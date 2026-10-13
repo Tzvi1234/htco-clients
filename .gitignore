@@ -1,0 +1,48 @@
+# Node and web
+node_modules/
+dist/
+coverage/
+storybook-static/
+playwright-report/
+test-results/
+.vite/
+*.tsbuildinfo
+
+# Android
+.gradle/
+build/
+local.properties
+*.keystore
+*.jks
+captures/
+.cxx/
+
+# Windows / .NET
+bin/
+obj/
+*.user
+*.pfx
+AppPackages/
+.vs/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+google-services.json
+
+# Editors and OS
+.idea/
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+Thumbs.db
+
+# Claude Code local settings
+.claude/settings.local.json
+.claude/worktrees/
+
+# Logs
+*.log

@@ -1,0 +1,401 @@
+# Component Specification
+
+All 38 HTCO components, their purpose and rules. Live previews in both themes: [HTCO design system](https://claude.ai/artifact/Bgq6rDafP6qyXiJBCsq8nf). Implementations: web components in `apps/web/src/shared/ui/` (Phase 3), Compose in `apps/android/core/designsystem/` (Phase 14), WinUI in `apps/windows/HTCO.Presentation/Controls/` (Phase 15).
+
+Each implementation must cover, per component: every variant and size listed here; default, hover, focus, pressed, disabled, loading and error states where they apply; light and dark; left-to-right and right-to-left; an accessible name and keyboard or touch behaviour; and screenshot tests for he/en × light/dark.
+
+## Index
+
+| Group | Components |
+|---|---|
+| Actions | [Button](#button), [IconButton](#iconbutton) |
+| Forms | [DateRangePicker](#daterangepicker), [FilterChips](#filterchips), [Input](#input), [PasswordField](#passwordfield), [SearchField](#searchfield), [Select](#select) |
+| Navigation | [BottomBar](#bottombar), [NavigationRail](#navigationrail), [Pagination](#pagination), [Sidebar](#sidebar), [Tabs](#tabs), [TopBar](#topbar) |
+| Status | [Badge](#badge), [ConnectivityIndicator](#connectivityindicator), [StatusDot](#statusdot), [StatusTimeline](#statustimeline) |
+| Data | [ActivityLogRow](#activitylogrow), [ChartContainer](#chartcontainer), [Ltr](#ltr), [MetricCard](#metriccard), [OrderRow](#orderrow), [ProductTile](#producttile) |
+| Workforce | [AgentAvatar](#agentavatar), [AgentCard](#agentcard), [TaskBoard](#taskboard) |
+| Decisions | [ApprovalCard](#approvalcard), [AuditPopover](#auditpopover), [IncidentCard](#incidentcard), [PermissionGate](#permissiongate) |
+| Feedback | [EmptyState](#emptystate), [ErrorState](#errorstate), [RetryBanner](#retrybanner), [Skeleton](#skeleton), [Toast](#toast) |
+| Overlays | [BottomSheet](#bottomsheet), [Dialog](#dialog) |
+
+## Actions
+
+### Button
+
+Use a button for an action the user takes now; one primary button per view, for the thing the screen exists to do.
+
+#### Variants
+- **primary** — `action-primary-bg` with `action-primary-fg`: a navy ink capsule in the light theme, turquoise in the dark theme.
+- **secondary** — `action-secondary-*`: outlined, for supporting actions.
+- **ghost** — for low-emphasis actions inside toolbars and tables.
+- **danger** — `action-danger-*`: only for destructive actions, always behind a confirmation.
+
+#### Sizes
+`sm` 32 px (dense tables, Windows), `md` 40 px (default), `lg` 48 px (touch, Android primary actions).
+
+#### Rules
+- Label with a verb in sentence case: "Approve fix", "Connect shop". Hebrew buttons use the gender-neutral infinitive: "לאשר תיקון".
+- Loading keeps the label and adds a spinner; the button stays the same width.
+- Disabled buttons explain why nearby (helper text or tooltip); never disable silently.
+- Focus shows the `border-focus` ring, 2 px with a 2 px offset.
+
+#### Consumer provides
+Label, variant, size, `onClick`/command, `disabled` and `loading` state, an accessible name for icon-only use (use IconButton instead).
+
+### IconButton
+
+A square button that shows only an icon, for frequent, recognizable actions in toolbars and headers.
+
+#### Rules
+- Always has an accessible name (`aria-label`, `AutomationProperties.Name`, `contentDescription`).
+- Use the amber attention dot only when something needs the user (unread approvals), never for general unread counts.
+- Sizes: 32 px in dense bars, 40 px default, 48 px touch target on Android.
+- Pair with a tooltip on web and Windows.
+
+#### Consumer provides
+Icon, accessible name, action, optional `needsAttention`.
+
+## Forms
+
+### DateRangePicker
+
+Choose a date range for dashboards and reports, with presets first.
+
+#### Rules
+- Presets: Today, Last 7 days, Last 30 days, This month, Custom.
+- Ranges are inclusive and shown in the user's time zone; the API receives UTC.
+- Week starts on Sunday for Hebrew, Monday for English (configurable).
+
+### FilterChips
+
+Active filters on a list, each removable, plus a chip to add one.
+
+#### Rules
+- A chip states the filter and its value ("Status: No tracking").
+- Removing a chip updates the list and the URL; "Clear all" appears after two or more chips.
+
+### Input
+
+A single-line text field with a visible label above it.
+
+#### Rules
+- Label always visible; placeholder is an example, never the label.
+- Border uses `border-control` (≥ 3:1 against the surface); errors switch to `danger-dot` and add a message with an icon, not colour alone.
+- Helper text in `text-muted`, 12 px.
+- Codes (SKU, tracking number, email) render LTR inside RTL layouts.
+
+#### Consumer provides
+Label, value, change handler, validation message, helper text, input type and autocomplete hints.
+
+### PasswordField
+
+A password input with a reveal toggle, used on sign-in and re-authentication.
+
+#### Rules
+- The toggle has an accessible name that states the action ("Show password").
+- Never pre-fill; allow password managers (`autocomplete="current-password"`).
+- Errors never reveal whether the email exists ("Email or password is incorrect").
+
+### SearchField
+
+Search within the current list or the whole workspace.
+
+#### Rules
+- Leading search icon, placeholder names what is searched ("Search receipts, SKUs, tracking").
+- Show the keyboard shortcut on web and Windows (`/` or `Ctrl K`).
+- Results update after typing pauses (250 ms); never on every keystroke against the API.
+
+### Select
+
+Pick one value from a short list (up to about 12 options); longer lists use a searchable combobox.
+
+#### Rules
+- Shows the current value, never an empty field without a placeholder.
+- Native on Android and Windows (Exposed dropdown, ComboBox); React Aria Select on the web.
+
+## Navigation
+
+### BottomBar
+
+Primary navigation on phones: up to five destinations along the bottom edge.
+
+#### Rules
+- Intentional addition: the phone form of the Sidebar, referenced by the navigation map.
+- Destinations: Overview, Approvals, Incidents, Orders, More. Labels are always visible.
+- The current destination gets a `bg-selected` pill behind its icon; the amber dot only on a destination where something waits for the user.
+- Touch targets at least 48 dp; respects the system gesture area.
+
+### NavigationRail
+
+Compact navigation for medium widths (tablets, narrow Windows windows): icons with short labels.
+
+#### Rules
+- Up to seven destinations; labels always visible.
+- Selected item gets a `bg-selected` pill behind the icon.
+
+### Pagination
+
+Cursor-based paging for long lists.
+
+#### Rules
+- Shows the visible range and Previous / Next; no page numbers (the API is cursor-based).
+- Keeps filters and sort in the URL so a page can be shared.
+
+### Sidebar
+
+Primary navigation on web and Windows: shop switcher, grouped destinations, counts that need attention.
+
+#### Rules
+- The current page is marked by `bg-selected` plus a 3 px `accent-fill` bar at the start edge (it moves to the right in RTL).
+- Counts are plain muted numbers; only items that need the user get the amber dot.
+- Collapses to a NavigationRail under 1200 px and to a bottom bar on phones.
+
+### Tabs
+
+Switch between views of the same object (order detail: Items, Timeline, Incidents, Audit).
+
+#### Rules
+- Intentional addition: not in the original component list, needed for object detail pages on all three platforms.
+- The selected tab has a 2 px `accent-fill` underline; counts stay muted.
+
+### TopBar
+
+Page header: breadcrumbs, page title, global search, notifications and the user menu.
+
+#### Rules
+- Title in `title-sm`; breadcrumbs in `text-muted`.
+- Notifications use the amber dot only when an approval or decision waits.
+
+## Status
+
+### Badge
+
+A short label for a category or state attached to an item.
+
+#### Tones
+`neutral` (default), `accent` (live, synced), `attention` (needs you), `success`, `danger`. Each pairs a `*-subtle` background with its `*-text` colour, both themes at ≥ 4.5:1.
+
+#### Rules
+- One or two words. States that change over time use StatusDot instead.
+
+### ConnectivityIndicator
+
+Tells the user whether what they see is live, catching up, or stale.
+
+#### Rules
+- Live: turquoise dot. Reconnecting: muted dot plus "Reconnecting". Offline: hollow dot plus the age of the data.
+- Never hide staleness: show "Last synced 14 min ago" with the source.
+
+### StatusDot
+
+The status language of HTCO: a small dot plus a word. Colour is never the only signal.
+
+#### States
+- running → `status-running` (turquoise, with a soft halo)
+- needs you → `status-needs-you` (the amber dot, 10 px)
+- waiting → `status-waiting` (muted)
+- done → `status-done`
+- failed or blocked → `status-failed`
+- offline → hollow muted ring
+
+#### Rules
+- Intentional addition: the base of every state display (orders, agents, tasks, incidents).
+- The word is always present ("Running", "Needs you", "Waiting for AutoVA").
+
+### StatusTimeline
+
+The history of an order, task or incident: each step with time, actor and the source that proves it.
+
+#### Rules
+- Newest at the bottom for processes, at the top for activity feeds.
+- Every step names its source ("Etsy webhook", "Reconciliation", "AutoVA via Etsy").
+- Future steps are not drawn; the next expected step may appear as "Expected by …".
+
+## Data
+
+### ActivityLogRow
+
+One entry in an activity feed or audit trail: when, who (agent, user or worker), what, and a link to the receipt.
+
+#### Rules
+- Actor discs: agents navy with turquoise initials; users neutral; workers dashed (deterministic code).
+- The sentence is plain and specific ("Opened incident for receipt 3412987711: no tracking after 6 days").
+- "Receipt" links open the action receipt: inputs, tool, changes, approval.
+
+### ChartContainer
+
+Frame for every chart: title, legend, the chart, and the source line.
+
+#### Rules
+- Series colours in order `dataviz-1` … `dataviz-5`; never more than five series.
+- Axis labels and gridlines in `text-muted` and `border-subtle`.
+- Footer states source, period and freshness; estimated values use a dashed line.
+- Every chart has a table view for screen readers.
+
+### Ltr
+
+Keeps codes, numbers and amounts in left-to-right order inside right-to-left text.
+
+#### Rules
+- Intentional addition: a utility every platform needs because HTCO mixes Hebrew text with receipt numbers, tracking codes, SKUs, IDs, emails, URLs and money.
+- Web: wrap the value in `<bdi dir="ltr">` (the `Ltr` component). Plain-text channels (notifications, CSV exports, emails): surround the value with Unicode FSI (U+2068) and PDI (U+2069).
+- Android: `BidiFormatter.unicodeWrap` or the same isolates. Windows: a left-to-right `Run` or the same isolates.
+- Codes also use the mono family; money uses the locale formatter before isolation.
+
+### MetricCard
+
+One KPI with its trend and, always, its source and freshness.
+
+#### Rules
+- Value in `display-sm` with tabular numbers; delta in `success-text` or `danger-text` with a sign and the comparison period.
+- Footer names the source and age ("Etsy · 4 min ago"); estimated figures say "Estimated".
+- Selecting a card opens the matching list, not a tooltip.
+
+### OrderRow
+
+A row in the orders table: receipt, buyer (masked by role), items, total, fulfillment state, tracking, last update.
+
+#### Rules
+- Receipt numbers and tracking codes are monospace and LTR in every language.
+- Status is a StatusDot with a word; money uses tabular numbers with the currency.
+- Buyer names are masked unless the role may see them.
+- Row height 44 px (36 px compact on Windows); selected rows use `bg-selected`.
+
+### ProductTile
+
+A product or listing in a grid: image, title, price, listing state and Listing Health risk.
+
+#### Rules
+- Image shows the real product photo; placeholders use the neutral sunken surface with an icon, never stock imagery.
+- Titles clamp at two lines; full title on hover or in detail.
+- Listing Health risk appears as a Badge only when risk is medium or high.
+
+## Workforce
+
+### AgentAvatar
+
+The face of an agent: a navy disc with initials, never a photo or mascot. State shows around it.
+
+#### States
+- idle: plain disc · running: turquoise ring (`status-running`) · needs you: amber dot · offline: dashed hollow disc.
+
+#### Rules
+- Agents are discs; people use photos or initials on a neutral disc, so the two are never confused.
+
+### AgentCard
+
+An agent in the directory or office list: who it is, what it is doing, and what it costs today.
+
+#### Rules
+- State comes only from verified events; when the worker is offline, every card shows Offline.
+- The current task links to the task; cost shows today's spend against the agent's daily cap.
+
+### TaskBoard
+
+Tasks by state: Queued, Running, Waiting for you, Done. The same tasks also appear as a list with SLA.
+
+#### Rules
+- Column headers carry the state's StatusDot and a count.
+- Cards show title, owner (agent disc or person), shop and SLA; no drag and drop for agent tasks (state changes come from the system).
+
+## Decisions
+
+### ApprovalCard
+
+A request for a human decision. It shows the exact action, its effect, the evidence and the risk, and expires.
+
+#### Anatomy
+Requester (agent disc or worker) → action in plain words → before and after (diff, changed words marked with `accent-subtle`) → cost range → risk meter → evidence links → rollback → expiry → Reject / Approve.
+
+#### Rules
+- The amber dot marks it as waiting for the user; nothing else on the screen competes with it.
+- Show raw parameters, not only the agent's summary; the server re-checks permissions, MFA and expiry on decision.
+- High risk requires re-authentication before Approve is enabled.
+- Screen readers read action, reason, impact and risk in that order.
+
+### AuditPopover
+
+Who did what and when, attached to any value or decision that has an audit trail.
+
+#### Rules
+- Shows actor, action, time, policy version and a link to the full receipt.
+- Read-only: audit entries cannot be edited from any client.
+
+### IncidentCard
+
+A verified problem: severity, what is affected, the evidence, the proposed fix and its state.
+
+#### Rules
+- Severity label plus words; the incident resolves only on evidence, and the card says which evidence closed it.
+- Proposed fixes say whether they are automatic (allowlisted), need approval, or need a developer.
+
+### PermissionGate
+
+Replaces content the user may not see, explaining why and what to do. The API refuses the data anyway; this is only the honest UI for it.
+
+#### Rules
+- Name the missing permission in plain words; offer "Request access" when a request flow exists.
+- Never render the hidden data and blur it.
+
+## Feedback
+
+### EmptyState
+
+What a screen shows when there is nothing yet, and the one action that changes that.
+
+#### Rules
+- Explains why it is empty and what will appear; one primary action.
+- Illustration is geometric (rings and a dot from the logo), never stock art.
+
+### ErrorState
+
+Shown when a screen cannot load. Explains, offers a retry, and gives the request ID for support.
+
+#### Rules
+- Plain cause when known ("Etsy is not responding"), never raw exception text.
+- Request ID in monospace, selectable, so the owner can paste it to support or the Debugger.
+
+### RetryBanner
+
+An inline notice that data could not refresh, with automatic retry and a manual option.
+
+#### Rules
+- Says what failed, what the system is doing, and how old the shown data is.
+- "Retry now" is the only action; the banner disappears on success.
+
+### Skeleton
+
+Placeholder shapes while the first data loads.
+
+#### Rules
+- Mirrors the real layout; never longer than a few seconds before showing an error or empty state.
+- The shimmer stops under reduced motion.
+- Never used to hide stale data: stale data is shown with its age.
+
+### Toast
+
+Brief confirmation of a completed background action, with an undo or view link when useful.
+
+#### Rules
+- Intentional addition: needed for confirmations the backend has verified ("Fix applied on Etsy").
+- Only for confirmed outcomes; errors that need action use a banner or the field itself.
+- Polite live region; never steals focus; stays at least 6 s and pauses on hover.
+
+## Overlays
+
+### BottomSheet
+
+Android's container for quick decisions and details over the current screen.
+
+#### Rules
+- Grabber, title, content, actions; actions are 48 px touch targets.
+- Used for approval details on the phone; the full approval card content, never a summary only.
+
+### Dialog
+
+A focused decision that blocks the page until answered, mainly confirmations of destructive or external actions.
+
+#### Rules
+- Title states the action as a question; body states the consequence; buttons repeat the verb ("Disconnect shop").
+- Focus moves into the dialog and returns to the trigger; Escape cancels.
+- Not for approvals of agent work: those use ApprovalCard in the approvals inbox.

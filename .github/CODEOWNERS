@@ -1,0 +1,7 @@
+# Every change is reviewed by the owner.
+* @Tzvi1234
+
+# Brand and design-system changes need explicit owner review.
+/assets/brand/ @Tzvi1234
+/design/ @Tzvi1234
+/.github/ @Tzvi1234

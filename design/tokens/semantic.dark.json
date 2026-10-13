@@ -1,0 +1,305 @@
+{
+  "$description": "HTCO semantic tokens - dark theme. Components use only these.",
+  "color": {
+    "bg": {
+      "canvas": {
+        "$value": "{palette.navy.950}",
+        "$description": "Page background"
+      },
+      "surface": {
+        "$value": "{palette.navy.925}",
+        "$description": "Cards, panels, tables"
+      },
+      "raised": {
+        "$value": "{palette.navy.900}",
+        "$description": "Menus, popovers, dialogs"
+      },
+      "sunken": {
+        "$value": "{palette.navy.975}",
+        "$description": "Inset areas, code, wells"
+      },
+      "selected": {
+        "$value": "{palette.turquoise.800}",
+        "$description": "Selected row or item"
+      },
+      "brand": {
+        "$value": "{color.brand.navy}",
+        "$description": "Brand ground (sign-in, splash) in both themes"
+      }
+    },
+    "text": {
+      "primary": {
+        "$value": "{palette.navy.frost}"
+      },
+      "secondary": {
+        "$value": "{palette.navy.300}"
+      },
+      "muted": {
+        "$value": "{palette.navy.400}"
+      },
+      "on-brand": {
+        "$value": "{color.brand.white}"
+      },
+      "link": {
+        "$value": "{palette.turquoise.400}"
+      }
+    },
+    "icon": {
+      "default": {
+        "$value": "{palette.navy.300}"
+      },
+      "muted": {
+        "$value": "{palette.navy.500}"
+      }
+    },
+    "border": {
+      "subtle": {
+        "$value": "{palette.navy.800}",
+        "$description": "Dividers; decorative"
+      },
+      "strong": {
+        "$value": "{palette.navy.750}",
+        "$description": "Card outlines; decorative"
+      },
+      "control": {
+        "$value": "{palette.navy.650}",
+        "$description": "Input and control boundaries (at least 3:1)"
+      },
+      "focus": {
+        "$value": "{palette.turquoise.400}",
+        "$description": "Focus ring"
+      }
+    },
+    "action": {
+      "primary": {
+        "bg": {
+          "$value": "{color.brand.turquoise}",
+          "$description": "Ink capsule in light; turquoise in dark"
+        },
+        "bg-hover": {
+          "$value": "{palette.turquoise.300}"
+        },
+        "bg-pressed": {
+          "$value": "{palette.turquoise.500}"
+        },
+        "fg": {
+          "$value": "{color.brand.navy}"
+        }
+      },
+      "secondary": {
+        "bg": {
+          "$value": "{palette.navy.925}"
+        },
+        "bg-hover": {
+          "$value": "{palette.navy.900}"
+        },
+        "fg": {
+          "$value": "{palette.navy.frost}"
+        },
+        "border": {
+          "$value": "{palette.navy.650}"
+        }
+      },
+      "danger": {
+        "bg": {
+          "$value": "{palette.red.400}"
+        },
+        "fg": {
+          "$value": "{color.brand.navy}"
+        }
+      }
+    },
+    "accent": {
+      "fill": {
+        "$value": "{palette.turquoise.400}",
+        "$description": "Indicators: active tab, live dot, progress"
+      },
+      "text": {
+        "$value": "{palette.turquoise.400}"
+      },
+      "subtle": {
+        "$value": "{palette.turquoise.900}"
+      }
+    },
+    "attention": {
+      "dot": {
+        "$value": "{palette.amber.400}",
+        "$description": "The 'needs you' dot"
+      },
+      "text": {
+        "$value": "{palette.amber.400}"
+      },
+      "subtle": {
+        "$value": "{palette.amber.900}"
+      }
+    },
+    "success": {
+      "dot": {
+        "$value": "{palette.green.400}"
+      },
+      "text": {
+        "$value": "{palette.green.400}"
+      },
+      "subtle": {
+        "$value": "{palette.green.900}"
+      }
+    },
+    "danger": {
+      "dot": {
+        "$value": "{palette.red.400}"
+      },
+      "text": {
+        "$value": "{palette.red.400}"
+      },
+      "subtle": {
+        "$value": "{palette.red.900}"
+      }
+    },
+    "status": {
+      "running": {
+        "$value": "{color.accent.fill}",
+        "$description": "Agent or job working"
+      },
+      "needs-you": {
+        "$value": "{color.attention.dot}",
+        "$description": "Waiting for a human decision"
+      },
+      "waiting": {
+        "$value": "{color.icon.muted}",
+        "$description": "Waiting for an external system or another agent"
+      },
+      "done": {
+        "$value": "{color.success.dot}"
+      },
+      "failed": {
+        "$value": "{color.danger.dot}",
+        "$description": "Failed or blocked"
+      },
+      "offline": {
+        "$value": "{color.icon.muted}",
+        "$description": "Rendered as a hollow dot"
+      }
+    },
+    "dataviz": {
+      "1": {
+        "$value": "{palette.turquoise.400}"
+      },
+      "2": {
+        "$value": "{palette.indigo.400}"
+      },
+      "3": {
+        "$value": "{palette.amber.400}"
+      },
+      "4": {
+        "$value": "{palette.coral.400}"
+      },
+      "5": {
+        "$value": "{palette.navy.400}"
+      }
+    }
+  },
+  "elevation": {
+    "1": {
+      "$type": "shadow",
+      "$value": [
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "alpha": 0.4,
+            "hex": "#000000"
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 1,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 2,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 0,
+            "unit": "px"
+          }
+        }
+      ],
+      "$description": "Native clients map this to platform elevation"
+    },
+    "2": {
+      "$type": "shadow",
+      "$value": [
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "alpha": 0.45,
+            "hex": "#000000"
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 4,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 16,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 0,
+            "unit": "px"
+          }
+        }
+      ],
+      "$description": "Native clients map this to platform elevation"
+    },
+    "3": {
+      "$type": "shadow",
+      "$value": [
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "alpha": 0.55,
+            "hex": "#000000"
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 16,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 40,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 0,
+            "unit": "px"
+          }
+        }
+      ],
+      "$description": "Native clients map this to platform elevation"
+    }
+  }
+}
