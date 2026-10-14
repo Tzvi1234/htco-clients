@@ -3,14 +3,30 @@ import { fileURLToPath } from "node:url";
 import { lingui } from "@lingui/vite-plugin";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
-import { defineConfig } from "vitest/config";
+import { defineConfig, type Plugin } from "vitest/config";
+
+import { withContentSecurityPolicy } from "./src/shared/security/csp.ts";
 
 // Explicit, so the config is found when Vitest runs from the repository root.
 const LINGUI_CONFIG = fileURLToPath(new URL("lingui.config.ts", import.meta.url));
 
+/** The built page carries the CSP; the dev server does not, because Vite injects inline scripts. */
+function contentSecurityPolicy(): Plugin {
+  return {
+    name: "htco-content-security-policy",
+    apply: "build",
+    transformIndexHtml: (html) => withContentSecurityPolicy(html),
+  };
+}
+
 export default defineConfig({
   // Lingui macros are compiled natively; no Babel.
-  plugins: [react(), lingui({ macroTransform: true, configPath: LINGUI_CONFIG }), tailwindcss()],
+  plugins: [
+    react(),
+    lingui({ macroTransform: true, configPath: LINGUI_CONFIG }),
+    tailwindcss(),
+    contentSecurityPolicy(),
+  ],
   build: {
     // The CSP allows no inline scripts or styles, so nothing is inlined into the HTML.
     assetsInlineLimit: 0,
