@@ -22,7 +22,7 @@ Sources of truth, in order (the repository always wins):
 - **Type:** Inter for English and numbers, Heebo for Hebrew, JetBrains Mono for codes; tabular numbers for data.
 - **Shape:** circles and soft radii from the logo (`radius-*` by role).
 - **RTL:** logical properties only; codes and money isolated left-to-right.
-- **Agents** are navy discs with role initials, never faces or mascots.
+- **AI employees** have permanent names and titles ("Maya · General Manager") and are navy discs with initials and an "AI" badge or title, never faces or mascots; Jev is a shared service, automations are dashed discs, tools are never actors (brand book, "People, AI employees and the office").
 
 ## Building a screen
 

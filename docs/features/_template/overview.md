@@ -14,7 +14,7 @@
 
 ## Users and actors
 
-<Who uses it: owner, roles, workers, agents.>
+<Who uses it: owner, roles, AI employees, automations.>
 
 ## Acceptance criteria
 

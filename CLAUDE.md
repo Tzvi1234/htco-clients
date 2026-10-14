@@ -6,6 +6,8 @@ Operating manual for AI coding agents in this repository. Read it fully at the s
 
 The clients of **HTCO OS** (HT Commerce, by H.T.Z Studios): the web app (`apps/web`), the Android app (`apps/android`), the Windows app (`apps/windows`), the design system (`design/`), the official brand assets (`assets/brand/`) and the generated API clients (`packages/api-clients/`). The backend, the master plan and the system-level docs live in the sibling repository `htco-platform` (checked out at `../htco-platform`).
 
+The office model ([platform ADR-0012](https://github.com/Tzvi1234/htco-platform/blob/main/docs/adr/0012-living-office-organization.md)): 16 AI employees with permanent names and titles in seven departments, deterministic automations, a tool registry and an engineering department; Jev is a shared Decision Advisor, not an employee. The office shows only recorded activity.
+
 ## Talking to the owner
 
 The owner writes in Hebrew. Answer in Hebrew in conversation. Everything committed (code, comments, docs, commit messages) is in English; user-facing strings exist in Hebrew and English.
@@ -34,8 +36,8 @@ The owner writes in Hebrew. Answer in Hebrew in conversation. Everything committ
 
 ```text
 apps/web/              Vite + React + TypeScript (Phase 3)
-apps/android/          Kotlin + Jetpack Compose (Phase 14)
-apps/windows/          C# + WinUI 3 (Phase 15)
+apps/android/          Kotlin + Jetpack Compose (Phase 16)
+apps/windows/          C# + WinUI 3 (Phase 17)
 design/tokens/         DTCG token source
 design/                Brand book and component spec
 packages/api-clients/  Pinned OpenAPI copy and generated clients
@@ -56,8 +58,8 @@ The web app exists (`apps/web`, slice 3.3 part 1). Each command is created by th
 | `pnpm i18n:check` | Lingui catalogs in sync with the code, and no missing Hebrew translation (part of `pnpm check`); `pnpm --filter @htco/web i18n:extract` updates them | Slice 3.3 |
 | `pnpm storybook` | Component previews | Slice 3.4 |
 | `pnpm test:e2e` | Playwright journeys with axe (he/en × light/dark) | Slice 3.3 (part 2) |
-| `./gradlew check` | Android: lint, unit and screenshot tests | Slice 14.1 |
-| `dotnet test` | Windows: unit and UI tests | Slice 15.2 |
+| `./gradlew check` | Android: lint, unit and screenshot tests | Slice 16.1 |
+| `dotnet test` | Windows: unit and UI tests | Slice 17.2 |
 
 ## Golden rules
 
