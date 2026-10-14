@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Status** | Version 1 — awaiting owner review |
+| **Status** | Version 2 (Claude-Native edition, 2026-10-14): version 1 plus 20 office, runtime and decision components — awaiting owner review (Phase 3, slice 3.10) |
 | **Source of truth** | This repository: [`tokens/`](tokens/README.md) (DTCG 2025.10), this brand book and [`COMPONENT_SPEC.md`](COMPONENT_SPEC.md) |
 | **Live reference** | [HTCO design system](https://claude.ai/artifact/Bgq6rDafP6qyXiJBCsq8nf) — a private mirror with live previews of every component in both themes, for the owner and invited reviewers |
 | **Brand assets** | [`../assets/brand/`](../assets/brand/) |
@@ -98,6 +98,8 @@ Rules:
 | Failed or blocked | `status-failed` | "Blocked: capability not granted" |
 | Offline | hollow ring in `status-waiting` | "Offline · data from 14 min ago" |
 
+**Runtime states.** AI employees and task runs show one of eight states with the same dots ([AgentStatus](COMPONENT_SPEC.md#agentstatus)): `IDLE` and `QUEUED` (waiting dot), `RUNNING` (running), `WAITING_EXTERNAL` (waiting, naming for whom), `WAITING_APPROVAL` (the amber dot), `BLOCKED` and `FAILED` (failed dot, different words, always with the reason), `OFFLINE` (hollow ring). They are derived on the server from task states (`WAITING_FOR_EXTERNAL` → `WAITING_EXTERNAL`, `WAITING_FOR_APPROVAL` → `WAITING_APPROVAL`) and never from animation. A provider quota or rate limit is `WAITING_EXTERNAL`, in words, never amber. No new colour tokens were needed.
+
 ## People, AI employees and the office
 
 | Actor | Looks like | Example label |
@@ -131,7 +133,7 @@ One visual language, native behaviour:
 
 ## Components
 
-38 components in nine groups: Actions, Forms, Navigation, Status, Data, Workforce, Decisions, Feedback and Overlays, plus 6 planned office components (Phase 15) specified but not yet previewed: DepartmentCard, EmployeeProfileHeader, AutomationRow, ToolBadge, ProposalCard and RoutingDecisionRow. Each of the 38 has guidelines and a live preview. Thirty-three come from the product specification's inventory. Five are intentional additions:
+58 components. Version 1 has 38 in nine groups: Actions, Forms, Navigation, Status, Data, Workforce, Decisions, Feedback and Overlays. Version 2 (the Claude-Native edition) adds 20 from the clients specification's inventory: AgentStatus, Avatar, EmployeeCard (replaces AgentCard), DepartmentCard, TaskCard, MessageThread, ToolResult, PolicyChip, RoutingTrace, ModelSelector, BillingModeBadge, AutomationExecutionRow, OfficeMap, AppShell, CommandPalette, ShopSwitcher, OrderTimeline, CostChart, CatalogAssetGrid and ApprovalSheet. EmployeeProfileHeader, ProposalCard and ToolBadge stay planned (Phase 16). Every component has guidelines and a live preview; the screens that use them are in [SCREEN_SPEC](../docs/ux/SCREEN_SPEC.md). In version 1, thirty-three come from the product specification's inventory. Five are intentional additions:
 
 - **StatusDot**, the base of the status language.
 - **Tabs**, for object detail pages.
@@ -147,5 +149,6 @@ Screens studied on Mobbin while shaping this system:
 - Shopify's orders table, for density and status pills.
 - Revolut Business approvals, for the approval card's evidence and timeline.
 - Railway's dashboard, for the Engineering Console.
+- Version 2: Browserbase's agent run view and Lindy's inline tool steps (ToolResult, RoutingTrace); Tana's agent thread with object cards (MessageThread); n8n executions and Databricks run events (AutomationExecutionRow, OrderTimeline); Gumloop's grouped command palette (CommandPalette); the OpenAI Platform usage page and its budget bar (CostChart). Links in [SCREEN_SPEC](../docs/ux/SCREEN_SPEC.md#mobbin-inspiration).
 
 HTCO borrows their patterns, not their look.

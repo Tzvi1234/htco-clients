@@ -1,7 +1,7 @@
 import { Trans } from "@lingui/react/macro";
 
 /**
- * The shop the screens show. Until a shop is connected (Phase 4) it says so plainly; it
+ * The shop the screens show. Until a shop is connected (Phase 9) it says so plainly; it
  * becomes a menu of the user's granted shops once `/v1/shops` exists.
  */
 export function ShopSwitcher() {

@@ -6,6 +6,8 @@ Operating manual for AI coding agents in this repository. Read it fully at the s
 
 The clients of **HTCO OS** (HT Commerce, by H.T.Z Studios): the web app (`apps/web`), the Android app (`apps/android`), the Windows app (`apps/windows`), the design system (`design/`), the official brand assets (`assets/brand/`) and the generated API clients (`packages/api-clients/`). The backend, the master plan and the system-level docs live in the sibling repository `htco-platform` (checked out at `../htco-platform`).
 
+This is the **Claude-Native Hybrid Edition** (platform [ADR-0016](https://github.com/Tzvi1234/htco-platform/blob/main/docs/adr/0016-claude-native-agent-runtime.md) and [ADR-0017](https://github.com/Tzvi1234/htco-platform/blob/main/docs/adr/0017-auth-and-billing-policy.md)): employees run on the Claude Agent SDK on the server with API-key billing. Nothing changes for clients except what they show: real runtime states, the billing mode of each run, and cost. Clients never hold provider keys and never offer a billing-mode switch.
+
 The office model ([platform ADR-0012](https://github.com/Tzvi1234/htco-platform/blob/main/docs/adr/0012-living-office-organization.md)): 16 AI employees with permanent names and titles in seven departments, deterministic automations, a tool registry and an engineering department; Jev is a shared Decision Advisor, not an employee. The office shows only recorded activity.
 
 ## Talking to the owner
@@ -15,9 +17,10 @@ The owner writes in Hebrew. Answer in Hebrew in conversation. Everything committ
 ## Before any task
 
 1. Load the `software-engineering` skill (mandatory, every task).
-2. Load `design-system` before creating or changing any UI, and `tdd` before writing code.
-3. Find the slice in `../htco-platform/docs/plan/phases/` (client work is planned there). Work only on planned slices or issues.
-4. Before calling anything done: `feature-verification` (screenshots in he/en × light/dark, keyboard, screen reader), then `feature-docs`.
+2. Load `design-system` before creating or changing any UI, and `tdd` and `testing` before writing code or tests.
+3. Find the slice in `../htco-platform/docs/plan/phases/` (client work is planned there; the master plan is version 3.0) and follow that phase file's "Instructions for the agent". Work only on planned slices or issues.
+4. Never cross a red line of [ENGINEERING_RULES §0](https://github.com/Tzvi1234/htco-platform/blob/main/docs/engineering/ENGINEERING_RULES.md#0-red-lines).
+5. Before calling anything done: `feature-verification` (screenshots in he/en × light/dark, keyboard, screen reader), then `feature-docs`.
 
 ## Sources of truth
 
@@ -28,6 +31,7 @@ The owner writes in Hebrew. Answer in Hebrew in conversation. Everything committ
 | Brand book | [`design/README.md`](design/README.md) |
 | Tokens | [`design/tokens/`](design/tokens/README.md) |
 | Components | [`design/COMPONENT_SPEC.md`](design/COMPONENT_SPEC.md); live previews: https://claude.ai/artifact/Bgq6rDafP6qyXiJBCsq8nf |
+| Screens (all 43, with states and phases) | [`docs/ux/SCREEN_SPEC.md`](docs/ux/SCREEN_SPEC.md) |
 | Navigation, content, accessibility | [`docs/ux/`](docs/ux/) |
 | Client decisions | [`docs/adr/`](docs/adr/README.md) |
 | API contract | `packages/api-clients/openapi.yaml` (pinned copy of the platform's contract) |
@@ -36,8 +40,8 @@ The owner writes in Hebrew. Answer in Hebrew in conversation. Everything committ
 
 ```text
 apps/web/              Vite + React + TypeScript (Phase 3)
-apps/android/          Kotlin + Jetpack Compose (Phase 16)
-apps/windows/          C# + WinUI 3 (Phase 17)
+apps/android/          Kotlin + Jetpack Compose (Phase 17)
+apps/windows/          C# + WinUI 3 (Phase 18)
 design/tokens/         DTCG token source
 design/                Brand book and component spec
 packages/api-clients/  Pinned OpenAPI copy and generated clients
@@ -58,15 +62,15 @@ The web app exists (`apps/web`, slice 3.3 part 1). Each command is created by th
 | `pnpm i18n:check` | Lingui catalogs in sync with the code, and no missing Hebrew translation (part of `pnpm check`); `pnpm --filter @htco/web i18n:extract` updates them | Slice 3.3 |
 | `pnpm storybook` | Component previews | Slice 3.4 |
 | `pnpm test:e2e` | Playwright journeys with axe (he/en × light/dark) | Slice 3.3 (part 2) |
-| `./gradlew check` | Android: lint, unit and screenshot tests | Slice 16.1 |
-| `dotnet test` | Windows: unit and UI tests | Slice 17.2 |
+| `./gradlew check` | Android: lint, unit and screenshot tests | Slice 17.1 |
+| `dotnet test` | Windows: unit and UI tests | Slice 18.2 |
 
 ## Golden rules
 
 1. No business rules in clients; the server decides.
 2. Generated API clients only; contract changes start in `htco-platform`.
 3. Tokens only; logical (start/end) layout; Hebrew and English for every string.
-4. Navy ground, turquoise for the system at work, amber only when the owner is needed.
+4. Navy ground, turquoise for the system at work, amber only when the owner is needed. Statuses are the eight real runtime states, derived on the server, never animation.
 5. Every screen has loading, empty, error, stale, offline and no-permission states; never claim unconfirmed success.
 6. Web keeps no tokens in JavaScript; native apps keep tokens only in platform-secure storage.
 7. WCAG 2.2 AA; keyboard and screen-reader paths for every action.

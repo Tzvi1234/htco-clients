@@ -24,3 +24,4 @@ Three platforms must share one visual language without sharing UI code. The W3C 
 
 - 2026-10-14 (slice 3.2): implemented in `packages/design-tokens`. Style Dictionary 5.6 merges the DTCG sources and resolves references; our own small formatters write all three outputs, because its built-in Compose transforms assume rem units and a single CSS file needs both themes. The `HighContrast` XAML dictionary moves to Phase 15, where the Windows app maps roles to Windows system colours. Contrast (202 pairs) and drift run in CI as tests.
 - 2026-10-14: phases renumbered by platform PLAN 2.0; the Windows app, and with it the `HighContrast` dictionary, is now Phase 17.
+- 2026-10-14: phases renumbered by platform PLAN 3.0 (Claude-Native Hybrid Edition); the Windows app and the `HighContrast` dictionary are now Phase 18.
