@@ -1,6 +1,6 @@
 # Component Specification
 
-All 58 HTCO components: the 38 of version 1, and 20 added in version 2 for the Claude-Native edition ([below](#version-2-components-claude-native-edition)). Four version 1 office components remain planned (Phase 17): DepartmentCard is now designed in version 2, AutomationRow is superseded by AutomationExecutionRow and RoutingDecisionRow by RoutingTrace; EmployeeProfileHeader, ProposalCard and ToolBadge stay planned. Live previews in both themes for the 38: [HTCO design system](https://claude.ai/artifact/Bgq6rDafP6qyXiJBCsq8nf); planned components get previews when they are designed. Implementations: web components in `apps/web/src/shared/ui/` (Phase 3), Compose in `apps/android/core/designsystem/` (Phase 17), WinUI in `apps/windows/HTCO.Presentation/Controls/` (Phase 18).
+All 38 HTCO components, their purpose and rules, plus 6 planned office components (Phase 15) marked "Planned". Live previews in both themes for the 38: [HTCO design system](https://claude.ai/artifact/Bgq6rDafP6qyXiJBCsq8nf); planned components get previews when they are designed. Implementations: web components in `apps/web/src/shared/ui/` (Phase 3), Compose in `apps/android/core/designsystem/` (Phase 16), WinUI in `apps/windows/HTCO.Presentation/Controls/` (Phase 17).
 
 Actors follow the office model of [platform ADR-0012](https://github.com/Tzvi1234/htco-platform/blob/main/docs/adr/0012-living-office-organization.md): people (users), 16 AI employees with permanent names and titles in seven departments, deterministic automations, Jev as a shared Decision Advisor, and the system. Tools are capabilities, never actors. Every office component shows only recorded activity from the API.
 
@@ -15,10 +15,8 @@ Each implementation must cover, per component: every variant and size listed her
 | Navigation | [BottomBar](#bottombar), [NavigationRail](#navigationrail), [Pagination](#pagination), [Sidebar](#sidebar), [Tabs](#tabs), [TopBar](#topbar) |
 | Status | [Badge](#badge), [ConnectivityIndicator](#connectivityindicator), [StatusDot](#statusdot), [StatusTimeline](#statustimeline) |
 | Data | [ActivityLogRow](#activitylogrow), [ChartContainer](#chartcontainer), [Ltr](#ltr), [MetricCard](#metriccard), [OrderRow](#orderrow), [ProductTile](#producttile) |
-| Workforce | [AgentAvatar](#agentavatar), [AgentCard](#agentcard) (superseded by EmployeeCard), [TaskBoard](#taskboard) |
-| Office & runtime (v2) | [AgentStatus](#agentstatus), [Avatar](#avatar), [EmployeeCard](#employeecard), [DepartmentCard](#departmentcard-1), [TaskCard](#taskcard), [MessageThread](#messagethread), [ToolResult](#toolresult), [PolicyChip](#policychip), [RoutingTrace](#routingtrace), [ModelSelector](#modelselector), [BillingModeBadge](#billingmodebadge), [AutomationExecutionRow](#automationexecutionrow), [OfficeMap](#officemap) |
-| Navigation, data, decisions (v2) | [AppShell](#appshell), [CommandPalette](#commandpalette), [ShopSwitcher](#shopswitcher), [OrderTimeline](#ordertimeline), [CostChart](#costchart), [CatalogAssetGrid](#catalogassetgrid), [ApprovalSheet](#approvalsheet) |
-| Office (planned, Phase 16) | [AutomationRow](#automationrow), [DepartmentCard](#departmentcard), [EmployeeProfileHeader](#employeeprofileheader), [ProposalCard](#proposalcard), [RoutingDecisionRow](#routingdecisionrow), [ToolBadge](#toolbadge) |
+| Workforce | [AgentAvatar](#agentavatar), [AgentCard](#agentcard), [TaskBoard](#taskboard) |
+| Office (planned, Phase 15) | [AutomationRow](#automationrow), [DepartmentCard](#departmentcard), [EmployeeProfileHeader](#employeeprofileheader), [ProposalCard](#proposalcard), [RoutingDecisionRow](#routingdecisionrow), [ToolBadge](#toolbadge) |
 | Decisions | [ApprovalCard](#approvalcard), [AuditPopover](#auditpopover), [IncidentCard](#incidentcard), [PermissionGate](#permissiongate) |
 | Feedback | [EmptyState](#emptystate), [ErrorState](#errorstate), [RetryBanner](#retrybanner), [Skeleton](#skeleton), [Toast](#toast) |
 | Overlays | [BottomSheet](#bottomsheet), [Dialog](#dialog) |
@@ -306,8 +304,6 @@ Employee ID, name, title, state, size, optional `showTitle`.
 
 ### AgentCard
 
-Superseded in version 2 by [EmployeeCard](#employeecard); kept here until the web implementation is renamed.
-
 An AI employee in a department or office list: name and title, department, what it is doing, and what it costs today.
 
 #### Rules
@@ -324,13 +320,13 @@ Tasks by state: Queued, Running, Waiting for you, Done. The same tasks also appe
 - Cards show title, owner (a person, or an employee disc with name and title), department, shop and SLA; handoffs between employees show on the task's timeline.
 - No drag and drop for tasks owned by employees or automations (state changes come from the system).
 
-## Office (planned, Phase 16)
+## Office (planned, Phase 15)
 
-Planned components for the office information architecture ([navigation map](../docs/ux/NAVIGATION_MAP.md)). They are specified here and designed, previewed and implemented in Phase 16.
+Planned components for the office information architecture ([navigation map](../docs/ux/NAVIGATION_MAP.md)). They are specified here and designed, previewed and implemented in Phase 15.
 
 ### AutomationRow
 
-Planned (Phase 16). One automation execution in the Automation Center: automation name and version, trigger, state, attempts and timing.
+Planned (Phase 15). One automation execution in the Automation Center: automation name and version, trigger, state, attempts and timing.
 
 #### Rules
 - State uses StatusDot with the execution's words: Pending, Running, Succeeded, Failed, Retry scheduled, Dead-lettered, Compensated, Cancelled.
@@ -343,7 +339,7 @@ Execution ID, automation name and version, state, attempt and maximum, trigger, 
 
 ### DepartmentCard
 
-Planned (Phase 16). One department in the Departments view: name, employees, current work and handoffs.
+Planned (Phase 15). One department in the Departments view: name, employees, current work and handoffs.
 
 #### Rules
 - Lists the department's employees as AgentAvatars with names; counts of open tasks, tasks waiting for the user and handoffs in progress come from the API.
@@ -355,7 +351,7 @@ Department ID and name, employees, counts, link to the department profile.
 
 ### EmployeeProfileHeader
 
-Planned (Phase 16). The top of an employee's profile: identity, state and the facts that bound the employee's work.
+Planned (Phase 15). The top of an employee's profile: identity, state and the facts that bound the employee's work.
 
 #### Rules
 - Large AgentAvatar, name and title, department, state, autonomy level, readiness and profile version.
@@ -367,7 +363,7 @@ Employee ID, name, title, department, state, autonomy, readiness, profile versio
 
 ### ProposalCard
 
-Planned (Phase 16; filled from Phase 14). An optimization proposal: the problem, the measured baseline, the expected benefit and where it is in its lifecycle.
+Planned (Phase 15; filled from Phase 18). An optimization proposal: the problem, the measured baseline, the expected benefit and where it is in its lifecycle.
 
 #### Rules
 - Lifecycle state in words: Detected, Proposed, Evaluating, Approved, Rejected, In development, Testing, Deployed, Measuring, Verified, Rolled back.
@@ -379,7 +375,7 @@ Proposal ID, title, state, baseline, expected benefit, measured result, people, 
 
 ### RoutingDecisionRow
 
-Planned (Phase 16). One model routing decision in the Decision & Model Observatory: which employee, which task, which tier and model, and why.
+Planned (Phase 15). One model routing decision in the Decision & Model Observatory: which employee, which task, which tier and model, and why.
 
 #### Rules
 - Shows employee, task, routing policy version, chosen tier (including "No AI") and model, fallback used, cost and latency.
@@ -391,7 +387,7 @@ Decision ID, employee, task, policy version, tier, model, fallback, cost, latenc
 
 ### ToolBadge
 
-Planned (Phase 16). A tool as a detail of an action or a profile: name, version, risk and side-effect class.
+Planned (Phase 15). A tool as a detail of an action or a profile: name, version, risk and side-effect class.
 
 #### Rules
 - Name in monospace (`catalog.create_draft`) with "v1"; risk (low, medium, high, critical) and side effect (none, internal, external, financial) as words, not colour alone.
@@ -502,287 +498,3 @@ A focused decision that blocks the page until answered, mainly confirmations of 
 - Title states the action as a question; body states the consequence; buttons repeat the verb ("Disconnect shop").
 - Focus moves into the dialog and returns to the trigger; Escape cancels.
 - Not for approvals of employee or automation work: those use ApprovalCard in the approvals inbox.
-
-## Version 2 components (Claude-Native edition)
-
-Added on 2026-10-14 from the clients specification v6.0 inventory (§10) and its runtime status model (§5). Live previews in both themes: [HTCO design system](https://claude.ai/artifact/Bgq6rDafP6qyXiJBCsq8nf), version 9. Phase 3 slice 3.10 (DS0) closes with the owner's design review of these; each is implemented on a platform in the phase that first needs it ([SCREEN_SPEC](../docs/ux/SCREEN_SPEC.md)).
-
-### Office & runtime
-
-#### AgentStatus
-
-The live state of an AI employee or a task run: one of eight runtime states, shown as a dot plus a word.
-
-##### States (from task runs and the state machine, never animation)
-| State | Dot | Word (en / he) |
-|---|---|---|
-| `IDLE` | waiting (muted) | Idle / פנוי |
-| `QUEUED` | waiting + clock icon | Queued / בתור |
-| `RUNNING` | running (turquoise with halo) | Running: what it does / פועל |
-| `WAITING_EXTERNAL` | waiting | Waiting for AutoVA, Etsy, supplier, provider / ממתין ל… |
-| `WAITING_APPROVAL` | needs you (amber) | Waiting for your approval / ממתין לאישורך |
-| `BLOCKED` | failed | Blocked: reason / חסום: סיבה |
-| `FAILED` | failed | Failed: reason, retry time / נכשל |
-| `OFFLINE` | hollow ring | Offline · data from 14 min ago / לא מחובר |
-
-##### Rules
-- The word is always present; `BLOCKED` and `FAILED` share a dot, so their words must differ and name the reason.
-- Amber only for `WAITING_APPROVAL`: a person is needed. A provider quota or 429 is `WAITING_EXTERNAL`, said in words, never amber.
-- When the agent worker is offline, every employee shows `OFFLINE` and the office is read-only.
-- Accessible name: name, state and detail ("Shon, running, researching garden lanterns").
-
-##### Consumer provides
-State, detail text, optional `since` time, optional link to the task run.
-
-#### Avatar
-
-A person: the owner or a team member. A photo, or initials on a neutral disc, so people are never confused with AI employees.
-
-##### Rules
-- Never the navy disc (that is the AI employee's AgentAvatar) and never the rounded-square service mark (Jev, service wings).
-- Sizes 24, 32 and 48 px. Accessible name: the person's name and role.
-- No status ring for people; presence is not tracked.
-
-##### Consumer provides
-Name, role, photo URL (optional), size.
-
-#### EmployeeCard
-
-One AI employee in the directory or a department: name and title, department, real state, current task and today's cost against the cap.
-
-##### Rules
-- Shows "Name · Title" (Maya · General Manager) and the department; never a face, photo or mascot.
-- State is an AgentStatus from recorded task runs. Readiness (`Draft`, `Ready`) is a Badge until the employee is activated; a draft employee is never shown as working.
-- The current task is a link; cost shows today's spend from `agent_runs` against the employee's daily cap, with a meter that turns `danger` only at 100%.
-- The billing mode (BillingModeBadge) appears where cost appears.
-- Jev never gets an EmployeeCard: it is a shared service.
-
-##### Consumer provides
-Employee ID, name, title, department, state and detail, readiness, current task link, cost today and cap, billing mode.
-
-#### DepartmentCard
-
-One department of the office: its people, the work in progress, what waits for you and the handoffs between employees.
-
-##### Rules
-- Seven people departments. The three service departments (Automations, AI Tools, Infrastructure) are drawn as service wings, never with employee discs.
-- Counts come from the API: open tasks, waiting for you, handoffs in progress. The amber dot only when something in the department waits for the owner.
-- Members are AgentAvatars with names; a person who is a member (a human operator) keeps a neutral avatar.
-
-##### Consumer provides
-Department ID and name, members with state, counts, link to the department page.
-
-#### TaskCard
-
-A business task as one card: what, who owns it, which shop, the SLA, its state and the evidence it closed with.
-
-##### Rules
-- Owner is a person (neutral avatar) or an employee (AgentAvatar with name); automations show their dashed mark.
-- State is a StatusDot word from the task state machine; a task is `Done` only with evidence, and the card says which.
-- Handoffs show the previous owner ("from Maya"). No drag and drop for tasks owned by employees or automations.
-- IDs are monospace and left-to-right.
-
-##### Consumer provides
-Task ID, title, state, owner, department, shop, SLA or due time, evidence summary, handoff source, link.
-
-#### MessageThread
-
-A conversation in the office: owner to employee, employee to employee, employee to department, or a task thread. Every message is a stored `employee_messages` row with delivery receipts.
-
-##### Rules
-- Messages are a calm list, not chat bubbles: avatar, name and title, time, then the text. The owner's messages use a neutral avatar.
-- Employees speak in the first person, factually, and attach receipts (ToolResult, links to tasks and records). No model reasoning is shown.
-- A handoff shows as its own row with the task link; every handoff has a message ID and a task transition.
-- Delivery state under the last message of a sender: Sent, Delivered, Acknowledged (from `ack_timestamp`).
-- Attachments are typed records (an order, a listing, an image) with scope; files are scanned before they open.
-- The composer is disabled with a reason when the employee is offline, a draft, or the user lacks the capability.
-
-##### Consumer provides
-Thread ID and kind, participants, messages (sender, time, text, attachments, tool results, delivery state), handoff rows, composer state.
-
-#### ToolResult
-
-One tool call inside a conversation, run or audit view: the tool and version, the policy decision, and the outcome with links to the records it changed.
-
-##### Rules
-- The tool name is monospace (`catalog.read`) with its version; tools are never the subject of a sentence and never get an avatar.
-- Show the decision in words: Allowed, Waiting for approval (amber dot), Denied with the reason. A denied call shows what was refused and that it was recorded.
-- Show results as records and links, never raw provider payloads or model reasoning. Untrusted content (web pages, email) is labelled as such.
-- Collapsed by default in long threads; the header stays readable.
-
-##### Consumer provides
-Tool name and version, decision and reason, outcome summary, record links, duration and cost, invocation ID.
-
-#### PolicyChip
-
-A capability and what the employee's policy says about it: allowed, needs approval, or denied.
-
-##### Rules
-- The capability name is monospace; the decision is a word or an icon with an accessible name, never colour alone.
-- Denied chips are dashed and muted. Needs-approval chips carry a lock icon, not amber (amber is for a waiting decision, not a rule).
-- Used in employee profiles (Permissions tab), routing policies and tool registry rows. Read-only: changes go through a versioned, approved profile.
-
-##### Consumer provides
-Capability, decision (`allow`, `approval`, `deny`), optional limit text (for example "up to $50").
-
-#### RoutingTrace
-
-Why a task ran on a given model, step by step, following the router's decision order; never the model's reasoning.
-
-##### Rules
-- Steps follow the router: (1) no AI if possible, (2) security gate, (3) capability fit, (4) quality benchmark, (5) cost and latency, (6) fallback, (7) final quality check.
-- The header names the employee, the routing policy version, the chosen runtime and model (monospace), the billing mode and the actual cost.
-- Rejected candidates say why in a few words. Model IDs come from the catalog with their verified date.
-- A Decision Advisor (Jev) step shows provider, schema result and fallback; Jev never appears as a decision authority.
-
-##### Consumer provides
-Decision ID, employee, policy version, steps (outcome, detail), chosen model, fallback chain, billing mode, reserved and actual cost.
-
-#### ModelSelector
-
-Choose which catalog models an employee's routing policy may use, with verified facts beside each option.
-
-##### Rules
-- Options come only from the model catalog; each shows provider, model reference (monospace), capability fit, price with its as-of date, benchmark score and status. No free-text model IDs.
-- Unverified or unhealthy models are disabled with the reason.
-- Selecting never applies a change: it proposes a new policy version that needs evaluation and approval (master plan test 12). The footer says so.
-- The Claude runtime runs Anthropic models only; image models appear only for Nika's image tools.
-
-##### Consumer provides
-Employee, current policy version, catalog entries with verification data, selection, onPropose.
-
-#### BillingModeBadge
-
-Which billing mode paid for an agent run, from the run's record (ADR-0017), shown wherever cost or a run appears.
-
-##### Modes
-- **API**: `API_PRODUCTION`, the only mode for hosted runs.
-- **API credits**: API usage paid from plan credits, where the provider reports it.
-- **Dev subscription**: a developer's own interactive session; never on a product run, shown only in engineering views.
-- **Approved subscription runtime**: off; shown as "Off" with the reason, never selectable.
-
-##### Rules
-- Neutral badges: billing is information, not a warning. No switching control anywhere: a mode changes only by policy and ADR.
-- Hover or focus explains the mode and links to the cost record.
-
-#### AutomationExecutionRow
-
-One run of a deterministic workflow in the Automation Center or an execution log: which workflow and version, what triggered it, its state, attempts, timing and keys.
-
-##### Rules
-- State words from the execution state machine: Pending, Running, Succeeded, Failed, Retry scheduled, Dead-lettered, Compensated, Cancelled. Rows are never tinted red; the dot and word carry the state.
-- Shows attempts ("2 of 5"), trigger kind (event, schedule, employee, user, workflow) and the actor that triggered it.
-- Execution ID and idempotency key are monospace, left-to-right, selectable.
-- "Retry safe run" appears only for callers with the capability and only for retryable states; there is never a "Run" action for a caller without it.
-
-##### Consumer provides
-Execution ID, automation name and version, state, attempt and maximum, trigger kind and actor, started and duration, idempotency key, canRetry, link.
-
-#### OfficeMap
-
-The 2D office: department rooms with their employees at their desks, real states, handoffs in progress, and the three service wings, with a list alternative for every view.
-
-##### Rules
-- Rooms: Executive Office, Product Studio, Procurement & Finance, Order Assurance, Marketing, Customer Support, Engineering. Service wings (Automations, AI Tools, Infrastructure) are dashed and show services, not people.
-- Jev sits in the AI Tools wing as a shared-service mark, never at a desk. GPT image generation is reached through Nika's desk, not shown as staff.
-- Desk states come only from task runs (AgentStatus). Motion is subtle and only for recorded events; under reduced motion it stops. When the worker is offline, every desk shows offline.
-- Every room and desk is a link to its page. A list view with the same content is one click away and is the default for screen readers.
-
-##### Consumer provides
-Departments with members and states, counts, service summaries, worker connectivity, onOpen.
-
-### Navigation (v2)
-
-#### AppShell
-
-The frame of every web and Windows screen: sidebar with shop switcher and grouped destinations, top bar with search, notifications and the user, and the page.
-
-##### Rules
-- Sidebar groups: Home; Work (Tasks, Approvals, Activity); Commerce (Orders, Products, Finance, Support); Office (Office, Departments, Employees, Conversations); System (Automations, AI Tools, Models, Engineering); Admin. Under 1200 px it becomes a NavigationRail; under 640 px a BottomBar.
-- The connectivity indicator in the top bar says whether data is live; the office becomes read-only when the agent worker is offline.
-- The amber dot appears only on destinations where something waits for the user.
-- The page owns its title, one primary action and its states (loading, empty, error, stale, offline, no permission).
-
-##### Consumer provides
-Current destination, user, shop, counts that need the user, connectivity state, page content.
-
-#### CommandPalette
-
-Jump anywhere and run allowed actions from the keyboard (Ctrl K on web and Windows): pages, employees, orders, tasks and commands in groups.
-
-##### Rules
-- Groups in this order: Go to, Employees, Records (orders, tasks, incidents), Actions. Results are filtered by the user's permissions on the server; an action the user cannot run is never listed.
-- Codes match exactly (receipt numbers, SKUs, task IDs) and render monospace and left-to-right.
-- Actions with side effects open their normal confirmation or approval flow; the palette never executes them directly.
-- Full keyboard support with a visible footer of keys; screen readers announce the active option.
-
-##### Consumer provides
-Query, grouped results with type, label, detail and target, active index, onSelect.
-
-#### ShopSwitcher
-
-Choose the shop context for every screen: each shop with its marketplace connection health and the user's role in it.
-
-##### Rules
-- Lists only shops the user is a member of (server-filtered). The current shop is marked with `bg-selected` and a check.
-- Connection health is a dot plus words ("Connected · synced 2 min ago", "Reconnect needed"). A broken connection is said in words; amber only if a decision waits for the owner.
-- Changing the shop changes the URL scope (`/shops/{id}/…`) and never mixes data from two shops on one screen.
-
-##### Consumer provides
-Shops (ID, name, marketplace, health, role), current shop, onSelect, link to Shops settings.
-
-### Data (v2)
-
-#### OrderTimeline
-
-The life of one order as recorded facts: each step with its time, actor and the source that proves it, including sync proof from Etsy and AutoVA.
-
-##### Rules
-- Process order: oldest at the top. Each step names its source ("Etsy webhook", "Reconciliation", "AutoVA via Etsy") and links its record.
-- Duplicate deliveries are shown as one step with a note ("received 3 times, ingested once"), never as three orders.
-- Future steps are not drawn; the next expected step may appear as "Expected by …" in muted text.
-- Receipt and tracking numbers are monospace and left-to-right.
-
-##### Consumer provides
-Order ID, steps (state, time, actor, source, record link, note), next expected step.
-
-#### CostChart
-
-AI spend over time against the budget, by employee, task kind or shop, with real API cost separated from credits and estimates.
-
-##### Rules
-- Bars in `dataviz-1`; estimated or unsettled days are dashed. The budget cap is a dashed line labelled with its value.
-- A budget meter shows thresholds at 70% and 90% as ticks; it turns `danger` only past 100%, and the text says what happens (tasks wait, automations continue).
-- API cost, API credits and personal development usage are separate figures; subscription usage never gets an invented per-token cost.
-- Footer names the source (`agent_runs`, provider usage) and freshness; a table view exists for screen readers.
-
-##### Consumer provides
-Series (date, amount, settled), cap, month to date, breakdown rows, currency, source and freshness.
-
-#### CatalogAssetGrid
-
-The images of a product or listing with their provenance and review state, including images Nika generated or edited.
-
-##### Rules
-- Every asset shows its origin in words: Supplier photo, Owner upload, Generated by Nika, Edited by Nika. Generated and edited assets carry their provenance link (brief, inputs, provider, cost).
-- New generated assets start as **Needs QA**; only Approved assets can be used in a listing. The rights check result is shown.
-- Real product imagery only; placeholders use the sunken surface and an icon, never stock pictures.
-- Each tile has alt text from the asset record; selection is keyboard-accessible.
-
-##### Consumer provides
-Assets (ID, thumbnail, origin, review state, rights check, provenance link, cost), selection, actions allowed.
-
-### Decisions (v2)
-
-#### ApprovalSheet
-
-The phone form of an approval, opened from a push notification: the full ApprovalCard content in a bottom sheet, with a fast and authenticated Approve or Reject.
-
-##### Rules
-- Opens from a deep link after the user authenticates; never shows another shop's item. The notification itself carries no buyer data.
-- Same order as ApprovalCard: requester, action, before and after, cost, risk, evidence, expiry. Never a summary only.
-- High-risk approvals require biometric or device re-authentication before Approve is enabled; the button says so.
-- Actions are 48 dp; Reject asks for an optional reason. The result is shown only after the server confirms it.
-
-##### Consumer provides
-Approval ID and content (as ApprovalCard), risk level, re-auth requirement, onApprove, onReject.

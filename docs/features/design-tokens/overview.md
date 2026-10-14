@@ -22,7 +22,7 @@ One source of truth for colour, type, spacing, shape and motion (`design/tokens/
 ## Scope
 
 - **In:** `packages/design-tokens` (loader, CSS, Kotlin and XAML formatters, contrast check, build), the generated files, tests, `pnpm tokens`.
-- **Out:** the `HighContrast` XAML dictionary (Phase 18, with the Windows app's system-colour mapping); Tailwind wiring of the CSS variables (slice 3.3); Compose theme objects built on the Kotlin tokens (Phase 17).
+- **Out:** the `HighContrast` XAML dictionary (Phase 17, with the Windows app's system-colour mapping); Tailwind wiring of the CSS variables (slice 3.3); Compose theme objects built on the Kotlin tokens (Phase 16).
 
 ## External facts learned
 
