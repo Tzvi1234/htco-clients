@@ -1,0 +1,15 @@
+# pnpm workspace. Apps join as their phases start (the web app in slice 3.3).
+packages:
+  - "packages/*"
+
+# Supply chain (ER-SEC-09).
+# New versions are installed only after seven days (in minutes).
+minimumReleaseAge: 10080
+# Fail when a package's publishing trust drops, for example a release without the provenance
+# its predecessors had.
+trustPolicy: no-downgrade
+# pnpm defaults, stated so a change is visible in review: transitive dependencies come only
+# from the registry, and a dependency's install script fails the install until it is reviewed
+# in `allowBuilds`.
+blockExoticSubdeps: true
+strictDepBuilds: true

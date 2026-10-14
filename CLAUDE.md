@@ -45,12 +45,13 @@ docs/                  ADRs, architecture, UX, features
 
 ## Commands
 
-There is no app code yet (Phase 0). Each command is created by the slice listed below, which must also update this table. If a command does not exist yet, say so; never claim it ran.
+There is no app code yet; the workspace tooling exists (slice 3.1). Each command is created by the slice listed below, which must also update this table. If a command does not exist yet, say so; never claim it ran.
 
 | Command | What it runs | Created in |
 |---|---|---|
 | `node design/tokens/check-contrast.mjs` | Token contrast check (202 pairs, both themes) | Exists now |
-| `pnpm install && pnpm check` | Web: lint, types, unit and component tests, i18n, tokens, contrast | Slices 3.1–3.2 |
+| `pnpm install && pnpm check` | ESLint (strict, type-aware), Prettier, TypeScript, Vitest; later also i18n, tokens and contrast | Slice 3.1 (tokens: 3.2; web: 3.3) |
+| `node scripts/<name>.ts` | Repository scripts run by CI (`conventional-commit`, `check-action-pins`, `test-integrity`); Node runs TypeScript directly | Slice 3.1 |
 | `pnpm storybook` | Component previews | Slice 3.4 |
 | `pnpm test:e2e` | Playwright journeys with axe (he/en × light/dark) | Slice 3.3 |
 | `./gradlew check` | Android: lint, unit and screenshot tests | Slice 14.1 |

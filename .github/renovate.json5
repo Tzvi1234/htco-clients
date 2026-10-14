@@ -1,0 +1,35 @@
+// Dependency updates (ER-SEC-09). Needs the Renovate GitHub App installed on this repository.
+{
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  extends: ["config:recommended", "helpers:pinGitHubActionDigests", ":semanticCommits"],
+  // New versions wait a week after publication; pnpm's `minimumReleaseAge` applies the same rule.
+  minimumReleaseAge: "7 days",
+  internalChecksFilter: "strict",
+  // Dependencies are pinned to exact versions in package.json.
+  rangeStrategy: "pin",
+  timezone: "Asia/Jerusalem",
+  schedule: ["before 6am on monday"],
+  lockFileMaintenance: {
+    enabled: true,
+    schedule: ["before 6am on monday"],
+  },
+  labels: ["dependencies"],
+  packageRules: [
+    {
+      description: "TypeScript stays on 6.x until typescript-eslint supports 7 (CLIENT_ARCHITECTURE §4)",
+      matchPackageNames: ["typescript"],
+      allowedVersions: "<7",
+    },
+    {
+      description: "One weekly pull request for development tools",
+      matchManagers: ["npm"],
+      matchDepTypes: ["devDependencies"],
+      groupName: "development tools",
+    },
+    {
+      description: "One weekly pull request for GitHub Actions",
+      matchManagers: ["github-actions"],
+      groupName: "GitHub Actions",
+    },
+  ],
+}

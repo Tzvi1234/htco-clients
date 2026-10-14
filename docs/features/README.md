@@ -4,4 +4,4 @@ Every client feature has a folder here, created from [`_template/`](_template/) 
 
 | Feature | Platforms | Phase | Status |
 |---|---|---|---|
-| — | — | — | Features are added from Phase 3 onward |
+| [web-shell](web-shell/overview.md) | Web | 3 | In progress |
