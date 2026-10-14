@@ -56,7 +56,7 @@ Tests prove the code matches expectations. Verification proves a person can actu
 
 ### Live or stale data
 - Disconnect the network: the screen shows offline with the data's age; reconnect: it refreshes without a reload.
-- Stop the platform worker: the office shows read-only and never a fake "running" agent.
+- Stop the platform worker: the office shows read-only and never a fake "running" employee.
 
 ### Android specifics
 - TalkBack order on approval cards; touch targets ≥ 48 dp; system back; notification deep links; app killed and restored; dark theme follows the system.

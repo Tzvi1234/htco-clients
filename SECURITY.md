@@ -2,7 +2,7 @@
 
 ## Reporting a vulnerability
 
-Please do not open a public issue for security problems. Email **security@office.ht-co.app** with a description, steps to reproduce and the expected impact. We aim to acknowledge reports within 3 business days. Until that mailbox is live (inbound mail arrives in Phase 12), contact the repository owner directly through GitHub.
+Please do not open a public issue for security problems. Email **security@office.ht-co.app** with a description, steps to reproduce and the expected impact. We aim to acknowledge reports within 3 business days. Until that mailbox is live (inbound mail arrives in Phase 14), contact the repository owner directly through GitHub.
 
 ## Scope
 

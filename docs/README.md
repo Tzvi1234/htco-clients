@@ -16,6 +16,6 @@ Client-specific documentation. Product, plan, system architecture and engineerin
 |---|---|
 | `docs/ux/SCREEN_INVENTORY.md` (screens with data, states and wireframes) | 3, then every phase adding screens |
 | `docs/ux/INTERACTION_CONTRACTS.md` (confirmations, permissions, feedback) | 7 |
-| `docs/ux/OFFICE_ANIMATION_SPEC.md` | 13 |
-| `docs/security/THREAT_MODEL_CLIENTS.md` | 3, extended in 14 and 15 |
-| `docs/releases/` release runbooks | 14 and 15 |
+| `docs/ux/OFFICE_ANIMATION_SPEC.md` (office views; animation only after v1 proves useful) | 15 |
+| `docs/security/THREAT_MODEL_CLIENTS.md` | 3, extended in 16 and 17 |
+| `docs/releases/` release runbooks | 16 and 17 |

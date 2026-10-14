@@ -19,7 +19,7 @@ flowchart LR
 | Data | Class (P0–P4) | Who can see it | Retention | Masking |
 |---|---|---|---|---|
 
-## Agent risks (if agents are involved)
+## AI employee risks (if AI employees or automations with AI steps are involved)
 
 - **Rule of Two:** untrusted input [yes/no] · sensitive data [yes/no] · external effect [yes/no] → <how at most two hold, or which approval covers the third>
 - **OWASP Agentic risks addressed:** ASI0x …

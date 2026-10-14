@@ -58,8 +58,9 @@ Rules:
 - Name the source and age of data: "Etsy · 4 min ago". Say "Estimated" when a figure is not verified.
 - Buttons are verbs: "Approve fix", "Connect shop". Hebrew buttons use the gender-neutral infinitive: "לאשר תיקון", "לחבר חנות".
 - No exclamation marks, no emoji, no hype. Errors explain the cause and the next step without apology.
-- System messages are in the third person ("Quality Supervisor flagged a size claim"). Agents speaking in a conversation use the first person, factually, and attach receipts.
-- Agents are named by their role ("Quality Supervisor"), never given human names or faces.
+- System messages are in the third person ("Noa flagged a size claim"). AI employees speaking in a conversation use the first person, factually, and attach receipts ("I compared the title with the supplier spec").
+- AI employees have permanent first names and titles ([platform ADR-0012](https://github.com/Tzvi1234/htco-platform/blob/main/docs/adr/0012-living-office-organization.md)). Show both where space allows: "Maya · General Manager"; the name alone only where the title is already visible nearby. They never claim feelings, and they never get faces or photos.
+- Automations are named by what they do ("Tracking Synchronization"); tools are named by capability (`tasks.create`) and never speak or act on their own.
 
 ## Layout and spacing
 
@@ -67,7 +68,7 @@ Rules:
 - Page gutters: 24 px on web and Windows, 16 px on phones.
 - Density: tables 36 px rows on Windows and dense web views, 44 px standard, 56 px on touch. Touch targets are at least 48 px on Android.
 - Breakpoints: 640, 900, 1200 and 1600 px. Under 1200 px the sidebar becomes a navigation rail; under 640 px, a bottom bar.
-- Lists are one sheet with dividers, not a stack of separate cards. Cards are for objects that stand alone (a metric, an approval, an agent).
+- Lists are one sheet with dividers, not a stack of separate cards. Cards are for objects that stand alone (a metric, an approval, an employee, a department).
 
 ## Shape and depth
 
@@ -97,11 +98,21 @@ Rules:
 | Failed or blocked | `status-failed` | "Blocked: capability not granted" |
 | Offline | hollow ring in `status-waiting` | "Offline · data from 14 min ago" |
 
-## People and agents
+## People, AI employees and the office
 
-- Agents are navy discs with role initials (`AgentAvatar`): a turquoise ring when running, the amber dot when they need a decision, a dashed hollow disc when offline.
-- People are photos or initials on neutral discs, so a person and an agent are never confused.
-- Workers (deterministic code) appear as dashed neutral discs marked "W" in activity logs.
+| Actor | Looks like | Example label |
+|---|---|---|
+| Person (user) | Photo, or initials on a neutral disc | "Owner" or a team member's name with their role |
+| AI employee | Navy disc with turquoise initials (`AgentAvatar`) and a small "AI" badge or the title next to it; no face, photo or mascot | "Maya · General Manager" |
+| Decision Advisor (Jev) | A rounded-square navy "service" mark with initials, labelled "Shared service"; never placed in a department | "Jev · Decision Advisor · Shared service" |
+| Automation | Dashed neutral disc with a workflow glyph (or "A" where icons are unavailable) | "Order Intake (automation)" |
+| System | Plain neutral disc without initials | "System" |
+
+- `AgentAvatar` states: idle plain disc · a turquoise ring when running · the amber dot when the employee needs a decision · a dashed hollow disc when offline.
+- A person and an AI employee are never confused: people never get the navy disc, and employees always carry the "AI" badge or their title.
+- Tools are not actors. They appear only as `ToolBadge` details of an action ("used `catalog.create_draft` v1"), never as avatars.
+- The office shows only recorded activity. An employee's state, task and messages come from the API's records; nothing is inferred or invented, motion follows only recorded events, and when the agent worker is offline every employee shows Offline.
+- The 16 employees sit in seven departments (Executive Office; Product Research, Content & Catalog; Procurement & Finance; Order Assurance; Marketing; Customer Service; Engineering & Development). Names and titles come from the platform's registry, never hard-coded in a client.
 
 ## Platforms
 
@@ -120,7 +131,7 @@ One visual language, native behaviour:
 
 ## Components
 
-38 components in nine groups: Actions, Forms, Navigation, Status, Data, Workforce, Decisions, Feedback and Overlays. Each has guidelines and a live preview. Thirty-three come from the product specification's inventory. Five are intentional additions:
+38 components in nine groups: Actions, Forms, Navigation, Status, Data, Workforce, Decisions, Feedback and Overlays, plus 6 planned office components (Phase 15) specified but not yet previewed: DepartmentCard, EmployeeProfileHeader, AutomationRow, ToolBadge, ProposalCard and RoutingDecisionRow. Each of the 38 has guidelines and a live preview. Thirty-three come from the product specification's inventory. Five are intentional additions:
 
 - **StatusDot**, the base of the status language.
 - **Tabs**, for object detail pages.
@@ -135,6 +146,6 @@ Screens studied on Mobbin while shaping this system:
 - Jobber's workflow cards, for the order pipeline.
 - Shopify's orders table, for density and status pills.
 - Revolut Business approvals, for the approval card's evidence and timeline.
-- Railway's dashboard, for the developer console.
+- Railway's dashboard, for the Engineering Console.
 
 HTCO borrows their patterns, not their look.

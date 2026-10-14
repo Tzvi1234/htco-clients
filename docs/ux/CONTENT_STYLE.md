@@ -16,11 +16,15 @@ How HTCO writes in the product, in Hebrew and English. The brand voice is summar
 - Buttons start with a verb. Confirmation buttons repeat the verb of the question ("Disconnect shop?" → "Disconnect shop").
 - Hebrew buttons use the gender-neutral infinitive ("לאשר", "לדחות", "לחבר חנות"). Hebrew body text addresses the user in plural or impersonal forms where natural.
 
-## Agents and the system
+## AI employees, automations and the system
 
-- The system speaks in the third person in status lines and logs: "Quality Supervisor flagged a size claim."
-- An agent speaking in a conversation uses the first person, factually, and attaches receipts: "I compared the title with the supplier spec. The title says large; the spec says 12 cm."
-- Agents are called by their role, never by human names, and never claim feelings.
+- The system speaks in the third person in status lines and logs: "Noa flagged a size claim."
+- An AI employee speaking in a conversation uses the first person, factually, and attaches receipts: "I compared the title with the supplier spec. The title says large; the spec says 12 cm."
+- AI employees have permanent first names and titles ([platform ADR-0012](https://github.com/Tzvi1234/htco-platform/blob/main/docs/adr/0012-living-office-organization.md)). Use "name · title" on first mention and wherever the title is not visible nearby ("Maya · General Manager"); the first name alone after that. Employees never claim feelings and are never described as people.
+- Jev is "the Decision Advisor (shared service)", never a member of a department or "an employee".
+- Automations are named by what they do and speak only through the system's third person: "Tracking Synchronization updated 12 orders."
+- Tools are never the subject of a sentence: "Noam updated the draft title using `catalog.update_draft_content`", not "The catalog tool updated the title".
+- Describe only what was recorded. Never write that an employee is "thinking", "busy" or "working on" something unless an activity record says so.
 
 ## Numbers, dates, money and codes
 

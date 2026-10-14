@@ -1,6 +1,8 @@
 # Component Specification
 
-All 38 HTCO components, their purpose and rules. Live previews in both themes: [HTCO design system](https://claude.ai/artifact/Bgq6rDafP6qyXiJBCsq8nf). Implementations: web components in `apps/web/src/shared/ui/` (Phase 3), Compose in `apps/android/core/designsystem/` (Phase 14), WinUI in `apps/windows/HTCO.Presentation/Controls/` (Phase 15).
+All 38 HTCO components, their purpose and rules, plus 6 planned office components (Phase 15) marked "Planned". Live previews in both themes for the 38: [HTCO design system](https://claude.ai/artifact/Bgq6rDafP6qyXiJBCsq8nf); planned components get previews when they are designed. Implementations: web components in `apps/web/src/shared/ui/` (Phase 3), Compose in `apps/android/core/designsystem/` (Phase 16), WinUI in `apps/windows/HTCO.Presentation/Controls/` (Phase 17).
+
+Actors follow the office model of [platform ADR-0012](https://github.com/Tzvi1234/htco-platform/blob/main/docs/adr/0012-living-office-organization.md): people (users), 16 AI employees with permanent names and titles in seven departments, deterministic automations, Jev as a shared Decision Advisor, and the system. Tools are capabilities, never actors. Every office component shows only recorded activity from the API.
 
 Each implementation must cover, per component: every variant and size listed here; default, hover, focus, pressed, disabled, loading and error states where they apply; light and dark; left-to-right and right-to-left; an accessible name and keyboard or touch behaviour; and screenshot tests for he/en × light/dark.
 
@@ -14,6 +16,7 @@ Each implementation must cover, per component: every variant and size listed her
 | Status | [Badge](#badge), [ConnectivityIndicator](#connectivityindicator), [StatusDot](#statusdot), [StatusTimeline](#statustimeline) |
 | Data | [ActivityLogRow](#activitylogrow), [ChartContainer](#chartcontainer), [Ltr](#ltr), [MetricCard](#metriccard), [OrderRow](#orderrow), [ProductTile](#producttile) |
 | Workforce | [AgentAvatar](#agentavatar), [AgentCard](#agentcard), [TaskBoard](#taskboard) |
+| Office (planned, Phase 15) | [AutomationRow](#automationrow), [DepartmentCard](#departmentcard), [EmployeeProfileHeader](#employeeprofileheader), [ProposalCard](#proposalcard), [RoutingDecisionRow](#routingdecisionrow), [ToolBadge](#toolbadge) |
 | Decisions | [ApprovalCard](#approvalcard), [AuditPopover](#auditpopover), [IncidentCard](#incidentcard), [PermissionGate](#permissiongate) |
 | Feedback | [EmptyState](#emptystate), [ErrorState](#errorstate), [RetryBanner](#retrybanner), [Skeleton](#skeleton), [Toast](#toast) |
 | Overlays | [BottomSheet](#bottomsheet), [Dialog](#dialog) |
@@ -199,7 +202,7 @@ The status language of HTCO: a small dot plus a word. Colour is never the only s
 - offline → hollow muted ring
 
 #### Rules
-- Intentional addition: the base of every state display (orders, agents, tasks, incidents).
+- Intentional addition: the base of every state display (orders, employees, automations, tasks, incidents).
 - The word is always present ("Running", "Needs you", "Waiting for AutoVA").
 
 ### StatusTimeline
@@ -215,10 +218,18 @@ The history of an order, task or incident: each step with time, actor and the so
 
 ### ActivityLogRow
 
-One entry in an activity feed or audit trail: when, who (agent, user or worker), what, and a link to the receipt.
+One entry in an activity feed or audit trail: when, who, what, and a link to the receipt. Each row is one recorded activity record from the API.
+
+#### Actor kinds
+- `user`: photo or initials on a neutral disc, with the person's name.
+- `employee`: AgentAvatar (navy, turquoise initials) with name and title, "Noa · Quality & Operations Supervisor".
+- `automation`: dashed neutral disc with a workflow glyph, with the automation's name.
+- `advisor`: Jev's rounded-square service mark, labelled "Shared service".
+- `system`: plain neutral disc, "System".
 
 #### Rules
-- Actor discs: agents navy with turquoise initials; users neutral; workers dashed (deterministic code).
+- The actor kind is always stated in words or a badge, not only by the disc's shape.
+- Shows shop, task and severity where present; feeds filter by employee, shop, task and severity.
 - The sentence is plain and specific ("Opened incident for receipt 3412987711: no tracking after 6 days").
 - "Receipt" links open the action receipt: inputs, tool, changes, approval.
 
@@ -274,21 +285,31 @@ A product or listing in a grid: image, title, price, listing state and Listing H
 
 ### AgentAvatar
 
-The face of an agent: a navy disc with initials, never a photo or mascot. State shows around it.
+The mark of an AI employee: a navy disc with the employee's initials (from the first name, "MA" for Maya), never a photo, face or mascot. State shows around it.
 
 #### States
 - idle: plain disc · running: turquoise ring (`status-running`) · needs you: amber dot · offline: dashed hollow disc.
 
+#### Variants
+- **employee**: round navy disc, with a small "AI" badge when the title is not shown next to it.
+- **advisor**: Jev, a rounded-square navy service mark with "Shared service" in its label and accessible name; never shown inside a department.
+
 #### Rules
-- Agents are discs; people use photos or initials on a neutral disc, so the two are never confused.
+- Employees are navy discs; people use photos or initials on a neutral disc, so the two are never confused.
+- State comes only from recorded activity; with no record the disc is idle, and when the agent worker is offline it is offline.
+- Accessible name: name, title, "AI employee" and state ("Maya, General Manager, AI employee, running").
+
+#### Consumer provides
+Employee ID, name, title, state, size, optional `showTitle`.
 
 ### AgentCard
 
-An agent in the directory or office list: who it is, what it is doing, and what it costs today.
+An AI employee in a department or office list: name and title, department, what it is doing, and what it costs today.
 
 #### Rules
-- State comes only from verified events; when the worker is offline, every card shows Offline.
-- The current task links to the task; cost shows today's spend against the agent's daily cap.
+- Shows "Maya · General Manager" and the department. Jev appears only in the Decision & Model Observatory and in activity, never in a department list.
+- State comes only from recorded activity; when the agent worker is offline, every card shows Offline. Readiness (`draft`, `ready`) shows as a Badge until the employee is activated.
+- The current task links to the task; cost shows today's spend against the employee's daily cap.
 
 ### TaskBoard
 
@@ -296,7 +317,85 @@ Tasks by state: Queued, Running, Waiting for you, Done. The same tasks also appe
 
 #### Rules
 - Column headers carry the state's StatusDot and a count.
-- Cards show title, owner (agent disc or person), shop and SLA; no drag and drop for agent tasks (state changes come from the system).
+- Cards show title, owner (a person, or an employee disc with name and title), department, shop and SLA; handoffs between employees show on the task's timeline.
+- No drag and drop for tasks owned by employees or automations (state changes come from the system).
+
+## Office (planned, Phase 15)
+
+Planned components for the office information architecture ([navigation map](../docs/ux/NAVIGATION_MAP.md)). They are specified here and designed, previewed and implemented in Phase 15.
+
+### AutomationRow
+
+Planned (Phase 15). One automation execution in the Automation Center: automation name and version, trigger, state, attempts and timing.
+
+#### Rules
+- State uses StatusDot with the execution's words: Pending, Running, Succeeded, Failed, Retry scheduled, Dead-lettered, Compensated, Cancelled.
+- Shows attempts ("Attempt 2 of 5"), the trigger kind (event, schedule, employee, user, workflow) and who triggered it.
+- The idempotency key and execution ID are monospace and LTR; a link opens the execution's activity records.
+- Manual execution is a separate, permission-gated action with confirmation; the row never offers it to a user without the right role.
+
+#### Consumer provides
+Execution ID, automation name and version, state, attempt and maximum, trigger, start and finish times, link.
+
+### DepartmentCard
+
+Planned (Phase 15). One department in the Departments view: name, employees, current work and handoffs.
+
+#### Rules
+- Lists the department's employees as AgentAvatars with names; counts of open tasks, tasks waiting for the user and handoffs in progress come from the API.
+- The amber dot only when something in the department waits for the user.
+- Seven departments; Jev is never shown as a member.
+
+#### Consumer provides
+Department ID and name, employees, counts, link to the department profile.
+
+### EmployeeProfileHeader
+
+Planned (Phase 15). The top of an employee's profile: identity, state and the facts that bound the employee's work.
+
+#### Rules
+- Large AgentAvatar, name and title, department, state, autonomy level, readiness and profile version.
+- Links to the profile's sections: activity, tools, skills, permissions, automations, sessions, memory summaries, model policy, evaluations.
+- Shows only recorded facts; a draft profile says "Draft: not production-ready".
+
+#### Consumer provides
+Employee ID, name, title, department, state, autonomy, readiness, profile version.
+
+### ProposalCard
+
+Planned (Phase 15; filled from Phase 18). An optimization proposal: the problem, the measured baseline, the expected benefit and where it is in its lifecycle.
+
+#### Rules
+- Lifecycle state in words: Detected, Proposed, Evaluating, Approved, Rejected, In development, Testing, Deployed, Measuring, Verified, Rolled back.
+- Baseline and expected benefit are numbers with units and period; after deployment the measured result sits next to them, labelled "Estimated" until verified.
+- Names the proposer (Omer), the prioritizer (Maya) and the implementer; links the pull request when one exists.
+
+#### Consumer provides
+Proposal ID, title, state, baseline, expected benefit, measured result, people, links.
+
+### RoutingDecisionRow
+
+Planned (Phase 15). One model routing decision in the Decision & Model Observatory: which employee, which task, which tier and model, and why.
+
+#### Rules
+- Shows employee, task, routing policy version, chosen tier (including "No AI") and model, fallback used, cost and latency.
+- Decision Advisor calls show the provider tried and the outcome (answered, rejected by schema, failed, fell back); never model reasoning.
+- Model names and IDs are monospace and LTR.
+
+#### Consumer provides
+Decision ID, employee, task, policy version, tier, model, fallback, cost, latency, advisor attempts.
+
+### ToolBadge
+
+Planned (Phase 15). A tool as a detail of an action or a profile: name, version, risk and side-effect class.
+
+#### Rules
+- Name in monospace (`catalog.create_draft`) with "v1"; risk (low, medium, high, critical) and side effect (none, internal, external, financial) as words, not colour alone.
+- Tools are never actors: no avatar, never the subject of a sentence.
+- In the AI Tools Center the badge links to the tool's registry entry (status, capabilities, access controls, tests).
+
+#### Consumer provides
+Tool name, version, risk, side effect, optional link.
 
 ## Decisions
 
@@ -305,11 +404,11 @@ Tasks by state: Queued, Running, Waiting for you, Done. The same tasks also appe
 A request for a human decision. It shows the exact action, its effect, the evidence and the risk, and expires.
 
 #### Anatomy
-Requester (agent disc or worker) → action in plain words → before and after (diff, changed words marked with `accent-subtle`) → cost range → risk meter → evidence links → rollback → expiry → Reject / Approve.
+Requester (employee disc with name and title, or automation) → action in plain words → before and after (diff, changed words marked with `accent-subtle`) → cost range → risk meter → evidence links → rollback → expiry → Reject / Approve.
 
 #### Rules
 - The amber dot marks it as waiting for the user; nothing else on the screen competes with it.
-- Show raw parameters, not only the agent's summary; the server re-checks permissions, MFA and expiry on decision.
+- Show raw parameters, not only the employee's summary; the server re-checks permissions, MFA and expiry on decision.
 - High risk requires re-authentication before Approve is enabled.
 - Screen readers read action, reason, impact and risk in that order.
 
@@ -327,7 +426,7 @@ A verified problem: severity, what is affected, the evidence, the proposed fix a
 
 #### Rules
 - Severity label plus words; the incident resolves only on evidence, and the card says which evidence closed it.
-- Proposed fixes say whether they are automatic (allowlisted), need approval, or need a developer.
+- Proposed fixes say whether they are automatic (allowlisted), need approval, or need Engineering (an engineering request).
 
 ### PermissionGate
 
@@ -353,7 +452,7 @@ Shown when a screen cannot load. Explains, offers a retry, and gives the request
 
 #### Rules
 - Plain cause when known ("Etsy is not responding"), never raw exception text.
-- Request ID in monospace, selectable, so the owner can paste it to support or the Debugger.
+- Request ID in monospace, selectable, so the owner can paste it to support or to Amir (Debugger & Reliability Engineer).
 
 ### RetryBanner
 
@@ -398,4 +497,4 @@ A focused decision that blocks the page until answered, mainly confirmations of 
 #### Rules
 - Title states the action as a question; body states the consequence; buttons repeat the verb ("Disconnect shop").
 - Focus moves into the dialog and returns to the trigger; Escape cancels.
-- Not for approvals of agent work: those use ApprovalCard in the approvals inbox.
+- Not for approvals of employee or automation work: those use ApprovalCard in the approvals inbox.

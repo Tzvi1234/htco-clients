@@ -12,7 +12,7 @@
 | Contrast | Text ≥ 4.5:1, large text and UI parts ≥ 3:1, in both themes; guaranteed by the token contrast check | Token CI check; axe on every story and page |
 | Focus | Always visible: 2 px `border-focus` ring with 2 px offset; logical focus order; focus returns to the trigger after dialogs | Keyboard-only Playwright journeys; Windows keyboard tests |
 | Keyboard | Every action reachable without a mouse on web and Windows; shortcuts never the only path | Playwright and FlaUI keyboard tests |
-| Screen readers | Every control has an accessible name; status words, not colour alone; approval cards read action, reason, impact, risk in order; charts have a table alternative | axe, TalkBack and Narrator spot checks per feature |
+| Screen readers | Every control has an accessible name; status words, not colour alone; approval cards read action, reason, impact, risk in order; charts have a table alternative; actor avatars announce name, title, actor kind and state ("Maya, General Manager, AI employee, running") | axe, TalkBack and Narrator spot checks per feature |
 | Touch | Targets ≥ 48 dp on Android, ≥ 24 px with spacing on the web | Compose tests; lint |
 | Motion | Respect reduced-motion settings: transitions become instant, shimmer and office animation stop | Tests with reduced motion emulated |
 | Text size | Layouts survive 200% text on the web and the largest system font on Android without clipping | Screenshot tests at large font scale |

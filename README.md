@@ -19,17 +19,17 @@
 
 ---
 
-> **Status:** Phase 3 starting — workspace tooling, CI and the design-token pipeline (CSS, Kotlin, XAML) in place; the web shell next. The web app follows in Phase 3, Android in Phase 14 and Windows in Phase 15. The master plan lives in [`htco-platform`](https://github.com/Tzvi1234/htco-platform/blob/main/docs/plan/PLAN.md).
+> **Status:** Phase 3 starting — workspace tooling, CI and the design-token pipeline (CSS, Kotlin, XAML) in place; the web shell next. The web app follows in Phase 3, the office in Phase 15, Android in Phase 16 and Windows in Phase 17. The master plan lives in [`htco-platform`](https://github.com/Tzvi1234/htco-platform/blob/main/docs/plan/PLAN.md).
 
 ## What is here
 
-HTCO Command is where the owner of a marketplace business sees verified orders and fulfillment, approves what the AI workforce proposes, and watches the office at work. It ships as three native clients over one API:
+HTCO Command is where the owner of a marketplace business sees verified orders and fulfillment, approves what the AI workforce proposes, and watches the office at work. The office ([platform ADR-0012](https://github.com/Tzvi1234/htco-platform/blob/main/docs/adr/0012-living-office-organization.md)) has 16 AI employees with names and titles in seven departments, deterministic automations, a tool registry and an engineering department, with Jev as a shared Decision Advisor; it shows only recorded activity. It ships as three native clients over one API:
 
 | Client | Stack | Best at |
 |---|---|---|
 | **Web** | TypeScript, React, React Aria, Tailwind (logical properties), Lingui | Everything, from any computer |
 | **Android** | Kotlin, Jetpack Compose | Approvals with push and biometrics, incidents, the daily picture |
-| **Windows** | C#/.NET 10, WinUI 3 | Dense operations work: order grids, incident center, developer console |
+| **Windows** | C#/.NET 10, WinUI 3 | Dense operations work: order grids, incident center, engineering console |
 
 All three share the [design tokens](design/tokens/README.md), the [component specification](design/COMPONENT_SPEC.md) and clients generated from the platform's OpenAPI contract. They never share business rules: those live on the server.
 
