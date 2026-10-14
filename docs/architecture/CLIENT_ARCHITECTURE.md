@@ -37,7 +37,7 @@ Web first (it establishes tokens, components, i18n, accessibility and the auth m
 
 | Area | Choice | Notes |
 |---|---|---|
-| Build | Vite 8, TypeScript (compiler TS 7; lint tooling on TS 6 until typescript-eslint supports TS 7) | Static build served by a small Caddy service with strict headers |
+| Build | Vite 8, TypeScript 6.0 for compiling and linting; both move to TypeScript 7 together once typescript-eslint supports it (its peer range ends below 6.1 today) | Static build served by a small Caddy service with strict headers. One TypeScript version keeps type-aware lint and the compiler in agreement. |
 | UI | React 19, React Aria Components | Accessibility and RTL built in |
 | Styling | Tailwind CSS 4 with token variables, logical utilities only (`ms-`, `me-`, `ps-`, `pe-`, `start-`, `end-`) | Lint rule rejects physical direction utilities |
 | Routing and data | TanStack Router, TanStack Query | Typed routes; query keys from the generated client |
@@ -101,4 +101,4 @@ No global state library until measurement shows a need; server state lives in Ta
 
 ## 8. Continuous integration
 
-One workflow with path-filtered jobs (`web`, `android`, `windows`, `tokens`, `contracts`) and a single required `ci-gate` job. A change to `design/tokens/` or `packages/api-clients/openapi.yaml` runs every client's job. All actions pinned by SHA; Renovate across npm, Gradle and NuGet with a minimum release age.
+One workflow (`.github/workflows/ci.yml`) and a single required `ci-gate` job. Today it runs `checks` (ESLint, Prettier, TypeScript), `tests` (Vitest), `security` (gitleaks over the history, osv-scanner on `pnpm-lock.yaml`), `workflows` (actionlint, zizmor, SHA pins), `test-integrity` and `pr-title`. Jobs for `web`, `android`, `windows`, `tokens` and `contracts` join with their slices behind path filters; a change to `design/tokens/` or `packages/api-clients/openapi.yaml` will run every client's job. All actions pinned by SHA; Renovate across npm, Gradle and NuGet with a seven-day minimum release age, matching pnpm's `minimumReleaseAge`.

@@ -19,7 +19,7 @@
 
 ---
 
-> **Status:** Phase 0 — design system v1 and plans complete. The web app starts in Phase 3, Android in Phase 14 and Windows in Phase 15. The master plan lives in [`htco-platform`](https://github.com/Tzvi1234/htco-platform/blob/main/docs/plan/PLAN.md).
+> **Status:** Phase 3 starting — workspace tooling and CI in place, the design-token pipeline next. The web app follows in Phase 3, Android in Phase 14 and Windows in Phase 15. The master plan lives in [`htco-platform`](https://github.com/Tzvi1234/htco-platform/blob/main/docs/plan/PLAN.md).
 
 ## What is here
 
@@ -63,7 +63,14 @@ Test-first, accessibility-first, right-to-left-first. Every screen designs its l
 
 ## Getting started
 
-Setup instructions arrive with the web shell in Phase 3.
+You need Node.js 24 (see `.node-version`) and pnpm; the pnpm version is pinned in `package.json` (`packageManager`, verified by hash), so `corepack enable` or a recent pnpm picks the right one.
+
+```bash
+pnpm install   # dependencies, at least seven days old (minimumReleaseAge)
+pnpm check     # lint, formatting, types and tests: what CI runs
+```
+
+The web app's own commands (`pnpm dev`, Storybook, Playwright) arrive with it in Phase 3.
 
 ## Security
 
