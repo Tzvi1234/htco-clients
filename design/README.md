@@ -42,9 +42,9 @@ Rules:
 
 | Family | Token | Use |
 |---|---|---|
-| Inter | `--font-latin` | English text and all numbers |
-| Heebo | `--font-hebrew` | Hebrew text (set `lang="he"` and `dir="rtl"`) |
-| JetBrains Mono | `--font-mono` | Receipt numbers, tracking codes, SKUs, IDs, code; always left-to-right |
+| Inter | `--font-family-latin` | English text and all numbers |
+| Heebo | `--font-family-hebrew` | Hebrew text (set `lang="he"` and `dir="rtl"`) |
+| JetBrains Mono | `--font-family-mono` | Receipt numbers, tracking codes, SKUs, IDs, code; always left-to-right |
 
 - Scale: `display` 40/48, `display-sm` 32/40, `title` 24/32, `title-sm` 20/28, `body` 16/24, `body-sm` 14/20, `caption` 12/16. Dense product UI uses `body-sm` for body text; never go below 12 px.
 - Weights: 400 for text, 500 for labels and buttons, 600 for titles and key numbers. Hierarchy comes from size and weight, not colour.
