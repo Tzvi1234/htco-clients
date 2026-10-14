@@ -49,7 +49,7 @@ There is no app code yet; the workspace tooling exists (slice 3.1). Each command
 
 | Command | What it runs | Created in |
 |---|---|---|
-| `node design/tokens/check-contrast.mjs` | Token contrast check (202 pairs, both themes) | Exists now |
+| `pnpm tokens` | Build the CSS, Kotlin and XAML tokens into `packages/design-tokens/generated/` (refuses when a contrast pair fails); `pnpm check` fails when they drift | Slice 3.2 |
 | `pnpm install && pnpm check` | ESLint (strict, type-aware), Prettier, TypeScript, Vitest; later also i18n, tokens and contrast | Slice 3.1 (tokens: 3.2; web: 3.3) |
 | `node scripts/<name>.ts` | Repository scripts run by CI (`conventional-commit`, `check-action-pins`, `test-integrity`); Node runs TypeScript directly | Slice 3.1 |
 | `pnpm storybook` | Component previews | Slice 3.4 |

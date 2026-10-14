@@ -19,3 +19,7 @@ Three platforms must share one visual language without sharing UI code. The W3C 
 
 - Positive: a colour or spacing change is one pull request across all clients, and contrast is guaranteed by CI.
 - Negative: a custom XAML format to maintain.
+
+## Validation
+
+- 2026-10-14 (slice 3.2): implemented in `packages/design-tokens`. Style Dictionary 5.6 merges the DTCG sources and resolves references; our own small formatters write all three outputs, because its built-in Compose transforms assume rem units and a single CSS file needs both themes. The `HighContrast` XAML dictionary moves to Phase 15, where the Windows app maps roles to Windows system colours. Contrast (202 pairs) and drift run in CI as tests.

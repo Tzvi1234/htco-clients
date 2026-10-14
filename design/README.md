@@ -6,7 +6,7 @@
 | **Source of truth** | This repository: [`tokens/`](tokens/README.md) (DTCG 2025.10), this brand book and [`COMPONENT_SPEC.md`](COMPONENT_SPEC.md) |
 | **Live reference** | [HTCO design system](https://claude.ai/artifact/Bgq6rDafP6qyXiJBCsq8nf) — a private mirror with live previews of every component in both themes, for the owner and invited reviewers |
 | **Brand assets** | [`../assets/brand/`](../assets/brand/) |
-| **Contrast check** | `node design/tokens/check-contrast.mjs` (202 token pairs, both themes) |
+| **Contrast check** | `pnpm check` (202 token pairs, both themes, in `packages/design-tokens`); `pnpm tokens` rebuilds the platform outputs |
 
 If the live reference and this repository ever disagree, the repository wins and the reference is updated.
 
