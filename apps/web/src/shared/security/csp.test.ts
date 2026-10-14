@@ -1,0 +1,42 @@
+import { describe, expect, it } from "vitest";
+
+import { CONTENT_SECURITY_POLICY, withContentSecurityPolicy } from "./csp.ts";
+import { refuseFraming } from "./framing.ts";
+
+describe("the Content Security Policy (AC-3.8.2)", () => {
+  it("allows only this origin, plus data: images for the authenticator QR code", () => {
+    expect(CONTENT_SECURITY_POLICY).toContain("default-src 'self'");
+    expect(CONTENT_SECURITY_POLICY).toContain("script-src 'self'");
+    expect(CONTENT_SECURITY_POLICY).toContain("img-src 'self' data:");
+    expect(CONTENT_SECURITY_POLICY).toContain("object-src 'none'");
+    expect(CONTENT_SECURITY_POLICY).not.toContain("unsafe-inline");
+    expect(CONTENT_SECURITY_POLICY).not.toContain("unsafe-eval");
+    expect(CONTENT_SECURITY_POLICY).not.toMatch(/https?:/);
+  });
+
+  it("is written into the built page's head, before any script", () => {
+    const html = '<html><head><meta charset="utf-8" /><script src="/a.js"></script></head></html>';
+    const built = withContentSecurityPolicy(html);
+    const meta = built.indexOf('http-equiv="Content-Security-Policy"');
+    expect(meta).toBeGreaterThan(-1);
+    expect(meta).toBeLessThan(built.indexOf("<script"));
+  });
+});
+
+describe("framing (clickjacking)", () => {
+  it("refuses to run inside a frame", () => {
+    const top = {};
+    expect(refuseFraming({ self: top, top })).toBe(false);
+    expect(refuseFraming({ self: {}, top })).toBe(true);
+  });
+
+  it("refuses when the top window cannot be read", () => {
+    const framed = {
+      self: {},
+      get top(): unknown {
+        throw new Error("cross-origin");
+      },
+    };
+    expect(refuseFraming(framed)).toBe(true);
+  });
+});
