@@ -45,15 +45,17 @@ docs/                  ADRs, architecture, UX, features
 
 ## Commands
 
-There is no app code yet; the workspace tooling exists (slice 3.1). Each command is created by the slice listed below, which must also update this table. If a command does not exist yet, say so; never claim it ran.
+The web app exists (`apps/web`, slice 3.3 part 1). Each command is created by the slice listed below, which must also update this table. If a command does not exist yet, say so; never claim it ran.
 
 | Command | What it runs | Created in |
 |---|---|---|
 | `pnpm tokens` | Build the CSS, Kotlin and XAML tokens into `packages/design-tokens/generated/` (refuses when a contrast pair fails); `pnpm check` fails when they drift | Slice 3.2 |
 | `pnpm install && pnpm check` | ESLint (strict, type-aware), Prettier, TypeScript, Vitest; later also i18n, tokens and contrast | Slice 3.1 (tokens: 3.2; web: 3.3) |
 | `node scripts/<name>.ts` | Repository scripts run by CI (`conventional-commit`, `check-action-pins`, `test-integrity`); Node runs TypeScript directly | Slice 3.1 |
+| `pnpm web` | The web app's dev server on http://localhost:5173 | Slice 3.3 |
+| `pnpm i18n:check` | Lingui catalogs in sync with the code, and no missing Hebrew translation (part of `pnpm check`); `pnpm --filter @htco/web i18n:extract` updates them | Slice 3.3 |
 | `pnpm storybook` | Component previews | Slice 3.4 |
-| `pnpm test:e2e` | Playwright journeys with axe (he/en × light/dark) | Slice 3.3 |
+| `pnpm test:e2e` | Playwright journeys with axe (he/en × light/dark) | Slice 3.3 (part 2) |
 | `./gradlew check` | Android: lint, unit and screenshot tests | Slice 14.1 |
 | `dotnet test` | Windows: unit and UI tests | Slice 15.2 |
 

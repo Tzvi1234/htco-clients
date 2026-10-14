@@ -14,10 +14,35 @@
 | CI | `checks`, `tests`, `security`, `workflows`, `test-integrity`, `pr-title`, aggregated by `ci-gate` | `.github/workflows/ci.yml` |
 | Updates | Renovate with a seven-day minimum release age; TypeScript held below 7 | `.github/renovate.json5` |
 
+## Web app (slice 3.3, part 1)
+
+```text
+apps/web/src/
+  main.tsx            reads the device settings, mounts <App>
+  app/                App (providers), router, RouteStates (not found, route error), shell/
+  features/           overview, shops, settings
+  shared/i18n/        locale (pure), i18n (Lingui catalogs), LocaleProvider (Lingui + React Aria + <html lang dir>)
+  shared/theme/       theme (pure), ThemeProvider (<html data-theme>)
+  shared/ui/          Button, IconButton, StatusDot, Ltr, EmptyState, ErrorState, Banner, Logo, PageHeader
+  shared/lib/         storage (guarded localStorage), useOnline, cx
+  locales/{en,he}/    messages.po
+```
+
+- **Tokens only.** `src/styles.css` maps every Tailwind theme namespace (colours, fonts, text sizes, radii by role, shadows, breakpoints) to the generated token variables and clears Tailwind's defaults, so a non-token colour or radius class does not exist. Radii are named by role (`rounded-control`, `rounded-button`, `rounded-card`, `rounded-dialog`, `rounded-pill`) because the token names (`--radius-sm`…) would collide with Tailwind's own variables.
+- **Direction.** `LocaleProvider` sets `lang` and `dir` on `<html>`; layout uses logical utilities only, enforced by `htco/logical-properties` (`scripts/eslint-logical-properties.ts`).
+- **Theme.** No `data-theme` means "follow the system" (the token CSS has a `prefers-color-scheme` block); light or dark set the attribute. Both choices are remembered per device in `localStorage` (`htco.locale`, `htco.theme`), guarded for blocked storage.
+- **Fonts** are self-hosted from `@fontsource-variable` (Inter, Heebo, JetBrains Mono), so the CSP needs no third-party font origin.
+- **Navigation** is one `<nav>` that is a bottom bar under 640 px, a rail to 1200 px and a sidebar above, so there is never a duplicate landmark.
+
 ## Decisions and alternatives
 
 | Decision | Alternatives considered | Why |
 |---|---|---|
 | TypeScript 6.0 for compiler and lint | TypeScript 7 for compiling, 6 for lint, side by side | Two TypeScript packages fight over the `tsc` binary and the peer resolution; at this size the native compiler's speed buys nothing, and one version keeps lint and compiler in agreement. |
+| Code-based TanStack routes | File-based routes with the router plugin | Three routes do not justify a code generator; switch when the route tree grows. |
+| Lingui macros compiled natively by `@lingui/vite-plugin` (`macroTransform`) | Babel or SWC plugin | No Babel in the Vite 8 toolchain. |
+| Catalog origins without line numbers (`formatter({ lineNumbers: false })`) | Line numbers (Lingui's default) | Reformatting code shifted line numbers and put the catalogs out of sync in CI; file names are enough to find a message. |
+| `GHSA-vfj7-8cjw-p6xm` (braces 3.0.3) ignored in `osv-scanner.toml` until 2026-12-31 | Block the web app until a fix ships | No fixed release exists; braces is reached only through `@lingui/cli` (development tooling, our own patterns, never untrusted input) and is not in the bundle. The entry expires so it is reviewed again. |
+| `semver@6.3.1` excluded from `trustPolicy` | Drop `eslint-plugin-react-hooks` | The npm team's 2023 ReDoS backport predates provenance on the 6.x line; the exclusion names that exact version only. |
 | Repository scripts in TypeScript, run by Node | Reuse the platform's Python scripts | Each repository builds with its own toolchain (ADR-0001 in `htco-platform`); the scripts are small and tested here. |
 | `uvx` for actionlint and zizmor in CI | Release binaries with checksums | The same versions as the platform repository, no Python project needed. |

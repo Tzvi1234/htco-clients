@@ -1,0 +1,7 @@
+# Reviewed exceptions for osv-scanner (security job). Each entry names why it is safe for now
+# and expires, so it is reviewed again.
+
+[[IgnoredVulns]]
+id = "GHSA-vfj7-8cjw-p6xm"
+ignoreUntil = 2026-12-31T00:00:00Z
+reason = "braces 3.0.3 (stack exhaustion on deeply nested glob patterns; no fixed release yet) is reached only through @lingui/cli, a development tool that expands our own catalog patterns, never untrusted input. Not in the web bundle. Upgrade when a fixed braces or micromatch is published."

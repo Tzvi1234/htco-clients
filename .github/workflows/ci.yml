@@ -39,6 +39,8 @@ jobs:
         run: pnpm run lint
       - name: Types
         run: pnpm run typecheck
+      - name: Translations in sync and complete
+        run: pnpm run i18n:check
 
   tests:
     name: tests

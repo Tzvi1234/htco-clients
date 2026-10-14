@@ -1,0 +1,47 @@
+{
+  "name": "@htco/web",
+  "version": "0.0.0",
+  "private": true,
+  "description": "HTCO Command for the web: the owner's bilingual, accessible dashboard.",
+  "license": "UNLICENSED",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "i18n:extract": "lingui extract --clean",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@fontsource-variable/heebo": "5.3.0",
+    "@fontsource-variable/inter": "5.3.0",
+    "@fontsource-variable/jetbrains-mono": "5.3.0",
+    "@htco/design-tokens": "workspace:*",
+    "@lingui/core": "6.9.0",
+    "@lingui/react": "6.9.0",
+    "@tanstack/react-query": "5.104.1",
+    "@tanstack/react-router": "1.170.41",
+    "lucide-react": "1.52.0",
+    "react": "19.3.0",
+    "react-aria-components": "1.21.1",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@lingui/cli": "6.9.0",
+    "@lingui/conf": "6.9.0",
+    "@lingui/format-po": "6.9.0",
+    "@lingui/vite-plugin": "6.9.0",
+    "@playwright/test": "1.63.0",
+    "@tailwindcss/vite": "4.3.3",
+    "@testing-library/jest-dom": "7.0.1",
+    "@testing-library/react": "16.3.3",
+    "@testing-library/user-event": "14.6.7",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.1.2",
+    "jsdom": "30.1.2",
+    "tailwindcss": "4.3.3",
+    "vite": "8.3.3"
+  }
+}

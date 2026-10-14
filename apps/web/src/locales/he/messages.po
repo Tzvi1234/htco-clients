@@ -1,0 +1,128 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2026-10-14 13:32+0300\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: he\n"
+
+#: src/app/shell/UserMenu.tsx
+msgid "Account and preferences"
+msgstr "חשבון והעדפות"
+
+#: src/features/overview/OverviewPage.tsx
+msgid "Connect Etsy shop"
+msgstr "לחבר חנות Etsy"
+
+#: src/features/overview/OverviewPage.tsx
+msgid "Connect your first shop"
+msgstr "לחבר את החנות הראשונה"
+
+#: src/features/shops/ShopsPage.tsx
+msgid "Connected shops appear here with their sync status and capabilities."
+msgstr "חנויות מחוברות יופיעו כאן עם מצב הסנכרון והיכולות שלהן."
+
+#: src/features/overview/OverviewPage.tsx
+msgid "Connecting a shop opens in a coming release."
+msgstr "חיבור חנות ייפתח בגרסה קרובה."
+
+#: src/app/shell/UserMenu.tsx
+#: src/features/settings/SettingsPage.tsx
+msgid "Dark"
+msgstr "כהה"
+
+#: src/app/shell/ShopSwitcher.tsx
+msgid "Etsy · not connected"
+msgstr "Etsy · לא מחוברת"
+
+#: src/app/RouteStates.tsx
+msgid "Go to the overview"
+msgstr "למעבר לסקירה"
+
+#: src/app/shell/UserMenu.tsx
+#: src/features/settings/SettingsPage.tsx
+msgid "Language"
+msgstr "שפה"
+
+#: src/app/shell/UserMenu.tsx
+#: src/features/settings/SettingsPage.tsx
+msgid "Light"
+msgstr "בהירה"
+
+#: src/app/shell/Navigation.tsx
+msgid "Main"
+msgstr "ראשי"
+
+#: src/app/shell/UserMenu.tsx
+#: src/features/settings/SettingsPage.tsx
+msgid "Match the system"
+msgstr "לפי המערכת"
+
+#: src/app/shell/ShopSwitcher.tsx
+msgid "No shop connected"
+msgstr "אין חנות מחוברת"
+
+#: src/features/shops/ShopsPage.tsx
+msgid "No shops yet"
+msgstr "עדיין אין חנויות"
+
+#: src/features/overview/OverviewPage.tsx
+msgid "Orders, tracking and listings appear here after you connect an Etsy shop. It takes about a minute."
+msgstr "הזמנות, מעקב משלוחים ומוצרים יופיעו כאן אחרי חיבור חנות Etsy. זה לוקח בערך דקה."
+
+#: src/app/shell/Navigation.tsx
+#: src/features/overview/OverviewPage.tsx
+msgid "Overview"
+msgstr "סקירה"
+
+#: src/app/RouteStates.tsx
+msgid "Page not found"
+msgstr "הדף לא נמצא"
+
+#: src/shared/ui/ErrorState.tsx
+msgid "Request ID <0>{requestId}</0>"
+msgstr "מזהה בקשה <0>{requestId}</0>"
+
+#: src/app/shell/Navigation.tsx
+#: src/features/settings/SettingsPage.tsx
+msgid "Settings"
+msgstr "הגדרות"
+
+#: src/app/shell/Navigation.tsx
+#: src/features/shops/ShopsPage.tsx
+msgid "Shops"
+msgstr "חנויות"
+
+#: src/app/RouteStates.tsx
+msgid "Something went wrong while showing it. Try again; your data was not changed."
+msgstr "משהו השתבש בהצגת המסך. אפשר לנסות שוב; הנתונים לא השתנו."
+
+#: src/app/RouteStates.tsx
+msgid "The address may be mistyped, or the page has moved."
+msgstr "ייתכן שהכתובת שגויה או שהדף הועבר."
+
+#: src/features/shops/ShopsPage.tsx
+msgid "The marketplace shops this organization runs."
+msgstr "החנויות שהארגון מפעיל בזירות המסחר."
+
+#: src/app/shell/UserMenu.tsx
+#: src/features/settings/SettingsPage.tsx
+msgid "Theme"
+msgstr "ערכת נושא"
+
+#: src/features/settings/SettingsPage.tsx
+msgid "These preferences are remembered on this device."
+msgstr "ההעדפות האלה נשמרות במכשיר הזה."
+
+#: src/app/RouteStates.tsx
+msgid "This screen could not be shown"
+msgstr "לא ניתן להציג את המסך"
+
+#: src/app/RouteStates.tsx
+msgid "Try again"
+msgstr "לנסות שוב"
+
+#: src/app/shell/AppShell.tsx
+msgid "You are offline. What you see may be out of date; changes are paused."
+msgstr "אין חיבור לאינטרנט. ייתכן שהמידע אינו עדכני; שינויים מושהים."

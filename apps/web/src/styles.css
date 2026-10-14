@@ -1,0 +1,131 @@
+/* The HTCO design tokens drive every utility: Tailwind's own palette, radii and shadows are
+   removed, so only token-backed classes exist ("tokens only", design/README.md). */
+@import "tailwindcss";
+@import "@htco/design-tokens/tokens.css";
+
+@theme inline {
+  --color-*: initial;
+  --color-canvas: var(--bg-canvas);
+  --color-surface: var(--bg-surface);
+  --color-raised: var(--bg-raised);
+  --color-sunken: var(--bg-sunken);
+  --color-selected: var(--bg-selected);
+  --color-brand: var(--bg-brand);
+  --color-primary: var(--text-primary);
+  --color-secondary: var(--text-secondary);
+  --color-muted: var(--text-muted);
+  --color-on-brand: var(--text-on-brand);
+  --color-link: var(--text-link);
+  --color-icon: var(--icon-default);
+  --color-icon-muted: var(--icon-muted);
+  --color-border-subtle: var(--border-subtle);
+  --color-border-strong: var(--border-strong);
+  --color-border-control: var(--border-control);
+  --color-focus: var(--border-focus);
+  --color-action-primary: var(--action-primary-bg);
+  --color-action-primary-hover: var(--action-primary-bg-hover);
+  --color-action-primary-pressed: var(--action-primary-bg-pressed);
+  --color-action-primary-fg: var(--action-primary-fg);
+  --color-action-secondary: var(--action-secondary-bg);
+  --color-action-secondary-hover: var(--action-secondary-bg-hover);
+  --color-action-secondary-fg: var(--action-secondary-fg);
+  --color-action-secondary-border: var(--action-secondary-border);
+  --color-action-danger: var(--action-danger-bg);
+  --color-action-danger-fg: var(--action-danger-fg);
+  --color-accent: var(--accent-fill);
+  --color-accent-text: var(--accent-text);
+  --color-accent-subtle: var(--accent-subtle);
+  --color-attention: var(--attention-dot);
+  --color-attention-text: var(--attention-text);
+  --color-attention-subtle: var(--attention-subtle);
+  --color-success: var(--success-dot);
+  --color-success-text: var(--success-text);
+  --color-success-subtle: var(--success-subtle);
+  --color-danger: var(--danger-dot);
+  --color-danger-text: var(--danger-text);
+  --color-danger-subtle: var(--danger-subtle);
+  --color-status-running: var(--status-running);
+  --color-status-needs-you: var(--status-needs-you);
+  --color-status-waiting: var(--status-waiting);
+  --color-status-done: var(--status-done);
+  --color-status-failed: var(--status-failed);
+
+  --font-*: initial;
+  --font-latin: var(--font-family-latin);
+  --font-hebrew: var(--font-family-hebrew);
+  --font-mono: var(--font-family-mono);
+
+  --text-*: initial;
+  --text-caption: var(--font-size-caption);
+  --text-caption--line-height: var(--font-line-height-caption);
+  --text-body-sm: var(--font-size-body-sm);
+  --text-body-sm--line-height: var(--font-line-height-body-sm);
+  --text-body: var(--font-size-body);
+  --text-body--line-height: var(--font-line-height-body);
+  --text-title-sm: var(--font-size-title-sm);
+  --text-title-sm--line-height: var(--font-line-height-title-sm);
+  --text-title: var(--font-size-title);
+  --text-title--line-height: var(--font-line-height-title);
+  --text-display-sm: var(--font-size-display-sm);
+  --text-display-sm--line-height: var(--font-line-height-display-sm);
+  --text-display: var(--font-size-display);
+  --text-display--line-height: var(--font-line-height-display);
+
+  /* Radii by role (design/README.md, "Shape and depth"). */
+  --radius-*: initial;
+  --radius-control: var(--radius-sm);
+  --radius-button: var(--radius-md);
+  --radius-card: var(--radius-lg);
+  --radius-dialog: var(--radius-xl);
+  --radius-pill: var(--radius-full);
+
+  --shadow-*: initial;
+  --shadow-1: var(--elevation-1);
+  --shadow-2: var(--elevation-2);
+  --shadow-3: var(--elevation-3);
+
+  --breakpoint-*: initial;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 900px;
+  --breakpoint-lg: 1200px;
+  --breakpoint-xl: 1600px;
+
+  --ease-standard: var(--motion-easing-standard);
+}
+
+@layer base {
+  html {
+    background: var(--bg-canvas);
+    color: var(--text-primary);
+    font-family: var(--font-family-latin);
+    font-size: 100%;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :root:lang(he) {
+    font-family: var(--font-family-hebrew);
+  }
+
+  body {
+    margin: 0;
+    font-size: var(--font-size-body-sm);
+    line-height: var(--font-line-height-body-sm);
+  }
+
+  /* One focus ring everywhere: 2 px border-focus with a 2 px offset. */
+  :focus-visible,
+  [data-focus-visible] {
+    outline: var(--border-width-focus) solid var(--border-focus);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 1ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 1ms !important;
+    }
+  }
+}
