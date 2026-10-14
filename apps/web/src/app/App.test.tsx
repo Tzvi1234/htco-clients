@@ -7,6 +7,7 @@ import { App } from "./App.tsx";
 import type { Locale } from "../shared/i18n/locale.ts";
 import { memoryStorage, type SettingsStorage } from "../shared/lib/storage.ts";
 import type { ThemePreference } from "../shared/theme/theme.ts";
+import { fakeBackend } from "../test/fakeApi.ts";
 
 interface Options {
   path?: string;
@@ -22,7 +23,11 @@ async function renderApp({
   storage = memoryStorage(),
 }: Options = {}) {
   const history = createMemoryHistory({ initialEntries: [path] });
-  render(<App locale={locale} theme={theme} storage={storage} history={history} />);
+  // A signed-in Owner whose session already has the second factor (slice 3.5).
+  const backend = fakeBackend({ signedIn: true, enrolled: true, assurance: "aal2" });
+  render(
+    <App locale={locale} theme={theme} storage={storage} history={history} api={backend.client} />,
+  );
   await screen.findByRole("heading", { level: 1 });
   return { user: userEvent.setup(), storage, history };
 }
