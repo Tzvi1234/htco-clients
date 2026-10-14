@@ -17,7 +17,8 @@
     "test": "vitest run",
     "tokens": "pnpm --filter @htco/design-tokens build",
     "i18n:check": "pnpm --filter @htco/web exec lingui check sync && pnpm --filter @htco/web exec lingui check missing",
-    "web": "pnpm --filter @htco/web dev"
+    "web": "pnpm --filter @htco/web dev",
+    "api:generate": "pnpm --filter @htco/api-client generate"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

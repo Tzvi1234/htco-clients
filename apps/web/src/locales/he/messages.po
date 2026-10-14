@@ -11,6 +11,34 @@ msgstr ""
 msgid "Account and preferences"
 msgstr "חשבון והעדפות"
 
+#: src/features/auth/SecondFactorPage.tsx
+msgid "Authenticator app"
+msgstr "אפליקציית אימות"
+
+#: src/features/security/SecurityPage.tsx
+msgid "Authenticator app is set up"
+msgstr "אפליקציית האימות מוגדרת"
+
+#: src/features/auth/SecondFactorPage.tsx
+msgid "Cannot scan? Type this key into the app:"
+msgstr "לא מצליחים לסרוק? הקלידו באפליקציה את המפתח הזה:"
+
+#: src/features/auth/SecondFactorPage.tsx
+msgid "Checking your account"
+msgstr "בודקים את החשבון שלך"
+
+#: src/features/auth/SecondFactorPage.tsx
+msgid "Code from the app"
+msgstr "הקוד מהאפליקציה"
+
+#: src/features/auth/SecondFactorPage.tsx
+msgid "Confirm"
+msgstr "אישור"
+
+#: src/features/auth/SecondFactorPage.tsx
+msgid "Confirm it is you"
+msgstr "אישור זהות"
+
 #: src/features/overview/OverviewPage.tsx
 msgid "Connect Etsy shop"
 msgstr "לחבר חנות Etsy"
@@ -32,6 +60,18 @@ msgstr "חיבור חנות ייפתח בגרסה קרובה."
 msgid "Dark"
 msgstr "כהה"
 
+#: src/features/auth/SignInPage.tsx
+msgid "Email"
+msgstr "אימייל"
+
+#: src/features/auth/SecondFactorPage.tsx
+msgid "Enter the 6-digit code from your authenticator app."
+msgstr "הזינו את הקוד בן 6 הספרות מאפליקציית האימות."
+
+#: src/features/auth/SecondFactorPage.tsx
+msgid "Enter the 6-digit code the app shows."
+msgstr "הזינו את הקוד בן 6 הספרות שהאפליקציה מציגה."
+
 #: src/app/shell/ShopSwitcher.tsx
 msgid "Etsy · not connected"
 msgstr "Etsy · לא מחוברת"
@@ -40,10 +80,19 @@ msgstr "Etsy · לא מחוברת"
 msgid "Go to the overview"
 msgstr "למעבר לסקירה"
 
+#: src/features/security/SecurityPage.tsx
+msgid "How you sign in, and where you are signed in."
+msgstr "איך נכנסים, ובאילו מכשירים את/ה מחובר/ת."
+
 #: src/app/shell/UserMenu.tsx
 #: src/features/settings/SettingsPage.tsx
 msgid "Language"
 msgstr "שפה"
+
+#. placeholder {0}: seen.format(new Date(session.last_seen_at))
+#: src/features/security/SecurityPage.tsx
+msgid "Last active {0}"
+msgstr "פעילות אחרונה {0}"
 
 #: src/app/shell/UserMenu.tsx
 #: src/features/settings/SettingsPage.tsx
@@ -58,6 +107,10 @@ msgstr "ראשי"
 #: src/features/settings/SettingsPage.tsx
 msgid "Match the system"
 msgstr "לפי המערכת"
+
+#: src/features/security/SecurityPage.tsx
+msgid "No authenticator app yet."
+msgstr "עדיין אין אפליקציית אימות."
 
 #: src/app/shell/ShopSwitcher.tsx
 msgid "No shop connected"
@@ -76,13 +129,42 @@ msgstr "הזמנות, מעקב משלוחים ומוצרים יופיעו כאן
 msgid "Overview"
 msgstr "סקירה"
 
+#: src/features/auth/SecondFactorPage.tsx
+msgid "Owners and Admins sign in with a password and a code from an app such as Google Authenticator, Microsoft Authenticator or 1Password."
+msgstr "בעלים ומנהלים נכנסים עם סיסמה וקוד מאפליקציה כמו Google Authenticator,‏ Microsoft Authenticator או 1Password."
+
 #: src/app/RouteStates.tsx
 msgid "Page not found"
 msgstr "הדף לא נמצא"
 
+#: src/features/auth/SignInPage.tsx
+msgid "Password"
+msgstr "סיסמה"
+
+#: src/features/auth/SecondFactorPage.tsx
+msgid "QR code for your authenticator app"
+msgstr "קוד QR לאפליקציית האימות"
+
 #: src/shared/ui/ErrorState.tsx
 msgid "Request ID <0>{requestId}</0>"
 msgstr "מזהה בקשה <0>{requestId}</0>"
+
+#: src/features/auth/SecondFactorPage.tsx
+msgid "Scan the QR code with the app."
+msgstr "סרקו את קוד ה-QR באפליקציה."
+
+#: src/app/shell/UserMenu.tsx
+#: src/features/security/SecurityPage.tsx
+msgid "Security"
+msgstr "אבטחה"
+
+#: src/features/security/SecurityPage.tsx
+msgid "Set one up"
+msgstr "להגדרה"
+
+#: src/features/auth/SecondFactorPage.tsx
+msgid "Set up your authenticator app"
+msgstr "הגדרת אפליקציית אימות"
 
 #: src/app/shell/Navigation.tsx
 #: src/features/settings/SettingsPage.tsx
@@ -94,6 +176,35 @@ msgstr "הגדרות"
 msgid "Shops"
 msgstr "חנויות"
 
+#: src/features/auth/SecondFactorPage.tsx
+msgid "Show the QR code"
+msgstr "הצגת קוד ה-QR"
+
+#: src/features/auth/SignInPage.tsx
+msgid "Sign in"
+msgstr "כניסה"
+
+#: src/features/auth/SignInPage.tsx
+msgid "Sign in to HTCO"
+msgstr "כניסה ל-HTCO"
+
+#: src/app/shell/UserMenu.tsx
+#: src/features/security/SecurityPage.tsx
+msgid "Sign out"
+msgstr "יציאה"
+
+#: src/features/security/SecurityPage.tsx
+msgid "Sign out {device}"
+msgstr "ניתוק {device}"
+
+#: src/features/auth/SignInPage.tsx
+msgid "Sign-in is unavailable right now. Try again shortly."
+msgstr "הכניסה לא זמינה כרגע. נסו שוב בעוד רגע."
+
+#: src/features/security/SecurityPage.tsx
+msgid "Signed-in devices"
+msgstr "מכשירים מחוברים"
+
 #: src/app/RouteStates.tsx
 msgid "Something went wrong while showing it. Try again; your data was not changed."
 msgstr "משהו השתבש בהצגת המסך. אפשר לנסות שוב; הנתונים לא השתנו."
@@ -101,6 +212,14 @@ msgstr "משהו השתבש בהצגת המסך. אפשר לנסות שוב; ה�
 #: src/app/RouteStates.tsx
 msgid "The address may be mistyped, or the page has moved."
 msgstr "ייתכן שהכתובת שגויה או שהדף הועבר."
+
+#: src/features/auth/SecondFactorPage.tsx
+msgid "The code is wrong or expired."
+msgstr "הקוד שגוי או שפג תוקפו."
+
+#: src/features/auth/SignInPage.tsx
+msgid "The email or the password is wrong."
+msgstr "האימייל או הסיסמה שגויים."
 
 #: src/features/shops/ShopsPage.tsx
 msgid "The marketplace shops this organization runs."
@@ -115,13 +234,42 @@ msgstr "ערכת נושא"
 msgid "These preferences are remembered on this device."
 msgstr "ההעדפות האלה נשמרות במכשיר הזה."
 
+#: src/features/security/SecurityPage.tsx
+msgid "This device"
+msgstr "המכשיר הזה"
+
+#: src/features/auth/SecondFactorPage.tsx
+msgid "This did not work. Try again shortly."
+msgstr "זה לא עבד. נסו שוב בעוד רגע."
+
+#: src/features/auth/SignInPage.tsx
+msgid "This page could not sign you in. Reload it and try again."
+msgstr "הדף לא הצליח להכניס אותך. טענו אותו מחדש ונסו שוב."
+
 #: src/app/RouteStates.tsx
 msgid "This screen could not be shown"
 msgstr "לא ניתן להציג את המסך"
 
+#: src/features/auth/SecondFactorPage.tsx
+#: src/features/auth/SignInPage.tsx
+msgid "Too many attempts. Wait 15 minutes and try again."
+msgstr "יותר מדי ניסיונות. המתינו 15 דקות ונסו שוב."
+
 #: src/app/RouteStates.tsx
 msgid "Try again"
 msgstr "לנסות שוב"
+
+#: src/features/security/SecurityPage.tsx
+msgid "Two-factor sign-in"
+msgstr "כניסה דו-שלבית"
+
+#: src/features/security/SecurityPage.tsx
+msgid "Unknown device"
+msgstr "מכשיר לא מזוהה"
+
+#: src/features/auth/SignInPage.tsx
+msgid "Use the email you were invited with."
+msgstr "השתמשו באימייל שאליו נשלחה ההזמנה."
 
 #: src/app/shell/AppShell.tsx
 msgid "You are offline. What you see may be out of date; changes are paused."

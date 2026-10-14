@@ -1,4 +1,6 @@
 import { useLingui } from "@lingui/react/macro";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "@tanstack/react-router";
 import { CircleUser } from "lucide-react";
 import {
   Header,
@@ -11,6 +13,7 @@ import {
   type Selection,
 } from "react-aria-components";
 
+import { useApi } from "../../shared/api/api.tsx";
 import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
 import type { Locale } from "../../shared/i18n/locale.ts";
 import { useTheme } from "../../shared/theme/ThemeProvider.tsx";
@@ -28,11 +31,21 @@ function selected(keys: Selection): string | undefined {
   return typeof first === "string" ? first : undefined;
 }
 
-/** Account menu: language, theme and (from slice 3.5) signing out. */
+/** Account menu: language, theme, security and signing out (slice 3.5). */
 export function UserMenu() {
   const { t } = useLingui();
   const { locale, setLocale } = useLocale();
   const { theme, setTheme } = useTheme();
+  const api = useApi();
+  const queryClient = useQueryClient();
+  const router = useRouter();
+  const signOut = useMutation({
+    mutationFn: () => api.POST("/v1/auth/sign-out"),
+    onSettled: async () => {
+      queryClient.clear();
+      await router.navigate({ to: "/sign-in" });
+    },
+  });
 
   return (
     <MenuTrigger>
@@ -82,6 +95,21 @@ export function UserMenu() {
               {t`Dark`}
             </MenuItem>
           </MenuSection>
+          <Separator className="my-1 h-px bg-border-subtle" />
+          <MenuItem
+            className={ITEM}
+            onAction={() => void router.navigate({ to: "/settings/security" })}
+          >
+            {t`Security`}
+          </MenuItem>
+          <MenuItem
+            className={ITEM}
+            onAction={() => {
+              signOut.mutate();
+            }}
+          >
+            {t`Sign out`}
+          </MenuItem>
         </Menu>
       </Popover>
     </MenuTrigger>

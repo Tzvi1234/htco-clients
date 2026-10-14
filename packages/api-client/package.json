@@ -1,0 +1,20 @@
+{
+  "name": "@htco/api-client",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Typed client for the HTCO API, generated from the platform's pinned OpenAPI document.",
+  "license": "UNLICENSED",
+  "type": "module",
+  "scripts": {
+    "generate": "node src/write-schema.ts"
+  },
+  "dependencies": {
+    "openapi-fetch": "0.17.0"
+  },
+  "devDependencies": {
+    "openapi-typescript": "7.13.0"
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}
