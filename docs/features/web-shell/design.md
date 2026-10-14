@@ -34,6 +34,22 @@ apps/web/src/
 - **Fonts** are self-hosted from `@fontsource-variable` (Inter, Heebo, JetBrains Mono), so the CSP needs no third-party font origin.
 - **Navigation** is one `<nav>` that is a bottom bar under 640 px, a rail to 1200 px and a sidebar above, so there is never a duplicate landmark.
 
+## API client and sign-in (slices 3.6 and 3.5, web)
+
+```text
+packages/api-client/  openapi.yaml (pinned), generated/schema.d.ts, src/index.ts (createApiClient)
+apps/web/src/
+  shared/api/         ApiError, ApiProvider, query factories (session, me, mfa, sessions), needsSecondFactor, safeRedirect
+  features/auth/      AuthLayout, SignInPage, SecondFactorPage (set up or confirm)
+  features/security/  SecurityPage (two-factor status, signed-in devices)
+  test/fakeApi.ts     the API's auth endpoints in memory
+```
+
+- **Same origin.** The app calls `/api/...`; in development Vite proxies it to `http://127.0.0.1:8000`, in production the edge routes it to the API (slice 3.8). Cookies stay first-party and `SameSite=Strict` works.
+- **Guards.** A pathless `signed-in` route reads the session (401 becomes `null`) and redirects to `/sign-in?redirect=...`; a pathless `app` route reads `/v1/me` and sends an Owner or Admin without `aal2` to `/security/setup`. Both read the cache (`staleTime: "static"`); sign-in, the second factor and sign-out remove the `auth` queries, and a 401 from any query does the same and returns to sign-in.
+- **Redirects** after sign-in accept only a same-site path (`safeRedirect`: one leading `/`, no `//`, no backslash).
+- **Errors** are mapped from the problem type's last segment (`sign-in-refused`, `too-many-attempts`, `csrf-failed`, `mfa-code-refused`) to calm messages that never say whether the email exists. 4xx responses are not retried.
+
 ## Decisions and alternatives
 
 | Decision | Alternatives considered | Why |

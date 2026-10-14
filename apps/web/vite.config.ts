@@ -16,7 +16,18 @@ export default defineConfig({
     assetsInlineLimit: 0,
     sourcemap: false,
   },
-  server: { port: 5173, strictPort: true },
+  server: {
+    port: 5173,
+    strictPort: true,
+    // The web app calls the API on its own origin under /api (as in production, where the
+    // ingress routes /api to the API), so the session cookie stays first-party.
+    proxy: {
+      "/api": {
+        target: "http://127.0.0.1:8000",
+        rewrite: (path) => path.replace(/^\/api/, ""),
+      },
+    },
+  },
   test: {
     name: "web",
     environment: "jsdom",
