@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { CONTENT_SECURITY_POLICY, withContentSecurityPolicy } from "./csp.ts";
+import { CONTENT_SECURITY_POLICY, withSecurityPolicies } from "./csp.ts";
 import { refuseFraming } from "./framing.ts";
 
 describe("the Content Security Policy (AC-3.8.2)", () => {
@@ -16,10 +16,15 @@ describe("the Content Security Policy (AC-3.8.2)", () => {
 
   it("is written into the built page's head, before any script", () => {
     const html = '<html><head><meta charset="utf-8" /><script src="/a.js"></script></head></html>';
-    const built = withContentSecurityPolicy(html);
+    const built = withSecurityPolicies(html);
     const meta = built.indexOf('http-equiv="Content-Security-Policy"');
     expect(meta).toBeGreaterThan(-1);
     expect(meta).toBeLessThan(built.indexOf("<script"));
+  });
+
+  it("sends no referrer to other sites", () => {
+    const built = withSecurityPolicies('<head><meta charset="utf-8" /></head>');
+    expect(built).toContain('<meta name="referrer" content="same-origin" />');
   });
 });
 
