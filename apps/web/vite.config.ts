@@ -5,7 +5,7 @@ import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import { defineConfig, type Plugin } from "vitest/config";
 
-import { withContentSecurityPolicy } from "./src/shared/security/csp.ts";
+import { withSecurityPolicies } from "./src/shared/security/csp.ts";
 
 // Explicit, so the config is found when Vitest runs from the repository root.
 const LINGUI_CONFIG = fileURLToPath(new URL("lingui.config.ts", import.meta.url));
@@ -15,7 +15,7 @@ function contentSecurityPolicy(): Plugin {
   return {
     name: "htco-content-security-policy",
     apply: "build",
-    transformIndexHtml: (html) => withContentSecurityPolicy(html),
+    transformIndexHtml: (html) => withSecurityPolicies(html),
   };
 }
 

@@ -21,9 +21,12 @@ export const CONTENT_SECURITY_POLICY = [
   "form-action 'self'",
 ].join("; ");
 
-/** Insert the policy after the charset, before any script or style, so it applies to all of them. */
-export function withContentSecurityPolicy(html: string): string {
-  const meta = `<meta http-equiv="Content-Security-Policy" content="${CONTENT_SECURITY_POLICY}" />`;
+/** Insert the policies after the charset, before any script or style, so it applies to all of them. */
+export function withSecurityPolicies(html: string): string {
+  const meta =
+    `<meta http-equiv="Content-Security-Policy" content="${CONTENT_SECURITY_POLICY}" />\n` +
+    // Addresses and query strings never leave for another site.
+    `    <meta name="referrer" content="same-origin" />`;
   const charset = /<meta charset="utf-8" \/>/i.exec(html);
   if (charset === null) throw new Error("index.html has no <meta charset> in its head");
   const end = charset.index + charset[0].length;
