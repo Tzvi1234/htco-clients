@@ -9,3 +9,4 @@ Decisions specific to the web, Windows and Android clients and the design system
 | [0003](0003-design-token-pipeline.md) | One DTCG token source generated for CSS, Kotlin and XAML | Accepted |
 | [0004](0004-api-client-generation.md) | Generated API clients from a pinned OpenAPI copy | Accepted |
 | [0005](0005-brand-palette-from-logo.md) | Brand palette measured from the official logo | Accepted |
+| [0006](0006-static-web-hosting.md) | The web app as an App Platform static site, policies in the page | Accepted |
