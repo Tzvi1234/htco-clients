@@ -5,3 +5,4 @@ Every client feature has a folder here, created from [`_template/`](_template/) 
 | Feature | Platforms | Phase | Status |
 |---|---|---|---|
 | [web-shell](web-shell/overview.md) | Web | 3 | In progress |
+| [design-tokens](design-tokens/overview.md) | Web, Android, Windows | 3 | Done (slice 3.2) |

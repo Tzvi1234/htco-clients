@@ -23,21 +23,23 @@ The original planning brief's earlier approximations (`#061322`, `#00E6D9`, `#F0
 
 ## Contrast guarantee
 
-Every text pair is at least 4.5:1 and every control boundary, focus ring and status dot at least 3:1, in both themes. The pairs checked are the ones the brand book names (text on each background, button labels on fills, badge text on its tint, dots on surfaces). From Phase 3, CI recomputes all pairs from these files and fails on any regression.
+Every text pair is at least 4.5:1 and every control boundary, focus ring and status dot at least 3:1, in both themes. The pairs checked are the ones the brand book names (text on each background, button labels on fills, badge text on its tint, dots on surfaces): 101 per theme, listed in [`packages/design-tokens/src/contrast.ts`](../../packages/design-tokens/src/contrast.ts). CI recomputes them from these files on every pull request and fails on any regression, and `pnpm tokens` refuses to build while one fails.
 
-## How tokens reach each platform (Phase 3 onward)
+## How tokens reach each platform
 
-[Style Dictionary](https://styledictionary.com/) builds the files below; generated output is committed and CI fails if it drifts from the source.
+`pnpm tokens` builds the files below in [`packages/design-tokens/generated/`](../../packages/design-tokens/generated/): [Style Dictionary](https://styledictionary.com/) merges the sources and resolves references, and small formatters of ours write each platform's file. The output is committed, and `pnpm check` fails when it drifts from the source.
 
-| Platform | Output | Naming |
-|---|---|---|
-| Web | CSS custom properties: `:root` (light), `[data-theme="dark"]`, and a `prefers-color-scheme` fallback | `--bg-canvas`, `--text-primary`, `--space-4` (the `color.` prefix is dropped so names match the brand book) |
-| Android | Kotlin objects for Compose (`HtcoColors.Light`, `HtcoColors.Dark`, `HtcoSpacing`, `HtcoType`) | `bgCanvas`, `textPrimary` |
-| Windows | XAML `ResourceDictionary` with `ThemeDictionaries` (Light, Dark, HighContrast) | `HtcoBgCanvasBrush`, `HtcoTextPrimaryBrush` |
+| Platform | File | Contents | Naming |
+|---|---|---|---|
+| Web | `htco-tokens.css` | Custom properties: light theme and the primitives on `:root`, the dark theme on `[data-theme="dark"]` and, when the user has not chosen, on a dark `prefers-color-scheme` | `--bg-canvas`, `--text-primary`, `--space-4`, `--font-size-body`, `--elevation-1` (the `color.` prefix is dropped so names match the brand book) |
+| Android | `HtcoTokens.kt` (package `app.htco.designsystem.tokens`) | `HtcoColors.Light` and `HtcoColors.Dark`, `HtcoSpacing`, `HtcoRadius`, `HtcoSize`, `HtcoBorderWidth`, `HtcoType` (sizes and line heights in sp, weights), `HtcoMotion` (milliseconds and easing); pixels become dp, 1rem is 16 | `bgCanvas`, `textPrimary`, `space4` |
+| Windows | `HtcoTokens.xaml` | A `ResourceDictionary` with `SolidColorBrush` resources in `Light` and `Dark` theme dictionaries, sizes as `x:Double`, radii as `CornerRadius`. The `HighContrast` dictionary, mapped to Windows system colours, is designed with the Windows app (Phase 15) | `HtcoBgCanvasBrush`, `HtcoSpace4`, `HtcoRadiusMd` |
+
+Unpublished on purpose: the palette ramps and raw brand colours (semantic tokens reference them) and the breakpoints. Font families stay on the web; Android and Windows load fonts as resources.
 
 ## Changing a token
 
 1. Change the source file (never the generated output).
-2. Run the build and the contrast check.
+2. Run `pnpm tokens` and commit the regenerated files with the source change; `pnpm check` runs the contrast and drift tests.
 3. Update the live design system reference and the brand book if the meaning changed.
 4. A change to a brand colour needs the owner's approval and a new ADR.

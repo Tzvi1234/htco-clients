@@ -14,7 +14,8 @@
     "lint": "eslint . && prettier --check .",
     "format": "prettier --write . && eslint --fix .",
     "typecheck": "tsc --project tsconfig.json",
-    "test": "vitest run"
+    "test": "vitest run",
+    "tokens": "pnpm --filter @htco/design-tokens build"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

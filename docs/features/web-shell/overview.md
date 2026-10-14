@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Slug** | `web-shell` |
-| **Phase / slices** | Phase 3 — slices 3.1, 3.3, 3.4, 3.6–3.9 (tokens: the `design-tokens` feature, from slice 3.2; authentication: `auth-bff` in `htco-platform`) |
+| **Phase / slices** | Phase 3 — slices 3.1, 3.3, 3.4, 3.6–3.9 (tokens: [`design-tokens`](../design-tokens/overview.md); authentication: `auth-bff` in `htco-platform`) |
 | **Requirements** | FR-ADM-01, FR-IAM-01, FR-IAM-02, FR-IAM-05, FR-IAM-06 (see the PRD in `htco-platform`) |
 | **Status** | In progress (slice 3.1, part 1) |
 | **Last updated** | 2026-10-14 |
