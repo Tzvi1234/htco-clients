@@ -1,0 +1,128 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2026-10-14 13:32+0300\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: en\n"
+
+#: src/app/shell/UserMenu.tsx:39
+msgid "Account and preferences"
+msgstr "Account and preferences"
+
+#: src/features/overview/OverviewPage.tsx:21
+msgid "Connect Etsy shop"
+msgstr "Connect Etsy shop"
+
+#: src/features/overview/OverviewPage.tsx:12
+msgid "Connect your first shop"
+msgstr "Connect your first shop"
+
+#: src/features/shops/ShopsPage.tsx:16
+msgid "Connected shops appear here with their sync status and capabilities."
+msgstr "Connected shops appear here with their sync status and capabilities."
+
+#: src/features/overview/OverviewPage.tsx:24
+msgid "Connecting a shop opens in a coming release."
+msgstr "Connecting a shop opens in a coming release."
+
+#: src/app/shell/UserMenu.tsx:79
+#: src/features/settings/SettingsPage.tsx:65
+msgid "Dark"
+msgstr "Dark"
+
+#: src/app/shell/ShopSwitcher.tsx:21
+msgid "Etsy · not connected"
+msgstr "Etsy · not connected"
+
+#: src/app/RouteStates.tsx:38
+msgid "Go to the overview"
+msgstr "Go to the overview"
+
+#: src/app/shell/UserMenu.tsx:53
+#: src/features/settings/SettingsPage.tsx:47
+msgid "Language"
+msgstr "Language"
+
+#: src/app/shell/UserMenu.tsx:76
+#: src/features/settings/SettingsPage.tsx:64
+msgid "Light"
+msgstr "Light"
+
+#: src/app/shell/Navigation.tsx:29
+msgid "Main"
+msgstr "Main"
+
+#: src/app/shell/UserMenu.tsx:73
+#: src/features/settings/SettingsPage.tsx:63
+msgid "Match the system"
+msgstr "Match the system"
+
+#: src/app/shell/ShopSwitcher.tsx:18
+msgid "No shop connected"
+msgstr "No shop connected"
+
+#: src/features/shops/ShopsPage.tsx:14
+msgid "No shops yet"
+msgstr "No shops yet"
+
+#: src/features/overview/OverviewPage.tsx:14
+msgid "Orders, tracking and listings appear here after you connect an Etsy shop. It takes about a minute."
+msgstr "Orders, tracking and listings appear here after you connect an Etsy shop. It takes about a minute."
+
+#: src/app/shell/Navigation.tsx:15
+#: src/features/overview/OverviewPage.tsx:10
+msgid "Overview"
+msgstr "Overview"
+
+#: src/app/RouteStates.tsx:34
+msgid "Page not found"
+msgstr "Page not found"
+
+#: src/shared/ui/ErrorState.tsx:22
+msgid "Request ID <0>{requestId}</0>"
+msgstr "Request ID <0>{requestId}</0>"
+
+#: src/app/shell/Navigation.tsx:17
+#: src/features/settings/SettingsPage.tsx:36
+msgid "Settings"
+msgstr "Settings"
+
+#: src/app/shell/Navigation.tsx:16
+#: src/features/shops/ShopsPage.tsx:10
+msgid "Shops"
+msgstr "Shops"
+
+#: src/app/RouteStates.tsx:14
+msgid "Something went wrong while showing it. Try again; your data was not changed."
+msgstr "Something went wrong while showing it. Try again; your data was not changed."
+
+#: src/app/RouteStates.tsx:35
+msgid "The address may be mistyped, or the page has moved."
+msgstr "The address may be mistyped, or the page has moved."
+
+#: src/features/shops/ShopsPage.tsx:11
+msgid "The marketplace shops this organization runs."
+msgstr "The marketplace shops this organization runs."
+
+#: src/app/shell/UserMenu.tsx:71
+#: src/features/settings/SettingsPage.tsx:62
+msgid "Theme"
+msgstr "Theme"
+
+#: src/features/settings/SettingsPage.tsx:37
+msgid "These preferences are remembered on this device."
+msgstr "These preferences are remembered on this device."
+
+#: src/app/RouteStates.tsx:12
+msgid "This screen could not be shown"
+msgstr "This screen could not be shown"
+
+#: src/app/RouteStates.tsx:24
+msgid "Try again"
+msgstr "Try again"
+
+#: src/app/shell/AppShell.tsx:32
+msgid "You are offline. What you see may be out of date; changes are paused."
+msgstr "You are offline. What you see may be out of date; changes are paused."

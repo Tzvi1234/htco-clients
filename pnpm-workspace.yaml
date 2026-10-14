@@ -1,5 +1,6 @@
 # pnpm workspace. Apps join as their phases start (the web app in slice 3.3).
 packages:
+  - "apps/web"
   - "packages/*"
 
 # Supply chain (ER-SEC-09).
@@ -8,6 +9,11 @@ minimumReleaseAge: 10080
 # Fail when a package's publishing trust drops, for example a release without the provenance
 # its predecessors had.
 trustPolicy: no-downgrade
+# Reviewed exceptions, exact versions only. semver 6.3.1 (2023) is the npm team's backport of
+# the ReDoS fix to the 6.x line, published by an npm CLI maintainer before 6.x had provenance;
+# Babel 7 (via eslint-plugin-react-hooks) still depends on it.
+trustPolicyExclude:
+  - semver@6.3.1
 # pnpm defaults, stated so a change is visible in review: transitive dependencies come only
 # from the registry, and a dependency's install script fails the install until it is reviewed
 # in `allowBuilds`.

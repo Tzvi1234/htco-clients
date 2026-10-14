@@ -10,5 +10,8 @@
   },
   "devDependencies": {
     "style-dictionary": "5.6.0"
+  },
+  "exports": {
+    "./tokens.css": "./generated/htco-tokens.css"
   }
 }
