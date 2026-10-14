@@ -19,7 +19,7 @@
 
 ---
 
-> **Status:** Phase 3 starting — workspace tooling, CI and the design-token pipeline (CSS, Kotlin, XAML) in place; the web shell next. The web app follows in Phase 3, the office in Phase 15, Android in Phase 16 and Windows in Phase 17. The master plan lives in [`htco-platform`](https://github.com/Tzvi1234/htco-platform/blob/main/docs/plan/PLAN.md).
+> **Status:** Phase 3 starting — workspace tooling, CI and the design-token pipeline (CSS, Kotlin, XAML) in place; the web shell next. The web app follows in Phase 3, the pilot office dashboard in Phase 7, the complete office in Phase 16, Android in Phase 17 and Windows in Phase 18 (master plan 3.0). The master plan lives in [`htco-platform`](https://github.com/Tzvi1234/htco-platform/blob/main/docs/plan/PLAN.md).
 
 ## What is here
 

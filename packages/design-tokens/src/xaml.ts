@@ -1,6 +1,6 @@
 // A WinUI 3 ResourceDictionary: colour brushes in Light and Dark theme dictionaries, and the
 // theme-independent sizes as doubles and corner radii. The HighContrast dictionary, which maps
-// roles to Windows system colours, is designed with the Windows app (Phase 15).
+// roles to Windows system colours, is designed with the Windows app (Phase 18).
 import { argb, GENERATED_HEADER, isPublished, pascal, publishedPath } from "./publish.ts";
 import type { Token } from "./tokens.ts";
 
