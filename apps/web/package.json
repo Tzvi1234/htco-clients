@@ -30,6 +30,7 @@
     "@axe-core/playwright": "4.13.0",
     "@lingui/cli": "6.9.0",
     "@lingui/conf": "6.9.0",
+    "@lingui/format-po": "6.9.0",
     "@lingui/vite-plugin": "6.9.0",
     "@playwright/test": "1.63.0",
     "@tailwindcss/vite": "4.3.3",
