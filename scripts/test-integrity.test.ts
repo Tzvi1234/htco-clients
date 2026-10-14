@@ -22,6 +22,9 @@ describe("diffFindings (ER-TEST-07)", () => {
     '+  xit("passes AA", () => {',
     "+    @Ignore",
     "+    [Ignore]",
+    '+  test.concurrent.skip("checks the dark theme", () => {',
+    '+describe.concurrent.todo("contrast")',
+    '+  it.sequential.only("passes AA", () => {',
   ])("reports a skip, todo or focus marker added in a test: %s", (added) => {
     expect(diffFindings(aDiff(TEST_FILE, [added]))).toEqual([
       { path: TEST_FILE, message: "adds a skip, todo or focus marker" },
@@ -75,6 +78,34 @@ describe("diffFindings (ER-TEST-07)", () => {
       expect(diffFindings(diff)).toEqual([{ path, message: "changes quality-gate settings" }]);
     },
   );
+
+  it("reports a quality-gate setting added without removing anything", () => {
+    const diff = aDiff("vitest.config.ts", [
+      '+    exclude: ["**"],',
+      "+    passWithNoTests: true,",
+    ]);
+
+    expect(diffFindings(diff)).toEqual([
+      { path: "vitest.config.ts", message: "changes quality-gate settings" },
+    ]);
+  });
+
+  it.each([
+    ['-    "test": "vitest run",', '+    "test": "true",'],
+    ['+    "lint": "true",'],
+    ['-    "typecheck": "tsc --project tsconfig.json",'],
+    ['-    "check": "pnpm run lint && pnpm run typecheck && pnpm run test",'],
+  ])("reports a changed quality-gate script in package.json: %s", (...lines) => {
+    expect(diffFindings(aDiff("package.json", lines))).toEqual([
+      { path: "package.json", message: "changes quality-gate settings" },
+    ]);
+  });
+
+  it("ignores dependency changes in package.json", () => {
+    const diff = aDiff("package.json", ['-    "vitest": "5.0.2",', '+    "vitest": "5.0.3",']);
+
+    expect(diffFindings(diff)).toEqual([]);
+  });
 
   it("ignores pure additions of new tests", () => {
     const diff = aDiff(TEST_FILE, [

@@ -1,6 +1,7 @@
 // Flag pull requests that weaken tests without a "Test changes" explanation (ER-TEST-07).
-// Findings: skip, todo or focus markers added to tests; removed tests; changed or removed
-// assertions; changed quality-gate settings. Any finding fails the check unless the pull
+// Findings: skip, todo or focus markers added to tests (also after modifiers such as
+// `test.concurrent.skip`); removed tests; changed or removed assertions; any added or removed
+// line in a quality-gate config; changed `test`, `lint`, `typecheck` or `check` scripts. Any finding fails the check unless the pull
 // request body explains it under "Test changes".
 // CI: `PR_BODY=… node scripts/test-integrity.ts --base <base commit>`.
 import { execFileSync } from "node:child_process";
@@ -24,7 +25,7 @@ const SETTINGS = "changes quality-gate settings";
 // Vitest and Jest (`it.skip`, `describe.only`, `test.todo`, `it.skipIf`, `xit`), JUnit
 // (`@Ignore`, `@Disabled`) and MSTest (`[Ignore]`).
 const SKIP =
-  /\b(?:it|test|describe|suite)\.(?:skip|only|todo|skipIf|runIf|fails)\b|\bx(?:it|test|describe)\(|@Ignore\b|@Disabled\b|\[Ignore\]/;
+  /\b(?:it|test|describe|suite)(?:\.\w+)*\.(?:skip|only|todo|skipIf|runIf|fails)\b|\bx(?:it|test|describe)\(|@Ignore\b|@Disabled\b|\[Ignore\]/;
 const TEST_NAME = /^\s*(?:it|test)(?:\.each\(.*?\))?\(\s*(["'`])(.+?)\1/;
 const ASSERTS = /\bexpect\(|\bassert/;
 const TEST_FILE = /(?:\.(?:test|spec)\.[cm]?[jt]sx?|\.stories\.tsx?|Tests?\.(?:kt|cs))$/;
@@ -34,6 +35,8 @@ const QUALITY_GATE_FILES = new Set([
   "tsconfig.base.json",
   "tsconfig.json",
 ]);
+// The package.json scripts that CI runs as gates.
+const GATE_SCRIPT = /^\s*"(?:test|lint|typecheck|check)"\s*:/;
 
 function changedLines(diff: string): ChangedLine[] {
   const lines: ChangedLine[] = [];
@@ -82,7 +85,8 @@ export function diffFindings(diff: string): Finding[] {
   }
 
   for (const line of lines) {
-    if (!line.added && QUALITY_GATE_FILES.has(line.path)) {
+    const gateScript = line.path.endsWith("package.json") && GATE_SCRIPT.test(line.text);
+    if (QUALITY_GATE_FILES.has(line.path) || gateScript) {
       findings.push({ path: line.path, message: SETTINGS });
     }
   }
