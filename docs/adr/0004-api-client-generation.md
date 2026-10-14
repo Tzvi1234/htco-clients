@@ -20,4 +20,4 @@ The platform publishes an OpenAPI 3.1 document. Hand-written clients drift from 
 ## Consequences
 
 - Positive: a server change that breaks a client fails CI before release.
-- Negative: generator quirks with OpenAPI 3.1 nullables need a spike per generator (Phases 3, 17 and 18).
+- Negative: generator quirks with OpenAPI 3.1 nullables need a spike per generator (Phases 3, 14 and 15).

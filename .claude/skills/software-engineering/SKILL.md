@@ -38,7 +38,7 @@ The clients are the face of a system that handles money, buyer data and autonomo
 
 ## 4. Before you say "done"
 
-Run the checks for the platforms you touched (the commands are created in Phases 3 (web), 17 (Android) and 18 (Windows); if one does not exist yet, say so instead of claiming it passed):
+Run the checks for the platforms you touched (the commands are created in Phase 3, 14 and 15; if one does not exist yet, say so instead of claiming it passed):
 
 ```
 pnpm check            # web: lint, types, unit and component tests, i18n, tokens

@@ -32,4 +32,4 @@
 | AC-3.2.2 | `contrast.test.ts` | The synthetic pair `#8a8a8a` on white fails at 3.45:1; all 202 real pairs pass. | Pass |
 
 **Observed:** `htco-tokens.css` (230 lines), `HtcoTokens.kt` (190 lines), `HtcoTokens.xaml` (156 lines, 100 brushes: 50 per theme); spot-checked `--bg-canvas` (`#f4f7fa` light, `#030f1f` dark), `HtcoColors.Light.bgCanvas`, `HtcoBgCanvasBrush`.
-**Open issues:** the Kotlin and XAML files are compiled for the first time with the Android (Phase 17) and Windows (Phase 18) apps.
+**Open issues:** the Kotlin and XAML files are compiled for the first time with the Android (Phase 16) and Windows (Phase 17) apps.

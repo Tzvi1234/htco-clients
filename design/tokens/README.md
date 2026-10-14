@@ -33,7 +33,7 @@ Every text pair is at least 4.5:1 and every control boundary, focus ring and sta
 |---|---|---|---|
 | Web | `htco-tokens.css` | Custom properties: light theme and the primitives on `:root`, the dark theme on `[data-theme="dark"]` and, when the user has not chosen, on a dark `prefers-color-scheme` | `--bg-canvas`, `--text-primary`, `--space-4`, `--font-size-body`, `--elevation-1` (the `color.` prefix is dropped so names match the brand book) |
 | Android | `HtcoTokens.kt` (package `app.htco.designsystem.tokens`) | `HtcoColors.Light` and `HtcoColors.Dark`, `HtcoSpacing`, `HtcoRadius`, `HtcoSize`, `HtcoBorderWidth`, `HtcoType` (sizes and line heights in sp, weights), `HtcoMotion` (milliseconds and easing); pixels become dp, 1rem is 16 | `bgCanvas`, `textPrimary`, `space4` |
-| Windows | `HtcoTokens.xaml` | A `ResourceDictionary` with `SolidColorBrush` resources in `Light` and `Dark` theme dictionaries, sizes as `x:Double`, radii as `CornerRadius`. The `HighContrast` dictionary, mapped to Windows system colours, is designed with the Windows app (Phase 18) | `HtcoBgCanvasBrush`, `HtcoSpace4`, `HtcoRadiusMd` |
+| Windows | `HtcoTokens.xaml` | A `ResourceDictionary` with `SolidColorBrush` resources in `Light` and `Dark` theme dictionaries, sizes as `x:Double`, radii as `CornerRadius`. The `HighContrast` dictionary, mapped to Windows system colours, is designed with the Windows app (Phase 17) | `HtcoBgCanvasBrush`, `HtcoSpace4`, `HtcoRadiusMd` |
 
 Unpublished on purpose: the palette ramps and raw brand colours (semantic tokens reference them) and the breakpoints. Font families stay on the web; Android and Windows load fonts as resources.
 
