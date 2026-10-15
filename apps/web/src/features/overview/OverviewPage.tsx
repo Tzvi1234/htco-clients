@@ -175,7 +175,7 @@ export function OverviewPage() {
               <h2 id="office" className="m-0 mt-1 text-title font-bold">
                 <Trans>Your AI office</Trans>
               </h2>
-              <p className="m-0 max-w-[34ch] text-body-sm text-secondary">
+              <p className="m-0 max-w-[34ch] text-body-sm text-primary">
                 <Trans>
                   Specialists for listings, orders, customers and money work on your shop under your
                   policies, and bring you every risky decision.
