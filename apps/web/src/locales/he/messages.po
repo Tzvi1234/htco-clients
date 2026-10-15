@@ -437,6 +437,10 @@ msgstr "בהירה"
 msgid "Listings that stay healthy"
 msgstr "מודעות שנשארות תקינות"
 
+#: src/features/shops/ShopCard.tsx
+msgid "Loading connection details"
+msgstr "טוען את פרטי החיבור"
+
 #: src/features/shops/ShopsPage.tsx
 msgid "Loading shops"
 msgstr "טוענים חנויות"

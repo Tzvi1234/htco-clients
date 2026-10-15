@@ -38,7 +38,9 @@ export function App({ locale, theme, storage, history, api: given }: AppProps) {
       defaultOptions: {
         queries: {
           // Retry only what may pass on a second try, never an answer given on purpose (4xx).
-          retry: (count, error) => count < 2 && !(error instanceof ApiError && error.status < 500),
+          // One quick retry: a failing screen says so within a second instead of spinning.
+          retry: (count, error) => count < 1 && !(error instanceof ApiError && error.status < 500),
+          retryDelay: 500,
         },
       },
     });

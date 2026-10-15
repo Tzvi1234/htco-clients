@@ -437,6 +437,10 @@ msgstr "Light"
 msgid "Listings that stay healthy"
 msgstr "Listings that stay healthy"
 
+#: src/features/shops/ShopCard.tsx
+msgid "Loading connection details"
+msgstr "Loading connection details"
+
 #: src/features/shops/ShopsPage.tsx
 msgid "Loading shops"
 msgstr "Loading shops"

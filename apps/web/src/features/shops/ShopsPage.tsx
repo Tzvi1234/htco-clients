@@ -106,7 +106,7 @@ function Shops({
       </PageBody>
     );
 
-  if (shops.data === undefined || (seesConnections && integrations.isPending))
+  if (shops.data === undefined)
     return (
       <PageBody>
         <p role="status" className="sr-only">
@@ -114,13 +114,7 @@ function Shops({
         </p>
         <div aria-hidden="true" className="grid gap-4 md:grid-cols-2 2xl:grid-cols-3">
           {[0, 1].map((n) => (
-            <div
-              key={n}
-              className="flex h-40 flex-col gap-3 rounded-card border border-border-subtle bg-surface p-4 shadow-1"
-            >
-              <span className="h-3 w-2/5 rounded-pill bg-sunken" />
-              <span className="h-3 w-3/5 rounded-pill bg-sunken" />
-            </div>
+            <ShopCardSkeleton key={n} />
           ))}
         </div>
       </PageBody>
@@ -162,7 +156,12 @@ function Shops({
         </div>
       )}
       {integrations.isError ? (
-        <FormAlert message={t`Connection details could not be loaded. Try again shortly.`} />
+        <div className="flex flex-wrap items-center gap-3">
+          <FormAlert message={t`Connection details could not be loaded. Try again shortly.`} />
+          <Button size="sm" onPress={() => void integrations.refetch()}>
+            <Trans>Try again</Trans>
+          </Button>
+        </div>
       ) : null}
       <div className="grid gap-4 md:grid-cols-2 2xl:grid-cols-3">
         {shops.data.map((shop) => {
@@ -172,6 +171,7 @@ function Shops({
               key={shop.id}
               shop={shop}
               integration={integration}
+              detailsLoading={seesConnections && integrations.isPending}
               now={integrations.dataUpdatedAt}
               {...(etsy !== undefined && needsReconnect(integration)
                 ? {
@@ -255,5 +255,30 @@ function NoShops({ etsy }: { etsy: ConnectEtsy | undefined }) {
         )}
       </EmptyState>
     </PageBody>
+  );
+}
+
+/** A shop card's shape while the shops are on their way: solid placeholders, a gentle pulse. */
+function ShopCardSkeleton() {
+  const bar = "rounded-pill bg-sunken motion-safe:animate-pulse";
+  return (
+    <div className="flex flex-col rounded-card border border-border-subtle bg-surface shadow-1">
+      <div className="flex items-center gap-3 px-4 pt-4 pb-3">
+        <span className="size-8 shrink-0 rounded-control bg-sunken motion-safe:animate-pulse" />
+        <span className="flex grow flex-col gap-2">
+          <span className={`h-3 w-2/5 ${bar}`} />
+          <span className={`h-2.5 w-1/4 ${bar}`} />
+        </span>
+        <span className={`h-5 w-20 ${bar}`} />
+      </div>
+      <div className="flex flex-col divide-y divide-border-subtle border-t border-border-subtle px-4">
+        {["w-3/5", "w-2/5", "w-1/2"].map((width) => (
+          <span key={width} className="flex h-11 items-center gap-3">
+            <span className="size-4 shrink-0 rounded-[4px] bg-sunken motion-safe:animate-pulse" />
+            <span className={`h-2.5 ${width} ${bar}`} />
+          </span>
+        ))}
+      </div>
+    </div>
   );
 }

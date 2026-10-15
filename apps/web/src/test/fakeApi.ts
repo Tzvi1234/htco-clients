@@ -37,6 +37,8 @@ export interface FakeState {
   /** The organization's shops and their Etsy connections. */
   shops: { id: string; name: string; status: string }[];
   integrations: IntegrationView[];
+  /** "fail": connection details answer 500; "hang": they never answer. */
+  integrationsTrouble?: "fail" | "hang" | undefined;
   /** True once the user confirmed a code in the last ten minutes (POST /v1/auth/step-up). */
   steppedUp: boolean;
   /** Where `POST /v1/shops/etsy/connect` sends the browser. */
@@ -307,6 +309,8 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
       }
       case "GET /v1/shop-integrations":
         if (state.role !== "owner" && state.role !== "admin") return problem(403, "forbidden");
+        if (state.integrationsTrouble === "hang") return new Promise<Response>(() => undefined);
+        if (state.integrationsTrouble === "fail") return problem(500, "internal-error");
         return json(200, { items: state.integrations });
       case "POST /v1/shops/etsy/connect":
         if (state.role !== "owner") return problem(403, "forbidden");
