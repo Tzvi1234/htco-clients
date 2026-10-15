@@ -65,3 +65,17 @@
 `pnpm check`: ESLint, Prettier, TypeScript, i18n (64 messages, none missing in Hebrew), 153 tests.
 
 **Open issues:** the web app is not deployed yet (slice 3.8); password reset and email verification need an email provider (3.5 part 3).
+
+### Verification — 3.4 (part 1) — 2026-10-15
+
+| Acceptance criterion | Covered by tests | Verified for real | Result |
+|---|---|---|---|
+| AC-3.1.2 | `storybook` job in `ci-gate` | A story with an unnamed button and one with low-contrast text failed `pnpm test:storybook` (axe `button-name`, `color-contrast`); the first CI runs failed on the missing screenshots until the baselines were committed | Pass |
+| AC-3.4.1 | 48 stories × (addon axe + he/en × light/dark `@axe-core/playwright`) | No violation found in any story, language or theme | Pass |
+| AC-3.4.2 | `Keyboard` stories | Red first: the focus-ring colour check failed while the ring's colour was still in transition; it now waits for the transition | Pass |
+| AC-3.4.3 | 192 screenshots | Baselines made in CI's image (`storybook-screenshots` artifact), each component reviewed in he/en × light/dark before committing | Pass |
+| AC-3.4.4 | `Ltr` "Tracking Number In Hebrew" | The control without `Ltr` is reordered (`IL-2024-0042` on screen), with `Ltr` the order is kept | Pass |
+
+CI: the `storybook` job runs beside the others in about 4.5 minutes (image pull 40 s, install 16 s, story tests 31 s, Storybook build 13 s, 193-case matrix 2.3 min). `pnpm check` green.
+
+**Open issues:** the slice's components that do not exist yet get their stories when they are built.
