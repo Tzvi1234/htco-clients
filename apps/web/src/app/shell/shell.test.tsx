@@ -163,10 +163,18 @@ describe("the screen's panel", () => {
   });
 });
 
+/** Demo frames whose title is what they show, as in the design: the chat's agent, the thread. */
+const DEMO_TITLES: Record<string, string> = {
+  "/office/chat": "Maya",
+  "/office/team": "Late orders + tracking sync failure",
+};
+
 describe("routes for every area and tab", () => {
   it.each(
     AREAS.flatMap((area) =>
-      area.tabs.filter((tab) => !tab.built).map((tab) => [tab.to, tabName(tab.id)] as const),
+      area.tabs
+        .filter((tab) => !tab.built)
+        .map((tab) => [tab.to, DEMO_TITLES[tab.to] ?? tabName(tab.id)] as const),
     ),
   )("%s shows the demo frame titled %s", async (path, title) => {
     await open(path);

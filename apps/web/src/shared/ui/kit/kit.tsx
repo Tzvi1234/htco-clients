@@ -1,10 +1,12 @@
 import "./kit.css";
 
 import { useLingui } from "@lingui/react/macro";
-import type { ComponentType, MouseEvent, ReactNode } from "react";
+import { use, type ComponentType, type MouseEvent, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 
 import { TrendGlyph } from "./glyphs.tsx";
 import { cx } from "../../lib/cx.ts";
+import { TopBarSlotContext } from "../PageHeader.tsx";
 import { useToast } from "../Toast.tsx";
 
 /**
@@ -636,6 +638,16 @@ export function DemoFrame({ children, className }: { children: ReactNode; classN
   const { t } = useLingui();
   const toast = useToast();
   const label = t`Demo`;
+  // The large label sits in the top bar, between the page title and the language switch.
+  const slot = use(TopBarSlotContext);
+  const header = slot?.closest("header") ?? null;
+  const pill = (
+    <div className={cx("k-demo-label", header !== null && "k-demo-top")}>
+      <i aria-hidden="true" />
+      <span>{label.toUpperCase()}</span>
+      <small>{t`Sample data · coming soon`}</small>
+    </div>
+  );
   return (
     <div
       role="region"
@@ -654,11 +666,8 @@ export function DemoFrame({ children, className }: { children: ReactNode; classN
         event.preventDefault();
       }}
     >
-      <div className="k-demo-label">
-        <i aria-hidden="true" />
-        {label.toUpperCase()}
-        <small>{t`Sample data · coming soon`}</small>
-      </div>
+      {header === null ? pill : createPortal(pill, header)}
+      <span className="sr-only">{t`Demo — coming soon`}</span>
       <div className="k-demo-body">{children}</div>
     </div>
   );

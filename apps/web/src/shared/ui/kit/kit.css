@@ -895,7 +895,7 @@ button.k-row:hover,
   color: var(--text-muted);
   text-align: start;
   height: 36px;
-  padding: 0 12px;
+  padding: 0 10px;
   position: sticky;
   top: 0;
   background: var(--bg-table-head);
@@ -905,7 +905,7 @@ button.k-row:hover,
 }
 .k-table td {
   height: 48px;
-  padding: 0 12px;
+  padding: 0 10px;
   border-bottom: 1px solid var(--border-subtle);
   white-space: nowrap;
   transition: background-color var(--motion-duration-fast) var(--motion-easing-standard);
@@ -1040,7 +1040,11 @@ button.k-row:hover,
 .k-att {
   display: flex;
   gap: 8px;
-  flex-wrap: wrap;
+}
+@media (max-width: 639.98px) {
+  .k-att {
+    flex-wrap: wrap;
+  }
 }
 .k-attc {
   display: flex;
@@ -1239,6 +1243,29 @@ button.k-row:hover,
   box-shadow: var(--elevation-popover);
   pointer-events: none;
   white-space: nowrap;
+}
+.k-demo-label.k-demo-top {
+  position: static;
+  translate: none;
+  order: 1;
+  flex: none;
+  box-shadow: none;
+  animation: htco-pop-in var(--motion-duration-base) var(--motion-easing-standard) both;
+}
+header:has(> .k-demo-top) > :nth-child(2) {
+  order: 2;
+}
+@media (max-width: 899.98px) {
+  .k-demo-label.k-demo-top small {
+    display: none;
+  }
+}
+@media (max-width: 639.98px) {
+  .k-demo-label.k-demo-top {
+    height: 28px;
+    padding: 0 12px 0 10px;
+    font-size: 12px;
+  }
 }
 .k-demo-label small {
   font-size: 12px;

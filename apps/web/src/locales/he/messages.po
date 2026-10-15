@@ -7,6 +7,10 @@ msgstr ""
 "X-Generator: @lingui/cli\n"
 "Language: he\n"
 
+#: src/features/office/TeamRoomPage.tsx
+msgid "{amir} is typing…"
+msgstr "{amir} מקליד…"
+
 #: src/features/shops/ShopCard.tsx
 msgid "{days, plural, one {Reconnect within # day} other {Reconnect within # days}}"
 msgstr "{days, plural, one {לחבר מחדש בתוך יום אחד} two {לחבר מחדש בתוך יומיים} other {לחבר מחדש בתוך # ימים}}"
@@ -14,6 +18,10 @@ msgstr "{days, plural, one {לחבר מחדש בתוך יום אחד} two {לח�
 #: src/features/overview/OverviewPage.tsx
 msgid "{doneCount} of {totalCount} done"
 msgstr "{doneCount} מתוך {totalCount} הושלמו"
+
+#: src/features/office/ChatPage.tsx
+msgid "{maya} is typing…"
+msgstr "{maya} מקלידה…"
 
 #: src/app/shell/Sidebar.tsx
 msgid "{name} tabs"
@@ -23,6 +31,46 @@ msgstr "הכרטיסיות של {name}"
 msgid "{shopCount} shops"
 msgstr "{shopCount} חנויות"
 
+#: src/features/office/ChatPage.tsx
+msgid "#3152 (Emma R.) and #3160 (Liam K.) — a print delay at the supplier. I suggest a 15% partial refund on #3152, it is 4 days late."
+msgstr "#3152 של Emma R. ו־#3160 של Liam K. — עיכוב בהדפסה אצל הספק. ממליצה על החזר חלקי של 15% ל־#3152, היא באיחור של 4 ימים."
+
+#: src/features/office/AiOpsPage.tsx
+msgid "$12.40 of $50.00 spent"
+msgstr "הוצאו $12.40 מתוך $50.00"
+
+#: src/features/office/AiOpsPage.tsx
+msgid "15 employees"
+msgstr "15 עובדים"
+
+#: src/features/office/ChatPage.tsx
+msgid "15% of $48.00"
+msgstr "15% מתוך $48.00"
+
+#: src/features/office/FloorPage.tsx
+msgid "16 employees · 7 departments · 3 machine rooms"
+msgstr "16 עובדים · 7 מחלקות · 3 חדרי מכונות"
+
+#: src/features/office/ChatPage.tsx
+msgid "2 late"
+msgstr "2 באיחור"
+
+#: src/features/office/TeamRoomPage.tsx
+msgid "2 late orders flagged"
+msgstr "זוהו 2 הזמנות באיחור"
+
+#: src/features/office/floor3d/engine.ts
+msgid "2 late orders?"
+msgstr "2 הזמנות באיחור?"
+
+#: src/features/office/EngineeringPage.tsx
+msgid "2 orders"
+msgstr "2 הזמנות"
+
+#: src/features/office/ChatPage.tsx
+msgid "2 rows"
+msgstr "2 שורות"
+
 #: src/features/overview/OverviewPage.tsx
 msgid "2 with Dana"
 msgstr "2 ממתינות לדנה"
@@ -31,13 +79,25 @@ msgstr "2 ממתינות לדנה"
 msgid "3 running · 1 waiting for you · 1 failed"
 msgstr "3 עובדים · 1 ממתין לך · 1 נכשל"
 
+#: src/features/office/data.ts
+msgid "4 new mockups ready for review."
+msgstr "4 הדמיות חדשות מוכנות לבדיקה."
+
 #: src/shared/demo/office.ts
 msgid "4 star-map mockups"
 msgstr "4 הדמיות למפת כוכבים"
 
+#: src/features/office/FloorPage.tsx
+msgid "7 departments · 3 service"
+msgstr "7 מחלקות · 3 מחלקות שירות"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "A native desktop app with the same features."
 msgstr "אפליקציה טבעית למחשב עם אותן יכולות."
+
+#: src/features/office/floor3d/engine.ts
+msgid "A new loop in the office"
+msgstr "יום עבודה חדש במשרד"
 
 #: src/features/shops/ShopCard.tsx
 msgid "Access"
@@ -65,11 +125,28 @@ msgctxt "navigation"
 msgid "Admin"
 msgstr "ניהול"
 
+#: src/features/office/EngineeringPage.tsx
+msgid "Agent latency metric"
+msgstr "מדד זמן תגובה לסוכנים"
+
+#: src/features/office/ChatPage.tsx
+msgid "Agent settings"
+msgstr "הגדרות סוכן"
+
 #: src/shared/demo/office.ts
 msgid "Agent Systems & Experience Engineer"
 msgstr "מהנדסת מערכות סוכנים וחוויה"
 
+#: src/features/office/ChatPage.tsx
+msgid "Agent:"
+msgstr "סוכנת:"
+
+#: src/features/office/AiOpsPage.tsx
+msgid "AI budget"
+msgstr "תקציב AI"
+
 #: src/app/shell/useNavLabels.ts
+#: src/features/office/AiOpsPage.tsx
 msgctxt "navigation"
 msgid "AI ops"
 msgstr "תפעול AI"
@@ -77,6 +154,10 @@ msgstr "תפעול AI"
 #: src/shared/demo/office.ts
 msgid "AI Tools"
 msgstr "כלי AI"
+
+#: src/features/office/AiOpsPage.tsx
+msgid "Alert at:"
+msgstr "התראה ב:"
 
 #: src/shared/demo/office.ts
 msgid "Alex"
@@ -90,13 +171,27 @@ msgstr "לכל האישורים"
 msgid "All areas"
 msgstr "כל האזורים"
 
+#: src/features/office/FloorPage.tsx
+msgid "All employees"
+msgstr "כל העובדים"
+
+#: src/features/office/data.ts
+msgid "All of yesterday’s tickets closed."
+msgstr "כל הפניות של אתמול נסגרו."
+
 #: src/app/shell/ShopSwitcher.tsx
 msgid "All shops"
 msgstr "כל החנויות"
 
+#: src/features/office/EngineeringPage.tsx
+#: src/features/office/TeamRoomPage.tsx
 #: src/shared/demo/office.ts
 msgid "Amir"
 msgstr "אמיר"
+
+#: src/features/office/TeamRoomPage.tsx
+msgid "Amir joined the thread"
+msgstr "אמיר הצטרף לשיחה"
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "An AI office you control"
@@ -114,14 +209,35 @@ msgstr "Android"
 msgid "Any browser, nothing to install."
 msgstr "בכל דפדפן, בלי התקנה."
 
+#: src/features/office/EngineeringPage.tsx
+msgid "api v1.14 — order cache"
+msgstr "api v1.14 — מטמון הזמנות"
+
+#: src/features/office/data.ts
+msgid "api v1.14 deploying, 60% done."
+msgstr "api v1.14 בפריסה, 60% הושלם."
+
+#: src/features/office/ChatPage.tsx
+msgid "Approval request"
+msgstr "בקשת אישור"
+
+#: src/features/office/TeamRoomPage.tsx
+msgid "Approval:"
+msgstr "אישור:"
+
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
 msgid "Approvals"
 msgstr "אישורים"
 
+#: src/features/office/ChatPage.tsx
 #: src/features/overview/OverviewPage.tsx
 msgid "Approve"
 msgstr "אישור"
+
+#: src/features/office/TeamRoomPage.tsx
+msgid "Archive"
+msgstr "ארכיון"
 
 #: src/app/shell/Flyout.tsx
 msgid "Area"
@@ -131,10 +247,22 @@ msgstr "אזור"
 msgid "Ask for a new link"
 msgstr "בקשת קישור חדש"
 
+#: src/features/office/floor3d/engine.ts
+msgid "Ask Tzvi"
+msgstr "נבקש מצבי"
+
+#: src/features/office/ChatPage.tsx
+msgid "Asks first"
+msgstr "שואלת קודם"
+
 #: src/features/auth/AcceptInvitePage.tsx
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "At least 12 characters."
 msgstr "לפחות 12 תווים."
+
+#: src/features/office/ChatPage.tsx
+msgid "Attach"
+msgstr "צירוף קובץ"
 
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Authenticator app"
@@ -144,6 +272,7 @@ msgstr "אפליקציית אימות"
 msgid "Authenticator app is set up"
 msgstr "אפליקציית האימות מוגדרת"
 
+#: src/features/office/FloorPage.tsx
 #: src/shared/demo/office.ts
 msgid "Automations"
 msgstr "אוטומציות"
@@ -152,6 +281,10 @@ msgstr "אוטומציות"
 msgctxt "navigation"
 msgid "Automations"
 msgstr "אוטומציות"
+
+#: src/features/office/ChatPage.tsx
+msgid "Autonomy:"
+msgstr "אוטונומיה:"
 
 #: src/shared/demo/office.ts
 msgid "Awaiting refund approval"
@@ -173,6 +306,14 @@ msgstr "שינויים גדולים, הודעות רגישות וכל דבר ח�
 msgid "Blocked"
 msgstr "חסום"
 
+#: src/features/office/TeamRoomPage.tsx
+msgid "Both printed yesterday, but I have no tracking numbers — tracking.sync has returned nothing since 07:40."
+msgstr "שתיהן הודפסו אתמול, אבל אין לי מספרי מעקב — tracking.sync לא מחזיר נתונים מאז 07:40."
+
+#: src/features/office/AiOpsPage.tsx
+msgid "Calls"
+msgstr "קריאות"
+
 #: src/features/shops/connectEtsy.tsx
 msgid "Cancel"
 msgstr "ביטול"
@@ -185,14 +326,30 @@ msgstr "לא מצליחים לסרוק? הקלידו באפליקציה את ה�
 msgid "carousel"
 msgstr "קרוסלה"
 
+#: src/features/office/EngineeringPage.tsx
+msgid "Carrier token rotation"
+msgstr "החלפת token לספק מעקב"
+
 #: src/shared/demo/office.ts
 msgid "Catalog & Pricing Architect"
 msgstr "ארכיטקט קטלוג ותמחור"
+
+#: src/features/office/EngineeringPage.tsx
+msgid "Change"
+msgstr "שינוי"
+
+#: src/features/office/EngineeringPage.tsx
+msgid "Changes & deploys"
+msgstr "שינויים ופריסות"
 
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
 msgid "Chat"
 msgstr "צ׳אט"
+
+#: src/features/office/EngineeringPage.tsx
+msgid "Chat with Amir"
+msgstr "שיחה עם אמיר"
 
 #: src/features/team/TeamPage.tsx
 msgid "Check the email address."
@@ -223,10 +380,22 @@ msgstr "בחר/י סיסמה ארוכה יותר שקשה לנחש."
 msgid "Choose a new password"
 msgstr "בחירת סיסמה חדשה"
 
+#: src/features/office/FloorPage.tsx
+msgid "Claude · model"
+msgstr "Claude · מודל"
+
 #: src/app/shell/Flyout.tsx
 #: src/app/shell/TabBar.tsx
 msgid "Close"
 msgstr "סגירה"
+
+#: src/features/office/TeamRoomPage.tsx
+msgid "Closed"
+msgstr "סגור"
+
+#: src/features/office/FloorPage.tsx
+msgid "Code"
+msgstr "קוד"
 
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Code from the app"
@@ -320,6 +489,10 @@ msgstr "החיבור מתחדש אוטומטית"
 msgid "Continuous Optimization Officer"
 msgstr "קצין שיפור מתמיד"
 
+#: src/features/office/ChatPage.tsx
+msgid "Conversations"
+msgstr "שיחות"
+
 #: src/shared/demo/office.ts
 msgid "Coordinating late orders"
 msgstr "מתאמת טיפול בהזמנות מאחרות"
@@ -332,6 +505,10 @@ msgstr "הועתק"
 msgid "Copy link"
 msgstr "העתקת הקישור"
 
+#: src/features/office/FloorPage.tsx
+msgid "Cost"
+msgstr "עלות"
+
 #: src/shared/theme/TweaksPanel.tsx
 msgid "Cream, lilac, orchid and lemon"
 msgstr "קרם, לילך, סחלב ולימון"
@@ -340,10 +517,15 @@ msgstr "קרם, לילך, סחלב ולימון"
 msgid "Creative & GPT Image Specialist"
 msgstr "מומחית קריאייטיב ו־GPT Image"
 
+#: src/features/office/ChatPage.tsx
+msgid "Current task"
+msgstr "משימה נוכחית"
+
 #: src/shared/demo/office.ts
 msgid "Customer Service"
 msgstr "שירות לקוחות"
 
+#: src/features/office/floor3d/plan.ts
 #: src/shared/demo/office.ts
 msgid "Customer Support"
 msgstr "תמיכת לקוחות"
@@ -357,9 +539,25 @@ msgstr "לקוחות"
 msgid "Customers answered"
 msgstr "לקוחות מקבלים מענה"
 
+#: src/features/office/AiOpsPage.tsx
+msgid "Daily AI spend, 1 to 15 October"
+msgstr "הוצאת AI יומית, 1 עד 15 באוקטובר"
+
+#: src/features/office/AiOpsPage.tsx
+msgid "Daily cap"
+msgstr "מגבלה יומית"
+
+#: src/features/office/AiOpsPage.tsx
+msgid "Daily spend"
+msgstr "הוצאה יומית"
+
 #: src/shared/demo/office.ts
 msgid "Dana"
 msgstr "דנה"
+
+#: src/features/office/floor3d/engine.ts
+msgid "Dana → Eitan · Emma R. ticket"
+msgstr "דנה ← איתן · פניית Emma R."
 
 #: src/shared/demo/office.ts
 msgid "Daniel"
@@ -382,7 +580,27 @@ msgstr "דמו"
 #: src/shared/ui/kit/kit.tsx
 #: src/shared/ui/SoonTag.tsx
 msgid "Demo — coming soon"
-msgstr "הדגמה — בקרוב"
+msgstr "דמו — בקרוב"
+
+#: src/features/office/ChatPage.tsx
+msgid "Department"
+msgstr "מחלקה"
+
+#: src/features/office/FloorPage.tsx
+msgid "Department details"
+msgstr "פרטי מחלקה"
+
+#: src/features/office/FloorPage.tsx
+msgid "Department load"
+msgstr "עומס מחלקה"
+
+#: src/features/office/FloorPage.tsx
+msgid "Department settings"
+msgstr "הגדרות מחלקה"
+
+#: src/features/office/FloorPage.tsx
+msgid "Department:"
+msgstr "מחלקה:"
 
 #: src/shared/demo/office.ts
 msgid "Deploying api v1.14"
@@ -404,6 +622,10 @@ msgstr "שולחן, מסך ורובוט"
 msgid "Developer"
 msgstr "מפתח/ת"
 
+#: src/features/office/TeamRoomPage.tsx
+msgid "Diagnosis"
+msgstr "אבחון"
+
 #: src/shared/theme/TweaksPanel.tsx
 msgid "Different"
 msgstr "שונה"
@@ -424,6 +646,10 @@ msgstr "הושלם"
 msgid "Download"
 msgstr "הורדה"
 
+#: src/features/office/FloorPage.tsx
+msgid "Drag to orbit · double-click a room"
+msgstr "גרירה לסיבוב · לחיצה כפולה על חדר"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "Each specialist acts under your policies and handles the day-to-day."
 msgstr "כל מומחה פועל לפי המדיניות שלך ומטפל בשגרה."
@@ -431,6 +657,10 @@ msgstr "כל מומחה פועל לפי המדיניות שלך ומטפל בש�
 #: src/shared/demo/office.ts
 msgid "Eitan"
 msgstr "איתן"
+
+#: src/features/office/TeamRoomPage.tsx
+msgid "Eitan, #3152 and #3160 passed their promised ship date. What is the supplier status?"
+msgstr "איתן, #3152 ו־#3160 עברו את תאריך המשלוח המובטח. מה הסטטוס אצל הספק?"
 
 #: src/shared/theme/TweaksPanel.tsx
 msgid "Element borders"
@@ -446,14 +676,24 @@ msgstr "ניגודיות רכיב ורקע"
 msgid "Email"
 msgstr "אימייל"
 
+#: src/features/office/EngineeringPage.tsx
+msgid "Engineer"
+msgstr "מהנדס"
+
+#: src/features/office/floor3d/plan.ts
 #: src/shared/demo/office.ts
 msgid "Engineering"
 msgstr "הנדסה"
 
 #: src/app/shell/useNavLabels.ts
+#: src/features/office/EngineeringPage.tsx
 msgctxt "navigation"
 msgid "Engineering"
 msgstr "הנדסה"
+
+#: src/features/office/EngineeringPage.tsx
+msgid "Engineering team"
+msgstr "צוות הנדסה"
 
 #: src/features/auth/ForgotPasswordPage.tsx
 msgid "Enter a valid email address."
@@ -483,6 +723,10 @@ msgstr "הזינו את האימייל ונשלח קישור לבחירת סיס
 msgid "Enter your email."
 msgstr "הזינו את האימייל."
 
+#: src/features/office/EngineeringPage.tsx
+msgid "Errors"
+msgstr "שגיאות"
+
 #: src/features/shops/ShopCard.tsx
 msgid "Etsy"
 msgstr "Etsy"
@@ -503,6 +747,10 @@ msgstr "Etsy לא ענתה. שום דבר לא נשמר. אפשר לנסות ש�
 msgid "Etsy shop"
 msgstr "חנות Etsy"
 
+#: src/features/office/TeamRoomPage.tsx
+msgid "etsy.order_intake flagged 2 late orders"
+msgstr "etsy.order_intake סימן 2 הזמנות באיחור"
+
 #: src/features/shops/connectEtsy.tsx
 msgid "Etsy's sign-in address looked wrong, so it was not opened. Try again shortly."
 msgstr "כתובת הכניסה של Etsy נראתה שגויה, ולכן לא נפתחה. אפשר לנסות שוב בעוד רגע."
@@ -515,6 +763,11 @@ msgstr "כל הזמנה, מאומתת"
 msgid "Everything your Etsy shop needs, working together in one AI office."
 msgstr "כל מה שחנות ה-Etsy שלך צריכה, עובד יחד במשרד AI אחד."
 
+#: src/features/office/ChatPage.tsx
+msgid "Evidence"
+msgstr "ראיות"
+
+#: src/features/office/floor3d/plan.ts
 #: src/shared/demo/office.ts
 msgid "Executive Office"
 msgstr "משרד המנכ״לית"
@@ -523,13 +776,26 @@ msgstr "משרד המנכ״לית"
 msgid "Expand the menu"
 msgstr "הרחבת התפריט"
 
+#: src/features/office/AiOpsPage.tsx
+msgid "Export"
+msgstr "ייצוא"
+
 #: src/shared/ui/kit/kit.tsx
 msgid "Failed"
 msgstr "נכשל"
 
+#: src/features/office/FloorPage.tsx
 #: src/features/overview/OverviewPage.tsx
 msgid "Fewer"
 msgstr "פחות"
+
+#: src/features/office/ChatPage.tsx
+msgid "File"
+msgstr "קובץ"
+
+#: src/features/office/TeamRoomPage.tsx
+msgid "Filter"
+msgstr "סינון"
 
 #: src/features/team/TeamPage.tsx
 msgid "Finance"
@@ -544,6 +810,7 @@ msgstr "כספים"
 msgid "Finance Controller"
 msgstr "בקר כספים"
 
+#: src/features/office/FloorPage.tsx
 #: src/features/overview/OverviewPage.tsx
 msgid "Find agent"
 msgstr "חיפוש סוכן"
@@ -553,13 +820,38 @@ msgid "Finish connecting in the web app where you are signed in."
 msgstr "יש להשלים את החיבור באפליקציית הרשת שבה נכנסת לחשבון."
 
 #: src/app/shell/useNavLabels.ts
+#: src/features/office/FloorPage.tsx
 msgctxt "navigation"
 msgid "Floor"
 msgstr "קומת המשרד"
 
+#: src/features/office/FloorPage.tsx
+msgid "Floor 1"
+msgstr "קומה 1"
+
+#: src/features/office/FloorPage.tsx
+msgid "Floor 1 · live"
+msgstr "קומה 1 · חי"
+
+#: src/features/office/AiOpsPage.tsx
+msgid "For all employees"
+msgstr "לכל העובדים"
+
+#: src/features/office/AiOpsPage.tsx
+msgid "For Nika only"
+msgstr "לניקה בלבד"
+
 #: src/features/auth/SignInPage.tsx
 msgid "Forgot your password?"
 msgstr "שכחתם את הסיסמה?"
+
+#: src/features/office/data.ts
+msgid "Found 2 late orders. Approval request attached."
+msgstr "מצאתי 2 הזמנות באיחור. מצרפת בקשת אישור."
+
+#: src/features/office/TeamRoomPage.tsx
+msgid "Found it: the carrier API token expired at 07:38, every call gets a 502 from the gateway. Rotating the token and re-running the sync."
+msgstr "מצאתי: ה־token של ספק המעקב פג ב־07:38, כל הקריאות מקבלות 502 מה־gateway. מחדש token ומריץ סנכרון חוזר."
 
 #: src/shared/theme/TweaksPanel.tsx
 msgid "Frosted glass"
@@ -569,9 +861,17 @@ msgstr "זכוכית חלבית"
 msgid "Fulfillment Inspector"
 msgstr "מפקח הגשמה"
 
+#: src/features/office/FloorPage.tsx
+msgid "Full screen"
+msgstr "מסך מלא"
+
 #: src/shared/demo/office.ts
 msgid "Gal"
 msgstr "גל"
+
+#: src/features/office/data.ts
+msgid "Gelato quote for towels"
+msgstr "הצעת מחיר Gelato למגבות"
 
 #: src/shared/demo/office.ts
 msgid "General Manager"
@@ -601,6 +901,10 @@ msgstr "ערב טוב"
 msgid "Good morning"
 msgstr "בוקר טוב"
 
+#: src/features/office/ChatPage.tsx
+msgid "Good morning Tzvi. Overnight order intake is done — here is what I found."
+msgstr "בוקר טוב צבי. קליטת ההזמנות של הלילה הסתיימה — הנה מה שמצאתי."
+
 #: src/features/overview/OverviewPage.tsx
 msgid "Good night"
 msgstr "לילה טוב"
@@ -613,10 +917,18 @@ msgstr "אפור וכתום"
 msgid "Gray, with no blooms behind the glass"
 msgstr "אפור, בלי הילות מאחורי הזכוכית"
 
+#: src/features/office/FloorPage.tsx
+msgid "Grid view"
+msgstr "תצוגת רשת"
+
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
 msgid "Health"
 msgstr "בריאות מערכת"
+
+#: src/features/office/AiOpsPage.tsx
+msgid "Healthy"
+msgstr "תקין"
 
 #: src/features/overview/OverviewPage.tsx
 msgid "Hero concepts"
@@ -659,6 +971,10 @@ msgstr "HT-Commerce מנהלת את עסק ה-Etsy שלך עם משרד AI שב�
 msgid "HTCO · the operating system for your marketplace business"
 msgstr "HTCO · מערכת ההפעלה של העסק שלך במרקטפלייס"
 
+#: src/features/office/EngineeringPage.tsx
+msgid "ID"
+msgstr "מזהה"
+
 #: src/shared/ui/kit/kit.tsx
 msgid "Idle"
 msgstr "פנוי"
@@ -667,13 +983,29 @@ msgstr "פנוי"
 msgid "If an account exists for this email, we sent a link to reset the password."
 msgstr "אם קיים חשבון עם האימייל הזה, שלחנו אליו קישור לאיפוס הסיסמה."
 
+#: src/features/office/AiOpsPage.tsx
+msgid "Images:"
+msgstr "תמונות:"
+
+#: src/features/office/EngineeringPage.tsx
+msgid "Impact"
+msgstr "השפעה"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "In development"
 msgstr "בפיתוח"
 
+#: src/features/office/EngineeringPage.tsx
+msgid "Incident:"
+msgstr "תקלה:"
+
 #: src/features/overview/OverviewPage.tsx
 msgid "Incidents"
 msgstr "תקלות"
+
+#: src/features/office/EngineeringPage.tsx
+msgid "Index on orders.status"
+msgstr "אינדקס על orders.status"
 
 #: src/shared/demo/office.ts
 msgid "Infrastructure"
@@ -708,6 +1040,10 @@ msgstr "חבר/ה שהוזמנו"
 msgid "Iris"
 msgstr "איריס"
 
+#: src/features/office/TeamRoomPage.tsx
+msgid "Join conversation"
+msgstr "הצטרפות לשיחה"
+
 #: src/features/overview/OverviewPage.tsx
 msgid "Key numbers"
 msgstr "מספרים מרכזיים"
@@ -733,6 +1069,10 @@ msgstr "סנכרון אחרון"
 msgid "Last synced {0}"
 msgstr "סונכרנה לאחרונה {0}"
 
+#: src/features/office/data.ts
+msgid "Late orders + tracking sync failure"
+msgstr "הזמנות באיחור + כשל סנכרון מעקב"
+
 #: src/shared/demo/office.ts
 msgid "Lead Software & Platform Engineer"
 msgstr "מהנדס תוכנה ופלטפורמה ראשי"
@@ -742,9 +1082,17 @@ msgctxt "navigation"
 msgid "Ledger"
 msgstr "ספר חשבונות"
 
+#: src/features/office/FloorPage.tsx
+msgid "Legend"
+msgstr "מקרא"
+
 #: src/shared/demo/office.ts
 msgid "Lia"
 msgstr "ליה"
+
+#: src/features/office/floor3d/engine.ts
+msgid "Lia → Maya · document"
+msgstr "ליה ← מאיה · מסמך"
 
 #: src/app/shell/UserMenu.tsx
 #: src/features/settings/SettingsPage.tsx
@@ -752,9 +1100,34 @@ msgstr "ליה"
 msgid "Light"
 msgstr "בהירה"
 
+#: src/features/office/AiOpsPage.tsx
+msgid "Limits"
+msgstr "מגבלות"
+
+#: src/features/office/TeamRoomPage.tsx
+msgid "Linked task"
+msgstr "משימה מקושרת"
+
+#: src/features/office/FloorPage.tsx
+msgid "List"
+msgstr "רשימה"
+
+#: src/features/office/ChatPage.tsx
+msgid "Listing image"
+msgstr "תמונת ליסטינג"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "Listings that stay healthy"
 msgstr "מודעות שנשארות תקינות"
+
+#: src/features/office/FloorPage.tsx
+#: src/features/office/TeamRoomPage.tsx
+msgid "Live"
+msgstr "חי"
+
+#: src/features/office/FloorPage.tsx
+msgid "Live activity"
+msgstr "פעילות חיה"
 
 #: src/features/shops/ShopCard.tsx
 msgid "Loading connection details"
@@ -764,6 +1137,10 @@ msgstr "טוען את פרטי החיבור"
 #: src/features/shops/ShopsPage.tsx
 msgid "Loading shops"
 msgstr "טוענים חנויות"
+
+#: src/features/office/floor3d/plan.ts
+msgid "Lounge"
+msgstr "טרקלין"
 
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
@@ -775,6 +1152,11 @@ msgstr "דואר"
 msgid "Main"
 msgstr "ראשי"
 
+#: src/features/office/FloorPage.tsx
+msgid "Map"
+msgstr "מפה"
+
+#: src/features/office/floor3d/plan.ts
 #: src/shared/demo/office.ts
 msgid "Marketing"
 msgstr "שיווק"
@@ -794,14 +1176,25 @@ msgstr "שיווק וצמיחה"
 msgid "Match the system"
 msgstr "לפי המערכת"
 
+#: src/features/office/ChatPage.tsx
+#: src/features/office/TeamRoomPage.tsx
 #: src/shared/demo/office.ts
 msgid "Maya"
 msgstr "מאיה"
+
+#: src/features/office/floor3d/engine.ts
+msgid "Maya → Amir · sync failure"
+msgstr "מאיה ← אמיר · כשל סנכרון"
+
+#: src/features/office/floor3d/engine.ts
+msgid "Maya back in Executive Office"
+msgstr "מאיה חזרה למשרד המנכ״לית"
 
 #: src/features/overview/OverviewPage.tsx
 msgid "Meet your office"
 msgstr "הכירו את המשרד"
 
+#: src/features/office/FloorPage.tsx
 #: src/features/team/TeamPage.tsx
 msgid "Members"
 msgstr "חברי צוות"
@@ -811,6 +1204,14 @@ msgctxt "navigation"
 msgid "Members & access"
 msgstr "חברים והרשאות"
 
+#: src/features/office/ChatPage.tsx
+msgid "Message {name}"
+msgstr "הודעה ל{name}"
+
+#: src/features/office/ChatPage.tsx
+msgid "Message {name}…"
+msgstr "כתיבת הודעה ל{name}…"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "Messages sorted, drafted and escalated with the order history beside them."
 msgstr "הודעות ממוינות, מנוסחות ומועברות הלאה עם היסטוריית ההזמנה לצידן."
@@ -819,7 +1220,26 @@ msgstr "הודעות ממוינות, מנוסחות ומועברות הלאה ע
 msgid "Miniature AI office"
 msgstr "משרד AI מיניאטורי"
 
+#: src/features/office/AiOpsPage.tsx
+msgid "Mode:"
+msgstr "מצב:"
+
+#: src/features/office/AiOpsPage.tsx
+msgid "Model settings"
+msgstr "הגדרות מודל"
+
+#: src/features/office/AiOpsPage.tsx
+msgid "Model:"
+msgstr "מודל:"
+
+#: src/features/office/AiOpsPage.tsx
+msgid "Month-end forecast"
+msgstr "צפי לסוף החודש"
+
 #: src/app/shell/TabBar.tsx
+#: src/features/office/ChatPage.tsx
+#: src/features/office/EngineeringPage.tsx
+#: src/features/office/FloorPage.tsx
 #: src/features/overview/OverviewPage.tsx
 msgid "More"
 msgstr "עוד"
@@ -836,15 +1256,44 @@ msgstr "מומחים בעלי שם עובדים לפי המדיניות שלך �
 msgid "Needs reconnecting"
 msgstr "צריך לחבר מחדש"
 
+#: src/features/office/ChatPage.tsx
+msgid "New chat"
+msgstr "שיחה חדשה"
+
+#: src/features/office/EngineeringPage.tsx
+msgid "New MCP tool: Etsy listings"
+msgstr "כלי MCP חדש: Etsy listings"
+
 #: src/features/auth/AcceptInvitePage.tsx
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "New password"
 msgstr "סיסמה חדשה"
 
+#: src/features/office/data.ts
+msgid "New star map mockups"
+msgstr "הדמיות חדשות למפת כוכבים"
+
 #: src/features/overview/OverviewPage.tsx
 msgid "Next concept"
 msgstr "הקונספט הבא"
 
+#: src/features/office/FloorPage.tsx
+msgid "Next department"
+msgstr "המחלקה הבאה"
+
+#: src/features/office/EngineeringPage.tsx
+msgid "Next:"
+msgstr "צעד הבא:"
+
+#: src/features/office/EngineeringPage.tsx
+msgid "Nightly postgres backup"
+msgstr "גיבוי לילי ל־postgres"
+
+#: src/features/office/data.ts
+msgid "Nightly quality audit"
+msgstr "בדיקת איכות לילית"
+
+#: src/features/office/AiOpsPage.tsx
 #: src/shared/demo/office.ts
 msgid "Nika"
 msgstr "ניקה"
@@ -873,9 +1322,37 @@ msgstr "עדיין לא חוברה חנות"
 msgid "No shops yet"
 msgstr "עדיין אין חנויות"
 
+#: src/features/office/floor3d/engine.ts
+msgid "No tracking yet"
+msgstr "אין מעקב עדיין"
+
+#: src/features/office/FloorPage.tsx
+msgid "No WebGL · list view"
+msgstr "אין WebGL · תצוגת רשימה"
+
 #: src/shared/demo/office.ts
 msgid "Noa"
 msgstr "נועה"
+
+#: src/features/office/floor3d/engine.ts
+msgid "Noa → Eitan · late orders"
+msgstr "נועה ← איתן · הזמנות באיחור"
+
+#: src/features/office/floor3d/engine.ts
+msgid "Noa → Maya · refund #3152"
+msgstr "נועה ← מאיה · החזר #3152"
+
+#: src/features/office/floor3d/engine.ts
+msgid "Noa back at desk · waiting for you"
+msgstr "נועה חזרה לשולחן · ממתינה לך"
+
+#: src/features/office/TeamRoomPage.tsx
+msgid "Noa sent approval AP-118 to Tzvi"
+msgstr "נועה שלחה בקשת אישור AP-118 לצבי"
+
+#: src/features/office/TeamRoomPage.tsx
+msgid "Noa, prepare a partial refund proposal for #3152 and send it to Tzvi for approval. Amir, can you join?"
+msgstr "נועה, תכיני הצעת החזר חלקי ל־#3152 ותעבירי לצבי לאישור. אמיר, אפשר להצטרף?"
 
 #: src/shared/demo/office.ts
 msgid "Noam"
@@ -901,11 +1378,20 @@ msgstr "לא מסתנכרנת. יש לחבר אותה שוב כדי להמשיך
 msgid "Nothing matches."
 msgstr "לא נמצאה התאמה."
 
+#: src/features/office/AiOpsPage.tsx
+msgid "October"
+msgstr "אוקטובר"
+
+#: src/features/office/AiOpsPage.tsx
+msgid "of"
+msgstr "מתוך"
+
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
 msgid "Office"
 msgstr "המשרד"
 
+#: src/features/office/FloorPage.tsx
 #: src/features/overview/OverviewPage.tsx
 msgid "Office floor"
 msgstr "קומת המשרד"
@@ -926,6 +1412,18 @@ msgstr "לא מחובר מאז 18:00"
 msgid "Omer"
 msgstr "עומר"
 
+#: src/features/office/floor3d/engine.ts
+msgid "Omer → lounge"
+msgstr "עומר יצא לטרקלין"
+
+#: src/features/office/floor3d/engine.ts
+msgid "Omer back at desk"
+msgstr "עומר חזר לשולחן"
+
+#: src/features/office/AiOpsPage.tsx
+msgid "On budget"
+msgstr "בתוך התקציב"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "One office for the whole business"
 msgstr "משרד אחד לכל העסק"
@@ -933,6 +1431,10 @@ msgstr "משרד אחד לכל העסק"
 #: src/features/shops/connectEtsy.tsx
 msgid "Only the workspace owner can connect a shop."
 msgstr "רק הבעלים של סביבת העבודה יכולים לחבר חנות."
+
+#: src/features/office/EngineeringPage.tsx
+msgid "Open incident"
+msgstr "תקלה פתוחה"
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "Open the web app"
@@ -942,10 +1444,19 @@ msgstr "לפתיחת אפליקציית הרשת"
 msgid "Open tickets"
 msgstr "פניות פתוחות"
 
+#: src/features/office/EngineeringPage.tsx
+msgid "Opened"
+msgstr "נפתחה"
+
 #: src/features/team/TeamPage.tsx
 msgid "Operations"
 msgstr "תפעול"
 
+#: src/features/office/ChatPage.tsx
+msgid "Order"
+msgstr "הזמנה"
+
+#: src/features/office/floor3d/plan.ts
 #: src/shared/demo/office.ts
 msgid "Order Assurance"
 msgstr "הבטחת הזמנות"
@@ -958,6 +1469,10 @@ msgstr "הזמנות"
 msgctxt "navigation"
 msgid "Orders"
 msgstr "הזמנות"
+
+#: src/features/office/ChatPage.tsx
+msgid "orders checked in Etsy"
+msgstr "הזמנות נבדקו ב־Etsy"
 
 #: src/features/shops/ShopsPage.tsx
 msgid "Orders today"
@@ -984,6 +1499,16 @@ msgstr "סקירה"
 msgid "Owner"
 msgstr "בעלים"
 
+#: src/features/office/EngineeringPage.tsx
+msgctxt "responsible, he"
+msgid "Owner"
+msgstr "אחראי"
+
+#: src/features/office/TeamRoomPage.tsx
+msgctxt "responsible, she"
+msgid "Owner"
+msgstr "אחראית"
+
 #: src/shared/demo/office.ts
 msgid "Owner Assistant"
 msgstr "עוזרת אישית לבעלים"
@@ -1000,21 +1525,57 @@ msgstr "הדף לא נמצא"
 msgid "Palette and ground"
 msgstr "פלטה ורקע"
 
+#: src/features/office/ChatPage.tsx
+msgid "Partial refund"
+msgstr "החזר חלקי"
+
 #: src/shared/demo/office.ts
 msgid "Partial refund 15% ($7.20) on order #3152 for Emma R."
 msgstr "החזר חלקי 15% ($7.20) על הזמנה #3152 של Emma R."
+
+#: src/features/office/TeamRoomPage.tsx
+msgid "Participants"
+msgstr "משתתפים"
 
 #: src/features/auth/SignInPage.tsx
 msgid "Password"
 msgstr "סיסמה"
 
+#: src/features/office/FloorPage.tsx
+msgid "Pause"
+msgstr "השהיה"
+
+#: src/features/office/TeamRoomPage.tsx
+msgid "Pause thread"
+msgstr "השהיית שיחה"
+
+#: src/features/office/FloorPage.tsx
+msgid "Paused"
+msgstr "מושהה"
+
 #: src/app/shell/TopBar.tsx
 msgid "Pending approvals"
 msgstr "אישורים ממתינים"
 
+#: src/features/office/AiOpsPage.tsx
+msgid "Per call"
+msgstr "ממוצע לקריאה"
+
 #: src/shared/theme/TweaksPanel.tsx
 msgid "Plain ground"
 msgstr "רקע אחיד"
+
+#: src/features/office/FloorPage.tsx
+msgid "Play"
+msgstr "הפעלה"
+
+#: src/features/office/ChatPage.tsx
+msgid "Policy"
+msgstr "מדיניות"
+
+#: src/features/office/TeamRoomPage.tsx
+msgid "Policy version"
+msgstr "גרסת מדיניות"
 
 #: src/features/overview/OverviewPage.tsx
 msgid "Preview"
@@ -1024,10 +1585,15 @@ msgstr "תצוגה מקדימה"
 msgid "Previous concept"
 msgstr "הקונספט הקודם"
 
+#: src/features/office/FloorPage.tsx
+msgid "Previous department"
+msgstr "המחלקה הקודמת"
+
 #: src/features/overview/heroes.ts
 msgid "Printed product stack"
 msgstr "ערימת מוצרים מודפסים"
 
+#: src/features/office/floor3d/plan.ts
 #: src/shared/demo/office.ts
 msgid "Procurement & Finance"
 msgstr "רכש וכספים"
@@ -1044,6 +1610,7 @@ msgstr "המוצר"
 msgid "Product Intelligence"
 msgstr "מודיעין מוצר"
 
+#: src/features/office/floor3d/plan.ts
 #: src/shared/demo/office.ts
 msgid "Product Studio"
 msgstr "סטודיו מוצרים"
@@ -1060,6 +1627,10 @@ msgstr "פרסום 4 תמונות חדשות לליסטינג מפת כוכבי�
 #: src/features/auth/SecondFactorPage.tsx
 msgid "QR code for your authenticator app"
 msgstr "קוד QR לאפליקציית האימות"
+
+#: src/features/office/FloorPage.tsx
+msgid "Quality"
+msgstr "איכות"
 
 #: src/shared/demo/office.ts
 msgid "Quality & Operations Supervisor"
@@ -1086,6 +1657,10 @@ msgstr "קריאת הזמנות"
 msgid "Read shop"
 msgstr "קריאת החנות"
 
+#: src/features/office/TeamRoomPage.tsx
+msgid "Read-only"
+msgstr "צפייה בלבד"
+
 #: src/features/shops/ShopsPage.tsx
 msgid "Reconnect"
 msgstr "חיבור מחדש"
@@ -1106,9 +1681,34 @@ msgstr "יש לחבר מחדש כדי להמשיך לסנכרן"
 msgid "Reconnect today"
 msgstr "יש לחבר מחדש היום"
 
+#: src/features/office/FloorPage.tsx
+msgid "Reduced motion · static view"
+msgstr "תנועה מופחתת · תצוגה סטטית"
+
+#: src/features/office/TeamRoomPage.tsx
+msgid "Refund awaiting approval"
+msgstr "החזר ממתין לאישור"
+
+#: src/features/office/data.ts
+msgid "Refund on #3152 is waiting for you."
+msgstr "ההחזר ל־#3152 ממתין לאישורך."
+
+#: src/features/office/floor3d/engine.ts
+msgid "Refund on #3152?"
+msgstr "החזר ל־#3152?"
+
+#: src/features/office/ChatPage.tsx
 #: src/features/overview/OverviewPage.tsx
 msgid "Reject"
 msgstr "דחייה"
+
+#: src/features/office/EngineeringPage.tsx
+msgid "Reliability"
+msgstr "אמינות"
+
+#: src/features/office/AiOpsPage.tsx
+msgid "Remaining"
+msgstr "נותר"
 
 #: src/features/auth/AcceptInvitePage.tsx
 #: src/features/auth/ResetPasswordPage.tsx
@@ -1123,9 +1723,17 @@ msgstr "מזהה בקשה <0>{requestId}</0>"
 msgid "Reset"
 msgstr "איפוס"
 
+#: src/features/office/FloorPage.tsx
+msgid "Reset view"
+msgstr "איפוס מבט"
+
 #: src/features/auth/ForgotPasswordPage.tsx
 msgid "Reset your password"
 msgstr "איפוס הסיסמה"
+
+#: src/features/office/TeamRoomPage.tsx
+msgid "Resolve late orders #3152, #3160"
+msgstr "טיפול בהזמנות באיחור #3152, #3160"
 
 #: src/features/overview/OverviewPage.tsx
 msgid "Revenue"
@@ -1163,9 +1771,21 @@ msgstr "תפקיד"
 msgid "Roni"
 msgstr "רוני"
 
+#: src/features/office/TeamRoomPage.tsx
+msgid "Root cause found"
+msgstr "נמצא שורש התקלה"
+
+#: src/features/office/EngineeringPage.tsx
+msgid "Rotate token"
+msgstr "החלפת token"
+
 #: src/shared/ui/kit/kit.tsx
 msgid "Running"
 msgstr "עובד"
+
+#: src/features/office/FloorPage.tsx
+msgid "Running now"
+msgstr "עובדים כעת"
 
 #: src/shared/ui/kit/kit.tsx
 msgid "Sample data · coming soon"
@@ -1188,6 +1808,10 @@ msgstr "חיפוש"
 msgid "Search actions"
 msgstr "חיפוש פעולות"
 
+#: src/features/office/ChatPage.tsx
+msgid "Search agents"
+msgstr "חיפוש סוכן"
+
 #: src/app/shell/CommandMenu.tsx
 msgid "Search screens and actions…"
 msgstr "חיפוש מסכים ופעולות…"
@@ -1206,6 +1830,10 @@ msgstr "אבטחת החשבון"
 msgid "Security"
 msgstr "אבטחה"
 
+#: src/features/office/ChatPage.tsx
+msgid "Send"
+msgstr "שליחה"
+
 #: src/features/team/TeamPage.tsx
 msgid "Send on WhatsApp"
 msgstr "שליחה ב-WhatsApp"
@@ -1221,6 +1849,14 @@ msgstr "שלחו את הקישור בעצמכם. הוא עובד פעם אחת; 
 #: src/shared/demo/office.ts
 msgid "SEO & Copywriting"
 msgstr "SEO וקופירייטינג"
+
+#: src/features/office/EngineeringPage.tsx
+msgid "Service"
+msgstr "שירות"
+
+#: src/features/office/FloorPage.tsx
+msgid "Service departments"
+msgstr "מחלקות שירות"
 
 #: src/features/security/SecurityPage.tsx
 msgid "Set one up"
@@ -1239,6 +1875,7 @@ msgid "Set your password"
 msgstr "בחירת סיסמה"
 
 #: src/app/shell/UserMenu.tsx
+#: src/features/office/FloorPage.tsx
 #: src/features/overview/OverviewPage.tsx
 #: src/features/settings/SettingsPage.tsx
 msgid "Settings"
@@ -1249,14 +1886,22 @@ msgctxt "navigation"
 msgid "Settings"
 msgstr "הגדרות"
 
-#: src/app/shell/UserMenu.tsx
-msgid "Several workspaces"
-msgstr "כמה סביבות עבודה"
+#: src/features/office/EngineeringPage.tsx
+msgid "Severity"
+msgstr "חומרה"
+
+#: src/features/office/ChatPage.tsx
+msgid "Shared in this chat"
+msgstr "שותף בשיחה"
 
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
 msgid "Shipping"
 msgstr "משלוחים"
+
+#: src/features/office/floor3d/engine.ts
+msgid "Ships today"
+msgstr "שולח היום"
 
 #: src/shared/demo/office.ts
 msgid "Shon"
@@ -1357,6 +2002,46 @@ msgstr "משהו השתבש בהצגת המסך. אפשר לנסות שוב; ה�
 msgid "Soon"
 msgstr "בקרוב"
 
+#: src/features/office/ChatPage.tsx
+msgid "source:"
+msgstr "מקור:"
+
+#: src/features/office/EngineeringPage.tsx
+#: src/features/office/FloorPage.tsx
+msgid "Speed"
+msgstr "מהירות"
+
+#: src/features/office/FloorPage.tsx
+msgid "Speed {speed}×"
+msgstr "מהירות {speed}×"
+
+#: src/features/office/AiOpsPage.tsx
+msgid "Spent this month:"
+msgstr "הוצאה החודש:"
+
+#: src/features/office/ChatPage.tsx
+msgid "Spent today"
+msgstr "עלות היום"
+
+#: src/features/office/EngineeringPage.tsx
+msgid "Stable"
+msgstr "יציב"
+
+#: src/features/office/FloorPage.tsx
+msgid "Stable performance"
+msgstr "ביצוע יציב"
+
+#: src/features/office/EngineeringPage.tsx
+msgid "Status"
+msgstr "סטטוס"
+
+#: src/features/office/AiOpsPage.tsx
+#: src/features/office/ChatPage.tsx
+#: src/features/office/EngineeringPage.tsx
+#: src/features/office/TeamRoomPage.tsx
+msgid "Status:"
+msgstr "סטטוס:"
+
 #: src/features/overview/OverviewPage.tsx
 msgid "Steps done:"
 msgstr "צעדים שהושלמו:"
@@ -1378,10 +2063,18 @@ msgstr "מעבר לספק Gelato למגבות מפשתן (−$2.10 ליחידה)
 msgid "Sync"
 msgstr "סנכרון"
 
+#: src/features/office/floor3d/engine.ts
+msgid "Sync fixed?"
+msgstr "הסנכרון תוקן?"
+
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
 msgid "System"
 msgstr "מערכת"
+
+#: src/features/office/TeamRoomPage.tsx
+msgid "Task:"
+msgstr "משימה:"
 
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
@@ -1397,6 +2090,18 @@ msgstr "צוות"
 msgctxt "navigation"
 msgid "Team room"
 msgstr "חדר צוות"
+
+#: src/features/office/TeamRoomPage.tsx
+msgid "Team threads"
+msgstr "שיחות צוות"
+
+#: src/features/office/floor3d/engine.ts
+msgid "Thanks!"
+msgstr "תודה!"
+
+#: src/features/office/FloorPage.tsx
+msgid "The 3D map could not load. Use the list view."
+msgstr "לא ניתן לטעון את המפה התלת־ממדית. אפשר להשתמש בתצוגת הרשימה."
 
 #: src/app/RouteStates.tsx
 msgid "The address may be mistyped, or the page has moved."
@@ -1414,6 +2119,10 @@ msgstr "האימייל או הסיסמה שגויים."
 #: src/features/shops/ShopsPage.tsx
 msgid "The marketplace shops this organization runs."
 msgstr "החנויות שהארגון מפעיל בזירות המסחר."
+
+#: src/features/office/FloorPage.tsx
+msgid "The office is waking up…"
+msgstr "המשרד מתעורר…"
 
 #: src/features/auth/AcceptInvitePage.tsx
 #: src/features/auth/ResetPasswordPage.tsx
@@ -1488,6 +2197,10 @@ msgstr "פג תוקף קישור ההזמנה או שכבר השתמשו בו. �
 msgid "This is your current password. Choose a different one."
 msgstr "זו הסיסמה הנוכחית שלכם. בחרו סיסמה אחרת."
 
+#: src/features/office/AiOpsPage.tsx
+msgid "this month"
+msgstr "החודש"
+
 #: src/features/auth/SignInPage.tsx
 msgid "This page could not sign you in. Reload it and try again."
 msgstr "הדף לא הצליח להכניס אותך. טענו אותו מחדש ונסו שוב."
@@ -1512,15 +2225,30 @@ msgstr "המסך הזה הוא חלק מהעיצוב החדש ונמצא בבנ�
 msgid "This takes a few seconds. Keep this page open."
 msgstr "זה לוקח כמה שניות. נא להשאיר את העמוד פתוח."
 
+#: src/features/office/TeamRoomPage.tsx
+msgid "Thread closed"
+msgstr "השיחה נסגרה"
+
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
 msgid "Tickets"
 msgstr "פניות"
 
+#: src/features/office/EngineeringPage.tsx
+msgid "Time"
+msgstr "שעה"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "Titles, photos and claims audited and fixed as drafts you approve."
 msgstr "כותרות, תמונות וטענות נבדקות ומתוקנות כטיוטות שאת/ה מאשר/ת."
 
+#: src/features/office/TeamRoomPage.tsx
+msgid "To tasks"
+msgstr "למשימות"
+
+#: src/features/office/AiOpsPage.tsx
+#: src/features/office/ChatPage.tsx
+#: src/features/office/TeamRoomPage.tsx
 #: src/features/overview/OverviewPage.tsx
 msgid "Today"
 msgstr "היום"
@@ -1528,6 +2256,10 @@ msgstr "היום"
 #: src/features/overview/OverviewPage.tsx
 msgid "Today’s orders"
 msgstr "הזמנות היום"
+
+#: src/features/office/floor3d/engine.ts
+msgid "Token expired"
+msgstr "ה־token פג"
 
 #: src/shared/demo/office.ts
 msgid "Tom"
@@ -1541,13 +2273,29 @@ msgstr "תום"
 msgid "Too many attempts. Wait 15 minutes and try again."
 msgstr "יותר מדי ניסיונות. המתינו 15 דקות ונסו שוב."
 
+#: src/features/office/ChatPage.tsx
+msgid "Tool call · evidence"
+msgstr "קריאת כלי · ראיה"
+
 #: src/shared/demo/office.ts
 msgid "Tracking sync is down"
 msgstr "סנכרון מעקב למטה"
 
+#: src/features/office/TeamRoomPage.tsx
+msgid "tracking.sync failed · exit 502"
+msgstr "tracking.sync נכשל · exit 502"
+
+#: src/features/office/floor3d/engine.ts
+msgid "tracking.sync failed (3/3)"
+msgstr "tracking.sync נכשל (3/3)"
+
 #: src/shared/demo/office.ts
 msgid "tracking.sync retry failed"
 msgstr "ניסיון חוזר ל־tracking.sync נכשל"
+
+#: src/features/office/data.ts
+msgid "tracking.sync returns 502, looking."
+msgstr "tracking.sync מחזיר 502, בודק."
 
 #: src/app/RouteStates.tsx
 #: src/features/overview/OverviewPage.tsx
@@ -1559,9 +2307,21 @@ msgstr "לנסות שוב"
 msgid "Two-factor sign-in"
 msgstr "כניסה דו-שלבית"
 
+#: src/features/office/ChatPage.tsx
+msgid "Tzvi"
+msgstr "צבי"
+
 #: src/features/security/SecurityPage.tsx
 msgid "Unknown device"
 msgstr "מכשיר לא מזוהה"
+
+#: src/features/office/EngineeringPage.tsx
+msgid "Uptime"
+msgstr "זמינות"
+
+#: src/features/office/AiOpsPage.tsx
+msgid "Usage:"
+msgstr "שימוש:"
 
 #: src/features/auth/AcceptInvitePage.tsx
 #: src/features/auth/ResetPasswordPage.tsx
@@ -1575,6 +2335,14 @@ msgstr "בכל מקום"
 #: src/shared/theme/TweaksPanel.tsx
 msgid "Very different"
 msgstr "שונה מאוד"
+
+#: src/features/office/FloorPage.tsx
+msgid "View"
+msgstr "תצוגה"
+
+#: src/features/office/ChatPage.tsx
+msgid "View evidence"
+msgstr "לראיות"
 
 #: src/features/team/TeamPage.tsx
 msgid "Viewer"
@@ -1596,25 +2364,54 @@ msgstr "ממתין להצעת Gelato"
 msgid "Waiting for trend data"
 msgstr "ממתין לנתוני טרנדים"
 
+#: src/features/office/FloorPage.tsx
 #: src/shared/ui/kit/kit.tsx
 msgid "Waiting for you"
 msgstr "מחכה לך"
+
+#: src/features/office/floor3d/engine.ts
+msgid "Waiting for you · refund #3152"
+msgstr "ממתינה לך · החזר #3152"
 
 #: src/features/overview/OverviewPage.tsx
 msgid "Waiting for you:"
 msgstr "ממתין לך:"
 
+#: src/features/office/data.ts
+msgid "Waiting on the Gelato quote."
+msgstr "ממתין להצעת מחיר מ־Gelato."
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "Web"
 msgstr "רשת"
+
+#: src/features/office/EngineeringPage.tsx
+msgid "Webhook retries"
+msgstr "ניסיונות חוזרים ל־webhooks"
+
+#: src/features/office/floor3d/engine.ts
+msgid "Weekly summary"
+msgstr "הסיכום השבועי"
 
 #: src/shared/demo/office.ts
 msgid "Weekly summary draft"
 msgstr "טיוטת סיכום שבועי"
 
+#: src/features/office/data.ts
+msgid "Weekly summary lands Friday."
+msgstr "הסיכום השבועי יגיע ביום ו׳."
+
+#: src/features/office/floor3d/engine.ts
+msgid "What do I tell Emma?"
+msgstr "מה לענות ל־Emma?"
+
 #: src/features/overview/OverviewPage.tsx
 msgid "What needs you"
 msgstr "מה מחכה לך"
+
+#: src/features/office/ChatPage.tsx
+msgid "Which ones are late? Can we do something for the customers?"
+msgstr "אילו מהן באיחור? אפשר לעשות משהו בשביל הלקוחות?"
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "Windows"
@@ -1638,6 +2435,11 @@ msgctxt "navigation"
 msgid "Workspace"
 msgstr "סביבת עבודה"
 
+#: src/features/office/data.ts
+#: src/features/office/EngineeringPage.tsx
+msgid "Yesterday"
+msgstr "אתמול"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "You approve what's risky"
 msgstr "את/ה מאשר/ת את מה שמסוכן"
@@ -1654,6 +2456,10 @@ msgstr "אין חיבור לאינטרנט. ייתכן שהמידע אינו ע�
 #: src/app/shell/UserMenu.tsx
 msgid "You are still signed in. Try signing out again shortly."
 msgstr "עדיין מחובר/ת. נסה/י להתנתק שוב בעוד רגע."
+
+#: src/features/office/TeamRoomPage.tsx
+msgid "You are watching agents talk. They keep working."
+msgstr "את/ה צופה בשיחה בין סוכנים. הם ממשיכים לעבוד."
 
 #: src/features/shops/EtsyCallbackPage.tsx
 msgid "You cancelled the connection on Etsy."
@@ -1698,10 +2504,6 @@ msgstr "החנות רצה. ההחלטה שלך."
 #: src/features/auth/AuthLayout.tsx
 msgid "Your shop runs. You decide<0>.</0>"
 msgstr "החנות רצה. ההחלטה שלך<0>.</0>"
-
-#: src/app/shell/ShopSwitcher.tsx
-msgid "Your shops"
-msgstr "החנויות שלך"
 
 #: src/features/auth/SignInPage.tsx
 msgid "Your shops, orders and AI office in one place."

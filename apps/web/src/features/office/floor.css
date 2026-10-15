@@ -1,0 +1,291 @@
+/* Office › Floor (Design 1C `.map3d`, `.flo`, `.lb3`, `.b3`): the 3D map, its overlays, and the
+   floating legend and ticker. The map is a picture of a place, so it keeps left-to-right. */
+.fl-map {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  margin: 0 8px 8px;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background: var(--bg-panel);
+}
+:root:is([data-t2="2"], [data-t2="3"]) .fl-map {
+  background: transparent;
+}
+:root[data-pal="d4"] .fl-map {
+  background: color-mix(in srgb, var(--bg-ground) 60%, var(--bg-card));
+}
+.fl-map canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  cursor: grab;
+  touch-action: none;
+  animation: htco-enter var(--motion-duration-slow) var(--motion-easing-enter) both;
+}
+.fl-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  font-family: var(--font-family-latin);
+}
+:root:lang(he) .fl-overlay {
+  font-family: var(--font-family-hebrew);
+}
+.fl-lb3 {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 24px;
+  padding: 0 10px;
+  border-radius: 12px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-strong);
+  color: var(--text-primary);
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  will-change: transform;
+}
+.fl-lb3.fl-svc {
+  border-style: dashed;
+}
+.fl-b3w {
+  position: absolute;
+  left: 0;
+  top: 0;
+  will-change: transform;
+}
+.fl-b3w::after {
+  content: "";
+  position: absolute;
+  left: -0.5px;
+  top: 0;
+  width: 1px;
+  height: var(--ld, 0px);
+  background: var(--border-hover);
+  opacity: 0.8;
+}
+.fl-b3 {
+  transform: translate(-50%, -100%);
+  height: 24px;
+  padding: 0 11px;
+  border-radius: 12px;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  background: var(--bg-card);
+  border: 1px solid var(--border-strong);
+  position: relative;
+  color: var(--text-primary);
+  animation: fl-pop var(--motion-duration-base) var(--motion-easing-standard) both;
+}
+@keyframes fl-pop {
+  from {
+    opacity: 0;
+    scale: 0.85;
+  }
+}
+.fl-b3::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -5px;
+  margin-left: -4px;
+  border: 4px solid transparent;
+  border-top-color: inherit;
+  border-bottom: 0;
+}
+.fl-b3.fl-say::after,
+.fl-b3.fl-ic::after {
+  border-top-color: var(--border-strong);
+}
+.fl-b3.fl-amb {
+  background: var(--attention-fill);
+  border-color: var(--attention-fill);
+  color: var(--attention-on-fill);
+  pointer-events: auto;
+  cursor: pointer;
+}
+.fl-b3.fl-red {
+  background: var(--danger-dot);
+  border-color: var(--danger-dot);
+  color: var(--action-danger-fg);
+  pointer-events: auto;
+  cursor: pointer;
+  animation:
+    fl-pop var(--motion-duration-base) var(--motion-easing-standard) both,
+    k-pulse 1.4s ease-in-out infinite;
+}
+.fl-b3.fl-ic {
+  width: 24px;
+  padding: 0;
+  justify-content: center;
+  background: var(--bg-raised);
+}
+.fl-b3.fl-zz {
+  background: none;
+  border: 0;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+.fl-b3.fl-zz::after {
+  display: none;
+}
+:root:is([data-t2="2"], [data-t2="3"]) :is(.fl-lb3, .fl-b3.fl-ic) {
+  background: color-mix(in srgb, var(--bg-card) 94%, transparent);
+}
+.fl-tag3 {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 20px;
+  padding: 0 9px;
+  border-radius: 10px;
+  background: var(--inverse-bg);
+  color: var(--inverse-text);
+  font-size: 11px;
+  display: none;
+  align-items: center;
+}
+
+/* the floating legend and ticker over the map */
+.fl-flo {
+  position: absolute;
+  z-index: 3;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-edge);
+  border-radius: 18px;
+  box-shadow:
+    var(--elevation-panel),
+    0 10px 28px -20px rgb(0 0 0 / 0.35);
+  backdrop-filter: var(--glass-backdrop);
+  animation: htco-enter var(--motion-duration-slow) var(--motion-easing-enter) 120ms both;
+}
+:root:is([data-t2="2"], [data-t2="3"]) .fl-flo {
+  background: var(--bg-panel);
+}
+.fl-flo > header {
+  height: 44px;
+  padding-inline: 16px 8px;
+}
+.fl-legend {
+  left: 20px;
+  bottom: 20px;
+  width: 344px;
+}
+.fl-lgd {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 16px;
+  padding: 0 16px 12px;
+}
+.fl-lgd div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 26px;
+  font-size: 12.5px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.fl-ticker {
+  right: 20px;
+  top: 68px;
+  width: 280px;
+  height: 228px;
+  display: flex;
+  flex-direction: column;
+}
+.fl-ticker ol {
+  padding: 0 16px 10px;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  margin: 0;
+  list-style: none;
+}
+.fl-ticker li + li {
+  color: var(--text-secondary);
+}
+
+/* list view: the floor render with department hotspots */
+.fl-floor {
+  position: relative;
+  width: 100%;
+  max-width: 700px;
+  aspect-ratio: 1536 / 1024;
+}
+.fl-floor img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+.fl-hs {
+  position: absolute;
+  translate: -50% -50%;
+  height: 30px;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--bg-raised) 94%, transparent);
+  border: 1px solid var(--border-strong);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding-inline: 4px 10px;
+  font-size: 12px;
+  white-space: nowrap;
+  color: var(--text-primary);
+  transition:
+    background-color var(--motion-duration-fast) var(--motion-easing-standard),
+    border-color var(--motion-duration-fast) var(--motion-easing-standard),
+    scale var(--motion-duration-fast) var(--motion-easing-standard);
+}
+.fl-hs:hover {
+  border-color: var(--border-hover-strong);
+  scale: 1.04;
+}
+.fl-hs.k-on {
+  background: var(--inverse-bg);
+  color: var(--inverse-text);
+  border-color: var(--inverse-bg);
+}
+.fl-hs.k-on .k-av {
+  background: var(--inverse-bg-hover);
+  color: var(--inverse-text);
+  border-color: var(--inverse-bg);
+}
+.fl-hs.fl-svc {
+  padding: 0 10px;
+  border-style: dashed;
+}
+
+@media (max-width: 1199.98px) {
+  .fl-legend {
+    width: 300px;
+  }
+  .fl-ticker {
+    width: 240px;
+  }
+}
+/* Phones: the map, then the legend and the ticker under it, not over it. */
+@media (max-width: 639.98px) {
+  .fl-map {
+    height: 420px;
+    flex: none;
+  }
+  .fl-flo {
+    position: static;
+    margin: 0 8px 8px;
+    width: auto;
+    height: auto;
+  }
+  .fl-ticker ol {
+    max-height: 180px;
+  }
+  .fl-head-extra,
+  .fl-lb3 {
+    display: none;
+  }
+}
