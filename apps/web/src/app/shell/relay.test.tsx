@@ -65,6 +65,18 @@ describe("the decision ring (design/README.md, The idea)", () => {
   });
 });
 
+describe("the aura (design/README.md, Backgrounds)", () => {
+  it("glows behind the overview but never behind the shops table, and is hidden from readers", async () => {
+    const { user } = await open();
+    const glow = document.querySelector("main [aria-hidden='true'].pointer-events-none");
+    expect(glow).not.toBeNull();
+
+    await user.click(screen.getByRole("link", { name: "Shops" }));
+    await screen.findByRole("heading", { level: 1, name: "Shops" });
+    expect(document.querySelector("main [aria-hidden='true'].pointer-events-none")).toBeNull();
+  });
+});
+
 describe("the logo", () => {
   it("is drawn inline with an accessible name, in the theme's colours", async () => {
     await open();

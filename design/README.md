@@ -25,6 +25,13 @@ Work passes through the office the way the logo's interlocked C and O pass into 
 - **Work screens are Attio-calm:** white or graphite surfaces, dense type, thin lines, one primary action per region. Colour appears only as small tags, object icons, status dots and the decision ring.
 - **Brand moments are Figma-warm:** sign-in, empty states, the intro and future onboarding or celebrations use flat shapes in the illustration palette with 2 px ink outlines. They show HTCO's own objects (receipts, listing tiles, the handoff rings and the decision card), never generic stickies or clip-art, and never text inside the art.
 
+## Backgrounds: the aura
+
+Brand moments sit on an **aura**: large, soft gradient shapes in the illustration palette (peach into iris from one top corner, sky into iris across the middle) on irregular rounded outlines, lightly blurred, with one hand-drawn coral stroke in a lower corner. It came from the owner's sign-in reference.
+
+- **Where:** the sign-in screens (the brand panel and a corner of the form side). On work screens it appears only as a faint glow at the top of greeting pages such as the overview (`PageBody aura`), never behind a table, a form or a list.
+- **How:** `Aura` (`brand`, `corner`, `page`). Decorative (`aria-hidden`), static apart from a one-time fade, logical positions so it mirrors in right-to-left layouts, lower opacity in the dark theme. Text always sits on a solid surface or keeps its contrast over the aura.
+
 ## The logo
 
 - The official geometry is kept exactly: block **H** and **T**, the interlocked **C** and **O** with their knockout gaps, and the dot. It is traced once into a vector, [`htco-logo.svg`](../assets/brand/htco-logo.svg); the original raster stays as the geometry source.

@@ -22,7 +22,7 @@ export function OverviewPage() {
         title={<Trans>Overview</Trans>}
         icon={<ObjectIcon hue="iris" icon={<House size={13} strokeWidth={2} />} />}
       />
-      <PageBody>
+      <PageBody aura>
         <section className="flex flex-col gap-2">
           <p className="m-0 font-display text-title font-semibold sm:text-display-sm">
             <Trans>Your shop runs. You decide.</Trans>
