@@ -10,7 +10,8 @@
 | Web app | Shell and navigation (`aria-current`), Hebrew start, language switch both ways from the account menu, theme choice and return to system, offline banner, not-found recovery | `apps/web/src/app/App.test.tsx` |
 | i18n | Catalogs in sync with the code and complete in Hebrew | `pnpm i18n:check` (`lingui check sync`, `lingui check missing`) |
 | Component stories | Every story renders in Chromium, its play function passes (keyboard reach, focus ring, Enter and Space, typing, announced errors, bidi order) and axe finds no violation (the accessibility addon with `a11y.test: "error"`) | `apps/web/src/shared/ui/*.stories.tsx`, `pnpm test:storybook` (`apps/web/vitest.storybook.config.ts`) |
-| Component matrix | Every story of the built Storybook in he/en × light/dark: no serious or critical axe violation, and a screenshot equal to its baseline | `apps/web/e2e/components/stories.spec.ts`, baselines in `apps/web/e2e/__screenshots__/` |
+| Component matrix | Every story of the built Storybook in he/en × light/dark: no serious or critical axe violation, and a screenshot equal to its baseline | `apps/web/e2e/components/stories.spec.ts`, baselines in `apps/web/e2e/components/__screenshots__/` |
+| Journeys | The app on its in-memory API (`?demo`, `src/test/fakeApi.ts`) at 1440×900 and 375×812: Owner sign-in → authenticator setup → overview; language switch both ways with the layout mirrored; theme following the system, a choice overriding it and surviving a reload; team invitation; accepting an invitation; sign-out. Every stop: no serious or critical axe violation on the page, and a screenshot equal to its baseline | `apps/web/e2e/journeys/*.spec.ts` (projects `journeys-desktop`, `journeys-phone`), baselines in `apps/web/e2e/journeys/__screenshots__/` |
 | CI | The pipeline itself | `.github/workflows/ci.yml` |
 
 ## Acceptance criteria coverage
@@ -18,12 +19,12 @@
 | Acceptance criterion | Tests |
 |---|---|
 | AC-3.1.1 | `scripts/eslint-logical-properties.test.ts` |
-| AC-3.3.1 | `App.test.tsx`: "switches to Hebrew and back from the account menu", "starts right-to-left in Hebrew"; `locale.test.ts` |
+| AC-3.3.1 | `App.test.tsx`: "switches to Hebrew and back from the account menu", "starts right-to-left in Hebrew"; `locale.test.ts`; journey `preferences.spec.ts` "switching to Hebrew mirrors the app right to left…" (`lang`/`dir` on the root, the main navigation moves to the right side and back, screenshots) |
 | AC-3.3.2 | `pnpm i18n:check` in the `checks` job |
-| AC-3.3.3 | `App.test.tsx`: "follows the system theme until the user picks one"; `theme.test.ts` |
+| AC-3.3.3 | `App.test.tsx`: "follows the system theme until the user picks one"; `theme.test.ts`; journey `preferences.spec.ts` "the theme follows the system…" (emulated system light and dark, then the user's choice, a reload, and back to the system) |
 | AC-3.5.1 | `auth.test.tsx`: "sends the CSRF header and keeps no token in the browser" |
 | AC-3.5.2 | `packages/api-client/test/client.test.ts`: "sends the CSRF header on unsafe requests only"; the fake API refuses requests without it |
-| AC-3.5.3 | `auth.test.tsx`: "sends an Owner without an authenticator app to set one up...", "asks an enrolled Owner for the code...", "lets other roles in..." |
+| AC-3.5.3 | `auth.test.tsx`: "sends an Owner without an authenticator app to set one up...", "asks an enrolled Owner for the code...", "lets other roles in..."; journey `auth.spec.ts` "an Owner signs in, sets up the authenticator app and lands on the overview" |
 | AC-3.5.4 | `auth.test.tsx`: "lists this user's devices and signs another one out" |
 | AC-3.6.1 | `packages/api-client/test/client.test.ts`: "match the pinned OpenAPI document" |
 | AC-3.1.2 | The `tests` job runs Vitest and the `storybook` job runs the story tests (interactions, axe) and the component matrix; `ci-gate` requires both |

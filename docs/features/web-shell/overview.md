@@ -5,7 +5,7 @@
 | **Slug** | `web-shell` |
 | **Phase / slices** | Phase 3 — slices 3.1, 3.3, 3.4, 3.6–3.9 (tokens: [`design-tokens`](../design-tokens/overview.md); authentication: `auth-bff` in `htco-platform`) |
 | **Requirements** | FR-ADM-01, FR-IAM-01, FR-IAM-02, FR-IAM-05, FR-IAM-06 (see the PRD in `htco-platform`) |
-| **Status** | In progress (slice 3.1; slice 3.3 part 1; slice 3.4 for the components that exist; slice 3.6 and the web half of 3.5) |
+| **Status** | In progress (slice 3.1; slice 3.3; slice 3.4 for the components that exist; slice 3.6 and the web half of 3.5) |
 | **Last updated** | 2026-10-15 |
 
 ## What and why
@@ -17,7 +17,7 @@ The owner's web app: a calm, bilingual, accessible shell where they sign in and 
 | ID | Criterion | Slice | Status |
 |---|---|---|---|
 | AC-3.1.1 | A physical direction utility (`ml-4`, `left-0`) in a component fails lint. | 3.1 (part 2, with the web app and Tailwind) | Pass |
-| AC-3.3.1 | Switching to Hebrew sets `dir="rtl"` and mirrors the layout; English restores LTR. | 3.3 | Pass (unit); visual check with the end-to-end suite in part 2 |
+| AC-3.3.1 | Switching to Hebrew sets `dir="rtl"` and mirrors the layout; English restores LTR. | 3.3 | Pass (unit and end-to-end journey with screenshots) |
 | AC-3.3.2 | A user-visible string missing from a catalog fails the i18n check. | 3.3 | Pass |
 | AC-3.3.3 | Theme follows the system by default and the user's choice when set. | 3.3 | Pass |
 | AC-3.5.1 | Signing in keeps no token in the browser: the session is an HttpOnly cookie set by the API, and nothing is written to `localStorage` or `sessionStorage`. | 3.5 (web) | Pass |
@@ -40,7 +40,8 @@ The owner's web app: a calm, bilingual, accessible shell where they sign in and 
 - **In (3.6, 3.5 web):** `packages/api-client` (openapi-typescript types, an openapi-fetch client that sends the CSRF header); the Vite dev proxy `/api` to the local API; sign-in, authenticator setup and confirmation, the security settings page (two-factor status, signed-in devices), sign-out from the account menu; route guards that send a visitor to sign-in and back, and an Owner or Admin to the second factor; any 401 from the API returns to sign-in.
 - **In (3.8):** `apps/web/Dockerfile` builds the app for App Platform's static site at `https://dash.ht-co.app`; the CSP and referrer policy are written into the built page; the app refuses to run inside a frame ([client ADR-0006](../../adr/0006-static-web-hosting.md)). The app spec, ingress and DNS live in `htco-platform`.
 - **In (3.4, part 1):** Storybook 10 (Vite builder) with the accessibility and Vitest addons; stories for every shared UI component (Button, IconButton, TextField, Tag and ObjectIcon, Banner, EmptyState and StateCard, ErrorState, PageHeader and PageBody, StatusDot and StatusLabel, DecisionRing, Logo, Ltr) with toolbar globals for Hebrew or English (through the app's `LocaleProvider`) and light or dark (`data-theme`) over the real token CSS; stories run as browser tests (play functions, axe); every story is checked again in he/en × light/dark with axe and a screenshot (Playwright, in the CI image). No component's look changed.
-- **Out (3.3 part 2 and the rest of 3.4):** Playwright journeys with axe in he/en × light/dark; the core components that do not exist yet (Select, Badge, MetricCard, Skeleton, Toast, Dialog, Pagination and the others in the slice) get their stories when they are built. Path filters arrive with the first expensive job.
+- **In (3.3, part 2):** Playwright journeys on the app's development server with the in-memory API (`?demo`), at 1440×900 and 375×812: Owner sign-in with authenticator setup, the language switch (Hebrew mirrored, English restored), the theme following the system and the user's remembered choice, team invitation, accepting an invitation, sign-out; each stop checked with axe and a screenshot (CI's `e2e` job).
+- **Out (the rest of 3.4, and journeys against the real API):** the core components that do not exist yet (Select, Badge, MetricCard, Skeleton, Toast, Dialog, Pagination and the others in the slice) get their stories when they are built. Path filters arrive with the first expensive job.
 
 ## External facts learned
 
