@@ -22,6 +22,7 @@ Screenshots are compared only on Linux, in the Playwright image the `storybook` 
 2. **If the change is a bug:** fix the component; never update a baseline to get green.
 3. **If the change is intended** (a new story, or a design change the owner approved): review every new or changed image, then copy the new baselines (or each `<name>-actual.png`, renamed to `<name>.png`) into `apps/web/e2e/**/__screenshots__/` and commit them with the change. To make them locally instead, run the suite in the same image: `docker run --rm -v "$PWD:/w" -w /w mcr.microsoft.com/playwright:v1.63.0-noble sh -c "corepack enable && pnpm install --frozen-lockfile && pnpm --filter @htco/web storybook:build && pnpm --filter @htco/web exec playwright test --project components --update-snapshots=changed"` (on a clean checkout: it installs Linux packages into `node_modules`).
 4. **Tests time out waiting for a story:** its play function failed in the built Storybook; open it with `pnpm storybook` to see the interaction panel.
+5. **Journeys** (`journeys-desktop`, `journeys-phone`) work the same way: their artifact is `journey-screenshots`, their baselines live in `apps/web/e2e/journeys/__screenshots__/` with the project in the name, and the same `docker run` with `--project journeys-desktop --project journeys-phone` (no Storybook build needed) makes them locally. A journey runs on the development server with `?demo`, so the in-memory API lives in the page: a journey must not reload the page unless it means to start again from the demo state.
 
 ## Deployment (slice 3.8)
 
