@@ -75,3 +75,24 @@ test("the theme follows the system until the user picks one, which is remembered
   await expect(root(page)).not.toHaveAttribute("data-theme");
   await expect.poll(() => ground(page)).toBe(light);
 });
+
+test("a tweak changed in the app shows on the landing page, and back (one preference)", async ({
+  page,
+}) => {
+  await openApp(page, "/", "signed-in");
+  await expect(pageTitle(page, "Overview")).toBeVisible();
+  await page.getByRole("button", { name: "Design tweaks" }).click();
+  await page.getByRole("radio", { name: "Design 4" }).click();
+  await expect(root(page)).toHaveAttribute("data-pal", "d4");
+
+  await openApp(page, "/welcome", "signed-out");
+  await expect(pageTitle(page, "Your shop runs. You decide.")).toBeVisible();
+  await expect(root(page)).toHaveAttribute("data-pal", "d4");
+  await checkpoint(page, "landing-design-4");
+
+  await page.getByRole("button", { name: "Design tweaks" }).click();
+  await page.getByRole("radio", { name: "SBB" }).click();
+  await openApp(page, "/", "signed-in");
+  await expect(pageTitle(page, "Overview")).toBeVisible();
+  await expect(root(page)).not.toHaveAttribute("data-pal", "d4");
+});

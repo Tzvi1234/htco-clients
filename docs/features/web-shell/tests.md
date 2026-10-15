@@ -82,3 +82,12 @@
 CI: the `storybook` job runs beside the others in about 4.5 minutes (image pull 40 s, install 16 s, story tests 31 s, Storybook build 13 s, 193-case matrix 2.3 min). `pnpm check` green.
 
 **Open issues:** the slice's components that do not exist yet get their stories when they are built.
+
+### Design 1C sign-in, landing and phone shell — 2026-10-15
+
+| Behaviour | Tests |
+|---|---|
+| The sign-in form sits on the physical left in Hebrew and English; the language switch is on the form panel; "Forgot your password?" sits under its field; the office numbers before sign-in are labelled Demo | `features/auth/design.test.tsx` |
+| The six code boxes take digits only, at most six, draw each digit and keep one labelled `one-time-code` input; "Back to sign-in" signs the first step out | `features/auth/design.test.tsx` |
+| The landing page says what works today and labels the rest; its tweaks are the app's stored preference; the renders carousel steps both ways | `features/welcome/welcome.test.tsx`, journey "a tweak changed in the app shows on the landing page" |
+| Phones: the large title shrinks on scroll; the sheet closes from its grabber | `app/shell/phone.test.tsx` |
