@@ -65,11 +65,12 @@ export function Navigation() {
             to={to}
             activeOptions={{ exact: to === "/", includeSearch: false }}
             className={cx(
-              "group flex flex-col items-center justify-center gap-0.5 rounded-button text-[11px] leading-[14px] font-medium text-app-muted no-underline outline-none",
-              "transition-[background-color,color,box-shadow] duration-[var(--motion-duration-fast)]",
-              "hover:text-app-text aria-[current=page]:text-app-text",
-              "max-sm:my-1.5 max-sm:h-12 max-sm:rounded-[14px]",
-              "max-sm:aria-[current=page]:bg-app-selected sm:size-10 sm:self-center sm:hover:bg-app-hover sm:aria-[current=page]:bg-app-selected",
+              "group flex flex-col items-center justify-center gap-0.5 rounded-button text-[11px] leading-[14px] font-medium no-underline outline-none",
+              "transition-[background-color,color] duration-[var(--motion-duration-fast)]",
+              // Phones: the white floating tab bar, the current tab on a soft iris pill.
+              "h-14 rounded-[22px] text-secondary aria-[current=page]:bg-selected aria-[current=page]:text-accent-text",
+              // Rail and sidebar: on the ink app ground.
+              "sm:size-10 sm:self-center sm:rounded-button sm:text-app-muted sm:hover:bg-app-hover sm:hover:text-app-text sm:aria-[current=page]:bg-app-selected sm:aria-[current=page]:text-app-text",
               "lg:h-[34px] lg:w-full lg:flex-row lg:justify-start lg:gap-2.5 lg:px-2.5 lg:text-body",
             )}
           >
