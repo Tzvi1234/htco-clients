@@ -201,7 +201,8 @@ function NoShops({ etsy }: { etsy: ConnectEtsy | undefined }) {
   ];
   return (
     <PageBody flush>
-      <div className="overflow-x-auto">
+      {/* Phones show lists, not tables: no column header there (design/README.md, rule 11). */}
+      <div className="overflow-x-auto max-sm:hidden">
         <div
           aria-hidden="true"
           className="grid min-w-[640px] grid-cols-[minmax(200px,2fr)_1fr_1fr_1fr] border-b border-border-subtle bg-sunken"
