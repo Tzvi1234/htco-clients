@@ -1318,3 +1318,67 @@ header:has(> .k-demo-top) > :nth-child(2) {
   border-radius: 50%;
   background: var(--accent-mark);
 }
+
+/* Live motion for the Design 1C parts (kit/*): the running LED, the waiting halo, rising dot
+   columns and the matrix's glow. styles.css removes every animation under reduced motion. */
+@keyframes htco-led {
+  0%,
+  60% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 0.45;
+  }
+}
+
+@keyframes htco-halo {
+  0%,
+  100% {
+    opacity: 0.35;
+    scale: 1;
+  }
+  50% {
+    opacity: 0.12;
+    scale: 1.25;
+  }
+}
+
+@keyframes htco-dot-rise {
+  from {
+    opacity: 0;
+    translate: 0 6px;
+  }
+}
+
+@keyframes htco-demo-shimmer {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+/* The parcel and other product art float gently in place. */
+@keyframes htco-float {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -6px;
+  }
+}
+
+/* Waiting: three dots taking turns (connecting, typing). */
+@keyframes htco-wait-dot {
+  0%,
+  60%,
+  100% {
+    opacity: 0.3;
+  }
+  30% {
+    opacity: 1;
+  }
+}

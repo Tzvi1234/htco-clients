@@ -171,7 +171,12 @@ const routeTree = rootRoute.addChildren([
         staticData: { layout: "panels" },
         component: OverviewPage,
       }),
-      createRoute({ getParentRoute: () => appRoute, path: "/shops", component: ShopsPage }),
+      createRoute({
+        getParentRoute: () => appRoute,
+        path: "/shops",
+        staticData: { layout: "panels" },
+        component: ShopsPage,
+      }),
       createRoute({ getParentRoute: () => appRoute, path: "/settings", component: SettingsPage }),
       createRoute({
         getParentRoute: () => appRoute,
@@ -183,6 +188,7 @@ const routeTree = rootRoute.addChildren([
       createRoute({
         getParentRoute: () => appRoute,
         path: "/integrations/etsy/callback",
+        staticData: { layout: "panels" },
         validateSearch: (search: Record<string, unknown>): EtsyReturn => etsyReturn(search),
         component: EtsyCallbackPage,
       }),

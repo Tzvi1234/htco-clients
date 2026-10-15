@@ -1,13 +1,14 @@
 import { Trans, useLingui } from "@lingui/react/macro";
-import { StorefrontIcon as Storefront } from "@phosphor-icons/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 
 import { ApiError, apiError, shopKeys, useApi } from "../../shared/api/api.tsx";
-import { ErrorState } from "../../shared/ui/ErrorState.tsx";
-import { PageBody, PageHeader } from "../../shared/ui/PageHeader.tsx";
-import { ObjectIcon } from "../../shared/ui/Tag.tsx";
+import parcel from "../../assets/commerce/parcel.webp";
+import { cx } from "../../shared/lib/cx.ts";
+import { PageHeader } from "../../shared/ui/PageHeader.tsx";
+import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
+import { IdBlock } from "../../shared/ui/kit/Bits.tsx";
 
 /** What Etsy put in the address when it sent the owner back. */
 export interface EtsyReturn {
@@ -97,31 +98,48 @@ export function EtsyCallbackPage() {
 
   return (
     <>
-      <PageHeader
-        title={<Trans>Connecting Etsy</Trans>}
-        icon={<ObjectIcon hue="coral" icon={Storefront} />}
-      />
-      <PageBody>
-        {outcome === null ? (
-          <div
-            role="status"
-            className="mx-auto flex w-full max-w-[560px] flex-col items-center gap-3 rounded-dialog border border-border-subtle bg-surface px-6 py-10 text-center shadow-1"
-          >
-            <span
-              aria-hidden="true"
-              className="size-5 animate-spin rounded-pill border-2 border-icon border-e-transparent"
-            />
-            <p className="m-0 font-display text-title-sm font-semibold">
-              <Trans>Connecting your Etsy shop</Trans>
-            </p>
-            <p className="m-0 text-secondary">
-              <Trans>This takes a few seconds. Keep this page open.</Trans>
-            </p>
-          </div>
-        ) : (
-          <Failure outcome={outcome} />
-        )}
-      </PageBody>
+      <PageHeader title={<Trans>Connecting Etsy</Trans>} />
+      <Panel className="grow motion-safe:animate-enter">
+        <PanelHeader
+          title={
+            <>
+              <span className="ltr">Etsy</span> · <Trans>Connection</Trans>
+            </>
+          }
+        />
+        <div className="flex grow flex-col items-center justify-center gap-6 px-6 pb-10 text-center">
+          <img
+            src={parcel}
+            alt=""
+            draggable={false}
+            className={cx(
+              "h-44 w-auto object-contain max-sm:h-28",
+              outcome === null
+                ? "motion-safe:animate-[htco-float_3s_ease-in-out_infinite]"
+                : "opacity-70 grayscale",
+            )}
+          />
+          {outcome === null ? (
+            <div role="status" className="flex flex-col items-center gap-3">
+              <IdBlock label={<Trans>Etsy:</Trans>} id={<Trans>Connecting your Etsy shop</Trans>} />
+              <p className="m-0 text-body-sm text-secondary">
+                <Trans>This takes a few seconds. Keep this page open.</Trans>
+              </p>
+              <span aria-hidden="true" className="flex gap-1.5">
+                {[0, 1, 2].map((i) => (
+                  <i
+                    key={i}
+                    style={{ animationDelay: `${String(i * 200)}ms` }}
+                    className="size-2 rounded-pill bg-inverse motion-safe:animate-[htco-wait-dot_1.2s_infinite]"
+                  />
+                ))}
+              </span>
+            </div>
+          ) : (
+            <Failure outcome={outcome} />
+          )}
+        </div>
+      </Panel>
     </>
   );
 }
@@ -154,22 +172,25 @@ function Failure({ outcome }: { outcome: Outcome }) {
   }
 
   return (
-    <ErrorState
-      title={
-        outcome.kind === "cancelled" ? (
-          <Trans>Connection cancelled</Trans>
-        ) : (
-          <Trans>The shop was not connected</Trans>
-        )
-      }
-      description={reason()}
-    >
+    <div role="alert" className="flex max-w-[480px] flex-col items-center gap-3">
+      <IdBlock
+        label={<Trans>Etsy:</Trans>}
+        id={
+          outcome.kind === "cancelled" ? (
+            <Trans>Connection cancelled</Trans>
+          ) : (
+            <Trans>The shop was not connected</Trans>
+          )
+        }
+        wrap
+      />
+      <p className="m-0 text-body-sm text-secondary">{reason()}</p>
       <Link
         to="/shops"
-        className="inline-flex h-8 items-center rounded-button bg-action-primary px-3 text-body font-medium text-action-primary-fg no-underline shadow-1 outline-none hover:bg-action-primary-hover focus-visible:ring-2 focus-visible:ring-focus"
+        className="mt-2 inline-flex h-10 items-center rounded-button bg-action-primary px-5 text-body-sm text-action-primary-fg no-underline transition-colors hover:bg-action-primary-hover active:scale-[0.98]"
       >
         <Trans>Back to shops</Trans>
       </Link>
-    </ErrorState>
+    </div>
   );
 }

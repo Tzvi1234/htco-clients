@@ -103,3 +103,20 @@ export function TrendGlyph({ up = true }: { up?: boolean }) {
     </svg>
   );
 }
+export const SearchGlyph = glyph(
+  <>
+    <circle cx="11" cy="11" r="7" />
+    <path d="M16.5 16.5L21 21" />
+  </>,
+  2,
+);
+export const RefreshGlyph = glyph(
+  <>
+    <path d="M19.5 12a7.5 7.5 0 01-13.2 4.9M4.5 12a7.5 7.5 0 0113.2-4.9" />
+    <path d="M18 3.5v4h-4M6 20.5v-4h4" />
+  </>,
+  1.7,
+);
+export const PlugGlyph = glyph(
+  <path d="M8.5 2.5a1 1 0 011 1V7h5V3.5a1 1 0 112 0V7h1a1 1 0 011 1v3.5a6 6 0 01-5 5.9V20.5a1 1 0 01-1 1h-1a1 1 0 01-1-1v-3.1a6 6 0 01-5-5.9V8a1 1 0 011-1h1V3.5a1 1 0 011-1z" />,
+);
