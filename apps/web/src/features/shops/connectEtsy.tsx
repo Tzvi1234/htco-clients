@@ -144,16 +144,22 @@ function StepUpDialog({
           onClose();
         }
       }}
-      className="fixed inset-0 z-50 flex items-start justify-center bg-[color-mix(in_srgb,var(--illustration-ink)_35%,transparent)] px-4 pt-[14vh] data-[entering]:animate-enter"
+      className="fixed inset-0 z-50 flex items-start justify-center bg-[color-mix(in_srgb,var(--bg-ground)_60%,transparent)] px-4 pt-[14vh] data-[entering]:animate-enter"
     >
-      <Modal className="w-full max-w-[400px] rounded-dialog border border-border-strong bg-raised p-6 shadow-3 outline-none data-[entering]:animate-enter">
+      <Modal className="glass w-full max-w-[420px] rounded-panel border border-edge bg-menu p-6 shadow-popover outline-none data-[entering]:animate-pop-in">
         <Dialog className="outline-none">
-          <form className="flex flex-col gap-4" onSubmit={submit} noValidate>
-            <div className="flex flex-col gap-1">
-              <Heading slot="title" className="m-0 font-display text-title-sm font-semibold">
+          <form className="flex flex-col gap-6" onSubmit={submit} noValidate>
+            <div className="flex flex-col gap-1.5 text-start">
+              <p className="m-0 text-caption font-light text-muted">
+                <Trans>Connect an Etsy shop</Trans>
+              </p>
+              <Heading
+                slot="title"
+                className="m-0 font-display text-[32px] leading-[1.25] font-light"
+              >
                 <Trans>Confirm it is you</Trans>
               </Heading>
-              <p className="m-0 text-body text-secondary">
+              <p className="m-0 text-body-sm text-secondary">
                 <Trans>
                   Enter the 6-digit code from your authenticator app to connect the shop.
                 </Trans>
@@ -161,14 +167,17 @@ function StepUpDialog({
             </div>
             <CodeField value={code} onChange={setCode} autoFocus />
             <FormAlert message={codeMessage(confirm.error)} />
-            <div className="flex justify-end gap-2">
-              <Button slot="close" variant="ghost">
+            <div className="grid grid-cols-2 gap-2">
+              <Button slot="close" size="lg">
                 <Trans>Cancel</Trans>
               </Button>
-              <Button type="submit" variant="primary" isPending={confirm.isPending}>
+              <Button type="submit" variant="primary" size="lg" isPending={confirm.isPending}>
                 <Trans>Confirm</Trans>
               </Button>
             </div>
+            <p className="m-0 text-center text-caption font-light text-muted">
+              <Trans>The confirmation lasts ten minutes.</Trans>
+            </p>
           </form>
         </Dialog>
       </Modal>

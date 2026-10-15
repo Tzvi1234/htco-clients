@@ -1,28 +1,27 @@
 import { Trans, useLingui } from "@lingui/react/macro";
-import {
-  ArrowsClockwiseIcon as ArrowsClockwise,
-  CalendarBlankIcon as CalendarBlank,
-  CheckCircleIcon as CheckCircle,
-  PackageIcon as Package,
-  StorefrontIcon as Storefront,
-  type Icon,
-} from "@phosphor-icons/react";
 import { useQuery } from "@tanstack/react-query";
 import { useRouterState } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 
 import { useConnectEtsy, type ConnectEtsy } from "./connectEtsy.tsx";
 import { ShopCard, needsReconnect, useReconnectLabel } from "./ShopCard.tsx";
+import { TopListings } from "./TopListings.tsx";
+import parcel from "../../assets/commerce/parcel.webp";
 import { FormAlert } from "../auth/AuthLayout.tsx";
 import { integrationsQuery, meQuery, shopsQuery, useApi } from "../../shared/api/api.tsx";
 import { Button } from "../../shared/ui/Button.tsx";
-import { EmptyState } from "../../shared/ui/EmptyState.tsx";
-import { ErrorState } from "../../shared/ui/ErrorState.tsx";
-import { PageBody, PageHeader } from "../../shared/ui/PageHeader.tsx";
-import { ObjectIcon } from "../../shared/ui/Tag.tsx";
+import { PageHeader } from "../../shared/ui/PageHeader.tsx";
+import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
 import { WorkspacePicker, pickWorkspace } from "../../shared/ui/WorkspacePicker.tsx";
+import { CheckGlyph, PlusGlyph } from "../../shared/ui/kit/glyphs.tsx";
+import { IdBlock, InkDisc } from "../../shared/ui/kit/Bits.tsx";
+import { Screen } from "../../shared/ui/kit/Layout.tsx";
 
-/** The organization's shops: an empty record table until one is connected, then shop cards. */
+/**
+ * The organization's shops (Commerce / Shops) in the Design 1C shop panels: one panel per shop
+ * with its real Etsy connection, the Owner's panel to connect another, and the planned top
+ * listings strip (Demo until listings sync).
+ */
 export function ShopsPage() {
   const api = useApi();
   const me = useQuery(meQuery(api));
@@ -38,16 +37,10 @@ export function ShopsPage() {
 
   return (
     <>
-      <PageHeader
-        title={<Trans>Shops</Trans>}
-        description={<Trans>The marketplace shops this organization runs.</Trans>}
-        icon={<ObjectIcon hue="coral" icon={Storefront} />}
-      />
+      <PageHeader title={<Trans>Shops</Trans>} />
       {ids.length > 1 ? (
-        <div className="px-4 pt-6 sm:px-6 lg:px-8">
-          <div className="max-w-[760px]">
-            <WorkspacePicker ids={ids} value={chosen} onChange={setChosen} />
-          </div>
+        <div className="shrink-0 motion-safe:animate-enter">
+          <WorkspacePicker ids={ids} value={chosen} onChange={setChosen} />
         </div>
       ) : null}
       {organizationId === undefined || role === undefined ? null : (
@@ -60,7 +53,7 @@ export function ShopsPage() {
         />
       )}
       {etsy.dialog}
-      <p className="m-0 mt-auto px-4 pt-8 pb-6 text-caption text-muted sm:px-6 lg:px-8">
+      <p className="m-0 shrink-0 px-4 pt-1 text-caption font-light text-muted">
         <Trans>
           The term 'Etsy' is a trademark of Etsy, Inc. This application uses the Etsy API but is not
           endorsed or certified by Etsy, Inc.
@@ -94,155 +87,190 @@ function Shops({
 
   if (shops.isError)
     return (
-      <PageBody>
-        <ErrorState
-          title={<Trans>Shops could not be loaded</Trans>}
-          description={<Trans>Check your connection and try again.</Trans>}
-        >
-          <Button variant="primary" onPress={() => void shops.refetch()}>
-            <Trans>Try again</Trans>
-          </Button>
-        </ErrorState>
-      </PageBody>
+      <Screen layout="lc2s">
+        <Panel className="lg:col-span-full">
+          <div
+            role="alert"
+            className="flex grow flex-col items-center justify-center gap-4 px-6 py-16 text-center"
+          >
+            <IdBlock label={<Trans>Shops:</Trans>} id={<Trans>Shops could not be loaded</Trans>} />
+            <p className="m-0 text-body-sm text-secondary">
+              <Trans>Check your connection and try again.</Trans>
+            </p>
+            <Button variant="primary" size="lg" onPress={() => void shops.refetch()}>
+              <Trans>Try again</Trans>
+            </Button>
+          </div>
+        </Panel>
+      </Screen>
     );
 
   if (shops.data === undefined)
     return (
-      <PageBody>
+      <Screen layout="lc2s">
         <p role="status" className="sr-only">
           <Trans>Loading shops</Trans>
         </p>
-        <div aria-hidden="true" className="grid gap-4 md:grid-cols-2 2xl:grid-cols-3">
-          {[0, 1].map((n) => (
-            <ShopCardSkeleton key={n} />
-          ))}
-        </div>
-      </PageBody>
+        {[0, 1].map((n) => (
+          <ShopPanelSkeleton key={n} />
+        ))}
+        <TopListings />
+      </Screen>
     );
 
-  if (shops.data.length === 0) return <NoShops etsy={etsy} />;
+  if (shops.data.length === 0)
+    return (
+      <Screen layout="lc2s">
+        <NoShops etsy={etsy} />
+        <HowConnecting />
+        <TopListings />
+      </Screen>
+    );
 
   // A role that lost access to connection details must not keep seeing cached ones.
   const byShop = new Map(
     (seesConnections ? (integrations.data ?? []) : []).map((i) => [i.shop_id, i]),
   );
+  const notices: ReactNode[] = [];
+  if (connected !== undefined)
+    notices.push(
+      <p
+        key="connected"
+        role="status"
+        className="m-0 inline-flex h-10 items-center gap-2 rounded-pill bg-inverse ps-3 pe-5 text-body-sm text-on-inverse motion-safe:animate-pop-in"
+      >
+        <span className="flex size-6 items-center justify-center rounded-pill bg-accent text-on-accent">
+          <CheckGlyph size={12} />
+        </span>
+        {connected === "reconnected" ? (
+          <Trans>Your Etsy shop is reconnected.</Trans>
+        ) : (
+          <Trans>Your Etsy shop is connected.</Trans>
+        )}
+      </p>,
+    );
+  if (integrations.isError)
+    notices.push(
+      <div key="details" className="flex flex-wrap items-center gap-3">
+        <FormAlert message={t`Connection details could not be loaded. Try again shortly.`} />
+        <Button onPress={() => void integrations.refetch()}>
+          <Trans>Try again</Trans>
+        </Button>
+      </div>,
+    );
+
   return (
-    <PageBody>
-      {connected === undefined ? null : (
-        <p
-          role="status"
-          className="m-0 flex items-center gap-2 rounded-card border border-border-subtle bg-surface px-4 py-3 text-body font-medium shadow-1"
-        >
-          <CheckCircle aria-hidden="true" size={18} weight="duotone" className="shrink-0" />
-          {connected === "reconnected" ? (
-            <Trans>Your Etsy shop is reconnected.</Trans>
-          ) : (
-            <Trans>Your Etsy shop is connected.</Trans>
-          )}
-        </p>
+    <>
+      {notices.length === 0 ? null : (
+        <div className="flex shrink-0 flex-wrap items-center gap-3 px-2">{notices}</div>
       )}
-      {etsy === undefined ? null : (
-        <div className="flex flex-col items-start gap-3">
-          <Button
-            isPending={etsy.pendingKey === "new"}
-            onPress={() => {
-              etsy.start("new");
-            }}
-          >
-            <Storefront aria-hidden="true" size={16} weight="duotone" />
-            <Trans>Connect Etsy shop</Trans>
-          </Button>
-          <FormAlert message={etsy.message} />
+      <Screen layout="lc2s">
+        <div className="flex min-h-0 flex-col gap-2 lg:col-span-full lg:grid lg:auto-rows-[100%] lg:grid-cols-2 lg:overflow-y-auto lg:[scrollbar-width:thin]">
+          {shops.data.map((shop) => {
+            const integration = byShop.get(shop.id);
+            return (
+              <ShopCard
+                key={shop.id}
+                shop={shop}
+                integration={integration}
+                detailsLoading={seesConnections && integrations.isPending}
+                now={integrations.dataUpdatedAt}
+                {...(seesConnections
+                  ? {
+                      onRefresh: () => {
+                        void integrations.refetch();
+                      },
+                    }
+                  : {})}
+                {...(etsy !== undefined && needsReconnect(integration)
+                  ? {
+                      reconnect: (
+                        <Button
+                          variant="primary"
+                          size="lg"
+                          aria-label={reconnectLabel(shop.name)}
+                          isPending={etsy.pendingKey === shop.id}
+                          onPress={() => {
+                            etsy.start(shop.id);
+                          }}
+                        >
+                          <Trans>Reconnect</Trans>
+                        </Button>
+                      ),
+                    }
+                  : {})}
+              />
+            );
+          })}
+          {etsy === undefined ? null : <ConnectPanel etsy={etsy} />}
         </div>
-      )}
-      {integrations.isError ? (
-        <div className="flex flex-wrap items-center gap-3">
-          <FormAlert message={t`Connection details could not be loaded. Try again shortly.`} />
-          <Button size="sm" onPress={() => void integrations.refetch()}>
-            <Trans>Try again</Trans>
-          </Button>
-        </div>
-      ) : null}
-      <div className="grid gap-4 md:grid-cols-2 2xl:grid-cols-3">
-        {shops.data.map((shop) => {
-          const integration = byShop.get(shop.id);
-          return (
-            <ShopCard
-              key={shop.id}
-              shop={shop}
-              integration={integration}
-              detailsLoading={seesConnections && integrations.isPending}
-              now={integrations.dataUpdatedAt}
-              {...(etsy !== undefined && needsReconnect(integration)
-                ? {
-                    reconnect: (
-                      <Button
-                        variant="primary"
-                        size="sm"
-                        aria-label={reconnectLabel(shop.name)}
-                        isPending={etsy.pendingKey === shop.id}
-                        onPress={() => {
-                          etsy.start(shop.id);
-                        }}
-                      >
-                        <Trans>Reconnect</Trans>
-                      </Button>
-                    ),
-                  }
-                : {})}
-            />
-          );
-        })}
-      </div>
-    </PageBody>
+        <TopListings />
+      </Screen>
+    </>
   );
 }
 
-/** No shop yet: the record table's shape, and the Owner's way to connect the first one. */
-function NoShops({ etsy }: { etsy: ConnectEtsy | undefined }) {
-  const { t } = useLingui();
-  const columns: { label: string; icon: Icon }[] = [
-    { label: t`Shop`, icon: Storefront },
-    { label: t`Sync`, icon: ArrowsClockwise },
-    { label: t`Orders today`, icon: Package },
-    { label: t`Last sync`, icon: CalendarBlank },
-  ];
+/** The Owner's panel beside the shops: connect another Etsy shop. */
+function ConnectPanel({ etsy }: { etsy: ConnectEtsy }) {
   return (
-    <PageBody flush>
-      {/* Phones show lists, not tables: no column header there (design/README.md, rule 11). */}
-      <div className="overflow-x-auto max-sm:hidden">
-        <div
-          aria-hidden="true"
-          className="grid min-w-[640px] grid-cols-[minmax(200px,2fr)_1fr_1fr_1fr] border-b border-border-subtle bg-sunken"
+    <Panel className="lg:min-h-full">
+      <PanelHeader title={<Trans>Connect a shop</Trans>} />
+      <div className="flex min-h-0 grow flex-col items-center justify-center gap-5 px-6 pb-6 text-center">
+        <span className="flex size-24 items-center justify-center rounded-pill border border-dashed border-line-hover max-sm:hidden">
+          <InkDisc>
+            <PlusGlyph size={14} />
+          </InkDisc>
+        </span>
+        <IdBlock label={<Trans>Marketplace:</Trans>} id={<span className="ltr">Etsy</span>} />
+        <p className="m-0 max-w-[320px] text-body-sm text-secondary">
+          <Trans>
+            Add another Etsy shop to this workspace. You confirm with your authenticator code, then
+            approve the access on Etsy.
+          </Trans>
+        </p>
+        <Button
+          variant="primary"
+          size="lg"
+          isPending={etsy.pendingKey === "new"}
+          onPress={() => {
+            etsy.start("new");
+          }}
         >
-          {columns.map(({ label, icon: ColumnIcon }) => (
-            <span
-              key={label}
-              className="flex h-8 items-center gap-1.5 border-e border-border-subtle px-3 text-body-sm text-muted last:border-e-0"
-            >
-              <ColumnIcon size={14} weight="duotone" />
-              {label}
-            </span>
-          ))}
-        </div>
+          <Trans>Connect Etsy shop</Trans>
+        </Button>
+        <FormAlert message={etsy.message} />
       </div>
-      <EmptyState
-        bare
-        icon={Storefront}
-        hue="coral"
-        title={<Trans>No shops yet</Trans>}
-        description={
+    </Panel>
+  );
+}
+
+/** No shop yet: the parcel, what will appear here, and the Owner's way to connect the first. */
+function NoShops({ etsy }: { etsy: ConnectEtsy | undefined }) {
+  return (
+    <Panel>
+      <PanelHeader title={<Trans>Shops</Trans>} meta={<span className="ltr">0</span>} />
+      <div className="flex min-h-0 grow flex-col items-center justify-between gap-5 px-6 pb-6 text-center">
+        <IdBlock label={<Trans>Shops:</Trans>} id={<Trans>No shops yet</Trans>} />
+        <div className="flex min-h-0 grow items-center justify-center max-sm:h-28 max-sm:grow-0">
+          <img
+            src={parcel}
+            alt=""
+            draggable={false}
+            className="max-h-48 w-auto object-contain motion-safe:animate-[htco-float_6s_ease-in-out_infinite] max-sm:h-full"
+          />
+        </div>
+        <p className="m-0 max-w-[340px] text-body-sm text-secondary">
           <Trans>Connected shops appear here with their sync status and capabilities.</Trans>
-        }
-      >
+        </p>
         {etsy === undefined ? (
           <p className="m-0 text-caption text-muted">
             <Trans>The workspace owner connects shops.</Trans>
           </p>
         ) : (
-          <>
+          <div className="flex flex-col items-center gap-3">
             <Button
               variant="primary"
+              size="lg"
               isPending={etsy.pendingKey === "new"}
               onPress={() => {
                 etsy.start("new");
@@ -251,34 +279,68 @@ function NoShops({ etsy }: { etsy: ConnectEtsy | undefined }) {
               <Trans>Connect Etsy shop</Trans>
             </Button>
             <FormAlert message={etsy.message} />
-          </>
+          </div>
         )}
-      </EmptyState>
-    </PageBody>
+      </div>
+    </Panel>
   );
 }
 
-/** A shop card's shape while the shops are on their way: solid placeholders, a gentle pulse. */
-function ShopCardSkeleton() {
-  const bar = "rounded-pill bg-sunken motion-safe:animate-pulse";
+/** The three steps of connecting, beside the empty state. */
+function HowConnecting() {
+  const steps: { title: ReactNode; text: ReactNode }[] = [
+    {
+      title: <Trans>Confirm it is you</Trans>,
+      text: <Trans>The 6-digit code from your authenticator app.</Trans>,
+    },
+    {
+      title: <Trans>Approve on Etsy</Trans>,
+      text: <Trans>Etsy asks you to allow reading the shop, orders and listings.</Trans>,
+    },
+    {
+      title: <Trans>Watch it here</Trans>,
+      text: <Trans>The shop appears with its connection health and last sync.</Trans>,
+    },
+  ];
   return (
-    <div className="flex flex-col rounded-card border border-border-subtle bg-surface shadow-1">
-      <div className="flex items-center gap-3 px-4 pt-4 pb-3">
-        <span className="size-8 shrink-0 rounded-control bg-sunken motion-safe:animate-pulse" />
-        <span className="flex grow flex-col gap-2">
-          <span className={`h-3 w-2/5 ${bar}`} />
-          <span className={`h-2.5 w-1/4 ${bar}`} />
-        </span>
-        <span className={`h-5 w-20 ${bar}`} />
-      </div>
-      <div className="flex flex-col divide-y divide-border-subtle border-t border-border-subtle px-4">
-        {["w-3/5", "w-2/5", "w-1/2"].map((width) => (
-          <span key={width} className="flex h-11 items-center gap-3">
-            <span className="size-4 shrink-0 rounded-[4px] bg-sunken motion-safe:animate-pulse" />
-            <span className={`h-2.5 ${width} ${bar}`} />
-          </span>
+    <Panel className="max-sm:hidden">
+      <PanelHeader title={<Trans>How connecting works</Trans>} meta={<span className="ltr">3</span>} />
+      <ol className="m-0 flex grow list-none flex-col justify-center gap-2 px-6 pb-6">
+        {steps.map((step, index) => (
+          <li
+            key={index}
+            style={{ animationDelay: `${120 + index * 80}ms` }}
+            className="flex items-center gap-4 rounded-card p-3 transition-colors hover:bg-hover motion-safe:animate-enter"
+          >
+            <span className="ltr flex size-10 shrink-0 items-center justify-center rounded-pill border border-line-strong text-body">
+              {index + 1}
+            </span>
+            <span className="flex min-w-0 flex-col">
+              <span className="text-body">{step.title}</span>
+              <span className="text-caption text-secondary">{step.text}</span>
+            </span>
+          </li>
         ))}
-      </div>
+      </ol>
+    </Panel>
+  );
+}
+
+/** A shop panel's shape while the shops are on their way: solid placeholders, a gentle pulse. */
+function ShopPanelSkeleton() {
+  const bar = "rounded-pill bg-hover motion-safe:animate-pulse";
+  return (
+    <div
+      aria-hidden="true"
+      className="glass flex min-h-60 flex-col items-center justify-between gap-6 rounded-panel border border-edge bg-panel p-6 shadow-panel"
+    >
+      <span className={`h-3 w-1/3 self-start ${bar}`} />
+      <span className={`h-8 w-1/2 ${bar}`} />
+      <span className="size-28 rounded-card bg-hover motion-safe:animate-pulse" />
+      <span className="grid w-full grid-cols-2 gap-2">
+        <span className={`h-8 ${bar}`} />
+        <span className={`h-8 ${bar}`} />
+      </span>
     </div>
   );
 }

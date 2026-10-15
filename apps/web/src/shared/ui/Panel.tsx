@@ -9,18 +9,22 @@ import { cx } from "../lib/cx.ts";
 export function Panel({
   as: Element = "section",
   label,
+  labelledBy,
   className,
   children,
 }: {
   as?: "section" | "div" | "article" | "aside";
   /** The panel's accessible name, when it has no PanelHeader. */
   label?: string;
+  /** The id of the element that names the panel (its heading or identifier). */
+  labelledBy?: string;
   className?: string;
   children: ReactNode;
 }) {
   return (
     <Element
       aria-label={label}
+      aria-labelledby={labelledBy}
       className={cx(
         "glass relative flex min-h-0 min-w-0 flex-col overflow-hidden rounded-panel border border-edge bg-panel shadow-panel",
         className,
