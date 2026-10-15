@@ -7,6 +7,7 @@ import { Dialog, Heading, Modal, ModalOverlay } from "react-aria-components";
 import {
   ApiError,
   apiError,
+  authKeys,
   meQuery,
   mfaQuery,
   shopsQuery,
@@ -76,6 +77,10 @@ export function TeamPage() {
     .map((m) => m.organization_id);
   const [chosen, setChosen] = useState<string | null>(null);
   const organizationId = pickWorkspace(managed, chosen);
+  // Only an Owner may grant the Owner role (the contract of change_member_role).
+  const actingOwner =
+    me.data?.memberships.some((m) => m.organization_id === organizationId && m.role === "owner") ??
+    false;
   const [selected, setSelected] = useState<string | null>(null);
   const phone = useMediaQuery(PHONE_QUERY);
   const emailRef = useRef<HTMLInputElement>(null);
@@ -144,6 +149,7 @@ export function TeamPage() {
               organizationId={organizationId}
               memberId={selected}
               myId={me.data?.user_id}
+              actingOwner={actingOwner}
               onClose={startInvite}
             />
           ) : (
@@ -167,6 +173,7 @@ export function TeamPage() {
                 organizationId={organizationId}
                 memberId={selected}
                 myId={me.data?.user_id}
+                actingOwner={actingOwner}
                 onClose={() => {
                   setSelected(null);
                 }}
@@ -512,12 +519,15 @@ function MemberPanel({
   organizationId,
   memberId,
   myId,
+  actingOwner,
   onClose,
   sheet = false,
 }: {
   organizationId: string;
   memberId: string;
   myId: string | undefined;
+  /** The signed-in user is this workspace's Owner, who alone may grant the Owner role. */
+  actingOwner: boolean;
   onClose: () => void;
   sheet?: boolean;
 }) {
@@ -531,7 +541,12 @@ function MemberPanel({
   const [confirming, setConfirming] = useState(false);
   const accessMessage = useAccessMessage();
   const member = members.data?.find((m) => m.id === memberId);
-  const refresh = () => queryClient.invalidateQueries({ queryKey: membersKey(organizationId) });
+  // Changing one's own membership changes what one may do: the identity is read again too.
+  const self = member !== undefined && member.user_id === myId;
+  const refresh = async () => {
+    await queryClient.invalidateQueries({ queryKey: membersKey(organizationId) });
+    if (self) await queryClient.invalidateQueries({ queryKey: authKeys.me });
+  };
   const path = { organization_id: organizationId, membership_id: memberId };
 
   const changeRole = useMutation({
@@ -620,7 +635,9 @@ function MemberPanel({
               onChange={(role) => {
                 changeRole.mutate(role);
               }}
-              options={INVITABLE.map((id) => ({ id, label: roleLabel(id) }))}
+              options={(actingOwner ? (["owner", ...INVITABLE] as Role[]) : INVITABLE).map(
+                (id) => ({ id, label: roleLabel(id) }),
+              )}
             />
             <section aria-labelledby={`shops-${memberId}`}>
               <SectionLabel id={`shops-${memberId}`}>

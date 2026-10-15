@@ -78,6 +78,25 @@ describe("Settings (FR-ADM-01)", () => {
     expect(notifications.querySelector("[inert]")).not.toBeNull();
   });
 
+  it("counts the Etsy shops of every workspace, not just the first", async () => {
+    const other = "c0000000-0000-7000-8000-000000000009";
+    await open({ ...demoShops(), otherOrgs: [other] });
+
+    const connections = screen.getByRole("region", { name: "Connections" });
+    // The fake answers each workspace with the same four shops, two of them connected.
+    expect(await within(connections).findByText("8 shops")).toBeInTheDocument();
+    expect(await within(connections).findByText("4 of 8 connected")).toBeInTheDocument();
+  });
+
+  it("leaves out the connection health a role cannot see", async () => {
+    await open({ ...demoShops(), role: "support" });
+
+    const connections = screen.getByRole("region", { name: "Connections" });
+    expect(await within(connections).findByText("4 shops")).toBeInTheDocument();
+    const etsy = within(connections).getByRole("link", { name: /Etsy/ });
+    expect(within(etsy).queryByText(/connected/i)).not.toBeInTheDocument();
+  });
+
   it("leads to Security with the second factor's state", async () => {
     await open();
     const access = screen.getByRole("region", { name: "Access and security" });

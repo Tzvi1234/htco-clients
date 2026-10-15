@@ -1,5 +1,5 @@
 import { createMemoryHistory } from "@tanstack/react-router";
-import { render, screen, waitFor, within } from "@testing-library/react";
+import { cleanup, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 
@@ -143,6 +143,45 @@ describe("managing a member (FR-IAM-03, slice 2.6)", () => {
     expect(backend.state.members.some((m) => m.id === dana.id)).toBe(false);
     // Back to inviting.
     expect(screen.getByLabelText("Email")).toBeInTheDocument();
+  });
+
+  it("lets the Owner, and only the Owner, grant the Owner role", async () => {
+    const { user, backend } = await open("/settings/team", withDana());
+    let member = await chooseDana(user);
+    await user.click(within(member).getByRole("radio", { name: "Owner" }));
+    await waitFor(() => {
+      expect(backend.state.members.find((m) => m.id === dana.id)?.role).toBe("owner");
+    });
+    cleanup();
+
+    const admin = await open("/settings/team", {
+      ...withDana(),
+      role: "admin",
+    });
+    member = await chooseDana(admin.user);
+    expect(within(member).queryByRole("radio", { name: "Owner" })).not.toBeInTheDocument();
+    expect(within(member).getByRole("radio", { name: "Finance" })).toBeInTheDocument();
+  });
+
+  it("reads the identity again after changing one's own role", async () => {
+    const self = { ...nth(fakeBackend().state.members, 0), role: "admin" };
+    const { user, backend } = await open("/settings/team", {
+      ...owner,
+      role: "admin",
+      members: [self, { ...dana }],
+    });
+
+    await user.click(within(nth(await memberRows(), 0)).getByText("Tzvi Weiss"));
+    const member = await screen.findByRole("region", { name: "Member" });
+    const before = backend.requests.filter((r) => r.url.endsWith("/v1/me")).length;
+    await user.click(within(member).getByRole("radio", { name: "Support" }));
+
+    await waitFor(() => {
+      expect(backend.requests.filter((r) => r.url.endsWith("/v1/me")).length).toBeGreaterThan(
+        before,
+      );
+    });
+    expect(backend.state.role).toBe("support");
   });
 
   it("offers no changes to the Owner's membership", async () => {

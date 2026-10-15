@@ -1,5 +1,5 @@
 import { Trans, useLingui } from "@lingui/react/macro";
-import { useQuery } from "@tanstack/react-query";
+import { useQueries, useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { Button as AriaButton } from "react-aria-components";
@@ -322,19 +322,29 @@ function ConnectionsPanel() {
   const { t } = useLingui();
   const api = useApi();
   const me = useQuery(meQuery(api));
-  const membership = me.data?.memberships[0];
-  const organizationId = membership?.organization_id;
-  const manages = membership?.role === "owner" || membership?.role === "admin";
-  const shops = useQuery({
-    ...shopsQuery(api, organizationId ?? ""),
-    enabled: organizationId !== undefined,
+  const memberships = me.data?.memberships ?? [];
+  // Every workspace the user belongs to, as the sidebar's shop card counts them.
+  const shops = useQueries({
+    queries: memberships.map((m) => shopsQuery(api, m.organization_id)),
+    combine: (results) =>
+      results.some((r) => r.data === undefined)
+        ? undefined
+        : results.reduce((sum, r) => sum + (r.data?.length ?? 0), 0),
   });
-  const integrations = useQuery({
-    ...integrationsQuery(api, organizationId ?? ""),
-    enabled: organizationId !== undefined && manages,
+  // Connection health is for Owners and Admins; it is shown only when it covers every workspace.
+  const manages =
+    memberships.length > 0 && memberships.every((m) => m.role === "owner" || m.role === "admin");
+  const connected = useQueries({
+    queries: (manages ? memberships : []).map((m) => integrationsQuery(api, m.organization_id)),
+    combine: (results) =>
+      !manages || results.some((r) => r.data === undefined)
+        ? undefined
+        : results.reduce(
+            (sum, r) => sum + (r.data ?? []).filter((i) => i.status === "connected").length,
+            0,
+          ),
   });
-  const count = shops.data?.length;
-  const connected = integrations.data?.filter((i) => i.status === "connected").length;
+  const count = me.data === undefined ? undefined : shops;
   const shopsLine = count === undefined ? "…" : count === 1 ? t`1 shop` : t`${count} shops`;
   return (
     <Panel label={t`Connections`}>

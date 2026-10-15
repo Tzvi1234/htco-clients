@@ -280,6 +280,8 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
         const role = String(body["role"]);
         if (role === "owner" && state.role !== "owner") return problem(403, "forbidden");
         member.role = role;
+        // The signed-in user's own membership: /v1/me answers with the new role.
+        if (member.user_id === user) state.role = role as FakeState["role"];
         return json(200, { ...member, shop_ids: member.shop_ids ?? [] });
       }
     }
