@@ -51,11 +51,11 @@ Seven areas in the owner's order and wording, defined once in `apps/web/src/app/
 | Work (עבודה) | Tasks · Approvals · Activity | `/work/tasks` · `/work/approvals` · `/work/activity` | Soon |
 | Commerce (מסחר) | Shops | `/shops` (also `/commerce/shops`; the Etsy return `/integrations/etsy/callback` belongs here) | Built |
 | | Orders · Products · Shipping · Suppliers | `/commerce/orders` · `/commerce/products` · `/commerce/shipping` · `/commerce/suppliers` | Soon |
-| Customers (לקוחות) | Tickets · Customers · Mail · Marketing | `/customers/tickets` · `/customers/customers` · `/customers/mail` · `/customers/marketing` | Soon |
-| Finance (כספים) | Overview · Ledger | `/finance/overview` · `/finance/ledger` | Soon |
-| Admin (ניהול) | Health · Automations | `/admin/health` · `/admin/automations` | Soon |
-| | Members & access | `/settings/team` (also `/admin/members`) | Built (Team) |
-| | Settings | `/settings`, with Security at `/settings/security` (also `/admin/settings`) | Built |
+| Customers (לקוחות) | Tickets · Customers · Mail · Marketing | `/customers/tickets` · `/customers/customers` · `/customers/mail` · `/customers/marketing` | Soon (the demo's full screens in the demo frame) |
+| Finance (כספים) | Overview · Ledger | `/finance/overview` · `/finance/ledger` | Soon (the demo's full screens in the demo frame) |
+| Admin (ניהול) | Health · Automations | `/admin/health` · `/admin/automations` | Soon (the demo's full screens in the demo frame) |
+| | Members & access | `/settings/team` (also `/admin/members`) | Built: members, inviting with the one-time link, role changes, shop access, removal; AI employees and the approval policy as demos |
+| | Settings | `/settings`, with Security at `/settings/security` (also `/admin/settings`) | Built: interface language, the design tweaks, access and security, Etsy connections; business settings, notifications and other connections as demos. Security: the second factor and signed-in devices; recovery as a demo |
 
 An area's own address (`/office`, `/work`, …) opens its first tab. The sidebar groups Home, then Workspace (Office to Finance), then System (Admin); on phones the tab bar carries Home, Office, Work and Commerce, and More opens every area.
 

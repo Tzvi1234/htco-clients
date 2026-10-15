@@ -6,64 +6,130 @@ import {
   apiError,
   authKeys,
   mfaQuery,
+  sessionQuery,
   sessionsQuery,
   useApi,
   type SessionItem,
 } from "../../shared/api/api.tsx";
 import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
 import { Button } from "../../shared/ui/Button.tsx";
-import { LaptopIcon as Laptop, ShieldCheckIcon as ShieldCheck } from "@phosphor-icons/react";
+import { PageHeader } from "../../shared/ui/PageHeader.tsx";
+import { Panel, PanelBody, PanelHeader } from "../../shared/ui/Panel.tsx";
+import { DemoPart, DemoTag } from "../../shared/ui/d1c/DemoFrame.tsx";
+import { LaptopIcon, PhoneIcon, ShieldIcon } from "../../shared/ui/d1c/icons.tsx";
+import { Dot, IdBlock, KV, KV2, ListRow, StateLabel } from "../../shared/ui/d1c/Parts.tsx";
+import { Screen, Stack } from "../../shared/ui/d1c/Layout.tsx";
 
-import { PageBody, PageHeader } from "../../shared/ui/PageHeader.tsx";
-import { ObjectIcon, Tag } from "../../shared/ui/Tag.tsx";
-import { StatusDot } from "../../shared/ui/StatusDot.tsx";
-
-const CARD = "overflow-hidden rounded-card border border-border-subtle bg-surface shadow-1";
-const CARD_HEADER =
-  "m-0 border-b border-border-subtle bg-sunken px-4 py-2.5 text-body font-semibold";
-
-/** Two-factor sign-in and the user's signed-in devices (slice 3.5, AC-3.5.4). */
+/**
+ * Security (slice 3.5, AC-3.5.4, FR-IAM-05), a page of Settings in the Design 1C language: the
+ * second factor beside the signed-in devices, each of which can be signed out.
+ */
 export function SecurityPage() {
+  const { t } = useLingui();
   return (
     <>
-      <PageHeader
-        title={<Trans>Security</Trans>}
-        description={<Trans>How you sign in, and where you are signed in.</Trans>}
-        icon={<ObjectIcon hue="mint" icon={ShieldCheck} />}
-      />
-      <PageBody>
-        <div className="flex max-w-[760px] flex-col gap-4">
+      <PageHeader title={t`Security`} />
+      <Screen layout="l2">
+        <Stack className="lg:grid-rows-[minmax(0,1.3fr)_minmax(0,1fr)]">
           <SecondFactor />
-          <Devices />
-        </div>
-      </PageBody>
+          <RecoveryDemo />
+        </Stack>
+        <Devices />
+      </Screen>
     </>
   );
 }
 
 function SecondFactor() {
+  const { t } = useLingui();
   const api = useApi();
   const mfa = useQuery(mfaQuery(api));
+  const session = useQuery(sessionQuery(api));
+  const enrolled = mfa.data?.enrolled;
   return (
-    <section className={CARD} aria-labelledby="second-factor">
-      <h2 id="second-factor" className={CARD_HEADER}>
-        <Trans>Two-factor sign-in</Trans>
-      </h2>
-      {mfa.data === undefined ? null : mfa.data.enrolled ? (
-        <p className="m-0 flex items-center gap-2 px-4 py-3.5 text-body">
-          <StatusDot status="done" />
-          <Trans>Authenticator app is set up</Trans>
-        </p>
-      ) : (
-        <p className="m-0 flex flex-wrap items-center gap-2 px-4 py-3.5 text-body">
-          <StatusDot status="needs-you" />
-          <Trans>No authenticator app yet.</Trans>{" "}
-          <Link to="/security/setup" className="text-link underline">
-            <Trans>Set one up</Trans>
-          </Link>
-        </p>
-      )}
-    </section>
+    <Panel label={t`Two-factor sign-in`}>
+      <PanelHeader title={<Trans>Two-factor sign-in</Trans>} />
+      <PanelBody className="justify-between gap-5">
+        <div className="flex flex-col items-center gap-3 pt-2">
+          <span className="flex size-16 items-center justify-center rounded-pill border border-line bg-raised">
+            <ShieldIcon size={24} />
+          </span>
+          <IdBlock
+            label={t`Two-step sign-in:`}
+            value={enrolled === undefined ? "…" : enrolled ? t`On` : t`Off`}
+          />
+        </div>
+        <KV
+          items={[
+            [t`Method`, t`Authenticator app`],
+            [
+              t`Codes set up`,
+              <span key="n" className="ltr">
+                {mfa.data?.factors.filter((f) => f.verified).length ?? "…"}
+              </span>,
+            ],
+            [
+              t`This session`,
+              session.data?.assurance === "aal2" ? t`Confirmed with a code` : t`Password only`,
+            ],
+            [t`Required for`, t`Owners and Admins`],
+          ]}
+        />
+        {enrolled === undefined ? null : enrolled ? (
+          <p className="m-0 flex animate-enter items-center justify-center gap-2 rounded-card bg-raised p-3 text-body-sm">
+            <StateLabel state="running">
+              <span className="text-body-sm">
+                <Trans>Authenticator app is set up</Trans>
+              </span>
+            </StateLabel>
+          </p>
+        ) : (
+          <p className="m-0 flex animate-enter flex-wrap items-center justify-center gap-2 rounded-card bg-raised p-3 text-body-sm">
+            <StateLabel state="waityou">
+              <span className="text-body-sm">
+                <Trans>No authenticator app yet.</Trans>
+              </span>
+            </StateLabel>{" "}
+            <Link to="/security/setup" className="text-link underline underline-offset-[3px]">
+              <Trans>Set one up</Trans>
+            </Link>
+          </p>
+        )}
+      </PanelBody>
+    </Panel>
+  );
+}
+
+/** Recovery codes and passkeys: planned with MFA recovery, so a demo. */
+function RecoveryDemo() {
+  const { t } = useLingui();
+  return (
+    <Panel label={t`Recovery`} className="max-sm:hidden">
+      <PanelHeader title={<Trans>Recovery</Trans>} actions={<DemoTag className="me-4" />} />
+      <PanelBody className="justify-between gap-4">
+        <DemoPart tag={false} className="flex flex-col gap-4">
+          <IdBlock label={t`Recovery codes left:`} value={<span className="ltr">8 / 10</span>} />
+          <KV2
+            items={[
+              [
+                t`Last used:`,
+                <>
+                  <Dot tone="ink" />
+                  {t`Never`}
+                </>,
+              ],
+              [
+                t`Passkey:`,
+                <>
+                  <Dot tone="muted" />
+                  {t`Off`}
+                </>,
+              ],
+            ]}
+          />
+        </DemoPart>
+      </PanelBody>
+    </Panel>
   );
 }
 
@@ -83,49 +149,70 @@ function Devices() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: authKeys.sessions }),
   });
   const seen = new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeStyle: "short" });
+  const count = sessions.data?.length;
 
   return (
-    <section className={CARD} aria-labelledby="devices">
-      <h2 id="devices" className={CARD_HEADER}>
-        <Trans>Signed-in devices</Trans>
-      </h2>
-      <ul aria-label={t`Signed-in devices`} className="m-0 flex list-none flex-col p-0">
-        {(sessions.data ?? []).map((session: SessionItem) => {
-          const device = session.user_agent ?? t`Unknown device`;
-          return (
-            <li
-              key={session.id}
-              className="flex min-h-14 items-center gap-3 border-b border-border-subtle px-4 py-2 transition-colors last:border-b-0 hover:bg-hover"
-            >
-              <ObjectIcon hue="slate" size="md" icon={Laptop} />
-              <div className="flex min-w-0 grow flex-col items-start gap-0.5">
-                <span className="max-w-full truncate font-medium">{device}</span>
-                <span className="text-body-sm text-muted">
-                  {session.current ? (
-                    <Tag hue="iris" dot>
-                      <Trans>This device</Trans>
-                    </Tag>
-                  ) : (
-                    <Trans>Last active {seen.format(new Date(session.last_seen_at))}</Trans>
-                  )}
+    <Panel label={t`Signed-in devices`} className="max-lg:min-h-[320px]">
+      <PanelHeader
+        title={<Trans>Signed-in devices</Trans>}
+        meta={count === undefined ? undefined : <span className="ltr">{count}</span>}
+      />
+      <PanelBody className="px-2 pb-2">
+        {sessions.isError ? (
+          <p role="alert" className="m-0 px-4 py-3 text-body-sm text-danger-text">
+            <Trans>The devices cannot be loaded right now. Try again shortly.</Trans>
+          </p>
+        ) : null}
+        {revoke.isError ? (
+          <p role="alert" className="m-0 px-4 py-3 text-body-sm text-danger-text">
+            <Trans>That device is still signed in. Try again shortly.</Trans>
+          </p>
+        ) : null}
+        <ul aria-label={t`Signed-in devices`} className="m-0 flex list-none flex-col gap-1 p-0">
+          {(sessions.data ?? []).map((session: SessionItem, index) => {
+            const device = session.user_agent ?? t`Unknown device`;
+            const mobile = /android|iphone|ipad|mobile/i.test(device);
+            return (
+              <li
+                key={session.id}
+                style={{ animationDelay: `${String(index * 40)}ms` }}
+                className={
+                  "flex animate-[htco-row-in_280ms_var(--motion-easing-enter)_both] items-center gap-3 rounded-card p-3 transition-colors duration-[var(--motion-duration-fast)] " +
+                  (session.current ? "bg-selected" : "hover:bg-hover")
+                }
+              >
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-pill border border-line bg-raised">
+                  {mobile ? <PhoneIcon size={16} /> : <LaptopIcon size={16} />}
                 </span>
-              </div>
-              {session.current ? null : (
-                <Button
-                  size="sm"
-                  aria-label={t`Sign out ${device}`}
-                  isPending={revoke.isPending && revoke.variables === session.id}
-                  onPress={() => {
-                    revoke.mutate(session.id);
-                  }}
-                >
-                  <Trans>Sign out</Trans>
-                </Button>
-              )}
-            </li>
-          );
-        })}
-      </ul>
-    </section>
+                <ListRow
+                  className="min-w-0 flex-1 py-0"
+                  title={device}
+                  line={
+                    session.current ? (
+                      <StateLabel state="running">
+                        <Trans>This device</Trans>
+                      </StateLabel>
+                    ) : (
+                      <Trans>Last active {seen.format(new Date(session.last_seen_at))}</Trans>
+                    )
+                  }
+                />
+                {session.current ? null : (
+                  <Button
+                    aria-label={t`Sign out ${device}`}
+                    isPending={revoke.isPending && revoke.variables === session.id}
+                    onPress={() => {
+                      revoke.mutate(session.id);
+                    }}
+                  >
+                    <Trans>Sign out</Trans>
+                  </Button>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      </PanelBody>
+    </Panel>
   );
 }

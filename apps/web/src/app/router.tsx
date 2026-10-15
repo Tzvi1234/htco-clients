@@ -177,13 +177,24 @@ const routeTree = rootRoute.addChildren([
         staticData: { layout: "panels" },
         component: ShopsPage,
       }),
-      createRoute({ getParentRoute: () => appRoute, path: "/settings", component: SettingsPage }),
+      createRoute({
+        getParentRoute: () => appRoute,
+        path: "/settings",
+        staticData: { layout: "panels" },
+        component: SettingsPage,
+      }),
       createRoute({
         getParentRoute: () => appRoute,
         path: "/settings/security",
+        staticData: { layout: "panels" },
         component: SecurityPage,
       }),
-      createRoute({ getParentRoute: () => appRoute, path: "/settings/team", component: TeamPage }),
+      createRoute({
+        getParentRoute: () => appRoute,
+        path: "/settings/team",
+        staticData: { layout: "panels" },
+        component: TeamPage,
+      }),
       // Etsy sends the owner back here; it needs the session cookie, so it is signed in.
       createRoute({
         getParentRoute: () => appRoute,
