@@ -40,7 +40,8 @@ apps/web/src/
 packages/api-client/  openapi.yaml (pinned), generated/schema.d.ts, src/index.ts (createApiClient)
 apps/web/src/
   shared/api/         ApiError, ApiProvider, query factories (session, me, mfa, sessions), needsSecondFactor, safeRedirect
-  features/auth/      AuthLayout, SignInPage, SecondFactorPage (set up or confirm)
+  features/auth/      AuthLayout, SignInPage, SecondFactorPage (set up or confirm), AcceptInvitePage,
+                      ForgotPasswordPage, ResetPasswordPage, linkTokens (fragment tokens, password checks)
   features/security/  SecurityPage (two-factor status, signed-in devices)
   test/fakeApi.ts     the API's auth endpoints in memory
 ```

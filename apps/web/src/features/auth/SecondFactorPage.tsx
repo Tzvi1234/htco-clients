@@ -163,7 +163,13 @@ function ConfirmCode() {
   );
 }
 
-function CodeField({ value, onChange }: { value: string; onChange: (value: string) => void }) {
+export function CodeField({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+}) {
   const { t } = useLingui();
   return (
     <TextField

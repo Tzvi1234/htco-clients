@@ -12,6 +12,8 @@ import {
 import { NotFound, RouteError } from "./RouteStates.tsx";
 import { AppShell } from "./shell/AppShell.tsx";
 import { AcceptInvitePage } from "../features/auth/AcceptInvitePage.tsx";
+import { ForgotPasswordPage } from "../features/auth/ForgotPasswordPage.tsx";
+import { ResetPasswordPage } from "../features/auth/ResetPasswordPage.tsx";
 import { SecondFactorPage } from "../features/auth/SecondFactorPage.tsx";
 import { SignInPage } from "../features/auth/SignInPage.tsx";
 import { OverviewPage } from "../features/overview/OverviewPage.tsx";
@@ -52,6 +54,20 @@ const acceptInviteRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/accept-invite",
   component: AcceptInvitePage,
+});
+
+/** Asks for a password reset email (AC-3.5.6). */
+const forgotPasswordRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/forgot-password",
+  component: ForgotPasswordPage,
+});
+
+/** Where the emailed reset link lands: the user chooses a new password and is signed in. */
+const resetPasswordRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/reset-password",
+  component: ResetPasswordPage,
 });
 
 /**
@@ -100,6 +116,8 @@ const routeTree = rootRoute.addChildren([
   welcomeRoute,
   signInRoute,
   acceptInviteRoute,
+  forgotPasswordRoute,
+  resetPasswordRoute,
   signedInRoute.addChildren([
     secondFactorRoute,
     appRoute.addChildren([

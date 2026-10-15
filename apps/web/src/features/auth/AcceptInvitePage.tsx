@@ -5,23 +5,10 @@ import { useRouter, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState, type SyntheticEvent } from "react";
 
 import { AuthLayout, FormAlert } from "./AuthLayout.tsx";
+import { passwordProblem, tokensOf, type LinkTokens } from "./linkTokens.ts";
 import { ApiError, apiError, useApi } from "../../shared/api/api.tsx";
 import { Button } from "../../shared/ui/Button.tsx";
 import { TextField } from "../../shared/ui/TextField.tsx";
-
-interface InviteTokens {
-  accessToken: string;
-  refreshToken: string;
-}
-
-/** The sign-in service puts the invitation's tokens in the fragment, which never reaches a server. */
-function tokensOf(hash: string): InviteTokens | null {
-  const params = new URLSearchParams(hash.replace(/^#/, ""));
-  const accessToken = params.get("access_token");
-  const refreshToken = params.get("refresh_token");
-  if (params.has("error") || accessToken === null || refreshToken === null) return null;
-  return { accessToken, refreshToken };
-}
 
 /**
  * Where an invitation link lands: the new member chooses a password and is signed in. The tokens
@@ -43,7 +30,7 @@ export function AcceptInvitePage() {
   }, [hash, router]);
 
   const accept = useMutation({
-    mutationFn: async (invite: InviteTokens) => {
+    mutationFn: async (invite: LinkTokens) => {
       const { data, error, response } = await api.POST("/v1/auth/invitations/accept", {
         body: {
           access_token: invite.accessToken,
@@ -82,12 +69,7 @@ export function AcceptInvitePage() {
     event.preventDefault();
     if (tokens === null) return;
     // Checked here as the API does, so the user gets a clear answer (Codex review).
-    const next =
-      password.length < 12 || password.length > 128
-        ? "length"
-        : password === repeat
-          ? null
-          : "mismatch";
+    const next = passwordProblem(password, repeat);
     setProblem(next);
     if (next === null) accept.mutate(tokens);
   }

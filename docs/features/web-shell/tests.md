@@ -23,6 +23,7 @@
 | AC-3.5.2 | `packages/api-client/test/client.test.ts`: "sends the CSRF header on unsafe requests only"; the fake API refuses requests without it |
 | AC-3.5.3 | `auth.test.tsx`: "sends an Owner without an authenticator app to set one up...", "asks an enrolled Owner for the code...", "lets other roles in..." |
 | AC-3.5.4 | `auth.test.tsx`: "lists this user's devices and signs another one out" |
+| AC-3.5.6 (web) | `passwordReset.test.tsx`: the sign-in link, the same confirmation for any email, 429, empty email, Hebrew; the reset sets the password and signs in, strips the fragment, mismatch, length, weak, expired link (fragment and API), the authenticator code |
 | AC-3.6.1 | `packages/api-client/test/client.test.ts`: "match the pinned OpenAPI document" |
 | AC-3.1.2 | The `tests` job runs Vitest and `ci-gate` requires it (Storybook and axe in part 2) |
 

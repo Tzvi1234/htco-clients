@@ -18,6 +18,9 @@
 | Post-sign-in redirect | Spoofing: open redirect to a look-alike site | `safeRedirect` accepts only a same-site path | `auth.test.tsx`: "never follows a redirect to another site" |
 | Dashboard | Elevation of privilege: an Owner or Admin with only a password | The route guard requires `aal2` for those roles; the API enforces it again on every request | `auth.test.tsx` (AC-3.5.3) |
 | Error messages | Information disclosure: account enumeration | One message for an unknown email and a wrong password | `auth.test.tsx` |
+| Forgot password | Information disclosure: account enumeration | The page shows the same confirmation for every email, because the API answers 202 for every email | `passwordReset.test.tsx`: "says the same thing whether or not the account exists" |
+| Reset link | Information disclosure: the link's tokens in the address bar, history or referrer | Read once from the fragment (never sent to a server) and stripped with a `replace` navigation; no token is stored | `passwordReset.test.tsx`: "drops the tokens from the address bar" |
+| Reset link | Elevation of privilege: a stolen inbox bypassing the authenticator app | The API requires the code (`mfa-code-required`); the page asks for it | `passwordReset.test.tsx`: "asks a user with an authenticator app for its code" |
 | QR code | Tampering | Rendered only from the API's `data:` image; the CSP (slice 3.8) allows `img-src data:` and nothing third-party | Slice 3.8 |
 
 ## The deployed site (slice 3.8)

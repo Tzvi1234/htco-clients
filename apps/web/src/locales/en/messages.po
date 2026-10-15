@@ -55,7 +55,12 @@ msgstr "Android"
 msgid "Any browser, nothing to install."
 msgstr "Any browser, nothing to install."
 
+#: src/features/auth/ResetPasswordPage.tsx
+msgid "Ask for a new link"
+msgstr "Ask for a new link"
+
 #: src/features/auth/AcceptInvitePage.tsx
+#: src/features/auth/ResetPasswordPage.tsx
 msgid "At least 12 characters."
 msgstr "At least 12 characters."
 
@@ -66,6 +71,10 @@ msgstr "Authenticator app"
 #: src/features/security/SecurityPage.tsx
 msgid "Authenticator app is set up"
 msgstr "Authenticator app is set up"
+
+#: src/features/auth/ForgotPasswordPage.tsx
+msgid "Back to sign-in"
+msgstr "Back to sign-in"
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "Big changes, sensitive messages and anything unusual always come to you."
@@ -79,13 +88,22 @@ msgstr "Cannot scan? Type this key into the app:"
 msgid "Check the email address."
 msgstr "Check the email address."
 
+#: src/features/auth/ForgotPasswordPage.tsx
+msgid "Check your email"
+msgstr "Check your email"
+
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Checking your account"
 msgstr "Checking your account"
 
 #: src/features/auth/AcceptInvitePage.tsx
+#: src/features/auth/ResetPasswordPage.tsx
 msgid "Choose a longer password that is harder to guess."
 msgstr "Choose a longer password that is harder to guess."
+
+#: src/features/auth/ResetPasswordPage.tsx
+msgid "Choose a new password"
+msgstr "Choose a new password"
 
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Code from the app"
@@ -160,10 +178,15 @@ msgstr "Download"
 msgid "Each specialist acts under your policies and handles the day-to-day."
 msgstr "Each specialist acts under your policies and handles the day-to-day."
 
+#: src/features/auth/ForgotPasswordPage.tsx
 #: src/features/auth/SignInPage.tsx
 #: src/features/team/TeamPage.tsx
 msgid "Email"
 msgstr "Email"
+
+#: src/features/auth/ResetPasswordPage.tsx
+msgid "Enter the 6-digit code from your authenticator app to finish."
+msgstr "Enter the 6-digit code from your authenticator app to finish."
 
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Enter the 6-digit code from your authenticator app."
@@ -172,6 +195,14 @@ msgstr "Enter the 6-digit code from your authenticator app."
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Enter the 6-digit code the app shows."
 msgstr "Enter the 6-digit code the app shows."
+
+#: src/features/auth/ForgotPasswordPage.tsx
+msgid "Enter your email and we will send you a link to choose a new one."
+msgstr "Enter your email and we will send you a link to choose a new one."
+
+#: src/features/auth/ForgotPasswordPage.tsx
+msgid "Enter your email."
+msgstr "Enter your email."
 
 #: src/app/shell/ShopSwitcher.tsx
 msgid "Etsy · not connected"
@@ -188,6 +219,10 @@ msgstr "Everything your Etsy shop needs, working together in one AI office."
 #: src/features/team/TeamPage.tsx
 msgid "Finance"
 msgstr "Finance"
+
+#: src/features/auth/SignInPage.tsx
+msgid "Forgot your password?"
+msgstr "Forgot your password?"
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "Get the apps"
@@ -245,6 +280,10 @@ msgstr "HTCO · the operating system for your marketplace business"
 #: src/features/overview/OverviewPage.tsx
 msgid "HTCO checks orders, tracking and listings, and asks you before anything risky."
 msgstr "HTCO checks orders, tracking and listings, and asks you before anything risky."
+
+#: src/features/auth/ForgotPasswordPage.tsx
+msgid "If an account exists for this email, we sent a link to reset the password."
+msgstr "If an account exists for this email, we sent a link to reset the password."
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "In development"
@@ -328,6 +367,7 @@ msgid "Named specialists work under your policies and bring you every risky deci
 msgstr "Named specialists work under your policies and bring you every risky decision."
 
 #: src/features/auth/AcceptInvitePage.tsx
+#: src/features/auth/ResetPasswordPage.tsx
 msgid "New password"
 msgstr "New password"
 
@@ -426,12 +466,17 @@ msgid "Records"
 msgstr "Records"
 
 #: src/features/auth/AcceptInvitePage.tsx
+#: src/features/auth/ResetPasswordPage.tsx
 msgid "Repeat the password"
 msgstr "Repeat the password"
 
 #: src/shared/ui/ErrorState.tsx
 msgid "Request ID <0>{requestId}</0>"
 msgstr "Request ID <0>{requestId}</0>"
+
+#: src/features/auth/ForgotPasswordPage.tsx
+msgid "Reset your password"
+msgstr "Reset your password"
 
 #: src/features/overview/OverviewPage.tsx
 msgid "Revenue, 30 days"
@@ -446,6 +491,7 @@ msgid "Role"
 msgstr "Role"
 
 #: src/features/auth/AcceptInvitePage.tsx
+#: src/features/auth/ResetPasswordPage.tsx
 msgid "Save and sign in"
 msgstr "Save and sign in"
 
@@ -473,6 +519,10 @@ msgstr "Security"
 #: src/features/team/TeamPage.tsx
 msgid "Send on WhatsApp"
 msgstr "Send on WhatsApp"
+
+#: src/features/auth/ForgotPasswordPage.tsx
+msgid "Send the link"
+msgstr "Send the link"
 
 #: src/features/team/TeamPage.tsx
 msgid "Send this link to them yourself. It works once; when it expires, invite them again."
@@ -572,6 +622,7 @@ msgstr "The address may be mistyped, or the page has moved."
 msgid "The AI employees start once a shop is connected."
 msgstr "The AI employees start once a shop is connected."
 
+#: src/features/auth/ResetPasswordPage.tsx
 #: src/features/auth/SecondFactorPage.tsx
 msgid "The code is wrong or expired."
 msgstr "The code is wrong or expired."
@@ -585,6 +636,7 @@ msgid "The marketplace shops this organization runs."
 msgstr "The marketplace shops this organization runs."
 
 #: src/features/auth/AcceptInvitePage.tsx
+#: src/features/auth/ResetPasswordPage.tsx
 msgid "The passwords are not the same."
 msgstr "The passwords are not the same."
 
@@ -606,6 +658,8 @@ msgid "This device"
 msgstr "This device"
 
 #: src/features/auth/AcceptInvitePage.tsx
+#: src/features/auth/ForgotPasswordPage.tsx
+#: src/features/auth/ResetPasswordPage.tsx
 #: src/features/auth/SecondFactorPage.tsx
 #: src/features/team/TeamPage.tsx
 msgid "This did not work. Try again shortly."
@@ -618,6 +672,10 @@ msgstr "This invitation link has expired or was already used. Ask for a new one.
 #: src/features/auth/SignInPage.tsx
 msgid "This page could not sign you in. Reload it and try again."
 msgstr "This page could not sign you in. Reload it and try again."
+
+#: src/features/auth/ResetPasswordPage.tsx
+msgid "This password reset link has expired or was already used. Ask for a new one."
+msgstr "This password reset link has expired or was already used. Ask for a new one."
 
 #: src/features/team/TeamPage.tsx
 msgid "This person is already a member."
@@ -632,6 +690,8 @@ msgid "Titles, photos and claims audited and fixed as drafts you approve."
 msgstr "Titles, photos and claims audited and fixed as drafts you approve."
 
 #: src/features/auth/AcceptInvitePage.tsx
+#: src/features/auth/ForgotPasswordPage.tsx
+#: src/features/auth/ResetPasswordPage.tsx
 #: src/features/auth/SecondFactorPage.tsx
 #: src/features/auth/SignInPage.tsx
 msgid "Too many attempts. Wait 15 minutes and try again."
@@ -654,6 +714,7 @@ msgid "Unknown device"
 msgstr "Unknown device"
 
 #: src/features/auth/AcceptInvitePage.tsx
+#: src/features/auth/ResetPasswordPage.tsx
 msgid "Use between 12 and 128 characters."
 msgstr "Use between 12 and 128 characters."
 
@@ -718,6 +779,10 @@ msgstr "Your AI office"
 #: src/features/welcome/WelcomePage.tsx
 msgid "Your AI office gets to work"
 msgstr "Your AI office gets to work"
+
+#: src/features/auth/ResetPasswordPage.tsx
+msgid "Your other devices will be signed out."
+msgstr "Your other devices will be signed out."
 
 #: src/features/auth/SignInPage.tsx
 msgid "Your password"
