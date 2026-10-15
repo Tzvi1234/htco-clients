@@ -63,6 +63,25 @@ describe("forgetting the password (AC-3.5.6)", () => {
     expect(backend.state.resetRequests).toEqual([]);
   });
 
+  it("asks to correct an address that is not an email", async () => {
+    const { user, backend } = await open("/forgot-password");
+
+    await user.type(screen.getByLabelText("Email"), "foo");
+    await user.click(screen.getByRole("button", { name: "Send the link" }));
+
+    expect(await screen.findByRole("alert")).toHaveTextContent("Enter a valid email address.");
+    expect(backend.state.resetRequests).toEqual([]);
+  });
+
+  it("asks to correct the email when the API refuses its format", async () => {
+    const { user } = await open("/forgot-password");
+
+    await user.type(screen.getByLabelText("Email"), "bad@x.y");
+    await user.click(screen.getByRole("button", { name: "Send the link" }));
+
+    expect(await screen.findByRole("alert")).toHaveTextContent("Enter a valid email address.");
+  });
+
   it("asks to wait after too many requests", async () => {
     const { user } = await open("/forgot-password", { resetThrottled: true });
 

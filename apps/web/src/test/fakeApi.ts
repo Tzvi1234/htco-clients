@@ -115,6 +115,7 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
     }
     if (route === "POST /v1/auth/password/forgot") {
       if (state.resetThrottled) return problem(429, "too-many-attempts");
+      if (body["email"] === "bad@x.y") return problem(422, "validation-error");
       state.resetRequests.push(body["email"]);
       return new Response(null, { status: 202 });
     }
