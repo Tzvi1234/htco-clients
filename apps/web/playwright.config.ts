@@ -34,7 +34,7 @@ export default defineConfig({
       // Every Storybook story in he/en × light/dark: axe and a screenshot (AC-3.4.1, AC-3.4.3).
       name: "components",
       testDir: "e2e/components",
-      use: { baseURL: "http://127.0.0.1:6006", viewport: { width: 800, height: 600 } },
+      use: { baseURL: "http://127.0.0.1:6006" },
     },
   ],
   webServer: [
