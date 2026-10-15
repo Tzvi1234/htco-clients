@@ -53,6 +53,9 @@ describe("connecting an Etsy shop (slice 4.3)", () => {
     await user.click(await screen.findByRole("button", { name: "Connect Etsy shop" }));
     const dialog = await screen.findByRole("dialog", { name: "Confirm it is you" });
     expect(assign).not.toHaveBeenCalled();
+    await vi.waitFor(() => {
+      expect(within(dialog).getByLabelText("Code from the app")).toHaveFocus();
+    });
 
     await user.type(within(dialog).getByLabelText("Code from the app"), "123456");
     await user.click(within(dialog).getByRole("button", { name: "Confirm" }));

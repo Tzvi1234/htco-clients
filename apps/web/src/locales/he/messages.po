@@ -810,7 +810,7 @@ msgstr "החנות לא חוברה"
 
 #: src/features/shops/ShopsPage.tsx
 msgid "The term 'Etsy' is a trademark of Etsy, Inc. This application uses the Etsy API but is not endorsed or certified by Etsy, Inc."
-msgstr "המונח 'Etsy' הוא סימן מסחרי של Etsy, Inc. אפליקציה זו משתמשת ב-API של Etsy, אך אינה נתמכת או מאושרת על ידי Etsy, Inc."
+msgstr "המונח 'Etsy' הוא סימן מסחרי של חברת Etsy, Inc. אפליקציה זו משתמשת ב-API של Etsy, אך חברת Etsy, Inc. אינה תומכת בה ואינה מאשרת אותה."
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "The web app is ready today. The Windows and Android apps are coming soon with the same features."

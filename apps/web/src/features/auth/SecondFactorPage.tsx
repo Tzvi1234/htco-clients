@@ -168,9 +168,11 @@ function ConfirmCode() {
 export function CodeField({
   value,
   onChange,
+  autoFocus = false,
 }: {
   value: string;
   onChange: (value: string) => void;
+  autoFocus?: boolean;
 }) {
   const { t } = useLingui();
   return (
@@ -183,6 +185,7 @@ export function CodeField({
       maxLength={6}
       ltr
       isRequired
+      autoFocus={autoFocus}
       value={value}
       onChange={(next) => {
         onChange(next.replace(/\D/g, "").slice(0, 6));

@@ -159,7 +159,7 @@ function StepUpDialog({
                 </Trans>
               </p>
             </div>
-            <CodeField value={code} onChange={setCode} />
+            <CodeField value={code} onChange={setCode} autoFocus />
             <FormAlert message={codeMessage(confirm.error)} />
             <div className="flex justify-end gap-2">
               <Button slot="close" variant="ghost">
