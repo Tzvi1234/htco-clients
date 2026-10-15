@@ -51,11 +51,11 @@ export function UserMenu() {
     <MenuTrigger>
       <Button
         aria-label={t`Account and preferences`}
-        className="flex h-10 w-full cursor-default items-center justify-center gap-2 rounded-control px-1.5 text-body text-app-muted outline-none data-[hovered]:bg-app-hover data-[hovered]:text-app-text data-[pressed]:bg-app-hover lg:justify-start"
+        className="flex size-14 cursor-default items-center justify-center gap-2 rounded-pill text-body text-app-muted outline-none data-[hovered]:bg-hover data-[pressed]:bg-hover sm:h-10 sm:w-full sm:rounded-control sm:px-1.5 sm:data-[hovered]:bg-app-hover sm:data-[hovered]:text-app-text sm:data-[pressed]:bg-app-hover lg:justify-start"
       >
         <span
           aria-hidden="true"
-          className="grid size-7 shrink-0 place-items-center rounded-pill bg-presence-iris text-presence-fg"
+          className="grid size-10 shrink-0 place-items-center rounded-pill bg-presence-iris text-presence-fg sm:size-7"
         >
           <User size={15} weight="fill" />
         </span>
