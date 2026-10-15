@@ -33,6 +33,11 @@ The web app is the `web` static site of the App Platform app `htco`, defined in 
 2. **Likely cause:** the build failed (lockfile, Node version) and App Platform kept the previous version.
 3. **Fix:** run `docker build -f apps/web/Dockerfile .` locally to reproduce, fix, merge.
 
+### A page shows "Refused to execute inline script", or flashes the default palette
+1. **Likely cause:** the tweaks boot script (`src/shared/theme/boot.ts`) reached the page in a different form than the CSP hashed, for example after an HTML minifier was added to the build.
+2. **Check:** the built `dist/index.html`: the `script-src` hash must be the SHA-256 of the inline script's exact text.
+3. **Fix:** keep the CSP plugin last (`order: "post"`), so it hashes the final page; the boot test and the CSP test cover the script and its hash.
+
 ### A page shows "Refused to apply inline style" in the console
 1. **Likely cause:** a dependency upgrade changed the `<style>` React Aria injects, so its hash in `src/shared/security/csp.ts` no longer matches. The page still works, because `styles.css` repeats the rule.
 2. **Fix:** copy the hash from the console message into `REACT_ARIA_PRESSABLE_STYLE`.

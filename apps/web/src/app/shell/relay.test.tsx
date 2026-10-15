@@ -29,7 +29,7 @@ describe("quick actions (design/README.md, UX rule 2)", () => {
       within(dialog)
         .getAllByRole("menuitem")
         .map((item) => item.textContent),
-    ).toEqual(["Go to security"]);
+    ).toEqual(["Security"]);
     await user.keyboard("{Enter}");
 
     expect(await screen.findByRole("heading", { level: 1, name: "Security" })).toBeInTheDocument();
@@ -56,32 +56,11 @@ describe("the intro (design/README.md, Motion)", () => {
   });
 });
 
-describe("the decision ring (design/README.md, The idea)", () => {
-  it("is decorative and always sits beside words that say the user is needed", async () => {
-    await open();
-    const words = screen.getByText("Waiting for you");
-    const ring = words.closest("span.relative")?.querySelector("svg");
-    expect(ring).toHaveAttribute("aria-hidden", "true");
-  });
-});
-
-describe("the aura (design/README.md, Backgrounds)", () => {
-  it("glows behind the overview but never behind the shops table, and is hidden from readers", async () => {
-    const { user } = await open();
-    const glow = document.querySelector("main [aria-hidden='true'].pointer-events-none");
-    expect(glow).not.toBeNull();
-
-    await user.click(screen.getByRole("link", { name: "Shops" }));
-    await screen.findByRole("heading", { level: 1, name: "Shops" });
-    expect(document.querySelector("main [aria-hidden='true'].pointer-events-none")).toBeNull();
-  });
-});
-
 describe("the logo", () => {
   it("is drawn inline with an accessible name, in the theme's colours", async () => {
     await open();
     const [logo] = screen.getAllByRole("img", { name: "HTCO" });
     expect(logo?.tagName.toLowerCase()).toBe("svg");
-    expect(logo?.querySelector("circle[r='77']")).toHaveAttribute("fill", "var(--attention-ring)");
+    expect(logo?.querySelector("circle[r='88']")).toHaveAttribute("fill", "var(--logo-dot)");
   });
 });

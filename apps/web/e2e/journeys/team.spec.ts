@@ -4,9 +4,10 @@ import { checkpoint, openApp, pageTitle } from "./support.ts";
 
 test("an Owner invites a member and gets the link to send", async ({ page }) => {
   await openApp(page, "/settings/team", "signed-in");
-  await expect(pageTitle(page, "Team")).toBeVisible();
-  const members = page.getByRole("list", { name: "Members" });
-  await expect(members.getByRole("listitem")).toHaveCount(1);
+  await expect(pageTitle(page, "Members & access")).toBeVisible();
+  // The members table: its body rows, one per member.
+  const members = page.getByRole("table", { name: "Members" }).locator("tbody tr");
+  await expect(members).toHaveCount(1);
   await checkpoint(page, "team");
 
   await page.getByLabel("Email").fill("dana@example.test");
@@ -16,7 +17,7 @@ test("an Owner invites a member and gets the link to send", async ({ page }) => 
   const link = page.getByRole("textbox", { name: "Invitation link" });
   await expect(link).toHaveValue(/verify\?token=/);
   await expect(page.getByRole("button", { name: "Copy link" })).toBeVisible();
-  await expect(members.getByRole("listitem")).toHaveCount(2);
+  await expect(members).toHaveCount(2);
   await checkpoint(page, "team-invited");
 });
 

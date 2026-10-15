@@ -1,0 +1,64 @@
+/* Motion for the front door (Design 1C). The global reduced-motion rule in styles.css switches
+   every animation here off. */
+
+/* Panels and list items rise into place, one after the other. */
+.welcome .w-rise {
+  animation: welcome-rise 560ms var(--motion-easing-enter) both;
+}
+
+@keyframes welcome-rise {
+  from {
+    opacity: 0;
+    translate: 0 14px;
+  }
+}
+
+/* The render on show floats a little. */
+.welcome .w-float {
+  animation: welcome-float 7s ease-in-out infinite;
+}
+
+@keyframes welcome-float {
+  50% {
+    translate: 0 -8px;
+  }
+}
+
+/* A live LED: the dot breathes with a soft ring. */
+.welcome .w-led {
+  animation: welcome-led 2.4s ease-out infinite;
+}
+
+@keyframes welcome-led {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--success-dot) 55%, transparent);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 6px transparent;
+  }
+}
+
+/* Cards lift on hover. */
+.welcome .w-lift {
+  transition:
+    translate var(--motion-duration-base) var(--motion-easing-standard),
+    border-color var(--motion-duration-base) var(--motion-easing-standard);
+}
+
+.welcome .w-lift:hover {
+  translate: 0 -3px;
+  border-color: var(--border-hover);
+}
+
+/* The dotted progress fills dot by dot. */
+.welcome .w-dot {
+  animation: welcome-dot 260ms var(--motion-easing-enter) both;
+}
+
+@keyframes welcome-dot {
+  from {
+    opacity: 0;
+    scale: 0.2;
+  }
+}

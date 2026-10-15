@@ -41,7 +41,7 @@ apps/windows/          C# + WinUI 3 (Phase 17)
 design/tokens/         DTCG token source
 design/                Brand book and component spec
 packages/api-clients/  Pinned OpenAPI copy and generated clients
-assets/brand/          Official logo (never modify)
+assets/brand/          The Design 1C logo: light, dark, Design 4 and mark files
 docs/                  ADRs, architecture, UX, features
 ```
 
@@ -51,10 +51,10 @@ The web app exists (`apps/web`, slice 3.3 part 1). Each command is created by th
 
 | Command | What it runs | Created in |
 |---|---|---|
-| `pnpm tokens` | Build the CSS, Kotlin and XAML tokens into `packages/design-tokens/generated/` (refuses when a contrast pair fails); `pnpm check` fails when they drift | Slice 3.2 |
+| `pnpm tokens` | Build the CSS, Kotlin and XAML tokens into `packages/design-tokens/generated/` (refuses when a contrast pair fails in any of the 114 palette, theme and tweak modes); `pnpm check` fails when they drift | Slice 3.2 (modes: ADR-0008) |
 | `pnpm install && pnpm check` | ESLint (strict, type-aware), Prettier, TypeScript, Vitest; later also i18n, tokens and contrast | Slice 3.1 (tokens: 3.2; web: 3.3) |
 | `node scripts/<name>.ts` | Repository scripts run by CI (`conventional-commit`, `check-action-pins`, `test-integrity`); Node runs TypeScript directly | Slice 3.1 |
-| `pnpm web` | The web app's dev server on http://localhost:5173; add `?demo` (signed in), `?demo=shops` (signed in, a shop in each connection state) or `?demo=signed-out` to run it on the in-memory API without a local API server (development builds only) | Slice 3.3 |
+| `pnpm web` | The web app's dev server on http://localhost:5173; add `?demo` (signed in), `?demo=shops` (signed in, a shop in each connection state), `?demo=mfa` (the authenticator code step), `?demo=no-workspace` or `?demo=signed-out` to run it on the in-memory API without a local API server (development builds only) | Slice 3.3 |
 | `pnpm i18n:check` | Lingui catalogs in sync with the code, and no missing Hebrew translation (part of `pnpm check`); `pnpm --filter @htco/web i18n:extract` updates them | Slice 3.3 |
 | `pnpm api:generate` | Regenerate `packages/api-client/generated/schema.d.ts` from the pinned `packages/api-client/openapi.yaml`; a test fails when they drift | Slice 3.6 |
 | `pnpm storybook` | Component previews on http://localhost:6006, with Hebrew/English and light/dark in the toolbar | Slice 3.4 |
@@ -68,13 +68,17 @@ The web app exists (`apps/web`, slice 3.3 part 1). Each command is created by th
 1. No business rules in clients; the server decides.
 2. Generated API clients only; contract changes start in `htco-platform`.
 3. Tokens only; logical (start/end) layout; Hebrew and English for every string.
-4. Navy ground, turquoise for the system at work, amber only when the owner is needed.
+4. Design 1C ([client ADR-0008](docs/adr/0008-design-1c.md)): panels on a gray ground, ink for what is current, one accent (orange, or lilac in Design 4); the palette, theme and tweaks are one shared preference (`data-pal`, `data-theme`, `data-t1`…`data-t3` on `<html>`).
 5. Every screen has loading, empty, error, stale, offline and no-permission states; never claim unconfirmed success.
 6. Web keeps no tokens in JavaScript; native apps keep tokens only in platform-secure storage.
 7. WCAG 2.2 AA; keyboard and screen-reader paths for every action.
 8. Tests first; screenshots reviewed in he/en × light/dark before merge.
-9. The official logo file is never modified, recoloured or redrawn.
+9. The logo is the owner's Design 1C logo (`assets/brand/`, `Logo`); never redraw it or recolour it outside the `logo.*` tokens.
 10. No junk files; docs change in the same pull request.
+
+## Building a screen
+
+The navigation (`apps/web/src/app/shell/nav.ts`) lists the seven areas and every tab of Design 1C. A tab without a screen has a route that renders its demo screen (a feature's `demoScreens.tsx`, in the kit's `DemoFrame`; `DemoScreen` when nothing is drawn yet), and a `SoonTag` beside it in the navigation. Screens are built from the one screen kit, `apps/web/src/shared/ui/kit/` (import from `kit/index.ts`). To build one: write the feature under `src/features/`, give its route the component in `src/app/router.tsx` (with `staticData: { layout: "panels" }` when it lays out its own `Panel`s), set `built: true` in `nav.ts`, and update `docs/ux/NAVIGATION_MAP.md`. The page's `PageHeader` puts its title in the top bar.
 
 ## Ask the owner first
 

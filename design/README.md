@@ -1,200 +1,115 @@
-# HTCO Design System — Relay
+# HTCO Design System — Design 1C
 
 | | |
 |---|---|
-| **Status** | Version 2, "Relay" ([client ADR-0007](../docs/adr/0007-relay-design-language.md)); replaces version 1 |
-| **Source of truth** | This repository: [`tokens/`](tokens/README.md) (DTCG 2025.10), this brand book and [`COMPONENT_SPEC.md`](COMPONENT_SPEC.md) |
-| **References** | Attio (layout, sizes, tables, objects, icons) and Figma (colour, illustration, brand moments), pulled from Mobbin and nothing else |
+| **Status** | Version 3, "Design 1C" ([client ADR-0008](../docs/adr/0008-design-1c.md)); replaces Relay (ADR-0007) |
+| **Source** | The owner's prototype "HTCO · Design 1C", copied 1:1; this repository's [`tokens/`](tokens/README.md) (DTCG 2025.10), this brand book and [`COMPONENT_SPEC.md`](COMPONENT_SPEC.md) |
 | **Brand assets** | [`../assets/brand/`](../assets/brand/) |
-| **Contrast check** | `pnpm check` (164 token pairs per theme, in `packages/design-tokens`); `pnpm tokens` rebuilds the platform outputs |
+| **Contrast check** | `pnpm check`: 205 token pairs in each of 114 modes (palette × theme × tweaks), in `packages/design-tokens` |
 
-HTCO is the operating system for a marketplace business: verified orders, fulfillment and money, plus an AI workforce that acts under policy and asks before anything risky. The brand promise is **autonomy you can audit**, said to the owner as "Your shop runs. You decide."
+HTCO is the operating system for a marketplace business: verified orders, fulfillment and money, plus an AI workforce that acts under policy and asks before anything risky. The promise is **autonomy you can audit**: "Your shop runs. You decide."
 
-## The idea: Relay
+## The idea
 
-Work passes through the office the way the logo's interlocked C and O pass into each other. An order or a listing is handed from an AI employee, through policy, to the owner. Three devices carry the idea, all from the logo:
+Calm panels floating on a gray ground. Ink for what is current, one accent for what matters, light type for titles and numbers, round pills for every control. The owner tunes the look himself with the tweaks; every combination stays readable.
 
-| Device | What it is | Where |
+## Palettes and the tweaks
+
+Two palettes, each with a light and a dark theme, and three tweak levels on top. All of it is one preference for every HTCO interface (the web app, the landing page, the phone layout, later the native apps), remembered per origin and applied as attributes on `<html>` before the first paint.
+
+| Tweak | Attribute | Levels |
 |---|---|---|
-| **Handoff rings** | Two interlocked rings and the dot: work moving from an employee, through policy, to you | Brand art only (sign-in, empty states) |
-| **Work traces** | An AI employee is a small pointer with a coloured flag (its presence colour), with the employee's name and title where space allows. Never a face, photo or mascot | Records an employee is working on; brand art |
-| **The decision ring** | A loose saffron marker loop, the only hand-drawn mark in the product | Only around what waits for the owner's decision, always beside words such as "Needs you" |
+| Theme | `data-theme` | System (no attribute) · Light · Dark |
+| Palette and ground | `data-pal` | **SBB** gray and orange (default) · **Design 4** cream, lilac, orchid, lemon · **Plain ground** (SBB without the bloom behind glass) |
+| 1 · Element vs ground contrast | `data-t1` | Normal · Different · Very different (SBB and plain) |
+| 2 · Frosted glass | `data-t2` | Off · Glass · Strong glass, with the designed bloom ground (not on plain) |
+| 3 · Element borders | `data-t3` | Normal · Different · Very different (SBB and plain) |
 
-## Two worlds
-
-- **Work screens are Attio-calm:** white or graphite surfaces, dense type, thin lines, one primary action per region. Colour appears only as small tags, object icons, status dots and the decision ring.
-- **Brand moments are Figma-warm:** sign-in, empty states, the intro and future onboarding or celebrations use flat shapes in the illustration palette with 2 px ink outlines. They show HTCO's own objects (receipts, listing tiles, the handoff rings and the decision card), never generic stickies or clip-art, and never text inside the art.
-
-## Backgrounds: the aura
-
-Brand moments sit on an **aura**: large organic shapes in **solid** pastel colours (`shape.iris`, `shape.sky`, `shape.peach`, `shape.mint`, `shape.saffron`; deep tones in the dark theme) with crisp edges, plus one hand-drawn coral stroke. It came from the owner's sign-in reference.
-
-- **Solid colour or glass, never tints, blurs or gradients.** This is the owner's rule for the whole product: no blurred glows, no gradient fills, and no faded tinted chips.
-- **Where:**
-  - the sign-in form side, as a cluster in the lower corner clear of the form;
-  - the landing hero;
-  - beside the greeting on the overview.
-  - Never behind a table, a form or a list, and never under text.
-- **How:** `Aura` (`form`, `brand`, `page`, `hero`). It is decorative (`aria-hidden`), static apart from a one-time entrance, and positioned with logical properties.
-
-## The app frame
-
-- The app ground is `bg-app`, a deep ink (`#141419`).
-- The sidebar sits directly on it, in light ink text (`app.text`, `app.text-muted`). Hover and the current item use lighter ink pills (`app.hover`, `app.selected`).
-- The work floats beside it on a white panel (`bg-canvas`, radius 16, 1 px line, `elevation-2`, an 8 px margin).
-- On phones the page fills the screen, and navigation is a floating **ink** tab bar at the bottom, 12 px from the edges, with radius 20. The current tab sits on a lighter ink pill.
-- Colour lives in solid accent surfaces (the AI office card in solid iris with the saffron dot), status and the decision ring. Icons, cards and lists stay monochrome and precise.
-
-## The logo
-
-- The official geometry is kept exactly: block **H** and **T**, the interlocked **C** and **O** with their knockout gaps, and the dot. It is traced once into a vector, [`htco-logo.svg`](../assets/brand/htco-logo.svg); the original raster stays as the geometry source.
-- Colours: **HT** ink `#16161A` (`#F2F2F5` on dark), **CO** iris `#4C3AC7` (`#8B7CFF` on dark), **dot** saffron `#F2B72F`. Files: `htco-logo-light.svg`, `htco-logo-dark.svg`, and `htco-mark.svg` ("CO.", for icons and the favicon).
-- The web app draws the same geometry inline (`Logo`), taking its colours from the tokens, so it follows the theme. Minimum height 16 px for the full logo; under that, use the mark. Clear space is the dot's diameter.
-- Never redraw, re-typeset, outline, add effects to or recolour it outside these tokens.
+In Design 4, contrast and borders come from the palette; their rows rest in the panel.
 
 ## Colour
 
-| Role | Light | Dark | Job |
-|---|---|---|---|
-| Iris | `#4C3AC7` | `#684FF0` fill, `#8B7CFF` text and focus | Primary actions, links, selection, focus, the logo's CO |
-| Saffron | `#F2B72F` ring; `#8A5A00` dot and text | `#F2B72F` | The logo's dot; "needs you" only |
-| Graphite | `#16161A` → `#FFFFFF` | `#F2F2F5` → `#0B0B0E` | Text, surfaces, lines |
-| Danger | `#C9363E` | `#F0646B` / `#FF8A8F` | Failures and destructive actions |
-| Success | `#138A66` | `#2DBE8C` | Outcomes that went well |
+| Role | SBB light | SBB dark | Design 4 light | Design 4 dark | Token |
+|---|---|---|---|---|---|
+| Ground | `#E5E5E5` | `#161616` | `#F3F4EE` | `#15141A` | `bg.ground` |
+| Panel | `#E1E1E0` | `#1E1E1E` | `#FFFFFF` | `#1E1D24` | `bg.panel` |
+| Raised (chips, bubbles, selected) | `#F0F0EF` | `#282828` | `#F3F4EE` | `#26252D` | `bg.raised`, `bg.selected` (D4 `#D8CFEE`) |
+| Sidebar | `#F3F3F2` | `#1C1C1C` | `#FFFFFF` | `#1C1B21` | `bg.sidebar` |
+| Ink (text, current item) | `#000000` | `#F2F2F2` | `#000000` | `#F3F4EE` | `text.primary`, `inverse.bg` |
+| Accent | orange `#FF7F36` | orange | lilac `#8C76D6` | lilac `#A996E8` | `accent.mark`, `accent.fill` |
+| Attention | orange | orange | lemon `#EDD803` | lemon | `attention.fill` |
+| Lines | `#D3D3D3`, `#C9C9C9` | `#2C2C2C`, `#3A3A3A` | `#E3E4DE`, `#CBCCC6` | `#2D2C34`, `#3D3C45` | `border.subtle`, `border.strong` |
 
-- **Surfaces:**
-  - `bg-canvas` for pages;
-  - `bg-sidebar` for the sidebar and inspectors;
-  - `bg-surface` for cards and tables;
-  - `bg-raised` for menus and dialogs;
-  - `bg-sunken` for table headers and wells;
-  - `bg-hover` for hover;
-  - `bg-selected` (iris tint) for selection;
-  - `bg-brand` for brand-moment grounds.
-- **Text:** `text-primary`, `text-secondary` and `text-muted`, each at least 4.5:1 on every surface. **Lines:** `border-subtle` for dividers, `border-strong` for card and chip outlines, `border-control` for inputs (3:1).
-- **Tags:**
-  - Hues: iris, saffron, coral, mint, sky, rose, slate. A tag is a **solid** fill in its hue (the `presence.*` colours) with white text, at least 4.5:1. The softer `tag.*` tints remain only for large panels such as `bg-brand`, never for chips.
-  - Tags are for values (stages, categories, ranges), not decoration.
-  - Colour is never the only signal.
-- **Presence:** seven flag colours for AI employees, white names on top (4.5:1). Seven colours cannot identify 16 employees, so a flag always shows the name.
-- **Illustration:** iris, saffron, coral, mint, sky and rose fills plus ink and paper, used only in brand art and never for text.
-- **The saffron rule:** saffron means "needs you" and nothing else in the product. Under 5% of any work screen.
+- **Text is always AA.** The prototype's `--mute`, `--soft`, the orange, lilac and lemon fail 4.5:1 as text on its panels. They keep their look where they are not text (`icon.faint`, `accent.mark`, `attention.fill`, the logo); text uses `text.secondary`, `text.muted`, `accent.text`, `attention.text`, which are solved per mode against every surface, glass included.
+- **The inverse fill** (`inverse.bg` with `inverse.text`) marks what is current: the active area circle, the current tab pill (with the accent dot, `accent.on-inverse`), the primary button, the chosen segment.
+- **Attention fills** carry ink text (orange or lemon badges and counters). Status is a dot plus a word, never colour alone.
+- **Data colours** from Relay (tag and presence hues, illustration) remain for tags, AI employee flags and brand art until those screens are redesigned.
+
+## Glass and the bloom
+
+Tweak 2 makes panels, the sidebar and menus translucent with a backdrop blur (`glass` utility; 18 px, or 30 px with more saturation for strong glass). Behind glass the ground becomes the **bloom**: soft radial glows in the palette (orange, warm white and gray for SBB; lilac, orchid and lemon for Design 4; deep versions in dark) over a gentle gradient. "Plain ground" keeps the gray ground behind the glass. Contrast is checked over every bloom colour.
+
+## The logo
+
+The owner's logo from the prototype: block **H** and **T** cut by the C's circle, **C** and **O** each cut by the next circle, the **dot** cut into the O.
+
+- Colours: SBB HT ink, CO orange, dot ink; Design 4 HT ink, CO lilac, dot lemon; dark themes light ink. In the app the colours come from `logo.ht`, `logo.co` and `logo.dot`, so the logo follows the palette and theme.
+- Files: `htco-logo.svg` (and `-light`), `htco-logo-dark.svg`, `htco-logo-d4.svg`, `htco-mark.svg` ("CO.", for the favicon and small places). `Logo` draws the same geometry inline; the dot drops in once as the intro.
+- Height 22 px in the sidebar; under 16 px use the mark. Never recolour it outside these tokens.
 
 ## Typography
 
 | Family | Token | Use |
 |---|---|---|
-| Inter | `--font-family-latin` | English UI text and all numbers |
-| Heebo | `--font-family-hebrew` | Hebrew UI text |
-| Rubik | `--font-family-display` | Greetings, sign-in, big numbers and brand moments, in Hebrew and English alike |
-| JetBrains Mono | `--font-family-mono` | Receipt numbers, tracking codes, SKUs and IDs; always left-to-right, never Hebrew |
+| Outfit | `--font-family-latin`, `--font-family-display` | Every Latin text and number |
+| Heebo | `--font-family-hebrew` | Hebrew text (Outfit carries Latin inside it) |
+| JetBrains Mono | `--font-family-mono` | Codes, IDs, tracking numbers; always left-to-right |
 
-- Scale (size/line height in px):
+- Weights 300 (titles, big numbers, captions), 400 (text), 500 (the current area, badges).
+- Sizes: 11 (group labels, counters), 12 (captions, crumbs), 13 (items, buttons, tables), 14 (body), 24 light (page titles), 32 light (key numbers), 48 light (the hero number).
+- Sentence case; numbers in tables use tabular figures.
 
-  | Token | Size | Use |
-  |---|---|---|
-  | `caption` | 12/16 | Captions |
-  | `body-sm` | 13/18 | Tables, sidebar, chips |
-  | `body` | 14/20 | UI default |
-  | `title-sm` | 16/24 | |
-  | `title` | 20/28 | |
-  | `display-sm` | 28/32 | |
-  | `display` | 40/44 | |
-  | `hero` | 56/60 | |
+## Layout and shape
 
-  Never below 12 px.
-- Weights: 400 for text, 500 for labels, buttons and table names, 600 for titles. Display sizes are set 0.03 rem tighter.
-- Numbers in tables, metrics and money use tabular figures (`tabular`).
-- Sentence case everywhere. Hebrew is never set in the mono face.
-
-## Layout and sizes (from Attio)
-
-- **App frame:**
-  - sidebar 248 px (`size-sidebar`), a 56 px rail from 640 px, a bottom bar on phones;
-  - each page has a 48 px header with the object icon, the title and actions;
-  - tables run full-bleed, other content has 24–32 px gutters.
-- **Sidebar, top to bottom:**
-  - the logo;
-  - **Quick actions** (Ctrl+K or ⌘K);
-  - the main items, then small section labels ("Records", "Workspace") with their items;
-  - the connected shop card;
-  - the account.
-  - Items are 32 px with a 16 px icon and a 14 px label. The current item gets a neutral fill and its object colour on the icon.
-- **Record table:**
-  - a 32 px header on `bg-sunken`, with a 13 px icon plus label per column;
-  - 36 px compact or 44 px comfortable rows;
-  - 1 px horizontal lines and optional vertical ones;
-  - a sticky first column with a checkbox;
-  - values shown as tags, status as a dot plus a word;
-  - a "+ Add calculation" footer when totals exist.
-  - Column resize, reorder, hide, saved views, bulk actions, keyboard cell navigation and virtualization come with the first data table, and a 360–480 px record inspector with the first record view.
-- **Controls:**
-  - buttons 28, 32 or 40 px with radius 8;
-  - inputs 32 px (40 px on sign-in) with radius 6;
-  - tags 20 px with radius 4;
-  - cards radius 12, dialogs radius 16.
-  - Cards have a 1 px line and the faintest shadow; menus and dialogs float with `elevation-3`.
-- **Object icons:** a quiet white tile with a hairline and a monochrome duotone glyph, at 20, 32 or 40 px. Icons are never coloured; colour is for meaning and for solid accent surfaces.
-- **Key numbers:** one card divided into cells (four across on wide screens, 2×2 on phones), each with a small monochrome icon and label, a display-size value, and a one-line source or state.
-- Spacing on a 4 px grid (`space-*`). Breakpoints 640, 900, 1200, 1600.
-
-## Iconography
-
-[Phosphor](https://phosphoricons.com) icons everywhere: `duotone` at 16–20 px for navigation, object tiles and inline UI, `fill` for the current navigation item, `bold` for small arrows. Always monochrome. Import the `…Icon` names. Directional icons mirror in right-to-left layouts; logos, media controls, time axes and codes do not. No emoji in the product.
+- **Frame (from 640 px):** the sidebar floats 8 px from the edges (264 px, radius 22); the top bar sits on the ground (72 px: crumbs, the 24 px title, then language, approvals, search and tweaks); screens are panels in a grid with 8 px gaps under it.
+- **Sidebar, top to bottom:** the logo and the collapse button; the shop card; **Quick actions** (Ctrl K); Home, then **Workspace** (Office, Work, Commerce, Customers, Finance) and **System** (Admin), each a 40 px circle icon and a name; the current area opens its tabs on a connector rail with the current tab as an ink pill with the accent dot; the owner's card. Below 1360 px it collapses to a 72 px rail (the user's choice is remembered), and an area's tabs open in the 208 px flyout beside it.
+- **Phones (under 640 px):** the top bar, the screen, and a floating tab bar (Home, Office, Work, Commerce, More); More opens every area in a sheet.
+- **Shapes:** panels 22, cards and menus 16, pills fully round; circle buttons 40 px with a hairline; buttons 32 px (28, 40); inputs 48 px pills on sign-in.
+- **Not built yet:** every tab has its address. A tab without a screen renders `DemoScreen` ("Demo — coming soon") and shows a `SoonTag` wherever it is listed.
 
 ## Motion
 
-| Moment | Motion | Time |
-|---|---|---|
-| Intro (once per device and intro version) | The sidebar slides in 8 px from the inline-start edge and fades; the logo's dot drops into place | 280 ms and 520 ms, never blocking |
-| Page entrance | Opacity plus 4 px rise | 160 ms (`motion-duration-base`) |
-| Menus, dialogs, quick actions | Opacity plus 4 px | 120–160 ms |
-| Decision ring | Draws on along its path | 400 ms (`motion-duration-draw`) |
-| Brand art | Pieces rise 12 px in turn, the ring draws, the dot drops; once, never looping | ≈ 1 s in total |
-| Buttons | Press to 98% | 120 ms |
+One curve, `cubic-bezier(.2,.7,.2,1)` (`motion.easing.standard`), and four times (`motion.duration.*`): 150 ms feedback, 200 ms entrances, 280 ms layout (sidebar width, flyout, chevrons), 300 ms sub-lists.
 
-- Opacity and short travel only; no scaling menus, no parallax, no row staggers, nothing tied to scrolling.
-- **Reduced motion** removes every animation (travel and drawing), not only shortens it.
-- Motion explains a change. The office never shows invented activity: brand art is an illustration, and real presence follows only recorded events.
+| Moment | Motion |
+|---|---|
+| Sidebar collapse and expand | Width animates; labels fade back in |
+| An area's tabs | Grid rows open from 0 to their height; the chevron turns |
+| Flyout | Slides 12 px in from the inline start and fades |
+| Screens | Cross-fade with a 6 px rise (View Transitions) |
+| Menus, palette, tweaks panel | Fade with a short drop |
+| Toast | Fades up at the bottom centre, gone after 1.8 s |
+| Every control | Hover changes its outline or fill; press scales to 95–98% |
+
+Reduced motion removes every animation and transition, not only shortens them. Nothing moves on scroll, and nothing loops except real activity.
 
 ## UX rules
 
-1. **One dominant action per region.** A table may offer create, import and bulk actions together; only one is primary.
-2. **Keyboard first.** Quick actions on Ctrl+K or ⌘K; every action is reachable without a mouse; the 2 px iris focus ring is always visible.
+1. **One dominant action per region.** Primary buttons are ink; others are outlined pills.
+2. **Keyboard first.** Quick actions on Ctrl+K or ⌘K; every action reachable without a mouse; the 2 px focus ring in ink is always visible.
 3. **Status is a dot plus a word.** Colour is never the only signal.
-4. **The decision ring means "needs you".** Never decorative, always beside words.
-5. **AI actions are governed in the open.** A proposed action shows the records affected, the reason, the policy used and a preview or diff. Approval states its scope (once, batch, time-limited, or a policy change). Every action has an actor, an audit entry and, where possible, undo. An AI draft never silently becomes a committed marketplace action.
-6. **Say where data comes from and how fresh it is** ("Etsy · 4 min ago"). Say "Estimated" when a figure is not verified. Show sync conflicts, stale data and partial failure, each with a retry.
-7. **Empty states teach.** Show the record type's 40 px icon over three faded placeholder rows in the shape of what will appear (never fake data), a title, one sentence, and one action, or say plainly when the action is not available yet.
-11. **Adapt, don't shrink, on phones.** Show fewer things, not smaller ones: the key numbers in a compact 2×2 grid with one shared note, steps without their descriptions, lists instead of tables, a large title, and the floating tab bar.
-8. **Loading** uses skeletons in the shape of what is coming, never a full-page spinner. **Errors** are inline: the cause and the next step, never an apology.
-9. **Right-to-left by construction:** logical CSS only, mirrored directional icons, codes in an LTR isolate. Hebrew and English are both first-class; test both directions and both themes.
+4. **Never invent activity.** Counters, badges and the office show only recorded data; a screen without data says so (`DemoScreen`, empty states).
+5. **AI actions are governed in the open:** the records affected, the reason, the policy, a preview; approval states its scope; every action has an actor and an audit entry.
+6. **Say where data comes from and how fresh it is.** Show stale data, conflicts and partial failure, each with a retry.
+7. **Loading** uses skeletons in the shape of what is coming. **Errors** are inline: the cause and the next step.
+8. **Right-to-left by construction:** logical CSS only, mirrored directional icons, codes in an LTR isolate.
+9. **Adapt, don't shrink, on phones:** fewer things, not smaller ones.
 10. **Destructive actions** confirm in words that say what will happen.
 
 ## Voice and content
 
-- Calm, precise, honest. Say what happened, what it means and what the person can do: "No tracking for receipt 3412987711 after 6 days. Re-running the sync."
-- Buttons are verbs: "Approve fix", "Connect shop". Hebrew buttons and instructions use the gender-neutral infinitive or plural: "לאשר תיקון", "הזינו את הקוד".
-- No exclamation marks, no emoji, no hype.
-- System messages are in the third person ("Noa flagged a size claim"). AI employees speaking in a conversation use the first person, factually, and attach receipts.
-- AI employees have permanent first names and titles ([platform ADR-0012](https://github.com/Tzvi1234/htco-platform/blob/main/docs/adr/0012-living-office-organization.md)), shown as "Maya · General Manager". Names and titles come from the platform's registry, never hard-coded in a client; brand art shows roles without names.
-
-## People, AI employees and the office
-
-| Actor | Looks like |
-|---|---|
-| Person (user) | Photo, or initials on a neutral disc |
-| AI employee | Presence pointer and flag in the employee's colour with the name, or an employee token (a rounded square in the presence colour with initials and a small role glyph); never a face |
-| Decision Advisor (Jev) | An employee token labelled "Shared service" |
-| Automation | A dashed neutral token with a workflow glyph |
-| System | A plain neutral disc |
-
-Employee states are viewing, drafting, waiting and committed. Each shows in words beside the token, and only from recorded events. When the agent worker is offline, every employee shows Offline.
-
-## Platforms
-
-One visual language, native behaviour: React Aria Components with these tokens on the web; WinUI 3 resource dictionaries on Windows (compact density); Jetpack Compose on Android with the same colours, type, shapes and components. The web leads (platform ADR-0016).
+Calm, precise, honest. Buttons are verbs. Hebrew buttons and instructions use the gender-neutral infinitive or plural. No exclamation marks, no emoji, no hype. AI employees have permanent names and titles from the platform's registry.
 
 ## Accessibility
 
-WCAG 2.2 AA on every platform. Text pairs are at least 4.5:1, and controls, focus, dots, tag dots and presence flags at least 3:1, in both themes, checked in CI. Focus is always visible. Screen readers get the same information as sight. Brand art is decorative (`aria-hidden`); everything it suggests is also said in words.
+WCAG 2.2 AA on every platform and in every palette, theme and tweak: text pairs at least 4.5:1, controls, focus, dots and icons at least 3:1, checked in CI over glass and the bloom too. Focus is always visible. Screen readers get the same information as sight; decorative art is `aria-hidden`.

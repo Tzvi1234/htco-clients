@@ -1,0 +1,36 @@
+{
+  "$description": "Strong glass at contrast level 3, default palettes, dark: the panel keeps more of its base.",
+  "color": {
+    "bg": {
+      "panel": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1529,
+            0.1529,
+            0.1529
+          ],
+          "alpha": 0.44,
+          "hex": "#272727"
+        },
+        "$extensions": {
+          "app.htco.mix": {
+            "base": "color.bg.panel-base",
+            "amount": 0.44,
+            "with": {
+              "colorSpace": "srgb",
+              "components": [
+                0,
+                0,
+                0
+              ],
+              "alpha": 0,
+              "hex": "#000000"
+            }
+          }
+        }
+      }
+    }
+  }
+}

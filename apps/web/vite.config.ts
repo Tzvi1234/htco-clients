@@ -6,16 +6,34 @@ import react from "@vitejs/plugin-react";
 import { defineConfig, type Plugin } from "vitest/config";
 
 import { withSecurityPolicies } from "./src/shared/security/csp.ts";
+import { TWEAKS_BOOT_SCRIPT } from "./src/shared/theme/boot.ts";
 
 // Explicit, so the config is found when Vitest runs from the repository root.
 const LINGUI_CONFIG = fileURLToPath(new URL("lingui.config.ts", import.meta.url));
 
-/** The built page carries the CSP; the dev server does not, because Vite injects inline scripts. */
+/**
+ * The tweaks (palette, theme, contrast, glass, borders) apply before the first paint: a small
+ * inline script reads them from localStorage (src/shared/theme/boot.ts, client ADR-0008).
+ */
+function tweaksBootScript(): Plugin {
+  return {
+    name: "htco-tweaks-boot",
+    transformIndexHtml: {
+      order: "pre",
+      handler: () => [{ tag: "script", children: TWEAKS_BOOT_SCRIPT, injectTo: "head" }],
+    },
+  };
+}
+
+/**
+ * The built page carries the CSP, allowing its one inline script by hash; the dev server does
+ * not, because Vite injects inline scripts of its own.
+ */
 function contentSecurityPolicy(): Plugin {
   return {
     name: "htco-content-security-policy",
     apply: "build",
-    transformIndexHtml: (html) => withSecurityPolicies(html),
+    transformIndexHtml: { order: "post", handler: (html) => withSecurityPolicies(html) },
   };
 }
 
@@ -25,6 +43,7 @@ export default defineConfig({
     react(),
     lingui({ macroTransform: true, configPath: LINGUI_CONFIG }),
     tailwindcss(),
+    tweaksBootScript(),
     contentSecurityPolicy(),
   ],
   build: {

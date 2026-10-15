@@ -1,177 +1,450 @@
 {
-  "$description": "HTCO Relay semantic tokens, dark theme.",
+  "$description": "HTCO Design 1C semantic tokens, default palette (SBB), dark theme.",
   "color": {
     "bg": {
-      "app": {
-        "$value": "{palette.graphite.d-app}",
-        "$description": "The app ground behind the floating work panel and the sidebar"
+      "ground": {
+        "$value": "{palette.sbb-dark.ground}",
+        "$description": "The app ground (--ground) behind the floating panels"
       },
-      "canvas": {
-        "$value": "{palette.graphite.d-canvas}",
-        "$description": "Page background (the work panel)"
+      "panel-base": {
+        "$value": "{palette.sbb-dark.panel}",
+        "$description": "The panel's own fill (--panel-base); glass mixes from it"
       },
-      "sidebar": {
-        "$value": "{palette.graphite.d-sidebar}",
-        "$description": "Sidebar and inspector"
-      },
-      "surface": {
-        "$value": "{palette.graphite.d-surface}",
-        "$description": "Cards, tables"
+      "panel": {
+        "$value": "{color.bg.panel-base}",
+        "$description": "Panels and the work area (--panel)"
       },
       "raised": {
-        "$value": "{palette.graphite.d-raised}",
-        "$description": "Menus, popovers, dialogs"
+        "$value": "{palette.sbb-dark.raised}",
+        "$description": "Raised fills inside panels: chips, bubbles, selected rows (--raised)"
       },
-      "sunken": {
-        "$value": "{palette.graphite.d-sunken}",
-        "$description": "Table header, wells, code"
+      "sidebar": {
+        "$value": "{palette.sbb-dark.sidebar}",
+        "$description": "The floating sidebar and flyout (--sb)"
       },
       "hover": {
-        "$value": "{palette.graphite.d-hover}",
-        "$description": "Hovered row or item"
+        "$value": "{palette.sbb-dark.hover}",
+        "$description": "Hover on rows, items and buttons (--hover)"
       },
       "selected": {
-        "$value": "{palette.iris.d-selected}",
-        "$description": "Selected row or item"
+        "$value": "{palette.sbb-dark.selected}"
+      },
+      "menu": {
+        "$value": "{color.bg.raised}",
+        "$description": "Menus, the palette and the tweaks panel (--menu-bg)"
+      },
+      "card": {
+        "$value": "{palette.sbb-dark.card}",
+        "$description": "White cards on a panel (--card)"
+      },
+      "table-head": {
+        "$value": "{color.bg.panel}",
+        "$description": "Sticky table headers (--th-bg)"
+      },
+      "app": {
+        "$value": "{color.bg.ground}"
+      },
+      "canvas": {
+        "$value": "{color.bg.panel}"
+      },
+      "surface": {
+        "$value": "{color.bg.raised}"
+      },
+      "sunken": {
+        "$value": "{color.bg.ground}"
       },
       "brand": {
-        "$value": "{palette.iris.d-brand}",
-        "$description": "Brand moment ground (sign-in art, empty states)"
+        "$value": "{color.accent.subtle}"
       }
     },
     "text": {
       "primary": {
-        "$value": "{palette.graphite.d-primary}"
-      },
-      "secondary": {
-        "$value": "{palette.graphite.d-secondary}"
-      },
-      "muted": {
-        "$value": "{palette.graphite.d-muted}"
+        "$value": "{palette.sbb-dark.ink}",
+        "$description": "Ink (--ink)"
       },
       "on-brand": {
-        "$value": "{palette.graphite.d-primary}"
+        "$value": "{color.text.primary}"
       },
       "link": {
-        "$value": "{palette.iris.400}"
+        "$value": "{color.text.primary}",
+        "$description": "Links are ink and underlined"
+      },
+      "on-inverse": {
+        "$value": "{color.inverse.text}"
+      },
+      "secondary": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.7686,
+            0.7686,
+            0.7686
+          ],
+          "alpha": 1,
+          "hex": "#c4c4c4"
+        }
+      },
+      "muted": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.5843,
+            0.5843,
+            0.5843
+          ],
+          "alpha": 1,
+          "hex": "#959595"
+        }
       }
     },
     "icon": {
       "default": {
-        "$value": "{palette.graphite.d-secondary}"
+        "$value": "{color.text.secondary}"
+      },
+      "faint": {
+        "$value": "{palette.sbb-dark.mute}",
+        "$description": "Decorative glyphs and placeholders only (--mute)"
       },
       "muted": {
-        "$value": "{palette.graphite.d-muted}"
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.5412,
+            0.5412,
+            0.5412
+          ],
+          "alpha": 1,
+          "hex": "#8a8a8a"
+        }
       }
     },
     "border": {
       "subtle": {
-        "$value": "{palette.graphite.d-subtle}",
-        "$description": "Dividers, table lines"
+        "$value": "{palette.sbb-dark.line}",
+        "$description": "Dividers (--line)"
       },
       "strong": {
-        "$value": "{palette.graphite.d-strong}",
-        "$description": "Card and chip outlines"
+        "$value": "{palette.sbb-dark.line-2}",
+        "$description": "Pill and circle outlines (--line2)"
       },
-      "control": {
-        "$value": "{palette.graphite.d-control}",
-        "$description": "Input boundaries (3:1)"
+      "edge": {
+        "$value": "{color.border.subtle}",
+        "$description": "A panel's edge (--edge)"
+      },
+      "sidebar": {
+        "$value": "{palette.sbb-dark.sidebar-line}",
+        "$description": "The sidebar's edge (--sb-line)"
+      },
+      "hover": {
+        "$value": "{palette.sbb-dark.line-hover}",
+        "$description": "A pill's outline on hover (--line-h)"
+      },
+      "hover-strong": {
+        "$value": "{palette.sbb-dark.line-hover-2}",
+        "$description": "A button's outline on hover (--line-h2)"
       },
       "focus": {
-        "$value": "{palette.iris.400}",
-        "$description": "Focus ring"
+        "$value": "{color.text.primary}",
+        "$description": "The 2 px focus ring"
+      },
+      "control": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.4667,
+            0.4667,
+            0.4667
+          ],
+          "alpha": 1,
+          "hex": "#777777"
+        }
+      }
+    },
+    "inverse": {
+      "bg": {
+        "$value": "{palette.sbb-dark.ink}",
+        "$description": "Active pills, primary buttons, the current item (--ink)"
+      },
+      "bg-hover": {
+        "$value": "{palette.sbb-dark.ink-hover}",
+        "$description": "(--ink-h)"
+      },
+      "text": {
+        "$value": "{palette.sbb-dark.black}",
+        "$description": "Text on the inverse fill (--white)"
+      },
+      "text-muted": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.302,
+            0.302,
+            0.302
+          ],
+          "alpha": 1,
+          "hex": "#4d4d4d"
+        },
+        "$description": "Quieter text on the inverse fill"
+      },
+      "border": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.7843,
+            0.7843,
+            0.7843
+          ],
+          "alpha": 1,
+          "hex": "#c8c8c8"
+        },
+        "$description": "Dividers on the inverse fill"
       }
     },
     "action": {
       "primary": {
         "bg": {
-          "$value": "{palette.iris.500}"
+          "$value": "{color.inverse.bg}"
         },
         "bg-hover": {
-          "$value": "{palette.iris.550}"
+          "$value": "{color.inverse.bg-hover}"
         },
         "bg-pressed": {
-          "$value": "{palette.iris.600}"
+          "$value": "{color.inverse.bg-hover}"
         },
         "fg": {
-          "$value": "{palette.graphite.d-primary}"
+          "$value": "{color.inverse.text}"
         }
       },
       "secondary": {
         "bg": {
-          "$value": "{palette.graphite.d-raised}"
+          "$value": "{color.bg.raised}"
         },
         "bg-hover": {
-          "$value": "{palette.graphite.d-hover}"
+          "$value": "{color.bg.hover}"
         },
         "fg": {
-          "$value": "{palette.graphite.d-primary}"
+          "$value": "{color.text.primary}"
         },
         "border": {
-          "$value": "{palette.graphite.d-control}"
+          "$value": "{color.border.control}"
         }
       },
       "danger": {
         "bg": {
-          "$value": "{palette.red.600}"
+          "$type": "color",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.898,
+              0.2824,
+              0.302
+            ],
+            "alpha": 1,
+            "hex": "#e5484d"
+          }
         },
         "fg": {
-          "$value": "{palette.graphite.0}"
+          "$value": "{palette.sbb-dark.black}"
         }
       }
     },
     "accent": {
       "fill": {
-        "$value": "{palette.iris.400}"
+        "$value": "{palette.sbb-dark.accent}",
+        "$description": "Accent fills with on-fill text (--accent-fill)"
       },
-      "text": {
-        "$value": "{palette.iris.450}"
+      "on-fill": {
+        "$value": "{palette.sbb-dark.black}",
+        "$description": "(--on-accent)"
+      },
+      "mark": {
+        "$value": "{palette.sbb-dark.accent}",
+        "$description": "Small accent marks: the current item's dot, the logo's CO (--accent)"
+      },
+      "on-inverse": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.8392,
+            0.3059,
+            0
+          ],
+          "alpha": 1,
+          "hex": "#d64e00"
+        },
+        "$description": "The accent dot on the inverse fill"
       },
       "subtle": {
-        "$value": "{palette.iris.d-subtle}"
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.2275,
+            0.1412,
+            0.0863
+          ],
+          "alpha": 1,
+          "hex": "#3a2416"
+        }
+      },
+      "text": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            0.498,
+            0.2118
+          ],
+          "alpha": 1,
+          "hex": "#ff7f36"
+        }
       }
     },
     "attention": {
-      "dot": {
-        "$value": "{palette.saffron.400}",
-        "$description": "Needs you (functional, 3:1)"
+      "fill": {
+        "$value": "{palette.sbb-dark.accent}",
+        "$description": "Badges and counters that need the owner (--attn)"
       },
-      "text": {
-        "$value": "{palette.saffron.d-text}"
+      "on-fill": {
+        "$value": "{palette.sbb-dark.black}",
+        "$description": "(--on-attn)"
       },
       "subtle": {
-        "$value": "{palette.saffron.d-subtle}"
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.2275,
+            0.1412,
+            0.0863
+          ],
+          "alpha": 1,
+          "hex": "#3a2416"
+        }
       },
       "ring": {
-        "$value": "{palette.saffron.400}",
-        "$description": "The decision ring (decorative, always beside a word)"
+        "$value": "{color.attention.fill}"
+      },
+      "text": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            0.498,
+            0.2118
+          ],
+          "alpha": 1,
+          "hex": "#ff7f36"
+        }
+      },
+      "dot": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            0.498,
+            0.2118
+          ],
+          "alpha": 1,
+          "hex": "#ff7f36"
+        }
       }
     },
     "success": {
-      "dot": {
-        "$value": "{palette.mint.500}"
+      "subtle": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1176,
+            0.1686,
+            0.0902
+          ],
+          "alpha": 1,
+          "hex": "#1e2b17"
+        }
       },
       "text": {
-        "$value": "{palette.mint.d-text}"
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.3529,
+            0.7647,
+            0.149
+          ],
+          "alpha": 1,
+          "hex": "#5ac326"
+        }
       },
-      "subtle": {
-        "$value": "{palette.mint.d-subtle}"
+      "dot": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.3529,
+            0.7647,
+            0.149
+          ],
+          "alpha": 1,
+          "hex": "#5ac326"
+        }
       }
     },
     "danger": {
-      "dot": {
-        "$value": "{palette.red.d-dot}"
+      "subtle": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.2275,
+            0.1098,
+            0.1098
+          ],
+          "alpha": 1,
+          "hex": "#3a1c1c"
+        }
       },
       "text": {
-        "$value": "{palette.red.d-text}"
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            0.3647,
+            0.3647
+          ],
+          "alpha": 1,
+          "hex": "#ff5d5d"
+        }
       },
-      "subtle": {
-        "$value": "{palette.red.d-subtle}"
+      "dot": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            0.3176,
+            0.3176
+          ],
+          "alpha": 1,
+          "hex": "#ff5151"
+        }
       }
     },
     "status": {
       "running": {
-        "$value": "{color.accent.fill}"
+        "$value": "{color.info.dot}"
       },
       "needs-you": {
         "$value": "{color.attention.dot}"
@@ -187,6 +460,208 @@
       },
       "offline": {
         "$value": "{color.icon.muted}"
+      }
+    },
+    "logo": {
+      "ht": {
+        "$value": "{palette.sbb-dark.ink}",
+        "$description": "The logo's HT (--logo-ht)"
+      },
+      "co": {
+        "$value": "{palette.sbb-dark.accent}",
+        "$description": "The logo's CO (--logo-co)"
+      },
+      "dot": {
+        "$value": "{palette.sbb-dark.ink}",
+        "$description": "The logo's dot (--logo-dot)"
+      }
+    },
+    "bloom": {
+      "1": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            0.498,
+            0.2118
+          ],
+          "alpha": 0.3,
+          "hex": "#ff7f36"
+        }
+      },
+      "2": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            0.5882,
+            0.3529
+          ],
+          "alpha": 0.18,
+          "hex": "#ff965a"
+        }
+      },
+      "3": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            1,
+            1
+          ],
+          "alpha": 0.06,
+          "hex": "#ffffff"
+        }
+      },
+      "4": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0,
+            0,
+            0
+          ],
+          "alpha": 0.35,
+          "hex": "#000000"
+        }
+      },
+      "5": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            1,
+            1
+          ],
+          "alpha": 0.04,
+          "hex": "#ffffff"
+        }
+      },
+      "start": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1373,
+            0.1373,
+            0.1373
+          ],
+          "alpha": 1,
+          "hex": "#232323"
+        },
+        "$description": "The designed ground's gradient, top"
+      },
+      "end": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.0588,
+            0.0588,
+            0.0588
+          ],
+          "alpha": 1,
+          "hex": "#0f0f0f"
+        },
+        "$description": "The designed ground's gradient, bottom"
+      },
+      "1-fade": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            0.498,
+            0.2118
+          ],
+          "alpha": 0,
+          "hex": "#ff7f36"
+        }
+      },
+      "2-fade": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            0.5882,
+            0.3529
+          ],
+          "alpha": 0,
+          "hex": "#ff965a"
+        }
+      },
+      "3-fade": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            1,
+            1
+          ],
+          "alpha": 0,
+          "hex": "#ffffff"
+        }
+      },
+      "4-fade": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0,
+            0,
+            0
+          ],
+          "alpha": 0,
+          "hex": "#000000"
+        }
+      },
+      "5-fade": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            1,
+            1
+          ],
+          "alpha": 0,
+          "hex": "#ffffff"
+        }
+      }
+    },
+    "info": {
+      "text": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1765,
+            0.5922,
+            1
+          ],
+          "alpha": 1,
+          "hex": "#2d97ff"
+        }
+      },
+      "dot": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0,
+            0.502,
+            1
+          ],
+          "alpha": 1,
+          "hex": "#0080ff"
+        }
       }
     },
     "tag": {
@@ -326,24 +801,6 @@
         }
       }
     },
-    "app": {
-      "text": {
-        "$value": "{palette.ink.text}",
-        "$description": "Text on the ink app ground (sidebar)"
-      },
-      "text-muted": {
-        "$value": "{palette.ink.muted}"
-      },
-      "hover": {
-        "$value": "{palette.ink.d-hover}"
-      },
-      "selected": {
-        "$value": "{palette.ink.d-selected}"
-      },
-      "border": {
-        "$value": "{palette.ink.d-border}"
-      }
-    },
     "shape": {
       "iris": {
         "$value": "{palette.shape.d-iris}",
@@ -414,11 +871,11 @@
           "color": {
             "colorSpace": "srgb",
             "components": [
-              0.0,
-              0.0,
-              0.0
+              0,
+              0,
+              0
             ],
-            "alpha": 0.24,
+            "alpha": 0.4,
             "hex": "#000000"
           },
           "offsetX": {
@@ -447,11 +904,11 @@
           "color": {
             "colorSpace": "srgb",
             "components": [
-              0.0,
-              0.0,
-              0.0
+              0,
+              0,
+              0
             ],
-            "alpha": 0.2,
+            "alpha": 0.4,
             "hex": "#000000"
           },
           "offsetX": {
@@ -475,11 +932,11 @@
           "color": {
             "colorSpace": "srgb",
             "components": [
-              0.0,
-              0.0,
-              0.0
+              0,
+              0,
+              0
             ],
-            "alpha": 0.4,
+            "alpha": 0.5,
             "hex": "#000000"
           },
           "offsetX": {
@@ -487,15 +944,15 @@
             "unit": "px"
           },
           "offsetY": {
-            "value": 6,
+            "value": 8,
             "unit": "px"
           },
           "blur": {
-            "value": 16,
+            "value": 24,
             "unit": "px"
           },
           "spread": {
-            "value": -4,
+            "value": -12,
             "unit": "px"
           }
         }
@@ -508,11 +965,11 @@
           "color": {
             "colorSpace": "srgb",
             "components": [
-              0.0,
-              0.0,
-              0.0
+              0,
+              0,
+              0
             ],
-            "alpha": 0.2,
+            "alpha": 0.6,
             "hex": "#000000"
           },
           "offsetX": {
@@ -520,35 +977,7 @@
             "unit": "px"
           },
           "offsetY": {
-            "value": 2,
-            "unit": "px"
-          },
-          "blur": {
-            "value": 4,
-            "unit": "px"
-          },
-          "spread": {
-            "value": 0,
-            "unit": "px"
-          }
-        },
-        {
-          "color": {
-            "colorSpace": "srgb",
-            "components": [
-              0.0,
-              0.0,
-              0.0
-            ],
-            "alpha": 0.4,
-            "hex": "#000000"
-          },
-          "offsetX": {
-            "value": 0,
-            "unit": "px"
-          },
-          "offsetY": {
-            "value": 16,
+            "value": 18,
             "unit": "px"
           },
           "blur": {
@@ -556,11 +985,113 @@
             "unit": "px"
           },
           "spread": {
-            "value": -8,
+            "value": -22,
             "unit": "px"
           }
         }
       ]
+    },
+    "panel": {
+      "$type": "shadow",
+      "$value": [],
+      "$description": "Panels: none at the normal border level"
+    },
+    "sidebar": {
+      "$type": "shadow",
+      "$value": [
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              1,
+              1,
+              1
+            ],
+            "alpha": 0.04,
+            "hex": "#ffffff"
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 1,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 0,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 0,
+            "unit": "px"
+          },
+          "inset": true
+        },
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0,
+              0,
+              0
+            ],
+            "alpha": 0.5,
+            "hex": "#000000"
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 14,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 32,
+            "unit": "px"
+          },
+          "spread": {
+            "value": -20,
+            "unit": "px"
+          }
+        }
+      ],
+      "$description": "The floating sidebar and flyout"
+    },
+    "popover": {
+      "$type": "shadow",
+      "$value": [
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0,
+              0,
+              0
+            ],
+            "alpha": 0.6,
+            "hex": "#000000"
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 18,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 40,
+            "unit": "px"
+          },
+          "spread": {
+            "value": -22,
+            "unit": "px"
+          }
+        }
+      ],
+      "$description": "Menus, the tweaks panel, the palette"
     }
   }
 }

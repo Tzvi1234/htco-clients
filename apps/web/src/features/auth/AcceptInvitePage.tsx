@@ -1,14 +1,13 @@
 import { Trans, useLingui } from "@lingui/react/macro";
-import { ArrowRightIcon as ArrowRight, LockSimpleIcon as LockSimple } from "@phosphor-icons/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState, type SyntheticEvent } from "react";
 
-import { AuthLayout, FormAlert } from "./AuthLayout.tsx";
+import { AUTH_SUBMIT, AuthLayout, FormAlert } from "./AuthLayout.tsx";
+import { PasswordField } from "./fields.tsx";
 import { passwordProblem, tokensOf, type LinkTokens } from "./linkTokens.ts";
 import { ApiError, apiError, useApi } from "../../shared/api/api.tsx";
 import { Button } from "../../shared/ui/Button.tsx";
-import { TextField } from "../../shared/ui/TextField.tsx";
 
 /**
  * Where an invitation link lands: the new member chooses a password and is signed in. The tokens
@@ -78,9 +77,12 @@ export function AcceptInvitePage() {
 
   if (tokens === null) {
     return (
-      <AuthLayout title={<Trans>Set your password</Trans>}>
-        <p className="m-0 text-secondary">
+      <AuthLayout eyebrow={<Trans>Invitation</Trans>} title={<Trans>Set your password</Trans>}>
+        <p className="m-0 rounded-card border border-line bg-raised p-4 text-body-sm text-secondary">
           <Trans>This invitation link has expired or was already used. Ask for a new one.</Trans>
+        </p>
+        <p className="m-0 text-caption font-light text-muted">
+          <Trans>The workspace owner can send a new invitation from Members & access.</Trans>
         </p>
       </AuthLayout>
     );
@@ -88,42 +90,34 @@ export function AcceptInvitePage() {
 
   return (
     <AuthLayout
+      eyebrow={<Trans>Invitation</Trans>}
       title={<Trans>Set your password</Trans>}
       description={<Trans>You were invited to HT-Commerce. Choose a password to finish.</Trans>}
     >
-      <form className="flex flex-col gap-5" onSubmit={submit} noValidate>
-        <TextField
-          size="lg"
-          icon={LockSimple}
-          label={t`New password`}
-          description={t`At least 12 characters.`}
-          type="password"
-          autoComplete="new-password"
-          isRequired
-          minLength={12}
-          value={password}
-          onChange={setPassword}
-        />
-        <TextField
-          size="lg"
-          icon={LockSimple}
-          label={t`Repeat the password`}
-          type="password"
-          autoComplete="new-password"
-          isRequired
-          value={repeat}
-          onChange={setRepeat}
-        />
+      <form className="flex flex-col gap-6" onSubmit={submit} noValidate>
+        <div className="flex flex-col gap-4">
+          <PasswordField
+            label={t`New password`}
+            description={t`At least 12 characters.`}
+            autoComplete="new-password"
+            value={password}
+            onChange={setPassword}
+          />
+          <PasswordField
+            label={t`Repeat the password`}
+            autoComplete="new-password"
+            value={repeat}
+            onChange={setRepeat}
+          />
+        </div>
         <FormAlert message={message()} />
         <Button
           type="submit"
           variant="primary"
-          size="lg"
           isPending={accept.isPending}
-          className="h-11 text-body"
+          className={AUTH_SUBMIT}
         >
           <Trans>Save and sign in</Trans>
-          <ArrowRight aria-hidden="true" size={16} weight="bold" className="rtl:-scale-x-100" />
         </Button>
       </form>
     </AuthLayout>

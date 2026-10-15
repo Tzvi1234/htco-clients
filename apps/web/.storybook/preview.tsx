@@ -1,7 +1,6 @@
 import "@fontsource-variable/heebo";
-import "@fontsource-variable/inter";
+import "@fontsource-variable/outfit";
 import "@fontsource-variable/jetbrains-mono";
-import "@fontsource-variable/rubik";
 import "../src/styles.css";
 
 import type { Decorator, Preview } from "@storybook/react-vite";
@@ -18,13 +17,17 @@ function isLocale(value: unknown): value is Locale {
 
 /**
  * Every story in Hebrew or English (the app's LocaleProvider sets `lang` and `dir` on the root)
- * and in the light or dark theme (`data-theme`, as the app's theme switch does), on the white
- * work panel where components live.
+ * and in the light or dark theme (`data-theme`, as the app's theme switch does), on the work
+ * panel where components live.
  */
 const inAppContext: Decorator = (Story, context) => {
   const locale = isLocale(context.globals["locale"]) ? context.globals["locale"] : "en";
   const theme: Theme = context.globals["theme"] === "dark" ? "dark" : "light";
   applyTheme(theme, document.documentElement);
+  // The palette (client ADR-0008) for review; screenshots use the default, SBB.
+  const palette: unknown = context.globals["palette"];
+  document.documentElement.dataset["pal"] =
+    palette === "d4" || palette === "plain" ? palette : "sbb";
   return (
     // A new provider per language, so it applies `lang` and `dir` as the app does on start.
     <LocaleProvider key={locale} initialLocale={locale} storage={undefined}>
@@ -50,6 +53,19 @@ const preview: Preview = {
         dynamicTitle: true,
       },
     },
+    palette: {
+      description: "Design 1C palette",
+      toolbar: {
+        title: "Palette",
+        icon: "paintbrush",
+        items: [
+          { value: "sbb", title: "SBB (gray and orange)" },
+          { value: "d4", title: "Design 4 (cream and lilac)" },
+          { value: "plain", title: "Plain ground" },
+        ],
+        dynamicTitle: true,
+      },
+    },
     theme: {
       description: "Theme",
       toolbar: {
@@ -63,7 +79,7 @@ const preview: Preview = {
       },
     },
   },
-  initialGlobals: { locale: "en", theme: "light" },
+  initialGlobals: { locale: "en", theme: "light", palette: "sbb" },
   parameters: {
     layout: "fullscreen",
     // AC-3.4.1: an axe violation fails the story's test (Vitest addon) instead of only warning.

@@ -2,7 +2,7 @@ import { useLingui } from "@lingui/react/macro";
 import { Label, RadioButton, RadioField, RadioGroup } from "react-aria-components";
 
 export const CHIP =
-  "flex h-8 cursor-default items-center rounded-pill border border-border-subtle px-3 text-body-sm font-medium outline-none transition-colors data-[focus-visible]:ring-2 data-[focus-visible]:ring-focus data-[hovered]:bg-hover data-[selected]:border-transparent data-[selected]:bg-app data-[selected]:text-app-text";
+  "flex h-8 cursor-default items-center rounded-pill border border-border-subtle px-3 text-body-sm font-medium outline-none transition-colors data-[focus-visible]:ring-2 data-[focus-visible]:ring-focus data-[hovered]:bg-hover data-[selected]:border-transparent data-[selected]:bg-inverse data-[selected]:text-on-inverse";
 
 /**
  * Which workspace a page works on, for a user in several. One workspace needs no question; with

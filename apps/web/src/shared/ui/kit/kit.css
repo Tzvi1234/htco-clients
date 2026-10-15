@@ -1,0 +1,524 @@
+/* Design 1C screen kit (kit/*.tsx): the demo's live motion, and the demo's patterns that are
+   markup rather than components (list rows, approvals, the chat thread, the hero stage). Class
+   names carry a `k-` prefix so they never meet Tailwind's utilities. Every colour, radius and
+   duration is a token; styles.css removes every animation under prefers-reduced-motion. */
+
+/* ---------- live motion ---------- */
+/* Running breathes like an LED; waiting-for-you rings. */
+@keyframes htco-led {
+  0%,
+  60% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 0.45;
+  }
+}
+
+@keyframes htco-halo {
+  0%,
+  100% {
+    opacity: 0.35;
+    scale: 1;
+  }
+  50% {
+    opacity: 0.12;
+    scale: 1.25;
+  }
+}
+
+/* The demo pill's dot and other live marks. */
+@keyframes htco-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+/* Dots of the charts and dotted bars grow in; table rows rise in. */
+@keyframes htco-dot-in {
+  from {
+    opacity: 0;
+    scale: 0.4;
+  }
+}
+
+@keyframes htco-row-in {
+  from {
+    opacity: 0;
+    translate: 0 6px;
+  }
+}
+
+/* Typing and waiting: three dots taking turns. */
+@keyframes htco-typing {
+  0%,
+  60%,
+  100% {
+    opacity: 0.35;
+    translate: 0 0;
+  }
+  30% {
+    opacity: 1;
+    translate: 0 -2px;
+  }
+}
+
+@keyframes htco-wait-dot {
+  0%,
+  60%,
+  100% {
+    opacity: 0.3;
+  }
+  30% {
+    opacity: 1;
+  }
+}
+
+/* The parcel and other product art float gently in place. */
+@keyframes htco-float {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -6px;
+  }
+}
+
+/* The six code boxes: the box waiting for the next digit shows a blinking caret. */
+.k-code-caret {
+  animation: k-code-blink 1.1s steps(1) infinite;
+}
+
+@keyframes k-code-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* A digit pops into its box. */
+.k-code-digit {
+  animation: k-code-pop 180ms var(--motion-easing-standard) both;
+}
+
+@keyframes k-code-pop {
+  from {
+    opacity: 0;
+    scale: 0.6;
+  }
+}
+
+/* A refused code shakes the boxes once. */
+.k-code-shake {
+  animation: k-code-shake 360ms var(--motion-easing-standard);
+}
+
+@keyframes k-code-shake {
+  20%,
+  60% {
+    translate: -6px 0;
+  }
+  40%,
+  80% {
+    translate: 6px 0;
+  }
+}
+
+/* ---------- helpers ---------- */
+.k-scroll {
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+.k-code {
+  font-family: var(--font-family-mono);
+  font-size: 12px;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+/* ---------- small marks: steps, counts, segmented views ---------- */
+.k-ck {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1px solid var(--border-hover);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+.k-ck.k-on {
+  background: var(--inverse-bg);
+  border-color: var(--inverse-bg);
+  color: var(--inverse-text);
+}
+.k-ck.k-now {
+  border-color: var(--accent-mark);
+}
+.k-cnt {
+  min-width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  background: var(--inverse-bg);
+  color: var(--inverse-text);
+  font-size: 11px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px;
+}
+.k-cnt.k-o {
+  background: var(--attention-fill);
+  color: var(--attention-on-fill);
+}
+.k-seg {
+  height: 32px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  padding: 3px;
+  gap: 2px;
+}
+.k-seg button {
+  height: 24px;
+  padding: 0 10px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  color: var(--text-primary);
+  transition: background-color var(--motion-duration-fast) var(--motion-easing-standard);
+}
+.k-seg button:hover {
+  background: var(--bg-hover);
+}
+.k-seg button.k-on {
+  background: var(--inverse-bg);
+  color: var(--inverse-text);
+}
+
+/* ---------- list rows ---------- */
+.k-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: var(--radius-xl);
+  text-align: start;
+  width: 100%;
+  color: inherit;
+  position: relative;
+  transition: background-color var(--motion-duration-fast) var(--motion-easing-standard);
+}
+button.k-row:hover,
+.k-row.k-click:hover {
+  background: var(--bg-hover);
+}
+.k-row.k-sel {
+  background: var(--bg-selected);
+}
+.k-row .k-grow {
+  flex: 1;
+  min-width: 0;
+}
+.k-row .k-nm {
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+.k-row .k-nm small {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 300;
+}
+.k-row .k-ln {
+  font-size: 12px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.k-row.k-accent.k-sel::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 4px;
+  top: 50%;
+  margin-top: -10px;
+  width: 3px;
+  height: 20px;
+  border-radius: 2px;
+  background: var(--accent-mark);
+}
+
+/* approvals item */
+.k-ap {
+  padding: 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.k-ap + .k-ap {
+  border-top: 1px solid var(--border-subtle);
+}
+.k-ap .k-who {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 300;
+}
+.k-ap .k-what {
+  font-size: 14px;
+  line-height: 1.35;
+}
+.k-ap .k-act {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  row-gap: 8px;
+}
+
+/* ---------- hero stage ---------- */
+.k-stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.k-side {
+  position: absolute;
+  top: 50%;
+  margin-top: -20px;
+}
+.k-side.k-s {
+  inset-inline-start: 16px;
+}
+.k-side.k-e {
+  inset-inline-end: 16px;
+}
+.k-dim {
+  font-size: 11px;
+  color: var(--text-secondary);
+  letter-spacing: 0.02em;
+}
+
+/* ---------- service hatch and timeline ---------- */
+.k-hatch {
+  background: repeating-linear-gradient(135deg, transparent 0 5px, var(--border-strong) 5px 6px);
+}
+.k-tl {
+  display: flex;
+  gap: 16px;
+  padding: 10px 0;
+  animation: htco-enter var(--motion-duration-slow) var(--motion-easing-enter) both;
+}
+.k-tl + .k-tl {
+  border-top: 1px solid var(--border-subtle);
+}
+.k-tl .k-tm {
+  width: 48px;
+  flex: none;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ---------- chat ---------- */
+.k-thread {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 0 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+.k-msg {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 72%;
+  animation: htco-enter var(--motion-duration-slow) var(--motion-easing-enter) both;
+}
+.k-msg.k-me {
+  align-self: flex-end;
+  align-items: flex-end;
+}
+.k-msg .k-meta {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.k-bub {
+  background: var(--bg-raised);
+  border-radius: 20px;
+  padding: 12px 16px;
+  font-size: 14px;
+  line-height: 1.45;
+}
+.k-msg.k-me .k-bub {
+  background: var(--inverse-bg);
+  color: var(--inverse-text);
+}
+.k-daysep {
+  align-self: center;
+  font-size: 11px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+.k-daysep::before,
+.k-daysep::after {
+  content: "";
+  flex: 1;
+  height: 0;
+  border-top: 1px dashed var(--border-strong);
+}
+.k-evt {
+  align-self: center;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  min-height: 28px;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-full);
+  padding: 0 14px;
+  animation: htco-enter var(--motion-duration-slow) var(--motion-easing-enter) both;
+}
+.k-tool {
+  width: 420px;
+  max-width: 100%;
+}
+.k-tool .k-hd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 300;
+}
+.k-tool .k-hd > span:first-child::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-mark);
+  margin-inline-end: 6px;
+  vertical-align: 1px;
+}
+.k-tool .k-big {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 6px 0 10px;
+}
+.k-tool .k-big b {
+  font-size: 32px;
+  font-weight: 300;
+  line-height: 1.1;
+}
+.k-apc {
+  width: 460px;
+  max-width: 100%;
+  box-shadow: inset 0 3px 0 var(--attention-fill);
+}
+.k-apc .k-lb {
+  font-size: 12px;
+  font-weight: 300;
+  color: var(--text-muted);
+}
+.k-apc .k-id {
+  font-size: 24px;
+  font-weight: 300;
+  line-height: 1.3;
+}
+.k-att {
+  display: flex;
+  gap: 8px;
+}
+@media (max-width: 639.98px) {
+  .k-att {
+    flex-wrap: wrap;
+  }
+}
+.k-attc {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-xl);
+  padding-block: 8px;
+  padding-inline: 8px 14px;
+}
+.k-attc .k-th {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  overflow: hidden;
+  flex: none;
+}
+.k-attc .k-fn {
+  font-size: 13px;
+}
+.k-attc .k-fs {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.k-composer {
+  flex: none;
+  margin: 0 16px 16px;
+  height: 56px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 8px;
+  transition: border-color var(--motion-duration-fast) var(--motion-easing-standard);
+}
+.k-composer:focus-within {
+  border-color: var(--border-hover-strong);
+}
+.k-composer input {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+  padding: 0 8px;
+  background: none;
+  border: 0;
+  outline: 0;
+  color: inherit;
+}
+.k-composer input::placeholder {
+  color: var(--text-muted);
+}
+.k-ro {
+  flex: none;
+  margin: 0 16px 16px;
+  min-height: 56px;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-inline: 20px 8px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}

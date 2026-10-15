@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="190 300 1530 475" role="img" aria-label="HTCO">
+  <style>
+    .ht { fill: #000000; }
+    .co { fill: #8C76D6; }
+    .dot { fill: #EDD803; }
+  </style>
+  <defs>
+    <mask id="cut-ht" maskUnits="userSpaceOnUse" x="0" y="0" width="1920" height="1080"><rect width="1920" height="1080" fill="#fff"/><circle cx="1100" cy="539" r="241" fill="#000"/></mask>
+    <mask id="cut-c" maskUnits="userSpaceOnUse" x="0" y="0" width="1920" height="1080"><rect width="1920" height="1080" fill="#fff"/><circle cx="1381" cy="537" r="241" fill="#000"/></mask>
+    <mask id="cut-o" maskUnits="userSpaceOnUse" x="0" y="0" width="1920" height="1080"><rect width="1920" height="1080" fill="#fff"/><circle cx="1621" cy="648" r="102" fill="#000"/></mask>
+  </defs>
+  <g class="ht" mask="url(#cut-ht)"><path d="M203 321h118v172h170V321h119v446H491V590H321v177H203z"/><path d="M621 321h400v93H850v353H730V414H621z"/></g>
+  <g mask="url(#cut-c)"><path class="co" fill-rule="evenodd" d="M1100 314a225 225 0 1 1 0 450a225 225 0 1 1 0-450zM1100 421a117 117 0 1 0 0 234a117 117 0 1 0 0-234z"/></g>
+  <g mask="url(#cut-o)"><path class="co" fill-rule="evenodd" d="M1381 311a226 226 0 1 1 0 452a226 226 0 1 1 0-452zM1381 415a117 122 0 1 0 0 244a117 122 0 1 0 0-244z"/></g>
+  <circle class="dot" cx="1621" cy="648" r="88"/>
+</svg>

@@ -1,15 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="750.5 93.5 750 750" role="img" aria-label="HTCO CO dot mark">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="862 300 858 475" role="img" aria-label="HTCO">
   <style>
-    .co { fill: #4C3AC7; }
-    .dot { fill: #F2B72F; }
+    .ht { fill: #000000; }
+    .co { fill: #FF7F36; }
+    .dot { fill: #000000; }
   </style>
   <defs>
-    <mask id="cut-o-from-c" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse" x="730" y="70" width="800" height="800"><rect x="730" y="70" width="800" height="800" fill="#fff"/><circle cx="1202.5" cy="468.5" r="208" fill="#000"/></mask>
-    <mask id="cut-dot-from-o" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse" x="730" y="70" width="800" height="800"><rect x="730" y="70" width="800" height="800" fill="#fff"/><circle cx="1411.5" cy="564.5" r="87" fill="#000"/></mask>
+    <mask id="cut-c" maskUnits="userSpaceOnUse" x="0" y="0" width="1920" height="1080"><rect width="1920" height="1080" fill="#fff"/><circle cx="1381" cy="537" r="241" fill="#000"/></mask>
+    <mask id="cut-o" maskUnits="userSpaceOnUse" x="0" y="0" width="1920" height="1080"><rect width="1920" height="1080" fill="#fff"/><circle cx="1621" cy="648" r="102" fill="#000"/></mask>
   </defs>
-  <g class="co" fill-rule="evenodd">
-    <path d="M1086.14 318.59A197 197 0 1 0 1086.14 620.41L1025.71 548.4A103 103 0 1 1 1025.71 390.6Z" mask="url(#cut-o-from-c)"/>
-    <path d="M1202.5 270.5A198 198 0 1 1 1202.5 666.5A198 198 0 1 1 1202.5 270.5ZM1202.5 363.5A105 105 0 1 0 1202.5 573.5A105 105 0 1 0 1202.5 363.5Z" mask="url(#cut-dot-from-o)"/>
-  </g>
-  <g class="dot"><circle cx="1411.5" cy="564.5" r="77"/></g>
+  <g mask="url(#cut-c)"><path class="co" fill-rule="evenodd" d="M1100 314a225 225 0 1 1 0 450a225 225 0 1 1 0-450zM1100 421a117 117 0 1 0 0 234a117 117 0 1 0 0-234z"/></g>
+  <g mask="url(#cut-o)"><path class="co" fill-rule="evenodd" d="M1381 311a226 226 0 1 1 0 452a226 226 0 1 1 0-452zM1381 415a117 122 0 1 0 0 244a117 122 0 1 0 0-244z"/></g>
+  <circle class="dot" cx="1621" cy="648" r="88"/>
 </svg>

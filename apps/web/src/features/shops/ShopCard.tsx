@@ -1,18 +1,26 @@
 import { Plural, Trans, useLingui } from "@lingui/react/macro";
-import {
-  ArrowsClockwiseIcon as ArrowsClockwise,
-  KeyIcon as Key,
-  PlugsConnectedIcon as PlugsConnected,
-  StorefrontIcon as Storefront,
-  type Icon,
-} from "@phosphor-icons/react";
 import { useId, type ReactNode } from "react";
 
+import parcel from "../../assets/commerce/parcel.webp";
 import type { IntegrationView, ShopView } from "../../shared/api/api.tsx";
 import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
+import { cx } from "../../shared/lib/cx.ts";
 import { Ltr } from "../../shared/ui/Ltr.tsx";
-import { StatusDot, type Status } from "../../shared/ui/StatusDot.tsx";
-import { ObjectIcon, Tag, type Hue } from "../../shared/ui/Tag.tsx";
+import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
+import {
+  CircleButton,
+  DemoPart,
+  Dot,
+  IdBlock,
+  KV2,
+  N,
+  Pill,
+  RefreshGlyph,
+  StatusGlyph,
+  Tile,
+  type AgentStatus,
+  type DotTone,
+} from "../../shared/ui/kit/index.ts";
 
 const DAY = 86_400_000;
 
@@ -35,27 +43,33 @@ export function ago(iso: string, now: number, locale: string): string {
   return format.format(0, "second");
 }
 
-const STATUS: Record<IntegrationView["status"], { hue: Hue }> = {
-  connected: { hue: "mint" },
-  needs_reauth: { hue: "saffron" },
-  disconnected: { hue: "slate" },
-};
-
-const HEALTH_DOT: Record<IntegrationView["token_health"], Status> = {
-  ok: "done",
-  expiring: "needs-you",
-  needs_reauth: "needs-you",
+/** The connection's status as the demo's status glyph: the shape carries it, not the colour. */
+const STATUS_GLYPH: Record<IntegrationView["status"], AgentStatus> = {
+  connected: "running",
+  needs_reauth: "waityou",
   disconnected: "offline",
 };
 
-/** One row of the card: a small monochrome icon, a label and its value. */
-function Row({
-  icon: Glyph,
+const HEALTH_GLYPH: Record<IntegrationView["token_health"], AgentStatus> = {
+  ok: "running",
+  expiring: "waityou",
+  needs_reauth: "waityou",
+  disconnected: "offline",
+};
+
+const SYNC_DOT: Record<IntegrationView["token_health"], DotTone> = {
+  ok: "success",
+  expiring: "attention",
+  needs_reauth: "attention",
+  disconnected: "muted",
+};
+
+/** One labelled line of the connection details (`.kv` in the demo's words). */
+function Detail({
   label,
   children,
   phone = true,
 }: {
-  icon: Icon;
   label: ReactNode;
   children: ReactNode;
   /** False: hidden on phones, which show fewer details (design/README.md, UX rule 11). */
@@ -63,28 +77,29 @@ function Row({
 }) {
   return (
     <div
-      className={
-        phone ? "flex items-start gap-3 py-2.5" : "flex items-start gap-3 py-2.5 max-sm:hidden"
-      }
+      className={cx(
+        "flex items-start justify-between gap-4 border-t border-line py-2.5 first:border-t-0",
+        !phone && "max-sm:hidden",
+      )}
     >
-      <dt className="flex w-28 shrink-0 items-center gap-1.5 text-body-sm text-muted max-sm:w-auto">
-        <Glyph aria-hidden="true" size={14} weight="duotone" />
-        {label}
-      </dt>
-      <dd className="m-0 min-w-0 grow text-body-sm text-primary">{children}</dd>
+      <dt className="shrink-0 text-caption font-light text-muted">{label}</dt>
+      <dd className="m-0 min-w-0 text-end text-body-sm">{children}</dd>
     </div>
   );
 }
 
 /**
- * A shop and its Etsy connection (slice 4.6): the status as a solid tag, the token health in
- * plain words, the granted access, and the last successful sync. Never a token.
+ * A shop and its Etsy connection (slice 4.6), in the Design 1C shop panel: the shop's name as
+ * the large identifier, the parcel, the planned sales tiles (Demo until orders sync, phase 5),
+ * then the real connection: health in plain words, the granted access, status and last sync.
+ * Never a token.
  */
 export function ShopCard({
   shop,
   integration,
   now,
   reconnect,
+  onRefresh,
   detailsLoading = false,
 }: {
   shop: ShopView;
@@ -95,6 +110,8 @@ export function ShopCard({
   now: number;
   /** The Owner's reconnect button, when the connection needs it. */
   reconnect?: ReactNode;
+  /** Loads the connection details again (Owners and Admins). */
+  onRefresh?: () => void;
 }) {
   const { t } = useLingui();
   const { locale } = useLocale();
@@ -131,89 +148,144 @@ export function ShopCard({
     }
   }
 
+  const asleep = integration?.status === "disconnected";
+
   return (
-    <article
-      aria-labelledby={titleId}
-      className="flex flex-col rounded-card border border-border-subtle bg-surface shadow-1"
-    >
-      <header className="flex items-center gap-3 px-4 pt-4 pb-3">
-        <ObjectIcon size="md" icon={Storefront} />
-        <div className="flex min-w-0 grow flex-col">
-          <h2 id={titleId} className="m-0 truncate text-body font-semibold">
-            {shop.name}
-          </h2>
-          <p className="m-0 truncate text-body-sm text-muted">
+    <Panel as="article" labelledBy={titleId} className="lg:min-h-full">
+      <PanelHeader
+        title={
+          <span className="ltr">
+            Etsy · <bdi>{shop.name}</bdi>
+          </span>
+        }
+        actions={
+          onRefresh === undefined ? undefined : (
+            <CircleButton
+              label={t`Refresh ${shop.name}`}
+              icon={<RefreshGlyph />}
+              onClick={onRefresh}
+            />
+          )
+        }
+      />
+      <div className="flex min-h-0 grow flex-col justify-between gap-4 overflow-auto px-6 pb-6">
+        <IdBlock label={<Trans>Shop:</Trans>} value={shop.name} valueId={titleId}>
+          <p className="m-0 mt-1 truncate text-caption font-light text-muted">
             {integration === undefined ? (
               <Trans>Etsy</Trans>
             ) : (
               <>
-                <Trans>Etsy shop</Trans>{" "}
-                <span className="max-sm:hidden">
-                  <Ltr>{integration.etsy_shop_id}</Ltr>
-                </span>
+                <Trans>Etsy shop</Trans> <Ltr>{integration.etsy_shop_id}</Ltr>
               </>
             )}
           </p>
+        </IdBlock>
+        <div className="flex min-h-20 grow basis-0 items-center justify-center max-lg:h-36 max-lg:grow-0 max-lg:basis-auto max-sm:h-24">
+          <img
+            src={parcel}
+            alt=""
+            draggable={false}
+            className={cx(
+              "h-full max-h-40 w-auto object-contain motion-safe:animate-[htco-float_6s_ease-in-out_infinite]",
+              asleep && "opacity-70 grayscale",
+            )}
+          />
         </div>
-        {integration === undefined ? null : (
-          <Tag hue={STATUS[integration.status].hue}>{statusLabel[integration.status]}</Tag>
-        )}
-      </header>
-      {detailsLoading ? (
-        <div className="flex flex-col divide-y divide-border-subtle border-t border-border-subtle px-4">
-          <span role="status" className="sr-only">
-            <Trans>Loading connection details</Trans>
-          </span>
-          {["w-3/5", "w-2/5", "w-1/2"].map((width) => (
-            <span key={width} aria-hidden="true" className="flex h-11 items-center gap-3">
-              <span className="size-4 shrink-0 rounded-[4px] bg-sunken motion-safe:animate-pulse" />
-              <span className={`h-2.5 rounded-pill bg-sunken motion-safe:animate-pulse ${width}`} />
+        <DemoPart tag="edge">
+          <div className="grid grid-cols-4 gap-2 max-sm:grid-cols-2 max-sm:[&>*:nth-child(n+3)]:hidden">
+            <Tile label={<Trans>Orders today</Trans>} value={<N>23</N>} />
+            <Tile label={<Trans>Revenue today</Trans>} value={<N>$842</N>} />
+            <Tile label={<Trans>Favourites</Trans>} value={<N>1,204</N>} />
+            <Tile label={<Trans>Rating</Trans>} value={<N>4.9</N>} />
+          </div>
+        </DemoPart>
+        {detailsLoading ? (
+          <div className="flex flex-col gap-3">
+            <span role="status" className="sr-only">
+              <Trans>Loading connection details</Trans>
             </span>
-          ))}
-        </div>
-      ) : null}
-      {integration === undefined || detailsLoading ? null : (
-        <>
-          <dl className="m-0 flex flex-col divide-y divide-border-subtle border-t border-border-subtle px-4">
-            <Row icon={PlugsConnected} label={<Trans>Connection</Trans>}>
-              <span className="inline-flex items-center gap-2">
-                <StatusDot status={HEALTH_DOT[integration.token_health]} />
-                <span>{health(integration)}</span>
+            {["w-3/5", "w-2/5"].map((width) => (
+              <span
+                key={width}
+                aria-hidden="true"
+                className="flex h-6 items-center justify-between gap-3"
+              >
+                <span className="h-2.5 w-16 rounded-pill bg-hover motion-safe:animate-pulse" />
+                <span
+                  className={`h-2.5 rounded-pill bg-hover motion-safe:animate-pulse ${width}`}
+                />
               </span>
-            </Row>
-            <Row icon={Key} label={<Trans>Access</Trans>} phone={false}>
-              {integration.scopes.length === 0 ? (
-                <span className="text-muted">
-                  <Trans>None</Trans>
+            ))}
+            <div aria-hidden="true" className="grid grid-cols-2 gap-2">
+              <span className="h-8 rounded-pill bg-hover motion-safe:animate-pulse" />
+              <span className="h-8 rounded-pill bg-hover motion-safe:animate-pulse" />
+            </div>
+          </div>
+        ) : null}
+        {integration === undefined || detailsLoading ? null : (
+          <div className="flex flex-col gap-4 motion-safe:animate-enter">
+            <dl className="m-0 flex flex-col">
+              <Detail label={<Trans>Connection</Trans>}>
+                <span className="inline-flex items-center gap-2">
+                  <StatusGlyph live status={HEALTH_GLYPH[integration.token_health]} />
+                  <span>{health(integration)}</span>
                 </span>
-              ) : (
-                <ul className="m-0 flex list-none flex-wrap gap-x-3 gap-y-1 p-0">
-                  {integration.scopes.map((scope) => (
-                    <li key={scope}>{scopeLabel[scope] ?? <Ltr>{scope}</Ltr>}</li>
-                  ))}
-                </ul>
-              )}
-            </Row>
-            <Row icon={ArrowsClockwise} label={<Trans>Last sync</Trans>}>
-              {integration.last_successful_call_at === null ? (
-                <span className="text-muted">
-                  <Trans>Not synced yet</Trans>
-                </span>
-              ) : (
-                <time dateTime={integration.last_successful_call_at}>
-                  {t`Last synced ${ago(integration.last_successful_call_at, now, locale)}`}
-                </time>
-              )}
-            </Row>
-          </dl>
-          {reconnect === undefined ? null : (
-            <footer className="border-t border-border-subtle px-4 py-3 max-sm:[&>*]:w-full">
-              {reconnect}
-            </footer>
-          )}
-        </>
-      )}
-    </article>
+              </Detail>
+              <Detail label={<Trans>Access</Trans>} phone={false}>
+                {integration.scopes.length === 0 ? (
+                  <span className="text-muted">
+                    <Trans>None</Trans>
+                  </span>
+                ) : (
+                  <ul className="m-0 flex list-none flex-wrap justify-end gap-1.5 p-0">
+                    {integration.scopes.map((scope) => (
+                      <li
+                        key={scope}
+                        className="inline-flex h-6 items-center rounded-pill bg-raised px-2.5 text-caption"
+                      >
+                        {scopeLabel[scope] ?? <Ltr>{scope}</Ltr>}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </Detail>
+            </dl>
+            <KV2
+              className="max-sm:grid-cols-1"
+              items={[
+                [
+                  <Trans>Status:</Trans>,
+                  <Pill wide>
+                    <StatusGlyph live status={STATUS_GLYPH[integration.status]} />
+                    <span className="truncate">{statusLabel[integration.status]}</span>
+                  </Pill>,
+                ],
+                [
+                  <Trans>Last sync:</Trans>,
+                  <Pill wide>
+                    <Dot tone={SYNC_DOT[integration.token_health]} />
+                    {integration.last_successful_call_at === null ? (
+                      <span className="truncate text-muted">
+                        <Trans>Not synced yet</Trans>
+                      </span>
+                    ) : (
+                      <time className="truncate" dateTime={integration.last_successful_call_at}>
+                        {t`Last synced ${ago(integration.last_successful_call_at, now, locale)}`}
+                      </time>
+                    )}
+                  </Pill>,
+                ],
+              ]}
+            />
+            {reconnect === undefined ? null : (
+              <div className="flex justify-center [&>*]:min-w-[200px] max-sm:[&>*]:w-full">
+                {reconnect}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </Panel>
   );
 }
 

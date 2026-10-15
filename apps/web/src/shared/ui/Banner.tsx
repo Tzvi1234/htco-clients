@@ -6,7 +6,7 @@ export function Banner({ children, action }: { children: ReactNode; action?: Rea
   return (
     <div
       role="status"
-      className="flex animate-enter items-center gap-2 bg-presence-saffron px-4 py-2 text-body-sm font-medium text-presence-fg sm:px-6"
+      className="flex animate-enter items-center gap-2 rounded-card bg-attention-subtle px-4 py-2 text-body-sm text-primary sm:px-6"
     >
       <CloudSlash aria-hidden="true" size={16} weight="duotone" className="shrink-0" />
       <p className="m-0 grow">{children}</p>

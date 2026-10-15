@@ -14,6 +14,12 @@ export function isPublished(token: Token): boolean {
   return !(group === "color" && subgroup === "brand");
 }
 
+/** Web-only effects (frosted glass, the designed ground behind it) stay out of native outputs. */
+export function isNative(token: Token): boolean {
+  if (!isPublished(token)) return false;
+  return token.path[0] !== "glass" && !(token.path[0] === "color" && token.path[1] === "bloom");
+}
+
 /** Semantic colours and elevation change with the theme; everything else is the same in both. */
 export function isThemed(token: Token): boolean {
   return token.type === "color" || token.path[0] === "elevation";
@@ -47,9 +53,11 @@ export function argb(color: DtcgColor): string {
   return `#${hex.join("").toUpperCase()}`;
 }
 
-/** Opaque colours as `#rrggbb`; translucent ones as `rgb(r g b / alpha)`. */
+/** Opaque colours as `#rrggbb`; translucent ones as `rgba(r, g, b, alpha)`. */
 export function cssColor(color: DtcgColor): string {
   const alpha = color.alpha ?? 1;
   if (alpha === 1) return color.hex.toLowerCase();
-  return `rgb(${channels(color).join(" ")} / ${String(alpha)})`;
+  // The legacy syntax, as Design 1C writes it: browsers keep its alpha at 8 bits, the same
+  // value the design renders with.
+  return `rgba(${channels(color).join(", ")}, ${String(alpha)})`;
 }

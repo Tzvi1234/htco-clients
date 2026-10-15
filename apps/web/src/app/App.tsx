@@ -9,8 +9,10 @@ import { LocaleProvider } from "../shared/i18n/LocaleProvider.tsx";
 import { IntroProvider } from "../shared/motion/intro.tsx";
 import type { Locale } from "../shared/i18n/locale.ts";
 import type { SettingsStorage } from "../shared/lib/storage.ts";
-import { ThemeProvider } from "../shared/theme/ThemeProvider.tsx";
+import { SettingsStorageContext } from "../shared/lib/storageContext.ts";
+import { TweaksProvider } from "../shared/theme/ThemeProvider.tsx";
 import type { ThemePreference } from "../shared/theme/theme.ts";
+import { readTweaks } from "../shared/theme/tweaks.ts";
 
 export interface AppProps {
   locale: Locale;
@@ -24,6 +26,8 @@ export interface AppProps {
 /** Providers and routes; `main.tsx` passes the device settings, tests pass their own. */
 export function App({ locale, theme, storage, history, api: given }: AppProps) {
   const [api] = useState(() => given ?? createApiClient());
+  // The theme and the design tweaks are one preference on this origin (client ADR-0008).
+  const [tweaks] = useState(() => ({ ...readTweaks(storage), theme }));
   const [{ queryClient, router }] = useState(() => {
     const client: QueryClient = new QueryClient({
       // A session that ended on the server (revoked elsewhere, expired): back to sign-in.
@@ -48,16 +52,18 @@ export function App({ locale, theme, storage, history, api: given }: AppProps) {
     return { queryClient: client, router: appRouter };
   });
   return (
-    <LocaleProvider initialLocale={locale} storage={storage}>
-      <ThemeProvider initialTheme={theme} storage={storage}>
-        <QueryClientProvider client={queryClient}>
-          <ApiProvider client={api}>
-            <IntroProvider storage={storage}>
-              <RouterProvider router={router} />
-            </IntroProvider>
-          </ApiProvider>
-        </QueryClientProvider>
-      </ThemeProvider>
-    </LocaleProvider>
+    <SettingsStorageContext value={storage}>
+      <LocaleProvider initialLocale={locale} storage={storage}>
+        <TweaksProvider initialTweaks={tweaks} storage={storage}>
+          <QueryClientProvider client={queryClient}>
+            <ApiProvider client={api}>
+              <IntroProvider storage={storage}>
+                <RouterProvider router={router} />
+              </IntroProvider>
+            </ApiProvider>
+          </QueryClientProvider>
+        </TweaksProvider>
+      </LocaleProvider>
+    </SettingsStorageContext>
   );
 }

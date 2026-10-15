@@ -40,6 +40,25 @@ Administration             users and roles · shop access · budgets and model p
 
 The office shows only recorded activity from the API (activity records, tasks, executions, routing decisions). It never fabricates or infers an employee's state: no recorded activity means no activity shown, and when the agent worker is offline every employee shows Offline and the office is read-only.
 
+## The web app's navigation (Design 1C, client ADR-0008)
+
+Seven areas in the owner's order and wording, defined once in `apps/web/src/app/shell/nav.ts`. Every tab has an address now; a tab that is not built shows the demo's full screen in the demo frame (dimmed, inert, the DEMO pill in the top bar; `features/*/demoScreens.tsx`) and carries a "Soon" tag ("בקרוב") in the sidebar, the flyout, the phone sheet and quick actions.
+
+| Area (he) | Tab | Address | Screen |
+|---|---|---|---|
+| Home (בית) | — | `/` | Built: greeting, shops, getting started; approvals, key numbers and the office pulse as demos |
+| Office (המשרד) | Floor · Chat · Team room · AI ops · Engineering | `/office/floor` · `/office/chat` · `/office/team` · `/office/aiops` · `/office/eng` | Soon (the demo's full screens in the demo frame; the floor is the living 3D office) |
+| Work (עבודה) | Tasks · Approvals · Activity | `/work/tasks` · `/work/approvals` · `/work/activity` | Soon (the demo's full screens in the demo frame) |
+| Commerce (מסחר) | Shops | `/shops` (also `/commerce/shops`; the Etsy return `/integrations/etsy/callback` belongs here) | Built: shops and their connection, connecting with the step-up code; sales tiles and top listings as demos |
+| | Orders · Products · Shipping · Suppliers | `/commerce/orders` · `/commerce/products` · `/commerce/shipping` · `/commerce/suppliers` | Soon (the demo's full screens in the demo frame) |
+| Customers (לקוחות) | Tickets · Customers · Mail · Marketing | `/customers/tickets` · `/customers/customers` · `/customers/mail` · `/customers/marketing` | Soon (the demo's full screens in the demo frame) |
+| Finance (כספים) | Overview · Ledger | `/finance/overview` · `/finance/ledger` | Soon (the demo's full screens in the demo frame) |
+| Admin (ניהול) | Health · Automations | `/admin/health` · `/admin/automations` | Soon (the demo's full screens in the demo frame) |
+| | Members & access | `/settings/team` (also `/admin/members`) | Built: members, inviting with the one-time link, role changes, shop access, removal; AI employees and the approval policy as demos |
+| | Settings | `/settings`, with Security at `/settings/security` (also `/admin/settings`) | Built: interface language, the design tweaks, access and security, Etsy connections; business settings, notifications and other connections as demos. Security: the second factor and signed-in devices; recovery as a demo |
+
+An area's own address (`/office`, `/work`, …) opens its first tab. The sidebar groups Home, then Workspace (Office to Finance), then System (Admin); on phones the tab bar carries Home, Office, Work and Commerce, and More opens every area.
+
 ## By platform and phase
 
 | Destination | Web | Android | Windows | Phase |
@@ -67,7 +86,7 @@ The office shows only recorded activity from the API (activity records, tasks, e
 
 ## Navigation patterns
 
-- **Web and Windows:** a sidebar at 1200 px and wider, a navigation rail between 640 and 1200 px; the top bar holds search, notifications and the user menu. The sidebar groups the office destinations under "Office" below the commerce destinations.
+- **Web and Windows:** the Design 1C floating sidebar (264 px) from 1360 px, its 72 px rail with the area flyout below that (the user's choice is remembered), and a tab bar under 640 px; the top bar holds the crumbs and title, language, approvals, search and the design tweaks; the account sits at the foot of the sidebar (in the top bar on phones).
 - **Android:** a `BottomBar` with up to five destinations: Overview, Approvals and Incidents first (Phase 16), then Orders and More by ADR. Approvals open in a bottom sheet with the full card. The office summary lives on Overview.
 - **Deep links:** every notification opens the exact object (`/approvals/{id}`, `/incidents/{id}`, `/orders/{id}`, `/office/employees/{id}`, `/office/automations/{id}/executions/{id}`) after authentication, and never shows another shop's object.
-- **The amber dot** appears on a destination only when something there waits for the user.
+- **The attention badge** (orange, or lemon in Design 4) appears on a destination only when something recorded there waits for the user.

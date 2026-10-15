@@ -1,0 +1,504 @@
+{
+  "$description": "Tweak 2 (frosted glass) at level 2, light; the designed ground (bloom) unless the palette is \"plain\".",
+  "color": {
+    "bg": {
+      "panel": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.8824,
+            0.8824,
+            0.8784
+          ],
+          "alpha": 0.52,
+          "hex": "#e1e1e0"
+        },
+        "$extensions": {
+          "app.htco.mix": {
+            "base": "color.bg.panel-base",
+            "amount": 0.52,
+            "with": {
+              "colorSpace": "srgb",
+              "components": [
+                0,
+                0,
+                0
+              ],
+              "alpha": 0,
+              "hex": "#000000"
+            }
+          }
+        },
+        "$description": "Glass panels: the panel base mixed with transparency (--panel)"
+      },
+      "raised": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            1,
+            1
+          ],
+          "alpha": 0.62,
+          "hex": "#ffffff"
+        }
+      },
+      "hover": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            1,
+            1
+          ],
+          "alpha": 0.4,
+          "hex": "#ffffff"
+        }
+      },
+      "sidebar": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.8824,
+            0.8824,
+            0.8784
+          ],
+          "alpha": 0.58,
+          "hex": "#e1e1e0"
+        },
+        "$extensions": {
+          "app.htco.mix": {
+            "base": "color.bg.panel-base",
+            "amount": 0.58,
+            "with": {
+              "colorSpace": "srgb",
+              "components": [
+                0,
+                0,
+                0
+              ],
+              "alpha": 0,
+              "hex": "#000000"
+            }
+          }
+        }
+      },
+      "menu": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            1,
+            1
+          ],
+          "alpha": 0.5332,
+          "hex": "#ffffff"
+        },
+        "$extensions": {
+          "app.htco.mix": {
+            "base": "color.bg.raised",
+            "amount": 0.86,
+            "with": {
+              "colorSpace": "srgb",
+              "components": [
+                0,
+                0,
+                0
+              ],
+              "alpha": 0,
+              "hex": "#000000"
+            }
+          }
+        }
+      },
+      "table-head": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.8824,
+            0.8824,
+            0.8784
+          ],
+          "alpha": 0.94,
+          "hex": "#e1e1e0"
+        },
+        "$extensions": {
+          "app.htco.mix": {
+            "base": "color.bg.panel-base",
+            "amount": 0.94,
+            "with": {
+              "colorSpace": "srgb",
+              "components": [
+                0,
+                0,
+                0
+              ],
+              "alpha": 0,
+              "hex": "#000000"
+            }
+          }
+        }
+      }
+    },
+    "border": {
+      "edge": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            1,
+            1
+          ],
+          "alpha": 0.7,
+          "hex": "#ffffff"
+        }
+      },
+      "sidebar": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            1,
+            1
+          ],
+          "alpha": 0.75,
+          "hex": "#ffffff"
+        }
+      },
+      "control": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.3765,
+            0.3765,
+            0.3765
+          ],
+          "alpha": 1,
+          "hex": "#606060"
+        }
+      }
+    },
+    "text": {
+      "secondary": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.2745,
+            0.2745,
+            0.2745
+          ],
+          "alpha": 1,
+          "hex": "#464646"
+        }
+      },
+      "muted": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.2745,
+            0.2745,
+            0.2745
+          ],
+          "alpha": 1,
+          "hex": "#464646"
+        }
+      }
+    },
+    "icon": {
+      "muted": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.3765,
+            0.3765,
+            0.3765
+          ],
+          "alpha": 1,
+          "hex": "#606060"
+        }
+      }
+    },
+    "accent": {
+      "text": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.4902,
+            0.1765,
+            0
+          ],
+          "alpha": 1,
+          "hex": "#7d2d00"
+        }
+      }
+    },
+    "attention": {
+      "text": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.4902,
+            0.1765,
+            0
+          ],
+          "alpha": 1,
+          "hex": "#7d2d00"
+        }
+      },
+      "dot": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.6627,
+            0.2392,
+            0
+          ],
+          "alpha": 1,
+          "hex": "#a93d00"
+        }
+      }
+    },
+    "success": {
+      "text": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1451,
+            0.3137,
+            0.0627
+          ],
+          "alpha": 1,
+          "hex": "#255010"
+        }
+      },
+      "dot": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1961,
+            0.4275,
+            0.0824
+          ],
+          "alpha": 1,
+          "hex": "#326d15"
+        }
+      }
+    },
+    "danger": {
+      "text": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.5765,
+            0,
+            0
+          ],
+          "alpha": 1,
+          "hex": "#930000"
+        }
+      },
+      "dot": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.7725,
+            0,
+            0
+          ],
+          "alpha": 1,
+          "hex": "#c50000"
+        }
+      }
+    },
+    "info": {
+      "text": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0,
+            0.2745,
+            0.5451
+          ],
+          "alpha": 1,
+          "hex": "#00468b"
+        }
+      },
+      "dot": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0,
+            0.3725,
+            0.7412
+          ],
+          "alpha": 1,
+          "hex": "#005fbd"
+        }
+      }
+    }
+  },
+  "elevation": {
+    "panel": {
+      "$type": "shadow",
+      "$value": [
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              1,
+              1,
+              1
+            ],
+            "alpha": 0.85,
+            "hex": "#ffffff"
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 1,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 0,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 0,
+            "unit": "px"
+          },
+          "inset": true
+        },
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0,
+              0,
+              0
+            ],
+            "alpha": 0.28,
+            "hex": "#000000"
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 12,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 32,
+            "unit": "px"
+          },
+          "spread": {
+            "value": -18,
+            "unit": "px"
+          }
+        }
+      ]
+    },
+    "sidebar": {
+      "$type": "shadow",
+      "$value": [
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              1,
+              1,
+              1
+            ],
+            "alpha": 0.9,
+            "hex": "#ffffff"
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 1,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 0,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 0,
+            "unit": "px"
+          },
+          "inset": true
+        },
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0,
+              0,
+              0
+            ],
+            "alpha": 0.3,
+            "hex": "#000000"
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 14,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 36,
+            "unit": "px"
+          },
+          "spread": {
+            "value": -18,
+            "unit": "px"
+          }
+        }
+      ]
+    }
+  },
+  "glass": {
+    "blur": {
+      "$type": "dimension",
+      "$value": {
+        "value": 18,
+        "unit": "px"
+      }
+    },
+    "saturate": {
+      "$type": "number",
+      "$value": 1.45
+    },
+    "brightness": {
+      "$type": "number",
+      "$value": 1
+    }
+  }
+}

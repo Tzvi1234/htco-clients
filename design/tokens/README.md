@@ -4,27 +4,32 @@ The single source of truth for colour, type, spacing, shape, motion and sizes on
 
 | File | Holds |
 |---|---|
-| [`base.json`](base.json) | Primitives: the three brand colours measured from the official logo, the full palette ramps, font families, type scale, spacing, radii, sizes, motion, breakpoints |
-| [`semantic.light.json`](semantic.light.json) | Semantic tokens for the light theme, as references into `base.json` |
-| [`semantic.dark.json`](semantic.dark.json) | The same semantic tokens for the dark theme |
+| [`base.json`](base.json) | Primitives: the brand colours, Design 1C's named colours for each palette and theme (`palette.sbb`, `palette.sbb-dark`, `palette.d4`, `palette.d4-dark`), the data-colour ramps, font families, type scale, spacing, radii, sizes, motion, glass, breakpoints |
+| [`semantic.light.json`](semantic.light.json) | Semantic tokens of the default palette (SBB), light theme, as references into `base.json` |
+| [`semantic.dark.json`](semantic.dark.json) | The same semantic tokens, dark theme |
+| [`modes/`](modes/) | Overlays: the Design 4 palette (`palette-d4.*`) and the tweak levels (`contrast-2/3.*`, `borders-2/3.*`, `glass-2/3.*`, `glass-2/3-d4.*`), each light and dark, setting only the tokens they change |
 
 Components use **semantic tokens only** (`color.text.primary`, `color.action.primary.bg`, `color.status.needs-you`). Primitives exist so the semantic layer can reference them; a component that reaches for `palette.turquoise.400` directly is a review finding.
 
-## Brand colours (Relay)
+## Brand colours (Design 1C)
 
 | Token | Hex | Role |
 |---|---|---|
-| `color.brand.iris` | `#4C3AC7` | The logo's CO; primary actions, links, selection, focus |
-| `color.brand.iris-bright` | `#7B66FF` | The CO on dark grounds |
-| `color.brand.saffron` | `#F2B72F` | The logo's dot; the decision ring ("needs you") |
-| `color.brand.ink` | `#16161A` | The logo's HT on light grounds; text |
-| `color.brand.paper` | `#FFFFFF` | Light ground |
+| `color.brand.orange` | `#FF7F36` | The logo's CO and the accent in the default palette |
+| `color.brand.ink` | `#000000` | The logo's HT and dot; text; the inverse fill |
+| `color.brand.lilac` | `#8C76D6` | The logo's CO and the accent in Design 4 |
+| `color.brand.lemon` | `#EDD803` | The logo's dot and attention in Design 4 |
+| `color.brand.cream` | `#F3F4EE` | The Design 4 ground |
 
-They replace the navy, turquoise and amber of version 1 ([client ADR-0007](../../docs/adr/0007-relay-design-language.md), superseding ADR-0005). Semantic groups added with Relay: `bg.sidebar`, `bg.hover`, `attention.ring`, `tag.<hue>.{bg,text,dot}` for seven hues, `presence.<hue>.{bg,fg}` for AI employee flags, and `illustration.*` for brand art. Type adds `font.family.display` (Rubik) and the `hero` size; radii gain `xs` (4 px, tags); motion gains `duration.draw` (400 ms).
+They replace Relay's iris and saffron ([client ADR-0008](../../docs/adr/0008-design-1c.md)). Semantic groups added with Design 1C: `bg.ground`, `bg.panel`, `bg.menu`, `bg.card`, `bg.table-head`, `inverse.*`, `accent.mark`, `accent.on-inverse`, `accent.on-fill`, `attention.fill`, `attention.on-fill`, `info.*`, `border.edge`, `border.sidebar`, `border.hover*`, `icon.faint`, `logo.*`, `bloom.*`, `elevation.panel`, `elevation.sidebar`, `elevation.popover`, and the web-only `glass.*`. Relay's names stay as aliases (`bg.canvas` is `{color.bg.panel}`), which the CSS keeps as `var()` links. Radii: `radius.xl` (16) for cards and `radius.xxl` (22) for panels.
+
+## Modes
+
+A mode is a palette (`sbb`, `plain`, `d4`), a theme and three tweak levels (`packages/design-tokens/src/modes.ts`). The web CSS puts each overlay group in a cascade layer keyed on `<html>` attributes (`data-pal`, `data-theme`, `data-t1`, `data-t2`, `data-t3`). Native outputs carry the default palette for now.
 
 ## Contrast guarantee
 
-Every text pair is at least 4.5:1 and every control boundary, focus ring and status dot at least 3:1, in both themes. The pairs checked are the ones the brand book names (text on each background, button labels on fills, badge text on its tint, dots on surfaces, tag text on its tint, presence names on their flags): 164 per theme, listed in [`packages/design-tokens/src/contrast.ts`](../../packages/design-tokens/src/contrast.ts). CI recomputes them from these files on every pull request and fails on any regression, and `pnpm tokens` refuses to build while one fails.
+Every text pair is at least 4.5:1 and every control boundary, focus ring and status dot at least 3:1, in every mode: 205 pairs (text and controls on every surface, labels on fills, coloured text on its tint, tags, presence flags) in each of 114 modes, listed in [`packages/design-tokens/src/contrast.ts`](../../packages/design-tokens/src/contrast.ts). Translucent glass surfaces are composited over each backdrop of their mode (the ground, or the bloom colours over both ends of its gradient) before measuring. CI recomputes them from these files on every pull request and fails on any regression, and `pnpm tokens` refuses to build while one fails.
 
 ## How tokens reach each platform
 

@@ -1,0 +1,140 @@
+/* Home (Design 1C `P.home`): the hero carousel and the phone order of the panels. */
+.k-stage.home-stage {
+  padding: 44px 72px 56px;
+}
+.home-hero-img {
+  position: absolute;
+  height: min(300px, 100%);
+  max-width: 86%;
+  object-fit: contain;
+  opacity: 0;
+  scale: 0.97;
+  translate: 0 6px;
+  transition:
+    opacity var(--motion-duration-slow) var(--motion-easing-standard),
+    scale var(--motion-duration-slow) var(--motion-easing-standard),
+    translate var(--motion-duration-slow) var(--motion-easing-standard);
+  pointer-events: none;
+  user-select: none;
+}
+.home-hero-img.home-hero-on {
+  opacity: 1;
+  scale: 1;
+  translate: 0 0;
+}
+/* Behind frosted glass the render sits on a white card, as in the design. */
+:root:is([data-t2="2"], [data-t2="3"]) .home-hero-img {
+  height: min(270px, 92%);
+  background: var(--bg-card);
+  border-radius: 20px;
+  padding: 14px;
+  box-shadow: var(--elevation-panel);
+}
+.home-hero-ix {
+  position: absolute;
+  top: 12px;
+  inset-inline-end: 16px;
+  height: 24px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-strong);
+  padding: 0 10px;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.home-hero-ix b {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.home-hero-foot {
+  position: absolute;
+  bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.home-hero-dots {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+}
+.home-hero-dots button {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--border-strong);
+  padding: 0;
+  transition:
+    width var(--motion-duration-base) var(--motion-easing-standard),
+    background-color var(--motion-duration-base) var(--motion-easing-standard);
+}
+/* A bigger hit area than the dot it shows. */
+.home-hero-dots button {
+  position: relative;
+}
+.home-hero-dots button::after {
+  content: "";
+  position: absolute;
+  inset: -8px -3px;
+}
+.home-hero-dots button:hover {
+  background: var(--border-hover);
+}
+.home-hero-dots button.home-dot-on {
+  width: 14px;
+  border-radius: 3px;
+  background: var(--text-primary);
+}
+[data-demo-part].home-orders-disc {
+  position: absolute;
+  bottom: 40px;
+  inset-inline-end: 20px;
+}
+@media (max-width: 1199.98px) {
+  .k-stage.home-stage {
+    padding-inline: 60px;
+  }
+  .home-hero-ix {
+    display: none;
+  }
+}
+
+/* Phones: today first, then getting started and the shop; fewer things, not smaller ones. */
+@media (max-width: 639.98px) {
+  .home-today {
+    order: 1;
+  }
+  .home-side {
+    order: 2;
+    display: contents;
+  }
+  .home-start {
+    order: 2;
+  }
+  .home-shop {
+    order: 3;
+  }
+  .home-needs {
+    order: 4;
+  }
+  .home-pulse {
+    order: 5;
+  }
+  .k-stage.home-stage {
+    min-height: 300px;
+    padding: 8px 52px 52px;
+  }
+  .home-hero-img {
+    height: 220px;
+  }
+  .home-needs .k-ap:nth-child(n + 3) {
+    display: none;
+  }
+  .home-orders-disc {
+    display: none;
+  }
+}

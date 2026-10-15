@@ -4,7 +4,9 @@ import { afterEach } from "vitest";
 
 afterEach(() => {
   cleanup();
-  document.documentElement.removeAttribute("data-theme");
+  for (const name of ["theme", "pal", "t1", "t2", "t3"]) {
+    document.documentElement.removeAttribute(`data-${name}`);
+  }
   document.documentElement.lang = "";
   document.documentElement.dir = "";
   localStorage.clear();

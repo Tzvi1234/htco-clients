@@ -17,7 +17,7 @@ export function IconButton({ icon, needsYou = false, className, ...props }: Icon
     <AriaButton
       {...props}
       className={cx(
-        "relative inline-flex size-8 cursor-default items-center justify-center rounded-control text-icon",
+        "relative inline-flex size-8 cursor-default items-center justify-center rounded-pill text-icon",
         "transition-colors duration-[var(--motion-duration-fast)] data-[hovered]:bg-hover data-[hovered]:text-primary data-[disabled]:opacity-45",
         className,
       )}
@@ -26,7 +26,7 @@ export function IconButton({ icon, needsYou = false, className, ...props }: Icon
       {needsYou ? (
         <span
           aria-hidden="true"
-          className="absolute end-1 top-1 size-2 rounded-pill bg-attention ring-2 ring-canvas"
+          className="absolute end-1 top-1 size-2 rounded-pill bg-attention ring-2 ring-panel"
         />
       ) : null}
     </AriaButton>
