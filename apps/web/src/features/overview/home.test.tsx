@@ -107,22 +107,22 @@ describe("Home (Design 1C P.home)", () => {
     );
   });
 
-  it("labels the parts that need unbuilt features as Demo, and they do nothing", async () => {
-    const { user, backend, history } = await open();
+  it("labels the parts that need unbuilt features as Demo and keeps them out of reach", async () => {
+    await open();
 
+    const parts = [...document.querySelectorAll("[data-demo-part]")];
+    expect(parts.length).toBeGreaterThanOrEqual(4);
+    for (const part of parts) {
+      expect(part).toHaveAttribute("inert");
+      expect(part).toHaveAttribute("aria-hidden", "true");
+      expect(part).toHaveTextContent("Demo");
+    }
     const needs = panel("What needs you");
-    expect(within(needs).getByText("Demo")).toBeInTheDocument();
-    expect(within(panel("Office pulse")).getByText("Demo")).toBeInTheDocument();
-    const numbers = screen.getByRole("list", { name: "Key numbers" });
-    expect(numbers.closest("[data-demo-part]")).not.toBeNull();
-
-    const before = backend.requests.length;
-    const [approve] = within(needs).getAllByRole("button", { name: "Approve" });
-    if (approve === undefined) throw new Error("No Approve button");
-    await user.click(approve);
-
-    expect(await screen.findByText("Demo — coming soon")).toBeInTheDocument();
-    expect(backend.requests.length).toBe(before);
-    expect(history.location.pathname).toBe("/");
+    expect(within(needs).queryByRole("button", { name: "Approve" })).not.toBeInTheDocument();
+    expect(within(needs).getByText("Demo — coming soon")).toBeInTheDocument();
+    expect(screen.queryByRole("list", { name: "Key numbers" })).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("list", { name: "Key numbers", hidden: true }).closest("[data-demo-part]"),
+    ).not.toBeNull();
   });
 });

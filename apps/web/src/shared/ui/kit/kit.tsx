@@ -675,7 +675,8 @@ export function DemoFrame({ children, className }: { children: ReactNode; classN
 
 /**
  * A part of a real screen that needs a feature we plan but have not built: the demo's design,
- * dimmed a little, with a small "Demo" label. Its controls are inert.
+ * dimmed a little, with a small "Demo" label. It is inert and hidden from assistive technology,
+ * which hears "Demo — coming soon" instead.
  */
 export function DemoPart({
   children,
@@ -690,24 +691,22 @@ export function DemoPart({
   as?: "div" | "section";
 }) {
   const { t } = useLingui();
-  const toast = useToast();
+  // Sample data is out of reach, as in DemoScreen: not focusable, not read as real data.
   return (
-    <Element
-      data-demo-part=""
-      className={cx("k-demopart", edge && "k-edge", className)}
-      onClickCapture={(event) => {
-        const control = (event.target as Element).closest(INTERACTIVE);
-        if (control === null) return;
-        event.preventDefault();
-        event.stopPropagation();
-        toast(t`Demo — coming soon`);
-      }}
-    >
-      <span className="k-demotag">
-        <i aria-hidden="true" />
-        {t`Demo`}
-      </span>
-      {children}
-    </Element>
+    <>
+      <Element
+        data-demo-part=""
+        inert
+        aria-hidden="true"
+        className={cx("k-demopart", edge && "k-edge", className)}
+      >
+        <span className="k-demotag">
+          <i />
+          {t`Demo`}
+        </span>
+        {children}
+      </Element>
+      <span className="sr-only">{t`Demo — coming soon`}</span>
+    </>
   );
 }
