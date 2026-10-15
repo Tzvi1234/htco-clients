@@ -85,7 +85,7 @@ export function WelcomePage() {
         </Link>
         <Link
           to="/sign-in"
-          className="inline-flex h-12 items-center gap-2 rounded-button bg-app px-6 text-body font-semibold text-app-text no-underline hover:bg-app-hover"
+          className="inline-flex h-12 items-center gap-2 rounded-button bg-inverse px-6 text-body font-semibold text-on-inverse no-underline hover:bg-inverse-hover"
         >
           <Trans>Open the web app</Trans>
           <ArrowRight aria-hidden="true" size={16} weight="bold" className="rtl:-scale-x-100" />
@@ -200,7 +200,7 @@ export function WelcomePage() {
 
         {/* How it works, on ink. */}
         <section id="how" aria-labelledby="how-title" className="px-4 sm:px-10">
-          <div className="grid items-center gap-12 rounded-[32px] bg-app px-6 py-14 text-app-text sm:px-16 lg:grid-cols-[1fr_1.15fr] lg:py-16">
+          <div className="grid items-center gap-12 rounded-[32px] bg-inverse px-6 py-14 text-on-inverse sm:px-16 lg:grid-cols-[1fr_1.15fr] lg:py-16">
             <div className="flex flex-col gap-8">
               <h2 id="how-title" className={cx(HEAD, "text-[44px] sm:text-[60px]")}>
                 <Trans>How it works.</Trans>
@@ -286,13 +286,16 @@ export function WelcomePage() {
       </main>
 
       <footer className="px-4 pb-6 sm:px-8">
-        <div className="flex flex-wrap items-center gap-6 rounded-[28px] bg-app px-8 py-7 text-title-sm text-app-muted sm:px-10">
-          <Logo height={34} onInk />
-          <span className="h-9 w-px bg-app-border max-sm:hidden" />
+        <div className="flex flex-wrap items-center gap-6 rounded-[28px] bg-inverse px-8 py-7 text-title-sm text-on-inverse-muted sm:px-10">
+          <Logo height={34} inverse />
+          <span className="h-9 w-px bg-inverse-border max-sm:hidden" />
           <span className="grow">
             <Trans>HT-Commerce by H.T.Z Studios</Trans>
           </span>
-          <Link to="/sign-in" className="font-semibold text-app-text no-underline hover:underline">
+          <Link
+            to="/sign-in"
+            className="font-semibold text-on-inverse no-underline hover:underline"
+          >
             <Trans>Sign in</Trans>
           </Link>
         </div>
@@ -304,12 +307,12 @@ export function WelcomePage() {
 function HowStep({ n, title, children }: { n: string; title: ReactNode; children: ReactNode }) {
   return (
     <li className="grid grid-cols-[72px_1fr] items-start gap-5">
-      <span className="tabular grid size-[68px] place-items-center rounded-pill bg-app-selected font-latin text-[26px] font-extrabold text-ring">
+      <span className="tabular grid size-[68px] place-items-center rounded-pill bg-inverse-hover font-latin text-[26px] font-extrabold text-ring">
         {n}
       </span>
       <div className="flex flex-col gap-1.5 pt-2">
         <h3 className="m-0 text-[22px] font-bold">{title}</h3>
-        <p className="m-0 text-title-sm text-app-muted">{children}</p>
+        <p className="m-0 text-title-sm text-on-inverse-muted">{children}</p>
       </div>
     </li>
   );

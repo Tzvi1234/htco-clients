@@ -1,12 +1,12 @@
 // A WinUI 3 ResourceDictionary: colour brushes in Light and Dark theme dictionaries, and the
 // theme-independent sizes as doubles and corner radii. The HighContrast dictionary, which maps
 // roles to Windows system colours, is designed with the Windows app (Phase 15).
-import { argb, GENERATED_HEADER, isPublished, pascal, publishedPath } from "./publish.ts";
+import { argb, GENERATED_HEADER, isNative, pascal, publishedPath } from "./publish.ts";
 import type { Token } from "./tokens.ts";
 
 const brushes = (tokens: Token[]): string[] =>
   tokens.flatMap((token) =>
-    token.type === "color" && isPublished(token)
+    token.type === "color" && isNative(token)
       ? [
           `            <SolidColorBrush x:Key="Htco${pascal(publishedPath(token))}Brush" Color="${argb(token.value)}" />`,
         ]
@@ -14,7 +14,7 @@ const brushes = (tokens: Token[]): string[] =>
   );
 
 function resource(token: Token): string | undefined {
-  if (token.type !== "dimension" || token.value.unit !== "px" || !isPublished(token)) {
+  if (token.type !== "dimension" || token.value.unit !== "px" || !isNative(token)) {
     return undefined;
   }
   const [group, kind] = token.path;

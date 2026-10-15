@@ -6,6 +6,25 @@ Actors follow the office model of [platform ADR-0012](https://github.com/Tzvi123
 
 Each implementation must cover, per component: every variant and size listed here; default, hover, focus, pressed, disabled, loading and error states where they apply; light and dark; left-to-right and right-to-left; an accessible name and keyboard or touch behaviour; and screenshot tests for he/en × light/dark.
 
+## Design 1C revision (2026-10-15)
+
+The design language changed to Design 1C ([client ADR-0008](../docs/adr/0008-design-1c.md)), superseding the Relay rules below. Where they disagree, the brand book wins. Built on the web so far:
+
+| Component | Design 1C rules |
+|---|---|
+| Button | Pills of 28, 32 or 40 px, 13 px regular; primary is the inverse (ink) fill; others outlined in `border.strong`, the outline darkens on hover; presses to 98% |
+| Circle button | 40 px circle with a hairline (`.cb`): top bar actions, the sidebar toggle, the area icons; the current area is the inverse fill |
+| Segmented (new) | A pill of exclusive options (a radio group): the top bar's language, and the tweaks' levels as one to three dots |
+| Panel (new) | The floating surface of every screen: radius 22, `bg.panel`, `border.edge`, glass when tweak 2 is on; a 56 px header with a 13 px title and a quiet meta line |
+| Sidebar | 264 px floating panel, a 72 px rail with a 208 px flyout; logo and toggle, shop card, Quick actions pill, areas as circle icons with names, tabs on a connector rail, the owner's card |
+| TopBar | 72 px on the ground: crumbs (12 px), the page's 24 px light title (the h1, placed by `PageHeader`), language, approvals, search, tweaks |
+| TabBar (phones, new) | A floating 64 px pill bar: Home, Office, Work, Commerce, More (a sheet with every area) |
+| QuickActions | Ctrl+K or ⌘K, the sidebar pill or the top bar's search; a 560 px panel over a veil of the ground, a pill search field, destinations grouped by area with Soon tags |
+| TweaksPanel (new) | 304 px: Theme (System · Light · Dark), contrast, glass and borders (three dots each), Palette and ground (SBB · Design 4 · Plain ground), Reset; opened by the top bar's TweaksButton, which counts the changed tweaks |
+| SoonTag, DemoBadge, DemoScreen (new) | "Soon" beside an unbuilt tab, in its own text colour; "Demo — coming soon" on a screen that shows only the design; DemoScreen is the frame for a tab whose screen is not built |
+| Toast | A 40 px ink pill at the bottom centre, 1.8 s, announced politely; confirmations only |
+| Logo | The owner's Design 1C logo, `full` or `mark`, colours from `logo.*`, the dot drops in once |
+
 ## Relay revision (2026-10-15)
 
 The design language changed to Relay ([client ADR-0007](../docs/adr/0007-relay-design-language.md)). Where this specification and the brand book disagree, the brand book's sizes and colours win. Built on the web so far:

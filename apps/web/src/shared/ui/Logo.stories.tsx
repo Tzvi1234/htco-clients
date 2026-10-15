@@ -21,12 +21,12 @@ export const Full: Story = {
 /** The "CO." mark for small places. */
 export const Mark: Story = { args: { variant: "mark" } };
 
-/** On the ink app ground (the sidebar). */
-export const OnInk: Story = {
-  args: { onInk: true },
+/** On the inverse (ink) fill. */
+export const Inverse: Story = {
+  args: { inverse: true },
   decorators: [
     (Story) => (
-      <div className="inline-block rounded-card bg-app p-4">
+      <div className="inline-block rounded-card bg-inverse p-4">
         <Story />
       </div>
     ),

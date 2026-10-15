@@ -91,7 +91,7 @@ export function TeamPage() {
   );
 }
 
-function useRoleLabel() {
+export function useRoleLabel() {
   const { t } = useLingui();
   return (role: string): string => {
     switch (role) {

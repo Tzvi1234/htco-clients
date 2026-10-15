@@ -14,6 +14,12 @@ export function isPublished(token: Token): boolean {
   return !(group === "color" && subgroup === "brand");
 }
 
+/** Web-only effects (frosted glass, the designed ground behind it) stay out of native outputs. */
+export function isNative(token: Token): boolean {
+  if (!isPublished(token)) return false;
+  return token.path[0] !== "glass" && !(token.path[0] === "color" && token.path[1] === "bloom");
+}
+
 /** Semantic colours and elevation change with the theme; everything else is the same in both. */
 export function isThemed(token: Token): boolean {
   return token.type === "color" || token.path[0] === "elevation";

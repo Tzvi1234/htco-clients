@@ -1,7 +1,6 @@
 import "@fontsource-variable/heebo";
-import "@fontsource-variable/inter";
+import "@fontsource-variable/outfit";
 import "@fontsource-variable/jetbrains-mono";
-import "@fontsource-variable/rubik";
 import "./styles.css";
 
 import { StrictMode } from "react";

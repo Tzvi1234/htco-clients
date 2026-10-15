@@ -11,6 +11,10 @@ msgstr ""
 msgid "{days, plural, one {Reconnect within # day} other {Reconnect within # days}}"
 msgstr "{days, plural, one {לחבר מחדש בתוך יום אחד} two {לחבר מחדש בתוך יומיים} other {לחבר מחדש בתוך # ימים}}"
 
+#: src/app/shell/Sidebar.tsx
+msgid "{name} tabs"
+msgstr "הכרטיסיות של {name}"
+
 #: src/features/overview/OverviewPage.tsx
 msgid "0 of 3 done"
 msgstr "0 מתוך 3 הושלמו"
@@ -39,13 +43,36 @@ msgstr "חשבון והעדפות"
 msgid "Active listings"
 msgstr "מודעות פעילות"
 
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Activity"
+msgstr "יומן פעילות"
+
 #: src/features/team/TeamPage.tsx
 msgid "Admin"
 msgstr "מנהל/ת"
 
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Admin"
+msgstr "ניהול"
+
 #: src/features/overview/OverviewPage.tsx
 msgid "After a shop is connected"
 msgstr "אחרי חיבור חנות"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "AI ops"
+msgstr "תפעול AI"
+
+#: src/app/shell/TabBar.tsx
+msgid "All areas"
+msgstr "כל האזורים"
+
+#: src/app/shell/ShopSwitcher.tsx
+msgid "All shops"
+msgstr "כל החנויות"
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "An AI office you control"
@@ -63,6 +90,15 @@ msgstr "Android"
 msgid "Any browser, nothing to install."
 msgstr "בכל דפדפן, בלי התקנה."
 
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Approvals"
+msgstr "אישורים"
+
+#: src/app/shell/Flyout.tsx
+msgid "Area"
+msgstr "אזור"
+
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "Ask for a new link"
 msgstr "בקשת קישור חדש"
@@ -79,6 +115,11 @@ msgstr "אפליקציית אימות"
 #: src/features/security/SecurityPage.tsx
 msgid "Authenticator app is set up"
 msgstr "אפליקציית האימות מוגדרת"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Automations"
+msgstr "אוטומציות"
 
 #: src/features/shops/EtsyCallbackPage.tsx
 msgid "Back to shops"
@@ -99,6 +140,11 @@ msgstr "ביטול"
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Cannot scan? Type this key into the app:"
 msgstr "לא מצליחים לסרוק? הקלידו באפליקציה את המפתח הזה:"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Chat"
+msgstr "צ׳אט"
 
 #: src/features/team/TeamPage.tsx
 msgid "Check the email address."
@@ -125,9 +171,23 @@ msgstr "בחר/י סיסמה ארוכה יותר שקשה לנחש."
 msgid "Choose a new password"
 msgstr "בחירת סיסמה חדשה"
 
+#: src/app/shell/Flyout.tsx
+#: src/app/shell/TabBar.tsx
+msgid "Close"
+msgstr "סגירה"
+
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Code from the app"
 msgstr "הקוד מהאפליקציה"
+
+#: src/app/shell/Sidebar.tsx
+msgid "Collapse the menu"
+msgstr "כיווץ התפריט"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Commerce"
+msgstr "מסחר"
 
 #: src/features/auth/SecondFactorPage.tsx
 #: src/features/shops/connectEtsy.tsx
@@ -199,12 +259,22 @@ msgstr "הועתק"
 msgid "Copy link"
 msgstr "העתקת הקישור"
 
+#: src/shared/theme/TweaksPanel.tsx
+msgid "Cream, lilac, orchid and lemon"
+msgstr "קרם, לילך, סחלב ולימון"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Customers"
+msgstr "לקוחות"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "Customers answered"
 msgstr "לקוחות מקבלים מענה"
 
 #: src/app/shell/UserMenu.tsx
 #: src/features/settings/SettingsPage.tsx
+#: src/shared/theme/TweaksPanel.tsx
 msgid "Dark"
 msgstr "כהה"
 
@@ -212,9 +282,25 @@ msgstr "כהה"
 msgid "Decisions waiting"
 msgstr "החלטות ממתינות"
 
+#: src/shared/ui/SoonTag.tsx
+msgid "Demo — coming soon"
+msgstr "הדגמה — בקרוב"
+
+#: src/shared/theme/TweaksPanel.tsx
+msgid "Design 4"
+msgstr "עיצוב 4"
+
+#: src/shared/theme/TweaksPanel.tsx
+msgid "Design tweaks"
+msgstr "התאמות עיצוב"
+
 #: src/features/team/TeamPage.tsx
 msgid "Developer"
 msgstr "מפתח/ת"
+
+#: src/shared/theme/TweaksPanel.tsx
+msgid "Different"
+msgstr "שונה"
 
 #: src/features/shops/ShopCard.tsx
 msgid "Disconnected"
@@ -232,11 +318,24 @@ msgstr "הורדה"
 msgid "Each specialist acts under your policies and handles the day-to-day."
 msgstr "כל מומחה פועל לפי המדיניות שלך ומטפל בשגרה."
 
+#: src/shared/theme/TweaksPanel.tsx
+msgid "Element borders"
+msgstr "קווי מסגרת"
+
+#: src/shared/theme/TweaksPanel.tsx
+msgid "Element vs. ground contrast"
+msgstr "ניגודיות רכיב ורקע"
+
 #: src/features/auth/ForgotPasswordPage.tsx
 #: src/features/auth/SignInPage.tsx
 #: src/features/team/TeamPage.tsx
 msgid "Email"
 msgstr "אימייל"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Engineering"
+msgstr "הנדסה"
 
 #: src/features/auth/ForgotPasswordPage.tsx
 msgid "Enter a valid email address."
@@ -270,10 +369,6 @@ msgstr "הזינו את האימייל."
 msgid "Etsy"
 msgstr "Etsy"
 
-#: src/app/shell/ShopSwitcher.tsx
-msgid "Etsy · not connected"
-msgstr "Etsy · לא מחוברת"
-
 #: src/features/shops/connectEtsy.tsx
 msgid "Etsy cannot be reached right now. Try again in a few minutes."
 msgstr "אין כרגע גישה ל-Etsy. אפשר לנסות שוב בעוד כמה דקות."
@@ -302,7 +397,16 @@ msgstr "כל הזמנה, מאומתת"
 msgid "Everything your Etsy shop needs, working together in one AI office."
 msgstr "כל מה שחנות ה-Etsy שלך צריכה, עובד יחד במשרד AI אחד."
 
+#: src/app/shell/Sidebar.tsx
+msgid "Expand the menu"
+msgstr "הרחבת התפריט"
+
 #: src/features/team/TeamPage.tsx
+msgid "Finance"
+msgstr "כספים"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
 msgid "Finance"
 msgstr "כספים"
 
@@ -310,9 +414,18 @@ msgstr "כספים"
 msgid "Finish connecting in the web app where you are signed in."
 msgstr "יש להשלים את החיבור באפליקציית הרשת שבה נכנסת לחשבון."
 
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Floor"
+msgstr "קומת המשרד"
+
 #: src/features/auth/SignInPage.tsx
 msgid "Forgot your password?"
 msgstr "שכחתם את הסיסמה?"
+
+#: src/shared/theme/TweaksPanel.tsx
+msgid "Frosted glass"
+msgstr "זכוכית חלבית"
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "Get the apps"
@@ -322,26 +435,31 @@ msgstr "לאפליקציות"
 msgid "Getting started"
 msgstr "צעדים ראשונים"
 
-#: src/app/shell/CommandMenu.tsx
-msgid "Go to security"
-msgstr "למעבר לאבטחה"
-
-#: src/app/shell/CommandMenu.tsx
-msgid "Go to settings"
-msgstr "למעבר להגדרות"
-
-#: src/app/shell/CommandMenu.tsx
-msgid "Go to shops"
-msgstr "למעבר לחנויות"
-
 #: src/app/RouteStates.tsx
-#: src/app/shell/CommandMenu.tsx
 msgid "Go to the overview"
 msgstr "למעבר לסקירה"
+
+#: src/shared/theme/TweaksPanel.tsx
+msgid "Gray and orange"
+msgstr "אפור וכתום"
+
+#: src/shared/theme/TweaksPanel.tsx
+msgid "Gray, with no blooms behind the glass"
+msgstr "אפור, בלי הילות מאחורי הזכוכית"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Health"
+msgstr "בריאות מערכת"
 
 #: src/features/auth/SignInPage.tsx
 msgid "Hide password"
 msgstr "הסתרת הסיסמה"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Home"
+msgstr "בית"
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "How it works"
@@ -408,6 +526,7 @@ msgstr "חבר/ה שהוזמנו"
 msgid "Key numbers"
 msgstr "מספרים מרכזיים"
 
+#: src/app/shell/TopBar.tsx
 #: src/app/shell/UserMenu.tsx
 #: src/features/settings/SettingsPage.tsx
 msgid "Language"
@@ -428,8 +547,14 @@ msgstr "סנכרון אחרון"
 msgid "Last synced {0}"
 msgstr "סונכרנה לאחרונה {0}"
 
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Ledger"
+msgstr "ספר חשבונות"
+
 #: src/app/shell/UserMenu.tsx
 #: src/features/settings/SettingsPage.tsx
+#: src/shared/theme/TweaksPanel.tsx
 msgid "Light"
 msgstr "בהירה"
 
@@ -445,12 +570,24 @@ msgstr "טוען את פרטי החיבור"
 msgid "Loading shops"
 msgstr "טוענים חנויות"
 
-#: src/app/shell/Navigation.tsx
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Mail"
+msgstr "דואר"
+
+#: src/app/shell/Sidebar.tsx
+#: src/app/shell/TabBar.tsx
 msgid "Main"
 msgstr "ראשי"
 
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Marketing"
+msgstr "שיווק"
+
 #: src/app/shell/UserMenu.tsx
 #: src/features/settings/SettingsPage.tsx
+#: src/shared/theme/TweaksPanel.tsx
 msgid "Match the system"
 msgstr "לפי המערכת"
 
@@ -462,9 +599,22 @@ msgstr "הכירו את המשרד"
 msgid "Members"
 msgstr "חברי צוות"
 
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Members & access"
+msgstr "חברים והרשאות"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "Messages sorted, drafted and escalated with the order history beside them."
 msgstr "הודעות ממוינות, מנוסחות ומועברות הלאה עם היסטוריית ההזמנה לצידן."
+
+#: src/app/shell/TabBar.tsx
+msgid "More"
+msgstr "עוד"
+
+#: src/app/shell/TabBar.tsx
+msgid "More areas"
+msgstr "אזורים נוספים"
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "Named specialists work under your policies and bring you every risky decision."
@@ -499,6 +649,10 @@ msgstr "עדיין אין חנויות"
 msgid "None"
 msgstr "אין"
 
+#: src/shared/theme/TweaksPanel.tsx
+msgid "Normal"
+msgstr "רגיל"
+
 #: src/features/shops/ShopCard.tsx
 msgid "Not synced yet"
 msgstr "עדיין לא סונכרנה"
@@ -515,6 +669,11 @@ msgstr "לא נמצאה התאמה."
 msgid "Numbers appear after a shop is connected."
 msgstr "המספרים יופיעו אחרי חיבור חנות."
 
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Office"
+msgstr "המשרד"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "One office for the whole business"
 msgstr "משרד אחד לכל העסק"
@@ -530,6 +689,11 @@ msgstr "לפתיחת אפליקציית הרשת"
 #: src/features/team/TeamPage.tsx
 msgid "Operations"
 msgstr "תפעול"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Orders"
+msgstr "הזמנות"
 
 #: src/features/overview/OverviewPage.tsx
 #: src/features/shops/ShopsPage.tsx
@@ -548,8 +712,12 @@ msgstr "הזמנות, מעקב ומסירה נבדקים מול המרקטפלי
 msgid "Orders, tracking and listings start flowing in."
 msgstr "הזמנות, מעקב ומודעות מתחילים לזרום."
 
-#: src/app/shell/Navigation.tsx
 #: src/features/overview/OverviewPage.tsx
+msgid "Overview"
+msgstr "סקירה"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
 msgid "Overview"
 msgstr "סקירה"
 
@@ -565,6 +733,10 @@ msgstr "בעלים ומנהלים נכנסים עם סיסמה וקוד מאפל
 msgid "Page not found"
 msgstr "הדף לא נמצא"
 
+#: src/shared/theme/TweaksPanel.tsx
+msgid "Palette and ground"
+msgstr "פלטה ורקע"
+
 #: src/features/auth/SignInPage.tsx
 msgid "Password"
 msgstr "סיסמה"
@@ -573,15 +745,29 @@ msgstr "סיסמה"
 msgid "Password and an authenticator app."
 msgstr "סיסמה ואפליקציית אימות."
 
+#: src/app/shell/TopBar.tsx
+msgid "Pending approvals"
+msgstr "אישורים ממתינים"
+
+#: src/shared/theme/TweaksPanel.tsx
+msgid "Plain ground"
+msgstr "רקע אחיד"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "Product"
 msgstr "המוצר"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Products"
+msgstr "מוצרים"
 
 #: src/features/auth/SecondFactorPage.tsx
 msgid "QR code for your authenticator app"
 msgstr "קוד QR לאפליקציית האימות"
 
 #: src/app/shell/CommandMenu.tsx
+#: src/app/shell/Sidebar.tsx
 msgid "Quick actions"
 msgstr "פעולות מהירות"
 
@@ -617,10 +803,6 @@ msgstr "יש לחבר מחדש כדי להמשיך לסנכרן"
 msgid "Reconnect today"
 msgstr "יש לחבר מחדש היום"
 
-#: src/app/shell/Navigation.tsx
-msgid "Records"
-msgstr "רשומות"
-
 #: src/features/auth/AcceptInvitePage.tsx
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "Repeat the password"
@@ -629,6 +811,10 @@ msgstr "הקלדת הסיסמה שוב"
 #: src/shared/ui/ErrorState.tsx
 msgid "Request ID <0>{requestId}</0>"
 msgstr "מזהה בקשה <0>{requestId}</0>"
+
+#: src/shared/theme/TweaksPanel.tsx
+msgid "Reset"
+msgstr "איפוס"
 
 #: src/features/auth/ForgotPasswordPage.tsx
 msgid "Reset your password"
@@ -655,9 +841,17 @@ msgstr "שמירה וכניסה"
 msgid "Scan the QR code with the app."
 msgstr "סרקו את קוד ה-QR באפליקציה."
 
+#: src/app/shell/TopBar.tsx
+msgid "Search"
+msgstr "חיפוש"
+
 #: src/app/shell/CommandMenu.tsx
 msgid "Search actions"
 msgstr "חיפוש פעולות"
+
+#: src/app/shell/CommandMenu.tsx
+msgid "Search screens and actions…"
+msgstr "חיפוש מסכים ופעולות…"
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "Sections"
@@ -667,6 +861,7 @@ msgstr "אזורים"
 msgid "Secure your account"
 msgstr "אבטחת החשבון"
 
+#: src/app/shell/CommandMenu.tsx
 #: src/app/shell/UserMenu.tsx
 #: src/features/security/SecurityPage.tsx
 msgid "Security"
@@ -700,23 +895,41 @@ msgstr "הגדרת אפליקציית אימות"
 msgid "Set your password"
 msgstr "בחירת סיסמה"
 
-#: src/app/shell/Navigation.tsx
+#: src/app/shell/UserMenu.tsx
 #: src/features/settings/SettingsPage.tsx
 msgid "Settings"
 msgstr "הגדרות"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Settings"
+msgstr "הגדרות"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Shipping"
+msgstr "משלוחים"
 
 #: src/features/shops/ShopsPage.tsx
 msgid "Shop"
 msgstr "חנות"
 
-#: src/app/shell/Navigation.tsx
 #: src/features/shops/ShopsPage.tsx
+msgid "Shops"
+msgstr "חנויות"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
 msgid "Shops"
 msgstr "חנויות"
 
 #: src/features/shops/ShopsPage.tsx
 msgid "Shops could not be loaded"
 msgstr "לא ניתן לטעון את החנויות"
+
+#: src/app/shell/ShopSwitcher.tsx
+msgid "Shops: {name}"
+msgstr "חנויות: {name}"
 
 #: src/features/auth/SignInPage.tsx
 msgid "Show password"
@@ -725,6 +938,10 @@ msgstr "הצגת הסיסמה"
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Show the QR code"
 msgstr "הצגת קוד ה-QR"
+
+#: src/app/shell/Sidebar.tsx
+msgid "Sidebar"
+msgstr "סרגל צד"
 
 #: src/features/auth/SignInPage.tsx
 #: src/features/welcome/WelcomePage.tsx
@@ -757,6 +974,10 @@ msgstr "מכשירים מחוברים"
 msgid "Something went wrong while showing it. Try again; your data was not changed."
 msgstr "משהו השתבש בהצגת המסך. אפשר לנסות שוב; הנתונים לא השתנו."
 
+#: src/shared/ui/SoonTag.tsx
+msgid "Soon"
+msgstr "בקרוב"
+
 #: src/features/overview/OverviewPage.tsx
 msgid "Specialists for listings, orders, customers and money work on your shop under your policies, and bring you every risky decision."
 msgstr "מומחים למודעות, הזמנות, לקוחות וכספים עובדים על החנות שלך לפי המדיניות שלך, ומביאים אליך כל החלטה מסוכנת."
@@ -764,6 +985,11 @@ msgstr "מומחים למודעות, הזמנות, לקוחות וכספים ע�
 #: src/features/overview/OverviewPage.tsx
 msgid "Start with your shop"
 msgstr "מתחילים מהחנות"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Suppliers"
+msgstr "ספקים"
 
 #: src/features/team/TeamPage.tsx
 msgid "Support"
@@ -773,10 +999,25 @@ msgstr "תמיכה"
 msgid "Sync"
 msgstr "סנכרון"
 
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "System"
+msgstr "מערכת"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Tasks"
+msgstr "משימות"
+
 #: src/features/settings/SettingsPage.tsx
 #: src/features/team/TeamPage.tsx
 msgid "Team"
 msgstr "צוות"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Team room"
+msgstr "חדר צוות"
 
 #: src/app/RouteStates.tsx
 msgid "The address may be mistyped, or the page has moved."
@@ -826,6 +1067,7 @@ msgstr "הבעלים של סביבת העבודה מחברים חנויות."
 
 #: src/app/shell/UserMenu.tsx
 #: src/features/settings/SettingsPage.tsx
+#: src/shared/theme/TweaksPanel.tsx
 msgid "Theme"
 msgstr "ערכת נושא"
 
@@ -887,9 +1129,18 @@ msgstr "האדם הזה כבר חבר בצוות."
 msgid "This screen could not be shown"
 msgstr "לא ניתן להציג את המסך"
 
+#: src/shared/ui/DemoScreen.tsx
+msgid "This screen is part of the new design and is being built. Nothing on it is live yet."
+msgstr "המסך הזה הוא חלק מהעיצוב החדש ונמצא בבנייה. שום דבר בו עוד לא פעיל."
+
 #: src/features/shops/EtsyCallbackPage.tsx
 msgid "This takes a few seconds. Keep this page open."
 msgstr "זה לוקח כמה שניות. נא להשאיר את העמוד פתוח."
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Tickets"
+msgstr "פניות"
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "Titles, photos and claims audited and fixed as drafts you approve."
@@ -912,10 +1163,6 @@ msgstr "לנסות שוב"
 msgid "Two-factor sign-in"
 msgstr "כניסה דו-שלבית"
 
-#: src/app/shell/CommandMenu.tsx
-msgid "Type a command or a page"
-msgstr "הקלידו פעולה או עמוד"
-
 #: src/features/security/SecurityPage.tsx
 msgid "Unknown device"
 msgstr "מכשיר לא מזוהה"
@@ -928,6 +1175,10 @@ msgstr "השתמש/י ב-12 עד 128 תווים."
 #: src/features/welcome/WelcomePage.tsx
 msgid "Use it anywhere"
 msgstr "בכל מקום"
+
+#: src/shared/theme/TweaksPanel.tsx
+msgid "Very different"
+msgstr "שונה מאוד"
 
 #: src/features/team/TeamPage.tsx
 msgid "Viewer"
@@ -945,8 +1196,21 @@ msgstr "רשת"
 msgid "Windows"
 msgstr "Windows"
 
-#: src/app/shell/Navigation.tsx
+#: src/shared/theme/TweaksPanel.tsx
+msgid "With the Design 4 palette, contrast and borders come from the palette; glass still applies."
+msgstr "בפלטת עיצוב 4 הניגודיות וקווי המסגרת נקבעים לפי הפלטה; הזכוכית ממשיכה לפעול."
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Work"
+msgstr "עבודה"
+
 #: src/shared/ui/WorkspacePicker.tsx
+msgid "Workspace"
+msgstr "סביבת עבודה"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
 msgid "Workspace"
 msgstr "סביבת עבודה"
 

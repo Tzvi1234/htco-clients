@@ -1,11 +1,21 @@
-import type { ReactNode } from "react";
+import { createContext, use, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 
 import { Aura } from "../art/Aura.tsx";
 import { cx } from "../lib/cx.ts";
 
 /**
- * The page's top bar (Attio): the object icon, the title (the page's only h1), a short
- * description beside it on wide screens, and the page's actions at the end.
+ * Where the app shell's top bar takes the page title: an element once the shell has mounted,
+ * `null` while it mounts, and `undefined` outside a shell (stories, the landing page).
+ */
+export const TopBarSlotContext = createContext<HTMLElement | null | undefined>(undefined);
+
+const TITLE = "m-0 truncate text-title-lg font-light font-display";
+
+/**
+ * The page's title (its only h1). Inside the app shell it sits in the top bar under the crumbs,
+ * light and 24 px (Design 1C); a description and the page's actions open the page's content.
+ * Elsewhere it renders in place.
  */
 export function PageHeader({
   title,
@@ -18,30 +28,40 @@ export function PageHeader({
   icon?: ReactNode;
   actions?: ReactNode;
 }) {
-  return (
-    <header className="sticky top-0 z-10 flex min-h-12 flex-wrap items-center gap-x-3 gap-y-1 border-b border-border-subtle bg-canvas px-4 py-2 max-sm:static max-sm:border-0 max-sm:bg-transparent max-sm:pt-6 max-sm:pb-0 sm:px-6">
-      <div className="flex min-w-0 grow items-center gap-2">
-        <span className="max-sm:hidden">{icon}</span>
-        <h1 className="m-0 truncate text-body font-semibold max-sm:text-[32px] max-sm:leading-tight max-sm:font-extrabold max-sm:tracking-[-0.02em]">
-          {title}
-        </h1>
-        {description === undefined ? null : (
-          <p className="m-0 hidden min-w-0 truncate text-body-sm text-muted md:block">
-            <span aria-hidden="true" className="me-2 text-border-strong">
-              /
-            </span>
-            {description}
-          </p>
+  const slot = use(TopBarSlotContext);
+  const extras =
+    description === undefined && actions === undefined ? null : (
+      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 pt-5 sm:px-6">
+        {description === undefined ? (
+          <span />
+        ) : (
+          <p className="m-0 min-w-0 text-body-sm font-light text-muted">{description}</p>
         )}
+        {actions === undefined ? null : <div className="flex items-center gap-2">{actions}</div>}
       </div>
-      {actions === undefined ? null : <div className="flex items-center gap-2">{actions}</div>}
-    </header>
+    );
+  if (slot === undefined) {
+    return (
+      <header className="flex flex-col">
+        <div className="flex min-w-0 items-center gap-2 px-4 pt-5 sm:px-6">
+          {icon}
+          <h1 className={TITLE}>{title}</h1>
+        </div>
+        {extras}
+      </header>
+    );
+  }
+  return (
+    <>
+      {slot === null ? null : createPortal(<h1 className={TITLE}>{title}</h1>, slot)}
+      {extras}
+    </>
   );
 }
 
 /**
- * The page's content under its header: gutters and a calm entrance. `aura` adds the faint
- * brand glow at the top (home and other greeting pages, never behind a table).
+ * The page's content: gutters and a calm entrance. `aura` adds the brand shapes at the top
+ * (home and other greeting pages, never behind a table).
  */
 export function PageBody({
   children,
@@ -56,7 +76,7 @@ export function PageBody({
     <div
       className={cx(
         "relative isolate flex animate-enter flex-col",
-        !flush && "gap-6 px-4 py-6 sm:px-6 lg:px-8",
+        !flush && "gap-6 px-4 py-6 sm:px-6",
       )}
     >
       {aura ? <Aura variant="page" className="-z-10" /> : null}

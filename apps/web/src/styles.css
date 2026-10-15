@@ -1,5 +1,6 @@
-/* The HTCO Relay design tokens drive every utility: Tailwind's own palette, radii and shadows are
-   removed, so only token-backed classes exist ("tokens only", design/README.md). */
+/* The HTCO Design 1C tokens drive every utility: Tailwind's own palette, radii and shadows are
+   removed, so only token-backed classes exist ("tokens only", design/README.md). The palette,
+   the theme and the tweaks are data attributes on <html> (client ADR-0008). */
 @import "tailwindcss";
 @import "@htco/design-tokens/tokens.css";
 
@@ -15,22 +16,38 @@
   }
 }
 
+/* `glass:` styles only while frosted glass (tweak 2) is on. */
+@custom-variant glass {
+  &:where(:root:is([data-t2="2"], [data-t2="3"]) *) {
+    @slot;
+  }
+}
+
 @theme inline {
   --color-*: initial;
-  --color-app: var(--bg-app);
-  --color-app-text: var(--app-text);
-  --color-app-muted: var(--app-text-muted);
-  --color-app-hover: var(--app-hover);
-  --color-app-selected: var(--app-selected);
-  --color-app-border: var(--app-border);
-  --color-canvas: var(--bg-canvas);
-  --color-sidebar: var(--bg-sidebar);
-  --color-surface: var(--bg-surface);
+  /* Design 1C surfaces */
+  --color-ground: var(--bg-ground);
+  --color-panel: var(--bg-panel);
   --color-raised: var(--bg-raised);
-  --color-sunken: var(--bg-sunken);
+  --color-sidebar: var(--bg-sidebar);
   --color-hover: var(--bg-hover);
   --color-selected: var(--bg-selected);
+  --color-menu: var(--bg-menu);
+  --color-card: var(--bg-card);
+  --color-table-head: var(--bg-table-head);
+  /* legacy surface names, following the core ones */
+  --color-app: var(--bg-app);
+  --color-canvas: var(--bg-canvas);
+  --color-surface: var(--bg-surface);
+  --color-sunken: var(--bg-sunken);
   --color-brand: var(--bg-brand);
+  /* the inverse fill: active pills, the current item, primary buttons */
+  --color-inverse: var(--inverse-bg);
+  --color-inverse-hover: var(--inverse-bg-hover);
+  --color-on-inverse: var(--inverse-text);
+  --color-on-inverse-muted: var(--inverse-text-muted);
+  --color-inverse-border: var(--inverse-border);
+  /* text and icons */
   --color-primary: var(--text-primary);
   --color-secondary: var(--text-secondary);
   --color-muted: var(--text-muted);
@@ -38,10 +55,19 @@
   --color-link: var(--text-link);
   --color-icon: var(--icon-default);
   --color-icon-muted: var(--icon-muted);
+  --color-faint: var(--icon-faint);
+  /* lines */
+  --color-line: var(--border-subtle);
+  --color-line-strong: var(--border-strong);
+  --color-edge: var(--border-edge);
+  --color-sidebar-line: var(--border-sidebar);
+  --color-line-hover: var(--border-hover);
+  --color-line-hover-strong: var(--border-hover-strong);
   --color-border-subtle: var(--border-subtle);
   --color-border-strong: var(--border-strong);
   --color-border-control: var(--border-control);
   --color-focus: var(--border-focus);
+  /* actions */
   --color-action-primary: var(--action-primary-bg);
   --color-action-primary-hover: var(--action-primary-bg-hover);
   --color-action-primary-pressed: var(--action-primary-bg-pressed);
@@ -52,9 +78,15 @@
   --color-action-secondary-border: var(--action-secondary-border);
   --color-action-danger: var(--action-danger-bg);
   --color-action-danger-fg: var(--action-danger-fg);
+  /* accent (orange in SBB, lilac in Design 4) and attention (orange, or lemon) */
   --color-accent: var(--accent-fill);
+  --color-on-accent: var(--accent-on-fill);
+  --color-accent-mark: var(--accent-mark);
+  --color-accent-on-inverse: var(--accent-on-inverse);
   --color-accent-text: var(--accent-text);
   --color-accent-subtle: var(--accent-subtle);
+  --color-attention-fill: var(--attention-fill);
+  --color-on-attention: var(--attention-on-fill);
   --color-attention: var(--attention-dot);
   --color-attention-text: var(--attention-text);
   --color-attention-subtle: var(--attention-subtle);
@@ -65,11 +97,14 @@
   --color-danger: var(--danger-dot);
   --color-danger-text: var(--danger-text);
   --color-danger-subtle: var(--danger-subtle);
+  --color-info: var(--info-dot);
+  --color-info-text: var(--info-text);
   --color-status-running: var(--status-running);
   --color-status-needs-you: var(--status-needs-you);
   --color-status-waiting: var(--status-waiting);
   --color-status-done: var(--status-done);
   --color-status-failed: var(--status-failed);
+  /* data colours kept from Relay for tags, presence flags and brand art */
   --color-tag-iris: var(--tag-iris-bg);
   --color-tag-iris-text: var(--tag-iris-text);
   --color-tag-iris-dot: var(--tag-iris-dot);
@@ -130,26 +165,36 @@
   --text-title-sm--line-height: var(--font-line-height-title-sm);
   --text-title: var(--font-size-title);
   --text-title--line-height: var(--font-line-height-title);
+  --text-title-lg: var(--font-size-title-lg);
+  --text-title-lg--line-height: var(--font-line-height-title-lg);
   --text-display-sm: var(--font-size-display-sm);
   --text-display-sm--line-height: var(--font-line-height-display-sm);
+  --text-number-lg: var(--font-size-number-lg);
+  --text-number-lg--line-height: var(--font-line-height-number-lg);
   --text-display: var(--font-size-display);
   --text-display--line-height: var(--font-line-height-display);
+  --text-number-xl: var(--font-size-number-xl);
+  --text-number-xl--line-height: var(--font-line-height-number-xl);
   --text-hero: var(--font-size-hero);
   --text-hero--line-height: var(--font-line-height-hero);
 
-  /* Radii by role (design/README.md, "Shape"). */
+  /* Radii by role (design/README.md, "Shape"): panels 22, cards 16, pills round. */
   --radius-*: initial;
   --radius-tag: var(--radius-xs);
   --radius-control: var(--radius-sm);
-  --radius-button: var(--radius-md);
-  --radius-card: var(--radius-lg);
-  --radius-dialog: var(--radius-xl);
+  --radius-button: var(--radius-full);
+  --radius-card: var(--radius-xl);
+  --radius-panel: var(--radius-xxl);
+  --radius-dialog: var(--radius-xxl);
   --radius-pill: var(--radius-full);
 
   --shadow-*: initial;
   --shadow-1: var(--elevation-1);
   --shadow-2: var(--elevation-2);
   --shadow-3: var(--elevation-3);
+  --shadow-panel: var(--elevation-panel);
+  --shadow-sidebar: var(--elevation-sidebar);
+  --shadow-popover: var(--elevation-popover);
 
   --breakpoint-*: initial;
   --breakpoint-sm: 640px;
@@ -160,29 +205,63 @@
   --ease-standard: var(--motion-easing-standard);
   --ease-enter: var(--motion-easing-enter);
 
-  --animate-enter: relay-enter var(--motion-duration-base) var(--motion-easing-enter) both;
-  --animate-sidebar-in: relay-sidebar-in var(--motion-duration-slow) var(--motion-easing-enter) both;
-  --animate-dot-drop: relay-dot-drop 520ms cubic-bezier(0.3, 0, 0, 1.25) both;
-  --animate-ring-draw: relay-ring-draw var(--motion-duration-draw) var(--motion-easing-enter) both;
-  --animate-art-in: relay-art-in 520ms var(--motion-easing-enter) both;
+  --animate-enter: htco-enter var(--motion-duration-base) var(--motion-easing-enter) both;
+  --animate-pop-in: htco-pop-in var(--motion-duration-base) var(--motion-easing-standard) both;
+  --animate-fly-in: htco-fly-in var(--motion-duration-slow) var(--motion-easing-standard) both;
+  --animate-sidebar-in: htco-sidebar-in var(--motion-duration-slow) var(--motion-easing-enter) both;
+  --animate-dot-drop: htco-dot-drop 520ms cubic-bezier(0.3, 0, 0, 1.25) both;
+  --animate-ring-draw: htco-ring-draw var(--motion-duration-draw) var(--motion-easing-enter) both;
+  --animate-art-in: htco-art-in 520ms var(--motion-easing-enter) both;
 }
 
-/* Motion (design/README.md, "Motion"): opacity and short travel only, never on scroll. */
-@keyframes relay-enter {
+/* Motion (design/README.md, "Motion"): opacity and short travel, one curve, never on scroll. */
+@keyframes htco-enter {
   from {
     opacity: 0;
     translate: 0 4px;
   }
 }
 
-@keyframes relay-sidebar-in {
+/* Menus, the palette, the tweaks panel: a short drop and fade. */
+@keyframes htco-pop-in {
   from {
     opacity: 0;
-    translate: calc(-8px * var(--relay-direction, 1)) 0;
+    translate: 0 -4px;
+    scale: 0.98;
   }
 }
 
-@keyframes relay-dot-drop {
+/* The flyout beside the collapsed sidebar slides in from the inline start (the demo's flyIn). */
+@keyframes htco-fly-in {
+  from {
+    opacity: 0;
+    translate: calc(-12px * var(--htco-direction, 1)) 0;
+  }
+}
+
+/* The sidebar's labels fade back in as it opens. */
+@keyframes htco-label-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* The phone's sheet of every area rises from the bottom. */
+@keyframes htco-sheet-in {
+  from {
+    translate: 0 24px;
+    opacity: 0;
+  }
+}
+
+@keyframes htco-sidebar-in {
+  from {
+    opacity: 0;
+    translate: calc(-8px * var(--htco-direction, 1)) 0;
+  }
+}
+
+@keyframes htco-dot-drop {
   0% {
     opacity: 0;
     translate: 0 -10px;
@@ -190,7 +269,7 @@
   }
 }
 
-@keyframes relay-ring-draw {
+@keyframes htco-ring-draw {
   from {
     stroke-dashoffset: 1;
   }
@@ -199,19 +278,81 @@
   }
 }
 
-@keyframes relay-art-in {
+@keyframes htco-art-in {
   from {
     opacity: 0;
     translate: 0 12px;
   }
 }
 
+/* Each screen's panels change with a short cross-fade and rise (View Transitions). */
+@keyframes htco-screen-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes htco-screen-in {
+  from {
+    opacity: 0;
+    translate: 0 6px;
+  }
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+
+::view-transition-old(screen) {
+  animation: htco-screen-out var(--motion-duration-fast) var(--motion-easing-exit) both;
+}
+
+::view-transition-new(screen) {
+  animation: htco-screen-in var(--motion-duration-base) var(--motion-easing-standard) both;
+}
+
 @layer base {
+  :root {
+    /* Glass is off unless tweak 2 turns it on; the designed ground only shows behind glass. */
+    --glass-backdrop: none;
+    --bloom: none;
+  }
+
+  :root:is([data-t2="2"], [data-t2="3"]) {
+    --glass-backdrop: blur(var(--glass-blur)) saturate(var(--glass-saturate))
+      brightness(var(--glass-brightness));
+  }
+
+  /* The designed ground behind the glass: soft blooms in the palette (Design 1C). */
+  :root:is([data-t2="2"], [data-t2="3"]):not([data-pal="plain"], [data-pal="d4"]) {
+    --bloom:
+      radial-gradient(38vw 38vw at 74% 14%, var(--bloom-1), transparent 70%),
+      radial-gradient(30vw 30vw at 96% 92%, var(--bloom-2), transparent 70%),
+      radial-gradient(46vw 46vw at 8% 88%, var(--bloom-3), transparent 70%),
+      radial-gradient(34vw 30vw at 40% 46%, var(--bloom-4), transparent 70%),
+      radial-gradient(28vw 28vw at 12% 10%, var(--bloom-5), transparent 70%),
+      linear-gradient(160deg, var(--bloom-start), var(--bloom-end));
+  }
+
+  :root[data-pal="d4"]:is([data-t2="2"], [data-t2="3"]) {
+    --bloom:
+      radial-gradient(40vw 40vw at 76% 12%, var(--bloom-1), transparent 70%),
+      radial-gradient(36vw 36vw at 12% 86%, var(--bloom-2), transparent 70%),
+      radial-gradient(22vw 22vw at 92% 88%, var(--bloom-3), transparent 70%),
+      radial-gradient(34vw 30vw at 44% 50%, var(--bloom-4), transparent 70%),
+      linear-gradient(160deg, var(--bloom-start), var(--bloom-end));
+  }
+
   html {
-    background: var(--bg-app);
+    background-color: var(--bg-ground);
+    background-image: var(--bloom);
+    background-attachment: fixed;
+    background-size: 100% 100%;
     color: var(--text-primary);
     font-family: var(--font-family-latin);
     font-size: 100%;
+    font-weight: var(--font-weight-regular);
     -webkit-font-smoothing: antialiased;
   }
 
@@ -220,13 +361,13 @@
   }
 
   :root[dir="rtl"] {
-    --relay-direction: -1;
+    --htco-direction: -1;
   }
 
   body {
     margin: 0;
     font-size: var(--font-size-body);
-    line-height: var(--font-line-height-body);
+    line-height: 1.4;
   }
 
   h1,
@@ -250,6 +391,12 @@
       animation: none !important;
       transition-duration: 1ms !important;
     }
+
+    ::view-transition-group(*),
+    ::view-transition-old(*),
+    ::view-transition-new(*) {
+      animation: none !important;
+    }
   }
 }
 
@@ -258,9 +405,20 @@
     font-variant-numeric: tabular-nums;
   }
 
-  /* The display face (Rubik, Hebrew and English alike) is set a little tighter. */
+  /* Titles and numbers are set a little tighter. */
   .font-display {
     letter-spacing: var(--font-tracking-display);
+  }
+
+  /* Frosted glass on floating surfaces (panels, the sidebar, menus) when tweak 2 is on. */
+  .glass {
+    backdrop-filter: var(--glass-backdrop);
+  }
+
+  /* Codes, numbers and Latin names inside Hebrew text keep their own direction. */
+  .ltr {
+    direction: ltr;
+    unicode-bidi: isolate;
   }
 }
 

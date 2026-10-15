@@ -1,7 +1,7 @@
 // Kotlin objects for Jetpack Compose. Pixel values become dp (and sp for type); 1rem is 16.
 // Font families, elevation and breakpoints stay on the web: Android uses font resources and its
 // own elevation model.
-import { argb, camel, GENERATED_HEADER, isPublished, publishedPath } from "./publish.ts";
+import { argb, camel, GENERATED_HEADER, isNative, publishedPath } from "./publish.ts";
 import type { Dimension, Token } from "./tokens.ts";
 
 const PACKAGE = "app.htco.designsystem.tokens";
@@ -43,6 +43,7 @@ function member(token: Token): string | undefined {
       return `val ${memberName(token)} = CubicBezierEasing(${token.value.map((n) => `${number(n)}f`).join(", ")})`;
     case "color":
     case "fontFamily":
+    case "number":
     case "shadow":
       return undefined;
   }
@@ -59,7 +60,7 @@ const colorObject = (name: string, tokens: Token[]): string[] => [
 ];
 
 export function renderKotlin(light: Token[], dark: Token[]): string {
-  const published = (tokens: Token[]) => tokens.filter(isPublished);
+  const published = (tokens: Token[]) => tokens.filter(isNative);
   const lines = [
     `// ${GENERATED_HEADER}`,
     `package ${PACKAGE}`,

@@ -1,6 +1,6 @@
 # Client ADR-0007: The Relay design language
 
-- **Status:** Accepted
+- **Status:** Superseded by [client ADR-0008](0008-design-1c.md) (Design 1C)
 - **Date:** 2026-10-15
 - **Deciders:** Owner, engineering
 - **Supersedes:** [client ADR-0005](0005-brand-palette-from-logo.md) (brand palette measured from the logo)

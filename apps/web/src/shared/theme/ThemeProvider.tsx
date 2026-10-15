@@ -1,49 +1,119 @@
-import { createContext, use, useCallback, useMemo, useState, type ReactNode } from "react";
+import {
+  createContext,
+  use,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
 
-import { applyTheme, rememberTheme, type ThemePreference } from "./theme.ts";
+import type { ThemePreference } from "./theme.ts";
+import {
+  applyTweaks,
+  DEFAULT_TWEAKS,
+  readTweaks,
+  TWEAK_STORAGE_KEYS,
+  writeTweak,
+  type TweakName,
+  type Tweaks,
+} from "./tweaks.ts";
 import type { SettingsStorage } from "../lib/storage.ts";
 
-interface ThemeState {
-  theme: ThemePreference;
-  setTheme: (theme: ThemePreference) => void;
+interface TweaksState {
+  tweaks: Tweaks;
+  setTweak: <Name extends TweakName>(name: Name, value: Tweaks[Name]) => void;
+  /** Back to the defaults, keeping the theme (it has its own control in Settings). */
+  resetTweaks: () => void;
 }
 
-const ThemeContext = createContext<ThemeState | null>(null);
+const TweaksContext = createContext<TweaksState | null>(null);
 
-interface ThemeProviderProps {
-  initialTheme: ThemePreference;
+interface TweaksProviderProps {
+  initialTweaks: Tweaks;
   storage: SettingsStorage | undefined;
   root?: HTMLElement;
   children: ReactNode;
 }
 
-/** System, light or dark; applied to the document root and remembered on this device. */
-export function ThemeProvider({
-  initialTheme,
+const STORAGE_KEYS = new Set(Object.values(TWEAK_STORAGE_KEYS));
+
+/**
+ * The design tweaks and the theme, one preference for every interface on this origin
+ * (client ADR-0008): applied to the document root, remembered, and followed when another tab of
+ * the app or the landing page changes them.
+ */
+export function TweaksProvider({
+  initialTweaks,
   storage,
   root = document.documentElement,
   children,
-}: ThemeProviderProps) {
-  const [theme, setThemeState] = useState(() => {
-    applyTheme(initialTheme, root);
-    return initialTheme;
+}: TweaksProviderProps) {
+  const [tweaks, setTweaks] = useState(() => {
+    applyTweaks(initialTweaks, root);
+    return initialTweaks;
   });
 
-  const setTheme = useCallback(
-    (next: ThemePreference) => {
-      applyTheme(next, root);
-      rememberTheme(next, storage);
-      setThemeState(next);
+  const update = useCallback(
+    (next: Tweaks) => {
+      applyTweaks(next, root);
+      setTweaks(next);
+    },
+    [root],
+  );
+
+  const setTweak = useCallback(
+    <Name extends TweakName>(name: Name, value: Tweaks[Name]) => {
+      writeTweak(storage, name, value);
+      setTweaks((current) => {
+        const next = { ...current, [name]: value };
+        applyTweaks(next, root);
+        return next;
+      });
     },
     [root, storage],
   );
 
-  const state = useMemo(() => ({ theme, setTheme }), [theme, setTheme]);
-  return <ThemeContext value={state}>{children}</ThemeContext>;
+  const resetTweaks = useCallback(() => {
+    setTweaks((current) => {
+      const next = { ...DEFAULT_TWEAKS, theme: current.theme };
+      for (const name of ["palette", "contrast", "glass", "borders"] as const) {
+        writeTweak(storage, name, next[name]);
+      }
+      applyTweaks(next, root);
+      return next;
+    });
+  }, [root, storage]);
+
+  // Another tab on this origin (the app or the landing page) changed a tweak.
+  useEffect(() => {
+    const onStorage = (event: StorageEvent) => {
+      if (event.key === null || STORAGE_KEYS.has(event.key)) update(readTweaks(storage));
+    };
+    window.addEventListener("storage", onStorage);
+    return () => {
+      window.removeEventListener("storage", onStorage);
+    };
+  }, [storage, update]);
+
+  const state = useMemo(() => ({ tweaks, setTweak, resetTweaks }), [tweaks, setTweak, resetTweaks]);
+  return <TweaksContext value={state}>{children}</TweaksContext>;
 }
 
-export function useTheme(): ThemeState {
-  const state = use(ThemeContext);
-  if (state === null) throw new Error("useTheme needs a ThemeProvider");
+export function useTweaks(): TweaksState {
+  const state = use(TweaksContext);
+  if (state === null) throw new Error("useTweaks needs a TweaksProvider");
   return state;
+}
+
+/** The theme part of the tweaks: system, light or dark (the Settings page and account menu). */
+export function useTheme(): { theme: ThemePreference; setTheme: (theme: ThemePreference) => void } {
+  const { tweaks, setTweak } = useTweaks();
+  const setTheme = useCallback(
+    (theme: ThemePreference) => {
+      setTweak("theme", theme);
+    },
+    [setTweak],
+  );
+  return { theme: tweaks.theme, setTheme };
 }

@@ -29,7 +29,7 @@ describe("quick actions (design/README.md, UX rule 2)", () => {
       within(dialog)
         .getAllByRole("menuitem")
         .map((item) => item.textContent),
-    ).toEqual(["Go to security"]);
+    ).toEqual(["Security"]);
     await user.keyboard("{Enter}");
 
     expect(await screen.findByRole("heading", { level: 1, name: "Security" })).toBeInTheDocument();
@@ -71,6 +71,7 @@ describe("the aura (design/README.md, Backgrounds)", () => {
     const glow = document.querySelector("main [aria-hidden='true'].pointer-events-none");
     expect(glow).not.toBeNull();
 
+    await user.click(screen.getByRole("button", { name: "Commerce" }));
     await user.click(screen.getByRole("link", { name: "Shops" }));
     await screen.findByRole("heading", { level: 1, name: "Shops" });
     expect(document.querySelector("main [aria-hidden='true'].pointer-events-none")).toBeNull();
@@ -82,6 +83,6 @@ describe("the logo", () => {
     await open();
     const [logo] = screen.getAllByRole("img", { name: "HTCO" });
     expect(logo?.tagName.toLowerCase()).toBe("svg");
-    expect(logo?.querySelector("circle[r='77']")).toHaveAttribute("fill", "var(--attention-ring)");
+    expect(logo?.querySelector("circle[r='88']")).toHaveAttribute("fill", "var(--logo-dot)");
   });
 });

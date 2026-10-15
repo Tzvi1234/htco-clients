@@ -51,6 +51,49 @@ describe("renderCss", () => {
   it("never publishes palette, brand or breakpoint primitives", () => {
     expect(css).not.toMatch(/--palette-|--color-brand-|--breakpoint-/);
   });
+
+  it("keeps a semantic alias as a link to its target", () => {
+    const [canvas] = light;
+    if (canvas === undefined) throw new Error("fixture");
+    const withAlias = renderCss(
+      [{ ...canvas, path: ["color", "bg", "app"], alias: ["color", "bg", "canvas"] }],
+      [],
+    );
+    expect(withAlias).toContain("--bg-app: var(--bg-canvas);");
+  });
+
+  it("writes an empty shadow as none", () => {
+    const flat = renderCss([{ path: ["elevation", "panel"], type: "shadow", value: [] }], []);
+    expect(flat).toContain("--elevation-panel: none;");
+  });
+});
+
+describe("renderCss with overlays", () => {
+  const overlay = aTheme("#ffffff", "#000000").slice(0, 1);
+  const overlayDark = aTheme("#111111", "#eeeeee").slice(0, 1);
+  const css = renderCss(light, dark, [
+    { layer: "glass", overlays: [{ when: '[data-t2="2"]', light: overlay, dark: overlayDark }] },
+  ]);
+
+  it("declares the cascade layers in order, the base first", () => {
+    expect(css).toContain("@layer htco-tokens.base, htco-tokens.glass;");
+    expect(css.indexOf("@layer htco-tokens.base {")).toBeLessThan(
+      css.indexOf("@layer htco-tokens.glass {"),
+    );
+  });
+
+  it("applies an overlay on its attributes, light and dark, with only the tokens it sets", () => {
+    const start = css.indexOf("@layer htco-tokens.glass {");
+    const glass = css.slice(start);
+    expect(glass).toContain(':root[data-t2="2"] {\n    --bg-canvas: #ffffff;\n  }');
+    expect(glass).toContain(
+      ':root[data-t2="2"][data-theme="dark"] {\n    --bg-canvas: #111111;\n  }',
+    );
+    expect(glass).toContain(
+      ':root[data-t2="2"]:not([data-theme="light"]) {\n      --bg-canvas: #111111;',
+    );
+    expect(glass).not.toContain("--space-4");
+  });
 });
 
 describe("renderKotlin", () => {

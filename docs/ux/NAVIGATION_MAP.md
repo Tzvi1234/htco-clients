@@ -40,6 +40,25 @@ Administration             users and roles · shop access · budgets and model p
 
 The office shows only recorded activity from the API (activity records, tasks, executions, routing decisions). It never fabricates or infers an employee's state: no recorded activity means no activity shown, and when the agent worker is offline every employee shows Offline and the office is read-only.
 
+## The web app's navigation (Design 1C, client ADR-0008)
+
+Seven areas in the owner's order and wording, defined once in `apps/web/src/app/shell/nav.ts`. Every tab has an address now; a tab without a screen renders `DemoScreen` and carries a "Soon" tag ("בקרוב") in the sidebar, the flyout, the phone sheet and quick actions.
+
+| Area (he) | Tab | Address | Screen |
+|---|---|---|---|
+| Home (בית) | — | `/` | Overview (built) |
+| Office (המשרד) | Floor · Chat · Team room · AI ops · Engineering | `/office/floor` · `/office/chat` · `/office/team` · `/office/aiops` · `/office/eng` | Soon |
+| Work (עבודה) | Tasks · Approvals · Activity | `/work/tasks` · `/work/approvals` · `/work/activity` | Soon |
+| Commerce (מסחר) | Shops | `/shops` (also `/commerce/shops`; the Etsy return `/integrations/etsy/callback` belongs here) | Built |
+| | Orders · Products · Shipping · Suppliers | `/commerce/orders` · `/commerce/products` · `/commerce/shipping` · `/commerce/suppliers` | Soon |
+| Customers (לקוחות) | Tickets · Customers · Mail · Marketing | `/customers/tickets` · `/customers/customers` · `/customers/mail` · `/customers/marketing` | Soon |
+| Finance (כספים) | Overview · Ledger | `/finance/overview` · `/finance/ledger` | Soon |
+| Admin (ניהול) | Health · Automations | `/admin/health` · `/admin/automations` | Soon |
+| | Members & access | `/settings/team` (also `/admin/members`) | Built (Team) |
+| | Settings | `/settings`, with Security at `/settings/security` (also `/admin/settings`) | Built |
+
+An area's own address (`/office`, `/work`, …) opens its first tab. The sidebar groups Home, then Workspace (Office to Finance), then System (Admin); on phones the tab bar carries Home, Office, Work and Commerce, and More opens every area.
+
 ## By platform and phase
 
 | Destination | Web | Android | Windows | Phase |
@@ -67,7 +86,7 @@ The office shows only recorded activity from the API (activity records, tasks, e
 
 ## Navigation patterns
 
-- **Web and Windows:** a sidebar at 1200 px and wider, a navigation rail between 640 and 1200 px; the top bar holds search, notifications and the user menu. The sidebar groups the office destinations under "Office" below the commerce destinations.
+- **Web and Windows:** the Design 1C floating sidebar (264 px) from 1360 px, its 72 px rail with the area flyout below that (the user's choice is remembered), and a tab bar under 640 px; the top bar holds the crumbs and title, language, approvals, search and the design tweaks; the account sits at the foot of the sidebar (in the top bar on phones).
 - **Android:** a `BottomBar` with up to five destinations: Overview, Approvals and Incidents first (Phase 16), then Orders and More by ADR. Approvals open in a bottom sheet with the full card. The office summary lives on Overview.
 - **Deep links:** every notification opens the exact object (`/approvals/{id}`, `/incidents/{id}`, `/orders/{id}`, `/office/employees/{id}`, `/office/automations/{id}/executions/{id}`) after authentication, and never shows another shop's object.
-- **The amber dot** appears on a destination only when something there waits for the user.
+- **The attention badge** (orange, or lemon in Design 4) appears on a destination only when something recorded there waits for the user.

@@ -31,8 +31,30 @@ apps/web/src/
 - **Tokens only.** `src/styles.css` maps every Tailwind theme namespace (colours, fonts, text sizes, radii by role, shadows, breakpoints) to the generated token variables and clears Tailwind's defaults, so a non-token colour or radius class does not exist. Radii are named by role (`rounded-control`, `rounded-button`, `rounded-card`, `rounded-dialog`, `rounded-pill`) because the token names (`--radius-sm`…) would collide with Tailwind's own variables.
 - **Direction.** `LocaleProvider` sets `lang` and `dir` on `<html>`; layout uses logical utilities only, enforced by `htco/logical-properties` (`scripts/eslint-logical-properties.ts`).
 - **Theme.** No `data-theme` means "follow the system" (the token CSS has a `prefers-color-scheme` block); light or dark set the attribute. Both choices are remembered per device in `localStorage` (`htco.locale`, `htco.theme`), guarded for blocked storage.
-- **Fonts** are self-hosted from `@fontsource-variable` (Inter, Heebo, JetBrains Mono), so the CSP needs no third-party font origin.
-- **Navigation** is one `<nav>` that is a bottom bar under 640 px, a rail to 1200 px and a sidebar above, so there is never a duplicate landmark.
+- **Fonts** are self-hosted from `@fontsource-variable` (Outfit, Heebo, JetBrains Mono), so the CSP needs no third-party font origin.
+- **Navigation** is the Design 1C sidebar from 640 px and a tab bar below (see "Design 1C shell" below); only one is rendered, so there is never a duplicate landmark.
+
+## Design 1C shell and tweaks (client ADR-0008)
+
+```text
+apps/web/src/
+  app/shell/          nav.ts (seven areas and their tabs), useNavLabels, ShellState (collapsed sidebar,
+                      flyout, palette), AppShell, Sidebar, Flyout, TopBar, TabBar (phones), CommandMenu,
+                      ShopSwitcher, UserMenu, DemoRoute
+  shared/theme/       tweaks.ts (the shared preference), boot.ts (the inline script before first paint),
+                      ThemeProvider.tsx (TweaksProvider, useTweaks, useTheme), TweaksPanel.tsx
+                      (TweaksPanel, TweaksButton)
+  shared/ui/          Panel, PanelHeader, PanelBody, Segmented, LevelDots, SoonTag, DemoBadge, DemoScreen,
+                      Toast (ToastProvider, useToast), icons (the prototype's glyphs), Logo
+```
+
+- **One preference.** `readTweaks`, `writeTweak` and `applyTweaks` read and write `htco.theme`, `htco.palette`, `htco.contrast`, `htco.glass` and `htco.borders`, and set `data-theme`, `data-pal`, `data-t1`, `data-t2`, `data-t3` on `<html>`. The Settings page's theme radio and the account menu go through `useTheme`, which is the theme part of the same preference. Another tab's change arrives through the `storage` event.
+- **Before the first paint.** `TWEAKS_BOOT_SCRIPT` is injected into `index.html` by the `htco-tweaks-boot` Vite plugin; the CSP plugin hashes every inline script of the built page into `script-src`. The boot test runs the script and `applyTweaks` on the same stored values and expects the same attributes.
+- **The title lives in the top bar.** `PageHeader` portals its h1 into the top bar's slot (`TopBarSlotContext`) under the crumbs, and renders its description and actions at the top of the page. Outside a shell (stories, the landing page) it renders in place.
+- **Panels.** A route without `staticData.layout` gets one panel from the shell (the existing screens); a route with `layout: "panels"` lays out its own `Panel`s, as `DemoScreen` does and as Design 1C screens will.
+- **Collapsed sidebar.** Below 1360 px the sidebar starts as a rail until the user chooses (`htco.sidebar`: `mini` or `open`). Collapsed sub-lists are `inert` and hidden from assistive technology, so only what is visible can be reached.
+- **Phones.** Under 640 px the shell renders the top bar (with search, tweaks and the account), the screen and the tab bar; the sidebar is not rendered, so there is one `Main` navigation landmark at every width.
+- **Motion.** Route changes use View Transitions on the `screen` view-transition name (`defaultViewTransition`, off under reduced motion); everything else is CSS on the `motion.*` tokens, removed under reduced motion.
 
 ## API client and sign-in (slices 3.6 and 3.5, web)
 

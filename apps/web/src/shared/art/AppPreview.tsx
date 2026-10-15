@@ -102,16 +102,16 @@ export function AppPreview({ className }: { className?: string }) {
         <span className="size-3 rounded-pill bg-[#28c840]" />
       </div>
       <div className="grid grid-cols-[180px_1fr] max-md:grid-cols-1">
-        <div className="flex flex-col gap-1 bg-app px-3 pt-4 pb-6 max-md:hidden">
+        <div className="flex flex-col gap-1 bg-inverse px-3 pt-4 pb-6 max-md:hidden">
           <span className="mb-5 px-2">
-            <Logo height={20} onInk />
+            <Logo height={20} inverse />
           </span>
           {NAV.map(({ icon: Glyph, label, current }) => (
             <span
               key={label}
               className={cx(
                 "flex h-9 items-center gap-3 rounded-button px-3 text-[13px] font-medium",
-                current === true ? "bg-app-selected text-app-text" : "text-app-muted",
+                current === true ? "bg-inverse-hover text-on-inverse" : "text-on-inverse-muted",
               )}
             >
               <Glyph size={18} weight={current === true ? "fill" : "regular"} />
@@ -244,7 +244,7 @@ export function AppPreview({ className }: { className?: string }) {
                 Specialists for listings, orders, customers and money work under your policies, and
                 bring you every risky decision.
               </span>
-              <span className="relative mt-2 inline-flex h-8 items-center gap-1.5 self-start rounded-button bg-app px-3 text-[11px] font-semibold text-app-text">
+              <span className="relative mt-2 inline-flex h-8 items-center gap-1.5 self-start rounded-button bg-inverse px-3 text-[11px] font-semibold text-on-inverse">
                 Start with your shop <ArrowRight size={11} weight="bold" />
               </span>
             </div>

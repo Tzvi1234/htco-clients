@@ -11,6 +11,8 @@ import {
 
 import { NotFound, RouteError } from "./RouteStates.tsx";
 import { AppShell } from "./shell/AppShell.tsx";
+import { DemoRoute } from "./shell/DemoRoute.tsx";
+import { AREAS } from "./shell/nav.ts";
 import { AcceptInvitePage } from "../features/auth/AcceptInvitePage.tsx";
 import { ForgotPasswordPage } from "../features/auth/ForgotPasswordPage.tsx";
 import { ResetPasswordPage } from "../features/auth/ResetPasswordPage.tsx";
@@ -28,6 +30,7 @@ import { ShopsPage } from "../features/shops/ShopsPage.tsx";
 import { TeamPage } from "../features/team/TeamPage.tsx";
 import { WelcomePage } from "../features/welcome/WelcomePage.tsx";
 import { meQuery, needsSecondFactor, sessionQuery } from "../shared/api/api.tsx";
+import { REDUCED_MOTION_QUERY } from "../shared/lib/useMediaQuery.ts";
 
 export interface RouterContext {
   queryClient: QueryClient;
@@ -117,6 +120,42 @@ const appRoute = createRoute({
   },
 });
 
+/**
+ * Every tab of the Design 1C navigation that has no screen yet: a route that renders the
+ * DemoScreen frame with the tab's title (app/shell/nav.ts). A screen replaces its route here.
+ */
+const demoRoutes = AREAS.flatMap((area) =>
+  area.tabs
+    .filter((tab) => !tab.built)
+    .map((tab) =>
+      createRoute({
+        getParentRoute: () => appRoute,
+        path: tab.to,
+        staticData: { layout: "panels" },
+        component: function Demo() {
+          return <DemoRoute area={area.id} tab={tab.id} />;
+        },
+      }),
+    ),
+);
+
+/** An area's own address opens its first tab; the demo's addresses lead to existing screens. */
+const redirects = [
+  ...AREAS.filter((area) => area.tabs.length > 0).map((area) => [`/${area.id}`, area.to] as const),
+  ["/commerce/shops", "/shops"],
+  ["/admin/members", "/settings/team"],
+  ["/admin/settings", "/settings"],
+].map(([from, to]) =>
+  createRoute({
+    getParentRoute: () => appRoute,
+    path: from,
+    beforeLoad: () => {
+      // eslint-disable-next-line @typescript-eslint/only-throw-error -- TanStack Router's redirect
+      throw redirect({ to, replace: true });
+    },
+  }),
+);
+
 const routeTree = rootRoute.addChildren([
   welcomeRoute,
   signInRoute,
@@ -142,9 +181,17 @@ const routeTree = rootRoute.addChildren([
         validateSearch: (search: Record<string, unknown>): EtsyReturn => etsyReturn(search),
         component: EtsyCallbackPage,
       }),
+      ...demoRoutes,
+      ...redirects,
     ]),
   ]),
 ]);
+
+/** Whether route changes animate: not when the user asks for reduced motion. */
+export function viewTransitions(): boolean {
+  if (typeof window.matchMedia !== "function") return true;
+  return !window.matchMedia(REDUCED_MOTION_QUERY).matches;
+}
 
 export function createAppRouter(context: RouterContext, history?: RouterHistory) {
   return createRouter({
@@ -153,12 +200,18 @@ export function createAppRouter(context: RouterContext, history?: RouterHistory)
     ...(history === undefined ? {} : { history }),
     defaultErrorComponent: RouteError,
     defaultPreload: "intent",
+    // Screens change with a short cross-fade (styles.css); never under reduced motion.
+    defaultViewTransition: viewTransitions(),
   });
 }
 
 declare module "@tanstack/react-router" {
   interface Register {
     router: ReturnType<typeof createAppRouter>;
+  }
+  interface StaticDataRouteOption {
+    /** "panels": the screen lays out its own Design 1C panels; otherwise the shell gives it one. */
+    layout?: "panels";
   }
   interface HistoryState {
     /** Set by the Etsy callback for the Shops page's confirmation, in that workspace. */

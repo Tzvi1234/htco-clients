@@ -1,134 +1,131 @@
 import { useLingui } from "@lingui/react/macro";
 import { useRouter } from "@tanstack/react-router";
-import {
-  GearSixIcon as GearSix,
-  HouseIcon as House,
-  MagnifyingGlassIcon as MagnifyingGlass,
-  ShieldCheckIcon as ShieldCheck,
-  StorefrontIcon as Storefront,
-  type Icon,
-} from "@phosphor-icons/react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
   Autocomplete,
-  Button,
+  Collection,
   Dialog,
+  Header,
   Input,
   Menu,
   MenuItem,
+  MenuSection,
   Modal,
   ModalOverlay,
   SearchField,
   useFilter,
 } from "react-aria-components";
 
-type Destination = "/" | "/shops" | "/settings" | "/settings/security";
+import { AREAS } from "./nav.ts";
+import { useShell } from "./ShellState.tsx";
+import { useNavLabels } from "./useNavLabels.ts";
+import { SearchIcon } from "../../shared/ui/icons.tsx";
+import { SoonTag } from "../../shared/ui/SoonTag.tsx";
 
-interface Action {
-  id: Destination;
+interface Destination {
+  id: string;
   label: string;
-  icon: Icon;
+  built: boolean;
 }
 
-/** Ctrl+K (⌘K on a Mac) or the sidebar button: jump anywhere by typing (Attio's quick actions). */
+/**
+ * Quick actions (Design 1C `.pal`): Ctrl+K (⌘K on a Mac), the sidebar's pill or the top bar's
+ * search open it over a veil of the ground; type to filter every destination, grouped by area.
+ */
 export function CommandMenu() {
   const { t } = useLingui();
+  const labels = useNavLabels();
   const router = useRouter();
   const { contains } = useFilter({ sensitivity: "base" });
-  const [isOpen, setOpen] = useState(false);
+  const { paletteOpen: isOpen, setPaletteOpen: setOpen } = useShell();
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (event.key.toLowerCase() === "k" && (event.metaKey || event.ctrlKey)) {
         event.preventDefault();
-        setOpen((open) => !open);
+        setOpen(!isOpen);
       }
     };
     window.addEventListener("keydown", onKey);
     return () => {
       window.removeEventListener("keydown", onKey);
     };
-  }, []);
+  }, [isOpen, setOpen]);
 
-  const actions: Action[] = [
-    { id: "/", label: t`Go to the overview`, icon: House },
-    { id: "/shops", label: t`Go to shops`, icon: Storefront },
-    { id: "/settings", label: t`Go to settings`, icon: GearSix },
-    { id: "/settings/security", label: t`Go to security`, icon: ShieldCheck },
-  ];
+  const sections = AREAS.map((area) => ({
+    id: area.id,
+    name: labels.area(area),
+    items: [
+      ...(area.tabs.length === 0 ? [{ id: area.to, label: labels.area(area), built: true }] : []),
+      ...area.tabs.map((tab): Destination => ({
+        id: tab.to,
+        label: labels.tab(area.id, tab.id),
+        built: tab.built,
+      })),
+      ...(area.id === "admin"
+        ? [{ id: "/settings/security", label: t`Security`, built: true }]
+        : []),
+    ],
+  }));
 
   return (
-    <>
-      <Button
-        onPress={() => {
-          setOpen(true);
-        }}
-        className="flex h-8 w-full cursor-default items-center gap-2 rounded-control border border-app-border bg-app-hover px-2 text-body-sm text-app-muted outline-none data-[hovered]:text-app-text max-lg:size-8 max-lg:justify-center max-lg:px-0"
-        aria-label={t`Quick actions`}
-      >
-        <MagnifyingGlass aria-hidden="true" size={15} weight="duotone" />
-        <span className="grow text-start max-lg:hidden">{t`Quick actions`}</span>
-        <kbd className="rounded-tag border border-app-border px-1 font-latin text-caption text-app-muted max-lg:hidden">
-          Ctrl K
-        </kbd>
-      </Button>
-      <ModalOverlay
-        isOpen={isOpen}
-        onOpenChange={setOpen}
-        isDismissable
-        className="fixed inset-0 z-50 flex items-start justify-center bg-[color-mix(in_srgb,var(--illustration-ink)_35%,transparent)] px-4 pt-[14vh] data-[entering]:animate-enter"
-      >
-        <Modal className="w-full max-w-[560px] rounded-dialog border border-border-strong bg-raised shadow-3 outline-none data-[entering]:animate-enter">
-          <Dialog aria-label={t`Quick actions`} className="outline-none">
-            <Autocomplete filter={contains}>
-              <SearchField
-                aria-label={t`Search actions`}
-                autoFocus
-                className="flex items-center gap-2 border-b border-border-subtle px-3"
-              >
-                <MagnifyingGlass
-                  aria-hidden="true"
-                  size={16}
-                  weight="duotone"
-                  className="text-icon"
-                />
-                <Input
-                  placeholder={t`Type a command or a page`}
-                  className="h-12 grow bg-transparent text-body text-primary outline-none placeholder:text-muted"
-                />
-              </SearchField>
-              <Menu
-                items={actions}
-                onAction={(key) => {
-                  const action = actions.find(({ id }) => id === key);
-                  setOpen(false);
-                  if (action !== undefined) void router.navigate({ to: action.id });
-                }}
-                className="max-h-[50vh] overflow-auto p-1.5 outline-none"
-                renderEmptyState={() => (
-                  <p className="m-0 px-3 py-6 text-center text-body-sm text-muted">{t`Nothing matches.`}</p>
-                )}
-              >
-                {(action) => (
-                  <MenuItem
-                    id={action.id}
-                    textValue={action.label}
-                    className="flex h-9 cursor-default items-center gap-2.5 rounded-control px-2.5 text-body text-primary outline-none data-[focused]:bg-selected"
-                  >
-                    <action.icon
-                      aria-hidden="true"
-                      size={16}
-                      weight="duotone"
-                      className="text-icon"
-                    />
-                    {action.label}
-                  </MenuItem>
-                )}
-              </Menu>
-            </Autocomplete>
-          </Dialog>
-        </Modal>
-      </ModalOverlay>
-    </>
+    <ModalOverlay
+      isOpen={isOpen}
+      onOpenChange={setOpen}
+      isDismissable
+      className="fixed inset-0 z-50 flex items-start justify-center bg-[color-mix(in_srgb,var(--bg-ground)_60%,transparent)] px-4 pt-[min(120px,14vh)] data-[entering]:animate-enter data-[exiting]:animate-[htco-enter_var(--motion-duration-fast)_reverse_both]"
+    >
+      <Modal className="glass w-full max-w-[560px] rounded-panel border border-line bg-menu p-2 shadow-popover outline-none data-[entering]:animate-pop-in">
+        <Dialog aria-label={t`Quick actions`} className="outline-none">
+          <Autocomplete filter={contains}>
+            <SearchField
+              aria-label={t`Search actions`}
+              autoFocus
+              className="mb-2 flex h-12 items-center gap-2.5 rounded-pill border border-line-strong px-4"
+            >
+              <SearchIcon size={16} className="text-secondary" />
+              <Input
+                placeholder={t`Search screens and actions…`}
+                className="h-full grow bg-transparent text-[15px] text-primary outline-none placeholder:text-muted [&::-webkit-search-cancel-button]:hidden"
+              />
+              <kbd className="inline-flex h-[18px] items-center rounded-[6px] border border-line-strong px-[5px] font-latin text-[11px] text-muted">
+                Esc
+              </kbd>
+            </SearchField>
+            <Menu
+              items={sections}
+              onAction={(key) => {
+                setOpen(false);
+                if (typeof key === "string") void router.navigate({ to: key });
+              }}
+              className="max-h-[56vh] overflow-auto outline-none"
+              renderEmptyState={() => (
+                <p className="m-0 px-4 py-6 text-center text-body-sm text-muted">{t`Nothing matches.`}</p>
+              )}
+            >
+              {(section) => (
+                <MenuSection id={section.id}>
+                  <Header className="px-4 pt-2 pb-1 text-[11px] font-light text-muted">
+                    {section.name}
+                  </Header>
+                  <Collection items={section.items}>
+                    {(item: Destination) => (
+                      <MenuItem
+                        id={item.id}
+                        textValue={item.label}
+                        className="flex h-11 cursor-default items-center justify-between gap-3 rounded-xl px-4 text-body-sm text-primary outline-none transition-colors duration-[var(--motion-duration-fast)] data-[focused]:bg-panel"
+                      >
+                        {item.label}
+                        {item.built ? null : <SoonTag className="text-muted" />}
+                      </MenuItem>
+                    )}
+                  </Collection>
+                </MenuSection>
+              )}
+            </Menu>
+          </Autocomplete>
+        </Dialog>
+      </Modal>
+    </ModalOverlay>
   );
 }

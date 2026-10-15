@@ -40,16 +40,19 @@ describe("the app shell", () => {
 
     expect(screen.getByRole("heading", { level: 1, name: "Overview" })).toBeInTheDocument();
     const nav = screen.getByRole("navigation", { name: "Main" });
-    expect(within(nav).getByRole("link", { name: "Overview" })).toHaveAttribute(
-      "aria-current",
-      "page",
+    expect(within(nav).getByRole("link", { name: "Home" })).toHaveAttribute("aria-current", "page");
+    // The other areas wait closed, their tabs out of reach until opened (Design 1C).
+    expect(within(nav).getByRole("button", { name: "Commerce" })).toHaveAttribute(
+      "aria-expanded",
+      "false",
     );
-    expect(within(nav).getByRole("link", { name: "Shops" })).not.toHaveAttribute("aria-current");
+    expect(within(nav).queryByRole("link", { name: "Shops" })).not.toBeInTheDocument();
   });
 
   it("navigates between destinations", async () => {
     const { user } = await renderApp();
 
+    await user.click(screen.getByRole("button", { name: "Commerce" }));
     await user.click(screen.getByRole("link", { name: "Shops" }));
 
     expect(await screen.findByRole("heading", { level: 1, name: "Shops" })).toBeInTheDocument();

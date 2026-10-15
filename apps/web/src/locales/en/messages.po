@@ -11,6 +11,10 @@ msgstr ""
 msgid "{days, plural, one {Reconnect within # day} other {Reconnect within # days}}"
 msgstr "{days, plural, one {Reconnect within # day} other {Reconnect within # days}}"
 
+#: src/app/shell/Sidebar.tsx
+msgid "{name} tabs"
+msgstr "{name} tabs"
+
 #: src/features/overview/OverviewPage.tsx
 msgid "0 of 3 done"
 msgstr "0 of 3 done"
@@ -39,13 +43,36 @@ msgstr "Account and preferences"
 msgid "Active listings"
 msgstr "Active listings"
 
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Activity"
+msgstr "Activity"
+
 #: src/features/team/TeamPage.tsx
+msgid "Admin"
+msgstr "Admin"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
 msgid "Admin"
 msgstr "Admin"
 
 #: src/features/overview/OverviewPage.tsx
 msgid "After a shop is connected"
 msgstr "After a shop is connected"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "AI ops"
+msgstr "AI ops"
+
+#: src/app/shell/TabBar.tsx
+msgid "All areas"
+msgstr "All areas"
+
+#: src/app/shell/ShopSwitcher.tsx
+msgid "All shops"
+msgstr "All shops"
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "An AI office you control"
@@ -63,6 +90,15 @@ msgstr "Android"
 msgid "Any browser, nothing to install."
 msgstr "Any browser, nothing to install."
 
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Approvals"
+msgstr "Approvals"
+
+#: src/app/shell/Flyout.tsx
+msgid "Area"
+msgstr "Area"
+
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "Ask for a new link"
 msgstr "Ask for a new link"
@@ -79,6 +115,11 @@ msgstr "Authenticator app"
 #: src/features/security/SecurityPage.tsx
 msgid "Authenticator app is set up"
 msgstr "Authenticator app is set up"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Automations"
+msgstr "Automations"
 
 #: src/features/shops/EtsyCallbackPage.tsx
 msgid "Back to shops"
@@ -99,6 +140,11 @@ msgstr "Cancel"
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Cannot scan? Type this key into the app:"
 msgstr "Cannot scan? Type this key into the app:"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Chat"
+msgstr "Chat"
 
 #: src/features/team/TeamPage.tsx
 msgid "Check the email address."
@@ -125,9 +171,23 @@ msgstr "Choose a longer password that is harder to guess."
 msgid "Choose a new password"
 msgstr "Choose a new password"
 
+#: src/app/shell/Flyout.tsx
+#: src/app/shell/TabBar.tsx
+msgid "Close"
+msgstr "Close"
+
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Code from the app"
 msgstr "Code from the app"
+
+#: src/app/shell/Sidebar.tsx
+msgid "Collapse the menu"
+msgstr "Collapse the menu"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Commerce"
+msgstr "Commerce"
 
 #: src/features/auth/SecondFactorPage.tsx
 #: src/features/shops/connectEtsy.tsx
@@ -199,12 +259,22 @@ msgstr "Copied"
 msgid "Copy link"
 msgstr "Copy link"
 
+#: src/shared/theme/TweaksPanel.tsx
+msgid "Cream, lilac, orchid and lemon"
+msgstr "Cream, lilac, orchid and lemon"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Customers"
+msgstr "Customers"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "Customers answered"
 msgstr "Customers answered"
 
 #: src/app/shell/UserMenu.tsx
 #: src/features/settings/SettingsPage.tsx
+#: src/shared/theme/TweaksPanel.tsx
 msgid "Dark"
 msgstr "Dark"
 
@@ -212,9 +282,25 @@ msgstr "Dark"
 msgid "Decisions waiting"
 msgstr "Decisions waiting"
 
+#: src/shared/ui/SoonTag.tsx
+msgid "Demo — coming soon"
+msgstr "Demo — coming soon"
+
+#: src/shared/theme/TweaksPanel.tsx
+msgid "Design 4"
+msgstr "Design 4"
+
+#: src/shared/theme/TweaksPanel.tsx
+msgid "Design tweaks"
+msgstr "Design tweaks"
+
 #: src/features/team/TeamPage.tsx
 msgid "Developer"
 msgstr "Developer"
+
+#: src/shared/theme/TweaksPanel.tsx
+msgid "Different"
+msgstr "Different"
 
 #: src/features/shops/ShopCard.tsx
 msgid "Disconnected"
@@ -232,11 +318,24 @@ msgstr "Download"
 msgid "Each specialist acts under your policies and handles the day-to-day."
 msgstr "Each specialist acts under your policies and handles the day-to-day."
 
+#: src/shared/theme/TweaksPanel.tsx
+msgid "Element borders"
+msgstr "Element borders"
+
+#: src/shared/theme/TweaksPanel.tsx
+msgid "Element vs. ground contrast"
+msgstr "Element vs. ground contrast"
+
 #: src/features/auth/ForgotPasswordPage.tsx
 #: src/features/auth/SignInPage.tsx
 #: src/features/team/TeamPage.tsx
 msgid "Email"
 msgstr "Email"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Engineering"
+msgstr "Engineering"
 
 #: src/features/auth/ForgotPasswordPage.tsx
 msgid "Enter a valid email address."
@@ -270,10 +369,6 @@ msgstr "Enter your email."
 msgid "Etsy"
 msgstr "Etsy"
 
-#: src/app/shell/ShopSwitcher.tsx
-msgid "Etsy · not connected"
-msgstr "Etsy · not connected"
-
 #: src/features/shops/connectEtsy.tsx
 msgid "Etsy cannot be reached right now. Try again in a few minutes."
 msgstr "Etsy cannot be reached right now. Try again in a few minutes."
@@ -302,7 +397,16 @@ msgstr "Every order, verified"
 msgid "Everything your Etsy shop needs, working together in one AI office."
 msgstr "Everything your Etsy shop needs, working together in one AI office."
 
+#: src/app/shell/Sidebar.tsx
+msgid "Expand the menu"
+msgstr "Expand the menu"
+
 #: src/features/team/TeamPage.tsx
+msgid "Finance"
+msgstr "Finance"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
 msgid "Finance"
 msgstr "Finance"
 
@@ -310,9 +414,18 @@ msgstr "Finance"
 msgid "Finish connecting in the web app where you are signed in."
 msgstr "Finish connecting in the web app where you are signed in."
 
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Floor"
+msgstr "Floor"
+
 #: src/features/auth/SignInPage.tsx
 msgid "Forgot your password?"
 msgstr "Forgot your password?"
+
+#: src/shared/theme/TweaksPanel.tsx
+msgid "Frosted glass"
+msgstr "Frosted glass"
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "Get the apps"
@@ -322,26 +435,31 @@ msgstr "Get the apps"
 msgid "Getting started"
 msgstr "Getting started"
 
-#: src/app/shell/CommandMenu.tsx
-msgid "Go to security"
-msgstr "Go to security"
-
-#: src/app/shell/CommandMenu.tsx
-msgid "Go to settings"
-msgstr "Go to settings"
-
-#: src/app/shell/CommandMenu.tsx
-msgid "Go to shops"
-msgstr "Go to shops"
-
 #: src/app/RouteStates.tsx
-#: src/app/shell/CommandMenu.tsx
 msgid "Go to the overview"
 msgstr "Go to the overview"
+
+#: src/shared/theme/TweaksPanel.tsx
+msgid "Gray and orange"
+msgstr "Gray and orange"
+
+#: src/shared/theme/TweaksPanel.tsx
+msgid "Gray, with no blooms behind the glass"
+msgstr "Gray, with no blooms behind the glass"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Health"
+msgstr "Health"
 
 #: src/features/auth/SignInPage.tsx
 msgid "Hide password"
 msgstr "Hide password"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Home"
+msgstr "Home"
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "How it works"
@@ -408,6 +526,7 @@ msgstr "Invited member"
 msgid "Key numbers"
 msgstr "Key numbers"
 
+#: src/app/shell/TopBar.tsx
 #: src/app/shell/UserMenu.tsx
 #: src/features/settings/SettingsPage.tsx
 msgid "Language"
@@ -428,8 +547,14 @@ msgstr "Last sync"
 msgid "Last synced {0}"
 msgstr "Last synced {0}"
 
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Ledger"
+msgstr "Ledger"
+
 #: src/app/shell/UserMenu.tsx
 #: src/features/settings/SettingsPage.tsx
+#: src/shared/theme/TweaksPanel.tsx
 msgid "Light"
 msgstr "Light"
 
@@ -445,12 +570,24 @@ msgstr "Loading connection details"
 msgid "Loading shops"
 msgstr "Loading shops"
 
-#: src/app/shell/Navigation.tsx
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Mail"
+msgstr "Mail"
+
+#: src/app/shell/Sidebar.tsx
+#: src/app/shell/TabBar.tsx
 msgid "Main"
 msgstr "Main"
 
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Marketing"
+msgstr "Marketing"
+
 #: src/app/shell/UserMenu.tsx
 #: src/features/settings/SettingsPage.tsx
+#: src/shared/theme/TweaksPanel.tsx
 msgid "Match the system"
 msgstr "Match the system"
 
@@ -462,9 +599,22 @@ msgstr "Meet your office"
 msgid "Members"
 msgstr "Members"
 
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Members & access"
+msgstr "Members & access"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "Messages sorted, drafted and escalated with the order history beside them."
 msgstr "Messages sorted, drafted and escalated with the order history beside them."
+
+#: src/app/shell/TabBar.tsx
+msgid "More"
+msgstr "More"
+
+#: src/app/shell/TabBar.tsx
+msgid "More areas"
+msgstr "More areas"
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "Named specialists work under your policies and bring you every risky decision."
@@ -499,6 +649,10 @@ msgstr "No shops yet"
 msgid "None"
 msgstr "None"
 
+#: src/shared/theme/TweaksPanel.tsx
+msgid "Normal"
+msgstr "Normal"
+
 #: src/features/shops/ShopCard.tsx
 msgid "Not synced yet"
 msgstr "Not synced yet"
@@ -515,6 +669,11 @@ msgstr "Nothing matches."
 msgid "Numbers appear after a shop is connected."
 msgstr "Numbers appear after a shop is connected."
 
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Office"
+msgstr "Office"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "One office for the whole business"
 msgstr "One office for the whole business"
@@ -530,6 +689,11 @@ msgstr "Open the web app"
 #: src/features/team/TeamPage.tsx
 msgid "Operations"
 msgstr "Operations"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Orders"
+msgstr "Orders"
 
 #: src/features/overview/OverviewPage.tsx
 #: src/features/shops/ShopsPage.tsx
@@ -548,8 +712,12 @@ msgstr "Orders, tracking and delivery checked against the marketplace, with the 
 msgid "Orders, tracking and listings start flowing in."
 msgstr "Orders, tracking and listings start flowing in."
 
-#: src/app/shell/Navigation.tsx
 #: src/features/overview/OverviewPage.tsx
+msgid "Overview"
+msgstr "Overview"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
 msgid "Overview"
 msgstr "Overview"
 
@@ -565,6 +733,10 @@ msgstr "Owners and Admins sign in with a password and a code from an app such as
 msgid "Page not found"
 msgstr "Page not found"
 
+#: src/shared/theme/TweaksPanel.tsx
+msgid "Palette and ground"
+msgstr "Palette and ground"
+
 #: src/features/auth/SignInPage.tsx
 msgid "Password"
 msgstr "Password"
@@ -573,15 +745,29 @@ msgstr "Password"
 msgid "Password and an authenticator app."
 msgstr "Password and an authenticator app."
 
+#: src/app/shell/TopBar.tsx
+msgid "Pending approvals"
+msgstr "Pending approvals"
+
+#: src/shared/theme/TweaksPanel.tsx
+msgid "Plain ground"
+msgstr "Plain ground"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "Product"
 msgstr "Product"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Products"
+msgstr "Products"
 
 #: src/features/auth/SecondFactorPage.tsx
 msgid "QR code for your authenticator app"
 msgstr "QR code for your authenticator app"
 
 #: src/app/shell/CommandMenu.tsx
+#: src/app/shell/Sidebar.tsx
 msgid "Quick actions"
 msgstr "Quick actions"
 
@@ -617,10 +803,6 @@ msgstr "Reconnect to keep syncing"
 msgid "Reconnect today"
 msgstr "Reconnect today"
 
-#: src/app/shell/Navigation.tsx
-msgid "Records"
-msgstr "Records"
-
 #: src/features/auth/AcceptInvitePage.tsx
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "Repeat the password"
@@ -629,6 +811,10 @@ msgstr "Repeat the password"
 #: src/shared/ui/ErrorState.tsx
 msgid "Request ID <0>{requestId}</0>"
 msgstr "Request ID <0>{requestId}</0>"
+
+#: src/shared/theme/TweaksPanel.tsx
+msgid "Reset"
+msgstr "Reset"
 
 #: src/features/auth/ForgotPasswordPage.tsx
 msgid "Reset your password"
@@ -655,9 +841,17 @@ msgstr "Save and sign in"
 msgid "Scan the QR code with the app."
 msgstr "Scan the QR code with the app."
 
+#: src/app/shell/TopBar.tsx
+msgid "Search"
+msgstr "Search"
+
 #: src/app/shell/CommandMenu.tsx
 msgid "Search actions"
 msgstr "Search actions"
+
+#: src/app/shell/CommandMenu.tsx
+msgid "Search screens and actions…"
+msgstr "Search screens and actions…"
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "Sections"
@@ -667,6 +861,7 @@ msgstr "Sections"
 msgid "Secure your account"
 msgstr "Secure your account"
 
+#: src/app/shell/CommandMenu.tsx
 #: src/app/shell/UserMenu.tsx
 #: src/features/security/SecurityPage.tsx
 msgid "Security"
@@ -700,23 +895,41 @@ msgstr "Set up your authenticator app"
 msgid "Set your password"
 msgstr "Set your password"
 
-#: src/app/shell/Navigation.tsx
+#: src/app/shell/UserMenu.tsx
 #: src/features/settings/SettingsPage.tsx
 msgid "Settings"
 msgstr "Settings"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Settings"
+msgstr "Settings"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Shipping"
+msgstr "Shipping"
 
 #: src/features/shops/ShopsPage.tsx
 msgid "Shop"
 msgstr "Shop"
 
-#: src/app/shell/Navigation.tsx
 #: src/features/shops/ShopsPage.tsx
+msgid "Shops"
+msgstr "Shops"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
 msgid "Shops"
 msgstr "Shops"
 
 #: src/features/shops/ShopsPage.tsx
 msgid "Shops could not be loaded"
 msgstr "Shops could not be loaded"
+
+#: src/app/shell/ShopSwitcher.tsx
+msgid "Shops: {name}"
+msgstr "Shops: {name}"
 
 #: src/features/auth/SignInPage.tsx
 msgid "Show password"
@@ -725,6 +938,10 @@ msgstr "Show password"
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Show the QR code"
 msgstr "Show the QR code"
+
+#: src/app/shell/Sidebar.tsx
+msgid "Sidebar"
+msgstr "Sidebar"
 
 #: src/features/auth/SignInPage.tsx
 #: src/features/welcome/WelcomePage.tsx
@@ -757,6 +974,10 @@ msgstr "Signed-in devices"
 msgid "Something went wrong while showing it. Try again; your data was not changed."
 msgstr "Something went wrong while showing it. Try again; your data was not changed."
 
+#: src/shared/ui/SoonTag.tsx
+msgid "Soon"
+msgstr "Soon"
+
 #: src/features/overview/OverviewPage.tsx
 msgid "Specialists for listings, orders, customers and money work on your shop under your policies, and bring you every risky decision."
 msgstr "Specialists for listings, orders, customers and money work on your shop under your policies, and bring you every risky decision."
@@ -764,6 +985,11 @@ msgstr "Specialists for listings, orders, customers and money work on your shop 
 #: src/features/overview/OverviewPage.tsx
 msgid "Start with your shop"
 msgstr "Start with your shop"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Suppliers"
+msgstr "Suppliers"
 
 #: src/features/team/TeamPage.tsx
 msgid "Support"
@@ -773,10 +999,25 @@ msgstr "Support"
 msgid "Sync"
 msgstr "Sync"
 
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "System"
+msgstr "System"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Tasks"
+msgstr "Tasks"
+
 #: src/features/settings/SettingsPage.tsx
 #: src/features/team/TeamPage.tsx
 msgid "Team"
 msgstr "Team"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Team room"
+msgstr "Team room"
 
 #: src/app/RouteStates.tsx
 msgid "The address may be mistyped, or the page has moved."
@@ -826,6 +1067,7 @@ msgstr "The workspace owner connects shops."
 
 #: src/app/shell/UserMenu.tsx
 #: src/features/settings/SettingsPage.tsx
+#: src/shared/theme/TweaksPanel.tsx
 msgid "Theme"
 msgstr "Theme"
 
@@ -887,9 +1129,18 @@ msgstr "This person is already a member."
 msgid "This screen could not be shown"
 msgstr "This screen could not be shown"
 
+#: src/shared/ui/DemoScreen.tsx
+msgid "This screen is part of the new design and is being built. Nothing on it is live yet."
+msgstr "This screen is part of the new design and is being built. Nothing on it is live yet."
+
 #: src/features/shops/EtsyCallbackPage.tsx
 msgid "This takes a few seconds. Keep this page open."
 msgstr "This takes a few seconds. Keep this page open."
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Tickets"
+msgstr "Tickets"
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "Titles, photos and claims audited and fixed as drafts you approve."
@@ -912,10 +1163,6 @@ msgstr "Try again"
 msgid "Two-factor sign-in"
 msgstr "Two-factor sign-in"
 
-#: src/app/shell/CommandMenu.tsx
-msgid "Type a command or a page"
-msgstr "Type a command or a page"
-
 #: src/features/security/SecurityPage.tsx
 msgid "Unknown device"
 msgstr "Unknown device"
@@ -928,6 +1175,10 @@ msgstr "Use between 12 and 128 characters."
 #: src/features/welcome/WelcomePage.tsx
 msgid "Use it anywhere"
 msgstr "Use it anywhere"
+
+#: src/shared/theme/TweaksPanel.tsx
+msgid "Very different"
+msgstr "Very different"
 
 #: src/features/team/TeamPage.tsx
 msgid "Viewer"
@@ -945,8 +1196,21 @@ msgstr "Web"
 msgid "Windows"
 msgstr "Windows"
 
-#: src/app/shell/Navigation.tsx
+#: src/shared/theme/TweaksPanel.tsx
+msgid "With the Design 4 palette, contrast and borders come from the palette; glass still applies."
+msgstr "With the Design 4 palette, contrast and borders come from the palette; glass still applies."
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Work"
+msgstr "Work"
+
 #: src/shared/ui/WorkspacePicker.tsx
+msgid "Workspace"
+msgstr "Workspace"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
 msgid "Workspace"
 msgstr "Workspace"
 

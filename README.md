@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/brand/HTCO_Official_Logo.png" alt="HTCO" width="420">
+  <img src="assets/brand/htco-logo.svg" alt="HTCO" width="420">
 </p>
 
 <h1 align="center">HTCO Clients</h1>

@@ -1,0 +1,439 @@
+{
+  "$description": "Tweak 2 at level 3 with the Design 4 palette, dark.",
+  "color": {
+    "bg": {
+      "panel": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1176,
+            0.1137,
+            0.1412
+          ],
+          "alpha": 0.38,
+          "hex": "#1e1d24"
+        }
+      },
+      "raised": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            1,
+            1
+          ],
+          "alpha": 0.06,
+          "hex": "#ffffff"
+        }
+      },
+      "hover": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            1,
+            1
+          ],
+          "alpha": 0.045,
+          "hex": "#ffffff"
+        }
+      },
+      "sidebar": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1176,
+            0.1137,
+            0.1412
+          ],
+          "alpha": 0.4,
+          "hex": "#1e1d24"
+        }
+      },
+      "menu": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1647,
+            0.1647,
+            0.1647
+          ],
+          "alpha": 0.8,
+          "hex": "#2a2a2a"
+        }
+      },
+      "table-head": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1176,
+            0.1137,
+            0.1412
+          ],
+          "alpha": 0.94,
+          "hex": "#1e1d24"
+        }
+      }
+    },
+    "border": {
+      "edge": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            1,
+            1
+          ],
+          "alpha": 0.14,
+          "hex": "#ffffff"
+        }
+      },
+      "sidebar": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            1,
+            1
+          ],
+          "alpha": 0.16,
+          "hex": "#ffffff"
+        }
+      },
+      "control": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.5725,
+            0.5686,
+            0.6039
+          ],
+          "alpha": 1,
+          "hex": "#92919a"
+        }
+      }
+    },
+    "text": {
+      "secondary": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.7765,
+            0.7725,
+            0.8
+          ],
+          "alpha": 1,
+          "hex": "#c6c5cc"
+        }
+      },
+      "muted": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.702,
+            0.702,
+            0.7255
+          ],
+          "alpha": 1,
+          "hex": "#b3b3b9"
+        }
+      }
+    },
+    "icon": {
+      "muted": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.5725,
+            0.5686,
+            0.6
+          ],
+          "alpha": 1,
+          "hex": "#929199"
+        }
+      }
+    },
+    "accent": {
+      "text": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.7294,
+            0.6667,
+            0.9255
+          ],
+          "alpha": 1,
+          "hex": "#baaaec"
+        }
+      }
+    },
+    "attention": {
+      "text": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9294,
+            0.8471,
+            0.0118
+          ],
+          "alpha": 1,
+          "hex": "#edd803"
+        }
+      },
+      "dot": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9294,
+            0.8471,
+            0.0118
+          ],
+          "alpha": 1,
+          "hex": "#edd803"
+        }
+      }
+    },
+    "success": {
+      "text": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.3686,
+            0.7961,
+            0.1529
+          ],
+          "alpha": 1,
+          "hex": "#5ecb27"
+        }
+      },
+      "dot": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.3529,
+            0.7647,
+            0.149
+          ],
+          "alpha": 1,
+          "hex": "#5ac326"
+        }
+      }
+    },
+    "danger": {
+      "text": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            0.5922,
+            0.5647
+          ],
+          "alpha": 1,
+          "hex": "#ff9790"
+        }
+      },
+      "dot": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            0.4196,
+            0.3843
+          ],
+          "alpha": 1,
+          "hex": "#ff6b62"
+        }
+      }
+    },
+    "info": {
+      "text": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.851,
+            0.6314,
+            0.8588
+          ],
+          "alpha": 1,
+          "hex": "#d9a1db"
+        }
+      },
+      "dot": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.8431,
+            0.6078,
+            0.851
+          ],
+          "alpha": 1,
+          "hex": "#d79bd9"
+        }
+      }
+    }
+  },
+  "elevation": {
+    "panel": {
+      "$type": "shadow",
+      "$value": [
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              1,
+              1,
+              1
+            ],
+            "alpha": 0.08,
+            "hex": "#ffffff"
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 1,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 0,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 0,
+            "unit": "px"
+          },
+          "inset": true
+        },
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0,
+              0,
+              0
+            ],
+            "alpha": 0.55,
+            "hex": "#000000"
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 12,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 32,
+            "unit": "px"
+          },
+          "spread": {
+            "value": -18,
+            "unit": "px"
+          }
+        }
+      ]
+    },
+    "sidebar": {
+      "$type": "shadow",
+      "$value": [
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              1,
+              1,
+              1
+            ],
+            "alpha": 0.1,
+            "hex": "#ffffff"
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 1,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 0,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 0,
+            "unit": "px"
+          },
+          "inset": true
+        },
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0,
+              0,
+              0
+            ],
+            "alpha": 0.55,
+            "hex": "#000000"
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 14,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 36,
+            "unit": "px"
+          },
+          "spread": {
+            "value": -18,
+            "unit": "px"
+          }
+        }
+      ]
+    }
+  },
+  "glass": {
+    "blur": {
+      "$type": "dimension",
+      "$value": {
+        "value": 30,
+        "unit": "px"
+      }
+    },
+    "saturate": {
+      "$type": "number",
+      "$value": 1.6
+    },
+    "brightness": {
+      "$type": "number",
+      "$value": 1
+    }
+  }
+}

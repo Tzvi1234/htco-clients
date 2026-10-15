@@ -21,7 +21,7 @@ const RADIO =
   "group flex h-9 cursor-default items-center gap-2.5 rounded-control px-2 outline-none transition-colors data-[hovered]:bg-hover data-[selected]:bg-selected";
 const MARK =
   "grid size-4 place-items-center rounded-pill border border-border-control bg-surface " +
-  "after:size-2 after:rounded-pill group-data-[selected]:border-accent group-data-[selected]:after:bg-accent";
+  "after:size-2 after:rounded-pill group-data-[selected]:border-inverse group-data-[selected]:after:bg-inverse";
 
 function Option({ value, children }: { value: string; children: ReactNode }) {
   return (

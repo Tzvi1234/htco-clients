@@ -1,5 +1,5 @@
 # Hand-written or generated files Prettier must not reformat.
 *.md
 pnpm-lock.yaml
-design/tokens/*.json
+design/tokens/**/*.json
 packages/*/generated/

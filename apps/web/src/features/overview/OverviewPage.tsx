@@ -184,7 +184,7 @@ export function OverviewPage() {
             </div>
             <Link
               to="/shops"
-              className="relative inline-flex h-10 items-center gap-1.5 self-start rounded-button bg-app px-4 text-body-sm font-semibold text-app-text no-underline hover:bg-app-hover"
+              className="relative inline-flex h-10 items-center gap-1.5 self-start rounded-button bg-inverse px-4 text-body-sm font-semibold text-on-inverse no-underline hover:bg-inverse-hover"
             >
               <Trans>Start with your shop</Trans>
               <ArrowRight size={14} weight="bold" className="rtl:-scale-x-100" />

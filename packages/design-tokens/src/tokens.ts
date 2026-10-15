@@ -30,7 +30,11 @@ export interface ShadowLayer {
   inset?: boolean;
 }
 
-export type Token = { path: string[] } & (
+export type Token = {
+  path: string[];
+  /** Set when the source names another semantic token (`{color.bg.panel}`): CSS keeps the link. */
+  alias?: string[];
+} & (
   | { type: "color"; value: DtcgColor }
   | { type: "dimension"; value: Dimension }
   | { type: "duration"; value: Duration }
@@ -38,6 +42,7 @@ export type Token = { path: string[] } & (
   | { type: "fontFamily"; value: string[] }
   | { type: "fontWeight"; value: number }
   | { type: "shadow"; value: ShadowLayer[] }
+  | { type: "number"; value: number }
 );
 
 export type Theme = "light" | "dark";
@@ -76,6 +81,7 @@ function toToken(path: string[], declaredType: unknown, value: unknown): Token {
   if (type === "dimension" && isDimension(value)) return { path, type, value };
   if (type === "duration" && isDuration(value)) return { path, type, value };
   if (type === "fontWeight" && typeof value === "number") return { path, type, value };
+  if (type === "number" && typeof value === "number") return { path, type, value };
   if (type === "fontFamily" && Array.isArray(value) && value.every((v) => typeof v === "string")) {
     return { path, type, value };
   }
@@ -99,10 +105,20 @@ function toToken(path: string[], declaredType: unknown, value: unknown): Token {
   );
 }
 
-/** Every token of `theme`: the primitives in `base.json` plus `semantic.<theme>.json`. */
-export async function loadTokens(theme: Theme, tokensDir = TOKENS_DIR): Promise<Token[]> {
+/** A reference to another semantic token (not a primitive), which CSS keeps as `var()`. */
+const SEMANTIC_REFERENCE = /^\{((?:color|elevation)\.[^{}]+)\}$/;
+
+/**
+ * Every token of `theme`: the primitives in `base.json`, `semantic.<theme>.json`, then each
+ * overlay (a palette or a tweak level, `modes/*.json`) in order, a later file winning.
+ */
+export async function loadTokens(
+  theme: Theme,
+  tokensDir = TOKENS_DIR,
+  overlays: readonly string[] = [],
+): Promise<Token[]> {
   // Style Dictionary reads `source` as glob patterns, which need forward slashes.
-  const source = ["base.json", `semantic.${theme}.json`].map((name) =>
+  const source = ["base.json", `semantic.${theme}.json`, ...overlays].map((name) =>
     join(tokensDir, name).replaceAll("\\", "/"),
   );
   const dictionary = new StyleDictionary({
@@ -114,6 +130,9 @@ export async function loadTokens(theme: Theme, tokensDir = TOKENS_DIR): Promise<
   const { allTokens } = await dictionary.getPlatformTokens("raw");
   return allTokens.map((token) => {
     const value: unknown = token.$value;
-    return toToken(token.path, token.$type, value);
+    const typed = toToken(token.path, token.$type, value);
+    const original: unknown = token.original.$value;
+    const reference = typeof original === "string" ? SEMANTIC_REFERENCE.exec(original) : null;
+    return reference?.[1] === undefined ? typed : { ...typed, alias: reference[1].split(".") };
   });
 }
