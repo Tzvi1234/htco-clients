@@ -1891,6 +1891,10 @@ msgctxt "navigation"
 msgid "Settings"
 msgstr "הגדרות"
 
+#: src/app/shell/UserMenu.tsx
+msgid "Several workspaces"
+msgstr "כמה סביבות עבודה"
+
 #: src/features/office/EngineeringPage.tsx
 msgid "Severity"
 msgstr "חומרה"
@@ -2509,6 +2513,10 @@ msgstr "החנות רצה. ההחלטה שלך."
 #: src/features/auth/AuthLayout.tsx
 msgid "Your shop runs. You decide<0>.</0>"
 msgstr "החנות רצה. ההחלטה שלך<0>.</0>"
+
+#: src/app/shell/ShopSwitcher.tsx
+msgid "Your shops"
+msgstr "החנויות שלך"
 
 #: src/features/auth/SignInPage.tsx
 msgid "Your shops, orders and AI office in one place."

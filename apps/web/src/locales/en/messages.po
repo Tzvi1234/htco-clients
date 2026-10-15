@@ -1891,6 +1891,10 @@ msgctxt "navigation"
 msgid "Settings"
 msgstr "Settings"
 
+#: src/app/shell/UserMenu.tsx
+msgid "Several workspaces"
+msgstr "Several workspaces"
+
 #: src/features/office/EngineeringPage.tsx
 msgid "Severity"
 msgstr "Severity"
@@ -2509,6 +2513,10 @@ msgstr "Your shop runs. You decide."
 #: src/features/auth/AuthLayout.tsx
 msgid "Your shop runs. You decide<0>.</0>"
 msgstr "Your shop runs. You decide<0>.</0>"
+
+#: src/app/shell/ShopSwitcher.tsx
+msgid "Your shops"
+msgstr "Your shops"
 
 #: src/features/auth/SignInPage.tsx
 msgid "Your shops, orders and AI office in one place."

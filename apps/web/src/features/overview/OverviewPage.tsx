@@ -1,11 +1,12 @@
 import "./home.css";
 
 import { Trans, useLingui } from "@lingui/react/macro";
-import { useQuery } from "@tanstack/react-query";
+import { useQueries, useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState, type ReactNode } from "react";
 
 import { HERO_NAMES, HEROES } from "./heroes.ts";
+import { shopCardState } from "../../app/shell/ShopSwitcher.tsx";
 import { meQuery, sessionQuery, shopsQuery, useApi, type ShopView } from "../../shared/api/api.tsx";
 import { RiskChip } from "../../shared/demo/AgentBits.tsx";
 import { AGENTS, APPROVALS, agent, badge, type AgentId } from "../../shared/demo/office.ts";
@@ -303,13 +304,30 @@ function Hero({ footer }: { footer: ReactNode }) {
 
 /* ---------------------------------------------------------------- shops (real) */
 
-function useShops() {
+/**
+ * The shops of every workspace the user belongs to, as the sidebar's shop card counts them:
+ * known once one workspace has shops or every workspace has answered; an error only when a
+ * list could not be read and no shop is known.
+ */
+function useShops(): { data: ShopView[] | undefined; isError: boolean; refetch: () => void } {
   const api = useApi();
   const me = useQuery(meQuery(api));
-  const organizationId = me.data?.memberships[0]?.organization_id;
-  return useQuery({
-    ...shopsQuery(api, organizationId ?? ""),
-    enabled: organizationId !== undefined,
+  const organizations = me.data?.memberships.map((m) => m.organization_id) ?? [];
+  return useQueries({
+    queries: organizations.map((organizationId) => shopsQuery(api, organizationId)),
+    combine: (results) => {
+      const shops = results.flatMap((result) => result.data ?? []);
+      const state = shopCardState(
+        results.map((result) => ({ status: result.status, count: result.data?.length ?? 0 })),
+      );
+      return {
+        data: state === "unknown" ? undefined : shops,
+        isError: state === "unknown" && results.some((result) => result.isError),
+        refetch: () => {
+          for (const result of results) if (result.isError) void result.refetch();
+        },
+      };
+    },
   });
 }
 
@@ -332,7 +350,7 @@ function ShopsCard() {
             type="button"
             className="k-btn"
             onClick={() => {
-              void shops.refetch();
+              shops.refetch();
             }}
           >
             {t`Try again`}
