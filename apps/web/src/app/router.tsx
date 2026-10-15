@@ -161,7 +161,7 @@ declare module "@tanstack/react-router" {
     router: ReturnType<typeof createAppRouter>;
   }
   interface HistoryState {
-    /** Set by the Etsy callback for the Shops page's confirmation. */
-    etsy?: "connected" | "reconnected";
+    /** Set by the Etsy callback for the Shops page's confirmation, in that workspace. */
+    etsy?: { outcome: "connected" | "reconnected"; organizationId: string };
   }
 }

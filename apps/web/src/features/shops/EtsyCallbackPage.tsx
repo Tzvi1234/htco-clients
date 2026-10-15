@@ -70,7 +70,12 @@ export function EtsyCallbackPage() {
       await navigate({
         to: "/shops",
         replace: true,
-        state: { etsy: data.reconnected ? "reconnected" : "connected" },
+        state: {
+          etsy: {
+            outcome: data.reconnected ? "reconnected" : "connected",
+            organizationId: data.shop.organization_id,
+          },
+        },
       });
     },
     onError: (error) => {

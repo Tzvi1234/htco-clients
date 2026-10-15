@@ -281,10 +281,14 @@ describe("Codex review findings", () => {
     expect(within(card).getByText("Needs reconnecting")).toBeInTheDocument();
 
     backend.state.role = "support";
+    // Half a minute later the user returns to the tab: the app asks who they are again.
     vi.useFakeTimers({ toFake: ["Date"] });
     vi.setSystemTime(Date.now() + 60_000);
     focusManager.setFocused(false);
     focusManager.setFocused(true);
+    await vi.waitFor(() => {
+      expect(backend.requests.filter((r) => r.url.endsWith("/v1/me"))).toHaveLength(2);
+    });
     vi.useRealTimers();
     focusManager.setFocused(undefined);
 

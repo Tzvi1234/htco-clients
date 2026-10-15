@@ -118,16 +118,28 @@ export const shopKeys = {
   integrations: (organizationId: string) => ["shops", organizationId, "integrations"] as const,
 };
 
-/** The organization's shops the user may see. */
+/** Every shop of the organization the user may see, following the API's pages. */
 export function shopsQuery(api: ApiClient, organizationId: string) {
+  async function page(cursor: string | null): Promise<components["schemas"]["ShopList"]> {
+    const { data, error, response } = await api.GET("/v1/shops", {
+      params: {
+        query: { organization_id: organizationId, ...(cursor === null ? {} : { cursor }) },
+      },
+    });
+    if (data === undefined) throw apiError(response, error);
+    return data;
+  }
   return queryOptions({
     queryKey: shopKeys.list(organizationId),
     queryFn: async (): Promise<ShopView[]> => {
-      const { data, error, response } = await api.GET("/v1/shops", {
-        params: { query: { organization_id: organizationId } },
-      });
-      if (data === undefined) throw apiError(response, error);
-      return data.items;
+      const shops: ShopView[] = [];
+      let cursor: string | null = null;
+      do {
+        const next = await page(cursor);
+        shops.push(...next.items);
+        cursor = next.next_cursor;
+      } while (cursor !== null);
+      return shops;
     },
   });
 }

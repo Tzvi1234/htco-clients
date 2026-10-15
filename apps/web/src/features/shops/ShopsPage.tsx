@@ -28,7 +28,9 @@ export function ShopsPage() {
   const me = useQuery(meQuery(api));
   const memberships = me.data?.memberships ?? [];
   const ids = memberships.map((m) => m.organization_id);
-  const [chosen, setChosen] = useState<string | null>(null);
+  const connected = useRouterState({ select: (s) => s.location.state.etsy });
+  // Back from Etsy: the workspace the shop was connected to.
+  const [chosen, setChosen] = useState<string | null>(() => connected?.organizationId ?? null);
   const organizationId = pickWorkspace(ids, chosen);
   const role = memberships.find((m) => m.organization_id === organizationId)?.role;
   const etsy = useConnectEtsy();
@@ -53,6 +55,7 @@ export function ShopsPage() {
           key={organizationId}
           organizationId={organizationId}
           seesConnections={role === "owner" || role === "admin"}
+          connected={connected?.organizationId === organizationId ? connected.outcome : undefined}
           etsy={isOwner ? etsy : undefined}
         />
       )}
@@ -70,10 +73,13 @@ export function ShopsPage() {
 function Shops({
   organizationId,
   seesConnections,
+  connected,
   etsy,
 }: {
   organizationId: string;
   seesConnections: boolean;
+  /** The confirmation after coming back from Etsy, for this workspace. */
+  connected: "connected" | "reconnected" | undefined;
   /** Present for the Owner, who alone connects shops. */
   etsy: ConnectEtsy | undefined;
 }) {
@@ -85,7 +91,6 @@ function Shops({
     enabled: seesConnections,
   });
   const reconnectLabel = useReconnectLabel();
-  const connected = useRouterState({ select: (s) => s.location.state.etsy });
 
   if (shops.isError)
     return (
@@ -123,7 +128,10 @@ function Shops({
 
   if (shops.data.length === 0) return <NoShops etsy={etsy} />;
 
-  const byShop = new Map((integrations.data ?? []).map((i) => [i.shop_id, i]));
+  // A role that lost access to connection details must not keep seeing cached ones.
+  const byShop = new Map(
+    (seesConnections ? (integrations.data ?? []) : []).map((i) => [i.shop_id, i]),
+  );
   return (
     <PageBody>
       {connected === undefined ? null : (
