@@ -19,7 +19,8 @@ test("the Owner connects an Etsy shop through the code dialog and Etsy (slice 4.
   await dialog.getByLabel("Code from the app").fill("123456");
   await dialog.getByRole("button", { name: "Confirm" }).click();
 
-  await expect(page.getByText("Your Etsy shop is connected.")).toBeVisible();
+  // A new page load on the development server: allow it time to compile and start.
+  await expect(page.getByText("Your Etsy shop is connected.")).toBeVisible({ timeout: 20_000 });
   await expect(page).toHaveURL(/\/shops$/);
   await expect(page.getByRole("article", { name: "Willow & Wick" })).toBeVisible();
   await checkpoint(page, "shops-connected");
