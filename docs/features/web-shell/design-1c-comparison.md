@@ -15,8 +15,9 @@ The prototype and the app (`?demo`) were opened in Chromium at 1440×900 on the 
 - Translucent colours use the legacy `rgba()` syntax, as the prototype does; browsers keep that alpha at 8 bits, which is the value the prototype renders with.
 - The bloom's gradients end on the same fully transparent colours; glass has no `brightness()` step, strong glass does.
 - A later token file replaces a whole shadow (no layers left over from the base).
+- No element in the shell has its own `view-transition-name`: one would make it a backdrop root and cut the glass panels off from the bloom behind them.
 
-Treated as equal: Tailwind's empty ring shadows (transparent, zero size) and equivalent round radii (`999px` against `50%` or half the height). Pixel samples of the sidebar fill, the top bar's ground and the gaps between panels match at 96–100%; what is left is different text (counters, names) and, under glass, differently sized panels blurring the bloom. Side-by-side screenshots of the default, glass, contrast, borders and Design 4 states are kept with the review of this change.
+Treated as equal: Tailwind's empty ring shadows (transparent, zero size) and equivalent round radii (`999px` against `50%` or half the height). Pixel samples of the top bar's ground, the gaps between panels and a panel corner are 100% identical in every state (glass included); the sidebar fill is 96–98% identical, the rest being different text (counters, names). Side-by-side screenshots of the default, glass, contrast, borders and Design 4 states are kept with the review of this change.
 
 ## Text colours raised for WCAG AA
 

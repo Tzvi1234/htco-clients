@@ -54,7 +54,7 @@ apps/web/src/
 - **Panels.** A route without `staticData.layout` gets one panel from the shell (the existing screens); a route with `layout: "panels"` lays out its own `Panel`s, as `DemoScreen` does and as Design 1C screens will.
 - **Collapsed sidebar.** Below 1360 px the sidebar starts as a rail until the user chooses (`htco.sidebar`: `mini` or `open`). Collapsed sub-lists are `inert` and hidden from assistive technology, so only what is visible can be reached.
 - **Phones.** Under 640 px the shell renders the top bar (with search, tweaks and the account), the screen and the tab bar; the sidebar is not rendered, so there is one `Main` navigation landmark at every width.
-- **Motion.** Route changes use View Transitions on the `screen` view-transition name (`defaultViewTransition`, off under reduced motion); everything else is CSS on the `motion.*` tokens, removed under reduced motion.
+- **Motion.** Route changes cross-fade through View Transitions on the root (`defaultViewTransition`, off under reduced motion); no element gets its own `view-transition-name`, because that would cut glass panels off from the bloom behind them; everything else is CSS on the `motion.*` tokens, removed under reduced motion.
 
 ## API client and sign-in (slices 3.6 and 3.5, web)
 

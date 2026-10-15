@@ -76,12 +76,7 @@ function Frame() {
             </Banner>
           </div>
         )}
-        <main
-          className={cx(
-            "flex min-h-0 grow flex-col gap-2 px-2 [view-transition-name:screen]",
-            phone ? "pb-24" : "pb-2",
-          )}
-        >
+        <main className={cx("flex min-h-0 grow flex-col gap-2 px-2", phone ? "pb-24" : "pb-2")}>
           {screen}
         </main>
       </div>

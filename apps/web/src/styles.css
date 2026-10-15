@@ -285,7 +285,10 @@
   }
 }
 
-/* Each screen's panels change with a short cross-fade and rise (View Transitions). */
+/* Screens change with a short cross-fade (View Transitions on the root: an element with its
+   own view-transition-name would cut glass panels off from the bloom behind them). The sidebar
+   and top bar are the same in both pictures, so only the screen visibly fades; screens add
+   their own short rise (animate-enter). */
 @keyframes htco-screen-out {
   to {
     opacity: 0;
@@ -295,20 +298,14 @@
 @keyframes htco-screen-in {
   from {
     opacity: 0;
-    translate: 0 6px;
   }
 }
 
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation: none;
-}
-
-::view-transition-old(screen) {
+::view-transition-old(root) {
   animation: htco-screen-out var(--motion-duration-fast) var(--motion-easing-exit) both;
 }
 
-::view-transition-new(screen) {
+::view-transition-new(root) {
   animation: htco-screen-in var(--motion-duration-base) var(--motion-easing-standard) both;
 }
 
