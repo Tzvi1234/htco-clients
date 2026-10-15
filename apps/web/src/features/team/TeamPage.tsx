@@ -23,6 +23,7 @@ import { Button } from "../../shared/ui/Button.tsx";
 import { PageBody, PageHeader } from "../../shared/ui/PageHeader.tsx";
 import { ObjectIcon, Tag, type Hue } from "../../shared/ui/Tag.tsx";
 import { TextField } from "../../shared/ui/TextField.tsx";
+import { CHIP, WorkspacePicker, pickWorkspace } from "../../shared/ui/WorkspacePicker.tsx";
 
 type Role = "owner" | "admin" | "operations" | "finance" | "support" | "developer" | "viewer";
 
@@ -37,9 +38,6 @@ const ROLE_HUES: Record<Role, Hue> = {
 };
 
 const INVITABLE: Role[] = ["admin", "operations", "finance", "support", "developer", "viewer"];
-
-const CHIP =
-  "flex h-8 cursor-default items-center rounded-pill border border-border-subtle px-3 text-body-sm font-medium outline-none transition-colors data-[focus-visible]:ring-2 data-[focus-visible]:ring-focus data-[hovered]:bg-hover data-[selected]:border-transparent data-[selected]:bg-app data-[selected]:text-app-text";
 
 const CARD = "overflow-hidden rounded-card border border-border-subtle bg-surface shadow-1";
 const CARD_HEADER =
@@ -61,15 +59,13 @@ function membersQuery(api: ApiClient, organizationId: string) {
 
 /** Who works in the organization, and inviting someone new (FR-IAM-02). Owners and Admins. */
 export function TeamPage() {
-  const { t } = useLingui();
   const api = useApi();
   const me = useQuery(meQuery(api));
   const managed = (me.data?.memberships ?? [])
     .filter((m) => m.role === "owner" || m.role === "admin")
     .map((m) => m.organization_id);
   const [chosen, setChosen] = useState<string | null>(null);
-  // One workspace: that one. Several: the user picks explicitly, never the first by accident.
-  const organizationId = managed.length === 1 ? managed[0] : (chosen ?? undefined);
+  const organizationId = pickWorkspace(managed, chosen);
 
   return (
     <>
@@ -81,24 +77,7 @@ export function TeamPage() {
       <PageBody>
         <div className="flex max-w-[760px] flex-col gap-4">
           {managed.length > 1 ? (
-            <RadioGroup
-              value={chosen}
-              onChange={setChosen}
-              className="flex flex-col gap-2 rounded-card border border-border-subtle bg-surface p-4 shadow-1"
-            >
-              <Label className="text-body-sm font-medium text-secondary">{t`Workspace`}</Label>
-              <div className="flex flex-wrap gap-2">
-                {managed.map((id) => (
-                  <RadioField key={id} value={id}>
-                    <RadioButton className={CHIP}>
-                      <span dir="ltr" className="font-mono">
-                        {id.slice(0, 8)}
-                      </span>
-                    </RadioButton>
-                  </RadioField>
-                ))}
-              </div>
-            </RadioGroup>
+            <WorkspacePicker ids={managed} value={chosen} onChange={setChosen} />
           ) : null}
           {organizationId === undefined ? null : (
             <>

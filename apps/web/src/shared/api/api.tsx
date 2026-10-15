@@ -108,3 +108,40 @@ export function safeRedirect(target: unknown): string {
     ? target
     : "/";
 }
+
+export type ShopView = components["schemas"]["ShopView"];
+export type IntegrationView = components["schemas"]["IntegrationView"];
+
+export const shopKeys = {
+  all: ["shops"] as const,
+  list: (organizationId: string) => ["shops", organizationId] as const,
+  integrations: (organizationId: string) => ["shops", organizationId, "integrations"] as const,
+};
+
+/** The organization's shops the user may see. */
+export function shopsQuery(api: ApiClient, organizationId: string) {
+  return queryOptions({
+    queryKey: shopKeys.list(organizationId),
+    queryFn: async (): Promise<ShopView[]> => {
+      const { data, error, response } = await api.GET("/v1/shops", {
+        params: { query: { organization_id: organizationId } },
+      });
+      if (data === undefined) throw apiError(response, error);
+      return data.items;
+    },
+  });
+}
+
+/** Each shop's marketplace connection: status, scopes and token health, never a token. */
+export function integrationsQuery(api: ApiClient, organizationId: string) {
+  return queryOptions({
+    queryKey: shopKeys.integrations(organizationId),
+    queryFn: async (): Promise<IntegrationView[]> => {
+      const { data, error, response } = await api.GET("/v1/shop-integrations", {
+        params: { query: { organization_id: organizationId } },
+      });
+      if (data === undefined) throw apiError(response, error);
+      return data.items;
+    },
+  });
+}

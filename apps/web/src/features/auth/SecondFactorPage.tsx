@@ -22,7 +22,8 @@ export function SecondFactorPage() {
   return status.data.enrolled ? <ConfirmCode /> : <SetUp />;
 }
 
-function useCodeMessage() {
+/** Plain words for a refused or failed authenticator code. */
+export function useCodeMessage() {
   const { t } = useLingui();
   return (error: Error | null): string | undefined => {
     if (error === null) return undefined;
@@ -163,6 +164,7 @@ function ConfirmCode() {
   );
 }
 
+/** The 6-digit code from the authenticator app: digits only, left-to-right. */
 export function CodeField({
   value,
   onChange,

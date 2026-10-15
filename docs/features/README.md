@@ -6,3 +6,4 @@ Every client feature has a folder here, created from [`_template/`](_template/) 
 |---|---|---|---|
 | [web-shell](web-shell/overview.md) | Web | 3 | In progress |
 | [design-tokens](design-tokens/overview.md) | Web, Android, Windows | 3 | Done (slice 3.2) |
+| [shops](shops/overview.md) | Web | 4 | In progress (slices 4.3, 4.6) |
