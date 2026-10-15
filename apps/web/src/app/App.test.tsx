@@ -119,7 +119,7 @@ describe("the app shell", () => {
     const { user } = await renderApp({ path: "/no-such-page" });
 
     expect(screen.getByRole("alert")).toHaveTextContent("Page not found");
-    await user.click(screen.getByRole("button", { name: "Go to the overview" }));
+    await user.click(screen.getByRole("button", { name: "Go to Home" }));
 
     expect(await screen.findByRole("heading", { level: 1, name: "Home" })).toBeInTheDocument();
   });

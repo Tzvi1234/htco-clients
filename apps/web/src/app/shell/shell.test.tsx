@@ -403,3 +403,21 @@ function tabName(id: string): string {
   };
   return names[id] ?? id;
 }
+
+describe("the demo label", () => {
+  it.each(["/office/chat", "/work/tasks", "/commerce/orders", "/finance/ledger"])(
+    "%s carries the large DEMO pill in the top bar, centred there, never inside the screen",
+    async (path) => {
+      await open(path);
+      const banner = screen.getByRole("heading", { level: 1 }).closest("header");
+      if (banner === null) throw new Error("No top bar");
+      // The pill is absolutely centred in the bar, so the bar must be its positioned box.
+      expect(banner).toHaveClass("relative");
+      const pill = within(banner).getByRole("note");
+      expect(pill).toHaveTextContent("DEMO");
+      expect(pill).toHaveClass("absolute", "inset-x-0", "justify-center");
+      expect(within(screen.getByRole("main")).queryByText("DEMO")).not.toBeInTheDocument();
+      expect(screen.getAllByText("DEMO")).toHaveLength(1);
+    },
+  );
+});

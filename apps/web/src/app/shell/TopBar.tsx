@@ -32,7 +32,8 @@ function Crumbs() {
   return (
     <p className="m-0 flex min-w-0 items-center gap-2 text-caption whitespace-nowrap text-muted">
       {trail.map((crumb, index) => (
-        <Fragment key={crumb}>
+        // By position: an area and its tab may share a name (Customers › Customers).
+        <Fragment key={index}>
           {index === 0 ? null : <CrumbIcon size={12} className="shrink-0 rtl:-scale-x-100" />}
           {index === trail.length - 1 ? (
             <span className="truncate text-primary">{crumb}</span>
@@ -70,7 +71,7 @@ export function TopBar({ titleSlot, phone }: { titleSlot: Ref<HTMLDivElement>; p
               "data-[scrolled]:border-line data-[scrolled]:pb-1.5",
               "[&_h1]:transition-[font-size] [&_h1]:duration-[var(--motion-duration-base)] data-[scrolled]:[&_h1]:text-title-sm data-[scrolled]:[&_h1]:font-normal",
             )
-          : "h-[72px] ps-6 pe-4",
+          : "relative h-[72px] ps-6 pe-4",
       )}
     >
       <div className="flex min-w-0 flex-col gap-0.5">

@@ -1461,8 +1461,8 @@ msgid "Getting started"
 msgstr "Getting started"
 
 #: src/app/RouteStates.tsx
-msgid "Go to the overview"
-msgstr "Go to the overview"
+msgid "Go to Home"
+msgstr "Go to Home"
 
 #: src/features/overview/OverviewPage.tsx
 msgid "Good afternoon"

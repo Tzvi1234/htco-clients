@@ -513,7 +513,7 @@ interface SupplierRow {
   products: Bi;
   time: Bi;
   quality: string;
-  quote: string;
+  quote: Bi | string;
   active: boolean;
 }
 
@@ -539,7 +539,7 @@ const SUPPLIERS: readonly SupplierRow[] = [
     products: bi("מגבות מטבח (הצעה)", "Tea towels (quote)"),
     time: bi("2.6 ימים", "2.6 days"),
     quality: "—",
-    quote: "$6.40 / unit",
+    quote: bi("‏$6.40 ליחידה", "$6.40 / unit"),
     active: false,
   },
 ];
@@ -565,7 +565,12 @@ function SuppliersDemo() {
     { key: "products", header: t`Products`, cell: (s) => text(s.products), phone: false },
     { key: "time", header: t`Production time`, cell: (s) => text(s.time), phone: false },
     { key: "quality", header: t`Quality`, cell: (s) => ltr(s.quality) },
-    { key: "quote", header: t`Open quote`, cell: (s) => ltr(s.quote), phone: false },
+    {
+      key: "quote",
+      header: t`Open quote`,
+      cell: (s) => (typeof s.quote === "string" ? ltr(s.quote) : text(s.quote)),
+      phone: false,
+    },
     {
       key: "status",
       header: t`Status`,

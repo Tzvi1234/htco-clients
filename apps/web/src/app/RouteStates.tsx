@@ -96,7 +96,7 @@ export function NotFound() {
       art="parcel"
     >
       <Button variant="primary" className={AUTH_SUBMIT} onPress={() => void navigate({ to: "/" })}>
-        <Trans>Go to the overview</Trans>
+        <Trans>Go to Home</Trans>
       </Button>
     </StatePage>
   );
