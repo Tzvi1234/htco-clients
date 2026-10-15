@@ -168,6 +168,11 @@ function LiveMap({ modes }: { modes: ReactNode }) {
     scene.current?.setPalette(palette);
   }, [palette]);
 
+  // The system's reduced-motion setting can change while the map is open.
+  useEffect(() => {
+    scene.current?.setStill(still);
+  }, [still]);
+
   useEffect(() => {
     scene.current?.relabel();
   }, [i18n.locale]);
