@@ -60,6 +60,23 @@ describe("the team (FR-IAM-02)", () => {
   });
 });
 
+describe("the team with several workspaces", () => {
+  it("asks which workspace before listing or inviting", async () => {
+    const other = "c0000000-0000-7000-8000-000000000009";
+    const { user, backend } = await open("/settings/team", { ...owner, otherOrgs: [other] });
+
+    expect(screen.queryByRole("list", { name: "Members" })).not.toBeInTheDocument();
+    await user.click(await screen.findByRole("radio", { name: /c0000000/ }));
+    await user.type(await screen.findByLabelText("Email"), "dana@example.test");
+    await user.click(screen.getByRole("button", { name: "Invite" }));
+
+    await screen.findByRole("textbox", { name: "Invitation link" });
+    expect(
+      backend.requests.some((r) => r.url.includes(`/v1/organizations/${other}/invitations`)),
+    ).toBe(true);
+  });
+});
+
 describe("accepting an invitation", () => {
   const link = "/accept-invite#access_token=invite-at&refresh_token=invite-rt&type=invite";
 
@@ -89,6 +106,19 @@ describe("accepting an invitation", () => {
     await user.click(screen.getByRole("button", { name: "Save and sign in" }));
 
     expect(await screen.findByRole("alert")).toHaveTextContent("The passwords are not the same.");
+    expect(backend.state.accepted).toBeUndefined();
+  });
+
+  it("checks the password length before sending it", async () => {
+    const { user, backend } = await open(link);
+
+    await user.type(screen.getByLabelText("New password"), "too short");
+    await user.type(screen.getByLabelText("Repeat the password"), "too short");
+    await user.click(screen.getByRole("button", { name: "Save and sign in" }));
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "Use between 12 and 128 characters.",
+    );
     expect(backend.state.accepted).toBeUndefined();
   });
 

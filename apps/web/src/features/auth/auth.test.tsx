@@ -167,6 +167,37 @@ describe("an account without an organization", () => {
   });
 });
 
+describe("signing out when the API is unavailable", () => {
+  it("keeps the user signed in and says so, from the account menu", async () => {
+    const { user, backend } = await open("/", {
+      signedIn: true,
+      enrolled: true,
+      assurance: "aal2",
+      signOutFails: true,
+    });
+
+    await user.click(screen.getByRole("button", { name: "Account and preferences" }));
+    await user.click(screen.getByRole("menuitem", { name: "Sign out" }));
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "You are still signed in. Try signing out again shortly.",
+    );
+    expect(screen.getByRole("heading", { level: 1, name: "Overview" })).toBeInTheDocument();
+    expect(backend.state.signedIn).toBe(true);
+  });
+
+  it("keeps the user signed in and says so, without a workspace", async () => {
+    const { user } = await open("/", { signedIn: true, member: false, signOutFails: true });
+
+    await screen.findByRole("heading", { level: 1, name: "You are not in a workspace yet" });
+    await user.click(screen.getByRole("button", { name: "Sign out" }));
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "You are still signed in. Try signing out again shortly.",
+    );
+  });
+});
+
 describe("security settings", () => {
   const ready = { signedIn: true, enrolled: true, assurance: "aal2" } as const;
 
