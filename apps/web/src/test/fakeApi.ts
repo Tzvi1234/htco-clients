@@ -18,6 +18,8 @@ export interface FakeState {
   members: { id: string; user_id: string; display_name: string | null; role: string }[];
   invited: { email: unknown; role: unknown }[];
   inviteLink: string;
+  /** False: signed in, but not a member of any organization (403 no-membership). */
+  member: boolean;
   accepted?: Record<string, unknown>;
 }
 
@@ -61,6 +63,7 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
       },
     ],
     invited: [],
+    member: true,
     inviteLink: "https://example.supabase.co/auth/v1/verify?token=t&type=invite",
     ...initial,
   };
@@ -100,6 +103,7 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
       case "GET /v1/auth/session":
         return json(200, { user_id: user, assurance: state.assurance });
       case "GET /v1/me":
+        if (!state.member) return problem(403, "no-membership");
         return json(200, {
           user_id: user,
           assurance: state.assurance,

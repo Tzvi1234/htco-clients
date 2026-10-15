@@ -151,6 +151,22 @@ describe("the second factor for Owners and Admins (AC-3.5.3)", () => {
   });
 });
 
+describe("an account without an organization", () => {
+  it("explains that an invitation is needed, and offers to sign out", async () => {
+    const { user, backend } = await open("/", { signedIn: true, member: false });
+
+    expect(
+      await screen.findByRole("heading", { level: 1, name: "You are not in a workspace yet" }),
+    ).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Sign out" }));
+
+    expect(
+      await screen.findByRole("heading", { level: 1, name: "Sign in to HT-Commerce" }),
+    ).toBeInTheDocument();
+    expect(backend.state.signedIn).toBe(false);
+  });
+});
+
 describe("security settings", () => {
   const ready = { signedIn: true, enrolled: true, assurance: "aal2" } as const;
 
