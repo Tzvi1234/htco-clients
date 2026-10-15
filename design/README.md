@@ -39,10 +39,11 @@ Brand moments sit on an **aura**: large organic shapes in **solid** pastel colou
 
 ## The app frame
 
-- The app ground is `bg-app`, a pale graphite.
-- The sidebar sits directly on it.
+- The app ground is `bg-app`, a deep ink (`#141419`).
+- The sidebar sits directly on it, in light ink text (`app.text`, `app.text-muted`). Hover and the current item use lighter ink pills (`app.hover`, `app.selected`).
 - The work floats beside it on a white panel (`bg-canvas`, radius 16, 1 px line, `elevation-2`, an 8 px margin).
-- On phones the page fills the screen, and navigation is a floating tab bar at the bottom, 12 px from the edges, with radius 16.
+- On phones the page fills the screen, and navigation is a floating **ink** tab bar at the bottom, 12 px from the edges, with radius 20. The current tab sits on a lighter ink pill.
+- Colour lives in solid accent surfaces (the AI office card in solid iris with the saffron dot), status and the decision ring. Icons, cards and lists stay monochrome and precise.
 
 ## The logo
 
@@ -133,12 +134,13 @@ Brand moments sit on an **aura**: large organic shapes in **solid** pastel colou
   - tags 20 px with radius 4;
   - cards radius 12, dialogs radius 16.
   - Cards have a 1 px line and the faintest shadow; menus and dialogs float with `elevation-3`.
-- **Object icons:** each record type has a **solid** tile in its hue with a white filled glyph, at 20, 32 or 40 px. Overview is iris, Shops coral, Security mint and Settings slate. Later records get their own hue once.
+- **Object icons:** a quiet white tile with a hairline and a monochrome duotone glyph, at 20, 32 or 40 px. Icons are never coloured; colour is for meaning and for solid accent surfaces.
+- **Key numbers:** one card divided into cells (four across on wide screens, 2×2 on phones), each with a small monochrome icon and label, a display-size value, and a one-line source or state.
 - Spacing on a 4 px grid (`space-*`). Breakpoints 640, 900, 1200, 1600.
 
 ## Iconography
 
-[Phosphor](https://phosphoricons.com) icons everywhere: `duotone` at 18–20 px for navigation and inline UI, `fill` in white on solid object tiles and on the current navigation item, `bold` for small arrows. Import the `…Icon` names. Directional icons mirror in right-to-left layouts; logos, media controls, time axes and codes do not. No emoji in the product.
+[Phosphor](https://phosphoricons.com) icons everywhere: `duotone` at 16–20 px for navigation, object tiles and inline UI, `fill` for the current navigation item, `bold` for small arrows. Always monochrome. Import the `…Icon` names. Directional icons mirror in right-to-left layouts; logos, media controls, time axes and codes do not. No emoji in the product.
 
 ## Motion
 

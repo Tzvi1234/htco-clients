@@ -51,7 +51,7 @@ export function UserMenu() {
     <MenuTrigger>
       <Button
         aria-label={t`Account and preferences`}
-        className="flex h-10 w-full cursor-default items-center justify-center gap-2 rounded-control px-1.5 text-body text-secondary outline-none data-[hovered]:bg-hover data-[hovered]:text-primary data-[pressed]:bg-hover lg:justify-start"
+        className="flex h-10 w-full cursor-default items-center justify-center gap-2 rounded-control px-1.5 text-body text-app-muted outline-none data-[hovered]:bg-app-hover data-[hovered]:text-app-text data-[pressed]:bg-app-hover lg:justify-start"
       >
         <span
           aria-hidden="true"
@@ -59,8 +59,8 @@ export function UserMenu() {
         >
           <User size={15} weight="fill" />
         </span>
-        <span className="hidden grow text-start font-medium text-primary lg:block">{t`Account`}</span>
-        <CaretUpDown aria-hidden="true" size={14} className="hidden text-icon-muted lg:block" />
+        <span className="hidden grow text-start font-medium text-app-text lg:block">{t`Account`}</span>
+        <CaretUpDown aria-hidden="true" size={14} className="hidden text-app-muted lg:block" />
       </Button>
       <Popover
         placement="top start"

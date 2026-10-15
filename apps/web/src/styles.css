@@ -18,6 +18,11 @@
 @theme inline {
   --color-*: initial;
   --color-app: var(--bg-app);
+  --color-app-text: var(--app-text);
+  --color-app-muted: var(--app-text-muted);
+  --color-app-hover: var(--app-hover);
+  --color-app-selected: var(--app-selected);
+  --color-app-border: var(--app-border);
   --color-canvas: var(--bg-canvas);
   --color-sidebar: var(--bg-sidebar);
   --color-surface: var(--bg-surface);

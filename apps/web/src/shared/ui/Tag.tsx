@@ -42,21 +42,23 @@ export function Tag({
 }
 
 const TILE = {
-  sm: { box: "size-5 rounded-[5px]", glyph: 12 },
+  sm: { box: "size-5 rounded-[5px]", glyph: 13 },
   md: { box: "size-8 rounded-control", glyph: 17 },
   lg: { box: "size-10 rounded-button", glyph: 21 },
 } as const;
 
 /**
- * A record type's icon (Shops, Orders, Security): a solid tile in its hue with a white filled
- * Phosphor glyph, at 20, 32 or 40 px. Decorative; the label beside it names the record type.
+ * A record type's icon (Shops, Orders, Security): a quiet white tile with a hairline and a
+ * monochrome duotone Phosphor glyph, at 20, 32 or 40 px. Colour is kept for meaning (status,
+ * the decision ring) and for solid accent surfaces, never for icons. Decorative; the label
+ * beside it names the record type.
  */
 export function ObjectIcon({
-  hue,
   icon: Glyph,
   size = "sm",
 }: {
-  hue: Hue;
+  /** Kept for the record type's identity in future views; icons themselves stay monochrome. */
+  hue?: Hue;
   icon: Icon;
   size?: keyof typeof TILE;
 }) {
@@ -64,12 +66,11 @@ export function ObjectIcon({
     <span
       aria-hidden="true"
       className={cx(
-        "inline-grid shrink-0 place-items-center text-presence-fg shadow-1",
+        "inline-grid shrink-0 place-items-center border border-border-strong bg-surface text-primary shadow-1",
         TILE[size].box,
-        SOLIDS[hue],
       )}
     >
-      <Glyph size={TILE[size].glyph} weight="fill" />
+      <Glyph size={TILE[size].glyph} weight="duotone" />
     </span>
   );
 }

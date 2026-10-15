@@ -13,7 +13,6 @@ export interface ContrastFailure {
 }
 
 const SURFACES = [
-  "bg.app",
   "bg.canvas",
   "bg.sidebar",
   "bg.surface",
@@ -68,6 +67,11 @@ const NAMED_PAIRS: ContrastPair[] = [
     [`tag.${hue}.text`, `tag.${hue}.bg`, 4.5],
     [`tag.${hue}.dot`, `tag.${hue}.bg`, 3],
     [`tag.${hue}.dot`, "bg.surface", 3],
+  ]),
+  // The ink app ground: sidebar text on the ground, on hover and on the current item.
+  ...["bg.app", "app.hover", "app.selected"].flatMap((ground): ContrastPair[] => [
+    ["app.text", ground, 4.5],
+    ["app.text-muted", ground, 4.5],
   ]),
   // An AI employee's presence flag: the name on the flag colour.
   ...PRESENCE.map((hue): ContrastPair => [`presence.${hue}.fg`, `presence.${hue}.bg`, 4.5]),

@@ -65,6 +65,14 @@ A Codex review of the first plan flagged four problems:
 - **Sign-in** says "HT-Commerce", carries the logo large above the title, and uses 44 px fields with icons and a show-password control. The brand panel keeps its first design.
 - A public **front door** (`/welcome`): what HTCO is, the web app to open now, and the Windows and Android apps marked "In development" until they exist. A signed-out visitor at the bare address lands there.
 
+## Revision — round 3 (2026-10-15, owner feedback)
+
+- **The app ground became deep ink**, with the sidebar on it and the work on a floating white panel. The phone tab bar is ink too.
+- **Icons are monochrome.** The coloured icon tiles read as generic; colour stays in solid accent surfaces such as the solid iris AI office card.
+- **The key numbers became one divided card.**
+- **The sign-in form side is calm and centred**, with the logo large above the form; the scattered shapes there were removed. The brand panel keeps its first design, with a cleaner ring interlock.
+- **The front door became bold blocks of solid colour** (an iris hero with the product preview rising out of it, solid pastel job tiles, an ink "How it works" band, platform cards), inspired by landing pages on Mobbin.
+
 ## Alternatives
 
 | Option | Why not |

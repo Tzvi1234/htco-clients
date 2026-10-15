@@ -98,8 +98,12 @@ export function SignInArt({ className }: { className?: string }) {
           stroke="var(--illustration-sky)"
           strokeWidth="24"
         />
+        {/* The interlock: the first ring passes over the second at the top crossing. Its ink
+            outline is redrawn only across the crossing, then its colour over a longer arc, so
+            the band stays seamless. */}
+        <path d="M262 164A50 50 0 0 1 308.98 196.9" fill="none" stroke={INK} strokeWidth="30" />
         <path
-          d="M300 176a50 50 0 0 1 0 76"
+          d="M253.32 164.76A50 50 0 0 1 311.24 205.32"
           fill="none"
           stroke="var(--illustration-iris)"
           strokeWidth="24"

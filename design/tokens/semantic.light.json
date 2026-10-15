@@ -326,6 +326,24 @@
         }
       }
     },
+    "app": {
+      "text": {
+        "$value": "{palette.ink.text}",
+        "$description": "Text on the ink app ground (sidebar)"
+      },
+      "text-muted": {
+        "$value": "{palette.ink.muted}"
+      },
+      "hover": {
+        "$value": "{palette.ink.hover}"
+      },
+      "selected": {
+        "$value": "{palette.ink.selected}"
+      },
+      "border": {
+        "$value": "{palette.ink.border}"
+      }
+    },
     "shape": {
       "iris": {
         "$value": "{palette.shape.iris}",

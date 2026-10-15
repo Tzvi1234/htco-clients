@@ -23,8 +23,8 @@ export function AppShell() {
     <div className="flex min-h-dvh flex-col bg-app sm:flex-row">
       <aside
         className={cx(
-          "fixed inset-x-3 bottom-3 z-20 flex rounded-dialog border border-border-subtle bg-raised/95 shadow-3 backdrop-blur",
-          "sm:sticky sm:inset-x-auto sm:top-0 sm:bottom-auto sm:h-dvh sm:w-16 sm:shrink-0 sm:flex-col sm:rounded-none sm:border-0 sm:bg-transparent sm:py-3 sm:shadow-none sm:backdrop-blur-none",
+          "fixed inset-x-3 bottom-3 z-20 flex rounded-[20px] bg-app px-1.5 shadow-3",
+          "sm:sticky sm:inset-x-auto sm:top-0 sm:bottom-auto sm:h-dvh sm:w-16 sm:shrink-0 sm:flex-col sm:rounded-none sm:bg-transparent sm:px-0 sm:py-3 sm:shadow-none",
           "lg:w-62",
           intro && "animate-sidebar-in",
         )}
@@ -35,8 +35,8 @@ export function AppShell() {
             aria-label="HTCO"
             className="flex h-9 items-center rounded-control px-1.5 outline-none lg:self-start"
           >
-            <Logo variant="full" height={22} animated={intro} className="max-lg:hidden" />
-            <Logo variant="mark" height={18} animated={intro} className="lg:hidden" />
+            <Logo variant="full" height={22} animated={intro} onInk className="max-lg:hidden" />
+            <Logo variant="mark" height={18} animated={intro} onInk className="lg:hidden" />
           </Link>
           <CommandMenu />
         </div>

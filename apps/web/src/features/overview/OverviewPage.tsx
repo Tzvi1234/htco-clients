@@ -32,11 +32,11 @@ export function OverviewPage() {
   const api = useApi();
   const session = useQuery(sessionQuery(api));
   const secured = session.data?.assurance === "aal2";
-  const metrics: { label: string; hue: Hue; icon: Icon }[] = [
-    { label: t`Orders today`, hue: "sky", icon: Package },
-    { label: t`Revenue, 30 days`, hue: "mint", icon: CurrencyCircleDollar },
-    { label: t`Active listings`, hue: "rose", icon: TagIcon },
-    { label: t`Decisions waiting`, hue: "saffron", icon: HandPalm },
+  const metrics: { label: string; icon: Icon }[] = [
+    { label: t`Orders today`, icon: Package },
+    { label: t`Revenue, 30 days`, icon: CurrencyCircleDollar },
+    { label: t`Active listings`, icon: TagIcon },
+    { label: t`Decisions waiting`, icon: HandPalm },
   ];
 
   return (
@@ -57,23 +57,23 @@ export function OverviewPage() {
 
         <ul
           aria-label={t`Key numbers`}
-          className="m-0 grid list-none grid-cols-2 gap-3 p-0 lg:grid-cols-4"
+          className="m-0 grid list-none grid-cols-2 overflow-hidden rounded-card border border-border-subtle bg-surface p-0 shadow-1 lg:grid-cols-4"
         >
-          {metrics.map(({ label, hue, icon }) => (
+          {metrics.map(({ label, icon: Glyph }) => (
             <li
               key={label}
-              className="flex flex-col gap-3 rounded-card border border-border-subtle bg-surface p-4 shadow-1 max-sm:gap-1.5 max-sm:p-3"
+              className="flex flex-col gap-2 border-border-subtle p-5 max-sm:p-4 max-lg:[&:nth-child(-n+2)]:border-b max-lg:[&:nth-child(odd)]:border-e lg:not-last:border-e"
             >
-              <div className="flex items-start justify-between gap-2">
-                <span className="text-body-sm font-medium text-secondary">{label}</span>
-                <ObjectIcon hue={hue} size="md" icon={icon} />
-              </div>
-              <div className="flex flex-col gap-0.5">
-                <span className="tabular font-display text-title font-semibold text-muted">—</span>
-                <span className="text-caption text-muted max-sm:hidden">
-                  <Trans>After a shop is connected</Trans>
-                </span>
-              </div>
+              <span className="flex items-center gap-1.5 text-body-sm font-medium text-secondary">
+                <Glyph aria-hidden="true" size={16} weight="duotone" className="text-icon" />
+                {label}
+              </span>
+              <span className="tabular font-display text-display-sm font-semibold text-border-strong max-sm:text-title">
+                —
+              </span>
+              <span className="text-caption text-muted max-sm:hidden">
+                <Trans>After a shop is connected</Trans>
+              </span>
             </li>
           ))}
         </ul>
@@ -143,14 +143,14 @@ export function OverviewPage() {
 
           <section
             aria-labelledby="office"
-            className="flex flex-col justify-between gap-4 rounded-card border border-border-subtle bg-brand p-5 shadow-1"
+            className="relative flex flex-col justify-between gap-6 overflow-hidden rounded-card bg-presence-iris p-6 text-presence-fg shadow-2"
           >
             <div className="flex flex-col gap-1.5">
-              <ObjectIcon hue="iris" size="lg" icon={Buildings} />
-              <h2 id="office" className="m-0 mt-2 font-display text-title-sm font-semibold">
+              <Buildings aria-hidden="true" size={28} weight="duotone" />
+              <h2 id="office" className="m-0 mt-2 font-display text-title font-semibold">
                 <Trans>Your AI office</Trans>
               </h2>
-              <p className="m-0 text-body-sm text-secondary">
+              <p className="m-0 text-body-sm opacity-90">
                 <Trans>
                   Specialists for listings, orders, customers and money work on your shop under your
                   policies, and bring you every risky decision.
@@ -159,11 +159,16 @@ export function OverviewPage() {
             </div>
             <Link
               to="/shops"
-              className="inline-flex items-center gap-1.5 self-start text-body-sm font-medium text-link no-underline hover:underline"
+              className="inline-flex h-9 items-center gap-1.5 self-start rounded-button bg-surface px-3.5 text-body-sm font-semibold text-primary no-underline shadow-1 hover:bg-hover"
             >
               <Trans>Start with your shop</Trans>
               <ArrowRight size={14} weight="bold" className="rtl:-scale-x-100" />
             </Link>
+            {/* The logo's dot: where every relay ends, with the owner. */}
+            <span
+              aria-hidden="true"
+              className="absolute -end-6 -bottom-6 size-24 rounded-pill bg-ring"
+            />
           </section>
         </div>
       </PageBody>

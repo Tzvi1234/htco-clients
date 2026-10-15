@@ -63,12 +63,12 @@ export function CommandMenu() {
         onPress={() => {
           setOpen(true);
         }}
-        className="flex h-8 w-full cursor-default items-center gap-2 rounded-control border border-border-strong bg-surface px-2 text-body-sm text-secondary shadow-1 outline-none data-[hovered]:bg-hover max-lg:size-8 max-lg:justify-center max-lg:px-0"
+        className="flex h-8 w-full cursor-default items-center gap-2 rounded-control border border-app-border bg-app-hover px-2 text-body-sm text-app-muted outline-none data-[hovered]:text-app-text max-lg:size-8 max-lg:justify-center max-lg:px-0"
         aria-label={t`Quick actions`}
       >
         <MagnifyingGlass aria-hidden="true" size={15} weight="duotone" />
         <span className="grow text-start max-lg:hidden">{t`Quick actions`}</span>
-        <kbd className="rounded-tag border border-border-strong px-1 font-latin text-caption text-muted max-lg:hidden">
+        <kbd className="rounded-tag border border-app-border px-1 font-latin text-caption text-app-muted max-lg:hidden">
           Ctrl K
         </kbd>
       </Button>
