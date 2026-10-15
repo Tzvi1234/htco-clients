@@ -81,6 +81,21 @@ describe("the six code boxes", () => {
     ]);
   });
 
+  it("turn red only while they hold the code that was refused", async () => {
+    const { user } = await open("/", { signedIn: true, enrolled: true, assurance: "aal1" });
+    await screen.findByRole("heading", { level: 1, name: "Two-step code" });
+    const code = screen.getByLabelText("Code from the app");
+
+    await user.type(code, "000000");
+    await user.click(screen.getByRole("button", { name: "Verify and sign in" }));
+    expect(await screen.findByRole("alert")).toHaveTextContent("The code is wrong or expired.");
+    expect(code).toHaveAttribute("aria-invalid", "true");
+
+    await user.clear(code);
+    await user.type(code, "111111");
+    expect(code).not.toHaveAttribute("aria-invalid");
+  });
+
   it("go back to sign-in by signing the first step out", async () => {
     const { user, backend } = await open("/", {
       signedIn: true,

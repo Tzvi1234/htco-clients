@@ -140,41 +140,43 @@ export function CodeBoxes({
   const [focused, setFocused] = useState(autoFocus);
   const digits = value.split("");
   return (
-    <div
-      dir="ltr"
-      key={invalid ? "refused" : "ok"}
-      className={cx("relative flex justify-center gap-2", invalid && "auth-shake")}
-    >
-      {Array.from({ length: 6 }, (_, index) => {
-        const digit = digits[index];
-        const next = focused && index === Math.min(digits.length, 5) && digits.length < 6;
-        return (
-          <span
-            key={index}
-            aria-hidden="true"
-            className={cx(
-              "grid h-[60px] w-[clamp(40px,12vw,52px)] place-items-center rounded-card border text-[26px] font-light tabular transition-[border-color,box-shadow,background-color] duration-[var(--motion-duration-fast)] ease-standard",
-              invalid
-                ? "border-danger"
-                : next
-                  ? "border-primary shadow-[0_0_0_1px_var(--text-primary)]"
-                  : digit === undefined
-                    ? "border-line-strong"
-                    : "border-line-hover-strong bg-hover",
-            )}
-          >
-            {digit === undefined ? (
-              next ? (
-                <i className="auth-caret block h-7 w-px bg-primary" />
-              ) : null
-            ) : (
-              <span key={digit + String(index)} className="auth-digit">
-                {digit}
-              </span>
-            )}
-          </span>
-        );
-      })}
+    <div dir="ltr" className="relative">
+      {/* Only the boxes remount to shake again; the input keeps its focus. */}
+      <div
+        key={invalid ? "refused" : "ok"}
+        className={cx("flex justify-center gap-2", invalid && "auth-shake")}
+      >
+        {Array.from({ length: 6 }, (_, index) => {
+          const digit = digits[index];
+          const next = focused && index === Math.min(digits.length, 5) && digits.length < 6;
+          return (
+            <span
+              key={index}
+              aria-hidden="true"
+              className={cx(
+                "grid h-[60px] w-[clamp(40px,12vw,52px)] place-items-center rounded-card border text-[26px] font-light tabular transition-[border-color,box-shadow,background-color] duration-[var(--motion-duration-fast)] ease-standard",
+                invalid
+                  ? "border-danger"
+                  : next
+                    ? "border-primary shadow-[0_0_0_1px_var(--text-primary)]"
+                    : digit === undefined
+                      ? "border-line-strong"
+                      : "border-line-hover-strong bg-hover",
+              )}
+            >
+              {digit === undefined ? (
+                next ? (
+                  <i className="auth-caret block h-7 w-px bg-primary" />
+                ) : null
+              ) : (
+                <span key={digit + String(index)} className="auth-digit">
+                  {digit}
+                </span>
+              )}
+            </span>
+          );
+        })}
+      </div>
       <input
         aria-label={label ?? t`Code from the app`}
         aria-invalid={invalid || undefined}

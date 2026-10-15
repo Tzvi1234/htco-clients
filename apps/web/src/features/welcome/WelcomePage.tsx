@@ -166,7 +166,10 @@ function Carousel() {
     t`Your shop`,
   ];
   const [index, setIndex] = useState(0);
-  const [paused, setPaused] = useState(false);
+  // Hover and focus pause the rotation independently: either one keeps it still.
+  const [hovered, setHovered] = useState(false);
+  const [focused, setFocused] = useState(false);
+  const paused = hovered || focused;
   useEffect(() => {
     if (reduced || paused) return;
     const timer = window.setInterval(() => {
@@ -185,16 +188,17 @@ function Carousel() {
       aria-label={t`HT-Commerce renders`}
       className={cx(PANEL, "w-rise min-h-[420px] [animation-delay:80ms] lg:min-h-[560px]")}
       onMouseEnter={() => {
-        setPaused(true);
+        setHovered(true);
       }}
       onMouseLeave={() => {
-        setPaused(false);
+        setHovered(false);
       }}
       onFocus={() => {
-        setPaused(true);
+        setFocused(true);
       }}
-      onBlur={() => {
-        setPaused(false);
+      onBlur={(event) => {
+        // Moving between the carousel controls keeps the focus inside.
+        if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false);
       }}
     >
       <header className="relative z-10 flex h-14 shrink-0 items-center justify-between gap-3 ps-6 pe-4">

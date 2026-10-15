@@ -1,5 +1,5 @@
 import { createMemoryHistory } from "@tanstack/react-router";
-import { render, screen, within } from "@testing-library/react";
+import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
@@ -51,5 +51,32 @@ describe("the landing page (Design 1C)", () => {
     await user.click(within(carousel).getByRole("button", { name: "Previous render" }));
     await user.click(within(carousel).getByRole("button", { name: "Previous render" }));
     expect(within(carousel).getByText("5/5")).toBeInTheDocument();
+  });
+
+  it("keeps still while focus is inside, even when the pointer leaves", async () => {
+    await open();
+    vi.useFakeTimers({ toFake: ["setInterval", "clearInterval"] });
+    try {
+      const carousel = screen.getByRole("region", { name: "HT-Commerce renders" });
+      act(() => {
+        within(carousel).getByRole("button", { name: "Next render" }).focus();
+      });
+      fireEvent.mouseEnter(carousel);
+      fireEvent.mouseLeave(carousel);
+      act(() => {
+        vi.advanceTimersByTime(9000);
+      });
+      expect(within(carousel).getByText("1/5")).toBeInTheDocument();
+
+      act(() => {
+        within(carousel).getByRole("button", { name: "Next render" }).blur();
+      });
+      act(() => {
+        vi.advanceTimersByTime(4300);
+      });
+      expect(within(carousel).getByText("2/5")).toBeInTheDocument();
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });

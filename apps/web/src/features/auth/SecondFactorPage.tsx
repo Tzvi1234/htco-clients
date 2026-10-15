@@ -80,9 +80,9 @@ function SetUp() {
     },
   });
   const verify = useMutation({
-    mutationFn: async (factorId: string) => {
+    mutationFn: async (attempt: { factorId: string; code: string }) => {
       const { data, error, response } = await api.POST("/v1/auth/mfa/verify", {
-        body: { factor_id: factorId, code },
+        body: { factor_id: attempt.factorId, code: attempt.code },
       });
       if (data === undefined) throw apiError(response, error);
     },
@@ -91,7 +91,7 @@ function SetUp() {
 
   function submit(event: SyntheticEvent) {
     event.preventDefault();
-    if (enroll.data !== undefined) verify.mutate(enroll.data.factor_id);
+    if (enroll.data !== undefined) verify.mutate({ factorId: enroll.data.factor_id, code });
   }
 
   return (
@@ -165,7 +165,7 @@ function SetUp() {
             value={code}
             onChange={setCode}
             autoFocus
-            invalid={verify.isError && code.length === 6}
+            invalid={verify.isError && verify.variables.code === code}
           />
           <FormAlert message={codeMessage(verify.error)} />
           <Button
@@ -189,8 +189,8 @@ function ConfirmCode() {
   const codeMessage = useCodeMessage();
   const [code, setCode] = useState("");
   const confirm = useMutation({
-    mutationFn: async () => {
-      const { error, response } = await api.POST("/v1/auth/step-up", { body: { code } });
+    mutationFn: async (attempt: string) => {
+      const { error, response } = await api.POST("/v1/auth/step-up", { body: { code: attempt } });
       if (!response.ok) throw apiError(response, error);
     },
     onSuccess: finish,
@@ -198,7 +198,7 @@ function ConfirmCode() {
 
   function submit(event: SyntheticEvent) {
     event.preventDefault();
-    confirm.mutate();
+    confirm.mutate(code);
   }
 
   return (
@@ -213,7 +213,7 @@ function ConfirmCode() {
           value={code}
           onChange={setCode}
           autoFocus
-          invalid={confirm.isError && code.length === 6}
+          invalid={confirm.isError && confirm.variables === code}
         />
         <BackLink />
         <FormAlert message={codeMessage(confirm.error)} />
