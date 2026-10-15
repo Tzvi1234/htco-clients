@@ -581,6 +581,7 @@ msgstr "Demo"
 msgid "DEMO"
 msgstr "DEMO"
 
+#: src/features/office/FloorPage.tsx
 #: src/shared/ui/kit/kit.tsx
 #: src/shared/ui/SoonTag.tsx
 msgid "Demo — coming soon"

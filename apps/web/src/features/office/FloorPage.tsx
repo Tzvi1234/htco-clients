@@ -3,7 +3,6 @@ import "./floor.css";
 import type { MessageDescriptor } from "@lingui/core";
 import { msg } from "@lingui/core/macro";
 import { useLingui } from "@lingui/react/macro";
-import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 
 import { AgentCard } from "./ChatPage.tsx";
@@ -49,6 +48,7 @@ import {
   Zoom,
 } from "../../shared/ui/kit/kit.tsx";
 import { PageHeader } from "../../shared/ui/PageHeader.tsx";
+import { useToast } from "../../shared/ui/Toast.tsx";
 import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
 
 /**
@@ -94,7 +94,6 @@ export function FloorPage() {
 
 function LiveMap({ modes }: { modes: ReactNode }) {
   const { t, i18n } = useLingui();
-  const navigate = useNavigate();
   const still = useMediaQuery(REDUCED_MOTION_QUERY);
   const { tweaks } = useTweaks();
   const palette = tweaks.palette === "d4" ? "d4" : "sbb";
@@ -116,10 +115,11 @@ function LiveMap({ modes }: { modes: ReactNode }) {
   }, [script, playing, speed, still]);
 
   // Keep the latest callbacks for the scene without rebuilding it.
-  const latest = useRef({ t: i18n, navigate });
+  const toast = useToast();
+  const latest = useRef({ t: i18n, toast });
   useEffect(() => {
-    latest.current = { t: i18n, navigate };
-  }, [i18n, navigate]);
+    latest.current = { t: i18n, toast };
+  }, [i18n, toast]);
 
   useEffect(() => {
     let cancelled = false;
@@ -140,11 +140,12 @@ function LiveMap({ modes }: { modes: ReactNode }) {
             return service === undefined ? "" : latest.current.t._(service.name);
           },
           agentName: (id) => latest.current.t._(agent(id).name),
+          // A demo frame: robots and status bubbles do not pretend to open anything.
           onAgent: () => {
-            void latest.current.navigate({ to: "/office/chat" });
+            latest.current.toast(latest.current.t._(COMING_SOON));
           },
-          onGo: (to) => {
-            void latest.current.navigate({ to });
+          onGo: () => {
+            latest.current.toast(latest.current.t._(COMING_SOON));
           },
           still,
         });
@@ -172,7 +173,7 @@ function LiveMap({ modes }: { modes: ReactNode }) {
   }, [i18n.locale]);
 
   useEffect(() => {
-    if (still) script.logEvent(REDUCED);
+    if (still && script.log.length === 0) script.logEvent(REDUCED);
   }, [still, script]);
 
   const counts = (status: (typeof AGENT_STATUSES)[number]) =>
@@ -269,6 +270,7 @@ function LiveMap({ modes }: { modes: ReactNode }) {
 }
 
 const REDUCED = msg`Reduced motion · static view`;
+const COMING_SOON = msg`Demo — coming soon`;
 
 /* ------------------------------------------------------------------ the list view */
 

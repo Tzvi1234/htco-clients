@@ -146,7 +146,12 @@ export class OfficeScene {
 
   /* ------------------------------------------------------------------ lifecycle */
 
+  /** Animate; under reduced motion draw one still frame and redraw only on interaction. */
   start(): void {
+    if (this.o.still) {
+      this.render(0);
+      return;
+    }
     if (this.running) return;
     this.running = true;
     this.last = 0;
@@ -193,6 +198,12 @@ export class OfficeScene {
   resetView(): void {
     this.target = { ...CAM0 };
     this.focus = null;
+    this.redraw();
+  }
+
+  /** Draws a frame when the loop is not running (reduced motion): the camera jumps there. */
+  private redraw(): void {
+    if (!this.running) this.render(this.o.still ? 0 : 0.05);
   }
 
   /* ------------------------------------------------------------------ helpers */
@@ -1945,7 +1956,7 @@ export class OfficeScene {
       return id ?? null;
     };
     const kick = () => {
-      if (!this.running) this.render(0.05);
+      this.redraw();
     };
     const on = <K extends keyof HTMLElementEventMap>(
       el: HTMLElement,
@@ -2007,6 +2018,7 @@ export class OfficeScene {
       const [x, z] = toWorld(room[0], room[1]);
       this.focus = new THREE.Vector3(x, 1.5, z);
       this.target.zoom = 2.25;
+      kick();
     });
     on(
       cv,
@@ -2017,6 +2029,7 @@ export class OfficeScene {
           0.9,
           Math.min(3.2, this.target.zoom * (e.deltaY < 0 ? 1.12 : 1 / 1.12)),
         );
+        kick();
       },
       { passive: false },
     );
