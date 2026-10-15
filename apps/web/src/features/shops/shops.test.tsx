@@ -262,6 +262,35 @@ describe("the shop card (slice 4.6)", () => {
   });
 });
 
+describe("loading the shops page", () => {
+  it("shows the shops at once while their connection details load", async () => {
+    await open("/shops", { ...owner, ...demoShops(), integrationsTrouble: "hang" });
+
+    const card = await screen.findByRole("article", { name: "Willow & Wick" });
+    expect(within(card).getByText("Loading connection details")).toBeInTheDocument();
+    expect(within(card).queryByText("Connected")).not.toBeInTheDocument();
+  });
+
+  it("keeps the shops on screen and offers to retry when connection details fail", async () => {
+    const { user, backend } = await open("/shops", {
+      ...owner,
+      ...demoShops(),
+      integrationsTrouble: "fail",
+    });
+
+    await screen.findByRole("article", { name: "Willow & Wick" });
+    expect(
+      await screen.findByText("Connection details could not be loaded. Try again shortly."),
+    ).toBeInTheDocument();
+
+    backend.state.integrationsTrouble = undefined;
+    await user.click(screen.getByRole("button", { name: "Try again" }));
+
+    const card = await screen.findByRole("article", { name: "Willow & Wick" });
+    expect(await within(card).findByText("Connected")).toBeInTheDocument();
+  });
+});
+
 describe("Codex review findings", () => {
   it("lists every shop, page after page", async () => {
     const shops = Array.from({ length: 51 }, (_, n) => ({
