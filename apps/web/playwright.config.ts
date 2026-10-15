@@ -57,6 +57,9 @@ export default defineConfig({
     ).map(([name, viewport]) => ({
       name,
       testDir: "e2e/journeys",
+      // A journey is several screens long, and the development server compiles each module on
+      // its first request, so the first journeys in a run are slow.
+      timeout: 90_000,
       snapshotPathTemplate: "{testDir}/__screenshots__/{testFileName}/{arg}-{projectName}{ext}",
       use: {
         baseURL: "http://127.0.0.1:5173",
