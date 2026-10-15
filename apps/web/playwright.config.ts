@@ -14,8 +14,9 @@ export default defineConfig({
   outputDir: "test-results",
   snapshotPathTemplate: "{testDir}/__screenshots__/{testFileName}/{arg}{ext}",
   ignoreSnapshots: process.platform !== "linux",
-  // CI never writes a missing baseline; a missing or different screenshot fails the run.
-  updateSnapshots: CI ? "none" : "missing",
+  // A missing baseline is written for review and still fails the test; a screenshot that differs
+  // from its baseline fails and never overwrites it (CI uploads both for review).
+  updateSnapshots: "missing",
   fullyParallel: true,
   forbidOnly: CI,
   retries: 0,
