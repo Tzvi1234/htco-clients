@@ -23,8 +23,8 @@ export function AppShell() {
     <div className="flex min-h-dvh flex-col bg-app sm:flex-row">
       <aside
         className={cx(
-          "fixed inset-x-3 bottom-3 z-20 flex rounded-[20px] bg-app px-1.5 shadow-3",
-          "sm:sticky sm:inset-x-auto sm:top-0 sm:bottom-auto sm:h-dvh sm:w-16 sm:shrink-0 sm:flex-col sm:rounded-none sm:bg-transparent sm:px-0 sm:py-3 sm:shadow-none",
+          "fixed inset-x-4 bottom-4 z-20 flex rounded-[28px] border border-border-subtle bg-surface p-1.5 shadow-3",
+          "sm:sticky sm:inset-x-auto sm:top-0 sm:bottom-auto sm:h-dvh sm:w-16 sm:shrink-0 sm:flex-col sm:rounded-none sm:border-0 sm:bg-transparent sm:p-0 sm:py-3 sm:shadow-none",
           "lg:w-62",
           intro && "animate-sidebar-in",
         )}
@@ -51,7 +51,7 @@ export function AppShell() {
       </aside>
       <div
         className={cx(
-          "flex min-w-0 grow flex-col overflow-clip bg-canvas pb-24 sm:pb-0",
+          "flex min-w-0 grow flex-col overflow-clip bg-sunken pb-28 sm:bg-canvas sm:pb-0",
           "sm:my-2 sm:me-2 sm:rounded-dialog sm:border sm:border-border-subtle sm:shadow-2",
         )}
       >
