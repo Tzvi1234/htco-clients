@@ -284,6 +284,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/integrations/etsy/callback": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Finish connecting an Etsy shop
+         * @description Exchanges the code, stores the tokens sealed, creates or updates the shop (one per
+         *     Etsy shop and organization), grants the connecting Owner, and audits the connection.
+         */
+        post: operations["complete_etsy_connection"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/me": {
         parameters: {
             query?: never;
@@ -393,6 +414,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/shop-integrations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Marketplace connections of the organization's shops
+         * @description Status, granted scopes and token health per shop, for the shop card; never a token.
+         */
+        get: operations["list_shop_integrations"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/shops": {
         parameters: {
             query?: never;
@@ -407,6 +448,27 @@ export interface paths {
         get: operations["shops"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/shops/etsy/connect": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Start connecting an Etsy shop
+         * @description Answers Etsy's authorization URL (PKCE S256, a single-use state bound to this
+         *     session for ten minutes). Requested scopes: shops_r, transactions_r, listings_r.
+         */
+        post: operations["connect_etsy_shop"];
         delete?: never;
         options?: never;
         head?: never;
@@ -431,11 +493,23 @@ export interface components {
             /** Assurance */
             assurance: string;
         };
+        /** AuthorizationView */
+        AuthorizationView: {
+            /** Authorization Url */
+            authorization_url: string;
+        };
         /**
          * CheckStatus
          * @enum {string}
          */
         CheckStatus: "ok" | "failed";
+        /** ConnectedShopView */
+        ConnectedShopView: {
+            integration: components["schemas"]["IntegrationView"];
+            /** Reconnected */
+            reconnected: boolean;
+            shop: components["schemas"]["ShopView"];
+        };
         /** EnrollmentView */
         EnrollmentView: {
             /** Factor Id */
@@ -454,6 +528,13 @@ export interface components {
              * @default Authenticator app
              */
             name: string;
+        };
+        /** EtsyCallback */
+        EtsyCallback: {
+            /** Code */
+            code: string;
+            /** State */
+            state?: string | null;
         };
         /** FactorView */
         FactorView: {
@@ -486,6 +567,54 @@ export interface components {
              * @constant
              */
             status: "ok";
+        };
+        /** IntegrationList */
+        IntegrationList: {
+            /** Items */
+            items: components["schemas"]["IntegrationView"][];
+        };
+        /**
+         * IntegrationProvider
+         * @enum {string}
+         */
+        IntegrationProvider: "etsy";
+        /**
+         * IntegrationStatus
+         * @enum {string}
+         */
+        IntegrationStatus: "connected" | "needs_reauth" | "disconnected";
+        /** IntegrationView */
+        IntegrationView: {
+            /** Access Expires At */
+            access_expires_at: string | null;
+            /**
+             * Connected At
+             * Format: date-time
+             */
+            connected_at: string;
+            /** Etsy Shop Id */
+            etsy_shop_id: number;
+            /** Failure Count */
+            failure_count: number;
+            /** Last Successful Call At */
+            last_successful_call_at: string | null;
+            provider: components["schemas"]["IntegrationProvider"];
+            /** Refresh Expires At */
+            refresh_expires_at: string | null;
+            /** Scopes */
+            scopes: string[];
+            /**
+             * Shop Id
+             * Format: uuid
+             */
+            shop_id: string;
+            status: components["schemas"]["IntegrationStatus"];
+            token_health: components["schemas"]["TokenHealth"];
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
         };
         /** Invitation */
         Invitation: {
@@ -707,6 +836,11 @@ export interface components {
             /** Code */
             code: string;
         };
+        /**
+         * TokenHealth
+         * @enum {string}
+         */
+        TokenHealth: "ok" | "expiring" | "needs_reauth" | "disconnected";
         /** ValidationProblem */
         ValidationProblem: {
             /** Detail */
@@ -1816,6 +1950,120 @@ export interface operations {
             };
         };
     };
+    complete_etsy_connection: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EtsyCallback"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConnectedShopView"];
+                };
+            };
+            /** @description The state is missing, unknown, used, expired or from another session (etsy-state-rejected), Etsy refused the code (etsy-authorization-refused), or the body is not valid JSON */
+            400: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not signed in, or the access token was rejected */
+            401: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not the Owner with a second factor (forbidden, mfa-required), not a web session (web-session-required), or not from the web app (csrf-failed) */
+            403: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The Etsy account has no shop (etsy-no-shop), or the shop is connected to another organization (etsy-shop-connected-elsewhere) */
+            409: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing or oversized code */
+            422: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"];
+                };
+            };
+            /** @description Unexpected error. Quote the request ID when reporting it */
+            500: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Etsy did not answer usefully; nothing was saved (etsy-unreachable) */
+            502: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Sign-in, the database or the Etsy connection is unavailable (etsy-unavailable) */
+            503: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
     me: {
         parameters: {
             query?: never;
@@ -2463,6 +2711,107 @@ export interface operations {
             };
         };
     };
+    list_shop_integrations: {
+        parameters: {
+            query?: {
+                organization_id?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IntegrationList"];
+                };
+            };
+            /** @description The caller belongs to several organizations and named none */
+            400: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not signed in, or the access token was rejected */
+            401: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Only the Owner and Admins see connections (forbidden) */
+            403: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The named organization does not exist for the caller */
+            404: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Invalid organization ID */
+            422: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"];
+                };
+            };
+            /** @description Unexpected error. Quote the request ID when reporting it */
+            500: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Sign-in or the database is unavailable */
+            503: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
     shops: {
         parameters: {
             query?: {
@@ -2555,6 +2904,72 @@ export interface operations {
                 };
             };
             /** @description Sign-in or the database is unavailable */
+            503: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    connect_etsy_shop: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuthorizationView"];
+                };
+            };
+            /** @description Not signed in, or the access token was rejected */
+            401: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not the Owner, no second factor, no recent step-up (forbidden, mfa-required, step-up-required, web-session-required), or the request did not come from the web app (csrf-failed) */
+            403: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Unexpected error. Quote the request ID when reporting it */
+            500: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Sign-in, the database or the Etsy connection is unavailable (etsy-unavailable) */
             503: {
                 headers: {
                     /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
