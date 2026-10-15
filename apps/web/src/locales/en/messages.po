@@ -7,6 +7,10 @@ msgstr ""
 "X-Generator: @lingui/cli\n"
 "Language: en\n"
 
+#: src/features/shops/ShopCard.tsx
+msgid "{days, plural, one {Reconnect within # day} other {Reconnect within # days}}"
+msgstr "{days, plural, one {Reconnect within # day} other {Reconnect within # days}}"
+
 #: src/features/overview/OverviewPage.tsx
 msgid "0 of 3 done"
 msgstr "0 of 3 done"
@@ -18,6 +22,10 @@ msgstr "1 of 3 done"
 #: src/features/welcome/WelcomePage.tsx
 msgid "A native desktop app with the same features."
 msgstr "A native desktop app with the same features."
+
+#: src/features/shops/ShopCard.tsx
+msgid "Access"
+msgstr "Access"
 
 #: src/app/shell/UserMenu.tsx
 msgid "Account"
@@ -72,6 +80,10 @@ msgstr "Authenticator app"
 msgid "Authenticator app is set up"
 msgstr "Authenticator app is set up"
 
+#: src/features/shops/EtsyCallbackPage.tsx
+msgid "Back to shops"
+msgstr "Back to shops"
+
 #: src/features/auth/ForgotPasswordPage.tsx
 msgid "Back to sign-in"
 msgstr "Back to sign-in"
@@ -80,6 +92,10 @@ msgstr "Back to sign-in"
 msgid "Big changes, sensitive messages and anything unusual always come to you."
 msgstr "Big changes, sensitive messages and anything unusual always come to you."
 
+#: src/features/shops/connectEtsy.tsx
+msgid "Cancel"
+msgstr "Cancel"
+
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Cannot scan? Type this key into the app:"
 msgstr "Cannot scan? Type this key into the app:"
@@ -87,6 +103,10 @@ msgstr "Cannot scan? Type this key into the app:"
 #: src/features/team/TeamPage.tsx
 msgid "Check the email address."
 msgstr "Check the email address."
+
+#: src/features/shops/ShopsPage.tsx
+msgid "Check your connection and try again."
+msgstr "Check your connection and try again."
 
 #: src/features/auth/ForgotPasswordPage.tsx
 msgid "Check your email"
@@ -110,10 +130,12 @@ msgid "Code from the app"
 msgstr "Code from the app"
 
 #: src/features/auth/SecondFactorPage.tsx
+#: src/features/shops/connectEtsy.tsx
 msgid "Confirm"
 msgstr "Confirm"
 
 #: src/features/auth/SecondFactorPage.tsx
+#: src/features/shops/connectEtsy.tsx
 msgid "Confirm it is you"
 msgstr "Confirm it is you"
 
@@ -133,13 +155,41 @@ msgstr "Connect your Etsy shop"
 msgid "Connect your first shop"
 msgstr "Connect your first shop"
 
+#: src/features/shops/ShopCard.tsx
+msgid "Connected"
+msgstr "Connected"
+
 #: src/features/shops/ShopsPage.tsx
 msgid "Connected shops appear here with their sync status and capabilities."
 msgstr "Connected shops appear here with their sync status and capabilities."
 
+#: src/features/shops/EtsyCallbackPage.tsx
+msgid "Connecting Etsy"
+msgstr "Connecting Etsy"
+
+#: src/features/shops/EtsyCallbackPage.tsx
+msgid "Connecting shops is unavailable right now. Try again in a few minutes."
+msgstr "Connecting shops is unavailable right now. Try again in a few minutes."
+
+#: src/features/shops/EtsyCallbackPage.tsx
+msgid "Connecting your Etsy shop"
+msgstr "Connecting your Etsy shop"
+
+#: src/features/shops/ShopCard.tsx
+msgid "Connection"
+msgstr "Connection"
+
+#: src/features/shops/EtsyCallbackPage.tsx
+msgid "Connection cancelled"
+msgstr "Connection cancelled"
+
 #: src/features/shops/ShopsPage.tsx
-msgid "Connecting a shop opens in a coming release."
-msgstr "Connecting a shop opens in a coming release."
+msgid "Connection details could not be loaded. Try again shortly."
+msgstr "Connection details could not be loaded. Try again shortly."
+
+#: src/features/shops/ShopCard.tsx
+msgid "Connection renews automatically"
+msgstr "Connection renews automatically"
 
 #: src/features/team/TeamPage.tsx
 msgid "Copied"
@@ -166,6 +216,10 @@ msgstr "Decisions waiting"
 msgid "Developer"
 msgstr "Developer"
 
+#: src/features/shops/ShopCard.tsx
+msgid "Disconnected"
+msgstr "Disconnected"
+
 #: src/features/overview/OverviewPage.tsx
 msgid "Done"
 msgstr "Done"
@@ -188,6 +242,10 @@ msgstr "Email"
 msgid "Enter a valid email address."
 msgstr "Enter a valid email address."
 
+#: src/features/shops/connectEtsy.tsx
+msgid "Enter the 6-digit code from your authenticator app to connect the shop."
+msgstr "Enter the 6-digit code from your authenticator app to connect the shop."
+
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "Enter the 6-digit code from your authenticator app to finish."
 msgstr "Enter the 6-digit code from your authenticator app to finish."
@@ -208,9 +266,33 @@ msgstr "Enter your email and we will send you a link to choose a new one."
 msgid "Enter your email."
 msgstr "Enter your email."
 
+#: src/features/shops/ShopCard.tsx
+msgid "Etsy"
+msgstr "Etsy"
+
 #: src/app/shell/ShopSwitcher.tsx
 msgid "Etsy · not connected"
 msgstr "Etsy · not connected"
+
+#: src/features/shops/connectEtsy.tsx
+msgid "Etsy cannot be reached right now. Try again in a few minutes."
+msgstr "Etsy cannot be reached right now. Try again in a few minutes."
+
+#: src/features/shops/EtsyCallbackPage.tsx
+msgid "Etsy did not accept the connection. Start again from Shops."
+msgstr "Etsy did not accept the connection. Start again from Shops."
+
+#: src/features/shops/EtsyCallbackPage.tsx
+msgid "Etsy did not answer. Nothing was saved. Try again in a few minutes."
+msgstr "Etsy did not answer. Nothing was saved. Try again in a few minutes."
+
+#: src/features/shops/ShopCard.tsx
+msgid "Etsy shop"
+msgstr "Etsy shop"
+
+#: src/features/shops/connectEtsy.tsx
+msgid "Etsy's sign-in address looked wrong, so it was not opened. Try again shortly."
+msgstr "Etsy's sign-in address looked wrong, so it was not opened. Try again shortly."
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "Every order, verified"
@@ -223,6 +305,10 @@ msgstr "Everything your Etsy shop needs, working together in one AI office."
 #: src/features/team/TeamPage.tsx
 msgid "Finance"
 msgstr "Finance"
+
+#: src/features/shops/EtsyCallbackPage.tsx
+msgid "Finish connecting in the web app where you are signed in."
+msgstr "Finish connecting in the web app where you are signed in."
 
 #: src/features/auth/SignInPage.tsx
 msgid "Forgot your password?"
@@ -332,9 +418,15 @@ msgstr "Language"
 msgid "Last active {0}"
 msgstr "Last active {0}"
 
+#: src/features/shops/ShopCard.tsx
 #: src/features/shops/ShopsPage.tsx
 msgid "Last sync"
 msgstr "Last sync"
+
+#. placeholder {0}: ago(integration.last_successful_call_at, now, locale)
+#: src/features/shops/ShopCard.tsx
+msgid "Last synced {0}"
+msgstr "Last synced {0}"
 
 #: src/app/shell/UserMenu.tsx
 #: src/features/settings/SettingsPage.tsx
@@ -344,6 +436,10 @@ msgstr "Light"
 #: src/features/welcome/WelcomePage.tsx
 msgid "Listings that stay healthy"
 msgstr "Listings that stay healthy"
+
+#: src/features/shops/ShopsPage.tsx
+msgid "Loading shops"
+msgstr "Loading shops"
 
 #: src/app/shell/Navigation.tsx
 msgid "Main"
@@ -370,6 +466,10 @@ msgstr "Messages sorted, drafted and escalated with the order history beside the
 msgid "Named specialists work under your policies and bring you every risky decision."
 msgstr "Named specialists work under your policies and bring you every risky decision."
 
+#: src/features/shops/ShopCard.tsx
+msgid "Needs reconnecting"
+msgstr "Needs reconnecting"
+
 #: src/features/auth/AcceptInvitePage.tsx
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "New password"
@@ -391,6 +491,18 @@ msgstr "No shop connected"
 msgid "No shops yet"
 msgstr "No shops yet"
 
+#: src/features/shops/ShopCard.tsx
+msgid "None"
+msgstr "None"
+
+#: src/features/shops/ShopCard.tsx
+msgid "Not synced yet"
+msgstr "Not synced yet"
+
+#: src/features/shops/ShopCard.tsx
+msgid "Not syncing. Connect it again to resume."
+msgstr "Not syncing. Connect it again to resume."
+
 #: src/app/shell/CommandMenu.tsx
 msgid "Nothing matches."
 msgstr "Nothing matches."
@@ -402,6 +514,10 @@ msgstr "Numbers appear after a shop is connected."
 #: src/features/welcome/WelcomePage.tsx
 msgid "One office for the whole business"
 msgstr "One office for the whole business"
+
+#: src/features/shops/connectEtsy.tsx
+msgid "Only the workspace owner can connect a shop."
+msgstr "Only the workspace owner can connect a shop."
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "Open the web app"
@@ -464,6 +580,38 @@ msgstr "QR code for your authenticator app"
 #: src/app/shell/CommandMenu.tsx
 msgid "Quick actions"
 msgstr "Quick actions"
+
+#: src/features/shops/ShopCard.tsx
+msgid "Read listings"
+msgstr "Read listings"
+
+#: src/features/shops/ShopCard.tsx
+msgid "Read orders"
+msgstr "Read orders"
+
+#: src/features/shops/ShopCard.tsx
+msgid "Read shop"
+msgstr "Read shop"
+
+#: src/features/shops/ShopsPage.tsx
+msgid "Reconnect"
+msgstr "Reconnect"
+
+#: src/features/shops/ShopCard.tsx
+msgid "Reconnect {name}"
+msgstr "Reconnect {name}"
+
+#: src/features/shops/ShopCard.tsx
+msgid "Reconnect soon"
+msgstr "Reconnect soon"
+
+#: src/features/shops/ShopCard.tsx
+msgid "Reconnect to keep syncing"
+msgstr "Reconnect to keep syncing"
+
+#: src/features/shops/ShopCard.tsx
+msgid "Reconnect today"
+msgstr "Reconnect today"
 
 #: src/app/shell/Navigation.tsx
 msgid "Records"
@@ -536,6 +684,10 @@ msgstr "Send this link to them yourself. It works once; when it expires, invite 
 msgid "Set one up"
 msgstr "Set one up"
 
+#: src/features/shops/connectEtsy.tsx
+msgid "Set up two-factor sign-in in Security first, then connect the shop."
+msgstr "Set up two-factor sign-in in Security first, then connect the shop."
+
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Set up your authenticator app"
 msgstr "Set up your authenticator app"
@@ -557,6 +709,10 @@ msgstr "Shop"
 #: src/features/shops/ShopsPage.tsx
 msgid "Shops"
 msgstr "Shops"
+
+#: src/features/shops/ShopsPage.tsx
+msgid "Shops could not be loaded"
+msgstr "Shops could not be loaded"
 
 #: src/features/auth/SignInPage.tsx
 msgid "Show password"
@@ -644,9 +800,25 @@ msgstr "The marketplace shops this organization runs."
 msgid "The passwords are not the same."
 msgstr "The passwords are not the same."
 
+#: src/features/shops/EtsyCallbackPage.tsx
+msgid "The shop could not be connected. Start again from Shops."
+msgstr "The shop could not be connected. Start again from Shops."
+
+#: src/features/shops/EtsyCallbackPage.tsx
+msgid "The shop was not connected"
+msgstr "The shop was not connected"
+
+#: src/features/shops/ShopsPage.tsx
+msgid "The term 'Etsy' is a trademark of Etsy, Inc. This application uses the Etsy API but is not endorsed or certified by Etsy, Inc."
+msgstr "The term 'Etsy' is a trademark of Etsy, Inc. This application uses the Etsy API but is not endorsed or certified by Etsy, Inc."
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "The web app is ready today. The Windows and Android apps are coming soon with the same features."
 msgstr "The web app is ready today. The Windows and Android apps are coming soon with the same features."
+
+#: src/features/shops/ShopsPage.tsx
+msgid "The workspace owner connects shops."
+msgstr "The workspace owner connects shops."
 
 #: src/app/shell/UserMenu.tsx
 #: src/features/settings/SettingsPage.tsx
@@ -657,6 +829,14 @@ msgstr "Theme"
 msgid "These preferences are remembered on this device."
 msgstr "These preferences are remembered on this device."
 
+#: src/features/shops/EtsyCallbackPage.tsx
+msgid "This connection link has expired or was already used. Start again from Shops."
+msgstr "This connection link has expired or was already used. Start again from Shops."
+
+#: src/features/shops/EtsyCallbackPage.tsx
+msgid "This connection link is incomplete. Start again from Shops."
+msgstr "This connection link is incomplete. Start again from Shops."
+
 #: src/features/security/SecurityPage.tsx
 msgid "This device"
 msgstr "This device"
@@ -665,9 +845,18 @@ msgstr "This device"
 #: src/features/auth/ForgotPasswordPage.tsx
 #: src/features/auth/ResetPasswordPage.tsx
 #: src/features/auth/SecondFactorPage.tsx
+#: src/features/shops/connectEtsy.tsx
 #: src/features/team/TeamPage.tsx
 msgid "This did not work. Try again shortly."
 msgstr "This did not work. Try again shortly."
+
+#: src/features/shops/EtsyCallbackPage.tsx
+msgid "This Etsy account has no shop yet. Open a shop on Etsy, then connect it."
+msgstr "This Etsy account has no shop yet. Open a shop on Etsy, then connect it."
+
+#: src/features/shops/EtsyCallbackPage.tsx
+msgid "This Etsy shop is already connected to another workspace."
+msgstr "This Etsy shop is already connected to another workspace."
 
 #: src/features/auth/AcceptInvitePage.tsx
 msgid "This invitation link has expired or was already used. Ask for a new one."
@@ -694,6 +883,10 @@ msgstr "This person is already a member."
 msgid "This screen could not be shown"
 msgstr "This screen could not be shown"
 
+#: src/features/shops/EtsyCallbackPage.tsx
+msgid "This takes a few seconds. Keep this page open."
+msgstr "This takes a few seconds. Keep this page open."
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "Titles, photos and claims audited and fixed as drafts you approve."
 msgstr "Titles, photos and claims audited and fixed as drafts you approve."
@@ -707,6 +900,7 @@ msgid "Too many attempts. Wait 15 minutes and try again."
 msgstr "Too many attempts. Wait 15 minutes and try again."
 
 #: src/app/RouteStates.tsx
+#: src/features/shops/ShopsPage.tsx
 msgid "Try again"
 msgstr "Try again"
 
@@ -748,7 +942,7 @@ msgid "Windows"
 msgstr "Windows"
 
 #: src/app/shell/Navigation.tsx
-#: src/features/team/TeamPage.tsx
+#: src/shared/ui/WorkspacePicker.tsx
 msgid "Workspace"
 msgstr "Workspace"
 
@@ -769,6 +963,10 @@ msgstr "You are offline. What you see may be out of date; changes are paused."
 msgid "You are still signed in. Try signing out again shortly."
 msgstr "You are still signed in. Try signing out again shortly."
 
+#: src/features/shops/EtsyCallbackPage.tsx
+msgid "You cancelled the connection on Etsy."
+msgstr "You cancelled the connection on Etsy."
+
 #: src/features/auth/AcceptInvitePage.tsx
 msgid "You were invited to HT-Commerce. Choose a password to finish."
 msgstr "You were invited to HT-Commerce. Choose a password to finish."
@@ -788,6 +986,14 @@ msgstr "Your AI office"
 #: src/features/welcome/WelcomePage.tsx
 msgid "Your AI office gets to work"
 msgstr "Your AI office gets to work"
+
+#: src/features/shops/ShopsPage.tsx
+msgid "Your Etsy shop is connected."
+msgstr "Your Etsy shop is connected."
+
+#: src/features/shops/ShopsPage.tsx
+msgid "Your Etsy shop is reconnected."
+msgstr "Your Etsy shop is reconnected."
 
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "Your other devices will be signed out."

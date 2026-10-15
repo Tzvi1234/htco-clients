@@ -8,6 +8,7 @@ Every destination in HTCO Command, where it appears on each platform, and the ph
 Sign in · MFA · Recovery · Sessions
 Overview
 Shops                      shop cards, capabilities, connect / disconnect
+  Etsy return              /integrations/etsy/callback: finishes connecting, then back to Shops
 Orders                     list → order detail (items · timeline · incidents · audit)
 Fulfillment                tracking health, SLA windows
 Incidents                  incident center → incident detail

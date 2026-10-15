@@ -19,6 +19,11 @@ import { SignInPage } from "../features/auth/SignInPage.tsx";
 import { OverviewPage } from "../features/overview/OverviewPage.tsx";
 import { SecurityPage } from "../features/security/SecurityPage.tsx";
 import { SettingsPage } from "../features/settings/SettingsPage.tsx";
+import {
+  EtsyCallbackPage,
+  etsyReturn,
+  type EtsyReturn,
+} from "../features/shops/EtsyCallbackPage.tsx";
 import { ShopsPage } from "../features/shops/ShopsPage.tsx";
 import { TeamPage } from "../features/team/TeamPage.tsx";
 import { WelcomePage } from "../features/welcome/WelcomePage.tsx";
@@ -130,6 +135,13 @@ const routeTree = rootRoute.addChildren([
         component: SecurityPage,
       }),
       createRoute({ getParentRoute: () => appRoute, path: "/settings/team", component: TeamPage }),
+      // Etsy sends the owner back here; it needs the session cookie, so it is signed in.
+      createRoute({
+        getParentRoute: () => appRoute,
+        path: "/integrations/etsy/callback",
+        validateSearch: (search: Record<string, unknown>): EtsyReturn => etsyReturn(search),
+        component: EtsyCallbackPage,
+      }),
     ]),
   ]),
 ]);
@@ -147,5 +159,9 @@ export function createAppRouter(context: RouterContext, history?: RouterHistory)
 declare module "@tanstack/react-router" {
   interface Register {
     router: ReturnType<typeof createAppRouter>;
+  }
+  interface HistoryState {
+    /** Set by the Etsy callback for the Shops page's confirmation, in that workspace. */
+    etsy?: { outcome: "connected" | "reconnected"; organizationId: string };
   }
 }

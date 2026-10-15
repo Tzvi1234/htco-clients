@@ -5,19 +5,22 @@ import { seriousViolations } from "../axe.ts";
 
 /**
  * Opens the app on the in-memory API (`?demo`, development server only; `src/test/fakeApi.ts`):
- * signed in as an Owner with the authenticator app set up, or signed out. The fake lives in the
- * page, so a journey stays in one page load; `path` may carry a `#fragment`.
+ * signed in as an Owner with the authenticator app set up (`shops`: also with a shop in each Etsy
+ * connection state), or signed out. The fake lives in the page, so a journey stays in one page
+ * load; `path` may carry a `?query` and a `#fragment`.
  */
 export async function openApp(
   page: Page,
   path: string,
-  as: "signed-in" | "signed-out",
+  as: "signed-in" | "signed-out" | "shops",
 ): Promise<void> {
   // Dates on screen (signed-in devices) do not move between runs.
   await page.clock.setFixedTime(new Date("2026-10-15T09:00:00Z"));
-  const [route = "/", fragment] = path.split("#");
-  const demo = as === "signed-in" ? "demo" : "demo=signed-out";
-  await page.goto(`${route}?${demo}${fragment === undefined ? "" : `#${fragment}`}`);
+  const [address = "/", fragment] = path.split("#");
+  const [route = "/", query] = address.split("?");
+  const demo = as === "signed-in" ? "demo" : as === "shops" ? "demo=shops" : "demo=signed-out";
+  const search = query === undefined ? demo : `${query}&${demo}`;
+  await page.goto(`${route}?${search}${fragment === undefined ? "" : `#${fragment}`}`);
 }
 
 /** The page's title: every screen has exactly one h1. */

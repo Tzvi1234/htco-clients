@@ -22,7 +22,8 @@ export function SecondFactorPage() {
   return status.data.enrolled ? <ConfirmCode /> : <SetUp />;
 }
 
-function useCodeMessage() {
+/** Plain words for a refused or failed authenticator code. */
+export function useCodeMessage() {
   const { t } = useLingui();
   return (error: Error | null): string | undefined => {
     if (error === null) return undefined;
@@ -163,12 +164,15 @@ function ConfirmCode() {
   );
 }
 
+/** The 6-digit code from the authenticator app: digits only, left-to-right. */
 export function CodeField({
   value,
   onChange,
+  autoFocus = false,
 }: {
   value: string;
   onChange: (value: string) => void;
+  autoFocus?: boolean;
 }) {
   const { t } = useLingui();
   return (
@@ -181,6 +185,7 @@ export function CodeField({
       maxLength={6}
       ltr
       isRequired
+      autoFocus={autoFocus}
       value={value}
       onChange={(next) => {
         onChange(next.replace(/\D/g, "").slice(0, 6));

@@ -7,6 +7,10 @@ msgstr ""
 "X-Generator: @lingui/cli\n"
 "Language: he\n"
 
+#: src/features/shops/ShopCard.tsx
+msgid "{days, plural, one {Reconnect within # day} other {Reconnect within # days}}"
+msgstr "{days, plural, one {לחבר מחדש בתוך יום אחד} two {לחבר מחדש בתוך יומיים} other {לחבר מחדש בתוך # ימים}}"
+
 #: src/features/overview/OverviewPage.tsx
 msgid "0 of 3 done"
 msgstr "0 מתוך 3 הושלמו"
@@ -18,6 +22,10 @@ msgstr "1 מתוך 3 הושלמו"
 #: src/features/welcome/WelcomePage.tsx
 msgid "A native desktop app with the same features."
 msgstr "אפליקציה טבעית למחשב עם אותן יכולות."
+
+#: src/features/shops/ShopCard.tsx
+msgid "Access"
+msgstr "גישה"
 
 #: src/app/shell/UserMenu.tsx
 msgid "Account"
@@ -72,6 +80,10 @@ msgstr "אפליקציית אימות"
 msgid "Authenticator app is set up"
 msgstr "אפליקציית האימות מוגדרת"
 
+#: src/features/shops/EtsyCallbackPage.tsx
+msgid "Back to shops"
+msgstr "חזרה לחנויות"
+
 #: src/features/auth/ForgotPasswordPage.tsx
 msgid "Back to sign-in"
 msgstr "חזרה לכניסה"
@@ -80,6 +92,10 @@ msgstr "חזרה לכניסה"
 msgid "Big changes, sensitive messages and anything unusual always come to you."
 msgstr "שינויים גדולים, הודעות רגישות וכל דבר חריג תמיד מגיעים אליך."
 
+#: src/features/shops/connectEtsy.tsx
+msgid "Cancel"
+msgstr "ביטול"
+
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Cannot scan? Type this key into the app:"
 msgstr "לא מצליחים לסרוק? הקלידו באפליקציה את המפתח הזה:"
@@ -87,6 +103,10 @@ msgstr "לא מצליחים לסרוק? הקלידו באפליקציה את ה�
 #: src/features/team/TeamPage.tsx
 msgid "Check the email address."
 msgstr "בדקו את כתובת האימייל."
+
+#: src/features/shops/ShopsPage.tsx
+msgid "Check your connection and try again."
+msgstr "כדאי לבדוק את החיבור לאינטרנט ולנסות שוב."
 
 #: src/features/auth/ForgotPasswordPage.tsx
 msgid "Check your email"
@@ -110,10 +130,12 @@ msgid "Code from the app"
 msgstr "הקוד מהאפליקציה"
 
 #: src/features/auth/SecondFactorPage.tsx
+#: src/features/shops/connectEtsy.tsx
 msgid "Confirm"
 msgstr "אישור"
 
 #: src/features/auth/SecondFactorPage.tsx
+#: src/features/shops/connectEtsy.tsx
 msgid "Confirm it is you"
 msgstr "אישור זהות"
 
@@ -133,13 +155,41 @@ msgstr "מחברים את חנות ה-Etsy"
 msgid "Connect your first shop"
 msgstr "לחבר את החנות הראשונה"
 
+#: src/features/shops/ShopCard.tsx
+msgid "Connected"
+msgstr "מחוברת"
+
 #: src/features/shops/ShopsPage.tsx
 msgid "Connected shops appear here with their sync status and capabilities."
 msgstr "חנויות מחוברות יופיעו כאן עם מצב הסנכרון והיכולות שלהן."
 
+#: src/features/shops/EtsyCallbackPage.tsx
+msgid "Connecting Etsy"
+msgstr "חיבור ל-Etsy"
+
+#: src/features/shops/EtsyCallbackPage.tsx
+msgid "Connecting shops is unavailable right now. Try again in a few minutes."
+msgstr "חיבור חנויות לא זמין כרגע. אפשר לנסות שוב בעוד כמה דקות."
+
+#: src/features/shops/EtsyCallbackPage.tsx
+msgid "Connecting your Etsy shop"
+msgstr "מחברים את חנות ה-Etsy שלך"
+
+#: src/features/shops/ShopCard.tsx
+msgid "Connection"
+msgstr "חיבור"
+
+#: src/features/shops/EtsyCallbackPage.tsx
+msgid "Connection cancelled"
+msgstr "החיבור בוטל"
+
 #: src/features/shops/ShopsPage.tsx
-msgid "Connecting a shop opens in a coming release."
-msgstr "חיבור חנות ייפתח בגרסה קרובה."
+msgid "Connection details could not be loaded. Try again shortly."
+msgstr "לא ניתן לטעון את פרטי החיבור. אפשר לנסות שוב בעוד רגע."
+
+#: src/features/shops/ShopCard.tsx
+msgid "Connection renews automatically"
+msgstr "החיבור מתחדש אוטומטית"
 
 #: src/features/team/TeamPage.tsx
 msgid "Copied"
@@ -166,6 +216,10 @@ msgstr "החלטות ממתינות"
 msgid "Developer"
 msgstr "מפתח/ת"
 
+#: src/features/shops/ShopCard.tsx
+msgid "Disconnected"
+msgstr "מנותקת"
+
 #: src/features/overview/OverviewPage.tsx
 msgid "Done"
 msgstr "הושלם"
@@ -188,6 +242,10 @@ msgstr "אימייל"
 msgid "Enter a valid email address."
 msgstr "הזינו כתובת אימייל תקינה."
 
+#: src/features/shops/connectEtsy.tsx
+msgid "Enter the 6-digit code from your authenticator app to connect the shop."
+msgstr "כדי לחבר את החנות, יש להזין את הקוד בן 6 הספרות מאפליקציית האימות."
+
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "Enter the 6-digit code from your authenticator app to finish."
 msgstr "כדי לסיים, הזינו את הקוד בן 6 הספרות מאפליקציית האימות."
@@ -208,9 +266,33 @@ msgstr "הזינו את האימייל ונשלח קישור לבחירת סיס
 msgid "Enter your email."
 msgstr "הזינו את האימייל."
 
+#: src/features/shops/ShopCard.tsx
+msgid "Etsy"
+msgstr "Etsy"
+
 #: src/app/shell/ShopSwitcher.tsx
 msgid "Etsy · not connected"
 msgstr "Etsy · לא מחוברת"
+
+#: src/features/shops/connectEtsy.tsx
+msgid "Etsy cannot be reached right now. Try again in a few minutes."
+msgstr "אין כרגע גישה ל-Etsy. אפשר לנסות שוב בעוד כמה דקות."
+
+#: src/features/shops/EtsyCallbackPage.tsx
+msgid "Etsy did not accept the connection. Start again from Shops."
+msgstr "Etsy לא אישרה את החיבור. אפשר להתחיל מחדש מעמוד החנויות."
+
+#: src/features/shops/EtsyCallbackPage.tsx
+msgid "Etsy did not answer. Nothing was saved. Try again in a few minutes."
+msgstr "Etsy לא ענתה. שום דבר לא נשמר. אפשר לנסות שוב בעוד כמה דקות."
+
+#: src/features/shops/ShopCard.tsx
+msgid "Etsy shop"
+msgstr "חנות Etsy"
+
+#: src/features/shops/connectEtsy.tsx
+msgid "Etsy's sign-in address looked wrong, so it was not opened. Try again shortly."
+msgstr "כתובת הכניסה של Etsy נראתה שגויה, ולכן לא נפתחה. אפשר לנסות שוב בעוד רגע."
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "Every order, verified"
@@ -223,6 +305,10 @@ msgstr "כל מה שחנות ה-Etsy שלך צריכה, עובד יחד במשר
 #: src/features/team/TeamPage.tsx
 msgid "Finance"
 msgstr "כספים"
+
+#: src/features/shops/EtsyCallbackPage.tsx
+msgid "Finish connecting in the web app where you are signed in."
+msgstr "יש להשלים את החיבור באפליקציית הרשת שבה נכנסת לחשבון."
 
 #: src/features/auth/SignInPage.tsx
 msgid "Forgot your password?"
@@ -332,9 +418,15 @@ msgstr "שפה"
 msgid "Last active {0}"
 msgstr "פעילות אחרונה {0}"
 
+#: src/features/shops/ShopCard.tsx
 #: src/features/shops/ShopsPage.tsx
 msgid "Last sync"
 msgstr "סנכרון אחרון"
+
+#. placeholder {0}: ago(integration.last_successful_call_at, now, locale)
+#: src/features/shops/ShopCard.tsx
+msgid "Last synced {0}"
+msgstr "סונכרנה לאחרונה {0}"
 
 #: src/app/shell/UserMenu.tsx
 #: src/features/settings/SettingsPage.tsx
@@ -344,6 +436,10 @@ msgstr "בהירה"
 #: src/features/welcome/WelcomePage.tsx
 msgid "Listings that stay healthy"
 msgstr "מודעות שנשארות תקינות"
+
+#: src/features/shops/ShopsPage.tsx
+msgid "Loading shops"
+msgstr "טוענים חנויות"
 
 #: src/app/shell/Navigation.tsx
 msgid "Main"
@@ -370,6 +466,10 @@ msgstr "הודעות ממוינות, מנוסחות ומועברות הלאה ע
 msgid "Named specialists work under your policies and bring you every risky decision."
 msgstr "מומחים בעלי שם עובדים לפי המדיניות שלך ומביאים אליך כל החלטה מסוכנת."
 
+#: src/features/shops/ShopCard.tsx
+msgid "Needs reconnecting"
+msgstr "צריך לחבר מחדש"
+
 #: src/features/auth/AcceptInvitePage.tsx
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "New password"
@@ -391,6 +491,18 @@ msgstr "אין חנות מחוברת"
 msgid "No shops yet"
 msgstr "עדיין אין חנויות"
 
+#: src/features/shops/ShopCard.tsx
+msgid "None"
+msgstr "אין"
+
+#: src/features/shops/ShopCard.tsx
+msgid "Not synced yet"
+msgstr "עדיין לא סונכרנה"
+
+#: src/features/shops/ShopCard.tsx
+msgid "Not syncing. Connect it again to resume."
+msgstr "לא מסתנכרנת. יש לחבר אותה שוב כדי להמשיך."
+
 #: src/app/shell/CommandMenu.tsx
 msgid "Nothing matches."
 msgstr "לא נמצאה התאמה."
@@ -402,6 +514,10 @@ msgstr "המספרים יופיעו אחרי חיבור חנות."
 #: src/features/welcome/WelcomePage.tsx
 msgid "One office for the whole business"
 msgstr "משרד אחד לכל העסק"
+
+#: src/features/shops/connectEtsy.tsx
+msgid "Only the workspace owner can connect a shop."
+msgstr "רק הבעלים של סביבת העבודה יכולים לחבר חנות."
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "Open the web app"
@@ -464,6 +580,38 @@ msgstr "קוד QR לאפליקציית האימות"
 #: src/app/shell/CommandMenu.tsx
 msgid "Quick actions"
 msgstr "פעולות מהירות"
+
+#: src/features/shops/ShopCard.tsx
+msgid "Read listings"
+msgstr "קריאת מוצרים"
+
+#: src/features/shops/ShopCard.tsx
+msgid "Read orders"
+msgstr "קריאת הזמנות"
+
+#: src/features/shops/ShopCard.tsx
+msgid "Read shop"
+msgstr "קריאת החנות"
+
+#: src/features/shops/ShopsPage.tsx
+msgid "Reconnect"
+msgstr "חיבור מחדש"
+
+#: src/features/shops/ShopCard.tsx
+msgid "Reconnect {name}"
+msgstr "חיבור מחדש של {name}"
+
+#: src/features/shops/ShopCard.tsx
+msgid "Reconnect soon"
+msgstr "כדאי לחבר מחדש בקרוב"
+
+#: src/features/shops/ShopCard.tsx
+msgid "Reconnect to keep syncing"
+msgstr "יש לחבר מחדש כדי להמשיך לסנכרן"
+
+#: src/features/shops/ShopCard.tsx
+msgid "Reconnect today"
+msgstr "יש לחבר מחדש היום"
 
 #: src/app/shell/Navigation.tsx
 msgid "Records"
@@ -536,6 +684,10 @@ msgstr "שלחו את הקישור בעצמכם. הוא עובד פעם אחת; 
 msgid "Set one up"
 msgstr "להגדרה"
 
+#: src/features/shops/connectEtsy.tsx
+msgid "Set up two-factor sign-in in Security first, then connect the shop."
+msgstr "קודם צריך להגדיר כניסה דו-שלבית בעמוד האבטחה, ואז לחבר את החנות."
+
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Set up your authenticator app"
 msgstr "הגדרת אפליקציית אימות"
@@ -557,6 +709,10 @@ msgstr "חנות"
 #: src/features/shops/ShopsPage.tsx
 msgid "Shops"
 msgstr "חנויות"
+
+#: src/features/shops/ShopsPage.tsx
+msgid "Shops could not be loaded"
+msgstr "לא ניתן לטעון את החנויות"
 
 #: src/features/auth/SignInPage.tsx
 msgid "Show password"
@@ -644,9 +800,25 @@ msgstr "החנויות שהארגון מפעיל בזירות המסחר."
 msgid "The passwords are not the same."
 msgstr "הסיסמאות אינן זהות."
 
+#: src/features/shops/EtsyCallbackPage.tsx
+msgid "The shop could not be connected. Start again from Shops."
+msgstr "לא ניתן לחבר את החנות. אפשר להתחיל מחדש מעמוד החנויות."
+
+#: src/features/shops/EtsyCallbackPage.tsx
+msgid "The shop was not connected"
+msgstr "החנות לא חוברה"
+
+#: src/features/shops/ShopsPage.tsx
+msgid "The term 'Etsy' is a trademark of Etsy, Inc. This application uses the Etsy API but is not endorsed or certified by Etsy, Inc."
+msgstr "המונח 'Etsy' הוא סימן מסחרי של חברת Etsy, Inc. אפליקציה זו משתמשת ב-API של Etsy, אך חברת Etsy, Inc. אינה תומכת בה ואינה מאשרת אותה."
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "The web app is ready today. The Windows and Android apps are coming soon with the same features."
 msgstr "אפליקציית הרשת מוכנה כבר היום. אפליקציות Windows ו-Android מגיעות בקרוב עם אותן יכולות."
+
+#: src/features/shops/ShopsPage.tsx
+msgid "The workspace owner connects shops."
+msgstr "הבעלים של סביבת העבודה מחברים חנויות."
 
 #: src/app/shell/UserMenu.tsx
 #: src/features/settings/SettingsPage.tsx
@@ -657,6 +829,14 @@ msgstr "ערכת נושא"
 msgid "These preferences are remembered on this device."
 msgstr "ההעדפות האלה נשמרות במכשיר הזה."
 
+#: src/features/shops/EtsyCallbackPage.tsx
+msgid "This connection link has expired or was already used. Start again from Shops."
+msgstr "קישור החיבור פג או כבר נוצל. אפשר להתחיל מחדש מעמוד החנויות."
+
+#: src/features/shops/EtsyCallbackPage.tsx
+msgid "This connection link is incomplete. Start again from Shops."
+msgstr "קישור החיבור חסר. אפשר להתחיל מחדש מעמוד החנויות."
+
 #: src/features/security/SecurityPage.tsx
 msgid "This device"
 msgstr "המכשיר הזה"
@@ -665,9 +845,18 @@ msgstr "המכשיר הזה"
 #: src/features/auth/ForgotPasswordPage.tsx
 #: src/features/auth/ResetPasswordPage.tsx
 #: src/features/auth/SecondFactorPage.tsx
+#: src/features/shops/connectEtsy.tsx
 #: src/features/team/TeamPage.tsx
 msgid "This did not work. Try again shortly."
 msgstr "זה לא עבד. נסו שוב בעוד רגע."
+
+#: src/features/shops/EtsyCallbackPage.tsx
+msgid "This Etsy account has no shop yet. Open a shop on Etsy, then connect it."
+msgstr "לחשבון ה-Etsy הזה עדיין אין חנות. אפשר לפתוח חנות ב-Etsy ואז לחבר אותה."
+
+#: src/features/shops/EtsyCallbackPage.tsx
+msgid "This Etsy shop is already connected to another workspace."
+msgstr "חנות ה-Etsy הזו כבר מחוברת לסביבת עבודה אחרת."
 
 #: src/features/auth/AcceptInvitePage.tsx
 msgid "This invitation link has expired or was already used. Ask for a new one."
@@ -694,6 +883,10 @@ msgstr "האדם הזה כבר חבר בצוות."
 msgid "This screen could not be shown"
 msgstr "לא ניתן להציג את המסך"
 
+#: src/features/shops/EtsyCallbackPage.tsx
+msgid "This takes a few seconds. Keep this page open."
+msgstr "זה לוקח כמה שניות. נא להשאיר את העמוד פתוח."
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "Titles, photos and claims audited and fixed as drafts you approve."
 msgstr "כותרות, תמונות וטענות נבדקות ומתוקנות כטיוטות שאת/ה מאשר/ת."
@@ -707,6 +900,7 @@ msgid "Too many attempts. Wait 15 minutes and try again."
 msgstr "יותר מדי ניסיונות. המתינו 15 דקות ונסו שוב."
 
 #: src/app/RouteStates.tsx
+#: src/features/shops/ShopsPage.tsx
 msgid "Try again"
 msgstr "לנסות שוב"
 
@@ -748,7 +942,7 @@ msgid "Windows"
 msgstr "Windows"
 
 #: src/app/shell/Navigation.tsx
-#: src/features/team/TeamPage.tsx
+#: src/shared/ui/WorkspacePicker.tsx
 msgid "Workspace"
 msgstr "סביבת עבודה"
 
@@ -769,6 +963,10 @@ msgstr "אין חיבור לאינטרנט. ייתכן שהמידע אינו ע�
 msgid "You are still signed in. Try signing out again shortly."
 msgstr "עדיין מחובר/ת. נסה/י להתנתק שוב בעוד רגע."
 
+#: src/features/shops/EtsyCallbackPage.tsx
+msgid "You cancelled the connection on Etsy."
+msgstr "ביטלת את החיבור ב-Etsy."
+
 #: src/features/auth/AcceptInvitePage.tsx
 msgid "You were invited to HT-Commerce. Choose a password to finish."
 msgstr "הוזמנת ל-HT-Commerce. בחר/י סיסמה כדי לסיים."
@@ -788,6 +986,14 @@ msgstr "משרד ה-AI שלך"
 #: src/features/welcome/WelcomePage.tsx
 msgid "Your AI office gets to work"
 msgstr "משרד ה-AI שלך מתחיל לעבוד"
+
+#: src/features/shops/ShopsPage.tsx
+msgid "Your Etsy shop is connected."
+msgstr "חנות ה-Etsy שלך מחוברת."
+
+#: src/features/shops/ShopsPage.tsx
+msgid "Your Etsy shop is reconnected."
+msgstr "חנות ה-Etsy שלך חוברה מחדש."
 
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "Your other devices will be signed out."

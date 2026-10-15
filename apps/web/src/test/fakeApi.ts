@@ -1,4 +1,6 @@
-import { createApiClient, type ApiClient } from "@htco/api-client";
+import { createApiClient, type ApiClient, type components } from "@htco/api-client";
+
+type IntegrationView = components["schemas"]["IntegrationView"];
 
 /** The API's sign-in, MFA and identity endpoints in memory, for the web app's tests. */
 export interface FakeBackend {
@@ -32,6 +34,19 @@ export interface FakeState {
   /** True: the user has an authenticator app, so the reset needs its code. */
   resetNeedsCode: boolean;
   reset?: Record<string, unknown>;
+  /** The organization's shops and their Etsy connections. */
+  shops: { id: string; name: string; status: string }[];
+  integrations: IntegrationView[];
+  /** True once the user confirmed a code in the last ten minutes (POST /v1/auth/step-up). */
+  steppedUp: boolean;
+  /** Where `POST /v1/shops/etsy/connect` sends the browser. */
+  authorizationUrl: string;
+  /** True: Etsy is unavailable (503 etsy-unavailable) when starting a connection. */
+  etsyDown: boolean;
+  /** A problem slug the Etsy callback answers with instead of connecting. */
+  callbackProblem?: string;
+  /** The bodies the Etsy callback received, in order. */
+  callbacks: unknown[];
 }
 
 const PROBLEMS = "https://ht-co.app/problems/";
@@ -41,6 +56,76 @@ function json(status: number, body: unknown): Response {
     status,
     headers: { "content-type": status >= 400 ? "application/problem+json" : "application/json" },
   });
+}
+
+const CALLBACK_STATUS: Record<string, number> = {
+  "etsy-state-rejected": 400,
+  "etsy-authorization-refused": 400,
+  "etsy-unreachable": 502,
+  "etsy-no-shop": 409,
+  "etsy-shop-connected-elsewhere": 409,
+  "web-session-required": 403,
+  "etsy-unavailable": 503,
+};
+
+const DAY = 86_400_000;
+
+/** An Etsy connection in the given health; "expiring" runs out in five days. */
+export function fakeIntegration(
+  shopId: string,
+  health: IntegrationView["token_health"],
+  overrides: Partial<IntegrationView> = {},
+): IntegrationView {
+  const now = Date.now();
+  const status: IntegrationView["status"] =
+    health === "needs_reauth"
+      ? "needs_reauth"
+      : health === "disconnected"
+        ? "disconnected"
+        : "connected";
+  return {
+    shop_id: shopId,
+    provider: "etsy",
+    status,
+    etsy_shop_id: 41_870_022,
+    scopes: ["shops_r", "transactions_r", "listings_r"],
+    token_health: health,
+    access_expires_at: new Date(now + 3_600_000).toISOString(),
+    // Half a day short of whole days, so the count of days left is stable while a test runs.
+    refresh_expires_at: new Date(now + (health === "expiring" ? 4.5 : 80) * DAY).toISOString(),
+    failure_count: health === "needs_reauth" ? 3 : 0,
+    last_successful_call_at: new Date(now - 4 * 60_000).toISOString(),
+    connected_at: "2026-10-01T09:00:00Z",
+    updated_at: "2026-10-15T09:00:00Z",
+    ...overrides,
+  };
+}
+
+/** `?demo=shops`: four shops, one in each connection state, for reviewing the shop cards. */
+export function demoShops(): Pick<FakeState, "shops" | "integrations"> {
+  const shops = [
+    { id: "d0000000-0000-7000-8000-000000000001", name: "Willow & Wick", status: "active" },
+    { id: "d0000000-0000-7000-8000-000000000002", name: "Linen Lane Studio", status: "active" },
+    { id: "d0000000-0000-7000-8000-000000000003", name: "Paper Fox Prints", status: "active" },
+    { id: "d0000000-0000-7000-8000-000000000004", name: "Old Harbor Goods", status: "active" },
+  ];
+  const [a, b, c, d] = shops.map((shop) => shop.id) as [string, string, string, string];
+  return {
+    shops,
+    integrations: [
+      fakeIntegration(a, "ok"),
+      fakeIntegration(b, "expiring", { etsy_shop_id: 39_002_114 }),
+      fakeIntegration(c, "needs_reauth", {
+        etsy_shop_id: 50_331_907,
+        last_successful_call_at: new Date(Date.now() - 2 * DAY).toISOString(),
+      }),
+      fakeIntegration(d, "disconnected", {
+        etsy_shop_id: 28_640_515,
+        scopes: [],
+        last_successful_call_at: null,
+      }),
+    ],
+  };
 }
 
 function problem(status: number, type: string): Response {
@@ -81,6 +166,12 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
     resetRequests: [],
     resetThrottled: false,
     resetNeedsCode: false,
+    shops: [],
+    integrations: [],
+    steppedUp: false,
+    authorizationUrl: "https://www.etsy.com/oauth/connect?response_type=code&state=s-1",
+    etsyDown: false,
+    callbacks: [],
     ...initial,
   };
   const requests: Request[] = [];
@@ -182,6 +273,7 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
         if (body["code"] !== "123456") return problem(401, "mfa-code-refused");
         state.enrolled = true;
         state.assurance = "aal2";
+        state.steppedUp = true;
         return route.endsWith("step-up") ? json(204, null) : json(200, { assurance: "aal2" });
       case "GET /v1/auth/sessions":
         return json(200, {
@@ -199,8 +291,51 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
         if (state.signOutFails) return problem(503, "auth-unavailable");
         state.signedIn = false;
         return json(204, null);
-      case "GET /v1/shops":
-        return json(200, { items: [], next_cursor: null });
+      case "GET /v1/shops": {
+        // Pages of 50 (the API's default), the cursor being the next index.
+        const start = Number(url.searchParams.get("cursor") ?? "0");
+        const end = start + Number(url.searchParams.get("limit") ?? "50");
+        const organizationId = url.searchParams.get("organization_id") ?? org;
+        return json(200, {
+          items: state.shops.slice(start, end).map((shop) => ({
+            ...shop,
+            organization_id: organizationId,
+            marketplace: "etsy",
+          })),
+          next_cursor: end < state.shops.length ? String(end) : null,
+        });
+      }
+      case "GET /v1/shop-integrations":
+        if (state.role !== "owner" && state.role !== "admin") return problem(403, "forbidden");
+        return json(200, { items: state.integrations });
+      case "POST /v1/shops/etsy/connect":
+        if (state.role !== "owner") return problem(403, "forbidden");
+        if (state.assurance !== "aal2") return problem(403, "mfa-required");
+        if (!state.steppedUp) return problem(403, "step-up-required");
+        if (state.etsyDown) return problem(503, "etsy-unavailable");
+        return json(200, { authorization_url: state.authorizationUrl });
+      case "POST /v1/integrations/etsy/callback": {
+        state.callbacks.push(body);
+        const slug = state.callbackProblem;
+        if (slug !== undefined) return problem(CALLBACK_STATUS[slug] ?? 500, slug);
+        const existing = state.shops.find((shop) => shop.name === "Willow & Wick");
+        const shop = existing ?? {
+          id: "d0000000-0000-7000-8000-000000000001",
+          name: "Willow & Wick",
+          status: "active",
+        };
+        if (existing === undefined) state.shops.push(shop);
+        const integration = fakeIntegration(shop.id, "ok");
+        state.integrations = [
+          ...state.integrations.filter((i) => i.shop_id !== shop.id),
+          integration,
+        ];
+        return json(200, {
+          shop: { ...shop, organization_id: org, marketplace: "etsy" },
+          integration,
+          reconnected: existing !== undefined,
+        });
+      }
       default: {
         const revoke = /^DELETE \/v1\/auth\/sessions\/(.+)$/.exec(route);
         const target = state.sessions.find((s) => s.id === revoke?.[1] && !s.revoked);
