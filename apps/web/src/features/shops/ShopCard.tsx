@@ -85,8 +85,11 @@ export function ShopCard({
   integration,
   now,
   reconnect,
+  detailsLoading = false,
 }: {
   shop: ShopView;
+  /** The connection details are still on their way: their rows show as placeholders. */
+  detailsLoading?: boolean;
   /** Undefined for roles that may not see connection details. */
   integration: IntegrationView | undefined;
   now: number;
@@ -156,7 +159,20 @@ export function ShopCard({
           <Tag hue={STATUS[integration.status].hue}>{statusLabel[integration.status]}</Tag>
         )}
       </header>
-      {integration === undefined ? null : (
+      {detailsLoading ? (
+        <div className="flex flex-col divide-y divide-border-subtle border-t border-border-subtle px-4">
+          <span role="status" className="sr-only">
+            <Trans>Loading connection details</Trans>
+          </span>
+          {["w-3/5", "w-2/5", "w-1/2"].map((width) => (
+            <span key={width} aria-hidden="true" className="flex h-11 items-center gap-3">
+              <span className="size-4 shrink-0 rounded-[4px] bg-sunken motion-safe:animate-pulse" />
+              <span className={`h-2.5 rounded-pill bg-sunken motion-safe:animate-pulse ${width}`} />
+            </span>
+          ))}
+        </div>
+      ) : null}
+      {integration === undefined || detailsLoading ? null : (
         <>
           <dl className="m-0 flex flex-col divide-y divide-border-subtle border-t border-border-subtle px-4">
             <Row icon={PlugsConnected} label={<Trans>Connection</Trans>}>
