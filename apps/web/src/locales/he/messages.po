@@ -521,6 +521,7 @@ msgstr "כניסה"
 msgid "Sign in to HT-Commerce"
 msgstr "כניסה ל-HT-Commerce"
 
+#: src/app/RouteStates.tsx
 #: src/app/shell/UserMenu.tsx
 #: src/features/security/SecurityPage.tsx
 msgid "Sign out"
@@ -680,6 +681,10 @@ msgstr "סביבת עבודה"
 msgid "You approve what's risky"
 msgstr "את/ה מאשר/ת את מה שמסוכן"
 
+#: src/app/RouteStates.tsx
+msgid "You are not in a workspace yet"
+msgstr "עדיין אינך חלק מסביבת עבודה"
+
 #: src/app/shell/AppShell.tsx
 msgid "You are offline. What you see may be out of date; changes are paused."
 msgstr "אין חיבור לאינטרנט. ייתכן שהמידע אינו עדכני; שינויים מושהים."
@@ -691,6 +696,10 @@ msgstr "הוזמנת ל-HT-Commerce. בחר/י סיסמה כדי לסיים."
 #: src/features/team/TeamPage.tsx
 msgid "You're invited to HT-Commerce: {link}"
 msgstr "הוזמנת ל-HT-Commerce: {link}"
+
+#: src/app/RouteStates.tsx
+msgid "Your account works, but no workspace has added it. Ask the workspace owner to invite you, then sign in again."
+msgstr "החשבון שלך תקין, אבל אף סביבת עבודה עדיין לא צירפה אותו. בקש/י מבעל סביבת העבודה הזמנה, ואז היכנס/י שוב."
 
 #: src/features/overview/OverviewPage.tsx
 msgid "Your AI office"
