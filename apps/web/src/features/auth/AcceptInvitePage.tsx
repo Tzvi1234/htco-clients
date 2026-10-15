@@ -56,6 +56,8 @@ export function AcceptInvitePage() {
     switch (error.type) {
       case "weak-password":
         return t`Choose a longer password that is harder to guess.`;
+      case "same-password":
+        return t`This is your current password. Choose a different one.`;
       case "invitation-refused":
         return t`This invitation link has expired or was already used. Ask for a new one.`;
       case "too-many-attempts":
