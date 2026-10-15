@@ -1,103 +1,110 @@
 {
-  "$description": "HTCO semantic tokens - light theme. Components use only these.",
+  "$description": "HTCO Relay semantic tokens, light theme.",
   "color": {
     "bg": {
       "canvas": {
-        "$value": "{palette.navy.25}",
+        "$value": "{palette.graphite.0}",
         "$description": "Page background"
       },
+      "sidebar": {
+        "$value": "{palette.graphite.25}",
+        "$description": "Sidebar and inspector"
+      },
       "surface": {
-        "$value": "{palette.navy.0}",
-        "$description": "Cards, panels, tables"
+        "$value": "{palette.graphite.0}",
+        "$description": "Cards, tables"
       },
       "raised": {
-        "$value": "{palette.navy.0}",
+        "$value": "{palette.graphite.0}",
         "$description": "Menus, popovers, dialogs"
       },
       "sunken": {
-        "$value": "{palette.navy.50}",
-        "$description": "Inset areas, code, wells"
+        "$value": "{palette.graphite.50}",
+        "$description": "Table header, wells, code"
+      },
+      "hover": {
+        "$value": "{palette.graphite.75}",
+        "$description": "Hovered row or item"
       },
       "selected": {
-        "$value": "{palette.turquoise.100}",
+        "$value": "{palette.iris.50}",
         "$description": "Selected row or item"
       },
       "brand": {
-        "$value": "{color.brand.navy}",
-        "$description": "Brand ground (sign-in, splash) in both themes"
+        "$value": "{palette.iris.50}",
+        "$description": "Brand moment ground (sign-in art, empty states)"
       }
     },
     "text": {
       "primary": {
-        "$value": "{palette.navy.ink}"
+        "$value": "{palette.graphite.900}"
       },
       "secondary": {
-        "$value": "{palette.navy.700}"
+        "$value": "{palette.graphite.600}"
       },
       "muted": {
-        "$value": "{palette.navy.600}"
+        "$value": "{palette.graphite.500}"
       },
       "on-brand": {
-        "$value": "{color.brand.white}"
+        "$value": "{palette.graphite.900}"
       },
       "link": {
-        "$value": "{palette.turquoise.700}"
+        "$value": "{palette.iris.600}"
       }
     },
     "icon": {
       "default": {
-        "$value": "{palette.navy.700}"
+        "$value": "{palette.graphite.600}"
       },
       "muted": {
-        "$value": "{palette.navy.550}"
+        "$value": "{palette.graphite.500}"
       }
     },
     "border": {
       "subtle": {
-        "$value": "{palette.navy.100}",
-        "$description": "Dividers; decorative"
+        "$value": "{palette.graphite.100}",
+        "$description": "Dividers, table lines"
       },
       "strong": {
-        "$value": "{palette.navy.200}",
-        "$description": "Card outlines; decorative"
+        "$value": "{palette.graphite.150}",
+        "$description": "Card and chip outlines"
       },
       "control": {
-        "$value": "{palette.navy.450}",
-        "$description": "Input and control boundaries (at least 3:1)"
+        "$value": "{palette.graphite.400}",
+        "$description": "Input boundaries (3:1)"
       },
       "focus": {
-        "$value": "{palette.turquoise.700}",
+        "$value": "{palette.iris.600}",
         "$description": "Focus ring"
       }
     },
     "action": {
       "primary": {
         "bg": {
-          "$value": "{color.brand.navy}",
-          "$description": "Ink capsule in light; turquoise in dark"
+          "$value": "{palette.iris.600}"
         },
         "bg-hover": {
-          "$value": "{palette.navy.850}"
+          "$value": "{palette.iris.700}"
         },
         "bg-pressed": {
-          "$value": "{palette.navy.975}"
+          "$value": "{palette.iris.800}"
         },
         "fg": {
-          "$value": "{color.brand.white}"
+          "$value": "{palette.graphite.0}"
         }
       },
       "secondary": {
         "bg": {
-          "$value": "{palette.navy.0}"
+          "$value": "{palette.graphite.0}"
         },
         "bg-hover": {
-          "$value": "{palette.navy.50}"
+          "$value": "{palette.graphite.75}"
         },
         "fg": {
-          "$value": "{palette.navy.ink}"
+          "$value": "{palette.graphite.900}"
         },
         "border": {
-          "$value": "{palette.navy.450}"
+          "$value": "{palette.graphite.400}"
         }
       },
       "danger": {
@@ -105,43 +112,46 @@
           "$value": "{palette.red.600}"
         },
         "fg": {
-          "$value": "{color.brand.white}"
+          "$value": "{palette.graphite.0}"
         }
       }
     },
     "accent": {
       "fill": {
-        "$value": "{palette.turquoise.600}",
-        "$description": "Indicators: active tab, live dot, progress"
+        "$value": "{palette.iris.600}"
       },
       "text": {
-        "$value": "{palette.turquoise.700}"
+        "$value": "{palette.iris.600}"
       },
       "subtle": {
-        "$value": "{palette.turquoise.50}"
+        "$value": "{palette.iris.50}"
       }
     },
     "attention": {
       "dot": {
-        "$value": "{palette.amber.600}",
-        "$description": "The 'needs you' dot"
+        "$value": "{palette.saffron.700}",
+        "$description": "Needs you (functional, 3:1)"
       },
       "text": {
-        "$value": "{palette.amber.700}"
+        "$value": "{palette.saffron.700}"
       },
       "subtle": {
-        "$value": "{palette.amber.50}"
+        "$value": "{palette.saffron.50}"
+      },
+      "ring": {
+        "$value": "{palette.saffron.400}",
+        "$description": "The decision ring (decorative, always beside a word)"
       }
     },
     "success": {
       "dot": {
-        "$value": "{palette.green.600}"
+        "$value": "{palette.mint.600}"
       },
       "text": {
-        "$value": "{palette.green.700}"
+        "$value": "{palette.mint.700}"
       },
       "subtle": {
-        "$value": "{palette.green.50}"
+        "$value": "{palette.mint.50}"
       }
     },
     "danger": {
@@ -157,44 +167,202 @@
     },
     "status": {
       "running": {
-        "$value": "{color.accent.fill}",
-        "$description": "Agent or job working"
+        "$value": "{color.accent.fill}"
       },
       "needs-you": {
-        "$value": "{color.attention.dot}",
-        "$description": "Waiting for a human decision"
+        "$value": "{color.attention.dot}"
       },
       "waiting": {
-        "$value": "{color.icon.muted}",
-        "$description": "Waiting for an external system or another agent"
+        "$value": "{color.icon.muted}"
       },
       "done": {
         "$value": "{color.success.dot}"
       },
       "failed": {
-        "$value": "{color.danger.dot}",
-        "$description": "Failed or blocked"
+        "$value": "{color.danger.dot}"
       },
       "offline": {
-        "$value": "{color.icon.muted}",
-        "$description": "Rendered as a hollow dot"
+        "$value": "{color.icon.muted}"
+      }
+    },
+    "tag": {
+      "iris": {
+        "bg": {
+          "$value": "{palette.iris.50}"
+        },
+        "text": {
+          "$value": "{palette.iris.600}"
+        },
+        "dot": {
+          "$value": "{palette.iris.600}"
+        }
+      },
+      "saffron": {
+        "bg": {
+          "$value": "{palette.saffron.50}"
+        },
+        "text": {
+          "$value": "{palette.saffron.700}"
+        },
+        "dot": {
+          "$value": "{palette.saffron.700}"
+        }
+      },
+      "coral": {
+        "bg": {
+          "$value": "{palette.coral.50}"
+        },
+        "text": {
+          "$value": "{palette.coral.700}"
+        },
+        "dot": {
+          "$value": "{palette.coral.600}"
+        }
+      },
+      "mint": {
+        "bg": {
+          "$value": "{palette.mint.50}"
+        },
+        "text": {
+          "$value": "{palette.mint.700}"
+        },
+        "dot": {
+          "$value": "{palette.mint.600}"
+        }
+      },
+      "sky": {
+        "bg": {
+          "$value": "{palette.sky.50}"
+        },
+        "text": {
+          "$value": "{palette.sky.700}"
+        },
+        "dot": {
+          "$value": "{palette.sky.600}"
+        }
+      },
+      "rose": {
+        "bg": {
+          "$value": "{palette.rose.50}"
+        },
+        "text": {
+          "$value": "{palette.rose.700}"
+        },
+        "dot": {
+          "$value": "{palette.rose.600}"
+        }
+      },
+      "slate": {
+        "bg": {
+          "$value": "{palette.slate.50}"
+        },
+        "text": {
+          "$value": "{palette.slate.600}"
+        },
+        "dot": {
+          "$value": "{palette.slate.600}"
+        }
+      }
+    },
+    "presence": {
+      "iris": {
+        "bg": {
+          "$value": "{palette.iris.600}"
+        },
+        "fg": {
+          "$value": "{palette.graphite.0}"
+        }
+      },
+      "coral": {
+        "bg": {
+          "$value": "{palette.coral.700}"
+        },
+        "fg": {
+          "$value": "{palette.graphite.0}"
+        }
+      },
+      "mint": {
+        "bg": {
+          "$value": "{palette.mint.700}"
+        },
+        "fg": {
+          "$value": "{palette.graphite.0}"
+        }
+      },
+      "sky": {
+        "bg": {
+          "$value": "{palette.sky.700}"
+        },
+        "fg": {
+          "$value": "{palette.graphite.0}"
+        }
+      },
+      "rose": {
+        "bg": {
+          "$value": "{palette.rose.700}"
+        },
+        "fg": {
+          "$value": "{palette.graphite.0}"
+        }
+      },
+      "saffron": {
+        "bg": {
+          "$value": "{palette.saffron.presence}"
+        },
+        "fg": {
+          "$value": "{palette.graphite.0}"
+        }
+      },
+      "slate": {
+        "bg": {
+          "$value": "{palette.slate.600}"
+        },
+        "fg": {
+          "$value": "{palette.graphite.0}"
+        }
+      }
+    },
+    "illustration": {
+      "iris": {
+        "$value": "{palette.iris.300}"
+      },
+      "saffron": {
+        "$value": "{palette.saffron.400}"
+      },
+      "coral": {
+        "$value": "{palette.coral.300}"
+      },
+      "mint": {
+        "$value": "{palette.mint.300}"
+      },
+      "sky": {
+        "$value": "{palette.sky.300}"
+      },
+      "rose": {
+        "$value": "{palette.rose.300}"
+      },
+      "ink": {
+        "$value": "{palette.graphite.900}"
+      },
+      "paper": {
+        "$value": "{palette.graphite.0}"
       }
     },
     "dataviz": {
       "1": {
-        "$value": "{palette.turquoise.600}"
+        "$value": "{palette.iris.600}"
       },
       "2": {
-        "$value": "{palette.indigo.600}"
+        "$value": "{palette.sky.600}"
       },
       "3": {
-        "$value": "{palette.amber.600}"
+        "$value": "{palette.mint.600}"
       },
       "4": {
         "$value": "{palette.coral.600}"
       },
       "5": {
-        "$value": "{palette.navy.600}"
+        "$value": "{palette.saffron.700}"
       }
     }
   },
@@ -206,12 +374,45 @@
           "color": {
             "colorSpace": "srgb",
             "components": [
-              0.0118,
-              0.0588,
-              0.1216
+              0.0863,
+              0.0863,
+              0.102
             ],
             "alpha": 0.06,
-            "hex": "#030f1f"
+            "hex": "#16161a"
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 1,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 2,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 0,
+            "unit": "px"
+          }
+        }
+      ]
+    },
+    "2": {
+      "$type": "shadow",
+      "$value": [
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0.0863,
+              0.0863,
+              0.102
+            ],
+            "alpha": 0.05,
+            "hex": "#16161a"
           },
           "offsetX": {
             "value": 0,
@@ -234,66 +435,31 @@
           "color": {
             "colorSpace": "srgb",
             "components": [
-              0.0118,
-              0.0588,
-              0.1216
+              0.0863,
+              0.0863,
+              0.102
             ],
-            "alpha": 0.04,
-            "hex": "#030f1f"
+            "alpha": 0.1,
+            "hex": "#16161a"
           },
           "offsetX": {
             "value": 0,
             "unit": "px"
           },
           "offsetY": {
-            "value": 1,
+            "value": 6,
             "unit": "px"
           },
           "blur": {
-            "value": 1,
+            "value": 16,
             "unit": "px"
           },
           "spread": {
-            "value": 0,
+            "value": -4,
             "unit": "px"
           }
         }
-      ],
-      "$description": "Native clients map this to platform elevation"
-    },
-    "2": {
-      "$type": "shadow",
-      "$value": [
-        {
-          "color": {
-            "colorSpace": "srgb",
-            "components": [
-              0.0118,
-              0.0588,
-              0.1216
-            ],
-            "alpha": 0.08,
-            "hex": "#030f1f"
-          },
-          "offsetX": {
-            "value": 0,
-            "unit": "px"
-          },
-          "offsetY": {
-            "value": 4,
-            "unit": "px"
-          },
-          "blur": {
-            "value": 12,
-            "unit": "px"
-          },
-          "spread": {
-            "value": 0,
-            "unit": "px"
-          }
-        }
-      ],
-      "$description": "Native clients map this to platform elevation"
+      ]
     },
     "3": {
       "$type": "shadow",
@@ -302,32 +468,59 @@
           "color": {
             "colorSpace": "srgb",
             "components": [
-              0.0118,
-              0.0588,
-              0.1216
+              0.0863,
+              0.0863,
+              0.102
             ],
-            "alpha": 0.12,
-            "hex": "#030f1f"
+            "alpha": 0.05,
+            "hex": "#16161a"
           },
           "offsetX": {
             "value": 0,
             "unit": "px"
           },
           "offsetY": {
-            "value": 12,
+            "value": 2,
             "unit": "px"
           },
           "blur": {
-            "value": 32,
+            "value": 4,
             "unit": "px"
           },
           "spread": {
             "value": 0,
             "unit": "px"
           }
+        },
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0.0863,
+              0.0863,
+              0.102
+            ],
+            "alpha": 0.16,
+            "hex": "#16161a"
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 16,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 40,
+            "unit": "px"
+          },
+          "spread": {
+            "value": -8,
+            "unit": "px"
+          }
         }
-      ],
-      "$description": "Native clients map this to platform elevation"
+      ]
     }
   }
 }

@@ -1,23 +1,7 @@
 import type { ReactNode } from "react";
 
-/** The brand mark's rings and dot: the illustration for "nothing here yet". */
-function RingsIllustration() {
-  return (
-    <svg width="96" height="56" viewBox="0 0 96 56" aria-hidden="true">
-      <circle cx="28" cy="28" r="20" fill="none" stroke="var(--accent-fill)" strokeWidth="8" />
-      <circle
-        cx="62"
-        cy="28"
-        r="20"
-        fill="none"
-        stroke="var(--accent-fill)"
-        strokeWidth="8"
-        opacity="0.55"
-      />
-      <circle cx="86" cy="44" r="7" fill="var(--attention-dot)" />
-    </svg>
-  );
-}
+import { EmptyArt } from "../art/RelayArt.tsx";
+import { cx } from "../lib/cx.ts";
 
 interface StateCardProps {
   title: ReactNode;
@@ -25,24 +9,34 @@ interface StateCardProps {
   /** 1 when the state replaces the whole page (not found, failed screen); else 2 or 3. */
   headingLevel?: 1 | 2 | 3;
   illustration?: boolean;
+  /** Sit inside a table or panel without a frame of its own. */
+  bare?: boolean;
   children?: ReactNode;
 }
 
-/** A centred card that explains a state and offers the next step. */
+/** A centred block that explains a state and offers the next step (one sentence, one action). */
 export function StateCard({
   title,
   description,
   headingLevel = 2,
   illustration = false,
+  bare = false,
   children,
 }: StateCardProps) {
   const Heading = (["h1", "h2", "h3"] as const)[headingLevel - 1] ?? "h2";
   return (
-    <section className="mx-auto flex w-full max-w-[440px] flex-col items-center gap-3 rounded-card border border-border-subtle bg-surface px-6 py-8 text-center">
-      {illustration ? <RingsIllustration /> : null}
+    <section
+      className={cx(
+        "mx-auto flex w-full max-w-[460px] flex-col items-center gap-2 px-6 text-center",
+        bare ? "py-12" : "rounded-card border border-border-subtle bg-surface py-10",
+      )}
+    >
+      {illustration ? <EmptyArt className="mb-3" /> : null}
       <Heading className="m-0 text-title-sm font-semibold">{title}</Heading>
-      <p className="m-0 max-w-[34ch] text-secondary">{description}</p>
-      {children}
+      <p className="m-0 max-w-[40ch] text-secondary">{description}</p>
+      {children === undefined ? null : (
+        <div className="mt-3 flex flex-col items-center gap-2">{children}</div>
+      )}
     </section>
   );
 }

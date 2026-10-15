@@ -1,4 +1,4 @@
-/* The HTCO design tokens drive every utility: Tailwind's own palette, radii and shadows are
+/* The HTCO Relay design tokens drive every utility: Tailwind's own palette, radii and shadows are
    removed, so only token-backed classes exist ("tokens only", design/README.md). */
 @import "tailwindcss";
 @import "@htco/design-tokens/tokens.css";
@@ -6,9 +6,11 @@
 @theme inline {
   --color-*: initial;
   --color-canvas: var(--bg-canvas);
+  --color-sidebar: var(--bg-sidebar);
   --color-surface: var(--bg-surface);
   --color-raised: var(--bg-raised);
   --color-sunken: var(--bg-sunken);
+  --color-hover: var(--bg-hover);
   --color-selected: var(--bg-selected);
   --color-brand: var(--bg-brand);
   --color-primary: var(--text-primary);
@@ -38,6 +40,7 @@
   --color-attention: var(--attention-dot);
   --color-attention-text: var(--attention-text);
   --color-attention-subtle: var(--attention-subtle);
+  --color-ring: var(--attention-ring);
   --color-success: var(--success-dot);
   --color-success-text: var(--success-text);
   --color-success-subtle: var(--success-subtle);
@@ -49,10 +52,48 @@
   --color-status-waiting: var(--status-waiting);
   --color-status-done: var(--status-done);
   --color-status-failed: var(--status-failed);
+  --color-tag-iris: var(--tag-iris-bg);
+  --color-tag-iris-text: var(--tag-iris-text);
+  --color-tag-iris-dot: var(--tag-iris-dot);
+  --color-tag-saffron: var(--tag-saffron-bg);
+  --color-tag-saffron-text: var(--tag-saffron-text);
+  --color-tag-saffron-dot: var(--tag-saffron-dot);
+  --color-tag-coral: var(--tag-coral-bg);
+  --color-tag-coral-text: var(--tag-coral-text);
+  --color-tag-coral-dot: var(--tag-coral-dot);
+  --color-tag-mint: var(--tag-mint-bg);
+  --color-tag-mint-text: var(--tag-mint-text);
+  --color-tag-mint-dot: var(--tag-mint-dot);
+  --color-tag-sky: var(--tag-sky-bg);
+  --color-tag-sky-text: var(--tag-sky-text);
+  --color-tag-sky-dot: var(--tag-sky-dot);
+  --color-tag-rose: var(--tag-rose-bg);
+  --color-tag-rose-text: var(--tag-rose-text);
+  --color-tag-rose-dot: var(--tag-rose-dot);
+  --color-tag-slate: var(--tag-slate-bg);
+  --color-tag-slate-text: var(--tag-slate-text);
+  --color-tag-slate-dot: var(--tag-slate-dot);
+  --color-presence-iris: var(--presence-iris-bg);
+  --color-presence-coral: var(--presence-coral-bg);
+  --color-presence-mint: var(--presence-mint-bg);
+  --color-presence-sky: var(--presence-sky-bg);
+  --color-presence-rose: var(--presence-rose-bg);
+  --color-presence-saffron: var(--presence-saffron-bg);
+  --color-presence-slate: var(--presence-slate-bg);
+  --color-presence-fg: var(--presence-iris-fg);
+  --color-art-iris: var(--illustration-iris);
+  --color-art-saffron: var(--illustration-saffron);
+  --color-art-coral: var(--illustration-coral);
+  --color-art-mint: var(--illustration-mint);
+  --color-art-sky: var(--illustration-sky);
+  --color-art-rose: var(--illustration-rose);
+  --color-art-ink: var(--illustration-ink);
+  --color-art-paper: var(--illustration-paper);
 
   --font-*: initial;
   --font-latin: var(--font-family-latin);
   --font-hebrew: var(--font-family-hebrew);
+  --font-display: var(--font-family-display);
   --font-mono: var(--font-family-mono);
 
   --text-*: initial;
@@ -70,9 +111,12 @@
   --text-display-sm--line-height: var(--font-line-height-display-sm);
   --text-display: var(--font-size-display);
   --text-display--line-height: var(--font-line-height-display);
+  --text-hero: var(--font-size-hero);
+  --text-hero--line-height: var(--font-line-height-hero);
 
-  /* Radii by role (design/README.md, "Shape and depth"). */
+  /* Radii by role (design/README.md, "Shape"). */
   --radius-*: initial;
+  --radius-tag: var(--radius-xs);
   --radius-control: var(--radius-sm);
   --radius-button: var(--radius-md);
   --radius-card: var(--radius-lg);
@@ -91,6 +135,52 @@
   --breakpoint-xl: 1600px;
 
   --ease-standard: var(--motion-easing-standard);
+  --ease-enter: var(--motion-easing-enter);
+
+  --animate-enter: relay-enter var(--motion-duration-base) var(--motion-easing-enter) both;
+  --animate-sidebar-in: relay-sidebar-in var(--motion-duration-slow) var(--motion-easing-enter) both;
+  --animate-dot-drop: relay-dot-drop 520ms cubic-bezier(0.3, 0, 0, 1.25) both;
+  --animate-ring-draw: relay-ring-draw var(--motion-duration-draw) var(--motion-easing-enter) both;
+  --animate-art-in: relay-art-in 520ms var(--motion-easing-enter) both;
+}
+
+/* Motion (design/README.md, "Motion"): opacity and short travel only, never on scroll. */
+@keyframes relay-enter {
+  from {
+    opacity: 0;
+    translate: 0 4px;
+  }
+}
+
+@keyframes relay-sidebar-in {
+  from {
+    opacity: 0;
+    translate: calc(-8px * var(--relay-direction, 1)) 0;
+  }
+}
+
+@keyframes relay-dot-drop {
+  0% {
+    opacity: 0;
+    translate: 0 -10px;
+    scale: 0.6;
+  }
+}
+
+@keyframes relay-ring-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes relay-art-in {
+  from {
+    opacity: 0;
+    translate: 0 12px;
+  }
 }
 
 @layer base {
@@ -106,10 +196,20 @@
     font-family: var(--font-family-hebrew);
   }
 
+  :root[dir="rtl"] {
+    --relay-direction: -1;
+  }
+
   body {
     margin: 0;
-    font-size: var(--font-size-body-sm);
-    line-height: var(--font-line-height-body-sm);
+    font-size: var(--font-size-body);
+    line-height: var(--font-line-height-body);
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
   }
 
   /* One focus ring everywhere: 2 px border-focus with a 2 px offset. */
@@ -119,14 +219,25 @@
     outline-offset: 2px;
   }
 
+  /* Reduced motion removes travel and drawing, not only time (design/README.md). */
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
     *::after {
-      animation-duration: 1ms !important;
-      animation-iteration-count: 1 !important;
+      animation: none !important;
       transition-duration: 1ms !important;
     }
+  }
+}
+
+@layer utilities {
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* The display face (Rubik, Hebrew and English alike) is set a little tighter. */
+  .font-display {
+    letter-spacing: var(--font-tracking-display);
   }
 }
 

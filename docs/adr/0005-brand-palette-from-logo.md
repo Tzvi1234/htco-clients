@@ -1,6 +1,6 @@
 # Client ADR-0005: Brand palette measured from the official logo
 
-- **Status:** Accepted
+- **Status:** Superseded by [client ADR-0007](0007-relay-design-language.md) (2026-10-15)
 - **Date:** 2026-10-14
 - **Deciders:** Owner, engineering
 

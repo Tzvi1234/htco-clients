@@ -54,7 +54,7 @@ The web app exists (`apps/web`, slice 3.3 part 1). Each command is created by th
 | `pnpm tokens` | Build the CSS, Kotlin and XAML tokens into `packages/design-tokens/generated/` (refuses when a contrast pair fails); `pnpm check` fails when they drift | Slice 3.2 |
 | `pnpm install && pnpm check` | ESLint (strict, type-aware), Prettier, TypeScript, Vitest; later also i18n, tokens and contrast | Slice 3.1 (tokens: 3.2; web: 3.3) |
 | `node scripts/<name>.ts` | Repository scripts run by CI (`conventional-commit`, `check-action-pins`, `test-integrity`); Node runs TypeScript directly | Slice 3.1 |
-| `pnpm web` | The web app's dev server on http://localhost:5173 | Slice 3.3 |
+| `pnpm web` | The web app's dev server on http://localhost:5173; add `?demo` (signed in) or `?demo=signed-out` to run it on the in-memory API without a local API server (development builds only) | Slice 3.3 |
 | `pnpm i18n:check` | Lingui catalogs in sync with the code, and no missing Hebrew translation (part of `pnpm check`); `pnpm --filter @htco/web i18n:extract` updates them | Slice 3.3 |
 | `pnpm api:generate` | Regenerate `packages/api-client/generated/schema.d.ts` from the pinned `packages/api-client/openapi.yaml`; a test fails when they drift | Slice 3.6 |
 | `pnpm storybook` | Component previews | Slice 3.4 |

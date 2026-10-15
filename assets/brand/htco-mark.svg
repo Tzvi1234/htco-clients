@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="750.5 93.5 750 750" role="img" aria-label="HTCO CO dot mark">
+  <style>
+    .co { fill: #4C3AC7; }
+    .dot { fill: #F2B72F; }
+  </style>
+  <defs>
+    <mask id="cut-o-from-c" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse" x="730" y="70" width="800" height="800"><rect x="730" y="70" width="800" height="800" fill="#fff"/><circle cx="1202.5" cy="468.5" r="208" fill="#000"/></mask>
+    <mask id="cut-dot-from-o" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse" x="730" y="70" width="800" height="800"><rect x="730" y="70" width="800" height="800" fill="#fff"/><circle cx="1411.5" cy="564.5" r="87" fill="#000"/></mask>
+  </defs>
+  <g class="co" fill-rule="evenodd">
+    <path d="M1086.14 318.59A197 197 0 1 0 1086.14 620.41L1025.71 548.4A103 103 0 1 1 1025.71 390.6Z" mask="url(#cut-o-from-c)"/>
+    <path d="M1202.5 270.5A198 198 0 1 1 1202.5 666.5A198 198 0 1 1 1202.5 270.5ZM1202.5 363.5A105 105 0 1 0 1202.5 573.5A105 105 0 1 0 1202.5 363.5Z" mask="url(#cut-dot-from-o)"/>
+  </g>
+  <g class="dot"><circle cx="1411.5" cy="564.5" r="77"/></g>
+</svg>

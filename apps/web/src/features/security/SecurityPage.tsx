@@ -12,10 +12,15 @@ import {
 } from "../../shared/api/api.tsx";
 import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
 import { Button } from "../../shared/ui/Button.tsx";
-import { PageHeader } from "../../shared/ui/PageHeader.tsx";
+import { Laptop, ShieldCheck } from "lucide-react";
+
+import { PageBody, PageHeader } from "../../shared/ui/PageHeader.tsx";
+import { ObjectIcon, Tag } from "../../shared/ui/Tag.tsx";
 import { StatusDot } from "../../shared/ui/StatusDot.tsx";
 
-const CARD = "flex flex-col gap-3 rounded-card border border-border-subtle bg-surface p-4";
+const CARD = "overflow-hidden rounded-card border border-border-subtle bg-surface shadow-1";
+const CARD_HEADER =
+  "m-0 border-b border-border-subtle bg-sunken px-4 py-2.5 text-body font-semibold";
 
 /** Two-factor sign-in and the user's signed-in devices (slice 3.5, AC-3.5.4). */
 export function SecurityPage() {
@@ -24,11 +29,14 @@ export function SecurityPage() {
       <PageHeader
         title={<Trans>Security</Trans>}
         description={<Trans>How you sign in, and where you are signed in.</Trans>}
+        icon={<ObjectIcon hue="mint" icon={<ShieldCheck size={13} strokeWidth={2} />} />}
       />
-      <div className="flex max-w-[720px] flex-col gap-4">
-        <SecondFactor />
-        <Devices />
-      </div>
+      <PageBody>
+        <div className="flex max-w-[760px] flex-col gap-4">
+          <SecondFactor />
+          <Devices />
+        </div>
+      </PageBody>
     </>
   );
 }
@@ -38,16 +46,16 @@ function SecondFactor() {
   const mfa = useQuery(mfaQuery(api));
   return (
     <section className={CARD} aria-labelledby="second-factor">
-      <h2 id="second-factor" className="m-0 text-body font-semibold">
+      <h2 id="second-factor" className={CARD_HEADER}>
         <Trans>Two-factor sign-in</Trans>
       </h2>
       {mfa.data === undefined ? null : mfa.data.enrolled ? (
-        <p className="m-0 flex items-center gap-2 text-body">
+        <p className="m-0 flex items-center gap-2 px-4 py-3.5 text-body">
           <StatusDot status="done" />
           <Trans>Authenticator app is set up</Trans>
         </p>
       ) : (
-        <p className="m-0 flex flex-wrap items-center gap-2 text-body">
+        <p className="m-0 flex flex-wrap items-center gap-2 px-4 py-3.5 text-body">
           <StatusDot status="needs-you" />
           <Trans>No authenticator app yet.</Trans>{" "}
           <Link to="/security/setup" className="text-link underline">
@@ -78,22 +86,25 @@ function Devices() {
 
   return (
     <section className={CARD} aria-labelledby="devices">
-      <h2 id="devices" className="m-0 text-body font-semibold">
+      <h2 id="devices" className={CARD_HEADER}>
         <Trans>Signed-in devices</Trans>
       </h2>
-      <ul aria-label={t`Signed-in devices`} className="m-0 flex list-none flex-col gap-2 p-0">
+      <ul aria-label={t`Signed-in devices`} className="m-0 flex list-none flex-col p-0">
         {(sessions.data ?? []).map((session: SessionItem) => {
           const device = session.user_agent ?? t`Unknown device`;
           return (
             <li
               key={session.id}
-              className="flex items-center justify-between gap-3 border-t border-border-subtle pt-2 first:border-t-0 first:pt-0"
+              className="flex min-h-14 items-center gap-3 border-b border-border-subtle px-4 py-2 transition-colors last:border-b-0 hover:bg-hover"
             >
-              <div className="flex min-w-0 flex-col">
-                <span className="truncate text-body">{device}</span>
-                <span className="text-caption text-muted">
+              <ObjectIcon hue="slate" size="md" icon={<Laptop size={14} strokeWidth={2} />} />
+              <div className="flex min-w-0 grow flex-col items-start gap-0.5">
+                <span className="max-w-full truncate font-medium">{device}</span>
+                <span className="text-body-sm text-muted">
                   {session.current ? (
-                    <Trans>This device</Trans>
+                    <Tag hue="iris" dot>
+                      <Trans>This device</Trans>
+                    </Tag>
                   ) : (
                     <Trans>Last active {seen.format(new Date(session.last_seen_at))}</Trans>
                   )}

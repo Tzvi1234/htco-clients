@@ -6,6 +6,26 @@ Actors follow the office model of [platform ADR-0012](https://github.com/Tzvi123
 
 Each implementation must cover, per component: every variant and size listed here; default, hover, focus, pressed, disabled, loading and error states where they apply; light and dark; left-to-right and right-to-left; an accessible name and keyboard or touch behaviour; and screenshot tests for he/en × light/dark.
 
+## Relay revision (2026-10-15)
+
+The design language changed to Relay ([client ADR-0007](../docs/adr/0007-relay-design-language.md)). Where this specification and the brand book disagree, the brand book's sizes and colours win. Built on the web so far:
+
+| Component | Relay rules |
+|---|---|
+| Button | 28, 32 or 40 px; radius 8; primary is iris with white text and the faintest shadow; presses to 98% |
+| IconButton | 32 px, radius 6; the "needs you" dot is saffron |
+| Input (`TextField`) | 32 px (40 px on sign-in), radius 6, label 13 px medium above, iris focus border plus a soft iris halo |
+| Sidebar | 248 px; the logo, Quick actions, 32 px items with object-coloured icons, section labels, the shop card, the account |
+| QuickActions (new) | Ctrl+K or ⌘K; a 560 px dialog with a search field and a filtered menu; Enter goes |
+| PageHeader (TopBar) | 48 px sticky bar: object icon, title (the h1), a short description on wide screens, actions |
+| Tag (new) | 20 px, radius 4, soft tint plus darker text, optional dot; seven hues |
+| ObjectIcon (new) | 20 or 28 px rounded tile in the record type's hue |
+| DecisionRing (new) | The saffron marker loop around what waits for the owner; decorative, always beside words; draws on in 400 ms |
+| StatusDot | Unchanged meaning; needs-you is saffron |
+| EmptyState | Brand art (receipt, handoff rings, listing tile), title 16 px, one sentence, one action or a plain "not yet" |
+| Banner (RetryBanner) | A slim full-width bar under the header on the saffron tint |
+| Logo | Inline SVG of the official geometry in token colours; `mark` variant; the dot drops in during the intro |
+
 ## Index
 
 | Group | Components |

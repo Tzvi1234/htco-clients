@@ -8,5 +8,6 @@ Decisions specific to the web, Windows and Android clients and the design system
 | [0002](0002-web-stack.md) | Web: Vite SPA with React Aria, Tailwind logical utilities and Lingui | Accepted |
 | [0003](0003-design-token-pipeline.md) | One DTCG token source generated for CSS, Kotlin and XAML | Accepted |
 | [0004](0004-api-client-generation.md) | Generated API clients from a pinned OpenAPI copy | Accepted |
-| [0005](0005-brand-palette-from-logo.md) | Brand palette measured from the official logo | Accepted |
+| [0005](0005-brand-palette-from-logo.md) | Brand palette measured from the official logo | Superseded by 0007 |
 | [0006](0006-static-web-hosting.md) | The web app as an App Platform static site, policies in the page | Accepted |
+| [0007](0007-relay-design-language.md) | The Relay design language (Attio layout, Figma colour, the logo recoloured) | Accepted |

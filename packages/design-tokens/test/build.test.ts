@@ -31,7 +31,7 @@ describe("loadTokens", () => {
     const tokens = await loadTokens("light");
     const canvas = tokens.find((token) => token.path.join(".") === "color.bg.canvas");
 
-    expect(canvas).toMatchObject({ type: "color", value: { hex: "#f4f7fa" } });
+    expect(canvas).toMatchObject({ type: "color", value: { hex: "#ffffff" } });
   });
 
   it("gives the same token paths in both themes", async () => {

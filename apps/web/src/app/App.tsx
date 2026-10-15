@@ -6,6 +6,7 @@ import { useState } from "react";
 import { createAppRouter } from "./router.tsx";
 import { ApiError, ApiProvider, createApiClient } from "../shared/api/api.tsx";
 import { LocaleProvider } from "../shared/i18n/LocaleProvider.tsx";
+import { IntroProvider } from "../shared/motion/intro.tsx";
 import type { Locale } from "../shared/i18n/locale.ts";
 import type { SettingsStorage } from "../shared/lib/storage.ts";
 import { ThemeProvider } from "../shared/theme/ThemeProvider.tsx";
@@ -49,7 +50,9 @@ export function App({ locale, theme, storage, history, api: given }: AppProps) {
       <ThemeProvider initialTheme={theme} storage={storage}>
         <QueryClientProvider client={queryClient}>
           <ApiProvider client={api}>
-            <RouterProvider router={router} />
+            <IntroProvider storage={storage}>
+              <RouterProvider router={router} />
+            </IntroProvider>
           </ApiProvider>
         </QueryClientProvider>
       </ThemeProvider>

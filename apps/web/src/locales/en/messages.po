@@ -7,6 +7,18 @@ msgstr ""
 "X-Generator: @lingui/cli\n"
 "Language: en\n"
 
+#: src/features/overview/OverviewPage.tsx
+msgid "0 of 3 done"
+msgstr "0 of 3 done"
+
+#: src/features/overview/OverviewPage.tsx
+msgid "1 of 3 done"
+msgstr "1 of 3 done"
+
+#: src/app/shell/UserMenu.tsx
+msgid "Account"
+msgstr "Account"
+
 #: src/app/shell/UserMenu.tsx
 msgid "Account and preferences"
 msgstr "Account and preferences"
@@ -39,7 +51,7 @@ msgstr "Confirm"
 msgid "Confirm it is you"
 msgstr "Confirm it is you"
 
-#: src/features/overview/OverviewPage.tsx
+#: src/features/shops/ShopsPage.tsx
 msgid "Connect Etsy shop"
 msgstr "Connect Etsy shop"
 
@@ -51,7 +63,7 @@ msgstr "Connect your first shop"
 msgid "Connected shops appear here with their sync status and capabilities."
 msgstr "Connected shops appear here with their sync status and capabilities."
 
-#: src/features/overview/OverviewPage.tsx
+#: src/features/shops/ShopsPage.tsx
 msgid "Connecting a shop opens in a coming release."
 msgstr "Connecting a shop opens in a coming release."
 
@@ -59,6 +71,10 @@ msgstr "Connecting a shop opens in a coming release."
 #: src/features/settings/SettingsPage.tsx
 msgid "Dark"
 msgstr "Dark"
+
+#: src/features/overview/OverviewPage.tsx
+msgid "Done"
+msgstr "Done"
 
 #: src/features/auth/SignInPage.tsx
 msgid "Email"
@@ -76,13 +92,42 @@ msgstr "Enter the 6-digit code the app shows."
 msgid "Etsy · not connected"
 msgstr "Etsy · not connected"
 
+#: src/features/auth/AuthLayout.tsx
+msgid "Every action an AI employee takes has a reason, a policy and a receipt, and anything risky waits for you."
+msgstr "Every action an AI employee takes has a reason, a policy and a receipt, and anything risky waits for you."
+
+#: src/features/overview/OverviewPage.tsx
+msgid "Getting started"
+msgstr "Getting started"
+
+#: src/app/shell/CommandMenu.tsx
+msgid "Go to security"
+msgstr "Go to security"
+
+#: src/app/shell/CommandMenu.tsx
+msgid "Go to settings"
+msgstr "Go to settings"
+
+#: src/app/shell/CommandMenu.tsx
+msgid "Go to shops"
+msgstr "Go to shops"
+
 #: src/app/RouteStates.tsx
+#: src/app/shell/CommandMenu.tsx
 msgid "Go to the overview"
 msgstr "Go to the overview"
 
 #: src/features/security/SecurityPage.tsx
 msgid "How you sign in, and where you are signed in."
 msgstr "How you sign in, and where you are signed in."
+
+#: src/features/auth/AuthLayout.tsx
+msgid "HTCO · the operating system for your marketplace business"
+msgstr "HTCO · the operating system for your marketplace business"
+
+#: src/features/overview/OverviewPage.tsx
+msgid "HTCO checks orders, tracking and listings, and asks you before anything risky. Three steps get it ready."
+msgstr "HTCO checks orders, tracking and listings, and asks you before anything risky. Three steps get it ready."
 
 #: src/app/shell/UserMenu.tsx
 #: src/features/settings/SettingsPage.tsx
@@ -93,6 +138,10 @@ msgstr "Language"
 #: src/features/security/SecurityPage.tsx
 msgid "Last active {0}"
 msgstr "Last active {0}"
+
+#: src/features/shops/ShopsPage.tsx
+msgid "Last sync"
+msgstr "Last sync"
 
 #: src/app/shell/UserMenu.tsx
 #: src/features/settings/SettingsPage.tsx
@@ -108,6 +157,10 @@ msgstr "Main"
 msgid "Match the system"
 msgstr "Match the system"
 
+#: src/features/overview/OverviewPage.tsx
+msgid "Meet your office"
+msgstr "Meet your office"
+
 #: src/features/security/SecurityPage.tsx
 msgid "No authenticator app yet."
 msgstr "No authenticator app yet."
@@ -120,9 +173,17 @@ msgstr "No shop connected"
 msgid "No shops yet"
 msgstr "No shops yet"
 
+#: src/app/shell/CommandMenu.tsx
+msgid "Nothing matches."
+msgstr "Nothing matches."
+
+#: src/features/shops/ShopsPage.tsx
+msgid "Orders today"
+msgstr "Orders today"
+
 #: src/features/overview/OverviewPage.tsx
-msgid "Orders, tracking and listings appear here after you connect an Etsy shop. It takes about a minute."
-msgstr "Orders, tracking and listings appear here after you connect an Etsy shop. It takes about a minute."
+msgid "Orders, tracking and listings appear after you connect an Etsy shop. Connecting opens in a coming release."
+msgstr "Orders, tracking and listings appear after you connect an Etsy shop. Connecting opens in a coming release."
 
 #: src/app/shell/Navigation.tsx
 #: src/features/overview/OverviewPage.tsx
@@ -141,17 +202,41 @@ msgstr "Page not found"
 msgid "Password"
 msgstr "Password"
 
+#: src/features/overview/OverviewPage.tsx
+msgid "Password and an authenticator app."
+msgstr "Password and an authenticator app."
+
 #: src/features/auth/SecondFactorPage.tsx
 msgid "QR code for your authenticator app"
 msgstr "QR code for your authenticator app"
+
+#: src/app/shell/CommandMenu.tsx
+msgid "Quick actions"
+msgstr "Quick actions"
+
+#: src/app/shell/Navigation.tsx
+msgid "Records"
+msgstr "Records"
 
 #: src/shared/ui/ErrorState.tsx
 msgid "Request ID <0>{requestId}</0>"
 msgstr "Request ID <0>{requestId}</0>"
 
+#: src/features/overview/OverviewPage.tsx
+msgid "Review security"
+msgstr "Review security"
+
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Scan the QR code with the app."
 msgstr "Scan the QR code with the app."
+
+#: src/app/shell/CommandMenu.tsx
+msgid "Search actions"
+msgstr "Search actions"
+
+#: src/features/overview/OverviewPage.tsx
+msgid "Secure your account"
+msgstr "Secure your account"
 
 #: src/app/shell/UserMenu.tsx
 #: src/features/security/SecurityPage.tsx
@@ -170,6 +255,10 @@ msgstr "Set up your authenticator app"
 #: src/features/settings/SettingsPage.tsx
 msgid "Settings"
 msgstr "Settings"
+
+#: src/features/shops/ShopsPage.tsx
+msgid "Shop"
+msgstr "Shop"
 
 #: src/app/shell/Navigation.tsx
 #: src/features/shops/ShopsPage.tsx
@@ -209,9 +298,17 @@ msgstr "Signed-in devices"
 msgid "Something went wrong while showing it. Try again; your data was not changed."
 msgstr "Something went wrong while showing it. Try again; your data was not changed."
 
+#: src/features/shops/ShopsPage.tsx
+msgid "Sync"
+msgstr "Sync"
+
 #: src/app/RouteStates.tsx
 msgid "The address may be mistyped, or the page has moved."
 msgstr "The address may be mistyped, or the page has moved."
+
+#: src/features/overview/OverviewPage.tsx
+msgid "The AI employees start once a shop is connected."
+msgstr "The AI employees start once a shop is connected."
 
 #: src/features/auth/SecondFactorPage.tsx
 msgid "The code is wrong or expired."
@@ -263,6 +360,10 @@ msgstr "Try again"
 msgid "Two-factor sign-in"
 msgstr "Two-factor sign-in"
 
+#: src/app/shell/CommandMenu.tsx
+msgid "Type a command or a page"
+msgstr "Type a command or a page"
+
 #: src/features/security/SecurityPage.tsx
 msgid "Unknown device"
 msgstr "Unknown device"
@@ -271,6 +372,23 @@ msgstr "Unknown device"
 msgid "Use the email you were invited with."
 msgstr "Use the email you were invited with."
 
+#: src/features/overview/OverviewPage.tsx
+msgid "Waiting"
+msgstr "Waiting"
+
+#: src/features/overview/OverviewPage.tsx
+msgid "Waiting for you"
+msgstr "Waiting for you"
+
+#: src/app/shell/Navigation.tsx
+msgid "Workspace"
+msgstr "Workspace"
+
 #: src/app/shell/AppShell.tsx
 msgid "You are offline. What you see may be out of date; changes are paused."
 msgstr "You are offline. What you see may be out of date; changes are paused."
+
+#: src/features/auth/AuthLayout.tsx
+#: src/features/overview/OverviewPage.tsx
+msgid "Your shop runs. You decide."
+msgstr "Your shop runs. You decide."

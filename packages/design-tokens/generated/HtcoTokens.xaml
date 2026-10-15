@@ -5,124 +5,218 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Light">
-            <SolidColorBrush x:Key="HtcoBgCanvasBrush" Color="#FFF4F7FA" />
+            <SolidColorBrush x:Key="HtcoBgCanvasBrush" Color="#FFFFFFFF" />
+            <SolidColorBrush x:Key="HtcoBgSidebarBrush" Color="#FFFAFAFB" />
             <SolidColorBrush x:Key="HtcoBgSurfaceBrush" Color="#FFFFFFFF" />
             <SolidColorBrush x:Key="HtcoBgRaisedBrush" Color="#FFFFFFFF" />
-            <SolidColorBrush x:Key="HtcoBgSunkenBrush" Color="#FFEDF2F7" />
-            <SolidColorBrush x:Key="HtcoBgSelectedBrush" Color="#FFCCFDFC" />
-            <SolidColorBrush x:Key="HtcoBgBrandBrush" Color="#FF030F1F" />
-            <SolidColorBrush x:Key="HtcoTextPrimaryBrush" Color="#FF0A1A2C" />
-            <SolidColorBrush x:Key="HtcoTextSecondaryBrush" Color="#FF44566B" />
-            <SolidColorBrush x:Key="HtcoTextMutedBrush" Color="#FF5F7085" />
-            <SolidColorBrush x:Key="HtcoTextOnBrandBrush" Color="#FFFFFFFF" />
-            <SolidColorBrush x:Key="HtcoTextLinkBrush" Color="#FF007A79" />
-            <SolidColorBrush x:Key="HtcoIconDefaultBrush" Color="#FF44566B" />
-            <SolidColorBrush x:Key="HtcoIconMutedBrush" Color="#FF6F8196" />
-            <SolidColorBrush x:Key="HtcoBorderSubtleBrush" Color="#FFDCE4ED" />
-            <SolidColorBrush x:Key="HtcoBorderStrongBrush" Color="#FFC3CFDC" />
-            <SolidColorBrush x:Key="HtcoBorderControlBrush" Color="#FF76879C" />
-            <SolidColorBrush x:Key="HtcoBorderFocusBrush" Color="#FF007A79" />
-            <SolidColorBrush x:Key="HtcoActionPrimaryBgBrush" Color="#FF030F1F" />
-            <SolidColorBrush x:Key="HtcoActionPrimaryBgHoverBrush" Color="#FF10243C" />
-            <SolidColorBrush x:Key="HtcoActionPrimaryBgPressedBrush" Color="#FF020A15" />
+            <SolidColorBrush x:Key="HtcoBgSunkenBrush" Color="#FFF5F5F7" />
+            <SolidColorBrush x:Key="HtcoBgHoverBrush" Color="#FFF0F0F3" />
+            <SolidColorBrush x:Key="HtcoBgSelectedBrush" Color="#FFF1EFFC" />
+            <SolidColorBrush x:Key="HtcoBgBrandBrush" Color="#FFF1EFFC" />
+            <SolidColorBrush x:Key="HtcoTextPrimaryBrush" Color="#FF16161A" />
+            <SolidColorBrush x:Key="HtcoTextSecondaryBrush" Color="#FF55575E" />
+            <SolidColorBrush x:Key="HtcoTextMutedBrush" Color="#FF6A6C75" />
+            <SolidColorBrush x:Key="HtcoTextOnBrandBrush" Color="#FF16161A" />
+            <SolidColorBrush x:Key="HtcoTextLinkBrush" Color="#FF4C3AC7" />
+            <SolidColorBrush x:Key="HtcoIconDefaultBrush" Color="#FF55575E" />
+            <SolidColorBrush x:Key="HtcoIconMutedBrush" Color="#FF6A6C75" />
+            <SolidColorBrush x:Key="HtcoBorderSubtleBrush" Color="#FFECECEF" />
+            <SolidColorBrush x:Key="HtcoBorderStrongBrush" Color="#FFE2E2E7" />
+            <SolidColorBrush x:Key="HtcoBorderControlBrush" Color="#FF85878F" />
+            <SolidColorBrush x:Key="HtcoBorderFocusBrush" Color="#FF4C3AC7" />
+            <SolidColorBrush x:Key="HtcoActionPrimaryBgBrush" Color="#FF4C3AC7" />
+            <SolidColorBrush x:Key="HtcoActionPrimaryBgHoverBrush" Color="#FF4130B0" />
+            <SolidColorBrush x:Key="HtcoActionPrimaryBgPressedBrush" Color="#FF36289A" />
             <SolidColorBrush x:Key="HtcoActionPrimaryFgBrush" Color="#FFFFFFFF" />
             <SolidColorBrush x:Key="HtcoActionSecondaryBgBrush" Color="#FFFFFFFF" />
-            <SolidColorBrush x:Key="HtcoActionSecondaryBgHoverBrush" Color="#FFEDF2F7" />
-            <SolidColorBrush x:Key="HtcoActionSecondaryFgBrush" Color="#FF0A1A2C" />
-            <SolidColorBrush x:Key="HtcoActionSecondaryBorderBrush" Color="#FF76879C" />
-            <SolidColorBrush x:Key="HtcoActionDangerBgBrush" Color="#FFC23347" />
+            <SolidColorBrush x:Key="HtcoActionSecondaryBgHoverBrush" Color="#FFF0F0F3" />
+            <SolidColorBrush x:Key="HtcoActionSecondaryFgBrush" Color="#FF16161A" />
+            <SolidColorBrush x:Key="HtcoActionSecondaryBorderBrush" Color="#FF85878F" />
+            <SolidColorBrush x:Key="HtcoActionDangerBgBrush" Color="#FFC9363E" />
             <SolidColorBrush x:Key="HtcoActionDangerFgBrush" Color="#FFFFFFFF" />
-            <SolidColorBrush x:Key="HtcoAccentFillBrush" Color="#FF008B89" />
-            <SolidColorBrush x:Key="HtcoAccentTextBrush" Color="#FF007A79" />
-            <SolidColorBrush x:Key="HtcoAccentSubtleBrush" Color="#FFE6FFFE" />
-            <SolidColorBrush x:Key="HtcoAttentionDotBrush" Color="#FFBD7E16" />
-            <SolidColorBrush x:Key="HtcoAttentionTextBrush" Color="#FF8A5A0E" />
-            <SolidColorBrush x:Key="HtcoAttentionSubtleBrush" Color="#FFFFF4E0" />
-            <SolidColorBrush x:Key="HtcoSuccessDotBrush" Color="#FF1F9452" />
-            <SolidColorBrush x:Key="HtcoSuccessTextBrush" Color="#FF187A45" />
-            <SolidColorBrush x:Key="HtcoSuccessSubtleBrush" Color="#FFE6F6EC" />
-            <SolidColorBrush x:Key="HtcoDangerDotBrush" Color="#FFC23347" />
-            <SolidColorBrush x:Key="HtcoDangerTextBrush" Color="#FFC23347" />
-            <SolidColorBrush x:Key="HtcoDangerSubtleBrush" Color="#FFFDECEE" />
-            <SolidColorBrush x:Key="HtcoStatusRunningBrush" Color="#FF008B89" />
-            <SolidColorBrush x:Key="HtcoStatusNeedsYouBrush" Color="#FFBD7E16" />
-            <SolidColorBrush x:Key="HtcoStatusWaitingBrush" Color="#FF6F8196" />
-            <SolidColorBrush x:Key="HtcoStatusDoneBrush" Color="#FF1F9452" />
-            <SolidColorBrush x:Key="HtcoStatusFailedBrush" Color="#FFC23347" />
-            <SolidColorBrush x:Key="HtcoStatusOfflineBrush" Color="#FF6F8196" />
-            <SolidColorBrush x:Key="HtcoDataviz1Brush" Color="#FF008B89" />
-            <SolidColorBrush x:Key="HtcoDataviz2Brush" Color="#FF4F5FD6" />
-            <SolidColorBrush x:Key="HtcoDataviz3Brush" Color="#FFBD7E16" />
-            <SolidColorBrush x:Key="HtcoDataviz4Brush" Color="#FFC9543E" />
-            <SolidColorBrush x:Key="HtcoDataviz5Brush" Color="#FF5F7085" />
+            <SolidColorBrush x:Key="HtcoAccentFillBrush" Color="#FF4C3AC7" />
+            <SolidColorBrush x:Key="HtcoAccentTextBrush" Color="#FF4C3AC7" />
+            <SolidColorBrush x:Key="HtcoAccentSubtleBrush" Color="#FFF1EFFC" />
+            <SolidColorBrush x:Key="HtcoAttentionDotBrush" Color="#FF8A5A00" />
+            <SolidColorBrush x:Key="HtcoAttentionTextBrush" Color="#FF8A5A00" />
+            <SolidColorBrush x:Key="HtcoAttentionSubtleBrush" Color="#FFFEF6DF" />
+            <SolidColorBrush x:Key="HtcoAttentionRingBrush" Color="#FFF2B72F" />
+            <SolidColorBrush x:Key="HtcoSuccessDotBrush" Color="#FF138A66" />
+            <SolidColorBrush x:Key="HtcoSuccessTextBrush" Color="#FF0F7656" />
+            <SolidColorBrush x:Key="HtcoSuccessSubtleBrush" Color="#FFE4F5EE" />
+            <SolidColorBrush x:Key="HtcoDangerDotBrush" Color="#FFC9363E" />
+            <SolidColorBrush x:Key="HtcoDangerTextBrush" Color="#FFC9363E" />
+            <SolidColorBrush x:Key="HtcoDangerSubtleBrush" Color="#FFFDECEC" />
+            <SolidColorBrush x:Key="HtcoStatusRunningBrush" Color="#FF4C3AC7" />
+            <SolidColorBrush x:Key="HtcoStatusNeedsYouBrush" Color="#FF8A5A00" />
+            <SolidColorBrush x:Key="HtcoStatusWaitingBrush" Color="#FF6A6C75" />
+            <SolidColorBrush x:Key="HtcoStatusDoneBrush" Color="#FF138A66" />
+            <SolidColorBrush x:Key="HtcoStatusFailedBrush" Color="#FFC9363E" />
+            <SolidColorBrush x:Key="HtcoStatusOfflineBrush" Color="#FF6A6C75" />
+            <SolidColorBrush x:Key="HtcoTagIrisBgBrush" Color="#FFF1EFFC" />
+            <SolidColorBrush x:Key="HtcoTagIrisTextBrush" Color="#FF4C3AC7" />
+            <SolidColorBrush x:Key="HtcoTagIrisDotBrush" Color="#FF4C3AC7" />
+            <SolidColorBrush x:Key="HtcoTagSaffronBgBrush" Color="#FFFEF6DF" />
+            <SolidColorBrush x:Key="HtcoTagSaffronTextBrush" Color="#FF8A5A00" />
+            <SolidColorBrush x:Key="HtcoTagSaffronDotBrush" Color="#FF8A5A00" />
+            <SolidColorBrush x:Key="HtcoTagCoralBgBrush" Color="#FFFCEDE9" />
+            <SolidColorBrush x:Key="HtcoTagCoralTextBrush" Color="#FFB3442F" />
+            <SolidColorBrush x:Key="HtcoTagCoralDotBrush" Color="#FFD95D45" />
+            <SolidColorBrush x:Key="HtcoTagMintBgBrush" Color="#FFE4F5EE" />
+            <SolidColorBrush x:Key="HtcoTagMintTextBrush" Color="#FF0F7656" />
+            <SolidColorBrush x:Key="HtcoTagMintDotBrush" Color="#FF138A66" />
+            <SolidColorBrush x:Key="HtcoTagSkyBgBrush" Color="#FFE7F0FC" />
+            <SolidColorBrush x:Key="HtcoTagSkyTextBrush" Color="#FF2460BA" />
+            <SolidColorBrush x:Key="HtcoTagSkyDotBrush" Color="#FF2F73D9" />
+            <SolidColorBrush x:Key="HtcoTagRoseBgBrush" Color="#FFFAEAF3" />
+            <SolidColorBrush x:Key="HtcoTagRoseTextBrush" Color="#FFA8447F" />
+            <SolidColorBrush x:Key="HtcoTagRoseDotBrush" Color="#FFC85A9E" />
+            <SolidColorBrush x:Key="HtcoTagSlateBgBrush" Color="#FFEEF0F3" />
+            <SolidColorBrush x:Key="HtcoTagSlateTextBrush" Color="#FF5B6170" />
+            <SolidColorBrush x:Key="HtcoTagSlateDotBrush" Color="#FF5B6170" />
+            <SolidColorBrush x:Key="HtcoPresenceIrisBgBrush" Color="#FF4C3AC7" />
+            <SolidColorBrush x:Key="HtcoPresenceIrisFgBrush" Color="#FFFFFFFF" />
+            <SolidColorBrush x:Key="HtcoPresenceCoralBgBrush" Color="#FFB3442F" />
+            <SolidColorBrush x:Key="HtcoPresenceCoralFgBrush" Color="#FFFFFFFF" />
+            <SolidColorBrush x:Key="HtcoPresenceMintBgBrush" Color="#FF0F7656" />
+            <SolidColorBrush x:Key="HtcoPresenceMintFgBrush" Color="#FFFFFFFF" />
+            <SolidColorBrush x:Key="HtcoPresenceSkyBgBrush" Color="#FF2460BA" />
+            <SolidColorBrush x:Key="HtcoPresenceSkyFgBrush" Color="#FFFFFFFF" />
+            <SolidColorBrush x:Key="HtcoPresenceRoseBgBrush" Color="#FFA8447F" />
+            <SolidColorBrush x:Key="HtcoPresenceRoseFgBrush" Color="#FFFFFFFF" />
+            <SolidColorBrush x:Key="HtcoPresenceSaffronBgBrush" Color="#FF9A6400" />
+            <SolidColorBrush x:Key="HtcoPresenceSaffronFgBrush" Color="#FFFFFFFF" />
+            <SolidColorBrush x:Key="HtcoPresenceSlateBgBrush" Color="#FF5B6170" />
+            <SolidColorBrush x:Key="HtcoPresenceSlateFgBrush" Color="#FFFFFFFF" />
+            <SolidColorBrush x:Key="HtcoIllustrationIrisBrush" Color="#FFA79CF0" />
+            <SolidColorBrush x:Key="HtcoIllustrationSaffronBrush" Color="#FFF2B72F" />
+            <SolidColorBrush x:Key="HtcoIllustrationCoralBrush" Color="#FFF08A6E" />
+            <SolidColorBrush x:Key="HtcoIllustrationMintBrush" Color="#FF4CC59A" />
+            <SolidColorBrush x:Key="HtcoIllustrationSkyBrush" Color="#FF6FA4EE" />
+            <SolidColorBrush x:Key="HtcoIllustrationRoseBrush" Color="#FFE58BBE" />
+            <SolidColorBrush x:Key="HtcoIllustrationInkBrush" Color="#FF16161A" />
+            <SolidColorBrush x:Key="HtcoIllustrationPaperBrush" Color="#FFFFFFFF" />
+            <SolidColorBrush x:Key="HtcoDataviz1Brush" Color="#FF4C3AC7" />
+            <SolidColorBrush x:Key="HtcoDataviz2Brush" Color="#FF2F73D9" />
+            <SolidColorBrush x:Key="HtcoDataviz3Brush" Color="#FF138A66" />
+            <SolidColorBrush x:Key="HtcoDataviz4Brush" Color="#FFD95D45" />
+            <SolidColorBrush x:Key="HtcoDataviz5Brush" Color="#FF8A5A00" />
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
-            <SolidColorBrush x:Key="HtcoBgCanvasBrush" Color="#FF030F1F" />
-            <SolidColorBrush x:Key="HtcoBgSurfaceBrush" Color="#FF0A1A2D" />
-            <SolidColorBrush x:Key="HtcoBgRaisedBrush" Color="#FF0F2338" />
-            <SolidColorBrush x:Key="HtcoBgSunkenBrush" Color="#FF020A15" />
-            <SolidColorBrush x:Key="HtcoBgSelectedBrush" Color="#FF083039" />
-            <SolidColorBrush x:Key="HtcoBgBrandBrush" Color="#FF030F1F" />
-            <SolidColorBrush x:Key="HtcoTextPrimaryBrush" Color="#FFEEF4FA" />
-            <SolidColorBrush x:Key="HtcoTextSecondaryBrush" Color="#FFA9BBCF" />
-            <SolidColorBrush x:Key="HtcoTextMutedBrush" Color="#FF8296AD" />
-            <SolidColorBrush x:Key="HtcoTextOnBrandBrush" Color="#FFFFFFFF" />
-            <SolidColorBrush x:Key="HtcoTextLinkBrush" Color="#FF05F7F4" />
-            <SolidColorBrush x:Key="HtcoIconDefaultBrush" Color="#FFA9BBCF" />
-            <SolidColorBrush x:Key="HtcoIconMutedBrush" Color="#FF647E9A" />
-            <SolidColorBrush x:Key="HtcoBorderSubtleBrush" Color="#FF1A3049" />
-            <SolidColorBrush x:Key="HtcoBorderStrongBrush" Color="#FF2E4B6B" />
-            <SolidColorBrush x:Key="HtcoBorderControlBrush" Color="#FF5A7898" />
-            <SolidColorBrush x:Key="HtcoBorderFocusBrush" Color="#FF05F7F4" />
-            <SolidColorBrush x:Key="HtcoActionPrimaryBgBrush" Color="#FF05F7F4" />
-            <SolidColorBrush x:Key="HtcoActionPrimaryBgHoverBrush" Color="#FF3BF9F6" />
-            <SolidColorBrush x:Key="HtcoActionPrimaryBgPressedBrush" Color="#FF00D5D2" />
-            <SolidColorBrush x:Key="HtcoActionPrimaryFgBrush" Color="#FF030F1F" />
-            <SolidColorBrush x:Key="HtcoActionSecondaryBgBrush" Color="#FF0A1A2D" />
-            <SolidColorBrush x:Key="HtcoActionSecondaryBgHoverBrush" Color="#FF0F2338" />
-            <SolidColorBrush x:Key="HtcoActionSecondaryFgBrush" Color="#FFEEF4FA" />
-            <SolidColorBrush x:Key="HtcoActionSecondaryBorderBrush" Color="#FF5A7898" />
-            <SolidColorBrush x:Key="HtcoActionDangerBgBrush" Color="#FFFF6B78" />
-            <SolidColorBrush x:Key="HtcoActionDangerFgBrush" Color="#FF030F1F" />
-            <SolidColorBrush x:Key="HtcoAccentFillBrush" Color="#FF05F7F4" />
-            <SolidColorBrush x:Key="HtcoAccentTextBrush" Color="#FF05F7F4" />
-            <SolidColorBrush x:Key="HtcoAccentSubtleBrush" Color="#FF06292F" />
-            <SolidColorBrush x:Key="HtcoAttentionDotBrush" Color="#FFF8B857" />
-            <SolidColorBrush x:Key="HtcoAttentionTextBrush" Color="#FFF8B857" />
-            <SolidColorBrush x:Key="HtcoAttentionSubtleBrush" Color="#FF3A2A10" />
-            <SolidColorBrush x:Key="HtcoSuccessDotBrush" Color="#FF46D98A" />
-            <SolidColorBrush x:Key="HtcoSuccessTextBrush" Color="#FF46D98A" />
-            <SolidColorBrush x:Key="HtcoSuccessSubtleBrush" Color="#FF0E3323" />
-            <SolidColorBrush x:Key="HtcoDangerDotBrush" Color="#FFFF6B78" />
-            <SolidColorBrush x:Key="HtcoDangerTextBrush" Color="#FFFF6B78" />
-            <SolidColorBrush x:Key="HtcoDangerSubtleBrush" Color="#FF3D1219" />
-            <SolidColorBrush x:Key="HtcoStatusRunningBrush" Color="#FF05F7F4" />
-            <SolidColorBrush x:Key="HtcoStatusNeedsYouBrush" Color="#FFF8B857" />
-            <SolidColorBrush x:Key="HtcoStatusWaitingBrush" Color="#FF647E9A" />
-            <SolidColorBrush x:Key="HtcoStatusDoneBrush" Color="#FF46D98A" />
-            <SolidColorBrush x:Key="HtcoStatusFailedBrush" Color="#FFFF6B78" />
-            <SolidColorBrush x:Key="HtcoStatusOfflineBrush" Color="#FF647E9A" />
-            <SolidColorBrush x:Key="HtcoDataviz1Brush" Color="#FF05F7F4" />
-            <SolidColorBrush x:Key="HtcoDataviz2Brush" Color="#FF7C8CFF" />
-            <SolidColorBrush x:Key="HtcoDataviz3Brush" Color="#FFF8B857" />
-            <SolidColorBrush x:Key="HtcoDataviz4Brush" Color="#FFFF8F7A" />
-            <SolidColorBrush x:Key="HtcoDataviz5Brush" Color="#FF8296AD" />
+            <SolidColorBrush x:Key="HtcoBgCanvasBrush" Color="#FF0E0E12" />
+            <SolidColorBrush x:Key="HtcoBgSidebarBrush" Color="#FF121218" />
+            <SolidColorBrush x:Key="HtcoBgSurfaceBrush" Color="#FF181820" />
+            <SolidColorBrush x:Key="HtcoBgRaisedBrush" Color="#FF1F1E28" />
+            <SolidColorBrush x:Key="HtcoBgSunkenBrush" Color="#FF0B0B0E" />
+            <SolidColorBrush x:Key="HtcoBgHoverBrush" Color="#FF22212C" />
+            <SolidColorBrush x:Key="HtcoBgSelectedBrush" Color="#FF201B36" />
+            <SolidColorBrush x:Key="HtcoBgBrandBrush" Color="#FF1A1730" />
+            <SolidColorBrush x:Key="HtcoTextPrimaryBrush" Color="#FFF4F3F7" />
+            <SolidColorBrush x:Key="HtcoTextSecondaryBrush" Color="#FFAAA8B3" />
+            <SolidColorBrush x:Key="HtcoTextMutedBrush" Color="#FF8B8D97" />
+            <SolidColorBrush x:Key="HtcoTextOnBrandBrush" Color="#FFF4F3F7" />
+            <SolidColorBrush x:Key="HtcoTextLinkBrush" Color="#FF8B7CFF" />
+            <SolidColorBrush x:Key="HtcoIconDefaultBrush" Color="#FFAAA8B3" />
+            <SolidColorBrush x:Key="HtcoIconMutedBrush" Color="#FF8B8D97" />
+            <SolidColorBrush x:Key="HtcoBorderSubtleBrush" Color="#FF2C2C35" />
+            <SolidColorBrush x:Key="HtcoBorderStrongBrush" Color="#FF3A3A45" />
+            <SolidColorBrush x:Key="HtcoBorderControlBrush" Color="#FF72747F" />
+            <SolidColorBrush x:Key="HtcoBorderFocusBrush" Color="#FF8B7CFF" />
+            <SolidColorBrush x:Key="HtcoActionPrimaryBgBrush" Color="#FF6B52F1" />
+            <SolidColorBrush x:Key="HtcoActionPrimaryBgHoverBrush" Color="#FF5A41E0" />
+            <SolidColorBrush x:Key="HtcoActionPrimaryBgPressedBrush" Color="#FF4C3AC7" />
+            <SolidColorBrush x:Key="HtcoActionPrimaryFgBrush" Color="#FFF4F3F7" />
+            <SolidColorBrush x:Key="HtcoActionSecondaryBgBrush" Color="#FF1F1E28" />
+            <SolidColorBrush x:Key="HtcoActionSecondaryBgHoverBrush" Color="#FF22212C" />
+            <SolidColorBrush x:Key="HtcoActionSecondaryFgBrush" Color="#FFF4F3F7" />
+            <SolidColorBrush x:Key="HtcoActionSecondaryBorderBrush" Color="#FF72747F" />
+            <SolidColorBrush x:Key="HtcoActionDangerBgBrush" Color="#FFC9363E" />
+            <SolidColorBrush x:Key="HtcoActionDangerFgBrush" Color="#FFFFFFFF" />
+            <SolidColorBrush x:Key="HtcoAccentFillBrush" Color="#FF8B7CFF" />
+            <SolidColorBrush x:Key="HtcoAccentTextBrush" Color="#FFA99FFF" />
+            <SolidColorBrush x:Key="HtcoAccentSubtleBrush" Color="#FF211C3B" />
+            <SolidColorBrush x:Key="HtcoAttentionDotBrush" Color="#FFF2B72F" />
+            <SolidColorBrush x:Key="HtcoAttentionTextBrush" Color="#FFF2C14E" />
+            <SolidColorBrush x:Key="HtcoAttentionSubtleBrush" Color="#FF2E2410" />
+            <SolidColorBrush x:Key="HtcoAttentionRingBrush" Color="#FFF2B72F" />
+            <SolidColorBrush x:Key="HtcoSuccessDotBrush" Color="#FF2DBE8C" />
+            <SolidColorBrush x:Key="HtcoSuccessTextBrush" Color="#FF4FD1A3" />
+            <SolidColorBrush x:Key="HtcoSuccessSubtleBrush" Color="#FF10271F" />
+            <SolidColorBrush x:Key="HtcoDangerDotBrush" Color="#FFF0646B" />
+            <SolidColorBrush x:Key="HtcoDangerTextBrush" Color="#FFFF8A8F" />
+            <SolidColorBrush x:Key="HtcoDangerSubtleBrush" Color="#FF2C1517" />
+            <SolidColorBrush x:Key="HtcoStatusRunningBrush" Color="#FF8B7CFF" />
+            <SolidColorBrush x:Key="HtcoStatusNeedsYouBrush" Color="#FFF2B72F" />
+            <SolidColorBrush x:Key="HtcoStatusWaitingBrush" Color="#FF8B8D97" />
+            <SolidColorBrush x:Key="HtcoStatusDoneBrush" Color="#FF2DBE8C" />
+            <SolidColorBrush x:Key="HtcoStatusFailedBrush" Color="#FFF0646B" />
+            <SolidColorBrush x:Key="HtcoStatusOfflineBrush" Color="#FF8B8D97" />
+            <SolidColorBrush x:Key="HtcoTagIrisBgBrush" Color="#FF211C3B" />
+            <SolidColorBrush x:Key="HtcoTagIrisTextBrush" Color="#FFA99FFF" />
+            <SolidColorBrush x:Key="HtcoTagIrisDotBrush" Color="#FF8B7CFF" />
+            <SolidColorBrush x:Key="HtcoTagSaffronBgBrush" Color="#FF2E2410" />
+            <SolidColorBrush x:Key="HtcoTagSaffronTextBrush" Color="#FFF2C14E" />
+            <SolidColorBrush x:Key="HtcoTagSaffronDotBrush" Color="#FFF2B72F" />
+            <SolidColorBrush x:Key="HtcoTagCoralBgBrush" Color="#FF33191A" />
+            <SolidColorBrush x:Key="HtcoTagCoralTextBrush" Color="#FFF59A84" />
+            <SolidColorBrush x:Key="HtcoTagCoralDotBrush" Color="#FFF59A84" />
+            <SolidColorBrush x:Key="HtcoTagMintBgBrush" Color="#FF10271F" />
+            <SolidColorBrush x:Key="HtcoTagMintTextBrush" Color="#FF4FD1A3" />
+            <SolidColorBrush x:Key="HtcoTagMintDotBrush" Color="#FF4FD1A3" />
+            <SolidColorBrush x:Key="HtcoTagSkyBgBrush" Color="#FF14213A" />
+            <SolidColorBrush x:Key="HtcoTagSkyTextBrush" Color="#FF8DB8F5" />
+            <SolidColorBrush x:Key="HtcoTagSkyDotBrush" Color="#FF8DB8F5" />
+            <SolidColorBrush x:Key="HtcoTagRoseBgBrush" Color="#FF301A28" />
+            <SolidColorBrush x:Key="HtcoTagRoseTextBrush" Color="#FFEC9BCB" />
+            <SolidColorBrush x:Key="HtcoTagRoseDotBrush" Color="#FFEC9BCB" />
+            <SolidColorBrush x:Key="HtcoTagSlateBgBrush" Color="#FF22252C" />
+            <SolidColorBrush x:Key="HtcoTagSlateTextBrush" Color="#FFB4BAC7" />
+            <SolidColorBrush x:Key="HtcoTagSlateDotBrush" Color="#FFB4BAC7" />
+            <SolidColorBrush x:Key="HtcoPresenceIrisBgBrush" Color="#FF4C3AC7" />
+            <SolidColorBrush x:Key="HtcoPresenceIrisFgBrush" Color="#FFFFFFFF" />
+            <SolidColorBrush x:Key="HtcoPresenceCoralBgBrush" Color="#FFB3442F" />
+            <SolidColorBrush x:Key="HtcoPresenceCoralFgBrush" Color="#FFFFFFFF" />
+            <SolidColorBrush x:Key="HtcoPresenceMintBgBrush" Color="#FF0F7656" />
+            <SolidColorBrush x:Key="HtcoPresenceMintFgBrush" Color="#FFFFFFFF" />
+            <SolidColorBrush x:Key="HtcoPresenceSkyBgBrush" Color="#FF2460BA" />
+            <SolidColorBrush x:Key="HtcoPresenceSkyFgBrush" Color="#FFFFFFFF" />
+            <SolidColorBrush x:Key="HtcoPresenceRoseBgBrush" Color="#FFA8447F" />
+            <SolidColorBrush x:Key="HtcoPresenceRoseFgBrush" Color="#FFFFFFFF" />
+            <SolidColorBrush x:Key="HtcoPresenceSaffronBgBrush" Color="#FF9A6400" />
+            <SolidColorBrush x:Key="HtcoPresenceSaffronFgBrush" Color="#FFFFFFFF" />
+            <SolidColorBrush x:Key="HtcoPresenceSlateBgBrush" Color="#FF5B6170" />
+            <SolidColorBrush x:Key="HtcoPresenceSlateFgBrush" Color="#FFFFFFFF" />
+            <SolidColorBrush x:Key="HtcoIllustrationIrisBrush" Color="#FFA79CF0" />
+            <SolidColorBrush x:Key="HtcoIllustrationSaffronBrush" Color="#FFF2B72F" />
+            <SolidColorBrush x:Key="HtcoIllustrationCoralBrush" Color="#FFF08A6E" />
+            <SolidColorBrush x:Key="HtcoIllustrationMintBrush" Color="#FF4CC59A" />
+            <SolidColorBrush x:Key="HtcoIllustrationSkyBrush" Color="#FF6FA4EE" />
+            <SolidColorBrush x:Key="HtcoIllustrationRoseBrush" Color="#FFE58BBE" />
+            <SolidColorBrush x:Key="HtcoIllustrationInkBrush" Color="#FF0B0B0E" />
+            <SolidColorBrush x:Key="HtcoIllustrationPaperBrush" Color="#FFE8E6ED" />
+            <SolidColorBrush x:Key="HtcoDataviz1Brush" Color="#FF8B7CFF" />
+            <SolidColorBrush x:Key="HtcoDataviz2Brush" Color="#FF6FA4EE" />
+            <SolidColorBrush x:Key="HtcoDataviz3Brush" Color="#FF4CC59A" />
+            <SolidColorBrush x:Key="HtcoDataviz4Brush" Color="#FFF08A6E" />
+            <SolidColorBrush x:Key="HtcoDataviz5Brush" Color="#FFF2B72F" />
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
     <x:Double x:Key="HtcoFontSizeCaption">12</x:Double>
-    <x:Double x:Key="HtcoFontSizeBodySm">14</x:Double>
-    <x:Double x:Key="HtcoFontSizeBody">16</x:Double>
-    <x:Double x:Key="HtcoFontSizeTitleSm">20</x:Double>
-    <x:Double x:Key="HtcoFontSizeTitle">24</x:Double>
-    <x:Double x:Key="HtcoFontSizeDisplaySm">32</x:Double>
+    <x:Double x:Key="HtcoFontSizeBodySm">13</x:Double>
+    <x:Double x:Key="HtcoFontSizeBody">14</x:Double>
+    <x:Double x:Key="HtcoFontSizeTitleSm">16</x:Double>
+    <x:Double x:Key="HtcoFontSizeTitle">20</x:Double>
+    <x:Double x:Key="HtcoFontSizeDisplaySm">28</x:Double>
     <x:Double x:Key="HtcoFontSizeDisplay">40</x:Double>
+    <x:Double x:Key="HtcoFontSizeHero">56</x:Double>
     <x:Double x:Key="HtcoFontLineHeightCaption">16</x:Double>
-    <x:Double x:Key="HtcoFontLineHeightBodySm">20</x:Double>
-    <x:Double x:Key="HtcoFontLineHeightBody">24</x:Double>
-    <x:Double x:Key="HtcoFontLineHeightTitleSm">28</x:Double>
-    <x:Double x:Key="HtcoFontLineHeightTitle">32</x:Double>
-    <x:Double x:Key="HtcoFontLineHeightDisplaySm">40</x:Double>
-    <x:Double x:Key="HtcoFontLineHeightDisplay">48</x:Double>
+    <x:Double x:Key="HtcoFontLineHeightBodySm">18</x:Double>
+    <x:Double x:Key="HtcoFontLineHeightBody">20</x:Double>
+    <x:Double x:Key="HtcoFontLineHeightTitleSm">24</x:Double>
+    <x:Double x:Key="HtcoFontLineHeightTitle">28</x:Double>
+    <x:Double x:Key="HtcoFontLineHeightDisplaySm">32</x:Double>
+    <x:Double x:Key="HtcoFontLineHeightDisplay">44</x:Double>
+    <x:Double x:Key="HtcoFontLineHeightHero">60</x:Double>
     <x:Double x:Key="HtcoSpace0">0</x:Double>
     <x:Double x:Key="HtcoSpace1">4</x:Double>
     <x:Double x:Key="HtcoSpace2">8</x:Double>
@@ -135,14 +229,15 @@
     <x:Double x:Key="HtcoSpace12">48</x:Double>
     <x:Double x:Key="HtcoSpace16">64</x:Double>
     <x:Double x:Key="HtcoSpace05">2</x:Double>
-    <CornerRadius x:Key="HtcoRadiusSm">8</CornerRadius>
-    <CornerRadius x:Key="HtcoRadiusMd">12</CornerRadius>
-    <CornerRadius x:Key="HtcoRadiusLg">16</CornerRadius>
-    <CornerRadius x:Key="HtcoRadiusXl">24</CornerRadius>
+    <CornerRadius x:Key="HtcoRadiusXs">4</CornerRadius>
+    <CornerRadius x:Key="HtcoRadiusSm">6</CornerRadius>
+    <CornerRadius x:Key="HtcoRadiusMd">8</CornerRadius>
+    <CornerRadius x:Key="HtcoRadiusLg">12</CornerRadius>
+    <CornerRadius x:Key="HtcoRadiusXl">16</CornerRadius>
     <CornerRadius x:Key="HtcoRadiusFull">999</CornerRadius>
-    <x:Double x:Key="HtcoSizeControlSm">32</x:Double>
-    <x:Double x:Key="HtcoSizeControlMd">40</x:Double>
-    <x:Double x:Key="HtcoSizeControlLg">48</x:Double>
+    <x:Double x:Key="HtcoSizeControlSm">28</x:Double>
+    <x:Double x:Key="HtcoSizeControlMd">32</x:Double>
+    <x:Double x:Key="HtcoSizeControlLg">40</x:Double>
     <x:Double x:Key="HtcoSizeIconSm">16</x:Double>
     <x:Double x:Key="HtcoSizeIconMd">20</x:Double>
     <x:Double x:Key="HtcoSizeIconLg">24</x:Double>
@@ -151,6 +246,9 @@
     <x:Double x:Key="HtcoSizeRowTouch">56</x:Double>
     <x:Double x:Key="HtcoSizeDotStatus">8</x:Double>
     <x:Double x:Key="HtcoSizeDotAttention">10</x:Double>
+    <x:Double x:Key="HtcoSizeNavItem">32</x:Double>
+    <x:Double x:Key="HtcoSizeSidebar">248</x:Double>
+    <x:Double x:Key="HtcoSizeHeader">48</x:Double>
     <x:Double x:Key="HtcoBorderWidthHairline">1</x:Double>
     <x:Double x:Key="HtcoBorderWidthFocus">2</x:Double>
 </ResourceDictionary>

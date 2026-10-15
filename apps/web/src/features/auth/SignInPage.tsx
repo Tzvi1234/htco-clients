@@ -61,6 +61,7 @@ export function SignInPage() {
     >
       <form className="flex flex-col gap-4" onSubmit={submit} noValidate>
         <TextField
+          size="lg"
           label={t`Email`}
           type="email"
           autoComplete="username"
@@ -70,6 +71,7 @@ export function SignInPage() {
           onChange={setEmail}
         />
         <TextField
+          size="lg"
           label={t`Password`}
           type="password"
           autoComplete="current-password"
