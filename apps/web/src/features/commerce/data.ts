@@ -118,7 +118,10 @@ export const ORDERS: readonly DemoOrder[] = (() => {
       total: fixed ?? PRODUCT_PRICES[item] * qty,
       status,
       shop: PRODUCT_SHOP[item],
-      tracking: status === "paid" || status === "prod" ? "" : `9400 1118 9922 ${n} 0${(k % 9) + 1}`,
+      tracking:
+        status === "paid" || status === "prod"
+          ? ""
+          : `9400 1118 9922 ${String(n)} 0${String((k % 9) + 1)}`,
       agent,
     });
   }

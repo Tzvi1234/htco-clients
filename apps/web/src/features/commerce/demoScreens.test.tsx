@@ -80,7 +80,8 @@ describe("the Work and Commerce demo screens (redesign)", () => {
     const [approve] = within(frame()).getAllByRole("button", { name: "Approve" });
     if (approve === undefined) throw new Error("No approve button");
     await user.click(approve);
-    expect(await screen.findByText("Demo — coming soon")).toBeInTheDocument();
+    // The frame says it to screen readers; the toast says it once more.
+    expect(await screen.findAllByText("Demo — coming soon")).toHaveLength(2);
     // Still pending: nothing was decided and nothing was sent.
     expect(within(frame()).getAllByRole("button", { name: "Approve" })).toHaveLength(4);
     expect(backend.requests.length).toBe(before);
@@ -90,10 +91,11 @@ describe("the Work and Commerce demo screens (redesign)", () => {
     const { user } = await open("/commerce/orders");
     await user.click(within(frame()).getByRole("button", { name: "Check tracking" }));
     expect(screen.getByRole("heading", { level: 1, name: "Orders" })).toBeInTheDocument();
-    expect(await screen.findByText("Demo — coming soon")).toBeInTheDocument();
+    // The frame says it to screen readers; the toast says it once more.
+    expect(await screen.findAllByText("Demo — coming soon")).toHaveLength(2);
   });
 
-  it("names the orders table and keeps order numbers left-to-right", async () => {
+  it("names the orders table and keeps order numbers in their own direction", async () => {
     await open("/commerce/orders", "he");
     const table = within(frame()).getByRole("table", { name: "הזמנות" });
     expect(within(table).getByText("#3152")).toHaveClass("ltr");

@@ -15,10 +15,8 @@ const modules = import.meta.glob<{ demoScreens?: Record<string, ComponentType> }
   "../../features/*/demoScreens.tsx",
   { eager: true },
 );
-const SCREENS: Record<string, ComponentType> = Object.assign(
-  {},
-  ...Object.values(modules).map((module) => module.demoScreens ?? {}),
-);
+const SCREENS: Record<string, ComponentType> = {};
+for (const module of Object.values(modules)) Object.assign(SCREENS, module.demoScreens ?? {});
 
 /**
  * A tab of the Design 1C navigation with no real screen yet: the demo's full screen with its

@@ -131,7 +131,7 @@ function OrdersDemo() {
         <span className="inline-flex items-center gap-2">
           <ProductThumb kind={o.item} size={24} radius={6} />
           <span className="max-sm:max-w-[120px] max-sm:truncate">{names[o.item]}</span>
-          {o.qty > 1 ? <span className="ltr text-muted">{`×${o.qty}`}</span> : null}
+          {o.qty > 1 ? <span className="ltr text-muted">{`×${String(o.qty)}`}</span> : null}
         </span>
       ),
     },
@@ -288,7 +288,7 @@ function ProductsDemo() {
           </div>
           <KeyValues
             items={[
-              { label: <Trans>Price</Trans>, value: ltr(`$${price}`) },
+              { label: <Trans>Price</Trans>, value: ltr(`$${String(price)}`) },
               { label: <Trans>Production cost</Trans>, value: ltr(money(price * 0.38)) },
               { label: <Trans>Shop</Trans>, value: SHOP_NAMES[PRODUCT_SHOP[kind]] },
               { label: <Trans>Supplier</Trans>, value: ltr("Printful") },
@@ -315,7 +315,9 @@ function ProductsDemo() {
               >
                 <span className="mb-2.5 flex w-full justify-between text-caption">
                   {ltr(sku)}
-                  <span className="font-light text-muted">{ltr(`$${PRODUCT_PRICES[k]}`)}</span>
+                  <span className="font-light text-muted">
+                    {ltr(`$${String(PRODUCT_PRICES[k])}`)}
+                  </span>
                 </span>
                 <ProductThumb kind={k} size={150} radius={16} className="max-sm:!size-[112px]" />
                 <span className="mt-3 text-body">{names[k]}</span>

@@ -103,7 +103,7 @@ function TaskColumn({
         {rows.map(([id, name, who, own], i) => (
           <div
             key={id}
-            style={{ animationDelay: `${120 + i * 60}ms` }}
+            style={{ animationDelay: `${String(120 + i * 60)}ms` }}
             className={cx(
               "flex flex-col gap-2 rounded-card border px-4 py-3.5 transition-[background-color,translate] duration-[var(--motion-duration-fast)] motion-safe:animate-enter hover:-translate-y-px",
               highlightFirst && i === 0 ? "border-raised bg-raised" : "border-line hover:bg-hover",
@@ -276,7 +276,7 @@ function ApprovalsDemo() {
             return (
               <div
                 key={item.id}
-                style={{ animationDelay: `${120 + i * 60}ms` }}
+                style={{ animationDelay: `${String(120 + i * 60)}ms` }}
                 className={cx(
                   "flex items-center gap-3 rounded-card p-4 transition-colors motion-safe:animate-enter max-sm:flex-wrap",
                   item.id === selected.id ? "bg-selected" : "hover:bg-hover",
@@ -462,7 +462,7 @@ function ActivityDemo() {
               return (
                 <li
                   key={`${time}-${who}`}
-                  style={{ animationDelay: `${80 + i * 40}ms` }}
+                  style={{ animationDelay: `${String(80 + i * 40)}ms` }}
                   className="flex gap-4 border-t border-line py-3 first:border-t-0 motion-safe:animate-enter"
                 >
                   <span className="ltr w-12 shrink-0 pt-1.5 text-caption text-muted">{time}</span>

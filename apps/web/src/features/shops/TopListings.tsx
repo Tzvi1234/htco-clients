@@ -29,8 +29,8 @@ export function TopListings() {
           <StripCard
             key={i}
             selected={i === 0}
-            topStart={<span className="ltr">{`L-${220 + i}`}</span>}
-            topEnd={<span className="ltr">{`$${PRODUCT_PRICES[kind]}`}</span>}
+            topStart={<span className="ltr">{`L-${String(220 + i)}`}</span>}
+            topEnd={<span className="ltr">{`$${String(PRODUCT_PRICES[kind])}`}</span>}
             middle={<ProductThumb kind={kind} size={56} />}
             task={<span className="text-primary">{names[kind]}</span>}
           />

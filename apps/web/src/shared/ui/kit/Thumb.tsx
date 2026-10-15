@@ -40,7 +40,7 @@ export function ProductThumb({
             <rect x="12" y="6" width="24" height="36" rx="1" fill="#111" />
             <circle cx="24" cy="20" r="9" fill="none" stroke="#fff" strokeWidth=".5" opacity=".7" />
             {STARS.map(([x, y]) => (
-              <circle key={`${x}-${y}`} cx={x} cy={y} r=".8" fill="#fff" />
+              <circle key={`${String(x)}-${String(y)}`} cx={x} cy={y} r=".8" fill="#fff" />
             ))}
             <rect x="17" y="33" width="14" height="1.2" fill="#fff" opacity=".7" />
             <rect x="19" y="36" width="10" height=".8" fill="#fff" opacity=".5" />

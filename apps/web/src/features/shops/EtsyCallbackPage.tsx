@@ -129,7 +129,7 @@ export function EtsyCallbackPage() {
                 {[0, 1, 2].map((i) => (
                   <i
                     key={i}
-                    style={{ animationDelay: `${i * 200}ms` }}
+                    style={{ animationDelay: `${String(i * 200)}ms` }}
                     className="size-2 rounded-pill bg-inverse motion-safe:animate-[htco-wait-dot_1.2s_infinite]"
                   />
                 ))}

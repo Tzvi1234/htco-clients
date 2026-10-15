@@ -335,18 +335,21 @@ export function StatusText({
   );
 }
 
+function animates(): boolean {
+  const reduce =
+    typeof window.matchMedia === "function" && window.matchMedia(REDUCED_MOTION_QUERY).matches;
+  return !reduce && typeof window.requestAnimationFrame === "function";
+}
+
 /** Animates a number up to its value once, keeping its prefix and suffix ("$842", "1,204"). */
 export function CountUp({ value, duration = 700 }: { value: string; duration?: number }) {
   const match = /^([^\d]*)([\d][\d,]*(?:\.\d+)?)(.*)$/.exec(value);
-  const [shown, setShown] = useState(() => (match === null ? value : null));
+  // Starts from zero only where it will animate; otherwise the value shows as is.
+  const [shown, setShown] = useState<string | null>(() =>
+    match === null || !animates() ? null : `${match[1] ?? ""}0${match[3] ?? ""}`,
+  );
   useEffect(() => {
-    if (match === null) return;
-    const reduce =
-      typeof window.matchMedia === "function" && window.matchMedia(REDUCED_MOTION_QUERY).matches;
-    if (reduce || typeof window.requestAnimationFrame !== "function") {
-      setShown(value);
-      return;
-    }
+    if (match === null || !animates()) return;
     const [, prefix = "", digits = "0", suffix = ""] = match;
     const target = Number(digits.replaceAll(",", ""));
     const decimals = digits.includes(".") ? (digits.split(".")[1] ?? "").length : 0;
@@ -484,7 +487,7 @@ export function Avatar({
         className,
       )}
     >
-      {[...person.name][0]}
+      {Array.from(person.name).at(0)}
       {showStatus && person.status !== undefined ? (
         <span className="absolute -end-0.5 -bottom-0.5 flex size-3.5 items-center justify-center rounded-pill bg-panel">
           <StatusGlyph status={person.status} size={8} />
@@ -526,7 +529,7 @@ export function DotBar({
       {Array.from({ length: total }, (_, i) => (
         <i
           key={i}
-          style={{ animationDelay: `${i * 12}ms` }}
+          style={{ animationDelay: `${String(i * 12)}ms` }}
           className={cx(
             "size-1.5 rounded-pill motion-safe:animate-enter",
             i < accent ? "bg-accent-mark" : i < filled ? "bg-inverse" : "bg-line-strong",

@@ -314,7 +314,7 @@ function HowConnecting() {
           {steps.map((step, index) => (
             <li
               key={index}
-              style={{ animationDelay: `${120 + index * 80}ms` }}
+              style={{ animationDelay: `${String(120 + index * 80)}ms` }}
               className="flex items-center gap-4 rounded-card p-3 transition-colors hover:bg-hover motion-safe:animate-enter"
             >
               <span className="ltr flex size-10 shrink-0 items-center justify-center rounded-pill border border-line-strong text-body">

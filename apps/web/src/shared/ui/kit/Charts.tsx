@@ -41,7 +41,7 @@ export function Matrix({
     for (let j = 0; j < rows; j++) {
       const x = i * p + 4;
       const y = j * p + 4;
-      const key = `${i}-${j}`;
+      const key = `${String(i)}-${String(j)}`;
       if (j === cy) {
         dots.push(
           <circle key={key} cx={x} cy={y} r={i === cx ? 1.6 : 0.9} fill="var(--text-primary)" />,
@@ -64,7 +64,7 @@ export function Matrix({
             r={(3.3 - d * 0.42).toFixed(2)}
             fill="var(--accent-mark)"
             opacity={(1 - d * 0.13).toFixed(2)}
-            style={{ animationDelay: `${d * 60}ms` }}
+            style={{ animationDelay: `${String(d * 60)}ms` }}
             className="motion-safe:animate-[htco-dot-rise_420ms_var(--motion-easing-enter)_both]"
           />,
         );
@@ -101,7 +101,7 @@ export function Matrix({
         className="col-start-2 row-start-2"
         width={cols * p}
         height={rows * p}
-        viewBox={`0 0 ${cols * p} ${rows * p}`}
+        viewBox={`0 0 ${String(cols * p)} ${String(rows * p)}`}
       >
         {dots}
         <circle cx={mx} cy={my} r={5} fill="var(--text-primary)" />
@@ -154,7 +154,7 @@ export function DotColumns({
         aria-hidden="true"
         width={W}
         height={H}
-        viewBox={`0 0 ${W} ${H}`}
+        viewBox={`0 0 ${String(W)} ${String(H)}`}
         style={{ direction: "ltr" }}
       >
         {values.map((v, i) => {
@@ -163,7 +163,7 @@ export function DotColumns({
           return (
             <g
               key={i}
-              style={{ animationDelay: `${i * 50}ms` }}
+              style={{ animationDelay: `${String(i * 50)}ms` }}
               className="motion-safe:animate-[htco-dot-rise_480ms_var(--motion-easing-enter)_both]"
             >
               {Array.from({ length: rows }, (_, j) => {
@@ -190,7 +190,7 @@ export function DotColumns({
           aria-hidden="true"
           dir="ltr"
           className="mt-2 grid text-center text-[11px] text-muted"
-          style={{ gridTemplateColumns: `repeat(${values.length}, ${gap}px)` }}
+          style={{ gridTemplateColumns: `repeat(${String(values.length)}, ${String(gap)}px)` }}
         >
           {labels.map((text, i) => (
             <span key={i}>{text}</span>
