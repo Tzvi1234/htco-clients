@@ -131,7 +131,9 @@ function main(): number {
       "--find-renames",
       `${values.base}...HEAD`,
     ],
-    { encoding: "utf8" },
+    // A large pull request (a redesign with its screenshot baselines) has a diff well over
+    // execFileSync's 1 MB default buffer.
+    { encoding: "utf8", maxBuffer: 512 * 1024 * 1024 },
   );
   const findings = diffFindings(diff);
   if (findings.length === 0) return 0;
