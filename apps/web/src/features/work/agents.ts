@@ -122,7 +122,7 @@ export const APPROVALS: readonly Approval[] = [
     id: "AP-118",
     by: "noa",
     what: bi(
-      "החזר חלקי 15% ($7.20) על הזמנה #3152 של Emma R.",
+      "החזר חלקי 15% ($7.20) על הזמנה #3152 של \u2068Emma R.\u2069",
       "Partial refund 15% ($7.20) on order #3152 for Emma R.",
     ),
     risk: "low",

@@ -204,7 +204,10 @@ function DecisionButtons({ large = false }: { large?: boolean }) {
 const PAST: readonly [AgentId, Bi, "ok" | "no", Bi | string][] = [
   [
     "dana",
-    bi("מענה ללקוחה Sofia M. עם קוד הנחה 10%", "Reply to Sofia M. with a 10% discount code"),
+    bi(
+      "מענה ללקוחה \u2068Sofia M.\u2069 עם קוד הנחה 10%",
+      "Reply to Sofia M. with a 10% discount code",
+    ),
     "ok",
     "07:40",
   ],
