@@ -181,7 +181,7 @@ describe("routes for every area and tab", () => {
     ["/commerce", "Shops"],
     ["/commerce/shops", "Shops"],
     ["/admin", "Health"],
-    ["/admin/members", "Team"],
+    ["/admin/members", "Members & access"],
     ["/admin/settings", "Settings"],
   ])("%s leads to %s", async (path, title) => {
     await open(path);

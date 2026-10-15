@@ -1,51 +1,55 @@
 import { Trans, useLingui } from "@lingui/react/macro";
-import {
-  CheckIcon as Check,
-  CopyIcon as Copy,
-  EnvelopeIcon as Envelope,
-  UsersThreeIcon as UsersThree,
-  WhatsappLogoIcon as WhatsappLogo,
-} from "@phosphor-icons/react";
+import type { components } from "@htco/api-client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState, type SyntheticEvent } from "react";
+import { useRef, useState, type RefObject, type SyntheticEvent } from "react";
+import { Dialog, Heading, Modal, ModalOverlay } from "react-aria-components";
+
 import {
-  Input,
-  Label,
-  RadioButton,
-  RadioField,
-  RadioGroup,
-  TextField as AriaTextField,
-} from "react-aria-components";
-
-import { FormAlert } from "../auth/AuthLayout.tsx";
-import { ApiError, apiError, meQuery, useApi, type ApiClient } from "../../shared/api/api.tsx";
+  ApiError,
+  apiError,
+  meQuery,
+  mfaQuery,
+  shopsQuery,
+  useApi,
+  type ApiClient,
+} from "../../shared/api/api.tsx";
+import { cx } from "../../shared/lib/cx.ts";
+import { PHONE_QUERY, useMediaQuery } from "../../shared/lib/useMediaQuery.ts";
 import { Button } from "../../shared/ui/Button.tsx";
-import { PageBody, PageHeader } from "../../shared/ui/PageHeader.tsx";
-import { ObjectIcon, Tag, type Hue } from "../../shared/ui/Tag.tsx";
-import { TextField } from "../../shared/ui/TextField.tsx";
-import { CHIP, WorkspacePicker, pickWorkspace } from "../../shared/ui/WorkspacePicker.tsx";
+import { CheckIcon, CloseIcon } from "../../shared/ui/icons.tsx";
+import { PageHeader } from "../../shared/ui/PageHeader.tsx";
+import { Panel, PanelBody, PanelHeader } from "../../shared/ui/Panel.tsx";
+import { DemoPart, DemoTag } from "../../shared/ui/d1c/DemoFrame.tsx";
+import { useEmployees, useStateWords } from "../../shared/ui/d1c/employees.ts";
+import { ChoiceChips, PillField } from "../../shared/ui/d1c/Form.tsx";
+import { CopyIcon, PlusIcon, WhatsappIcon } from "../../shared/ui/d1c/icons.tsx";
+import {
+  Avatar,
+  CircleButton,
+  Dot,
+  IdBlock,
+  KV,
+  KV2,
+  SectionLabel,
+  StateLabel,
+  Toggle,
+  Who,
+} from "../../shared/ui/d1c/Parts.tsx";
+import { Screen, Stack } from "../../shared/ui/d1c/Layout.tsx";
+import { DataTable } from "../../shared/ui/d1c/Table.tsx";
 
-type Role = "owner" | "admin" | "operations" | "finance" | "support" | "developer" | "viewer";
-
-const ROLE_HUES: Record<Role, Hue> = {
-  owner: "iris",
-  admin: "sky",
-  operations: "mint",
-  finance: "saffron",
-  support: "coral",
-  developer: "slate",
-  viewer: "slate",
-};
+type Role = components["schemas"]["Role"];
+type Member = components["schemas"]["MemberView"];
 
 const INVITABLE: Role[] = ["admin", "operations", "finance", "support", "developer", "viewer"];
+/** Owners and Admins see every shop of the organization (the permission matrix). */
+const ORGANIZATION_WIDE: readonly string[] = ["owner", "admin"];
 
-const CARD = "overflow-hidden rounded-card border border-border-subtle bg-surface shadow-1";
-const CARD_HEADER =
-  "m-0 border-b border-border-subtle bg-sunken px-4 py-2.5 text-body font-semibold";
+const membersKey = (organizationId: string) => ["organizations", organizationId, "members"];
 
 function membersQuery(api: ApiClient, organizationId: string) {
   return {
-    queryKey: ["organizations", organizationId, "members"] as const,
+    queryKey: membersKey(organizationId),
     queryFn: async () => {
       const { data, error, response } = await api.GET(
         "/v1/organizations/{organization_id}/members",
@@ -57,8 +61,14 @@ function membersQuery(api: ApiClient, organizationId: string) {
   };
 }
 
-/** Who works in the organization, and inviting someone new (FR-IAM-02). Owners and Admins. */
+/**
+ * Members & access (FR-IAM-02, FR-IAM-03): who works in the organization, their role and shops,
+ * inviting someone new, changing a role, granting shops and removing a member. Owners and
+ * Admins. The Design 1C screen (`P.members`): the members table and, beside it, inviting or the
+ * chosen member, and the approval policy (a demo until policies are built).
+ */
 export function TeamPage() {
+  const { t } = useLingui();
   const api = useApi();
   const me = useQuery(meQuery(api));
   const managed = (me.data?.memberships ?? [])
@@ -66,29 +76,124 @@ export function TeamPage() {
     .map((m) => m.organization_id);
   const [chosen, setChosen] = useState<string | null>(null);
   const organizationId = pickWorkspace(managed, chosen);
+  const [selected, setSelected] = useState<string | null>(null);
+  const phone = useMediaQuery(PHONE_QUERY);
+  const emailRef = useRef<HTMLInputElement>(null);
+
+  const startInvite = () => {
+    setSelected(null);
+    // After the invite panel is back in place.
+    setTimeout(() => emailRef.current?.focus(), 0);
+  };
 
   return (
     <>
-      <PageHeader
-        title={<Trans>Team</Trans>}
-        description={<Trans>Invite people and choose what they can do.</Trans>}
-        icon={<ObjectIcon icon={UsersThree} />}
-      />
-      <PageBody>
-        <div className="flex max-w-[760px] flex-col gap-4">
+      <PageHeader title={t`Members & access`} />
+      <Screen layout="l2r">
+        <Panel className="max-lg:min-h-[420px] max-sm:min-h-0">
+          <PanelHeader
+            title={<Trans>Members & access</Trans>}
+            meta={<MemberCount organizationId={organizationId} />}
+            actions={
+              organizationId === undefined ? undefined : (
+                <CircleButton label={t`Invite member`} icon={<PlusIcon />} onPress={startInvite} />
+              )
+            }
+          />
           {managed.length > 1 ? (
-            <WorkspacePicker ids={managed} value={chosen} onChange={setChosen} />
+            <div className="px-6 pb-3">
+              <ChoiceChips
+                label={t`Workspace`}
+                value={organizationId ?? null}
+                onChange={(id) => {
+                  setChosen(id);
+                  setSelected(null);
+                }}
+                options={managed.map((id) => ({ id, label: id.slice(0, 8), ltr: true }))}
+              />
+            </div>
           ) : null}
-          {organizationId === undefined ? null : (
-            <>
-              <Invite key={organizationId} organizationId={organizationId} />
-              <Members organizationId={organizationId} />
-            </>
+          {organizationId === undefined ? (
+            managed.length > 1 ? (
+              <PanelBody className="items-center justify-center text-center">
+                <p className="m-0 max-w-[320px] text-body-sm font-light text-muted">
+                  <Trans>Choose the workspace whose members you want to see and invite.</Trans>
+                </p>
+              </PanelBody>
+            ) : null
+          ) : (
+            <div className="flex min-h-0 flex-1 flex-col overflow-auto [scrollbar-width:thin]">
+              <MembersTable
+                organizationId={organizationId}
+                selected={selected}
+                onSelect={setSelected}
+                myId={me.data?.user_id}
+              />
+              <EmployeesDemo />
+            </div>
           )}
-        </div>
-      </PageBody>
+        </Panel>
+        <Stack className="lg:grid-rows-[minmax(0,1.25fr)_minmax(0,1fr)]">
+          {organizationId === undefined ? (
+            <Panel>
+              <PanelHeader title={<Trans>Invite member</Trans>} />
+            </Panel>
+          ) : selected !== null && !phone ? (
+            <MemberPanel
+              key={selected}
+              organizationId={organizationId}
+              memberId={selected}
+              myId={me.data?.user_id}
+              onClose={startInvite}
+            />
+          ) : (
+            <InvitePanel key={organizationId} organizationId={organizationId} emailRef={emailRef} />
+          )}
+          <PolicyPanel />
+        </Stack>
+      </Screen>
+      {phone && organizationId !== undefined && selected !== null ? (
+        <ModalOverlay
+          isOpen
+          isDismissable
+          onOpenChange={(open) => {
+            if (!open) setSelected(null);
+          }}
+          className="fixed inset-0 z-50 flex items-end bg-[color-mix(in_srgb,var(--bg-ground)_60%,transparent)]"
+        >
+          <Modal className="w-full animate-[htco-sheet-in_var(--motion-duration-slow)_var(--motion-easing-enter)_both] p-2 pb-[max(8px,env(safe-area-inset-bottom))]">
+            <Dialog className="outline-none" aria-label={t`Member`}>
+              <MemberPanel
+                organizationId={organizationId}
+                memberId={selected}
+                myId={me.data?.user_id}
+                onClose={() => {
+                  setSelected(null);
+                }}
+                sheet
+              />
+            </Dialog>
+          </Modal>
+        </ModalOverlay>
+      ) : null}
     </>
   );
+}
+
+/** The workspace in use: the only one, or the one the user picked. */
+function pickWorkspace(ids: string[], chosen: string | null): string | undefined {
+  if (ids.length === 1) return ids[0];
+  return chosen !== null && ids.includes(chosen) ? chosen : undefined;
+}
+
+function MemberCount({ organizationId }: { organizationId: string | undefined }) {
+  const api = useApi();
+  const members = useQuery({
+    ...membersQuery(api, organizationId ?? ""),
+    enabled: organizationId !== undefined,
+  });
+  if (members.data === undefined) return null;
+  return <span className="ltr">{members.data.length}</span>;
 }
 
 export function useRoleLabel() {
@@ -113,66 +218,128 @@ export function useRoleLabel() {
   };
 }
 
-function Members({ organizationId }: { organizationId: string }) {
+/** What a member can reach: every shop for Owners and Admins, else the shops granted. */
+function useAccessLabel() {
+  const { t } = useLingui();
+  return (member: Member): string => {
+    if (ORGANIZATION_WIDE.includes(member.role)) return t`All shops`;
+    const count = member.shop_ids.length;
+    if (count === 0) return t`No shops`;
+    return count === 1 ? t`1 shop` : t`${count} shops`;
+  };
+}
+
+function MembersTable({
+  organizationId,
+  selected,
+  onSelect,
+  myId,
+}: {
+  organizationId: string;
+  selected: string | null;
+  onSelect: (id: string) => void;
+  myId: string | undefined;
+}) {
   const { t } = useLingui();
   const api = useApi();
   const members = useQuery(membersQuery(api, organizationId));
   const roleLabel = useRoleLabel();
+  const access = useAccessLabel();
+
+  if (members.isError)
+    return (
+      <p role="alert" className="m-0 px-6 py-4 text-body-sm text-danger-text">
+        <Trans>The members cannot be loaded right now. Try again shortly.</Trans>
+      </p>
+    );
+
   return (
-    <section className={CARD} aria-labelledby="members">
-      <h2 id="members" className={CARD_HEADER}>
-        <Trans>Members</Trans>
-      </h2>
-      <ul aria-label={t`Members`} className="m-0 list-none p-0">
-        {(members.data ?? []).map((member) => (
-          <li
-            key={member.id}
-            className="flex items-center gap-3 border-b border-border-subtle px-4 py-3 last:border-b-0"
-          >
-            <span
-              aria-hidden="true"
-              className="grid size-8 shrink-0 place-items-center rounded-pill bg-sunken text-body-sm font-semibold text-secondary"
-            >
-              {(member.display_name ?? "?").slice(0, 1).toUpperCase()}
-            </span>
-            <span className="min-w-0 grow truncate font-medium">
-              {member.display_name ?? t`Invited member`}
-            </span>
-            <Tag hue={ROLE_HUES[member.role]}>{roleLabel(member.role)}</Tag>
-          </li>
-        ))}
-      </ul>
+    <DataTable
+      label={t`Members`}
+      className="flex-none overflow-visible"
+      phoneHidden={[1, 3, 4]}
+      head={[t`Name`, t`Type`, t`Role`, t`Access`, t`Needs approval`, t`Status`]}
+      rows={(members.data ?? []).map((member) => {
+        const name = member.display_name ?? t`Invited member`;
+        const you = member.user_id === myId;
+        return {
+          key: member.id,
+          selected: member.id === selected,
+          onSelect: () => {
+            onSelect(member.id);
+          },
+          cells: [
+            <span key="name" className="inline-flex items-center gap-2">
+              <Who name={name} ink={member.role === "owner"} />
+              {you ? <span className="text-caption font-light text-muted">{t`(you)`}</span> : null}
+            </span>,
+            t`Human`,
+            roleLabel(member.role),
+            access(member),
+            <span key="approval" className="text-muted">
+              —
+            </span>,
+            member.display_name === null ? (
+              <StateLabel key="status" state="queued">
+                {t`Invited`}
+              </StateLabel>
+            ) : (
+              <StateLabel key="status" state="running">
+                {t`Active`}
+              </StateLabel>
+            ),
+          ],
+        };
+      })}
+    />
+  );
+}
+
+/** The AI employees as members: planned with the living office, shown as a demo. */
+function EmployeesDemo() {
+  const { t } = useLingui();
+  const { list } = useEmployees();
+  const words = useStateWords();
+  return (
+    <section aria-label={t`AI employees`} className="mt-2 max-sm:hidden">
+      <div className="flex items-center gap-2 px-6 pb-1">
+        <SectionLabel>
+          <Trans>AI employees</Trans>
+        </SectionLabel>
+        <DemoTag className="mb-2" />
+      </div>
+      <DemoPart tag={false}>
+        <DataTable
+          label={t`AI employees`}
+          className="flex-none overflow-visible"
+          head={[t`Name`, t`Type`, t`Role`, t`Access`, t`Needs approval`, t`Status`]}
+          rows={list.slice(0, 9).map((employee) => ({
+            key: employee.id,
+            cells: [
+              <Who key="name" name={employee.name} />,
+              <span key="type" className="ltr">
+                AI
+              </span>,
+              employee.title,
+              employee.department === "exec" ? t`Read + act` : t`Read + draft`,
+              employee.department === "exec" || employee.department === "proc"
+                ? t`Money, refunds`
+                : t`Publishing`,
+              <StateLabel key="state" state={employee.state}>
+                {words[employee.state]}
+              </StateLabel>,
+            ],
+          }))}
+        />
+      </DemoPart>
     </section>
   );
 }
 
-function Invite({ organizationId }: { organizationId: string }) {
+/** What went wrong with an invitation, in words (the macro needs `t` from useLingui). */
+function useInviteMessage() {
   const { t } = useLingui();
-  const api = useApi();
-  const queryClient = useQueryClient();
-  const roleLabel = useRoleLabel();
-  const [email, setEmail] = useState("");
-  const [role, setRole] = useState<Role>("admin");
-  const [copied, setCopied] = useState(false);
-
-  const invite = useMutation({
-    mutationFn: async () => {
-      const { data, error, response } = await api.POST(
-        "/v1/organizations/{organization_id}/invitations",
-        { params: { path: { organization_id: organizationId } }, body: { email, role } },
-      );
-      if (data === undefined) throw apiError(response, error);
-      return data;
-    },
-    onSuccess: async () => {
-      setEmail("");
-      setCopied(false);
-      await queryClient.invalidateQueries({ queryKey: ["organizations", organizationId] });
-    },
-  });
-
-  function message(): string | undefined {
-    const error = invite.error;
+  return (error: Error | null): string | undefined => {
     if (error === null) return undefined;
     if (!(error instanceof ApiError)) return t`This did not work. Try again shortly.`;
     switch (error.status) {
@@ -185,100 +352,421 @@ function Invite({ organizationId }: { organizationId: string }) {
       default:
         return t`Invitations cannot be sent right now. Try again shortly.`;
     }
-  }
+  };
+}
+
+function InvitePanel({
+  organizationId,
+  emailRef,
+}: {
+  organizationId: string;
+  emailRef: RefObject<HTMLInputElement | null>;
+}) {
+  const { t } = useLingui();
+  const api = useApi();
+  const queryClient = useQueryClient();
+  const roleLabel = useRoleLabel();
+  const [email, setEmail] = useState("");
+  const [role, setRole] = useState<Role>("admin");
+  const [copied, setCopied] = useState(false);
+  const inviteMessage = useInviteMessage();
+
+  const invite = useMutation({
+    mutationFn: async (invitee: string) => {
+      const { data, error, response } = await api.POST(
+        "/v1/organizations/{organization_id}/invitations",
+        { params: { path: { organization_id: organizationId } }, body: { email: invitee, role } },
+      );
+      if (data === undefined) throw apiError(response, error);
+      return data;
+    },
+    onSuccess: async () => {
+      setEmail("");
+      setCopied(false);
+      await queryClient.invalidateQueries({ queryKey: ["organizations", organizationId] });
+    },
+  });
 
   function submit(event: SyntheticEvent) {
     event.preventDefault();
-    invite.mutate();
+    invite.mutate(email);
   }
 
   const link = invite.data?.invite_link ?? null;
   const share = link === null ? null : t`You're invited to HT-Commerce: ${link}`;
+  const message = inviteMessage(invite.error);
+  const invitedRole = roleLabel(invite.data?.role ?? role);
+  const invitedEmail = invite.variables ?? "";
 
   return (
-    <section className={CARD} aria-labelledby="invite">
-      <h2 id="invite" className={CARD_HEADER}>
-        <Trans>Invite someone</Trans>
-      </h2>
-      <form className="flex flex-col gap-4 p-4" onSubmit={submit} noValidate>
-        <TextField
-          icon={Envelope}
-          label={t`Email`}
-          placeholder="name@company.com"
-          type="email"
-          ltr
-          isRequired
-          value={email}
-          onChange={setEmail}
-        />
-        <RadioGroup
-          value={role}
-          onChange={(value) => {
-            setRole(value as Role);
-          }}
-          orientation="horizontal"
-          className="flex flex-col gap-2"
-        >
-          <Label className="text-body-sm font-medium text-secondary">{t`Role`}</Label>
-          <div className="flex flex-wrap gap-2">
-            {INVITABLE.map((value) => (
-              <RadioField key={value} value={value}>
-                <RadioButton className={CHIP}>{roleLabel(value)}</RadioButton>
-              </RadioField>
-            ))}
+    <Panel label={t`Invite member`}>
+      <PanelHeader title={<Trans>Invite member</Trans>} />
+      {link === null || share === null ? (
+        <PanelBody className="gap-4">
+          <form className="flex flex-col gap-4" onSubmit={submit} noValidate>
+            <PillField
+              label={t`Email`}
+              placeholder="name@company.com"
+              type="email"
+              ltr
+              isRequired
+              value={email}
+              onChange={setEmail}
+              inputRef={emailRef}
+            />
+            <ChoiceChips
+              label={t`Role`}
+              value={role}
+              onChange={setRole}
+              options={INVITABLE.map((id) => ({ id, label: roleLabel(id) }))}
+            />
+            {message === undefined ? null : (
+              <p role="alert" className="m-0 animate-enter text-body-sm text-danger-text">
+                {message}
+              </p>
+            )}
+            <Button type="submit" variant="primary" size="lg" isPending={invite.isPending}>
+              <Trans>Invite</Trans>
+            </Button>
+          </form>
+        </PanelBody>
+      ) : (
+        <PanelBody className="animate-enter justify-between gap-4">
+          <div className="flex flex-col items-center gap-2 pt-1">
+            <span className="flex size-12 animate-pop-in items-center justify-center rounded-pill bg-inverse text-on-inverse">
+              <CheckIcon size={18} />
+            </span>
+            <IdBlock
+              label={t`Invitation ready · ${invitedRole}`}
+              value={<span className="ltr text-title font-normal">{invitedEmail}</span>}
+              className="max-w-full"
+            />
           </div>
-        </RadioGroup>
-        <FormAlert message={message()} />
-        <Button type="submit" variant="primary" isPending={invite.isPending} className="self-start">
-          <Trans>Invite</Trans>
-        </Button>
-      </form>
-      {link === null || share === null ? null : (
-        <div className="flex flex-col gap-3 border-t border-border-subtle bg-sunken p-4">
-          <p className="m-0 text-body-sm text-secondary">
+          <p className="m-0 text-center text-caption text-secondary">
             <Trans>
               Send this link to them yourself. It works once; when it expires, invite them again.
             </Trans>
           </p>
-          <AriaTextField aria-label={t`Invitation link`} value={link} isReadOnly>
-            <Input
-              dir="ltr"
-              className="h-10 w-full rounded-control border border-border-control bg-surface px-3 font-mono text-body-sm outline-none"
-              onFocus={(event) => {
-                event.currentTarget.select();
-              }}
-            />
-          </AriaTextField>
-          <div className="flex flex-wrap gap-2">
+          <PillField
+            label={t`Invitation link`}
+            value={link}
+            isReadOnly
+            ltr
+            mono
+            className="[&_label]:sr-only"
+          />
+          <div className="grid grid-cols-1 gap-2">
             <Button
+              size="lg"
               onPress={() => {
                 void navigator.clipboard.writeText(link).then(() => {
                   setCopied(true);
                 });
               }}
             >
-              {copied ? (
-                <Check aria-hidden="true" size={16} weight="bold" />
-              ) : (
-                <Copy aria-hidden="true" size={16} weight="duotone" />
-              )}
+              {copied ? <CheckIcon size={14} /> : <CopyIcon size={14} />}
               {copied ? <Trans>Copied</Trans> : <Trans>Copy link</Trans>}
             </Button>
             <a
               href={`https://wa.me/?text=${encodeURIComponent(share)}`}
               target="_blank"
               rel="noreferrer noopener"
-              className="inline-flex h-9 items-center gap-1.5 rounded-button border border-border-subtle bg-surface px-3 text-body-sm font-semibold text-primary no-underline hover:bg-hover"
+              className="inline-flex h-10 items-center justify-center gap-1.5 rounded-button border border-line-strong px-4 text-body-sm whitespace-nowrap text-primary no-underline transition-colors hover:border-line-hover-strong hover:bg-hover"
             >
-              <WhatsappLogo aria-hidden="true" size={16} weight="duotone" />
+              <WhatsappIcon size={14} />
               <Trans>Send on WhatsApp</Trans>
             </a>
           </div>
-          <p className="m-0 text-caption text-muted">
-            {t`Role`}: {roleLabel(invite.data?.role ?? role)}
-          </p>
-        </div>
+          <Button
+            variant="ghost"
+            onPress={() => {
+              invite.reset();
+              setTimeout(() => emailRef.current?.focus(), 0);
+            }}
+          >
+            <PlusIcon size={14} />
+            <Trans>Invite someone else</Trans>
+          </Button>
+        </PanelBody>
       )}
-    </section>
+    </Panel>
+  );
+}
+
+/** Why a change to a member did not happen, in words. */
+function useAccessMessage() {
+  const { t } = useLingui();
+  return (error: Error | null): string | undefined => {
+    if (error === null) return undefined;
+    if (error instanceof ApiError) {
+      if (error.status === 403) return t`Confirm with your authenticator app, then try again.`;
+      if (error.status === 404) return t`This member or shop is no longer in the workspace.`;
+      if (error.status === 422) return t`The server did not accept this change.`;
+    }
+    return t`This did not work. Try again shortly.`;
+  };
+}
+
+/** The chosen member: their role, their shops, and removing them. */
+function MemberPanel({
+  organizationId,
+  memberId,
+  myId,
+  onClose,
+  sheet = false,
+}: {
+  organizationId: string;
+  memberId: string;
+  myId: string | undefined;
+  onClose: () => void;
+  sheet?: boolean;
+}) {
+  const { t } = useLingui();
+  const api = useApi();
+  const queryClient = useQueryClient();
+  const roleLabel = useRoleLabel();
+  const access = useAccessLabel();
+  const members = useQuery(membersQuery(api, organizationId));
+  const shops = useQuery(shopsQuery(api, organizationId));
+  const [confirming, setConfirming] = useState(false);
+  const accessMessage = useAccessMessage();
+  const member = members.data?.find((m) => m.id === memberId);
+  const refresh = () => queryClient.invalidateQueries({ queryKey: membersKey(organizationId) });
+  const path = { organization_id: organizationId, membership_id: memberId };
+
+  const changeRole = useMutation({
+    mutationFn: async (role: Role) => {
+      const { data, error, response } = await api.PATCH(
+        "/v1/organizations/{organization_id}/members/{membership_id}",
+        { params: { path }, body: { role } },
+      );
+      if (data === undefined) throw apiError(response, error);
+      return data;
+    },
+    onSuccess: refresh,
+  });
+  const grant = useMutation({
+    mutationFn: async ({ shopId, on }: { shopId: string; on: boolean }) => {
+      const params = { path: { ...path, shop_id: shopId } };
+      const url = "/v1/organizations/{organization_id}/members/{membership_id}/shops/{shop_id}";
+      const { error, response } = on
+        ? await api.PUT(url, { params })
+        : await api.DELETE(url, { params });
+      if (!response.ok) throw apiError(response, error);
+    },
+    onSuccess: refresh,
+  });
+  const remove = useMutation({
+    mutationFn: async () => {
+      const { error, response } = await api.DELETE(
+        "/v1/organizations/{organization_id}/members/{membership_id}",
+        { params: { path } },
+      );
+      if (!response.ok) throw apiError(response, error);
+    },
+    onSuccess: async () => {
+      await refresh();
+      onClose();
+    },
+  });
+
+  if (member === undefined) return null;
+  const name = member.display_name ?? t`Invited member`;
+  const owner = member.role === "owner";
+  const wide = ORGANIZATION_WIDE.includes(member.role);
+  const message =
+    accessMessage(changeRole.error) ?? accessMessage(grant.error) ?? accessMessage(remove.error);
+
+  const Title = sheet ? Heading : "span";
+  return (
+    <Panel className={cx(sheet && "max-h-[86dvh]")} {...(sheet ? {} : { label: t`Member` })}>
+      <PanelHeader
+        title={
+          <Title {...(sheet ? { slot: "title" } : {})} className="m-0 text-body-sm font-normal">
+            <Trans>Member</Trans>
+          </Title>
+        }
+        actions={
+          <CircleButton
+            label={sheet ? t`Close` : t`Back to inviting`}
+            icon={<CloseIcon size={14} />}
+            onPress={onClose}
+          />
+        }
+      />
+      <PanelBody className="gap-5">
+        <div className="flex flex-col items-center gap-2">
+          <Avatar initial={name.slice(0, 1)} size="lg" ink={owner} />
+          <IdBlock label={t`Member:`} value={name} className="max-w-full" />
+        </div>
+        <KV
+          items={[
+            [t`Type`, t`Human`],
+            [t`Role`, roleLabel(member.role)],
+            [t`Access`, access(member)],
+            [t`Status`, member.display_name === null ? t`Invited` : t`Active`],
+          ]}
+        />
+        {owner ? (
+          <p className="m-0 rounded-card bg-raised p-4 text-caption text-secondary">
+            <Trans>The Owner's role, shops and membership cannot be changed.</Trans>
+          </p>
+        ) : (
+          <>
+            <ChoiceChips
+              label={t`Change role`}
+              value={member.role}
+              isDisabled={changeRole.isPending}
+              onChange={(role) => {
+                changeRole.mutate(role);
+              }}
+              options={INVITABLE.map((id) => ({ id, label: roleLabel(id) }))}
+            />
+            <section aria-labelledby={`shops-${memberId}`}>
+              <SectionLabel id={`shops-${memberId}`}>
+                <Trans>Shop access</Trans>
+              </SectionLabel>
+              {wide ? (
+                <p className="m-0 text-caption text-secondary">
+                  <Trans>Owners and Admins work in every shop of the workspace.</Trans>
+                </p>
+              ) : (shops.data ?? []).length === 0 ? (
+                <p className="m-0 text-caption text-secondary">
+                  <Trans>No shops yet. Connect one under Commerce › Shops.</Trans>
+                </p>
+              ) : (
+                <ul className="m-0 flex list-none flex-col p-0">
+                  {(shops.data ?? []).map((shop) => {
+                    const on = member.shop_ids.includes(shop.id);
+                    const shopName = shop.name;
+                    return (
+                      <li
+                        key={shop.id}
+                        className="flex items-center gap-3 py-2.5 [&+&]:border-t [&+&]:border-line"
+                      >
+                        <Avatar initial={shop.name.slice(0, 1)} size="sm" />
+                        <span className="min-w-0 flex-1 truncate text-body-sm">{shop.name}</span>
+                        <Toggle
+                          label={t`Access to ${shopName}`}
+                          isSelected={on}
+                          isDisabled={grant.isPending}
+                          onChange={(next) => {
+                            grant.mutate({ shopId: shop.id, on: next });
+                          }}
+                        />
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </section>
+            {message === undefined ? null : (
+              <p role="alert" className="m-0 animate-enter text-body-sm text-danger-text">
+                {message}
+              </p>
+            )}
+            <div className="mt-auto flex flex-col gap-2">
+              {confirming ? (
+                <div className="flex animate-enter flex-col gap-2 rounded-card bg-raised p-3">
+                  <p className="m-0 text-caption text-secondary">
+                    {member.user_id === myId ? (
+                      <Trans>Remove yourself from this workspace? You lose access at once.</Trans>
+                    ) : (
+                      <Trans>Remove {name} from this workspace? Their access ends at once.</Trans>
+                    )}
+                  </p>
+                  <div className="grid grid-cols-2 gap-2">
+                    <Button
+                      onPress={() => {
+                        setConfirming(false);
+                      }}
+                    >
+                      <Trans>Cancel</Trans>
+                    </Button>
+                    <Button
+                      variant="primary"
+                      isPending={remove.isPending}
+                      onPress={() => {
+                        remove.mutate();
+                      }}
+                    >
+                      <Trans>Remove</Trans>
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <Button
+                  onPress={() => {
+                    setConfirming(true);
+                  }}
+                >
+                  <Trans>Remove from workspace</Trans>
+                </Button>
+              )}
+            </div>
+          </>
+        )}
+      </PanelBody>
+    </Panel>
+  );
+}
+
+/** The approval policy beside the members: planned, so a demo; two-step sign-in is real. */
+function PolicyPanel() {
+  const { t } = useLingui();
+  const api = useApi();
+  const mfa = useQuery(mfaQuery(api));
+  return (
+    <Panel className="max-sm:hidden" label={t`Policy`}>
+      <PanelHeader title={<Trans>Policy</Trans>} actions={<DemoTag className="me-4" />} />
+      <PanelBody className="justify-between gap-4">
+        <DemoPart tag={false} className="flex flex-col gap-4">
+          <IdBlock
+            label={t`Policy version:`}
+            value={<span className="ltr font-mono text-[22px]">2026-10-15.1</span>}
+          />
+          <KV
+            items={[
+              [
+                t`Refund without approval`,
+                <span key="a" className="ltr">
+                  $0
+                </span>,
+              ],
+              [
+                t`Refund with approval`,
+                <span key="b" className="ltr">
+                  ≤ $20
+                </span>,
+              ],
+              [t`Publish listing`, t`Approval`],
+              [t`Change supplier`, t`Approval`],
+            ]}
+          />
+        </DemoPart>
+        <KV2
+          items={[
+            [
+              t`Two-step sign-in:`,
+              mfa.data === undefined ? (
+                "…"
+              ) : (
+                <>
+                  <Dot tone={mfa.data.enrolled ? "success" : "attention"} />
+                  {mfa.data.enrolled ? t`On` : t`Off`}
+                </>
+              ),
+            ],
+            [
+              t`Audit log:`,
+              <span key="audit" className="inline-flex items-center gap-2 opacity-60">
+                <Dot tone="ink" />
+                {t`90 days`}
+              </span>,
+            ],
+          ]}
+        />
+      </PanelBody>
+    </Panel>
   );
 }

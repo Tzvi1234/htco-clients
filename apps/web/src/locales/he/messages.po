@@ -7,29 +7,92 @@ msgstr ""
 "X-Generator: @lingui/cli\n"
 "Language: he\n"
 
+#: src/features/team/TeamPage.tsx
+msgid "(you)"
+msgstr "(את/ה)"
+
+#: src/features/settings/SettingsPage.tsx
+msgid "{connected} of {count} connected"
+msgstr "{connected} מתוך {count} מחוברות"
+
+#: src/features/settings/SettingsPage.tsx
+#: src/features/team/TeamPage.tsx
+msgid "{count} shops"
+msgstr "{count} חנויות"
+
 #: src/features/shops/ShopCard.tsx
 msgid "{days, plural, one {Reconnect within # day} other {Reconnect within # days}}"
 msgstr "{days, plural, one {לחבר מחדש בתוך יום אחד} two {לחבר מחדש בתוך יומיים} other {לחבר מחדש בתוך # ימים}}"
+
+#: src/features/settings/SettingsPage.tsx
+msgid "{devices} devices"
+msgstr "{devices} מכשירים"
 
 #: src/app/shell/Sidebar.tsx
 msgid "{name} tabs"
 msgstr "הכרטיסיות של {name}"
 
+#: src/features/customers/CustomersDemos.tsx
+msgid "$3 / day"
+msgstr "$3 ליום"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "$5 / day"
+msgstr "$5 ליום"
+
 #: src/features/overview/OverviewPage.tsx
 msgid "0 of 3 done"
 msgstr "0 מתוך 3 הושלמו"
 
+#: src/features/settings/SettingsPage.tsx
+msgid "1 device"
+msgstr "מכשיר אחד"
+
 #: src/features/overview/OverviewPage.tsx
 msgid "1 of 3 done"
 msgstr "1 מתוך 3 הושלמו"
+
+#: src/features/settings/SettingsPage.tsx
+#: src/features/team/TeamPage.tsx
+msgid "1 shop"
+msgstr "חנות אחת"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "2 late orders need a reply"
+msgstr "2 הזמנות באיחור דורשות תשובה"
+
+#: src/features/admin/AdminDemos.tsx
+msgid "3 jobs"
+msgstr "3 משימות"
+
+#: src/features/admin/AdminDemos.tsx
+msgid "30-day uptime"
+msgstr "זמינות 30 יום"
+
+#: src/features/admin/AdminDemos.tsx
+msgid "30-day uptime:"
+msgstr "זמינות 30 יום:"
+
+#: src/features/team/TeamPage.tsx
+msgid "90 days"
+msgstr "90 יום"
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "A native desktop app with the same features."
 msgstr "אפליקציה טבעית למחשב עם אותן יכולות."
 
 #: src/features/shops/ShopCard.tsx
+#: src/features/team/TeamPage.tsx
 msgid "Access"
 msgstr "גישה"
+
+#: src/features/settings/SettingsPage.tsx
+msgid "Access and security"
+msgstr "גישה ואבטחה"
+
+#: src/features/team/TeamPage.tsx
+msgid "Access to {shopName}"
+msgstr "גישה ל־{shopName}"
 
 #: src/app/shell/UserMenu.tsx
 msgid "Account"
@@ -38,6 +101,19 @@ msgstr "חשבון"
 #: src/app/shell/UserMenu.tsx
 msgid "Account and preferences"
 msgstr "חשבון והעדפות"
+
+#: src/features/customers/CustomersDemos.tsx
+#: src/features/team/TeamPage.tsx
+msgid "Active"
+msgstr "פעיל"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Active campaign"
+msgstr "קמפיין פעיל"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Active customers:"
+msgstr "לקוחות פעילים:"
 
 #: src/features/overview/OverviewPage.tsx
 msgid "Active listings"
@@ -61,18 +137,56 @@ msgstr "ניהול"
 msgid "After a shop is connected"
 msgstr "אחרי חיבור חנות"
 
+#: src/shared/ui/d1c/employees.ts
+msgid "Agent Systems & Experience Engineer"
+msgstr "מהנדסת מערכות סוכנים וחוויה"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Agent:"
+msgstr "סוכנת:"
+
+#: src/features/finance/FinanceDemos.tsx
+msgid "AI costs"
+msgstr "עלויות AI"
+
+#: src/features/team/TeamPage.tsx
+msgid "AI employees"
+msgstr "עובדי AI"
+
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
 msgid "AI ops"
 msgstr "תפעול AI"
 
+#: src/features/settings/SettingsPage.tsx
+msgid "Alerts"
+msgstr "התראות"
+
+#: src/shared/ui/d1c/employees.ts
+msgid "Alex"
+msgstr "אלכס"
+
 #: src/app/shell/TabBar.tsx
 msgid "All areas"
 msgstr "כל האזורים"
 
+#: src/features/customers/CustomersDemos.tsx
+msgid "All customers"
+msgstr "כל הלקוחות"
+
 #: src/app/shell/ShopSwitcher.tsx
+#: src/features/finance/FinanceDemos.tsx
+#: src/features/team/TeamPage.tsx
 msgid "All shops"
 msgstr "כל החנויות"
+
+#: src/shared/ui/d1c/employees.ts
+msgid "Amir"
+msgstr "אמיר"
+
+#: src/features/finance/FinanceDemos.tsx
+msgid "Amount"
+msgstr "סכום"
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "An AI office you control"
@@ -90,6 +204,18 @@ msgstr "Android"
 msgid "Any browser, nothing to install."
 msgstr "בכל דפדפן, בלי התקנה."
 
+#: src/features/settings/SettingsPage.tsx
+msgid "Appearance"
+msgstr "מראה"
+
+#: src/features/team/TeamPage.tsx
+msgid "Approval"
+msgstr "אישור"
+
+#: src/features/settings/SettingsPage.tsx
+msgid "Approval requests"
+msgstr "בקשות אישור"
+
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
 msgid "Approvals"
@@ -103,12 +229,29 @@ msgstr "אזור"
 msgid "Ask for a new link"
 msgstr "בקשת קישור חדש"
 
+#: src/features/admin/AdminDemos.tsx
+msgid "Assigned:"
+msgstr "טיפול:"
+
 #: src/features/auth/AcceptInvitePage.tsx
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "At least 12 characters."
 msgstr "לפחות 12 תווים."
 
+#: src/features/customers/CustomersDemos.tsx
+msgid "Attach"
+msgstr "צירוף קובץ"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "AU"
+msgstr "אוסטרליה"
+
+#: src/features/team/TeamPage.tsx
+msgid "Audit log:"
+msgstr "יומן ביקורת:"
+
 #: src/features/auth/SecondFactorPage.tsx
+#: src/features/security/SecurityPage.tsx
 msgid "Authenticator app"
 msgstr "אפליקציית אימות"
 
@@ -116,10 +259,30 @@ msgstr "אפליקציית אימות"
 msgid "Authenticator app is set up"
 msgstr "אפליקציית האימות מוגדרת"
 
+#: src/features/admin/AdminDemos.tsx
+msgid "Automation details"
+msgstr "פרטי אוטומציה"
+
+#: src/features/admin/AdminDemos.tsx
+msgid "Automation:"
+msgstr "אוטומציה:"
+
+#: src/features/admin/AdminDemos.tsx
+msgid "Automations"
+msgstr "אוטומציות"
+
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
 msgid "Automations"
 msgstr "אוטומציות"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Avg. value"
+msgstr "ערך ממוצע"
+
+#: src/features/team/TeamPage.tsx
+msgid "Back to inviting"
+msgstr "חזרה להזמנה"
 
 #: src/features/shops/EtsyCallbackPage.tsx
 msgid "Back to shops"
@@ -129,11 +292,40 @@ msgstr "חזרה לחנויות"
 msgid "Back to sign-in"
 msgstr "חזרה לכניסה"
 
+#: src/features/finance/FinanceDemos.tsx
+msgid "Balances"
+msgstr "יתרות"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "Big changes, sensitive messages and anything unusual always come to you."
 msgstr "שינויים גדולים, הודעות רגישות וכל דבר חריג תמיד מגיעים אליך."
 
+#: src/shared/ui/d1c/employees.ts
+msgid "Blocked"
+msgstr "חסום"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Budget"
+msgstr "תקציב"
+
+#: src/features/settings/SettingsPage.tsx
+msgid "Business name"
+msgstr "שם העסק"
+
+#: src/features/finance/FinanceDemos.tsx
+msgid "By shop"
+msgstr "חלוקה לפי חנות"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "CA"
+msgstr "קנדה"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Campaign:"
+msgstr "קמפיין:"
+
 #: src/features/shops/connectEtsy.tsx
+#: src/features/team/TeamPage.tsx
 msgid "Cancel"
 msgstr "ביטול"
 
@@ -141,10 +333,46 @@ msgstr "ביטול"
 msgid "Cannot scan? Type this key into the app:"
 msgstr "לא מצליחים לסרוק? הקלידו באפליקציה את המפתח הזה:"
 
+#: src/features/admin/AdminDemos.tsx
+msgid "Capacity"
+msgstr "קיבולת"
+
+#: src/features/finance/FinanceDemos.tsx
+msgid "Cash"
+msgstr "מזומנים"
+
+#: src/shared/ui/d1c/employees.ts
+msgid "Catalog & Pricing Architect"
+msgstr "ארכיטקט קטלוג ותמחור"
+
+#: src/features/finance/FinanceDemos.tsx
+msgid "Category"
+msgstr "קטגוריה"
+
+#: src/features/team/TeamPage.tsx
+msgid "Change role"
+msgstr "שינוי תפקיד"
+
+#: src/features/team/TeamPage.tsx
+msgid "Change supplier"
+msgstr "החלפת ספק"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Channel:"
+msgstr "ערוץ:"
+
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
 msgid "Chat"
 msgstr "צ׳אט"
+
+#: src/features/admin/AdminDemos.tsx
+msgid "Chat with Amir"
+msgstr "שיחה עם אמיר"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Chat with Lia"
+msgstr "שיחה עם ליה"
 
 #: src/features/team/TeamPage.tsx
 msgid "Check the email address."
@@ -171,14 +399,35 @@ msgstr "בחר/י סיסמה ארוכה יותר שקשה לנחש."
 msgid "Choose a new password"
 msgstr "בחירת סיסמה חדשה"
 
+#: src/features/team/TeamPage.tsx
+msgid "Choose the workspace whose members you want to see and invite."
+msgstr "בחרו את סביבת העבודה שאת חבריה תרצו לראות ולהזמין."
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Clicks"
+msgstr "הקלקות"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Clicks per day"
+msgstr "הקלקות לפי יום"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Clicks per day, 1 to 15 October: 18 to 41, highest today"
+msgstr "הקלקות לפי יום, 1 עד 15 באוקטובר: 18 עד 41, השיא היום"
+
 #: src/app/shell/Flyout.tsx
 #: src/app/shell/TabBar.tsx
+#: src/features/team/TeamPage.tsx
 msgid "Close"
 msgstr "סגירה"
 
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Code from the app"
 msgstr "הקוד מהאפליקציה"
+
+#: src/features/security/SecurityPage.tsx
+msgid "Codes set up"
+msgstr "קודים מוגדרים"
 
 #: src/app/shell/Sidebar.tsx
 msgid "Collapse the menu"
@@ -188,6 +437,10 @@ msgstr "כיווץ התפריט"
 msgctxt "navigation"
 msgid "Commerce"
 msgstr "מסחר"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Compose"
+msgstr "הודעה חדשה"
 
 #: src/features/auth/SecondFactorPage.tsx
 #: src/features/shops/connectEtsy.tsx
@@ -203,6 +456,10 @@ msgstr "אישור זהות"
 msgid "Confirm with your authenticator app, then try again."
 msgstr "אשרו באפליקציית האימות ונסו שוב."
 
+#: src/features/security/SecurityPage.tsx
+msgid "Confirmed with a code"
+msgstr "אומת בקוד"
+
 #: src/features/shops/ShopsPage.tsx
 msgid "Connect Etsy shop"
 msgstr "לחבר חנות Etsy"
@@ -215,6 +472,7 @@ msgstr "מחברים את חנות ה-Etsy"
 msgid "Connect your first shop"
 msgstr "לחבר את החנות הראשונה"
 
+#: src/features/settings/SettingsPage.tsx
 #: src/features/shops/ShopCard.tsx
 msgid "Connected"
 msgstr "מחוברת"
@@ -251,6 +509,18 @@ msgstr "לא ניתן לטעון את פרטי החיבור. אפשר לנסות
 msgid "Connection renews automatically"
 msgstr "החיבור מתחדש אוטומטית"
 
+#: src/features/settings/SettingsPage.tsx
+msgid "Connections"
+msgstr "חיבורים"
+
+#: src/shared/ui/d1c/employees.ts
+msgid "Continuous Optimization Officer"
+msgstr "קצין שיפור מתמיד"
+
+#: src/features/finance/FinanceDemos.tsx
+msgid "Controller"
+msgstr "אחראי"
+
 #: src/features/team/TeamPage.tsx
 msgid "Copied"
 msgstr "הועתק"
@@ -259,9 +529,42 @@ msgstr "הועתק"
 msgid "Copy link"
 msgstr "העתקת הקישור"
 
+#: src/features/customers/CustomersDemos.tsx
+msgid "Country"
+msgstr "מדינה"
+
+#: src/features/settings/SettingsPage.tsx
 #: src/shared/theme/TweaksPanel.tsx
 msgid "Cream, lilac, orchid and lemon"
 msgstr "קרם, לילך, סחלב ולימון"
+
+#: src/shared/ui/d1c/employees.ts
+msgid "Creative & GPT Image Specialist"
+msgstr "מומחית קריאייטיב ו־GPT Image"
+
+#: src/features/settings/SettingsPage.tsx
+msgid "Currency"
+msgstr "מטבע"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Customer"
+msgstr "לקוח"
+
+#: src/shared/ui/d1c/employees.ts
+msgid "Customer Service"
+msgstr "שירות לקוחות"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Customer since"
+msgstr "לקוחה מאז"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Customer:"
+msgstr "לקוחה:"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Customers"
+msgstr "לקוחות"
 
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
@@ -272,24 +575,79 @@ msgstr "לקוחות"
 msgid "Customers answered"
 msgstr "לקוחות מקבלים מענה"
 
+#: src/features/finance/FinanceDemos.tsx
+msgid "Daily avg."
+msgstr "ממוצע יומי"
+
+#: src/features/finance/FinanceDemos.tsx
+msgid "Daily revenue"
+msgstr "הכנסה יומית"
+
+#: src/features/finance/FinanceDemos.tsx
+msgid "Daily revenue, 1 to 15 October: $780 to $1,284, highest today"
+msgstr "הכנסה יומית, 1 עד 15 באוקטובר: $780 עד $1,284, השיא היום"
+
+#: src/features/finance/FinanceDemos.tsx
+msgid "Daily sales"
+msgstr "מכירות יומיות"
+
+#: src/features/settings/SettingsPage.tsx
+msgid "Daily summary"
+msgstr "סיכום יומי"
+
+#: src/shared/ui/d1c/employees.ts
+msgid "Dana"
+msgstr "דנה"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Dana linked task T-2041"
+msgstr "דנה קישרה למשימה T-2041"
+
+#: src/shared/ui/d1c/employees.ts
+msgid "Daniel"
+msgstr "דניאל"
+
 #: src/app/shell/UserMenu.tsx
 #: src/features/settings/SettingsPage.tsx
 #: src/shared/theme/TweaksPanel.tsx
 msgid "Dark"
 msgstr "כהה"
 
+#: src/features/finance/FinanceDemos.tsx
+msgid "Date"
+msgstr "תאריך"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "DE"
+msgstr "גרמניה"
+
+#: src/shared/ui/d1c/employees.ts
+msgid "Debugger & Reliability Engineer"
+msgstr "מהנדס דיבאג ואמינות"
+
 #: src/features/overview/OverviewPage.tsx
 msgid "Decisions waiting"
 msgstr "החלטות ממתינות"
+
+#: src/shared/ui/d1c/DemoFrame.tsx
+msgid "Demo"
+msgstr "דמו"
 
 #: src/shared/ui/DemoScreen.tsx
 msgid "DEMO"
 msgstr "דמו"
 
+#: src/shared/ui/d1c/DemoFrame.tsx
 #: src/shared/ui/SoonTag.tsx
 msgid "Demo — coming soon"
 msgstr "הדגמה — בקרוב"
 
+#: src/features/admin/AdminDemos.tsx
+#: src/features/finance/FinanceDemos.tsx
+msgid "Description"
+msgstr "תיאור"
+
+#: src/features/settings/SettingsPage.tsx
 #: src/shared/theme/TweaksPanel.tsx
 msgid "Design 4"
 msgstr "עיצוב 4"
@@ -302,6 +660,7 @@ msgstr "התאמות עיצוב"
 msgid "Developer"
 msgstr "מפתח/ת"
 
+#: src/features/settings/SettingsPage.tsx
 #: src/shared/theme/TweaksPanel.tsx
 msgid "Different"
 msgstr "שונה"
@@ -318,14 +677,28 @@ msgstr "הושלם"
 msgid "Download"
 msgstr "הורדה"
 
+#: src/features/customers/CustomersDemos.tsx
+msgid "Draft"
+msgstr "טיוטה"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "Each specialist acts under your policies and handles the day-to-day."
 msgstr "כל מומחה פועל לפי המדיניות שלך ומטפל בשגרה."
 
+#: src/features/customers/CustomersDemos.tsx
+msgid "Edit reply…"
+msgstr "עריכת תשובה…"
+
+#: src/shared/ui/d1c/employees.ts
+msgid "Eitan"
+msgstr "איתן"
+
+#: src/features/settings/SettingsPage.tsx
 #: src/shared/theme/TweaksPanel.tsx
 msgid "Element borders"
 msgstr "קווי מסגרת"
 
+#: src/features/settings/SettingsPage.tsx
 #: src/shared/theme/TweaksPanel.tsx
 msgid "Element vs. ground contrast"
 msgstr "ניגודיות רכיב ורקע"
@@ -369,9 +742,21 @@ msgstr "הזינו את האימייל ונשלח קישור לבחירת סיס
 msgid "Enter your email."
 msgstr "הזינו את האימייל."
 
+#: src/features/admin/AdminDemos.tsx
+msgid "Error"
+msgstr "שגיאה"
+
+#: src/features/admin/AdminDemos.tsx
+msgid "Errors"
+msgstr "שגיאות"
+
 #: src/features/shops/ShopCard.tsx
 msgid "Etsy"
 msgstr "Etsy"
+
+#: src/features/finance/FinanceDemos.tsx
+msgid "Etsy balance:"
+msgstr "יתרה ב־Etsy:"
 
 #: src/features/shops/connectEtsy.tsx
 msgid "Etsy cannot be reached right now. Try again in a few minutes."
@@ -385,6 +770,10 @@ msgstr "Etsy לא אישרה את החיבור. אפשר להתחיל מחדש �
 msgid "Etsy did not answer. Nothing was saved. Try again in a few minutes."
 msgstr "Etsy לא ענתה. שום דבר לא נשמר. אפשר לנסות שוב בעוד כמה דקות."
 
+#: src/features/finance/FinanceDemos.tsx
+msgid "Etsy fees"
+msgstr "עמלות Etsy"
+
 #: src/features/shops/ShopCard.tsx
 msgid "Etsy shop"
 msgstr "חנות Etsy"
@@ -392,6 +781,14 @@ msgstr "חנות Etsy"
 #: src/features/shops/connectEtsy.tsx
 msgid "Etsy's sign-in address looked wrong, so it was not opened. Try again shortly."
 msgstr "כתובת הכניסה של Etsy נראתה שגויה, ולכן לא נפתחה. אפשר לנסות שוב בעוד רגע."
+
+#: src/features/admin/AdminDemos.tsx
+msgid "Every 30 min"
+msgstr "כל 30 דקות"
+
+#: src/features/settings/SettingsPage.tsx
+msgid "Every morning at 08:00"
+msgstr "כל בוקר ב־08:00"
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "Every order, verified"
@@ -405,6 +802,43 @@ msgstr "כל מה שחנות ה-Etsy שלך צריכה, עובד יחד במשר
 msgid "Expand the menu"
 msgstr "הרחבת התפריט"
 
+#: src/features/finance/FinanceDemos.tsx
+msgid "Expenses (month)"
+msgstr "הוצאות החודש"
+
+#: src/features/finance/FinanceDemos.tsx
+msgid "Export"
+msgstr "ייצוא"
+
+#: src/features/finance/FinanceDemos.tsx
+msgid "Export CSV"
+msgstr "ייצוא CSV"
+
+#: src/shared/ui/d1c/employees.ts
+msgid "Failed"
+msgstr "נכשל"
+
+#: src/features/admin/AdminDemos.tsx
+msgid "Failures"
+msgstr "כשלונות"
+
+#: src/features/finance/FinanceDemos.tsx
+msgid "Fees"
+msgstr "עמלות"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Filed in:"
+msgstr "תויק ב:"
+
+#: src/features/settings/SettingsPage.tsx
+msgid "Files"
+msgstr "קבצים"
+
+#: src/features/admin/AdminDemos.tsx
+#: src/features/customers/CustomersDemos.tsx
+msgid "Filter"
+msgstr "סינון"
+
 #: src/features/team/TeamPage.tsx
 msgid "Finance"
 msgstr "כספים"
@@ -413,6 +847,14 @@ msgstr "כספים"
 msgctxt "navigation"
 msgid "Finance"
 msgstr "כספים"
+
+#: src/shared/ui/d1c/employees.ts
+msgid "Finance Controller"
+msgstr "בקר כספים"
+
+#: src/features/finance/FinanceDemos.tsx
+msgid "Financial health"
+msgstr "בריאות פיננסית"
 
 #: src/features/shops/EtsyCallbackPage.tsx
 msgid "Finish connecting in the web app where you are signed in."
@@ -427,9 +869,34 @@ msgstr "קומת המשרד"
 msgid "Forgot your password?"
 msgstr "שכחתם את הסיסמה?"
 
+#: src/features/customers/CustomersDemos.tsx
+msgid "Frequency"
+msgstr "תדירות"
+
+#: src/features/finance/FinanceDemos.tsx
+msgid "Fri"
+msgstr "ו׳"
+
+#: src/features/settings/SettingsPage.tsx
 #: src/shared/theme/TweaksPanel.tsx
 msgid "Frosted glass"
 msgstr "זכוכית חלבית"
+
+#: src/shared/ui/d1c/employees.ts
+msgid "Fulfillment Inspector"
+msgstr "מפקח הגשמה"
+
+#: src/shared/ui/d1c/employees.ts
+msgid "Gal"
+msgstr "גל"
+
+#: src/features/settings/SettingsPage.tsx
+msgid "General"
+msgstr "כללי"
+
+#: src/shared/ui/d1c/employees.ts
+msgid "General Manager"
+msgstr "מנהלת כללית"
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "Get the apps"
@@ -443,22 +910,60 @@ msgstr "צעדים ראשונים"
 msgid "Go to the overview"
 msgstr "למעבר לסקירה"
 
+#: src/features/settings/SettingsPage.tsx
 #: src/shared/theme/TweaksPanel.tsx
 msgid "Gray and orange"
 msgstr "אפור וכתום"
 
+#: src/features/settings/SettingsPage.tsx
 #: src/shared/theme/TweaksPanel.tsx
 msgid "Gray, with no blooms behind the glass"
 msgstr "אפור, בלי הילות מאחורי הזכוכית"
+
+#: src/features/finance/FinanceDemos.tsx
+msgid "Gross"
+msgstr "ברוטו"
+
+#: src/features/finance/FinanceDemos.tsx
+msgid "Gross profit"
+msgstr "רווח גולמי"
+
+#: src/features/finance/FinanceDemos.tsx
+msgid "Growth"
+msgstr "צמיחה"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Handled by:"
+msgstr "מטפלת:"
 
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
 msgid "Health"
 msgstr "בריאות מערכת"
 
+#: src/features/customers/CustomersDemos.tsx
+msgid "Healthy"
+msgstr "בריא"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Hello, the summary is attached. Lia (Owner Assistant) already filed it and flagged 2 points to review."
+msgstr "שלום, מצורף הסיכום. ליה (עוזרת אישית) כבר תייקה את המסמך וסימנה 2 נקודות לבדיקה."
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Hi Emma, your print is ready and ships today. To make up for the delay we will refund 15% — as soon as Tzvi approves."
+msgstr "היי Emma, ההדפס שלך מוכן ויוצא היום. כפיצוי על העיכוב נחזיר לך 15% — ברגע שצבי יאשר."
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Hi, my order was supposed to ship 4 days ago and I have no tracking number. Can you check?"
+msgstr "היי, ההזמנה שלי הייתה אמורה לצאת לפני 4 ימים ואין לי מספר מעקב. אפשר לבדוק?"
+
 #: src/features/auth/SignInPage.tsx
 msgid "Hide password"
 msgstr "הסתרת הסיסמה"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Holiday towels"
+msgstr "מגבות לחגים"
 
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
@@ -473,7 +978,7 @@ msgstr "איך זה עובד"
 msgid "How it works."
 msgstr "איך זה עובד."
 
-#: src/features/security/SecurityPage.tsx
+#: src/features/settings/SettingsPage.tsx
 msgid "How you sign in, and where you are signed in."
 msgstr "איך נכנסים, ובאילו מכשירים את/ה מחובר/ת."
 
@@ -493,6 +998,14 @@ msgstr "HTCO · מערכת ההפעלה של העסק שלך במרקטפליי�
 msgid "HTCO checks orders, tracking and listings, and asks you before anything risky."
 msgstr "HTCO בודקת הזמנות, מעקב משלוחים ומודעות, ושואלת אותך לפני כל דבר מסוכן."
 
+#: src/features/team/TeamPage.tsx
+msgid "Human"
+msgstr "אדם"
+
+#: src/shared/ui/d1c/employees.ts
+msgid "Idle"
+msgstr "פנוי"
+
 #: src/features/auth/ForgotPasswordPage.tsx
 msgid "If an account exists for this email, we sent a link to reset the password."
 msgstr "אם קיים חשבון עם האימייל הזה, שלחנו אליו קישור לאיפוס הסיסמה."
@@ -501,9 +1014,25 @@ msgstr "אם קיים חשבון עם האימייל הזה, שלחנו אליו
 msgid "In development"
 msgstr "בפיתוח"
 
+#: src/features/customers/CustomersDemos.tsx
+msgid "Inbox"
+msgstr "תיבת דואר"
+
+#: src/features/settings/SettingsPage.tsx
+msgid "Instant Telegram alert"
+msgstr "התראה מיידית בטלגרם"
+
+#: src/features/settings/SettingsPage.tsx
+msgid "Interface language"
+msgstr "שפת ממשק"
+
 #: src/features/team/TeamPage.tsx
 msgid "Invitation link"
 msgstr "קישור הזמנה"
+
+#: src/features/team/TeamPage.tsx
+msgid "Invitation ready · {invitedRole}"
+msgstr "ההזמנה מוכנה · {invitedRole}"
 
 #: src/features/team/TeamPage.tsx
 msgid "Invitations cannot be sent right now. Try again shortly."
@@ -513,18 +1042,29 @@ msgstr "אי אפשר לשלוח הזמנות כרגע. נסו שוב בעוד �
 msgid "Invite"
 msgstr "הזמנה"
 
-#: src/features/settings/SettingsPage.tsx
 #: src/features/team/TeamPage.tsx
+msgid "Invite member"
+msgstr "הזמנת חבר"
+
+#: src/features/settings/SettingsPage.tsx
 msgid "Invite people and choose what they can do."
 msgstr "הזמינו אנשים ובחרו מה הם יכולים לעשות."
 
 #: src/features/team/TeamPage.tsx
-msgid "Invite someone"
-msgstr "הזמנת אדם"
+msgid "Invite someone else"
+msgstr "הזמנת מישהו נוסף"
+
+#: src/features/team/TeamPage.tsx
+msgid "Invited"
+msgstr "הוזמן"
 
 #: src/features/team/TeamPage.tsx
 msgid "Invited member"
 msgstr "חבר/ה שהוזמנו"
+
+#: src/shared/ui/d1c/employees.ts
+msgid "Iris"
+msgstr "איריס"
 
 #: src/features/overview/OverviewPage.tsx
 msgid "Key numbers"
@@ -532,14 +1072,29 @@ msgstr "מספרים מרכזיים"
 
 #: src/app/shell/TopBar.tsx
 #: src/app/shell/UserMenu.tsx
-#: src/features/settings/SettingsPage.tsx
 msgid "Language"
 msgstr "שפה"
+
+#: src/features/admin/AdminDemos.tsx
+msgid "Last 30 runs"
+msgstr "30 ריצות אחרונות"
 
 #. placeholder {0}: seen.format(new Date(session.last_seen_at))
 #: src/features/security/SecurityPage.tsx
 msgid "Last active {0}"
 msgstr "פעילות אחרונה {0}"
+
+#: src/features/admin/AdminDemos.tsx
+msgid "Last backup"
+msgstr "גיבוי אחרון"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Last order"
+msgstr "הזמנה אחרונה"
+
+#: src/features/admin/AdminDemos.tsx
+msgid "Last run"
+msgstr "ריצה אחרונה"
 
 #: src/features/shops/ShopCard.tsx
 #: src/features/shops/ShopsPage.tsx
@@ -551,16 +1106,49 @@ msgstr "סנכרון אחרון"
 msgid "Last synced {0}"
 msgstr "סונכרנה לאחרונה {0}"
 
+#: src/features/security/SecurityPage.tsx
+msgid "Last used:"
+msgstr "שימוש אחרון:"
+
+#: src/shared/ui/d1c/employees.ts
+msgid "Lead Software & Platform Engineer"
+msgstr "מהנדס תוכנה ופלטפורמה ראשי"
+
+#: src/features/customers/CustomersDemos.tsx
+#: src/features/finance/FinanceDemos.tsx
+msgid "Ledger"
+msgstr "ספר חשבונות"
+
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
 msgid "Ledger"
 msgstr "ספר חשבונות"
+
+#: src/shared/ui/d1c/employees.ts
+msgid "Lia"
+msgstr "ליה"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Lia filed under Finance › Ledger"
+msgstr "ליה תייקה תחת כספים › ספר חשבונות"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Lia’s notes"
+msgstr "הערות של ליה"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Lifetime value"
+msgstr "סה״כ קניות"
 
 #: src/app/shell/UserMenu.tsx
 #: src/features/settings/SettingsPage.tsx
 #: src/shared/theme/TweaksPanel.tsx
 msgid "Light"
 msgstr "בהירה"
+
+#: src/features/settings/SettingsPage.tsx
+msgid "Light, dark, or as the device is set"
+msgstr "בהיר, כהה, או לפי הגדרת המכשיר"
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "Listings that stay healthy"
@@ -574,6 +1162,10 @@ msgstr "טוען את פרטי החיבור"
 msgid "Loading shops"
 msgstr "טוענים חנויות"
 
+#: src/features/customers/CustomersDemos.tsx
+msgid "Loyalty"
+msgstr "נאמנות"
+
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
 msgid "Mail"
@@ -584,10 +1176,22 @@ msgstr "דואר"
 msgid "Main"
 msgstr "ראשי"
 
+#: src/features/finance/FinanceDemos.tsx
+msgid "Margin"
+msgstr "מרווח"
+
+#: src/features/finance/FinanceDemos.tsx
+msgid "Marketing"
+msgstr "שיווק"
+
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
 msgid "Marketing"
 msgstr "שיווק"
+
+#: src/shared/ui/d1c/employees.ts
+msgid "Marketing & Growth"
+msgstr "שיווק וצמיחה"
 
 #: src/app/shell/UserMenu.tsx
 #: src/features/settings/SettingsPage.tsx
@@ -595,13 +1199,30 @@ msgstr "שיווק"
 msgid "Match the system"
 msgstr "לפי המערכת"
 
+#: src/shared/ui/d1c/employees.ts
+msgid "Maya"
+msgstr "מאיה"
+
 #: src/features/overview/OverviewPage.tsx
 msgid "Meet your office"
 msgstr "הכירו את המשרד"
 
 #: src/features/team/TeamPage.tsx
+msgid "Member"
+msgstr "חבר"
+
+#: src/features/team/TeamPage.tsx
+msgid "Member:"
+msgstr "חבר:"
+
+#: src/features/team/TeamPage.tsx
 msgid "Members"
 msgstr "חברי צוות"
+
+#: src/features/settings/SettingsPage.tsx
+#: src/features/team/TeamPage.tsx
+msgid "Members & access"
+msgstr "חברים והרשאות"
 
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
@@ -612,7 +1233,20 @@ msgstr "חברים והרשאות"
 msgid "Messages sorted, drafted and escalated with the order history beside them."
 msgstr "הודעות ממוינות, מנוסחות ומועברות הלאה עם היסטוריית ההזמנה לצידן."
 
+#: src/features/security/SecurityPage.tsx
+msgid "Method"
+msgstr "שיטה"
+
+#: src/features/finance/FinanceDemos.tsx
+msgid "Mon"
+msgstr "ב׳"
+
+#: src/features/team/TeamPage.tsx
+msgid "Money, refunds"
+msgstr "כספים, החזרים"
+
 #: src/app/shell/TabBar.tsx
+#: src/features/customers/CustomersDemos.tsx
 msgid "More"
 msgstr "עוד"
 
@@ -620,18 +1254,71 @@ msgstr "עוד"
 msgid "More areas"
 msgstr "אזורים נוספים"
 
+#: src/features/customers/CustomersDemos.tsx
+msgid "Mug arrived cracked"
+msgstr "ספל הגיע סדוק"
+
+#: src/features/admin/AdminDemos.tsx
+#: src/features/team/TeamPage.tsx
+msgid "Name"
+msgstr "שם"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "Named specialists work under your policies and bring you every risky decision."
 msgstr "מומחים בעלי שם עובדים לפי המדיניות שלך ומביאים אליך כל החלטה מסוכנת."
+
+#: src/features/team/TeamPage.tsx
+msgid "Needs approval"
+msgstr "אישור נדרש"
 
 #: src/features/shops/ShopCard.tsx
 msgid "Needs reconnecting"
 msgstr "צריך לחבר מחדש"
 
+#: src/features/customers/CustomersDemos.tsx
+msgid "Needs reply:"
+msgstr "דורש תשובה:"
+
+#: src/features/finance/FinanceDemos.tsx
+msgid "Net by day"
+msgstr "נטו לפי יום"
+
+#: src/features/security/SecurityPage.tsx
+msgid "Never"
+msgstr "אף פעם"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "New"
+msgstr "חדשים"
+
+#: src/features/admin/AdminDemos.tsx
+msgid "New automation"
+msgstr "אוטומציה חדשה"
+
 #: src/features/auth/AcceptInvitePage.tsx
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "New password"
 msgstr "סיסמה חדשה"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "New this month"
+msgstr "חדשים החודש"
+
+#: src/features/finance/FinanceDemos.tsx
+msgid "Next payout"
+msgstr "תשלום הבא"
+
+#: src/features/admin/AdminDemos.tsx
+msgid "Nightly listing quality audit"
+msgstr "בדיקת איכות לילית לליסטינגים"
+
+#: src/shared/ui/d1c/employees.ts
+msgid "Nika"
+msgstr "ניקה"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "No"
+msgstr "לא"
 
 #: src/features/auth/SignInPage.tsx
 msgid "No account yet? The workspace owner sends invitations."
@@ -645,17 +1332,38 @@ msgstr "עדיין אין אפליקציית אימות."
 msgid "No shop connected"
 msgstr "אין חנות מחוברת"
 
+#: src/features/team/TeamPage.tsx
+msgid "No shops"
+msgstr "אין חנויות"
+
 #: src/features/shops/ShopsPage.tsx
 msgid "No shops yet"
 msgstr "עדיין אין חנויות"
+
+#: src/features/team/TeamPage.tsx
+msgid "No shops yet. Connect one under Commerce › Shops."
+msgstr "אין עדיין חנויות. אפשר לחבר חנות במסחר › חנויות."
+
+#: src/shared/ui/d1c/employees.ts
+msgid "Noa"
+msgstr "נועה"
+
+#: src/shared/ui/d1c/employees.ts
+msgid "Noam"
+msgstr "נועם"
 
 #: src/features/shops/ShopCard.tsx
 msgid "None"
 msgstr "אין"
 
+#: src/features/settings/SettingsPage.tsx
 #: src/shared/theme/TweaksPanel.tsx
 msgid "Normal"
 msgstr "רגיל"
+
+#: src/features/settings/SettingsPage.tsx
+msgid "Not connected"
+msgstr "לא מחובר"
 
 #: src/features/shops/ShopCard.tsx
 msgid "Not synced yet"
@@ -669,14 +1377,54 @@ msgstr "לא מסתנכרנת. יש לחבר אותה שוב כדי להמשיך
 msgid "Nothing matches."
 msgstr "לא נמצאה התאמה."
 
+#: src/features/settings/SettingsPage.tsx
+msgid "Notifications"
+msgstr "התראות"
+
 #: src/features/overview/OverviewPage.tsx
 msgid "Numbers appear after a shop is connected."
 msgstr "המספרים יופיעו אחרי חיבור חנות."
+
+#: src/features/finance/FinanceDemos.tsx
+msgid "October"
+msgstr "אוקטובר"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "October invoice #4471"
+msgstr "חשבונית אוקטובר #4471"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "October newsletter"
+msgstr "ניוזלטר אוקטובר"
+
+#: src/features/security/SecurityPage.tsx
+#: src/features/settings/SettingsPage.tsx
+#: src/features/team/TeamPage.tsx
+msgid "Off"
+msgstr "כבוי"
 
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
 msgid "Office"
 msgstr "המשרד"
+
+#: src/shared/ui/d1c/employees.ts
+msgid "Offline"
+msgstr "לא מחובר"
+
+#: src/shared/ui/d1c/employees.ts
+msgid "Omer"
+msgstr "עומר"
+
+#: src/features/admin/AdminDemos.tsx
+#: src/features/security/SecurityPage.tsx
+#: src/features/team/TeamPage.tsx
+msgid "On"
+msgstr "פעיל"
+
+#: src/features/settings/SettingsPage.tsx
+msgid "On this device"
+msgstr "במכשיר הזה"
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "One office for the whole business"
@@ -686,13 +1434,29 @@ msgstr "משרד אחד לכל העסק"
 msgid "Only the workspace owner can connect a shop."
 msgstr "רק הבעלים של סביבת העבודה יכולים לחבר חנות."
 
+#: src/features/admin/AdminDemos.tsx
+msgid "Open incidents"
+msgstr "תקלות פתוחות"
+
+#: src/features/finance/FinanceDemos.tsx
+msgid "Open invoices"
+msgstr "חשבוניות פתוחות"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "Open the web app"
 msgstr "לפתיחת אפליקציית הרשת"
 
+#: src/features/customers/CustomersDemos.tsx
+msgid "Open tickets"
+msgstr "פניות פתוחות"
+
 #: src/features/team/TeamPage.tsx
 msgid "Operations"
 msgstr "תפעול"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Orders"
+msgstr "הזמנות"
 
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
@@ -716,6 +1480,10 @@ msgstr "הזמנות, מעקב ומסירה נבדקים מול המרקטפלי
 msgid "Orders, tracking and listings start flowing in."
 msgstr "הזמנות, מעקב ומודעות מתחילים לזרום."
 
+#: src/features/admin/AdminDemos.tsx
+msgid "Overall"
+msgstr "מצב כללי"
+
 #: src/features/overview/OverviewPage.tsx
 msgid "Overview"
 msgstr "סקירה"
@@ -725,21 +1493,43 @@ msgctxt "navigation"
 msgid "Overview"
 msgstr "סקירה"
 
+#: src/features/admin/AdminDemos.tsx
 #: src/features/team/TeamPage.tsx
 msgid "Owner"
 msgstr "בעלים"
+
+#: src/shared/ui/d1c/employees.ts
+msgid "Owner Assistant"
+msgstr "עוזרת אישית לבעלים"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Owner:"
+msgstr "אחראי:"
+
+#: src/features/security/SecurityPage.tsx
+msgid "Owners and Admins"
+msgstr "בעלים ומנהלים"
 
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Owners and Admins sign in with a password and a code from an app such as Google Authenticator, Microsoft Authenticator or 1Password."
 msgstr "בעלים ומנהלים נכנסים עם סיסמה וקוד מאפליקציה כמו Google Authenticator,‏ Microsoft Authenticator או 1Password."
 
+#: src/features/team/TeamPage.tsx
+msgid "Owners and Admins work in every shop of the workspace."
+msgstr "בעלים ומנהלים עובדים בכל החנויות של סביבת העבודה."
+
 #: src/app/RouteStates.tsx
 msgid "Page not found"
 msgstr "הדף לא נמצא"
 
+#: src/features/settings/SettingsPage.tsx
 #: src/shared/theme/TweaksPanel.tsx
 msgid "Palette and ground"
 msgstr "פלטה ורקע"
+
+#: src/features/security/SecurityPage.tsx
+msgid "Passkey:"
+msgstr "מפתח גישה:"
 
 #: src/features/auth/SignInPage.tsx
 msgid "Password"
@@ -749,31 +1539,108 @@ msgstr "סיסמה"
 msgid "Password and an authenticator app."
 msgstr "סיסמה ואפליקציית אימות."
 
+#: src/features/security/SecurityPage.tsx
+msgid "Password only"
+msgstr "סיסמה בלבד"
+
 #: src/app/shell/TopBar.tsx
 msgid "Pending approvals"
 msgstr "אישורים ממתינים"
 
+#: src/features/settings/SettingsPage.tsx
 #: src/shared/theme/TweaksPanel.tsx
 msgid "Plain ground"
 msgstr "רקע אחיד"
 
+#: src/features/team/TeamPage.tsx
+msgid "Policy"
+msgstr "מדיניות"
+
+#: src/features/team/TeamPage.tsx
+msgid "Policy version:"
+msgstr "גרסת מדיניות:"
+
+#: src/features/finance/FinanceDemos.tsx
+msgid "Printful invoice #4471"
+msgstr "חשבונית Printful #4471"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Printful invoice matches orders"
+msgstr "חשבונית Printful תואמת להזמנות"
+
+#: src/shared/ui/d1c/employees.ts
+msgid "Procurement & Supplier Quotes"
+msgstr "רכש והצעות ספקים"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "Product"
 msgstr "המוצר"
+
+#: src/shared/ui/d1c/employees.ts
+msgid "Product Intelligence"
+msgstr "מודיעין מוצר"
+
+#: src/features/finance/FinanceDemos.tsx
+msgid "Production"
+msgstr "ייצור"
 
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
 msgid "Products"
 msgstr "מוצרים"
 
+#: src/features/team/TeamPage.tsx
+msgid "Publish listing"
+msgstr "פרסום ליסטינג"
+
+#: src/features/team/TeamPage.tsx
+msgid "Publishing"
+msgstr "פרסום"
+
+#: src/features/admin/AdminDemos.tsx
+msgid "Pull Etsy orders every 15 minutes"
+msgstr "קליטת הזמנות מ־Etsy כל 15 דקות"
+
 #: src/features/auth/SecondFactorPage.tsx
 msgid "QR code for your authenticator app"
 msgstr "קוד QR לאפליקציית האימות"
+
+#: src/shared/ui/d1c/employees.ts
+msgid "Quality & Operations Supervisor"
+msgstr "מפקחת איכות ותפעול"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Question about A3 print size"
+msgstr "שאלה על גודל הדפס A3"
+
+#: src/features/admin/AdminDemos.tsx
+msgid "Queue depth"
+msgstr "עומס תור"
+
+#: src/shared/ui/d1c/employees.ts
+msgid "Queued"
+msgstr "בתור"
 
 #: src/app/shell/CommandMenu.tsx
 #: src/app/shell/Sidebar.tsx
 msgid "Quick actions"
 msgstr "פעולות מהירות"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Quote: linen tea towels"
+msgstr "הצעת מחיר: מגבות מפשתן"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Reach:"
+msgstr "היקף:"
+
+#: src/features/team/TeamPage.tsx
+msgid "Read + act"
+msgstr "קריאה + פעולה"
+
+#: src/features/team/TeamPage.tsx
+msgid "Read + draft"
+msgstr "קריאה + טיוטה"
 
 #: src/features/shops/ShopCard.tsx
 msgid "Read listings"
@@ -786,6 +1653,14 @@ msgstr "קריאת הזמנות"
 #: src/features/shops/ShopCard.tsx
 msgid "Read shop"
 msgstr "קריאת החנות"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Recency"
+msgstr "טריות"
+
+#: src/features/admin/AdminDemos.tsx
+msgid "Recent runs"
+msgstr "ריצות אחרונות"
 
 #: src/features/shops/ShopsPage.tsx
 msgid "Reconnect"
@@ -807,6 +1682,50 @@ msgstr "יש לחבר מחדש כדי להמשיך לסנכרן"
 msgid "Reconnect today"
 msgstr "יש לחבר מחדש היום"
 
+#: src/features/finance/FinanceDemos.tsx
+msgid "Recorded by"
+msgstr "נרשם ע״י"
+
+#: src/features/security/SecurityPage.tsx
+msgid "Recovery"
+msgstr "שחזור"
+
+#: src/features/security/SecurityPage.tsx
+msgid "Recovery codes left:"
+msgstr "קודי שחזור שנותרו:"
+
+#: src/features/finance/FinanceDemos.tsx
+msgid "Refund #3131"
+msgstr "החזר #3131"
+
+#: src/features/team/TeamPage.tsx
+msgid "Refund with approval"
+msgstr "החזר עם אישור"
+
+#: src/features/team/TeamPage.tsx
+msgid "Refund without approval"
+msgstr "החזר ללא אישור"
+
+#: src/features/finance/FinanceDemos.tsx
+msgid "Refunds"
+msgstr "החזרים"
+
+#: src/features/team/TeamPage.tsx
+msgid "Remove"
+msgstr "הסרה"
+
+#: src/features/team/TeamPage.tsx
+msgid "Remove {name} from this workspace? Their access ends at once."
+msgstr "להסיר את {name} מסביבת העבודה? הגישה מסתיימת מיד."
+
+#: src/features/team/TeamPage.tsx
+msgid "Remove from workspace"
+msgstr "הסרה מסביבת העבודה"
+
+#: src/features/team/TeamPage.tsx
+msgid "Remove yourself from this workspace? You lose access at once."
+msgstr "להסיר את עצמך מסביבת העבודה? הגישה שלך מסתיימת מיד."
+
 #: src/features/auth/AcceptInvitePage.tsx
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "Repeat the password"
@@ -816,6 +1735,11 @@ msgstr "הקלדת הסיסמה שוב"
 msgid "Request ID <0>{requestId}</0>"
 msgstr "מזהה בקשה <0>{requestId}</0>"
 
+#: src/features/security/SecurityPage.tsx
+msgid "Required for"
+msgstr "חובה עבור"
+
+#: src/features/settings/SettingsPage.tsx
 #: src/shared/theme/TweaksPanel.tsx
 msgid "Reset"
 msgstr "איפוס"
@@ -823,6 +1747,22 @@ msgstr "איפוס"
 #: src/features/auth/ForgotPasswordPage.tsx
 msgid "Reset your password"
 msgstr "איפוס הסיסמה"
+
+#: src/features/admin/AdminDemos.tsx
+msgid "Response time"
+msgstr "זמן תגובה"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Returning"
+msgstr "חוזרים"
+
+#: src/features/finance/FinanceDemos.tsx
+msgid "Revenue"
+msgstr "הכנסה"
+
+#: src/features/finance/FinanceDemos.tsx
+msgid "Revenue this month:"
+msgstr "הכנסה החודש:"
 
 #: src/features/overview/OverviewPage.tsx
 msgid "Revenue, 30 days"
@@ -832,9 +1772,45 @@ msgstr "הכנסות, 30 יום"
 msgid "Review security"
 msgstr "לבדיקת האבטחה"
 
+#: src/features/customers/CustomersDemos.tsx
+msgid "ROAS"
+msgstr "החזר"
+
 #: src/features/team/TeamPage.tsx
 msgid "Role"
 msgstr "תפקיד"
+
+#: src/shared/ui/d1c/employees.ts
+msgid "Roni"
+msgstr "רוני"
+
+#: src/shared/ui/d1c/employees.ts
+msgid "Running"
+msgstr "עובד"
+
+#: src/features/admin/AdminDemos.tsx
+msgid "Runs today"
+msgstr "ריצות היום"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Sales"
+msgstr "מכירות"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Sales up 12% this week"
+msgstr "המכירות עלו 12% השבוע"
+
+#: src/shared/ui/d1c/DemoFrame.tsx
+msgid "Sample data · coming soon"
+msgstr "נתוני דוגמה · בקרוב"
+
+#: src/features/finance/FinanceDemos.tsx
+msgid "Sat"
+msgstr "ש׳"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Satisfaction:"
+msgstr "שביעות רצון:"
 
 #: src/features/auth/AcceptInvitePage.tsx
 #: src/features/auth/ResetPasswordPage.tsx
@@ -845,13 +1821,22 @@ msgstr "שמירה וכניסה"
 msgid "Scan the QR code with the app."
 msgstr "סרקו את קוד ה-QR באפליקציה."
 
+#: src/features/admin/AdminDemos.tsx
+msgid "Schedule"
+msgstr "תדירות"
+
 #: src/app/shell/TopBar.tsx
+#: src/features/customers/CustomersDemos.tsx
 msgid "Search"
 msgstr "חיפוש"
 
 #: src/app/shell/CommandMenu.tsx
 msgid "Search actions"
 msgstr "חיפוש פעולות"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Search customer"
+msgstr "חיפוש לקוח"
 
 #: src/app/shell/CommandMenu.tsx
 msgid "Search screens and actions…"
@@ -868,8 +1853,17 @@ msgstr "אבטחת החשבון"
 #: src/app/shell/CommandMenu.tsx
 #: src/app/shell/UserMenu.tsx
 #: src/features/security/SecurityPage.tsx
+#: src/features/settings/SettingsPage.tsx
 msgid "Security"
 msgstr "אבטחה"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Segments"
+msgstr "סגמנטים"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Send"
+msgstr "שליחה"
 
 #: src/features/team/TeamPage.tsx
 msgid "Send on WhatsApp"
@@ -882,6 +1876,14 @@ msgstr "שליחת הקישור"
 #: src/features/team/TeamPage.tsx
 msgid "Send this link to them yourself. It works once; when it expires, invite them again."
 msgstr "שלחו את הקישור בעצמכם. הוא עובד פעם אחת; אם פג תוקפו, הזמינו שוב."
+
+#: src/shared/ui/d1c/employees.ts
+msgid "SEO & Copywriting"
+msgstr "SEO וקופירייטינג"
+
+#: src/features/admin/AdminDemos.tsx
+msgid "Services"
+msgstr "שירותים"
 
 #: src/features/security/SecurityPage.tsx
 msgid "Set one up"
@@ -900,6 +1902,9 @@ msgid "Set your password"
 msgstr "בחירת סיסמה"
 
 #: src/app/shell/UserMenu.tsx
+#: src/features/admin/AdminDemos.tsx
+#: src/features/customers/CustomersDemos.tsx
+#: src/features/finance/FinanceDemos.tsx
 #: src/features/settings/SettingsPage.tsx
 msgid "Settings"
 msgstr "הגדרות"
@@ -913,14 +1918,32 @@ msgstr "הגדרות"
 msgid "Several workspaces"
 msgstr "כמה סביבות עבודה"
 
+#: src/features/finance/FinanceDemos.tsx
+msgid "Share:"
+msgstr "חלק:"
+
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
 msgid "Shipping"
 msgstr "משלוחים"
 
+#: src/features/customers/CustomersDemos.tsx
+msgid "Shipping address update"
+msgstr "עדכון כתובת למשלוח"
+
+#: src/shared/ui/d1c/employees.ts
+msgid "Shon"
+msgstr "שון"
+
+#: src/features/customers/CustomersDemos.tsx
+#: src/features/finance/FinanceDemos.tsx
 #: src/features/shops/ShopsPage.tsx
 msgid "Shop"
 msgstr "חנות"
+
+#: src/features/team/TeamPage.tsx
+msgid "Shop access"
+msgstr "גישה לחנויות"
 
 #: src/features/shops/ShopsPage.tsx
 msgid "Shops"
@@ -938,6 +1961,14 @@ msgstr "לא ניתן לטעון את החנויות"
 #: src/app/shell/ShopSwitcher.tsx
 msgid "Shops: {name}"
 msgstr "חנויות: {name}"
+
+#: src/features/admin/AdminDemos.tsx
+msgid "Show less"
+msgstr "פחות"
+
+#: src/features/admin/AdminDemos.tsx
+msgid "Show more"
+msgstr "יותר"
 
 #: src/features/auth/SignInPage.tsx
 msgid "Show password"
@@ -978,6 +2009,10 @@ msgstr "הכניסה לא זמינה כרגע. נסו שוב בעוד רגע."
 msgid "Signed-in devices"
 msgstr "מכשירים מחוברים"
 
+#: src/features/finance/FinanceDemos.tsx
+msgid "Software"
+msgstr "תוכנה"
+
 #: src/app/RouteStates.tsx
 msgid "Something went wrong while showing it. Try again; your data was not changed."
 msgstr "משהו השתבש בהצגת המסך. אפשר לנסות שוב; הנתונים לא השתנו."
@@ -990,9 +2025,39 @@ msgstr "בקרוב"
 msgid "Specialists for listings, orders, customers and money work on your shop under your policies, and bring you every risky decision."
 msgstr "מומחים למודעות, הזמנות, לקוחות וכספים עובדים על החנות שלך לפי המדיניות שלך, ומביאים אליך כל החלטה מסוכנת."
 
+#: src/features/admin/AdminDemos.tsx
+msgid "Stable"
+msgstr "יציב"
+
 #: src/features/overview/OverviewPage.tsx
 msgid "Start with your shop"
 msgstr "מתחילים מהחנות"
+
+#: src/features/admin/AdminDemos.tsx
+#: src/features/team/TeamPage.tsx
+msgid "Status"
+msgstr "סטטוס"
+
+#: src/features/admin/AdminDemos.tsx
+#: src/features/customers/CustomersDemos.tsx
+msgid "Status:"
+msgstr "סטטוס:"
+
+#: src/features/finance/FinanceDemos.tsx
+msgid "Steady growth"
+msgstr "צמיחה יציבה"
+
+#: src/features/admin/AdminDemos.tsx
+msgid "Succeeded"
+msgstr "הצליח"
+
+#: src/features/finance/FinanceDemos.tsx
+msgid "Sun"
+msgstr "א׳"
+
+#: src/features/settings/SettingsPage.tsx
+msgid "Supplier"
+msgstr "ספק"
 
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
@@ -1007,25 +2072,36 @@ msgstr "תמיכה"
 msgid "Sync"
 msgstr "סנכרון"
 
+#: src/features/admin/AdminDemos.tsx
+msgid "Sync tracking numbers from carriers"
+msgstr "סנכרון מספרי מעקב מחברות השילוח"
+
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
 msgid "System"
 msgstr "מערכת"
+
+#: src/features/admin/AdminDemos.tsx
+msgid "System health"
+msgstr "בריאות מערכת"
+
+#: src/features/settings/SettingsPage.tsx
+msgid "System incidents"
+msgstr "תקלות מערכת"
 
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
 msgid "Tasks"
 msgstr "משימות"
 
-#: src/features/settings/SettingsPage.tsx
-#: src/features/team/TeamPage.tsx
-msgid "Team"
-msgstr "צוות"
-
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
 msgid "Team room"
 msgstr "חדר צוות"
+
+#: src/features/security/SecurityPage.tsx
+msgid "That device is still signed in. Try again shortly."
+msgstr "המכשיר עדיין מחובר. נסו שוב בעוד רגע."
 
 #: src/app/RouteStates.tsx
 msgid "The address may be mistyped, or the page has moved."
@@ -1040,6 +2116,10 @@ msgstr "עובדי ה-AI מתחילים לעבוד אחרי שחנות מחוב�
 msgid "The code is wrong or expired."
 msgstr "הקוד שגוי או שפג תוקפו."
 
+#: src/features/security/SecurityPage.tsx
+msgid "The devices cannot be loaded right now. Try again shortly."
+msgstr "אי אפשר לטעון את המכשירים כרגע. נסו שוב בעוד רגע."
+
 #: src/features/auth/SignInPage.tsx
 msgid "The email or the password is wrong."
 msgstr "האימייל או הסיסמה שגויים."
@@ -1048,10 +2128,22 @@ msgstr "האימייל או הסיסמה שגויים."
 msgid "The marketplace shops this organization runs."
 msgstr "החנויות שהארגון מפעיל בזירות המסחר."
 
+#: src/features/team/TeamPage.tsx
+msgid "The members cannot be loaded right now. Try again shortly."
+msgstr "אי אפשר לטעון את החברים כרגע. נסו שוב בעוד רגע."
+
+#: src/features/team/TeamPage.tsx
+msgid "The Owner's role, shops and membership cannot be changed."
+msgstr "אי אפשר לשנות את התפקיד, החנויות או החברות של הבעלים."
+
 #: src/features/auth/AcceptInvitePage.tsx
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "The passwords are not the same."
 msgstr "הסיסמאות אינן זהות."
+
+#: src/features/team/TeamPage.tsx
+msgid "The server did not accept this change."
+msgstr "השרת לא קיבל את השינוי."
 
 #: src/features/shops/EtsyCallbackPage.tsx
 msgid "The shop could not be connected. Start again from Shops."
@@ -1078,10 +2170,6 @@ msgstr "הבעלים של סביבת העבודה מחברים חנויות."
 #: src/shared/theme/TweaksPanel.tsx
 msgid "Theme"
 msgstr "ערכת נושא"
-
-#: src/features/settings/SettingsPage.tsx
-msgid "These preferences are remembered on this device."
-msgstr "ההעדפות האלה נשמרות במכשיר הזה."
 
 #: src/features/shops/EtsyCallbackPage.tsx
 msgid "This connection link has expired or was already used. Start again from Shops."
@@ -1121,6 +2209,10 @@ msgstr "פג תוקף קישור ההזמנה או שכבר השתמשו בו. �
 msgid "This is your current password. Choose a different one."
 msgstr "זו הסיסמה הנוכחית שלכם. בחרו סיסמה אחרת."
 
+#: src/features/team/TeamPage.tsx
+msgid "This member or shop is no longer in the workspace."
+msgstr "החבר או החנות כבר לא בסביבת העבודה."
+
 #: src/features/auth/SignInPage.tsx
 msgid "This page could not sign you in. Reload it and try again."
 msgstr "הדף לא הצליח להכניס אותך. טענו אותו מחדש ונסו שוב."
@@ -1141,18 +2233,51 @@ msgstr "לא ניתן להציג את המסך"
 msgid "This screen is part of the new design and is being built. Nothing on it is live yet."
 msgstr "המסך הזה הוא חלק מהעיצוב החדש ונמצא בבנייה. שום דבר בו עוד לא פעיל."
 
+#: src/features/security/SecurityPage.tsx
+msgid "This session"
+msgstr "החיבור הזה"
+
 #: src/features/shops/EtsyCallbackPage.tsx
 msgid "This takes a few seconds. Keep this page open."
 msgstr "זה לוקח כמה שניות. נא להשאיר את העמוד פתוח."
+
+#: src/features/finance/FinanceDemos.tsx
+msgid "This week"
+msgstr "השבוע"
+
+#: src/features/finance/FinanceDemos.tsx
+msgid "Thu"
+msgstr "ה׳"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Ticket"
+msgstr "פנייה"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Tickets"
+msgstr "פניות"
 
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
 msgid "Tickets"
 msgstr "פניות"
 
+#: src/features/settings/SettingsPage.tsx
+msgid "Time zone"
+msgstr "אזור זמן"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "Titles, photos and claims audited and fixed as drafts you approve."
 msgstr "כותרות, תמונות וטענות נבדקות ומתוקנות כטיוטות שאת/ה מאשר/ת."
+
+#: src/features/customers/CustomersDemos.tsx
+#: src/features/finance/FinanceDemos.tsx
+msgid "Today"
+msgstr "היום"
+
+#: src/shared/ui/d1c/employees.ts
+msgid "Tom"
+msgstr "תום"
 
 #: src/features/auth/AcceptInvitePage.tsx
 #: src/features/auth/ForgotPasswordPage.tsx
@@ -1162,18 +2287,59 @@ msgstr "כותרות, תמונות וטענות נבדקות ומתוקנות כ
 msgid "Too many attempts. Wait 15 minutes and try again."
 msgstr "יותר מדי ניסיונות. המתינו 15 דקות ונסו שוב."
 
+#: src/features/customers/CustomersDemos.tsx
+msgid "Total"
+msgstr "סה״כ"
+
+#: src/features/finance/FinanceDemos.tsx
+msgid "Trend:"
+msgstr "מגמה:"
+
 #: src/app/RouteStates.tsx
 #: src/features/shops/ShopsPage.tsx
 msgid "Try again"
 msgstr "לנסות שוב"
 
+#: src/features/finance/FinanceDemos.tsx
+msgid "Tue"
+msgstr "ג׳"
+
 #: src/features/security/SecurityPage.tsx
 msgid "Two-factor sign-in"
 msgstr "כניסה דו-שלבית"
 
+#: src/features/settings/SettingsPage.tsx
+msgid "Two-step sign-in off"
+msgstr "אימות דו־שלבי כבוי"
+
+#: src/features/settings/SettingsPage.tsx
+msgid "Two-step sign-in on"
+msgstr "אימות דו־שלבי פעיל"
+
+#: src/features/security/SecurityPage.tsx
+#: src/features/team/TeamPage.tsx
+msgid "Two-step sign-in:"
+msgstr "אימות דו־שלבי:"
+
+#: src/features/team/TeamPage.tsx
+msgid "Type"
+msgstr "סוג"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "UK"
+msgstr "בריטניה"
+
 #: src/features/security/SecurityPage.tsx
 msgid "Unknown device"
 msgstr "מכשיר לא מזוהה"
+
+#: src/features/admin/AdminDemos.tsx
+msgid "Uptime"
+msgstr "זמינות"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "US"
+msgstr "ארה״ב"
 
 #: src/features/auth/AcceptInvitePage.tsx
 #: src/features/auth/ResetPasswordPage.tsx
@@ -1184,6 +2350,15 @@ msgstr "השתמש/י ב-12 עד 128 תווים."
 msgid "Use it anywhere"
 msgstr "בכל מקום"
 
+#: src/features/customers/CustomersDemos.tsx
+msgid "Value"
+msgstr "ערך"
+
+#: src/features/admin/AdminDemos.tsx
+msgid "Version"
+msgstr "גרסה"
+
+#: src/features/settings/SettingsPage.tsx
 #: src/shared/theme/TweaksPanel.tsx
 msgid "Very different"
 msgstr "שונה מאוד"
@@ -1192,7 +2367,12 @@ msgstr "שונה מאוד"
 msgid "Viewer"
 msgstr "צפייה"
 
+#: src/shared/ui/d1c/employees.ts
+msgid "Waiting (external)"
+msgstr "ממתין לגורם חיצוני"
+
 #: src/features/overview/OverviewPage.tsx
+#: src/shared/ui/d1c/employees.ts
 msgid "Waiting for you"
 msgstr "מחכה לך"
 
@@ -1200,10 +2380,27 @@ msgstr "מחכה לך"
 msgid "Web"
 msgstr "רשת"
 
+#: src/features/finance/FinanceDemos.tsx
+msgid "Wed"
+msgstr "ד׳"
+
+#: src/features/settings/SettingsPage.tsx
+msgid "When an automation fails"
+msgstr "כאשר אוטומציה נכשלת"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Where is my order?"
+msgstr "איפה ההזמנה שלי?"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Where is my order? #3152"
+msgstr "איפה ההזמנה שלי? #3152"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "Windows"
 msgstr "Windows"
 
+#: src/features/settings/SettingsPage.tsx
 #: src/shared/theme/TweaksPanel.tsx
 msgid "With the Design 4 palette, contrast and borders come from the palette; glass still applies."
 msgstr "בפלטת עיצוב 4 הניגודיות וקווי המסגרת נקבעים לפי הפלטה; הזכוכית ממשיכה לפעול."
@@ -1213,6 +2410,7 @@ msgctxt "navigation"
 msgid "Work"
 msgstr "עבודה"
 
+#: src/features/team/TeamPage.tsx
 #: src/shared/ui/WorkspacePicker.tsx
 msgid "Workspace"
 msgstr "סביבת עבודה"
@@ -1221,6 +2419,10 @@ msgstr "סביבת עבודה"
 msgctxt "navigation"
 msgid "Workspace"
 msgstr "סביבת עבודה"
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Yesterday"
+msgstr "אתמול"
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "You approve what's risky"
@@ -1295,3 +2497,7 @@ msgstr "החנויות שלך"
 #: src/features/auth/SignInPage.tsx
 msgid "Your shops, orders and AI office in one place."
 msgstr "החנויות, ההזמנות ומשרד ה-AI שלך במקום אחד."
+
+#: src/features/customers/CustomersDemos.tsx
+msgid "Your weekly sales summary"
+msgstr "סיכום מכירות שבועי"

@@ -17,11 +17,20 @@ export interface FakeState {
   password: string;
   failures: number;
   sessions: { id: string; current: boolean; revoked: boolean }[];
-  members: { id: string; user_id: string; display_name: string | null; role: string }[];
+  members: {
+    id: string;
+    user_id: string;
+    display_name: string | null;
+    role: string;
+    /** The shops granted to the member (Owners and Admins see every shop anyway). */
+    shop_ids?: string[];
+  }[];
   invited: { email: unknown; role: unknown }[];
   inviteLink: string;
   /** False: signed in, but not a member of any organization (403 no-membership). */
   member: boolean;
+  /** True: changing a member answers 403 mfa-required (the session lost its second factor). */
+  memberChangesRefused?: boolean;
   /** True: sign-out fails with 503 and the session stays. */
   signOutFails: boolean;
   /** Extra organizations the user is Owner of, by ID. */
@@ -185,7 +194,7 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
     const url = new URL(request.url);
     const route = `${request.method} ${url.pathname.replace(/^\/api/, "")}`;
     const body: Record<string, unknown> =
-      request.method === "POST"
+      request.method === "POST" || request.method === "PATCH"
         ? ((await request.json().catch(() => ({}))) as Record<string, unknown>)
         : {};
     const unsafe = request.method !== "GET";
@@ -231,7 +240,9 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
     const orgRoute = /^(GET|POST) \/v1\/organizations\/([^/]+)\/(members|invitations)$/.exec(route);
     if (orgRoute !== null) {
       if (orgRoute[3] === "members")
-        return json(200, { items: state.members.map((m) => ({ ...m, shop_ids: [] })) });
+        return json(200, {
+          items: state.members.map((m) => ({ ...m, shop_ids: m.shop_ids ?? [] })),
+        });
       state.invited.push({ email: body["email"], role: body["role"] });
       const member = {
         id: `b0000000-0000-7000-8000-00000000000${String(state.members.length + 1)}`,
@@ -241,6 +252,36 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
       };
       state.members.push(member);
       return json(201, { ...member, shop_ids: [], invite_link: state.inviteLink });
+    }
+
+    // Changing a role, removing a member, granting and revoking shops (slice 2.6).
+    const memberRoute =
+      /^(PATCH|DELETE|PUT) \/v1\/organizations\/[^/]+\/members\/([^/]+)(?:\/shops\/([^/]+))?$/.exec(
+        route,
+      );
+    if (memberRoute !== null) {
+      const [, method, memberId, shopId] = memberRoute;
+      const member = state.members.find((m) => m.id === memberId);
+      if (member === undefined) return problem(404, "not-found");
+      if (state.role !== "owner" && state.role !== "admin") return problem(403, "forbidden");
+      if (state.memberChangesRefused === true) return problem(403, "mfa-required");
+      if (member.role === "owner") return problem(403, "forbidden");
+      if (shopId !== undefined) {
+        if (!state.shops.some((shop) => shop.id === shopId)) return problem(404, "not-found");
+        const granted = (member.shop_ids ?? []).filter((id) => id !== shopId);
+        member.shop_ids = method === "PUT" ? [...granted, shopId] : granted;
+        return json(204, null);
+      }
+      if (method === "DELETE") {
+        state.members = state.members.filter((m) => m !== member);
+        return json(204, null);
+      }
+      if (method === "PATCH") {
+        const role = String(body["role"]);
+        if (role === "owner" && state.role !== "owner") return problem(403, "forbidden");
+        member.role = role;
+        return json(200, { ...member, shop_ids: member.shop_ids ?? [] });
+      }
     }
 
     switch (route) {

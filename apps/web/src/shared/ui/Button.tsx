@@ -11,8 +11,9 @@ const VARIANTS: Record<ButtonVariant, string> = {
     "bg-action-primary text-action-primary-fg border-action-primary data-[hovered]:bg-action-primary-hover data-[pressed]:bg-action-primary-pressed",
   secondary:
     "bg-transparent text-action-secondary-fg border-line-strong data-[hovered]:border-line-hover-strong data-[hovered]:bg-hover",
-  ghost: "bg-transparent text-secondary data-[hovered]:bg-hover data-[hovered]:text-primary",
-  danger: "bg-action-danger text-action-danger-fg",
+  ghost:
+    "border-transparent bg-transparent text-secondary data-[hovered]:bg-hover data-[hovered]:text-primary",
+  danger: "border-transparent bg-action-danger text-action-danger-fg",
 };
 
 // 28, 32 and 40 px.
@@ -40,7 +41,7 @@ export function Button({
     <AriaButton
       {...props}
       className={cx(
-        "inline-flex items-center justify-center rounded-button border border-transparent font-normal whitespace-nowrap",
+        "inline-flex items-center justify-center rounded-button border font-normal whitespace-nowrap",
         "cursor-default transition-[background-color,border-color,scale] duration-[var(--motion-duration-fast)] ease-standard",
         "data-[pressed]:scale-[0.98] data-[disabled]:opacity-45",
         VARIANTS[variant],

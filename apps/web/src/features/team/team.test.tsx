@@ -1,11 +1,18 @@
 import { createMemoryHistory } from "@tanstack/react-router";
-import { render, screen, within } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 
 import { App } from "../../app/App.tsx";
 import { memoryStorage } from "../../shared/lib/storage.ts";
 import { fakeBackend, type FakeState } from "../../test/fakeApi.ts";
+
+/** The item at `index`, failing the test when there is none. */
+function nth<T>(list: readonly T[], index: number): T {
+  const item = list[index];
+  if (item === undefined) throw new Error(`No item ${String(index)}`);
+  return item;
+}
 
 async function open(path: string, state: Partial<FakeState> = {}) {
   const backend = fakeBackend(state);
@@ -25,13 +32,32 @@ async function open(path: string, state: Partial<FakeState> = {}) {
 
 const owner = { signedIn: true, enrolled: true, assurance: "aal2" } as const;
 
+/** The members table's body rows (the first row is the column heads). */
+async function memberRows() {
+  const table = await screen.findByRole("table", { name: "Members" });
+  return within(table).getAllByRole("row").slice(1);
+}
+
+const dana = {
+  id: "b0000000-0000-7000-8000-000000000002",
+  user_id: "a1b2c3d4-0000-7000-8000-000000000002",
+  display_name: "Dana Levi",
+  role: "support",
+};
+const shop = {
+  id: "d0000000-0000-7000-8000-000000000001",
+  name: "Willow & Wick",
+  status: "active",
+};
+
 describe("the team (FR-IAM-02)", () => {
   it("lists the organization's members with their roles", async () => {
     await open("/settings/team", owner);
 
-    const members = await screen.findByRole("list", { name: "Members" });
-    expect(within(members).getAllByRole("listitem")).toHaveLength(1);
-    expect(within(members).getByText("Owner")).toBeInTheDocument();
+    const rows = await memberRows();
+    expect(rows).toHaveLength(1);
+    expect(within(nth(rows, 0)).getByText("Owner")).toBeInTheDocument();
+    expect(within(nth(rows, 0)).getByText("All shops")).toBeInTheDocument();
   });
 
   it("invites a user as Admin and hands the owner the link to send", async () => {
@@ -44,19 +70,123 @@ describe("the team (FR-IAM-02)", () => {
     expect(link).toHaveValue(backend.state.inviteLink);
     expect(screen.getByRole("button", { name: "Copy link" })).toBeInTheDocument();
     expect(backend.state.invited).toEqual([{ email: "dana@example.test", role: "admin" }]);
-    expect(
-      within(screen.getByRole("list", { name: "Members" })).getAllByRole("listitem"),
-    ).toHaveLength(2);
+    expect(await memberRows()).toHaveLength(2);
   });
 
   it("is offered from Settings to Owners and Admins only", async () => {
     await open("/settings", owner);
-    expect(screen.getByRole("link", { name: /Team/ })).toHaveAttribute("href", "/settings/team");
+    const page = screen.getByRole("main");
+    expect(within(page).getByRole("link", { name: /Members & access/ })).toHaveAttribute(
+      "href",
+      "/settings/team",
+    );
   });
 
   it("is not offered to other roles", async () => {
     await open("/settings", { signedIn: true, role: "support" });
-    expect(screen.queryByRole("link", { name: /Team/ })).not.toBeInTheDocument();
+    expect(
+      within(screen.getByRole("main")).queryByRole("link", { name: /Members & access/ }),
+    ).not.toBeInTheDocument();
+  });
+});
+
+describe("managing a member (FR-IAM-03, slice 2.6)", () => {
+  const withDana = { ...owner, members: [...fakeBackend().state.members, { ...dana }] };
+
+  async function chooseDana(user: ReturnType<typeof userEvent.setup>) {
+    await user.click(within(nth(await memberRows(), 1)).getByText("Dana Levi"));
+    return screen.findByRole("region", { name: "Member" });
+  }
+
+  it("changes a member's role on the server's answer", async () => {
+    const { user, backend } = await open("/settings/team", withDana);
+
+    const member = await chooseDana(user);
+    await user.click(within(member).getByRole("radio", { name: "Finance" }));
+
+    await waitFor(async () => {
+      expect(within(nth(await memberRows(), 1)).getByText("Finance")).toBeVisible();
+    });
+    expect(backend.state.members.find((m) => m.id === dana.id)?.role).toBe("finance");
+  });
+
+  it("grants and revokes a shop", async () => {
+    const { user, backend } = await open("/settings/team", { ...withDana, shops: [shop] });
+
+    const member = await chooseDana(user);
+    const access = await within(member).findByRole("switch", { name: "Access to Willow & Wick" });
+    await user.click(access);
+
+    await waitFor(() => {
+      expect(backend.state.members.find((m) => m.id === dana.id)?.shop_ids).toEqual([shop.id]);
+    });
+    expect(await within(member).findByText("1 shop")).toBeInTheDocument();
+
+    await user.click(access);
+    await waitFor(() => {
+      expect(backend.state.members.find((m) => m.id === dana.id)?.shop_ids).toEqual([]);
+    });
+  });
+
+  it("removes a member only after confirming", async () => {
+    const { user, backend } = await open("/settings/team", withDana);
+
+    const member = await chooseDana(user);
+    await user.click(within(member).getByRole("button", { name: "Remove from workspace" }));
+    expect(backend.state.members).toHaveLength(2);
+    await user.click(within(member).getByRole("button", { name: "Remove" }));
+
+    await waitFor(async () => {
+      expect(await memberRows()).toHaveLength(1);
+    });
+    expect(backend.state.members.some((m) => m.id === dana.id)).toBe(false);
+    // Back to inviting.
+    expect(screen.getByLabelText("Email")).toBeInTheDocument();
+  });
+
+  it("offers no changes to the Owner's membership", async () => {
+    const { user } = await open("/settings/team", owner);
+
+    await user.click(within(nth(await memberRows(), 0)).getByText("Tzvi Weiss"));
+    const member = await screen.findByRole("region", { name: "Member" });
+
+    expect(
+      within(member).getByText("The Owner's role, shops and membership cannot be changed."),
+    ).toBeInTheDocument();
+    expect(within(member).queryByRole("radio")).not.toBeInTheDocument();
+    expect(within(member).queryByRole("button", { name: /Remove/ })).not.toBeInTheDocument();
+  });
+
+  it("says why a change was refused, and changes nothing", async () => {
+    const { user, backend } = await open("/settings/team", {
+      ...withDana,
+      memberChangesRefused: true,
+    });
+
+    const member = await chooseDana(user);
+    await user.click(within(member).getByRole("radio", { name: "Finance" }));
+
+    expect(
+      await within(member).findByText("Confirm with your authenticator app, then try again."),
+    ).toHaveAttribute("role", "alert");
+    expect(backend.state.members.find((m) => m.id === dana.id)?.role).toBe("support");
+  });
+});
+
+describe("the planned parts of Members & access", () => {
+  it("shows the AI employees and the policy as demos that do nothing", async () => {
+    const { user } = await open("/settings/team", owner);
+
+    const employees = await screen.findByRole("region", { name: "AI employees" });
+    expect(within(employees).getAllByText("Demo").length).toBeGreaterThan(0);
+    expect(within(employees).getByText("Maya")).toBeInTheDocument();
+    expect(employees.querySelector("[inert]")).not.toBeNull();
+    const policy = screen.getByRole("region", { name: "Policy" });
+    expect(within(policy).getAllByText("Demo").length).toBeGreaterThan(0);
+    expect(policy.querySelector("[inert]")).not.toBeNull();
+
+    await user.click(within(employees).getByText("Maya"));
+    expect(await screen.findByText("Demo — coming soon")).toBeInTheDocument();
   });
 });
 
@@ -65,7 +195,7 @@ describe("the team with several workspaces", () => {
     const other = "c0000000-0000-7000-8000-000000000009";
     const { user, backend } = await open("/settings/team", { ...owner, otherOrgs: [other] });
 
-    expect(screen.queryByRole("list", { name: "Members" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("table", { name: "Members" })).not.toBeInTheDocument();
     await user.click(await screen.findByRole("radio", { name: /c0000000/ }));
     await user.type(await screen.findByLabelText("Email"), "dana@example.test");
     await user.click(screen.getByRole("button", { name: "Invite" }));

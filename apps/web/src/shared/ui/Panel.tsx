@@ -45,7 +45,8 @@ export function PanelHeader({
 }) {
   const Heading = level === 2 ? "h2" : "h3";
   return (
-    <header className="flex h-14 shrink-0 items-center justify-between gap-3 ps-6 pe-2">
+    // A div, not a header: a header outside a sectioning element would be a second banner.
+    <div className="flex h-14 shrink-0 items-center justify-between gap-3 ps-6 pe-2">
       <div className="flex min-w-0 items-baseline gap-2.5">
         <Heading className="m-0 truncate text-body-sm font-normal">{title}</Heading>
         {meta === undefined ? null : (
@@ -53,7 +54,7 @@ export function PanelHeader({
         )}
       </div>
       {actions === undefined ? null : <div className="flex items-center gap-1">{actions}</div>}
-    </header>
+    </div>
   );
 }
 
