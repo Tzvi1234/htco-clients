@@ -91,7 +91,8 @@ describe("the team (FR-IAM-02)", () => {
 });
 
 describe("managing a member (FR-IAM-03, slice 2.6)", () => {
-  const withDana = { ...owner, members: [...fakeBackend().state.members, { ...dana }] };
+  // A fresh copy per test: the fake backend changes its members in place.
+  const withDana = () => ({ ...owner, members: [...fakeBackend().state.members, { ...dana }] });
 
   async function chooseDana(user: ReturnType<typeof userEvent.setup>) {
     await user.click(within(nth(await memberRows(), 1)).getByText("Dana Levi"));
@@ -99,7 +100,7 @@ describe("managing a member (FR-IAM-03, slice 2.6)", () => {
   }
 
   it("changes a member's role on the server's answer", async () => {
-    const { user, backend } = await open("/settings/team", withDana);
+    const { user, backend } = await open("/settings/team", withDana());
 
     const member = await chooseDana(user);
     await user.click(within(member).getByRole("radio", { name: "Finance" }));
@@ -111,7 +112,7 @@ describe("managing a member (FR-IAM-03, slice 2.6)", () => {
   });
 
   it("grants and revokes a shop", async () => {
-    const { user, backend } = await open("/settings/team", { ...withDana, shops: [shop] });
+    const { user, backend } = await open("/settings/team", { ...withDana(), shops: [shop] });
 
     const member = await chooseDana(user);
     const access = await within(member).findByRole("switch", { name: "Access to Willow & Wick" });
@@ -129,7 +130,7 @@ describe("managing a member (FR-IAM-03, slice 2.6)", () => {
   });
 
   it("removes a member only after confirming", async () => {
-    const { user, backend } = await open("/settings/team", withDana);
+    const { user, backend } = await open("/settings/team", withDana());
 
     const member = await chooseDana(user);
     await user.click(within(member).getByRole("button", { name: "Remove from workspace" }));
@@ -159,7 +160,7 @@ describe("managing a member (FR-IAM-03, slice 2.6)", () => {
 
   it("says why a change was refused, and changes nothing", async () => {
     const { user, backend } = await open("/settings/team", {
-      ...withDana,
+      ...withDana(),
       memberChangesRefused: true,
     });
 
