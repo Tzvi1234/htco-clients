@@ -7,7 +7,7 @@ import {
   LockSimpleIcon as LockSimple,
 } from "@phosphor-icons/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRouter, useSearch } from "@tanstack/react-router";
+import { Link, useRouter, useSearch } from "@tanstack/react-router";
 import { useState, type SyntheticEvent } from "react";
 import { Button as AriaButton } from "react-aria-components";
 
@@ -107,6 +107,9 @@ export function SignInPage() {
             </AriaButton>
           }
         />
+        <Link to="/forgot-password" className="-mt-2 self-end text-body-sm font-medium text-link">
+          <Trans>Forgot your password?</Trans>
+        </Link>
         <FormAlert message={message(signIn.error)} />
         <Button
           type="submit"

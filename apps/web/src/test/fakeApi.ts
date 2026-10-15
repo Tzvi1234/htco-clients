@@ -25,6 +25,13 @@ export interface FakeState {
   /** Extra organizations the user is Owner of, by ID. */
   otherOrgs: string[];
   accepted?: Record<string, unknown>;
+  /** Emails a password reset link was asked for (the same answer for any email). */
+  resetRequests: unknown[];
+  /** True: asking for a reset link answers 429. */
+  resetThrottled: boolean;
+  /** True: the user has an authenticator app, so the reset needs its code. */
+  resetNeedsCode: boolean;
+  reset?: Record<string, unknown>;
 }
 
 const PROBLEMS = "https://ht-co.app/problems/";
@@ -71,6 +78,9 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
     signOutFails: false,
     otherOrgs: [],
     inviteLink: "https://example.supabase.co/auth/v1/verify?token=t&type=invite",
+    resetRequests: [],
+    resetThrottled: false,
+    resetNeedsCode: false,
     ...initial,
   };
   const requests: Request[] = [];
@@ -99,8 +109,28 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
     }
     if (route === "POST /v1/auth/invitations/accept") {
       if (body["access_token"] !== "invite-at") return problem(401, "invitation-refused");
+      if (body["password"] === state.password) return problem(422, "same-password");
       state.accepted = body;
       state.signedIn = true;
+      return json(200, { user_id: user, assurance: state.assurance });
+    }
+    if (route === "POST /v1/auth/password/forgot") {
+      if (state.resetThrottled) return problem(429, "too-many-attempts");
+      if (body["email"] === "bad@x.y") return problem(422, "validation-error");
+      state.resetRequests.push(body["email"]);
+      return new Response(null, { status: 202 });
+    }
+    if (route === "POST /v1/auth/password/reset") {
+      if (body["access_token"] !== "reset-at") return problem(401, "reset-link-refused");
+      if (state.resetNeedsCode && body["code"] === undefined)
+        return problem(403, "mfa-code-required");
+      if (state.resetNeedsCode && body["code"] !== "123456")
+        return problem(401, "mfa-code-refused");
+      if (String(body["password"]).includes("weak")) return problem(422, "weak-password");
+      if (body["password"] === state.password) return problem(422, "same-password");
+      state.reset = body;
+      state.signedIn = true;
+      if (state.resetNeedsCode) state.assurance = "aal2";
       return json(200, { user_id: user, assurance: state.assurance });
     }
     if (!state.signedIn) return problem(401, "session-ended");

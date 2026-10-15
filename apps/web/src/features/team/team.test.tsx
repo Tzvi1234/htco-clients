@@ -122,6 +122,18 @@ describe("accepting an invitation", () => {
     expect(backend.state.accepted).toBeUndefined();
   });
 
+  it("says when the chosen password is the account's current one", async () => {
+    const { user } = await open(link);
+
+    await user.type(screen.getByLabelText("New password"), "correct horse battery");
+    await user.type(screen.getByLabelText("Repeat the password"), "correct horse battery");
+    await user.click(screen.getByRole("button", { name: "Save and sign in" }));
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "This is your current password. Choose a different one.",
+    );
+  });
+
   it("says when the link expired or was already used", async () => {
     await open("/accept-invite#error=access_denied&error_code=otp_expired");
     expect(
