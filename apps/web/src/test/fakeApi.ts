@@ -291,15 +291,20 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
         if (state.signOutFails) return problem(503, "auth-unavailable");
         state.signedIn = false;
         return json(204, null);
-      case "GET /v1/shops":
+      case "GET /v1/shops": {
+        // Pages of 50 (the API's default), the cursor being the next index.
+        const start = Number(url.searchParams.get("cursor") ?? "0");
+        const end = start + Number(url.searchParams.get("limit") ?? "50");
+        const organizationId = url.searchParams.get("organization_id") ?? org;
         return json(200, {
-          items: state.shops.map((shop) => ({
+          items: state.shops.slice(start, end).map((shop) => ({
             ...shop,
-            organization_id: org,
+            organization_id: organizationId,
             marketplace: "etsy",
           })),
-          next_cursor: null,
+          next_cursor: end < state.shops.length ? String(end) : null,
         });
+      }
       case "GET /v1/shop-integrations":
         if (state.role !== "owner" && state.role !== "admin") return problem(403, "forbidden");
         return json(200, { items: state.integrations });

@@ -1,3 +1,4 @@
+import { focusManager } from "@tanstack/react-query";
 import { createMemoryHistory } from "@tanstack/react-router";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -258,5 +259,55 @@ describe("the shop card (slice 4.6)", () => {
 
     expect(await screen.findByRole("article", { name: "Willow & Wick" })).toBeInTheDocument();
     expect(screen.queryByText("Read orders")).not.toBeInTheDocument();
+  });
+});
+
+describe("Codex review findings", () => {
+  it("lists every shop, page after page", async () => {
+    const shops = Array.from({ length: 51 }, (_, n) => ({
+      id: `e0000000-0000-7000-8000-${String(n).padStart(12, "0")}`,
+      name: `Shop ${String(n + 1)}`,
+      status: "active",
+    }));
+    await open("/shops", { ...owner, shops });
+
+    expect(await screen.findByRole("article", { name: "Shop 51" })).toBeInTheDocument();
+    expect(screen.getAllByRole("article")).toHaveLength(51);
+  });
+
+  it("drops the connection details when the user is no longer Owner or Admin", async () => {
+    const { backend } = await open("/shops", { ...owner, ...demoShops() });
+    const card = await screen.findByRole("article", { name: "Paper Fox Prints" });
+    expect(within(card).getByText("Needs reconnecting")).toBeInTheDocument();
+
+    backend.state.role = "support";
+    vi.useFakeTimers({ toFake: ["Date"] });
+    vi.setSystemTime(Date.now() + 60_000);
+    focusManager.setFocused(false);
+    focusManager.setFocused(true);
+    vi.useRealTimers();
+    focusManager.setFocused(undefined);
+
+    await vi.waitFor(() => {
+      expect(screen.queryByText("Needs reconnecting")).not.toBeInTheDocument();
+    });
+    expect(screen.getByRole("article", { name: "Paper Fox Prints" })).toBeInTheDocument();
+  });
+
+  it("shows the confirmation in the workspace the shop was connected to", async () => {
+    const other = "c0000000-0000-7000-8000-000000000009";
+    const { user } = await open("/integrations/etsy/callback?code=etsy-code&state=s-1", {
+      ...owner,
+      otherOrgs: [other],
+    });
+
+    // The connected workspace is chosen for the owner, with the confirmation.
+    expect(await screen.findByText("Your Etsy shop is connected.")).toBeInTheDocument();
+    expect(screen.getByRole("radio", { name: /a0000000/ })).toBeChecked();
+
+    await user.click(screen.getByRole("radio", { name: /c0000000/ }));
+    await vi.waitFor(() => {
+      expect(screen.queryByText("Your Etsy shop is connected.")).not.toBeInTheDocument();
+    });
   });
 });
