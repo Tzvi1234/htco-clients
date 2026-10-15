@@ -19,3 +19,7 @@ trustPolicyExclude:
 # in `allowBuilds`.
 blockExoticSubdeps: true
 strictDepBuilds: true
+# Reviewed install scripts. esbuild (through Storybook) only checks that its platform binary is
+# present; the binary ships as an optional dependency, so the script is not needed.
+allowBuilds:
+  esbuild: false

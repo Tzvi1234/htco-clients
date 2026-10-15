@@ -5,7 +5,7 @@
 | **Slug** | `web-shell` |
 | **Phase / slices** | Phase 3 — slices 3.1, 3.3, 3.4, 3.6–3.9 (tokens: [`design-tokens`](../design-tokens/overview.md); authentication: `auth-bff` in `htco-platform`) |
 | **Requirements** | FR-ADM-01, FR-IAM-01, FR-IAM-02, FR-IAM-05, FR-IAM-06 (see the PRD in `htco-platform`) |
-| **Status** | In progress (slice 3.1 complete except Storybook and axe; slice 3.3 part 1; slice 3.6 and the web half of 3.5) |
+| **Status** | In progress (slice 3.1; slice 3.3 part 1; slice 3.4 for the components that exist; slice 3.6 and the web half of 3.5) |
 | **Last updated** | 2026-10-15 |
 
 ## What and why
@@ -27,7 +27,11 @@ The owner's web app: a calm, bilingual, accessible shell where they sign in and 
 | AC-3.6.1 | The generated API types match the pinned OpenAPI copy. | 3.6 | Pass |
 | AC-3.8.1 | Every page carries the security policies (CSP, referrer), over HTTPS only; see client ADR-0006 for why they travel in the page. | 3.8 | Pass (unit); live check after the first deploy |
 | AC-3.8.2 | The deployed app passes the sign-in journey with a real account. | 3.8 | Open (needs the owner's account) |
-| AC-3.1.2 | A failing Vitest, Storybook interaction or axe check fails `ci-gate`. | 3.1 (Vitest now; Storybook and axe with slice 3.4) | Partly verified |
+| AC-3.1.2 | A failing Vitest, Storybook interaction or axe check fails `ci-gate`. | 3.1 (Vitest), 3.4 (Storybook and axe in the `storybook` job) | Pass |
+| AC-3.4.1 | Every component story passes axe with zero serious or critical violations. | 3.4 | Pass (every story, he/en × light/dark) |
+| AC-3.4.2 | Every interactive component is fully operable by keyboard, with a visible focus ring (interaction tests). | 3.4 | Pass (Button, IconButton, TextField, Banner action) |
+| AC-3.4.3 | Screenshot tests exist for he/en × light/dark for each component. | 3.4 | Pass (Linux baselines from the CI image) |
+| AC-3.4.4 | A tracking number inside Hebrew text renders in the correct order (`Ltr` test). | 3.4 | Pass |
 
 ## Scope
 
@@ -35,7 +39,8 @@ The owner's web app: a calm, bilingual, accessible shell where they sign in and 
 - **In (3.1 part 2, 3.3 part 1):** the logical-CSS lint rule; `apps/web` with Vite 8, React 19, Tailwind 4 driven only by the design tokens, React Aria Components, TanStack Router and Query, Lingui 6 (English source, Hebrew catalog); the app shell (sidebar at 1200 px, rail from 640 px, bottom bar on phones), shop switcher placeholder, account menu (language, theme), overview and shops empty states, settings, offline banner, not-found and route-error states.
 - **In (3.6, 3.5 web):** `packages/api-client` (openapi-typescript types, an openapi-fetch client that sends the CSRF header); the Vite dev proxy `/api` to the local API; sign-in, authenticator setup and confirmation, the security settings page (two-factor status, signed-in devices), sign-out from the account menu; route guards that send a visitor to sign-in and back, and an Owner or Admin to the second factor; any 401 from the API returns to sign-in.
 - **In (3.8):** `apps/web/Dockerfile` builds the app for App Platform's static site at `https://dash.ht-co.app`; the CSP and referrer policy are written into the built page; the app refuses to run inside a frame ([client ADR-0006](../../adr/0006-static-web-hosting.md)). The app spec, ingress and DNS live in `htco-platform`.
-- **Out (3.3 part 2 and 3.4):** Playwright journeys with axe in he/en × light/dark, Storybook with the accessibility addon, the rest of the core components. Path filters arrive with the first expensive job.
+- **In (3.4, part 1):** Storybook 10 (Vite builder) with the accessibility and Vitest addons; stories for every shared UI component (Button, IconButton, TextField, Tag and ObjectIcon, Banner, EmptyState and StateCard, ErrorState, PageHeader and PageBody, StatusDot and StatusLabel, DecisionRing, Logo, Ltr) with toolbar globals for Hebrew or English (through the app's `LocaleProvider`) and light or dark (`data-theme`) over the real token CSS; stories run as browser tests (play functions, axe); every story is checked again in he/en × light/dark with axe and a screenshot (Playwright, in the CI image). No component's look changed.
+- **Out (3.3 part 2 and the rest of 3.4):** Playwright journeys with axe in he/en × light/dark; the core components that do not exist yet (Select, Badge, MetricCard, Skeleton, Toast, Dialog, Pagination and the others in the slice) get their stories when they are built. Path filters arrive with the first expensive job.
 
 ## External facts learned
 

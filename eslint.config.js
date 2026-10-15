@@ -16,6 +16,7 @@ export default defineConfig(
     "packages/*/generated/",
     "apps/web/playwright-report/",
     "apps/web/test-results/",
+    "apps/web/storybook-static/",
   ]),
   js.configs.recommended,
   tseslint.configs.strictTypeChecked,

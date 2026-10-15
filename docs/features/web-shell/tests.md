@@ -9,6 +9,8 @@
 | Web units | Locale (direction, browser languages, remembered choice), theme (system default, remembered choice, `data-theme`), guarded storage | `apps/web/src/shared/**/*.test.ts` |
 | Web app | Shell and navigation (`aria-current`), Hebrew start, language switch both ways from the account menu, theme choice and return to system, offline banner, not-found recovery | `apps/web/src/app/App.test.tsx` |
 | i18n | Catalogs in sync with the code and complete in Hebrew | `pnpm i18n:check` (`lingui check sync`, `lingui check missing`) |
+| Component stories | Every story renders in Chromium, its play function passes (keyboard reach, focus ring, Enter and Space, typing, announced errors, bidi order) and axe finds no violation (the accessibility addon with `a11y.test: "error"`) | `apps/web/src/shared/ui/*.stories.tsx`, `pnpm test:storybook` (`apps/web/vitest.storybook.config.ts`) |
+| Component matrix | Every story of the built Storybook in he/en × light/dark: no serious or critical axe violation, and a screenshot equal to its baseline | `apps/web/e2e/components/stories.spec.ts`, baselines in `apps/web/e2e/__screenshots__/` |
 | CI | The pipeline itself | `.github/workflows/ci.yml` |
 
 ## Acceptance criteria coverage
@@ -24,7 +26,11 @@
 | AC-3.5.3 | `auth.test.tsx`: "sends an Owner without an authenticator app to set one up...", "asks an enrolled Owner for the code...", "lets other roles in..." |
 | AC-3.5.4 | `auth.test.tsx`: "lists this user's devices and signs another one out" |
 | AC-3.6.1 | `packages/api-client/test/client.test.ts`: "match the pinned OpenAPI document" |
-| AC-3.1.2 | The `tests` job runs Vitest and `ci-gate` requires it (Storybook and axe in part 2) |
+| AC-3.1.2 | The `tests` job runs Vitest and the `storybook` job runs the story tests (interactions, axe) and the component matrix; `ci-gate` requires both |
+| AC-3.4.1 | Every story: axe through the accessibility addon (`pnpm test:storybook`, any violation fails) and `@axe-core/playwright` in he/en × light/dark (`stories.spec.ts`, serious or critical fail) |
+| AC-3.4.2 | `Keyboard` stories of Button, IconButton and TextField, `KeyboardDisabled` (Button), `WithAction` (Banner): Tab reaches the control, the focus ring is the 2 px `--border-focus` outline (or the field's focus border and ring), Enter and Space press |
+| AC-3.4.3 | `stories.spec.ts`: one screenshot per story in he/en × light/dark |
+| AC-3.4.4 | `Ltr.stories.tsx` "Tracking Number In Hebrew": each character of `2024-0042-IL` sits to the right of the one before it, the Hebrew words around it read right to left, and the same number without `Ltr` is reordered (the check can fail) |
 
 ## Verification evidence
 
@@ -59,3 +65,17 @@
 `pnpm check`: ESLint, Prettier, TypeScript, i18n (64 messages, none missing in Hebrew), 153 tests.
 
 **Open issues:** the web app is not deployed yet (slice 3.8); password reset and email verification need an email provider (3.5 part 3).
+
+### Verification — 3.4 (part 1) — 2026-10-15
+
+| Acceptance criterion | Covered by tests | Verified for real | Result |
+|---|---|---|---|
+| AC-3.1.2 | `storybook` job in `ci-gate` | A story with an unnamed button and one with low-contrast text failed `pnpm test:storybook` (axe `button-name`, `color-contrast`); the first CI runs failed on the missing screenshots until the baselines were committed | Pass |
+| AC-3.4.1 | 48 stories × (addon axe + he/en × light/dark `@axe-core/playwright`) | No violation found in any story, language or theme | Pass |
+| AC-3.4.2 | `Keyboard` stories | Red first: the focus-ring colour check failed while the ring's colour was still in transition; it now waits for the transition | Pass |
+| AC-3.4.3 | 192 screenshots | Baselines made in CI's image (`storybook-screenshots` artifact), each component reviewed in he/en × light/dark before committing | Pass |
+| AC-3.4.4 | `Ltr` "Tracking Number In Hebrew" | The control without `Ltr` is reordered (`IL-2024-0042` on screen), with `Ltr` the order is kept | Pass |
+
+CI: the `storybook` job runs beside the others in about 4.5 minutes (image pull 40 s, install 16 s, story tests 31 s, Storybook build 13 s, 193-case matrix 2.3 min). `pnpm check` green.
+
+**Open issues:** the slice's components that do not exist yet get their stories when they are built.
