@@ -15,6 +15,7 @@ export interface TextFieldProps extends Omit<AriaTextFieldProps, "className" | "
   errorMessage?: string;
   /** Codes and email addresses stay left-to-right inside Hebrew pages. */
   ltr?: boolean;
+  size?: "md" | "lg";
   className?: string;
 }
 
@@ -24,6 +25,7 @@ export function TextField({
   description,
   errorMessage,
   ltr = false,
+  size = "md",
   className,
   ...props
 }: TextFieldProps) {
@@ -31,14 +33,17 @@ export function TextField({
     <AriaTextField
       {...props}
       isInvalid={errorMessage !== undefined || props.isInvalid === true}
-      className={cx("flex flex-col gap-1", className)}
+      className={cx("flex flex-col gap-1.5", className)}
     >
-      <Label className="text-body font-medium">{label}</Label>
+      <Label className="text-body-sm font-medium text-secondary">{label}</Label>
       <Input
         dir={ltr ? "ltr" : undefined}
         className={cx(
-          "h-10 rounded-control border border-border-control bg-surface px-3 text-body text-primary",
-          "outline-none data-[focus-visible]:ring-2 data-[focus-visible]:ring-focus",
+          size === "lg" ? "h-10" : "h-8",
+          "rounded-control border border-border-control bg-surface px-2.5 text-body text-primary shadow-1",
+          "transition-[border-color,box-shadow] duration-[var(--motion-duration-fast)] outline-none",
+          "placeholder:text-muted data-[hovered]:border-icon",
+          "data-[focused]:border-focus data-[focused]:ring-3 data-[focused]:ring-accent-subtle",
           "data-[invalid]:border-danger",
           ltr && "text-start",
         )}

@@ -108,7 +108,7 @@ function SetUp() {
           <img
             src={enroll.data.qr_code}
             alt={t`QR code for your authenticator app`}
-            className="size-48 self-center rounded-control bg-white p-2"
+            className="size-48 self-center rounded-card border border-border-subtle bg-art-paper p-2"
           />
           <p className="m-0 text-caption text-muted">
             <Trans>Cannot scan? Type this key into the app:</Trans>{" "}
@@ -166,6 +166,7 @@ function CodeField({ value, onChange }: { value: string; onChange: (value: strin
   const { t } = useLingui();
   return (
     <TextField
+      size="lg"
       label={t`Code from the app`}
       inputMode="numeric"
       autoComplete="one-time-code"

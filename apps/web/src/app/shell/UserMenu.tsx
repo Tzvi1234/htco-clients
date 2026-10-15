@@ -1,8 +1,9 @@
 import { useLingui } from "@lingui/react/macro";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "@tanstack/react-router";
-import { CircleUser } from "lucide-react";
+import { ChevronsUpDown, UserRound } from "lucide-react";
 import {
+  Button,
   Header,
   Menu,
   MenuItem,
@@ -18,12 +19,11 @@ import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
 import type { Locale } from "../../shared/i18n/locale.ts";
 import { useTheme } from "../../shared/theme/ThemeProvider.tsx";
 import type { ThemePreference } from "../../shared/theme/theme.ts";
-import { IconButton } from "../../shared/ui/IconButton.tsx";
 
 const ITEM =
-  "flex h-9 cursor-default items-center gap-2 rounded-control px-2 outline-none data-[focused]:bg-action-secondary-hover data-[disabled]:text-muted " +
+  "flex h-8 cursor-default items-center gap-2 rounded-control px-2 text-body outline-none data-[focused]:bg-hover data-[disabled]:text-muted " +
   "before:inline-block before:w-4 before:text-accent-text data-[selected]:before:content-['✓']";
-const SECTION_HEADER = "px-2 pt-2 pb-1 text-caption font-semibold text-muted";
+const SECTION_HEADER = "px-2 pt-2 pb-1 text-caption font-medium text-muted";
 
 function selected(keys: Selection): string | undefined {
   if (keys === "all") return undefined;
@@ -49,13 +49,23 @@ export function UserMenu() {
 
   return (
     <MenuTrigger>
-      <IconButton
+      <Button
         aria-label={t`Account and preferences`}
-        icon={<CircleUser size={22} strokeWidth={1.75} />}
-      />
+        className="flex h-10 w-full cursor-default items-center justify-center gap-2 rounded-control px-1.5 text-body text-secondary outline-none data-[hovered]:bg-hover data-[hovered]:text-primary data-[pressed]:bg-hover lg:justify-start"
+      >
+        <span
+          aria-hidden="true"
+          className="grid size-7 shrink-0 place-items-center rounded-pill bg-presence-iris text-presence-fg"
+        >
+          <UserRound size={15} strokeWidth={2} />
+        </span>
+        <span className="hidden grow text-start font-medium text-primary lg:block">{t`Account`}</span>
+        <ChevronsUpDown aria-hidden="true" size={14} className="hidden text-icon-muted lg:block" />
+      </Button>
       <Popover
-        placement="bottom end"
-        className="min-w-56 rounded-card border border-border-strong bg-raised p-1 shadow-2 outline-none"
+        placement="top start"
+        offset={6}
+        className="min-w-60 rounded-card border border-border-strong bg-raised p-1.5 shadow-3 outline-none data-[entering]:animate-enter"
       >
         <Menu className="outline-none">
           <MenuSection

@@ -7,7 +7,7 @@ export interface IconButtonProps extends Omit<AriaButtonProps, "className" | "ch
   /** What the button does; icon-only buttons are named for screen readers. */
   "aria-label": string;
   icon: ReactNode;
-  /** The amber dot: something here waits for the user. */
+  /** The saffron dot: something here waits for the user. */
   needsYou?: boolean;
   className?: string;
 }
@@ -17,8 +17,8 @@ export function IconButton({ icon, needsYou = false, className, ...props }: Icon
     <AriaButton
       {...props}
       className={cx(
-        "relative inline-flex size-10 cursor-default items-center justify-center rounded-button text-icon",
-        "data-[hovered]:bg-action-secondary-hover data-[disabled]:opacity-45",
+        "relative inline-flex size-8 cursor-default items-center justify-center rounded-control text-icon",
+        "transition-colors duration-[var(--motion-duration-fast)] data-[hovered]:bg-hover data-[hovered]:text-primary data-[disabled]:opacity-45",
         className,
       )}
     >
@@ -26,7 +26,7 @@ export function IconButton({ icon, needsYou = false, className, ...props }: Icon
       {needsYou ? (
         <span
           aria-hidden="true"
-          className="absolute top-2 end-2 size-2.5 rounded-pill bg-attention ring-2 ring-surface"
+          className="absolute end-1 top-1 size-2 rounded-pill bg-attention ring-2 ring-canvas"
         />
       ) : null}
     </AriaButton>

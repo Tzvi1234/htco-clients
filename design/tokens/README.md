@@ -10,20 +10,21 @@ The single source of truth for colour, type, spacing, shape, motion and sizes on
 
 Components use **semantic tokens only** (`color.text.primary`, `color.action.primary.bg`, `color.status.needs-you`). Primitives exist so the semantic layer can reference them; a component that reaches for `palette.turquoise.400` directly is a review finding.
 
-## Brand colours (measured, not guessed)
+## Brand colours (Relay)
 
-| Token | Hex | Measured from |
+| Token | Hex | Role |
 |---|---|---|
-| `color.brand.navy` | `#030F1F` | Logo background pixels (median) |
-| `color.brand.turquoise` | `#05F7F4` | The "CO" letters |
-| `color.brand.amber` | `#F8B857` | The dot |
-| `color.brand.white` | `#FFFFFF` | The "HT" letters |
+| `color.brand.iris` | `#4C3AC7` | The logo's CO; primary actions, links, selection, focus |
+| `color.brand.iris-bright` | `#7B66FF` | The CO on dark grounds |
+| `color.brand.saffron` | `#F2B72F` | The logo's dot; the decision ring ("needs you") |
+| `color.brand.ink` | `#16161A` | The logo's HT on light grounds; text |
+| `color.brand.paper` | `#FFFFFF` | Light ground |
 
-The original planning brief's earlier approximations (`#061322`, `#00E6D9`, `#F0B76A`) and the retired indigo palette are superseded by these values ([client ADR-0005](../../docs/adr/0005-brand-palette-from-logo.md)).
+They replace the navy, turquoise and amber of version 1 ([client ADR-0007](../../docs/adr/0007-relay-design-language.md), superseding ADR-0005). Semantic groups added with Relay: `bg.sidebar`, `bg.hover`, `attention.ring`, `tag.<hue>.{bg,text,dot}` for seven hues, `presence.<hue>.{bg,fg}` for AI employee flags, and `illustration.*` for brand art. Type adds `font.family.display` (Rubik) and the `hero` size; radii gain `xs` (4 px, tags); motion gains `duration.draw` (400 ms).
 
 ## Contrast guarantee
 
-Every text pair is at least 4.5:1 and every control boundary, focus ring and status dot at least 3:1, in both themes. The pairs checked are the ones the brand book names (text on each background, button labels on fills, badge text on its tint, dots on surfaces): 101 per theme, listed in [`packages/design-tokens/src/contrast.ts`](../../packages/design-tokens/src/contrast.ts). CI recomputes them from these files on every pull request and fails on any regression, and `pnpm tokens` refuses to build while one fails.
+Every text pair is at least 4.5:1 and every control boundary, focus ring and status dot at least 3:1, in both themes. The pairs checked are the ones the brand book names (text on each background, button labels on fills, badge text on its tint, dots on surfaces, tag text on its tint, presence names on their flags): 164 per theme, listed in [`packages/design-tokens/src/contrast.ts`](../../packages/design-tokens/src/contrast.ts). CI recomputes them from these files on every pull request and fails on any regression, and `pnpm tokens` refuses to build while one fails.
 
 ## How tokens reach each platform
 

@@ -12,7 +12,17 @@ export interface ContrastFailure {
   ratio: number;
 }
 
-const SURFACES = ["bg.canvas", "bg.surface", "bg.raised", "bg.sunken", "bg.selected"];
+const SURFACES = [
+  "bg.canvas",
+  "bg.sidebar",
+  "bg.surface",
+  "bg.raised",
+  "bg.sunken",
+  "bg.hover",
+  "bg.selected",
+];
+const HUES = ["iris", "saffron", "coral", "mint", "sky", "rose", "slate"];
+const PRESENCE = ["iris", "coral", "mint", "sky", "rose", "saffron", "slate"];
 const TEXT = [
   "text.primary",
   "text.secondary",
@@ -51,6 +61,15 @@ const NAMED_PAIRS: ContrastPair[] = [
   ["text.primary", "attention.subtle", 4.5],
   ["text.primary", "success.subtle", 4.5],
   ["text.primary", "danger.subtle", 4.5],
+  ["text.on-brand", "bg.canvas", 4.5],
+  // Tags: their text on their tint, and their dot on the tint and on a plain surface.
+  ...HUES.flatMap((hue): ContrastPair[] => [
+    [`tag.${hue}.text`, `tag.${hue}.bg`, 4.5],
+    [`tag.${hue}.dot`, `tag.${hue}.bg`, 3],
+    [`tag.${hue}.dot`, "bg.surface", 3],
+  ]),
+  // An AI employee's presence flag: the name on the flag colour.
+  ...PRESENCE.map((hue): ContrastPair => [`presence.${hue}.fg`, `presence.${hue}.bg`, 4.5]),
 ];
 
 /** Pairs of colour token names (without the `color.` prefix) and the minimum ratio. */
