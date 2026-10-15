@@ -52,7 +52,7 @@ describe.each(["light", "dark"] as const)("the %s theme", (theme) => {
     expect(failures).toEqual([]);
   });
 
-  it("checks 164 pairs: text and controls on every surface, named pairs, tags, presence flags", () => {
-    expect(CONTRAST_PAIRS).toHaveLength(164);
+  it("checks 170 pairs: text and controls on every surface, named pairs, tags, presence flags, the ink sidebar", () => {
+    expect(CONTRAST_PAIRS).toHaveLength(170);
   });
 });

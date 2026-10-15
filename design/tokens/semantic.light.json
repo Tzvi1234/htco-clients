@@ -2,9 +2,13 @@
   "$description": "HTCO Relay semantic tokens, light theme.",
   "color": {
     "bg": {
+      "app": {
+        "$value": "{palette.graphite.app}",
+        "$description": "The app ground behind the floating work panel and the sidebar"
+      },
       "canvas": {
         "$value": "{palette.graphite.0}",
-        "$description": "Page background"
+        "$description": "Page background (the work panel)"
       },
       "sidebar": {
         "$value": "{palette.graphite.25}",
@@ -320,6 +324,42 @@
         "fg": {
           "$value": "{palette.graphite.0}"
         }
+      }
+    },
+    "app": {
+      "text": {
+        "$value": "{palette.ink.text}",
+        "$description": "Text on the ink app ground (sidebar)"
+      },
+      "text-muted": {
+        "$value": "{palette.ink.muted}"
+      },
+      "hover": {
+        "$value": "{palette.ink.hover}"
+      },
+      "selected": {
+        "$value": "{palette.ink.selected}"
+      },
+      "border": {
+        "$value": "{palette.ink.border}"
+      }
+    },
+    "shape": {
+      "iris": {
+        "$value": "{palette.shape.iris}",
+        "$description": "Solid background shapes (the aura); decorative, never behind text"
+      },
+      "sky": {
+        "$value": "{palette.shape.sky}"
+      },
+      "peach": {
+        "$value": "{palette.shape.peach}"
+      },
+      "mint": {
+        "$value": "{palette.shape.mint}"
+      },
+      "saffron": {
+        "$value": "{palette.shape.saffron}"
       }
     },
     "illustration": {

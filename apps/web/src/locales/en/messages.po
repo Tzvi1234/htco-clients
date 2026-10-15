@@ -15,6 +15,10 @@ msgstr "0 of 3 done"
 msgid "1 of 3 done"
 msgstr "1 of 3 done"
 
+#: src/features/welcome/WelcomePage.tsx
+msgid "A native desktop app."
+msgstr "A native desktop app."
+
 #: src/app/shell/UserMenu.tsx
 msgid "Account"
 msgstr "Account"
@@ -22,6 +26,34 @@ msgstr "Account"
 #: src/app/shell/UserMenu.tsx
 msgid "Account and preferences"
 msgstr "Account and preferences"
+
+#: src/features/overview/OverviewPage.tsx
+msgid "Active listings"
+msgstr "Active listings"
+
+#: src/features/overview/OverviewPage.tsx
+msgid "After a shop is connected"
+msgstr "After a shop is connected"
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "An AI office you control"
+msgstr "An AI office you control"
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "An APK for your phone."
+msgstr "An APK for your phone."
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "Android"
+msgstr "Android"
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "Any browser, nothing to install."
+msgstr "Any browser, nothing to install."
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "Anything risky waits for your approval, with the reason and the receipt."
+msgstr "Anything risky waits for your approval, with the reason and the receipt."
 
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Authenticator app"
@@ -55,6 +87,10 @@ msgstr "Confirm it is you"
 msgid "Connect Etsy shop"
 msgstr "Connect Etsy shop"
 
+#: src/features/welcome/WelcomePage.tsx
+msgid "Connect your Etsy shop"
+msgstr "Connect your Etsy shop"
+
 #: src/features/overview/OverviewPage.tsx
 msgid "Connect your first shop"
 msgstr "Connect your first shop"
@@ -67,14 +103,30 @@ msgstr "Connected shops appear here with their sync status and capabilities."
 msgid "Connecting a shop opens in a coming release."
 msgstr "Connecting a shop opens in a coming release."
 
+#: src/features/welcome/WelcomePage.tsx
+msgid "Customers answered"
+msgstr "Customers answered"
+
 #: src/app/shell/UserMenu.tsx
 #: src/features/settings/SettingsPage.tsx
 msgid "Dark"
 msgstr "Dark"
 
 #: src/features/overview/OverviewPage.tsx
+msgid "Decisions waiting"
+msgstr "Decisions waiting"
+
+#: src/features/overview/OverviewPage.tsx
 msgid "Done"
 msgstr "Done"
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "Download"
+msgstr "Download"
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "Each specialist acts under your policies and shows its work."
+msgstr "Each specialist acts under your policies and shows its work."
 
 #: src/features/auth/SignInPage.tsx
 msgid "Email"
@@ -92,9 +144,13 @@ msgstr "Enter the 6-digit code the app shows."
 msgid "Etsy · not connected"
 msgstr "Etsy · not connected"
 
-#: src/features/auth/AuthLayout.tsx
-msgid "Every action an AI employee takes has a reason, a policy and a receipt, and anything risky waits for you."
-msgstr "Every action an AI employee takes has a reason, a policy and a receipt, and anything risky waits for you."
+#: src/features/welcome/WelcomePage.tsx
+msgid "Every order, verified"
+msgstr "Every order, verified"
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "Get the apps"
+msgstr "Get the apps"
 
 #: src/features/overview/OverviewPage.tsx
 msgid "Getting started"
@@ -117,17 +173,41 @@ msgstr "Go to shops"
 msgid "Go to the overview"
 msgstr "Go to the overview"
 
+#: src/features/auth/SignInPage.tsx
+msgid "Hide password"
+msgstr "Hide password"
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "How it works"
+msgstr "How it works"
+
 #: src/features/security/SecurityPage.tsx
 msgid "How you sign in, and where you are signed in."
 msgstr "How you sign in, and where you are signed in."
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "HT-Commerce by H.T.Z Studios"
+msgstr "HT-Commerce by H.T.Z Studios"
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "HT-Commerce runs your Etsy business with an AI office that checks every order, keeps listings healthy and asks you before anything risky."
+msgstr "HT-Commerce runs your Etsy business with an AI office that checks every order, keeps listings healthy and asks you before anything risky."
 
 #: src/features/auth/AuthLayout.tsx
 msgid "HTCO · the operating system for your marketplace business"
 msgstr "HTCO · the operating system for your marketplace business"
 
 #: src/features/overview/OverviewPage.tsx
-msgid "HTCO checks orders, tracking and listings, and asks you before anything risky. Three steps get it ready."
-msgstr "HTCO checks orders, tracking and listings, and asks you before anything risky. Three steps get it ready."
+msgid "HTCO checks orders, tracking and listings, and asks you before anything risky."
+msgstr "HTCO checks orders, tracking and listings, and asks you before anything risky."
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "In development"
+msgstr "In development"
+
+#: src/features/overview/OverviewPage.tsx
+msgid "Key numbers"
+msgstr "Key numbers"
 
 #: src/app/shell/UserMenu.tsx
 #: src/features/settings/SettingsPage.tsx
@@ -148,6 +228,10 @@ msgstr "Last sync"
 msgid "Light"
 msgstr "Light"
 
+#: src/features/welcome/WelcomePage.tsx
+msgid "Listings that stay healthy"
+msgstr "Listings that stay healthy"
+
 #: src/app/shell/Navigation.tsx
 msgid "Main"
 msgstr "Main"
@@ -160,6 +244,18 @@ msgstr "Match the system"
 #: src/features/overview/OverviewPage.tsx
 msgid "Meet your office"
 msgstr "Meet your office"
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "Messages sorted, drafted and escalated with the order history beside them."
+msgstr "Messages sorted, drafted and escalated with the order history beside them."
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "Named specialists work under your policies and bring you every risky decision."
+msgstr "Named specialists work under your policies and bring you every risky decision."
+
+#: src/features/auth/SignInPage.tsx
+msgid "No account yet? The workspace owner sends invitations."
+msgstr "No account yet? The workspace owner sends invitations."
 
 #: src/features/security/SecurityPage.tsx
 msgid "No authenticator app yet."
@@ -177,13 +273,34 @@ msgstr "No shops yet"
 msgid "Nothing matches."
 msgstr "Nothing matches."
 
+#: src/features/overview/OverviewPage.tsx
+msgid "Numbers appear after a shop is connected."
+msgstr "Numbers appear after a shop is connected."
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "One place for the whole business"
+msgstr "One place for the whole business"
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "Open the web app"
+msgstr "Open the web app"
+
+#: src/features/overview/OverviewPage.tsx
 #: src/features/shops/ShopsPage.tsx
 msgid "Orders today"
 msgstr "Orders today"
 
+#: src/features/welcome/WelcomePage.tsx
+msgid "Orders, listings and messages start flowing in."
+msgstr "Orders, listings and messages start flowing in."
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "Orders, tracking and delivery checked against the marketplace, with the receipt to prove it."
+msgstr "Orders, tracking and delivery checked against the marketplace, with the receipt to prove it."
+
 #: src/features/overview/OverviewPage.tsx
-msgid "Orders, tracking and listings appear after you connect an Etsy shop. Connecting opens in a coming release."
-msgstr "Orders, tracking and listings appear after you connect an Etsy shop. Connecting opens in a coming release."
+msgid "Orders, tracking and listings start flowing in."
+msgstr "Orders, tracking and listings start flowing in."
 
 #: src/app/shell/Navigation.tsx
 #: src/features/overview/OverviewPage.tsx
@@ -206,6 +323,10 @@ msgstr "Password"
 msgid "Password and an authenticator app."
 msgstr "Password and an authenticator app."
 
+#: src/features/welcome/WelcomePage.tsx
+msgid "Product"
+msgstr "Product"
+
 #: src/features/auth/SecondFactorPage.tsx
 msgid "QR code for your authenticator app"
 msgstr "QR code for your authenticator app"
@@ -223,6 +344,10 @@ msgid "Request ID <0>{requestId}</0>"
 msgstr "Request ID <0>{requestId}</0>"
 
 #: src/features/overview/OverviewPage.tsx
+msgid "Revenue, 30 days"
+msgstr "Revenue, 30 days"
+
+#: src/features/overview/OverviewPage.tsx
 msgid "Review security"
 msgstr "Review security"
 
@@ -233,6 +358,10 @@ msgstr "Scan the QR code with the app."
 #: src/app/shell/CommandMenu.tsx
 msgid "Search actions"
 msgstr "Search actions"
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "Sections"
+msgstr "Sections"
 
 #: src/features/overview/OverviewPage.tsx
 msgid "Secure your account"
@@ -265,17 +394,22 @@ msgstr "Shop"
 msgid "Shops"
 msgstr "Shops"
 
+#: src/features/auth/SignInPage.tsx
+msgid "Show password"
+msgstr "Show password"
+
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Show the QR code"
 msgstr "Show the QR code"
 
 #: src/features/auth/SignInPage.tsx
+#: src/features/welcome/WelcomePage.tsx
 msgid "Sign in"
 msgstr "Sign in"
 
 #: src/features/auth/SignInPage.tsx
-msgid "Sign in to HTCO"
-msgstr "Sign in to HTCO"
+msgid "Sign in to HT-Commerce"
+msgstr "Sign in to HT-Commerce"
 
 #: src/app/shell/UserMenu.tsx
 #: src/features/security/SecurityPage.tsx
@@ -297,6 +431,14 @@ msgstr "Signed-in devices"
 #: src/app/RouteStates.tsx
 msgid "Something went wrong while showing it. Try again; your data was not changed."
 msgstr "Something went wrong while showing it. Try again; your data was not changed."
+
+#: src/features/overview/OverviewPage.tsx
+msgid "Specialists for listings, orders, customers and money work on your shop under your policies, and bring you every risky decision."
+msgstr "Specialists for listings, orders, customers and money work on your shop under your policies, and bring you every risky decision."
+
+#: src/features/overview/OverviewPage.tsx
+msgid "Start with your shop"
+msgstr "Start with your shop"
 
 #: src/features/shops/ShopsPage.tsx
 msgid "Sync"
@@ -321,6 +463,10 @@ msgstr "The email or the password is wrong."
 #: src/features/shops/ShopsPage.tsx
 msgid "The marketplace shops this organization runs."
 msgstr "The marketplace shops this organization runs."
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "The web app is ready today. The Windows and Android apps follow with the same features."
+msgstr "The web app is ready today. The Windows and Android apps follow with the same features."
 
 #: src/app/shell/UserMenu.tsx
 #: src/features/settings/SettingsPage.tsx
@@ -347,6 +493,10 @@ msgstr "This page could not sign you in. Reload it and try again."
 msgid "This screen could not be shown"
 msgstr "This screen could not be shown"
 
+#: src/features/welcome/WelcomePage.tsx
+msgid "Titles, photos and claims audited and fixed as drafts you approve."
+msgstr "Titles, photos and claims audited and fixed as drafts you approve."
+
 #: src/features/auth/SecondFactorPage.tsx
 #: src/features/auth/SignInPage.tsx
 msgid "Too many attempts. Wait 15 minutes and try again."
@@ -368,9 +518,9 @@ msgstr "Type a command or a page"
 msgid "Unknown device"
 msgstr "Unknown device"
 
-#: src/features/auth/SignInPage.tsx
-msgid "Use the email you were invited with."
-msgstr "Use the email you were invited with."
+#: src/features/welcome/WelcomePage.tsx
+msgid "Use it anywhere"
+msgstr "Use it anywhere"
 
 #: src/features/overview/OverviewPage.tsx
 msgid "Waiting"
@@ -380,6 +530,14 @@ msgstr "Waiting"
 msgid "Waiting for you"
 msgstr "Waiting for you"
 
+#: src/features/welcome/WelcomePage.tsx
+msgid "Web"
+msgstr "Web"
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "Windows"
+msgstr "Windows"
+
 #: src/app/shell/Navigation.tsx
 msgid "Workspace"
 msgstr "Workspace"
@@ -388,7 +546,31 @@ msgstr "Workspace"
 msgid "You are offline. What you see may be out of date; changes are paused."
 msgstr "You are offline. What you see may be out of date; changes are paused."
 
-#: src/features/auth/AuthLayout.tsx
+#: src/features/welcome/WelcomePage.tsx
+msgid "You decide"
+msgstr "You decide"
+
 #: src/features/overview/OverviewPage.tsx
+msgid "Your AI office"
+msgstr "Your AI office"
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "Your office gets to work"
+msgstr "Your office gets to work"
+
+#: src/features/auth/SignInPage.tsx
+msgid "Your password"
+msgstr "Your password"
+
+#: src/features/overview/OverviewPage.tsx
+#: src/features/welcome/WelcomePage.tsx
 msgid "Your shop runs. You decide."
 msgstr "Your shop runs. You decide."
+
+#: src/features/auth/AuthLayout.tsx
+msgid "Your shop runs. You decide<0>.</0>"
+msgstr "Your shop runs. You decide<0>.</0>"
+
+#: src/features/auth/SignInPage.tsx
+msgid "Your shops, orders and AI office in one place."
+msgstr "Your shops, orders and AI office in one place."

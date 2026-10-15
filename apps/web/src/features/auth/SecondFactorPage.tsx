@@ -1,4 +1,5 @@
 import { Trans, useLingui } from "@lingui/react/macro";
+import { ShieldCheckIcon as ShieldCheck } from "@phosphor-icons/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "@tanstack/react-router";
 import { useState, type SyntheticEvent } from "react";
@@ -167,6 +168,7 @@ function CodeField({ value, onChange }: { value: string; onChange: (value: strin
   return (
     <TextField
       size="lg"
+      icon={ShieldCheck}
       label={t`Code from the app`}
       inputMode="numeric"
       autoComplete="one-time-code"

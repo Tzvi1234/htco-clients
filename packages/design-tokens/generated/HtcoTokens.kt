@@ -9,6 +9,7 @@ import androidx.compose.ui.unit.sp
 
 object HtcoColors {
     object Light {
+        val bgApp = Color(0xFF141419)
         val bgCanvas = Color(0xFFFFFFFF)
         val bgSidebar = Color(0xFFFAFAFB)
         val bgSurface = Color(0xFFFFFFFF)
@@ -92,6 +93,16 @@ object HtcoColors {
         val presenceSaffronFg = Color(0xFFFFFFFF)
         val presenceSlateBg = Color(0xFF5B6170)
         val presenceSlateFg = Color(0xFFFFFFFF)
+        val appText = Color(0xFFF4F3F7)
+        val appTextMuted = Color(0xFFA6A5B0)
+        val appHover = Color(0xFF22212A)
+        val appSelected = Color(0xFF2D2C37)
+        val appBorder = Color(0xFF2A2932)
+        val shapeIris = Color(0xFFDCD6FF)
+        val shapeSky = Color(0xFFCDE1FF)
+        val shapePeach = Color(0xFFFFD8C4)
+        val shapeMint = Color(0xFFC9F0DE)
+        val shapeSaffron = Color(0xFFFFE6A3)
         val illustrationIris = Color(0xFFA79CF0)
         val illustrationSaffron = Color(0xFFF2B72F)
         val illustrationCoral = Color(0xFFF08A6E)
@@ -108,6 +119,7 @@ object HtcoColors {
     }
 
     object Dark {
+        val bgApp = Color(0xFF08080A)
         val bgCanvas = Color(0xFF0E0E12)
         val bgSidebar = Color(0xFF121218)
         val bgSurface = Color(0xFF181820)
@@ -191,6 +203,16 @@ object HtcoColors {
         val presenceSaffronFg = Color(0xFFFFFFFF)
         val presenceSlateBg = Color(0xFF5B6170)
         val presenceSlateFg = Color(0xFFFFFFFF)
+        val appText = Color(0xFFF4F3F7)
+        val appTextMuted = Color(0xFFA6A5B0)
+        val appHover = Color(0xFF18171E)
+        val appSelected = Color(0xFF23222C)
+        val appBorder = Color(0xFF1E1D25)
+        val shapeIris = Color(0xFF26214A)
+        val shapeSky = Color(0xFF172A47)
+        val shapePeach = Color(0xFF3A2420)
+        val shapeMint = Color(0xFF12302A)
+        val shapeSaffron = Color(0xFF33290F)
         val illustrationIris = Color(0xFFA79CF0)
         val illustrationSaffron = Color(0xFFF2B72F)
         val illustrationCoral = Color(0xFFF08A6E)

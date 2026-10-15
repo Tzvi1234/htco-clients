@@ -1,5 +1,5 @@
 import { Trans } from "@lingui/react/macro";
-import { Store } from "lucide-react";
+import { StorefrontIcon as Storefront } from "@phosphor-icons/react";
 
 import { StatusDot } from "../../shared/ui/StatusDot.tsx";
 
@@ -9,18 +9,18 @@ import { StatusDot } from "../../shared/ui/StatusDot.tsx";
  */
 export function ShopSwitcher() {
   return (
-    <div className="flex items-center gap-2.5 rounded-card border border-border-subtle bg-surface p-2.5 shadow-1">
+    <div className="flex items-center gap-2.5 rounded-card border border-app-border bg-app-hover p-2.5">
       <span
         aria-hidden="true"
-        className="grid size-7 shrink-0 place-items-center rounded-control border border-dashed border-border-control text-icon-muted"
+        className="grid size-7 shrink-0 place-items-center rounded-control border border-dashed border-app-muted text-app-muted"
       >
-        <Store size={14} strokeWidth={1.85} />
+        <Storefront size={14} weight="duotone" />
       </span>
       <span className="min-w-0 grow">
-        <span className="block truncate text-body-sm font-semibold">
+        <span className="block truncate text-body-sm font-semibold text-app-text">
           <Trans>No shop connected</Trans>
         </span>
-        <span className="flex items-center gap-1.5 text-caption text-muted">
+        <span className="flex items-center gap-1.5 text-caption text-app-muted">
           <StatusDot status="offline" />
           <Trans>Etsy · not connected</Trans>
         </span>

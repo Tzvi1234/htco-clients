@@ -35,9 +35,22 @@ async function signIn(
 }
 
 describe("signing in", () => {
-  it("sends a signed-out visitor to the sign-in page", async () => {
+  it("sends a signed-out visitor to the sign-in page, and back afterwards", async () => {
+    await open("/shops");
+    expect(
+      screen.getByRole("heading", { level: 1, name: "Sign in to HT-Commerce" }),
+    ).toBeInTheDocument();
+  });
+
+  it("opens the front door at the bare address for a signed-out visitor", async () => {
     await open("/");
-    expect(screen.getByRole("heading", { level: 1, name: "Sign in to HTCO" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { level: 1, name: "Your shop runs. You decide." }),
+    ).toBeInTheDocument();
+    expect(screen.getAllByRole("link", { name: "Open the web app" })[0]).toHaveAttribute(
+      "href",
+      "/sign-in",
+    );
   });
 
   it("says the email or password is wrong, without saying which", async () => {
@@ -86,13 +99,15 @@ describe("signing in", () => {
     await user.click(screen.getByRole("menuitem", { name: "Security" }));
 
     expect(
-      await screen.findByRole("heading", { level: 1, name: "Sign in to HTCO" }),
+      await screen.findByRole("heading", { level: 1, name: "Sign in to HT-Commerce" }),
     ).toBeInTheDocument();
   });
 
   it("signs in in Hebrew, right to left", async () => {
     await open("/sign-in", {}, "he");
-    expect(screen.getByRole("heading", { level: 1, name: "כניסה ל-HTCO" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { level: 1, name: "כניסה ל-HT-Commerce" }),
+    ).toBeInTheDocument();
     expect(document.documentElement.dir).toBe("rtl");
   });
 });
@@ -164,7 +179,7 @@ describe("security settings", () => {
     await user.click(screen.getByRole("menuitem", { name: "Sign out" }));
 
     expect(
-      await screen.findByRole("heading", { level: 1, name: "Sign in to HTCO" }),
+      await screen.findByRole("heading", { level: 1, name: "Sign in to HT-Commerce" }),
     ).toBeInTheDocument();
     expect(backend.state.signedIn).toBe(false);
   });

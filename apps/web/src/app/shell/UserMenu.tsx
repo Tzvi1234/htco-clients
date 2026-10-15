@@ -1,7 +1,7 @@
 import { useLingui } from "@lingui/react/macro";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "@tanstack/react-router";
-import { ChevronsUpDown, UserRound } from "lucide-react";
+import { CaretUpDownIcon as CaretUpDown, UserIcon as User } from "@phosphor-icons/react";
 import {
   Button,
   Header,
@@ -51,16 +51,16 @@ export function UserMenu() {
     <MenuTrigger>
       <Button
         aria-label={t`Account and preferences`}
-        className="flex h-10 w-full cursor-default items-center justify-center gap-2 rounded-control px-1.5 text-body text-secondary outline-none data-[hovered]:bg-hover data-[hovered]:text-primary data-[pressed]:bg-hover lg:justify-start"
+        className="flex h-10 w-full cursor-default items-center justify-center gap-2 rounded-control px-1.5 text-body text-app-muted outline-none data-[hovered]:bg-app-hover data-[hovered]:text-app-text data-[pressed]:bg-app-hover lg:justify-start"
       >
         <span
           aria-hidden="true"
           className="grid size-7 shrink-0 place-items-center rounded-pill bg-presence-iris text-presence-fg"
         >
-          <UserRound size={15} strokeWidth={2} />
+          <User size={15} weight="fill" />
         </span>
-        <span className="hidden grow text-start font-medium text-primary lg:block">{t`Account`}</span>
-        <ChevronsUpDown aria-hidden="true" size={14} className="hidden text-icon-muted lg:block" />
+        <span className="hidden grow text-start font-medium text-app-text lg:block">{t`Account`}</span>
+        <CaretUpDown aria-hidden="true" size={14} className="hidden text-app-muted lg:block" />
       </Button>
       <Popover
         placement="top start"

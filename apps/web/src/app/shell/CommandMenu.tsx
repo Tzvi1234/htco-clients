@@ -1,6 +1,13 @@
 import { useLingui } from "@lingui/react/macro";
 import { useRouter } from "@tanstack/react-router";
-import { House, Search, Settings, ShieldCheck, Store, type LucideIcon } from "lucide-react";
+import {
+  GearSixIcon as GearSix,
+  HouseIcon as House,
+  MagnifyingGlassIcon as MagnifyingGlass,
+  ShieldCheckIcon as ShieldCheck,
+  StorefrontIcon as Storefront,
+  type Icon,
+} from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import {
   Autocomplete,
@@ -20,7 +27,7 @@ type Destination = "/" | "/shops" | "/settings" | "/settings/security";
 interface Action {
   id: Destination;
   label: string;
-  icon: LucideIcon;
+  icon: Icon;
 }
 
 /** Ctrl+K (⌘K on a Mac) or the sidebar button: jump anywhere by typing (Attio's quick actions). */
@@ -45,8 +52,8 @@ export function CommandMenu() {
 
   const actions: Action[] = [
     { id: "/", label: t`Go to the overview`, icon: House },
-    { id: "/shops", label: t`Go to shops`, icon: Store },
-    { id: "/settings", label: t`Go to settings`, icon: Settings },
+    { id: "/shops", label: t`Go to shops`, icon: Storefront },
+    { id: "/settings", label: t`Go to settings`, icon: GearSix },
     { id: "/settings/security", label: t`Go to security`, icon: ShieldCheck },
   ];
 
@@ -56,12 +63,12 @@ export function CommandMenu() {
         onPress={() => {
           setOpen(true);
         }}
-        className="flex h-8 w-full cursor-default items-center gap-2 rounded-control border border-border-strong bg-surface px-2 text-body-sm text-secondary shadow-1 outline-none data-[hovered]:bg-hover max-lg:size-8 max-lg:justify-center max-lg:px-0"
+        className="flex h-8 w-full cursor-default items-center gap-2 rounded-control border border-app-border bg-app-hover px-2 text-body-sm text-app-muted outline-none data-[hovered]:text-app-text max-lg:size-8 max-lg:justify-center max-lg:px-0"
         aria-label={t`Quick actions`}
       >
-        <Search aria-hidden="true" size={15} strokeWidth={1.75} />
+        <MagnifyingGlass aria-hidden="true" size={15} weight="duotone" />
         <span className="grow text-start max-lg:hidden">{t`Quick actions`}</span>
-        <kbd className="rounded-tag border border-border-strong px-1 font-latin text-caption text-muted max-lg:hidden">
+        <kbd className="rounded-tag border border-app-border px-1 font-latin text-caption text-app-muted max-lg:hidden">
           Ctrl K
         </kbd>
       </Button>
@@ -79,7 +86,12 @@ export function CommandMenu() {
                 autoFocus
                 className="flex items-center gap-2 border-b border-border-subtle px-3"
               >
-                <Search aria-hidden="true" size={16} strokeWidth={1.75} className="text-icon" />
+                <MagnifyingGlass
+                  aria-hidden="true"
+                  size={16}
+                  weight="duotone"
+                  className="text-icon"
+                />
                 <Input
                   placeholder={t`Type a command or a page`}
                   className="h-12 grow bg-transparent text-body text-primary outline-none placeholder:text-muted"
@@ -106,7 +118,7 @@ export function CommandMenu() {
                     <action.icon
                       aria-hidden="true"
                       size={16}
-                      strokeWidth={1.75}
+                      weight="duotone"
                       className="text-icon"
                     />
                     {action.label}

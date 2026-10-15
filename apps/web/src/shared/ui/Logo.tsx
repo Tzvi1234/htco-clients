@@ -21,11 +21,14 @@ export function Logo({
   variant = "full",
   height = 20,
   animated = false,
+  onInk = false,
   className,
 }: {
   variant?: "full" | "mark";
   height?: number;
   animated?: boolean;
+  /** On the ink app ground: HT in light ink, CO in the light iris. */
+  onInk?: boolean;
   className?: string;
 }) {
   const id = useId();
@@ -58,7 +61,7 @@ export function Logo({
         {mask("o", 1411.5, 564.5, 87)}
       </defs>
       {variant === "full" ? (
-        <g fill="var(--text-primary)">
+        <g fill={onInk ? "var(--app-text)" : "var(--text-primary)"}>
           <path d="M177.5 280.5H279V430.5H427.5V280.5H530.5V668.5H427.5V513.5H279V668.5H177.5Z" />
           <path
             d="M541.5 280.5H875.5V361.5H740.5V668.5H636.5V361.5H541.5Z"
@@ -66,7 +69,7 @@ export function Logo({
           />
         </g>
       ) : null}
-      <g fill="var(--text-link)" fillRule="evenodd">
+      <g fill={onInk ? "var(--illustration-iris)" : "var(--text-link)"} fillRule="evenodd">
         <path d={C_RING} mask={`url(#${id}-c)`} />
         <path d={O_RING} mask={`url(#${id}-o)`} />
       </g>

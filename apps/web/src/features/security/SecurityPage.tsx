@@ -12,7 +12,7 @@ import {
 } from "../../shared/api/api.tsx";
 import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
 import { Button } from "../../shared/ui/Button.tsx";
-import { Laptop, ShieldCheck } from "lucide-react";
+import { LaptopIcon as Laptop, ShieldCheckIcon as ShieldCheck } from "@phosphor-icons/react";
 
 import { PageBody, PageHeader } from "../../shared/ui/PageHeader.tsx";
 import { ObjectIcon, Tag } from "../../shared/ui/Tag.tsx";
@@ -29,7 +29,7 @@ export function SecurityPage() {
       <PageHeader
         title={<Trans>Security</Trans>}
         description={<Trans>How you sign in, and where you are signed in.</Trans>}
-        icon={<ObjectIcon hue="mint" icon={<ShieldCheck size={13} strokeWidth={2} />} />}
+        icon={<ObjectIcon hue="mint" icon={ShieldCheck} />}
       />
       <PageBody>
         <div className="flex max-w-[760px] flex-col gap-4">
@@ -97,7 +97,7 @@ function Devices() {
               key={session.id}
               className="flex min-h-14 items-center gap-3 border-b border-border-subtle px-4 py-2 transition-colors last:border-b-0 hover:bg-hover"
             >
-              <ObjectIcon hue="slate" size="md" icon={<Laptop size={14} strokeWidth={2} />} />
+              <ObjectIcon hue="slate" size="md" icon={Laptop} />
               <div className="flex min-w-0 grow flex-col items-start gap-0.5">
                 <span className="max-w-full truncate font-medium">{device}</span>
                 <span className="text-body-sm text-muted">
