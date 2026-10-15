@@ -21,7 +21,7 @@ export function AuthLayout({
   return (
     <div className="grid min-h-dvh bg-canvas text-primary lg:grid-cols-[minmax(460px,1fr)_minmax(520px,1.15fr)]">
       <main className="flex flex-col items-center px-6 py-8 sm:px-14">
-        <div className="flex w-full max-w-[400px] grow animate-enter flex-col justify-center gap-8 pt-6 pb-16">
+        <div className="flex w-full max-w-[440px] grow animate-enter flex-col justify-center gap-8 pt-6 pb-16">
           <div className="flex justify-center pb-4">
             <Logo height={72} animated />
           </div>
@@ -39,18 +39,20 @@ export function AuthLayout({
       </main>
       <aside
         aria-hidden="true"
-        className="relative m-3 hidden flex-col justify-between overflow-hidden rounded-dialog border border-border-subtle bg-brand p-10 lg:flex"
+        className="relative isolate m-3 hidden flex-col gap-10 overflow-hidden rounded-dialog bg-brand p-12 lg:flex"
       >
-        <p className="m-0 max-w-[16ch] font-display text-display font-semibold text-on-brand">
-          <Trans>Your shop runs. You decide.</Trans>
-        </p>
-        <SignInArt className="mx-auto max-w-[560px]" />
-        <p className="m-0 max-w-[44ch] text-body text-secondary">
+        {/* Solid corner shapes, as in the owner's reference: crisp, no blur. */}
+        <span className="absolute -end-20 -top-24 -z-10 size-[300px] rounded-pill bg-shape-iris" />
+        <span className="absolute -end-16 -bottom-20 -z-10 size-[220px] rounded-pill bg-shape-saffron" />
+        <span className="absolute end-[150px] -bottom-28 -z-10 size-[220px] rounded-pill bg-shape-peach" />
+        <p className="m-0 max-w-[13ch] font-display text-[56px] leading-[1.02] font-bold text-on-brand">
           <Trans>
-            Every action an AI employee takes has a reason, a policy and a receipt, and anything
-            risky waits for you.
+            Your shop runs. You decide<span className="text-ring">.</span>
           </Trans>
         </p>
+        <div className="flex grow items-center">
+          <SignInArt className="mx-auto max-w-[680px]" />
+        </div>
       </aside>
     </div>
   );

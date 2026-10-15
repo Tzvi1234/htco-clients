@@ -144,10 +144,6 @@ msgstr "הזינו את הקוד בן 6 הספרות שהאפליקציה מצי
 msgid "Etsy · not connected"
 msgstr "Etsy · לא מחוברת"
 
-#: src/features/auth/AuthLayout.tsx
-msgid "Every action an AI employee takes has a reason, a policy and a receipt, and anything risky waits for you."
-msgstr "לכל פעולה של עובד AI יש סיבה, מדיניות וקבלה, וכל דבר מסוכן מחכה לך."
-
 #: src/features/welcome/WelcomePage.tsx
 msgid "Every order, verified"
 msgstr "כל הזמנה, מאומתת"
@@ -566,11 +562,14 @@ msgstr "המשרד מתחיל לעבוד"
 msgid "Your password"
 msgstr "הסיסמה שלך"
 
-#: src/features/auth/AuthLayout.tsx
 #: src/features/overview/OverviewPage.tsx
 #: src/features/welcome/WelcomePage.tsx
 msgid "Your shop runs. You decide."
 msgstr "החנות רצה. ההחלטה שלך."
+
+#: src/features/auth/AuthLayout.tsx
+msgid "Your shop runs. You decide<0>.</0>"
+msgstr "החנות רצה. ההחלטה שלך<0>.</0>"
 
 #: src/features/auth/SignInPage.tsx
 msgid "Your shops, orders and AI office in one place."

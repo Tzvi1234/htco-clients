@@ -144,10 +144,6 @@ msgstr "Enter the 6-digit code the app shows."
 msgid "Etsy · not connected"
 msgstr "Etsy · not connected"
 
-#: src/features/auth/AuthLayout.tsx
-msgid "Every action an AI employee takes has a reason, a policy and a receipt, and anything risky waits for you."
-msgstr "Every action an AI employee takes has a reason, a policy and a receipt, and anything risky waits for you."
-
 #: src/features/welcome/WelcomePage.tsx
 msgid "Every order, verified"
 msgstr "Every order, verified"
@@ -566,11 +562,14 @@ msgstr "Your office gets to work"
 msgid "Your password"
 msgstr "Your password"
 
-#: src/features/auth/AuthLayout.tsx
 #: src/features/overview/OverviewPage.tsx
 #: src/features/welcome/WelcomePage.tsx
 msgid "Your shop runs. You decide."
 msgstr "Your shop runs. You decide."
+
+#: src/features/auth/AuthLayout.tsx
+msgid "Your shop runs. You decide<0>.</0>"
+msgstr "Your shop runs. You decide<0>.</0>"
 
 #: src/features/auth/SignInPage.tsx
 msgid "Your shops, orders and AI office in one place."
