@@ -11,10 +11,14 @@ export interface FakeState {
   signedIn: boolean;
   assurance: "aal1" | "aal2";
   enrolled: boolean;
-  role: "owner" | "admin" | "support" | "viewer";
+  role: "owner" | "admin" | "support" | "developer" | "viewer";
   password: string;
   failures: number;
   sessions: { id: string; current: boolean; revoked: boolean }[];
+  members: { id: string; user_id: string; display_name: string | null; role: string }[];
+  invited: { email: unknown; role: unknown }[];
+  inviteLink: string;
+  accepted?: Record<string, unknown>;
 }
 
 const PROBLEMS = "https://ht-co.app/problems/";
@@ -48,6 +52,16 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
       { id: "11111111-1111-7111-8111-111111111111", current: true, revoked: false },
       { id: "22222222-2222-7222-8222-222222222222", current: false, revoked: false },
     ],
+    members: [
+      {
+        id: "b0000000-0000-7000-8000-000000000001",
+        user_id: "a1b2c3d4-0000-7000-8000-000000000001",
+        display_name: "Tzvi Weiss",
+        role: "owner",
+      },
+    ],
+    invited: [],
+    inviteLink: "https://example.supabase.co/auth/v1/verify?token=t&type=invite",
     ...initial,
   };
   const requests: Request[] = [];
@@ -71,6 +85,12 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
         state.failures += 1;
         return problem(401, "sign-in-refused");
       }
+      state.signedIn = true;
+      return json(200, { user_id: user, assurance: state.assurance });
+    }
+    if (route === "POST /v1/auth/invitations/accept") {
+      if (body["access_token"] !== "invite-at") return problem(401, "invitation-refused");
+      state.accepted = body;
       state.signedIn = true;
       return json(200, { user_id: user, assurance: state.assurance });
     }
@@ -120,6 +140,19 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
       case "POST /v1/auth/sign-out":
         state.signedIn = false;
         return json(204, null);
+      case `GET /v1/organizations/${org}/members`:
+        return json(200, { items: state.members.map((m) => ({ ...m, shop_ids: [] })) });
+      case `POST /v1/organizations/${org}/invitations`: {
+        state.invited.push({ email: body["email"], role: body["role"] });
+        const member = {
+          id: `b0000000-0000-7000-8000-00000000000${String(state.members.length + 1)}`,
+          user_id: `a1b2c3d4-0000-7000-8000-00000000000${String(state.members.length + 1)}`,
+          display_name: null,
+          role: String(body["role"]),
+        };
+        state.members.push(member);
+        return json(201, { ...member, shop_ids: [], invite_link: state.inviteLink });
+      }
       case "GET /v1/shops":
         return json(200, { items: [], next_cursor: null });
       default: {

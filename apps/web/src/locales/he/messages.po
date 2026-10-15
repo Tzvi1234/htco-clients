@@ -31,6 +31,10 @@ msgstr "חשבון והעדפות"
 msgid "Active listings"
 msgstr "מודעות פעילות"
 
+#: src/features/team/TeamPage.tsx
+msgid "Admin"
+msgstr "מנהל/ת"
+
 #: src/features/overview/OverviewPage.tsx
 msgid "After a shop is connected"
 msgstr "אחרי חיבור חנות"
@@ -51,6 +55,10 @@ msgstr "Android"
 msgid "Any browser, nothing to install."
 msgstr "בכל דפדפן, בלי התקנה."
 
+#: src/features/auth/AcceptInvitePage.tsx
+msgid "At least 12 characters."
+msgstr "לפחות 12 תווים."
+
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Authenticator app"
 msgstr "אפליקציית אימות"
@@ -67,9 +75,17 @@ msgstr "שינויים גדולים, הודעות רגישות וכל דבר ח�
 msgid "Cannot scan? Type this key into the app:"
 msgstr "לא מצליחים לסרוק? הקלידו באפליקציה את המפתח הזה:"
 
+#: src/features/team/TeamPage.tsx
+msgid "Check the email address."
+msgstr "בדקו את כתובת האימייל."
+
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Checking your account"
 msgstr "בודקים את החשבון שלך"
+
+#: src/features/auth/AcceptInvitePage.tsx
+msgid "Choose a longer password that is harder to guess."
+msgstr "בחר/י סיסמה ארוכה יותר שקשה לנחש."
 
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Code from the app"
@@ -82,6 +98,10 @@ msgstr "אישור"
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Confirm it is you"
 msgstr "אישור זהות"
+
+#: src/features/team/TeamPage.tsx
+msgid "Confirm with your authenticator app, then try again."
+msgstr "אשרו באפליקציית האימות ונסו שוב."
 
 #: src/features/shops/ShopsPage.tsx
 msgid "Connect Etsy shop"
@@ -103,6 +123,14 @@ msgstr "חנויות מחוברות יופיעו כאן עם מצב הסנכרו
 msgid "Connecting a shop opens in a coming release."
 msgstr "חיבור חנות ייפתח בגרסה קרובה."
 
+#: src/features/team/TeamPage.tsx
+msgid "Copied"
+msgstr "הועתק"
+
+#: src/features/team/TeamPage.tsx
+msgid "Copy link"
+msgstr "העתקת הקישור"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "Customers answered"
 msgstr "לקוחות מקבלים מענה"
@@ -115,6 +143,10 @@ msgstr "כהה"
 #: src/features/overview/OverviewPage.tsx
 msgid "Decisions waiting"
 msgstr "החלטות ממתינות"
+
+#: src/features/team/TeamPage.tsx
+msgid "Developer"
+msgstr "מפתח/ת"
 
 #: src/features/overview/OverviewPage.tsx
 msgid "Done"
@@ -129,6 +161,7 @@ msgid "Each specialist acts under your policies and handles the day-to-day."
 msgstr "כל מומחה פועל לפי המדיניות שלך ומטפל בשגרה."
 
 #: src/features/auth/SignInPage.tsx
+#: src/features/team/TeamPage.tsx
 msgid "Email"
 msgstr "אימייל"
 
@@ -151,6 +184,10 @@ msgstr "כל הזמנה, מאומתת"
 #: src/features/welcome/WelcomePage.tsx
 msgid "Everything your Etsy shop needs, working together in one AI office."
 msgstr "כל מה שחנות ה-Etsy שלך צריכה, עובד יחד במשרד AI אחד."
+
+#: src/features/team/TeamPage.tsx
+msgid "Finance"
+msgstr "כספים"
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "Get the apps"
@@ -213,6 +250,31 @@ msgstr "HTCO בודקת הזמנות, מעקב משלוחים ומודעות, ו
 msgid "In development"
 msgstr "בפיתוח"
 
+#: src/features/team/TeamPage.tsx
+msgid "Invitation link"
+msgstr "קישור הזמנה"
+
+#: src/features/team/TeamPage.tsx
+msgid "Invitations cannot be sent right now. Try again shortly."
+msgstr "אי אפשר לשלוח הזמנות כרגע. נסו שוב בעוד רגע."
+
+#: src/features/team/TeamPage.tsx
+msgid "Invite"
+msgstr "הזמנה"
+
+#: src/features/settings/SettingsPage.tsx
+#: src/features/team/TeamPage.tsx
+msgid "Invite people and choose what they can do."
+msgstr "הזמינו אנשים ובחרו מה הם יכולים לעשות."
+
+#: src/features/team/TeamPage.tsx
+msgid "Invite someone"
+msgstr "הזמנת אדם"
+
+#: src/features/team/TeamPage.tsx
+msgid "Invited member"
+msgstr "חבר/ה שהוזמנו"
+
 #: src/features/overview/OverviewPage.tsx
 msgid "Key numbers"
 msgstr "מספרים מרכזיים"
@@ -253,6 +315,10 @@ msgstr "לפי המערכת"
 msgid "Meet your office"
 msgstr "הכירו את המשרד"
 
+#: src/features/team/TeamPage.tsx
+msgid "Members"
+msgstr "חברי צוות"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "Messages sorted, drafted and escalated with the order history beside them."
 msgstr "הודעות ממוינות, מנוסחות ומועברות הלאה עם היסטוריית ההזמנה לצידן."
@@ -260,6 +326,10 @@ msgstr "הודעות ממוינות, מנוסחות ומועברות הלאה ע
 #: src/features/welcome/WelcomePage.tsx
 msgid "Named specialists work under your policies and bring you every risky decision."
 msgstr "מומחים בעלי שם עובדים לפי המדיניות שלך ומביאים אליך כל החלטה מסוכנת."
+
+#: src/features/auth/AcceptInvitePage.tsx
+msgid "New password"
+msgstr "סיסמה חדשה"
 
 #: src/features/auth/SignInPage.tsx
 msgid "No account yet? The workspace owner sends invitations."
@@ -293,6 +363,10 @@ msgstr "משרד אחד לכל העסק"
 msgid "Open the web app"
 msgstr "לפתיחת אפליקציית הרשת"
 
+#: src/features/team/TeamPage.tsx
+msgid "Operations"
+msgstr "תפעול"
+
 #: src/features/overview/OverviewPage.tsx
 #: src/features/shops/ShopsPage.tsx
 msgid "Orders today"
@@ -314,6 +388,10 @@ msgstr "הזמנות, מעקב ומודעות מתחילים לזרום."
 #: src/features/overview/OverviewPage.tsx
 msgid "Overview"
 msgstr "סקירה"
+
+#: src/features/team/TeamPage.tsx
+msgid "Owner"
+msgstr "בעלים"
 
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Owners and Admins sign in with a password and a code from an app such as Google Authenticator, Microsoft Authenticator or 1Password."
@@ -347,6 +425,10 @@ msgstr "פעולות מהירות"
 msgid "Records"
 msgstr "רשומות"
 
+#: src/features/auth/AcceptInvitePage.tsx
+msgid "Repeat the password"
+msgstr "הקלדת הסיסמה שוב"
+
 #: src/shared/ui/ErrorState.tsx
 msgid "Request ID <0>{requestId}</0>"
 msgstr "מזהה בקשה <0>{requestId}</0>"
@@ -358,6 +440,14 @@ msgstr "הכנסות, 30 יום"
 #: src/features/overview/OverviewPage.tsx
 msgid "Review security"
 msgstr "לבדיקת האבטחה"
+
+#: src/features/team/TeamPage.tsx
+msgid "Role"
+msgstr "תפקיד"
+
+#: src/features/auth/AcceptInvitePage.tsx
+msgid "Save and sign in"
+msgstr "שמירה וכניסה"
 
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Scan the QR code with the app."
@@ -380,6 +470,14 @@ msgstr "אבטחת החשבון"
 msgid "Security"
 msgstr "אבטחה"
 
+#: src/features/team/TeamPage.tsx
+msgid "Send on WhatsApp"
+msgstr "שליחה ב-WhatsApp"
+
+#: src/features/team/TeamPage.tsx
+msgid "Send this link to them yourself. It works once; when it expires, invite them again."
+msgstr "שלחו את הקישור בעצמכם. הוא עובד פעם אחת; אם פג תוקפו, הזמינו שוב."
+
 #: src/features/security/SecurityPage.tsx
 msgid "Set one up"
 msgstr "להגדרה"
@@ -387,6 +485,10 @@ msgstr "להגדרה"
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Set up your authenticator app"
 msgstr "הגדרת אפליקציית אימות"
+
+#: src/features/auth/AcceptInvitePage.tsx
+msgid "Set your password"
+msgstr "בחירת סיסמה"
 
 #: src/app/shell/Navigation.tsx
 #: src/features/settings/SettingsPage.tsx
@@ -448,9 +550,18 @@ msgstr "מומחים למודעות, הזמנות, לקוחות וכספים ע�
 msgid "Start with your shop"
 msgstr "מתחילים מהחנות"
 
+#: src/features/team/TeamPage.tsx
+msgid "Support"
+msgstr "תמיכה"
+
 #: src/features/shops/ShopsPage.tsx
 msgid "Sync"
 msgstr "סנכרון"
+
+#: src/features/settings/SettingsPage.tsx
+#: src/features/team/TeamPage.tsx
+msgid "Team"
+msgstr "צוות"
 
 #: src/app/RouteStates.tsx
 msgid "The address may be mistyped, or the page has moved."
@@ -472,6 +583,10 @@ msgstr "האימייל או הסיסמה שגויים."
 msgid "The marketplace shops this organization runs."
 msgstr "החנויות שהארגון מפעיל בזירות המסחר."
 
+#: src/features/auth/AcceptInvitePage.tsx
+msgid "The passwords are not the same."
+msgstr "הסיסמאות אינן זהות."
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "The web app is ready today. The Windows and Android apps are coming soon with the same features."
 msgstr "אפליקציית הרשת מוכנה כבר היום. אפליקציות Windows ו-Android מגיעות בקרוב עם אותן יכולות."
@@ -489,13 +604,23 @@ msgstr "ההעדפות האלה נשמרות במכשיר הזה."
 msgid "This device"
 msgstr "המכשיר הזה"
 
+#: src/features/auth/AcceptInvitePage.tsx
 #: src/features/auth/SecondFactorPage.tsx
+#: src/features/team/TeamPage.tsx
 msgid "This did not work. Try again shortly."
 msgstr "זה לא עבד. נסו שוב בעוד רגע."
+
+#: src/features/auth/AcceptInvitePage.tsx
+msgid "This invitation link has expired or was already used. Ask for a new one."
+msgstr "פג תוקף קישור ההזמנה או שכבר השתמשו בו. בקש/י קישור חדש."
 
 #: src/features/auth/SignInPage.tsx
 msgid "This page could not sign you in. Reload it and try again."
 msgstr "הדף לא הצליח להכניס אותך. טענו אותו מחדש ונסו שוב."
+
+#: src/features/team/TeamPage.tsx
+msgid "This person is already a member."
+msgstr "האדם הזה כבר חבר בצוות."
 
 #: src/app/RouteStates.tsx
 msgid "This screen could not be shown"
@@ -505,6 +630,7 @@ msgstr "לא ניתן להציג את המסך"
 msgid "Titles, photos and claims audited and fixed as drafts you approve."
 msgstr "כותרות, תמונות וטענות נבדקות ומתוקנות כטיוטות שאת/ה מאשר/ת."
 
+#: src/features/auth/AcceptInvitePage.tsx
 #: src/features/auth/SecondFactorPage.tsx
 #: src/features/auth/SignInPage.tsx
 msgid "Too many attempts. Wait 15 minutes and try again."
@@ -530,6 +656,10 @@ msgstr "מכשיר לא מזוהה"
 msgid "Use it anywhere"
 msgstr "בכל מקום"
 
+#: src/features/team/TeamPage.tsx
+msgid "Viewer"
+msgstr "צפייה"
+
 #: src/features/overview/OverviewPage.tsx
 msgid "Waiting for you"
 msgstr "מחכה לך"
@@ -553,6 +683,14 @@ msgstr "את/ה מאשר/ת את מה שמסוכן"
 #: src/app/shell/AppShell.tsx
 msgid "You are offline. What you see may be out of date; changes are paused."
 msgstr "אין חיבור לאינטרנט. ייתכן שהמידע אינו עדכני; שינויים מושהים."
+
+#: src/features/auth/AcceptInvitePage.tsx
+msgid "You were invited to HT-Commerce. Choose a password to finish."
+msgstr "הוזמנת ל-HT-Commerce. בחר/י סיסמה כדי לסיים."
+
+#: src/features/team/TeamPage.tsx
+msgid "You're invited to HT-Commerce: {link}"
+msgstr "הוזמנת ל-HT-Commerce: {link}"
 
 #: src/features/overview/OverviewPage.tsx
 msgid "Your AI office"

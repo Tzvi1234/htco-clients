@@ -11,12 +11,14 @@ import {
 
 import { NotFound, RouteError } from "./RouteStates.tsx";
 import { AppShell } from "./shell/AppShell.tsx";
+import { AcceptInvitePage } from "../features/auth/AcceptInvitePage.tsx";
 import { SecondFactorPage } from "../features/auth/SecondFactorPage.tsx";
 import { SignInPage } from "../features/auth/SignInPage.tsx";
 import { OverviewPage } from "../features/overview/OverviewPage.tsx";
 import { SecurityPage } from "../features/security/SecurityPage.tsx";
 import { SettingsPage } from "../features/settings/SettingsPage.tsx";
 import { ShopsPage } from "../features/shops/ShopsPage.tsx";
+import { TeamPage } from "../features/team/TeamPage.tsx";
 import { WelcomePage } from "../features/welcome/WelcomePage.tsx";
 import { meQuery, needsSecondFactor, sessionQuery } from "../shared/api/api.tsx";
 
@@ -43,6 +45,13 @@ const signInRoute = createRoute({
   validateSearch: (search: Record<string, unknown>): { redirect?: string } =>
     typeof search["redirect"] === "string" ? { redirect: search["redirect"] } : {},
   component: SignInPage,
+});
+
+/** Where an invitation link lands: the new member sets a password and is signed in. */
+const acceptInviteRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/accept-invite",
+  component: AcceptInvitePage,
 });
 
 /**
@@ -90,6 +99,7 @@ const appRoute = createRoute({
 const routeTree = rootRoute.addChildren([
   welcomeRoute,
   signInRoute,
+  acceptInviteRoute,
   signedInRoute.addChildren([
     secondFactorRoute,
     appRoute.addChildren([
@@ -101,6 +111,7 @@ const routeTree = rootRoute.addChildren([
         path: "/settings/security",
         component: SecurityPage,
       }),
+      createRoute({ getParentRoute: () => appRoute, path: "/settings/team", component: TeamPage }),
     ]),
   ]),
 ]);
