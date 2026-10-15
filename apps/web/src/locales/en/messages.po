@@ -669,6 +669,10 @@ msgstr "This did not work. Try again shortly."
 msgid "This invitation link has expired or was already used. Ask for a new one."
 msgstr "This invitation link has expired or was already used. Ask for a new one."
 
+#: src/features/auth/ResetPasswordPage.tsx
+msgid "This is your current password. Choose a different one."
+msgstr "This is your current password. Choose a different one."
+
 #: src/features/auth/SignInPage.tsx
 msgid "This page could not sign you in. Reload it and try again."
 msgstr "This page could not sign you in. Reload it and try again."

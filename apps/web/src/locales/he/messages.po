@@ -669,6 +669,10 @@ msgstr "זה לא עבד. נסו שוב בעוד רגע."
 msgid "This invitation link has expired or was already used. Ask for a new one."
 msgstr "פג תוקף קישור ההזמנה או שכבר השתמשו בו. בקש/י קישור חדש."
 
+#: src/features/auth/ResetPasswordPage.tsx
+msgid "This is your current password. Choose a different one."
+msgstr "זו הסיסמה הנוכחית שלכם. בחרו סיסמה אחרת."
+
 #: src/features/auth/SignInPage.tsx
 msgid "This page could not sign you in. Reload it and try again."
 msgstr "הדף לא הצליח להכניס אותך. טענו אותו מחדש ונסו שוב."
