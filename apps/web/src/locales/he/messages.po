@@ -23,6 +23,18 @@ msgstr "0 מתוך 3 הושלמו"
 msgid "1 of 3 done"
 msgstr "1 מתוך 3 הושלמו"
 
+#: src/features/auth/AuthLayout.tsx
+msgid "16 AI employees"
+msgstr "16 עובדי AI"
+
+#: src/features/auth/AuthLayout.tsx
+msgid "7 departments"
+msgstr "7 מחלקות"
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "A desk for every specialist"
+msgstr "שולחן לכל מומחה"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "A native desktop app with the same features."
 msgstr "אפליקציה טבעית למחשב עם אותן יכולות."
@@ -75,12 +87,8 @@ msgid "All shops"
 msgstr "כל החנויות"
 
 #: src/features/welcome/WelcomePage.tsx
-msgid "An AI office you control"
-msgstr "משרד AI בשליטתך"
-
-#: src/features/welcome/WelcomePage.tsx
-msgid "An APK for your phone with the same features."
-msgstr "קובץ APK לטלפון עם אותן יכולות."
+msgid "An app for your phone with the same features."
+msgstr "אפליקציה לטלפון עם אותן יכולות."
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "Android"
@@ -94,6 +102,10 @@ msgstr "בכל דפדפן, בלי התקנה."
 msgctxt "navigation"
 msgid "Approvals"
 msgstr "אישורים"
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "Apps"
+msgstr "אפליקציות"
 
 #: src/app/shell/Flyout.tsx
 msgid "Area"
@@ -126,12 +138,13 @@ msgid "Back to shops"
 msgstr "חזרה לחנויות"
 
 #: src/features/auth/ForgotPasswordPage.tsx
+#: src/features/auth/SecondFactorPage.tsx
 msgid "Back to sign-in"
 msgstr "חזרה לכניסה"
 
 #: src/features/welcome/WelcomePage.tsx
-msgid "Big changes, sensitive messages and anything unusual always come to you."
-msgstr "שינויים גדולים, הודעות רגישות וכל דבר חריג תמיד מגיעים אליך."
+msgid "Bring your team"
+msgstr "צרפו את הצוות"
 
 #: src/features/shops/connectEtsy.tsx
 msgid "Cancel"
@@ -140,6 +153,10 @@ msgstr "ביטול"
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Cannot scan? Type this key into the app:"
 msgstr "לא מצליחים לסרוק? הקלידו באפליקציה את המפתח הזה:"
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "carousel"
+msgstr "קרוסלה"
 
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
@@ -176,6 +193,7 @@ msgstr "בחירת סיסמה חדשה"
 msgid "Close"
 msgstr "סגירה"
 
+#: src/features/auth/fields.tsx
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Code from the app"
 msgstr "הקוד מהאפליקציה"
@@ -184,17 +202,19 @@ msgstr "הקוד מהאפליקציה"
 msgid "Collapse the menu"
 msgstr "כיווץ התפריט"
 
+#: src/features/welcome/WelcomePage.tsx
+msgid "Coming"
+msgstr "בקרוב"
+
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
 msgid "Commerce"
 msgstr "מסחר"
 
-#: src/features/auth/SecondFactorPage.tsx
 #: src/features/shops/connectEtsy.tsx
 msgid "Confirm"
 msgstr "אישור"
 
-#: src/features/auth/SecondFactorPage.tsx
 #: src/features/shops/connectEtsy.tsx
 msgid "Confirm it is you"
 msgstr "אישור זהות"
@@ -202,6 +222,14 @@ msgstr "אישור זהות"
 #: src/features/team/TeamPage.tsx
 msgid "Confirm with your authenticator app, then try again."
 msgstr "אשרו באפליקציית האימות ונסו שוב."
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "Connect"
+msgstr "חיבור"
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "Connect and reconnect your shops"
+msgstr "חיבור וחיבור מחדש של החנויות"
 
 #: src/features/shops/ShopsPage.tsx
 msgid "Connect Etsy shop"
@@ -251,6 +279,10 @@ msgstr "לא ניתן לטעון את פרטי החיבור. אפשר לנסות
 msgid "Connection renews automatically"
 msgstr "החיבור מתחדש אוטומטית"
 
+#: src/features/auth/SignInPage.tsx
+msgid "Continue"
+msgstr "המשך"
+
 #: src/features/team/TeamPage.tsx
 msgid "Copied"
 msgstr "הועתק"
@@ -268,10 +300,6 @@ msgctxt "navigation"
 msgid "Customers"
 msgstr "לקוחות"
 
-#: src/features/welcome/WelcomePage.tsx
-msgid "Customers answered"
-msgstr "לקוחות מקבלים מענה"
-
 #: src/app/shell/UserMenu.tsx
 #: src/features/settings/SettingsPage.tsx
 #: src/shared/theme/TweaksPanel.tsx
@@ -281,6 +309,10 @@ msgstr "כהה"
 #: src/features/overview/OverviewPage.tsx
 msgid "Decisions waiting"
 msgstr "החלטות ממתינות"
+
+#: src/features/auth/AuthLayout.tsx
+msgid "Demo"
+msgstr "דמו"
 
 #: src/shared/ui/DemoScreen.tsx
 msgid "DEMO"
@@ -314,14 +346,6 @@ msgstr "מנותקת"
 msgid "Done"
 msgstr "הושלם"
 
-#: src/features/welcome/WelcomePage.tsx
-msgid "Download"
-msgstr "הורדה"
-
-#: src/features/welcome/WelcomePage.tsx
-msgid "Each specialist acts under your policies and handles the day-to-day."
-msgstr "כל מומחה פועל לפי המדיניות שלך ומטפל בשגרה."
-
 #: src/shared/theme/TweaksPanel.tsx
 msgid "Element borders"
 msgstr "קווי מסגרת"
@@ -345,6 +369,10 @@ msgstr "הנדסה"
 msgid "Enter a valid email address."
 msgstr "הזינו כתובת אימייל תקינה."
 
+#: src/features/auth/SecondFactorPage.tsx
+msgid "Enter the 6 digits your authenticator app shows now."
+msgstr "הזינו את 6 הספרות שאפליקציית האימות מציגה עכשיו."
+
 #: src/features/shops/connectEtsy.tsx
 msgid "Enter the 6-digit code from your authenticator app to connect the shop."
 msgstr "כדי לחבר את החנות, יש להזין את הקוד בן 6 הספרות מאפליקציית האימות."
@@ -352,10 +380,6 @@ msgstr "כדי לחבר את החנות, יש להזין את הקוד בן 6 ה
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "Enter the 6-digit code from your authenticator app to finish."
 msgstr "כדי לסיים, הזינו את הקוד בן 6 הספרות מאפליקציית האימות."
-
-#: src/features/auth/SecondFactorPage.tsx
-msgid "Enter the 6-digit code from your authenticator app."
-msgstr "הזינו את הקוד בן 6 הספרות מאפליקציית האימות."
 
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Enter the 6-digit code the app shows."
@@ -368,6 +392,10 @@ msgstr "הזינו את האימייל ונשלח קישור לבחירת סיס
 #: src/features/auth/ForgotPasswordPage.tsx
 msgid "Enter your email."
 msgstr "הזינו את האימייל."
+
+#: src/app/RouteStates.tsx
+msgid "Error 404"
+msgstr "שגיאה 404"
 
 #: src/features/shops/ShopCard.tsx
 msgid "Etsy"
@@ -389,17 +417,17 @@ msgstr "Etsy לא ענתה. שום דבר לא נשמר. אפשר לנסות ש�
 msgid "Etsy shop"
 msgstr "חנות Etsy"
 
+#: src/features/welcome/WelcomePage.tsx
+msgid "Etsy shops"
+msgstr "חנויות Etsy"
+
 #: src/features/shops/connectEtsy.tsx
 msgid "Etsy's sign-in address looked wrong, so it was not opened. Try again shortly."
 msgstr "כתובת הכניסה של Etsy נראתה שגויה, ולכן לא נפתחה. אפשר לנסות שוב בעוד רגע."
 
 #: src/features/welcome/WelcomePage.tsx
-msgid "Every order, verified"
-msgstr "כל הזמנה, מאומתת"
-
-#: src/features/welcome/WelcomePage.tsx
-msgid "Everything your Etsy shop needs, working together in one AI office."
-msgstr "כל מה שחנות ה-Etsy שלך צריכה, עובד יחד במשרד AI אחד."
+msgid "Every order checked against the marketplace, with tracking that keeps up."
+msgstr "כל הזמנה נבדקת מול הפלטפורמה, עם מעקב משלוח שמתעדכן."
 
 #: src/app/shell/Sidebar.tsx
 msgid "Expand the menu"
@@ -431,10 +459,6 @@ msgstr "שכחתם את הסיסמה?"
 msgid "Frosted glass"
 msgstr "זכוכית חלבית"
 
-#: src/features/welcome/WelcomePage.tsx
-msgid "Get the apps"
-msgstr "לאפליקציות"
-
 #: src/features/overview/OverviewPage.tsx
 msgid "Getting started"
 msgstr "צעדים ראשונים"
@@ -456,7 +480,11 @@ msgctxt "navigation"
 msgid "Health"
 msgstr "בריאות מערכת"
 
-#: src/features/auth/SignInPage.tsx
+#: src/features/welcome/WelcomePage.tsx
+msgid "Hebrew and English, right to left"
+msgstr "עברית ואנגלית, מימין לשמאל"
+
+#: src/features/auth/fields.tsx
 msgid "Hide password"
 msgstr "הסתרת הסיסמה"
 
@@ -469,10 +497,6 @@ msgstr "בית"
 msgid "How it works"
 msgstr "איך זה עובד"
 
-#: src/features/welcome/WelcomePage.tsx
-msgid "How it works."
-msgstr "איך זה עובד."
-
 #: src/features/security/SecurityPage.tsx
 msgid "How you sign in, and where you are signed in."
 msgstr "איך נכנסים, ובאילו מכשירים את/ה מחובר/ת."
@@ -482,12 +506,12 @@ msgid "HT-Commerce by H.T.Z Studios"
 msgstr "HT-Commerce מבית H.T.Z Studios"
 
 #: src/features/welcome/WelcomePage.tsx
-msgid "HT-Commerce runs your Etsy business with an AI office that checks every order, keeps listings healthy, and asks you before anything risky."
-msgstr "HT-Commerce מנהלת את עסק ה-Etsy שלך עם משרד AI שבודק כל הזמנה, שומר על המודעות תקינות ושואל אותך לפני כל דבר מסוכן."
+msgid "HT-Commerce is the operating system for your Etsy business: your shops, your team and, step by step, an AI office that asks you before anything risky."
+msgstr "HT-Commerce היא מערכת ההפעלה של העסק שלך ב־Etsy: החנויות, הצוות, ובהדרגה גם משרד AI ששואל אותך לפני כל דבר מסוכן."
 
-#: src/features/auth/AuthLayout.tsx
-msgid "HTCO · the operating system for your marketplace business"
-msgstr "HTCO · מערכת ההפעלה של העסק שלך במרקטפלייס"
+#: src/features/welcome/WelcomePage.tsx
+msgid "HT-Commerce renders"
+msgstr "הדמיות HT-Commerce"
 
 #: src/features/overview/OverviewPage.tsx
 msgid "HTCO checks orders, tracking and listings, and asks you before anything risky."
@@ -501,6 +525,14 @@ msgstr "אם קיים חשבון עם האימייל הזה, שלחנו אליו
 msgid "In development"
 msgstr "בפיתוח"
 
+#: src/features/welcome/WelcomePage.tsx
+msgid "in the web app"
+msgstr "באפליקציית הווב"
+
+#: src/features/auth/AcceptInvitePage.tsx
+msgid "Invitation"
+msgstr "הזמנה"
+
 #: src/features/team/TeamPage.tsx
 msgid "Invitation link"
 msgstr "קישור הזמנה"
@@ -510,8 +542,13 @@ msgid "Invitations cannot be sent right now. Try again shortly."
 msgstr "אי אפשר לשלוח הזמנות כרגע. נסו שוב בעוד רגע."
 
 #: src/features/team/TeamPage.tsx
+#: src/features/welcome/WelcomePage.tsx
 msgid "Invite"
 msgstr "הזמנה"
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "Invite members by email or link and choose what they can do."
+msgstr "הזמינו חברי צוות באימייל או בקישור ובחרו מה מותר להם."
 
 #: src/features/settings/SettingsPage.tsx
 #: src/features/team/TeamPage.tsx
@@ -532,9 +569,15 @@ msgstr "מספרים מרכזיים"
 
 #: src/app/shell/TopBar.tsx
 #: src/app/shell/UserMenu.tsx
+#: src/features/auth/AuthLayout.tsx
 #: src/features/settings/SettingsPage.tsx
+#: src/features/welcome/WelcomePage.tsx
 msgid "Language"
 msgstr "שפה"
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "Languages"
+msgstr "שפות"
 
 #. placeholder {0}: seen.format(new Date(session.last_seen_at))
 #: src/features/security/SecurityPage.tsx
@@ -563,8 +606,8 @@ msgid "Light"
 msgstr "בהירה"
 
 #: src/features/welcome/WelcomePage.tsx
-msgid "Listings that stay healthy"
-msgstr "מודעות שנשארות תקינות"
+msgid "Listings and products"
+msgstr "מודעות ומוצרים"
 
 #: src/features/shops/ShopCard.tsx
 msgid "Loading connection details"
@@ -609,8 +652,8 @@ msgid "Members & access"
 msgstr "חברים והרשאות"
 
 #: src/features/welcome/WelcomePage.tsx
-msgid "Messages sorted, drafted and escalated with the order history beside them."
-msgstr "הודעות ממוינות, מנוסחות ומועברות הלאה עם היסטוריית ההזמנה לצידן."
+msgid "Members, roles and invitation links"
+msgstr "חברי צוות, תפקידים וקישורי הזמנה"
 
 #: src/app/shell/TabBar.tsx
 msgid "More"
@@ -620,10 +663,6 @@ msgstr "עוד"
 msgid "More areas"
 msgstr "אזורים נוספים"
 
-#: src/features/welcome/WelcomePage.tsx
-msgid "Named specialists work under your policies and bring you every risky decision."
-msgstr "מומחים בעלי שם עובדים לפי המדיניות שלך ומביאים אליך כל החלטה מסוכנת."
-
 #: src/features/shops/ShopCard.tsx
 msgid "Needs reconnecting"
 msgstr "צריך לחבר מחדש"
@@ -632,6 +671,10 @@ msgstr "צריך לחבר מחדש"
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "New password"
 msgstr "סיסמה חדשה"
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "Next render"
+msgstr "ההדמיה הבאה"
 
 #: src/features/auth/SignInPage.tsx
 msgid "No account yet? The workspace owner sends invitations."
@@ -679,12 +722,16 @@ msgid "Office"
 msgstr "המשרד"
 
 #: src/features/welcome/WelcomePage.tsx
-msgid "One office for the whole business"
-msgstr "משרד אחד לכל העסק"
+msgid "One button, Etsy asks you to allow it, and you are back."
+msgstr "כפתור אחד, Etsy מבקשת את אישורך, וחוזרים."
 
 #: src/features/shops/connectEtsy.tsx
 msgid "Only the workspace owner can connect a shop."
 msgstr "רק הבעלים של סביבת העבודה יכולים לחבר חנות."
+
+#: src/features/auth/SecondFactorPage.tsx
+msgid "Open the authenticator app on your phone."
+msgstr "פתחו את אפליקציית האימות בטלפון."
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "Open the web app"
@@ -699,18 +746,19 @@ msgctxt "navigation"
 msgid "Orders"
 msgstr "הזמנות"
 
+#: src/features/welcome/WelcomePage.tsx
+msgid "Orders and shipping"
+msgstr "הזמנות ומשלוחים"
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "Orders on their way"
+msgstr "הזמנות בדרך"
+
+#: src/features/auth/AuthLayout.tsx
 #: src/features/overview/OverviewPage.tsx
 #: src/features/shops/ShopsPage.tsx
 msgid "Orders today"
 msgstr "הזמנות היום"
-
-#: src/features/welcome/WelcomePage.tsx
-msgid "Orders, listings and messages start flowing in."
-msgstr "הזמנות, מודעות והודעות מתחילות לזרום."
-
-#: src/features/welcome/WelcomePage.tsx
-msgid "Orders, tracking and delivery checked against the marketplace, with the receipt to prove it."
-msgstr "הזמנות, מעקב ומסירה נבדקים מול המרקטפלייס, עם קבלה שמוכיחה."
 
 #: src/features/overview/OverviewPage.tsx
 msgid "Orders, tracking and listings start flowing in."
@@ -729,6 +777,10 @@ msgstr "סקירה"
 msgid "Owner"
 msgstr "בעלים"
 
+#: src/features/auth/SignInPage.tsx
+msgid "Owners and Admins confirm with an authenticator code"
+msgstr "בעלים ומנהלים מאשרים עם קוד מאפליקציית אימות"
+
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Owners and Admins sign in with a password and a code from an app such as Google Authenticator, Microsoft Authenticator or 1Password."
 msgstr "בעלים ומנהלים נכנסים עם סיסמה וקוד מאפליקציה כמו Google Authenticator,‏ Microsoft Authenticator או 1Password."
@@ -741,6 +793,8 @@ msgstr "הדף לא נמצא"
 msgid "Palette and ground"
 msgstr "פלטה ורקע"
 
+#: src/features/auth/ForgotPasswordPage.tsx
+#: src/features/auth/ResetPasswordPage.tsx
 #: src/features/auth/SignInPage.tsx
 msgid "Password"
 msgstr "סיסמה"
@@ -748,6 +802,10 @@ msgstr "סיסמה"
 #: src/features/overview/OverviewPage.tsx
 msgid "Password and an authenticator app."
 msgstr "סיסמה ואפליקציית אימות."
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "Password and authenticator app"
+msgstr "סיסמה ואפליקציית אימות"
 
 #: src/app/shell/TopBar.tsx
 msgid "Pending approvals"
@@ -758,8 +816,8 @@ msgid "Plain ground"
 msgstr "רקע אחיד"
 
 #: src/features/welcome/WelcomePage.tsx
-msgid "Product"
-msgstr "המוצר"
+msgid "Previous render"
+msgstr "ההדמיה הקודמת"
 
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
@@ -786,6 +844,10 @@ msgstr "קריאת הזמנות"
 #: src/features/shops/ShopCard.tsx
 msgid "Read shop"
 msgstr "קריאת החנות"
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "Ready today"
+msgstr "זמין היום"
 
 #: src/features/shops/ShopsPage.tsx
 msgid "Reconnect"
@@ -836,10 +898,18 @@ msgstr "לבדיקת האבטחה"
 msgid "Role"
 msgstr "תפקיד"
 
+#: src/features/auth/AuthLayout.tsx
+msgid "Running now"
+msgstr "עובדים כעת"
+
 #: src/features/auth/AcceptInvitePage.tsx
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "Save and sign in"
 msgstr "שמירה וכניסה"
+
+#: src/features/auth/SecondFactorPage.tsx
+msgid "Scan the QR code we show you."
+msgstr "סרקו את קוד ה־QR שנציג לכם."
 
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Scan the QR code with the app."
@@ -935,9 +1005,14 @@ msgstr "לא ניתן לטעון את החנויות"
 msgid "Shops: {name}"
 msgstr "חנויות: {name}"
 
-#: src/features/auth/SignInPage.tsx
+#: src/features/auth/fields.tsx
 msgid "Show password"
 msgstr "הצגת הסיסמה"
+
+#. placeholder {0}: String(at + 1)
+#: src/features/welcome/WelcomePage.tsx
+msgid "Show render {0}"
+msgstr "הצגת הדמיה {0}"
 
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Show the QR code"
@@ -952,9 +1027,9 @@ msgstr "סרגל צד"
 msgid "Sign in"
 msgstr "כניסה"
 
-#: src/features/auth/SignInPage.tsx
-msgid "Sign in to HT-Commerce"
-msgstr "כניסה ל-HT-Commerce"
+#: src/features/welcome/WelcomePage.tsx
+msgid "Sign in; Owners and Admins add a code from an authenticator app."
+msgstr "נכנסים; בעלים ומנהלים מוסיפים קוד מאפליקציית אימות."
 
 #: src/app/RouteStates.tsx
 #: src/app/shell/UserMenu.tsx
@@ -966,6 +1041,10 @@ msgstr "יציאה"
 msgid "Sign out {device}"
 msgstr "ניתוק {device}"
 
+#: src/features/welcome/WelcomePage.tsx
+msgid "Sign-in"
+msgstr "כניסה"
+
 #: src/features/auth/SignInPage.tsx
 msgid "Sign-in is unavailable right now. Try again shortly."
 msgstr "הכניסה לא זמינה כרגע. נסו שוב בעוד רגע."
@@ -973,6 +1052,18 @@ msgstr "הכניסה לא זמינה כרגע. נסו שוב בעוד רגע."
 #: src/features/security/SecurityPage.tsx
 msgid "Signed-in devices"
 msgstr "מכשירים מחוברים"
+
+#: src/features/auth/SecondFactorPage.tsx
+msgid "Signs you out first"
+msgstr "מנתק אתכם קודם"
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "Sixteen AI employees in seven departments, working under your policies."
+msgstr "שישה־עשר עובדי AI בשבע מחלקות, שעובדים לפי המדיניות שלך."
+
+#: src/app/RouteStates.tsx
+msgid "Something went wrong"
+msgstr "משהו השתבש"
 
 #: src/app/RouteStates.tsx
 msgid "Something went wrong while showing it. Try again; your data was not changed."
@@ -989,6 +1080,18 @@ msgstr "מומחים למודעות, הזמנות, לקוחות וכספים ע�
 #: src/features/overview/OverviewPage.tsx
 msgid "Start with your shop"
 msgstr "מתחילים מהחנות"
+
+#: src/features/auth/AuthLayout.tsx
+msgid "Step {step} of 2"
+msgstr "שלב {step} מתוך 2"
+
+#: src/features/auth/SecondFactorPage.tsx
+msgid "Step 2 of 2"
+msgstr "שלב 2 מתוך 2"
+
+#: src/features/auth/SecondFactorPage.tsx
+msgid "Step 2 of 2 · Security"
+msgstr "שלב 2 מתוך 2 · אבטחה"
 
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
@@ -1015,6 +1118,7 @@ msgstr "משימות"
 
 #: src/features/settings/SettingsPage.tsx
 #: src/features/team/TeamPage.tsx
+#: src/features/welcome/WelcomePage.tsx
 msgid "Team"
 msgstr "צוות"
 
@@ -1031,6 +1135,14 @@ msgstr "ייתכן שהכתובת שגויה או שהדף הועבר."
 msgid "The AI employees start once a shop is connected."
 msgstr "עובדי ה-AI מתחילים לעבוד אחרי שחנות מחוברת."
 
+#: src/features/welcome/WelcomePage.tsx
+msgid "The AI office"
+msgstr "משרד ה־AI"
+
+#: src/features/auth/SecondFactorPage.tsx
+msgid "The app shows a new code every 30 seconds"
+msgstr "האפליקציה מציגה קוד חדש כל 30 שניות"
+
 #: src/features/auth/ResetPasswordPage.tsx
 #: src/features/auth/SecondFactorPage.tsx
 msgid "The code is wrong or expired."
@@ -1039,6 +1151,10 @@ msgstr "הקוד שגוי או שפג תוקפו."
 #: src/features/auth/SignInPage.tsx
 msgid "The email or the password is wrong."
 msgstr "האימייל או הסיסמה שגויים."
+
+#: src/features/auth/ForgotPasswordPage.tsx
+msgid "The link works once. Check the spam folder if it does not arrive."
+msgstr "הקישור עובד פעם אחת. אם הוא לא מגיע, בדקו בתיקיית הספאם."
 
 #: src/features/shops/ShopsPage.tsx
 msgid "The marketplace shops this organization runs."
@@ -1062,8 +1178,12 @@ msgid "The term 'Etsy' is a trademark of Etsy, Inc. This application uses the Et
 msgstr "המונח 'Etsy' הוא סימן מסחרי של חברת Etsy, Inc. אפליקציה זו משתמשת ב-API של Etsy, אך חברת Etsy, Inc. אינה תומכת בה ואינה מאשרת אותה."
 
 #: src/features/welcome/WelcomePage.tsx
-msgid "The web app is ready today. The Windows and Android apps are coming soon with the same features."
-msgstr "אפליקציית הרשת מוכנה כבר היום. אפליקציות Windows ו-Android מגיעות בקרוב עם אותן יכולות."
+msgid "The web app is open today"
+msgstr "אפליקציית הווב פתוחה כבר היום"
+
+#: src/features/auth/AcceptInvitePage.tsx
+msgid "The workspace owner can send a new invitation from Members & access."
+msgstr "בעל סביבת העבודה יכול לשלוח הזמנה חדשה מ״חברים והרשאות״."
 
 #: src/features/shops/ShopsPage.tsx
 msgid "The workspace owner connects shops."
@@ -1147,8 +1267,8 @@ msgid "Tickets"
 msgstr "פניות"
 
 #: src/features/welcome/WelcomePage.tsx
-msgid "Titles, photos and claims audited and fixed as drafts you approve."
-msgstr "כותרות, תמונות וטענות נבדקות ומתוקנות כטיוטות שאת/ה מאשר/ת."
+msgid "Titles, photos and claims audited, fixed as drafts you approve."
+msgstr "כותרות, תמונות וטענות נבדקות ומתוקנות כטיוטות שאתה מאשר."
 
 #: src/features/auth/AcceptInvitePage.tsx
 #: src/features/auth/ForgotPasswordPage.tsx
@@ -1167,18 +1287,30 @@ msgstr "לנסות שוב"
 msgid "Two-factor sign-in"
 msgstr "כניסה דו-שלבית"
 
+#: src/features/welcome/WelcomePage.tsx
+msgid "Two-step"
+msgstr "דו־שלבית"
+
+#: src/features/auth/SecondFactorPage.tsx
+msgid "Two-step code"
+msgstr "קוד אימות"
+
 #: src/features/security/SecurityPage.tsx
 msgid "Unknown device"
 msgstr "מכשיר לא מזוהה"
+
+#: src/features/auth/AuthLayout.tsx
+msgid "Uptime"
+msgstr "זמינות"
 
 #: src/features/auth/AcceptInvitePage.tsx
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "Use between 12 and 128 characters."
 msgstr "השתמש/י ב-12 עד 128 תווים."
 
-#: src/features/welcome/WelcomePage.tsx
-msgid "Use it anywhere"
-msgstr "בכל מקום"
+#: src/features/auth/SecondFactorPage.tsx
+msgid "Verify and sign in"
+msgstr "אימות וכניסה"
 
 #: src/shared/theme/TweaksPanel.tsx
 msgid "Very different"
@@ -1188,6 +1320,7 @@ msgstr "שונה מאוד"
 msgid "Viewer"
 msgstr "צפייה"
 
+#: src/features/auth/AuthLayout.tsx
 #: src/features/overview/OverviewPage.tsx
 msgid "Waiting for you"
 msgstr "מחכה לך"
@@ -1195,6 +1328,18 @@ msgstr "מחכה לך"
 #: src/features/welcome/WelcomePage.tsx
 msgid "Web"
 msgstr "רשת"
+
+#: src/features/auth/SignInPage.tsx
+msgid "Welcome back"
+msgstr "ברוך שובך"
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "What is coming"
+msgstr "מה בדרך"
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "What works today"
+msgstr "מה עובד היום"
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "Windows"
@@ -1218,10 +1363,6 @@ msgctxt "navigation"
 msgid "Workspace"
 msgstr "סביבת עבודה"
 
-#: src/features/welcome/WelcomePage.tsx
-msgid "You approve what's risky"
-msgstr "את/ה מאשר/ת את מה שמסוכן"
-
 #: src/app/RouteStates.tsx
 msgid "You are not in a workspace yet"
 msgstr "עדיין אינך חלק מסביבת עבודה"
@@ -1232,6 +1373,7 @@ msgstr "אין חיבור לאינטרנט. ייתכן שהמידע אינו ע�
 
 #: src/app/RouteStates.tsx
 #: src/app/shell/UserMenu.tsx
+#: src/features/auth/SecondFactorPage.tsx
 msgid "You are still signed in. Try signing out again shortly."
 msgstr "עדיין מחובר/ת. נסה/י להתנתק שוב בעוד רגע."
 
@@ -1248,6 +1390,10 @@ msgid "You're invited to HT-Commerce: {link}"
 msgstr "הוזמנת ל-HT-Commerce: {link}"
 
 #: src/app/RouteStates.tsx
+msgid "Your account"
+msgstr "החשבון שלך"
+
+#: src/app/RouteStates.tsx
 msgid "Your account works, but no workspace has added it. Ask the workspace owner to invite you, then sign in again."
 msgstr "החשבון שלך תקין, אבל אף סביבת עבודה עדיין לא צירפה אותו. בקש/י מבעל סביבת העבודה הזמנה, ואז היכנס/י שוב."
 
@@ -1256,8 +1402,8 @@ msgid "Your AI office"
 msgstr "משרד ה-AI שלך"
 
 #: src/features/welcome/WelcomePage.tsx
-msgid "Your AI office gets to work"
-msgstr "משרד ה-AI שלך מתחיל לעבוד"
+msgid "Your AI office, in miniature"
+msgstr "משרד ה־AI שלך, במיניאטורה"
 
 #: src/features/shops/ShopsPage.tsx
 msgid "Your Etsy shop is connected."
@@ -1267,27 +1413,27 @@ msgstr "חנות ה-Etsy שלך מחוברת."
 msgid "Your Etsy shop is reconnected."
 msgstr "חנות ה-Etsy שלך חוברה מחדש."
 
+#: src/features/auth/AuthLayout.tsx
+msgid "Your office"
+msgstr "המשרד שלך"
+
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "Your other devices will be signed out."
 msgstr "המכשירים האחרים שלכם ינותקו מהחשבון."
 
-#: src/features/auth/SignInPage.tsx
-msgid "Your password"
-msgstr "הסיסמה שלך"
+#: src/features/welcome/WelcomePage.tsx
+msgid "Your products"
+msgstr "המוצרים שלך"
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "Your shop"
+msgstr "החנות שלך"
 
 #: src/features/overview/OverviewPage.tsx
 #: src/features/welcome/WelcomePage.tsx
 msgid "Your shop runs. You decide."
 msgstr "החנות רצה. ההחלטה שלך."
 
-#: src/features/auth/AuthLayout.tsx
-msgid "Your shop runs. You decide<0>.</0>"
-msgstr "החנות רצה. ההחלטה שלך<0>.</0>"
-
 #: src/app/shell/ShopSwitcher.tsx
 msgid "Your shops"
 msgstr "החנויות שלך"
-
-#: src/features/auth/SignInPage.tsx
-msgid "Your shops, orders and AI office in one place."
-msgstr "החנויות, ההזמנות ומשרד ה-AI שלך במקום אחד."
