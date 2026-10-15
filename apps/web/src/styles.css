@@ -3,6 +3,18 @@
 @import "tailwindcss";
 @import "@htco/design-tokens/tokens.css";
 
+/* `dark:` follows the same rule as the tokens: an explicit data-theme, else the system. */
+@custom-variant dark {
+  &:where([data-theme="dark"], [data-theme="dark"] *) {
+    @slot;
+  }
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not([data-theme]), :root:not([data-theme]) *) {
+      @slot;
+    }
+  }
+}
+
 @theme inline {
   --color-*: initial;
   --color-canvas: var(--bg-canvas);

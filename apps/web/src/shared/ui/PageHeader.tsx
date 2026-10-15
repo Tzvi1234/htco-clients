@@ -1,5 +1,8 @@
 import type { ReactNode } from "react";
 
+import { Aura } from "../art/Aura.tsx";
+import { cx } from "../lib/cx.ts";
+
 /**
  * The page's top bar (Attio): the object icon, the title (the page's only h1), a short
  * description beside it on wide screens, and the page's actions at the end.
@@ -34,16 +37,27 @@ export function PageHeader({
   );
 }
 
-/** The page's content under its header: gutters and a calm entrance. */
-export function PageBody({ children, flush = false }: { children: ReactNode; flush?: boolean }) {
+/**
+ * The page's content under its header: gutters and a calm entrance. `aura` adds the faint
+ * brand glow at the top (home and other greeting pages, never behind a table).
+ */
+export function PageBody({
+  children,
+  flush = false,
+  aura = false,
+}: {
+  children: ReactNode;
+  flush?: boolean;
+  aura?: boolean;
+}) {
   return (
     <div
-      className={
-        flush
-          ? "flex animate-enter flex-col"
-          : "flex animate-enter flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8"
-      }
+      className={cx(
+        "relative isolate flex animate-enter flex-col",
+        !flush && "gap-6 px-4 py-6 sm:px-6 lg:px-8",
+      )}
     >
+      {aura ? <Aura variant="page" className="-z-10" /> : null}
       {children}
     </div>
   );
