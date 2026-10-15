@@ -40,11 +40,7 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
-const frame = () => {
-  const element = document.querySelector("[data-demo-frame]");
-  if (!(element instanceof HTMLElement)) throw new Error("No demo frame");
-  return element;
-};
+const content = () => screen.getByTestId("demo-content");
 
 // Every demo screen this change draws, with its title and one panel that must be on it.
 const SCREENS = [
@@ -59,54 +55,50 @@ const SCREENS = [
 
 describe("the Work and Commerce demo screens (redesign)", () => {
   it.each(SCREENS)(
-    "%s draws the demo's screen inside the demo frame",
+    "%s draws the demo's screen under the DEMO label",
     async (path, title, panel) => {
       await open(path);
       expect(screen.getByRole("heading", { level: 1, name: title })).toBeInTheDocument();
-      expect(within(frame()).getByText("Demo")).toBeInTheDocument();
-      expect(within(frame()).getByText("Sample data · coming soon")).toBeInTheDocument();
-      expect(await within(frame()).findByRole("heading", { name: panel })).toBeInTheDocument();
+      expect(screen.getByText("DEMO")).toBeInTheDocument();
+      expect(screen.getByRole("note")).toHaveTextContent("Demo — coming soon");
+      // Drawn (a crash fails here), but out of reach: hidden from readers.
+      expect(
+        await within(content()).findByRole("heading", { name: panel, hidden: true }),
+      ).toBeInTheDocument();
     },
   );
 
   it.each(SCREENS)("%s says Demo in Hebrew too", async (path) => {
     await open(path, "he");
-    expect(within(frame()).getByText("דמו")).toBeInTheDocument();
+    expect(screen.getByText("דמו")).toBeInTheDocument();
   });
 
-  it("does nothing on a click but say it is a demo", async () => {
-    const { user, backend } = await open("/work/approvals");
+  it("keeps the sample controls out of reach: nothing to press, nothing sent", async () => {
+    const { backend } = await open("/work/approvals");
     const before = backend.requests.length;
-    const [approve] = within(frame()).getAllByRole("button", { name: "Approve" });
-    if (approve === undefined) throw new Error("No approve button");
-    await user.click(approve);
-    // The frame says it to screen readers; the toast says it once more.
-    expect(await screen.findAllByText("Demo — coming soon")).toHaveLength(2);
-    // Still pending: nothing was decided and nothing was sent.
-    expect(within(frame()).getAllByRole("button", { name: "Approve" })).toHaveLength(4);
+    expect(content()).toHaveAttribute("inert");
+    expect(content()).toHaveAttribute("aria-hidden", "true");
+    expect(screen.queryByRole("button", { name: "Approve" })).not.toBeInTheDocument();
+    expect(
+      within(content()).getAllByRole("button", { name: "Approve", hidden: true }),
+    ).toHaveLength(4);
     expect(backend.requests.length).toBe(before);
-  });
-
-  it("keeps a demo screen's links from leaving it", async () => {
-    const { user } = await open("/commerce/orders");
-    await user.click(within(frame()).getByRole("button", { name: "Check tracking" }));
-    expect(screen.getByRole("heading", { level: 1, name: "Orders" })).toBeInTheDocument();
-    // The frame says it to screen readers; the toast says it once more.
-    expect(await screen.findAllByText("Demo — coming soon")).toHaveLength(2);
   });
 
   it("names the orders table and keeps order numbers in their own direction", async () => {
     await open("/commerce/orders", "he");
-    const table = within(frame()).getByRole("table", { name: "הזמנות" });
+    const table = within(content()).getByRole("table", { name: "הזמנות", hidden: true });
     expect(within(table).getByText("#3152")).toHaveClass("ltr");
   });
 
-  it("shows the demo frame on phones", async () => {
+  it("shows the demo screens on phones", async () => {
     phone();
     await open("/commerce/orders");
     expect(screen.queryByRole("complementary", { name: "Sidebar" })).not.toBeInTheDocument();
-    expect(within(frame()).getByText("Demo")).toBeInTheDocument();
-    expect(within(frame()).getByRole("table", { name: "Orders" })).toBeInTheDocument();
+    expect(screen.getByText("DEMO")).toBeInTheDocument();
+    expect(
+      within(content()).getByRole("table", { name: "Orders", hidden: true }),
+    ).toBeInTheDocument();
   });
 });
 

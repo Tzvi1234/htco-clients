@@ -3,8 +3,6 @@ import type { ComponentType } from "react";
 import type { AreaId } from "./nav.ts";
 import { useNavLabels } from "./useNavLabels.ts";
 import { DemoScreen } from "../../shared/ui/DemoScreen.tsx";
-import { PageHeader } from "../../shared/ui/PageHeader.tsx";
-import { DemoFrame } from "../../shared/ui/kit/Demo.tsx";
 
 /**
  * The Design 1C demo screens drawn so far: each feature folder may export `demoScreens` from a
@@ -20,7 +18,8 @@ for (const module of Object.values(modules)) Object.assign(SCREENS, module.demoS
 
 /**
  * A tab of the Design 1C navigation with no real screen yet: the demo's full screen with its
- * sample data inside the demo frame when it is drawn, else the DemoScreen placeholder.
+ * sample data inside DemoScreen (dimmed, inert, under the DEMO label) when it is drawn, else the
+ * DemoScreen placeholder.
  */
 export function DemoRoute({ area, tab }: { area: AreaId; tab: string }) {
   const labels = useNavLabels();
@@ -28,11 +27,8 @@ export function DemoRoute({ area, tab }: { area: AreaId; tab: string }) {
   const Screen = SCREENS[`${area}/${tab}`];
   if (Screen === undefined) return <DemoScreen title={title} />;
   return (
-    <>
-      <PageHeader title={title} />
-      <DemoFrame>
-        <Screen />
-      </DemoFrame>
-    </>
+    <DemoScreen title={title} className="flex flex-col">
+      <Screen />
+    </DemoScreen>
   );
 }
