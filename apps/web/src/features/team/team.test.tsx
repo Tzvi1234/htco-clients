@@ -90,7 +90,7 @@ describe("accepting an invitation", () => {
     await user.type(screen.getByLabelText("Repeat the password"), "a long new password");
     await user.click(screen.getByRole("button", { name: "Save and sign in" }));
 
-    expect(await screen.findByRole("heading", { level: 1, name: "Overview" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { level: 1, name: "Home" })).toBeInTheDocument();
     expect(backend.state.accepted).toEqual({
       access_token: "invite-at",
       refresh_token: "invite-rt",

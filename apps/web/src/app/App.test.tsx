@@ -38,7 +38,7 @@ describe("the app shell", () => {
   it("shows the overview with the main navigation", async () => {
     await renderApp();
 
-    expect(screen.getByRole("heading", { level: 1, name: "Overview" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 1, name: "Home" })).toBeInTheDocument();
     const nav = screen.getByRole("navigation", { name: "Main" });
     expect(within(nav).getByRole("link", { name: "Home" })).toHaveAttribute("aria-current", "page");
     // The other areas wait closed, their tabs out of reach until opened (Design 1C).
@@ -63,7 +63,7 @@ describe("the app shell", () => {
     await renderApp({ locale: "he" });
 
     expect([root.lang, root.dir]).toEqual(["he", "rtl"]);
-    expect(screen.getByRole("heading", { level: 1, name: "סקירה" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 1, name: "בית" })).toBeInTheDocument();
   });
 
   it("switches to Hebrew and back from the account menu (AC-3.3.1)", async () => {
@@ -73,14 +73,14 @@ describe("the app shell", () => {
     await user.click(screen.getByRole("menuitemradio", { name: "עברית" }));
 
     expect([root.lang, root.dir]).toEqual(["he", "rtl"]);
-    expect(screen.getByRole("heading", { level: 1, name: "סקירה" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 1, name: "בית" })).toBeInTheDocument();
     expect(storage.getItem("htco.locale")).toBe("he");
 
     await user.click(screen.getByRole("button", { name: "חשבון והעדפות" }));
     await user.click(screen.getByRole("menuitemradio", { name: "English" }));
 
     expect([root.lang, root.dir]).toEqual(["en", "ltr"]);
-    expect(screen.getByRole("heading", { level: 1, name: "Overview" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 1, name: "Home" })).toBeInTheDocument();
   });
 
   it("follows the system theme until the user picks one, then remembers it (AC-3.3.3)", async () => {
@@ -121,6 +121,6 @@ describe("the app shell", () => {
     expect(screen.getByRole("alert")).toHaveTextContent("Page not found");
     await user.click(screen.getByRole("button", { name: "Go to the overview" }));
 
-    expect(await screen.findByRole("heading", { level: 1, name: "Overview" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { level: 1, name: "Home" })).toBeInTheDocument();
   });
 });

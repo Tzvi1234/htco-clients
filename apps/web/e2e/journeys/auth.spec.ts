@@ -22,13 +22,13 @@ test("an Owner signs in, sets up the authenticator app and lands on the overview
   await page.getByLabel("Code from the app").fill("123456");
   await page.getByRole("button", { name: "Confirm" }).click();
 
-  await expect(pageTitle(page, "Overview")).toBeVisible();
+  await expect(pageTitle(page, "Home")).toBeVisible();
   await checkpoint(page, "overview");
 });
 
 test("a signed-in user signs out from the account menu", async ({ page }) => {
   await openApp(page, "/", "signed-in");
-  await expect(pageTitle(page, "Overview")).toBeVisible();
+  await expect(pageTitle(page, "Home")).toBeVisible();
 
   await openAccountMenu(page);
   await expect(page.getByRole("menu")).toBeVisible();

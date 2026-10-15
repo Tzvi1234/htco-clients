@@ -56,28 +56,6 @@ describe("the intro (design/README.md, Motion)", () => {
   });
 });
 
-describe("the decision ring (design/README.md, The idea)", () => {
-  it("is decorative and always sits beside words that say the user is needed", async () => {
-    await open();
-    const words = screen.getByText("Waiting for you");
-    const ring = words.closest("span.relative")?.querySelector("svg");
-    expect(ring).toHaveAttribute("aria-hidden", "true");
-  });
-});
-
-describe("the aura (design/README.md, Backgrounds)", () => {
-  it("glows behind the overview but never behind the shops table, and is hidden from readers", async () => {
-    const { user } = await open();
-    const glow = document.querySelector("main [aria-hidden='true'].pointer-events-none");
-    expect(glow).not.toBeNull();
-
-    await user.click(screen.getByRole("button", { name: "Commerce" }));
-    await user.click(screen.getByRole("link", { name: "Shops" }));
-    await screen.findByRole("heading", { level: 1, name: "Shops" });
-    expect(document.querySelector("main [aria-hidden='true'].pointer-events-none")).toBeNull();
-  });
-});
-
 describe("the logo", () => {
   it("is drawn inline with an accessible name, in the theme's colours", async () => {
     await open();
