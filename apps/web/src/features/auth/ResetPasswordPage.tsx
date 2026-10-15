@@ -1,15 +1,13 @@
 import { Trans, useLingui } from "@lingui/react/macro";
-import { ArrowRightIcon as ArrowRight, LockSimpleIcon as LockSimple } from "@phosphor-icons/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link, useRouter, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState, type SyntheticEvent } from "react";
 
-import { AuthLayout, FormAlert } from "./AuthLayout.tsx";
+import { AUTH_SUBMIT, AuthLayout, FormAlert } from "./AuthLayout.tsx";
+import { CodeBoxes, PasswordField } from "./fields.tsx";
 import { passwordProblem, tokensOf, type LinkTokens } from "./linkTokens.ts";
-import { CodeField } from "./SecondFactorPage.tsx";
 import { ApiError, apiError, useApi } from "../../shared/api/api.tsx";
 import { Button } from "../../shared/ui/Button.tsx";
-import { TextField } from "../../shared/ui/TextField.tsx";
 
 /**
  * Where the emailed password reset link lands, like the invitation page: the tokens are read once
@@ -92,13 +90,16 @@ export function ResetPasswordPage() {
 
   if (tokens === null) {
     return (
-      <AuthLayout title={<Trans>Choose a new password</Trans>}>
-        <p className="m-0 text-center text-secondary">
+      <AuthLayout eyebrow={<Trans>Password</Trans>} title={<Trans>Choose a new password</Trans>}>
+        <p className="m-0 rounded-card border border-line bg-raised p-4 text-body-sm text-secondary">
           <Trans>
             This password reset link has expired or was already used. Ask for a new one.
           </Trans>
         </p>
-        <Link to="/forgot-password" className="text-center text-body-sm font-medium text-link">
+        <Link
+          to="/forgot-password"
+          className="inline-flex h-12 w-full items-center justify-center rounded-pill bg-action-primary text-body-sm text-action-primary-fg transition-[background-color,scale] duration-[var(--motion-duration-fast)] hover:bg-action-primary-hover active:scale-[0.98]"
+        >
           <Trans>Ask for a new link</Trans>
         </Link>
       </AuthLayout>
@@ -107,43 +108,37 @@ export function ResetPasswordPage() {
 
   return (
     <AuthLayout
+      eyebrow={<Trans>Password</Trans>}
       title={<Trans>Choose a new password</Trans>}
       description={<Trans>Your other devices will be signed out.</Trans>}
     >
-      <form className="flex flex-col gap-5" onSubmit={submit} noValidate>
-        <TextField
-          size="lg"
-          icon={LockSimple}
-          label={t`New password`}
-          description={t`At least 12 characters.`}
-          type="password"
-          autoComplete="new-password"
-          isRequired
-          minLength={12}
-          value={password}
-          onChange={setPassword}
-        />
-        <TextField
-          size="lg"
-          icon={LockSimple}
-          label={t`Repeat the password`}
-          type="password"
-          autoComplete="new-password"
-          isRequired
-          value={repeat}
-          onChange={setRepeat}
-        />
-        {needsCode ? <CodeField value={code} onChange={setCode} /> : null}
+      <form className="flex flex-col gap-6" onSubmit={submit} noValidate>
+        <div className="flex flex-col gap-4">
+          <PasswordField
+            label={t`New password`}
+            description={t`At least 12 characters.`}
+            autoComplete="new-password"
+            value={password}
+            onChange={setPassword}
+          />
+          <PasswordField
+            label={t`Repeat the password`}
+            autoComplete="new-password"
+            value={repeat}
+            onChange={setRepeat}
+          />
+        </div>
+        {needsCode ? (
+          <div className="flex animate-enter flex-col gap-3">
+            <p className="m-0 text-body-sm text-secondary">
+              <Trans>Enter the 6-digit code from your authenticator app to finish.</Trans>
+            </p>
+            <CodeBoxes value={code} onChange={setCode} autoFocus />
+          </div>
+        ) : null}
         <FormAlert message={message()} />
-        <Button
-          type="submit"
-          variant="primary"
-          size="lg"
-          isPending={reset.isPending}
-          className="h-11 text-body"
-        >
+        <Button type="submit" variant="primary" isPending={reset.isPending} className={AUTH_SUBMIT}>
           <Trans>Save and sign in</Trans>
-          <ArrowRight aria-hidden="true" size={16} weight="bold" className="rtl:-scale-x-100" />
         </Button>
       </form>
     </AuthLayout>

@@ -18,7 +18,7 @@ if (container === null) throw new Error("index.html has no #root element");
 const storage = deviceStorage();
 
 // Development only: `?demo` (signed in), `?demo=shops` (signed in, with shops in each connection
-// state) or `?demo=signed-out` runs the app on the in-memory API used by the tests, to review
+// state), `?demo=mfa` (the authenticator code step), `?demo=no-workspace` or `?demo=signed-out` runs the app on the in-memory API used by the tests, to review
 // screens without a local API. Connecting a shop asks for the code 123456 and comes straight back
 // to the Etsy callback. Production builds drop this branch.
 const demo = import.meta.env.DEV ? new URLSearchParams(window.location.search).get("demo") : null;
@@ -28,6 +28,10 @@ const api =
     : await (async () => {
         const { demoShops, fakeBackend } = await import("./test/fakeApi.ts");
         if (demo === "signed-out") return fakeBackend().client;
+        // Signed in with a password only: the authenticator code step.
+        if (demo === "mfa")
+          return fakeBackend({ signedIn: true, enrolled: true, assurance: "aal1" }).client;
+        if (demo === "no-workspace") return fakeBackend({ signedIn: true, member: false }).client;
         return fakeBackend({
           signedIn: true,
           enrolled: true,

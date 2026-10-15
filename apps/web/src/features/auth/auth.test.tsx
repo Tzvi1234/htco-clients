@@ -31,15 +31,13 @@ async function signIn(
 ) {
   await user.type(screen.getByLabelText("Email"), "owner@example.test");
   await user.type(screen.getByLabelText("Password"), password);
-  await user.click(screen.getByRole("button", { name: "Sign in" }));
+  await user.click(screen.getByRole("button", { name: "Continue" }));
 }
 
 describe("signing in", () => {
   it("sends a signed-out visitor to the sign-in page, and back afterwards", async () => {
     await open("/shops");
-    expect(
-      screen.getByRole("heading", { level: 1, name: "Sign in to HT-Commerce" }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 1, name: "Sign in" })).toBeInTheDocument();
   });
 
   it("opens the front door at the bare address for a signed-out visitor", async () => {
@@ -98,16 +96,12 @@ describe("signing in", () => {
     await user.click(screen.getByRole("button", { name: "Account and preferences" }));
     await user.click(screen.getByRole("menuitem", { name: "Security" }));
 
-    expect(
-      await screen.findByRole("heading", { level: 1, name: "Sign in to HT-Commerce" }),
-    ).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { level: 1, name: "Sign in" })).toBeInTheDocument();
   });
 
   it("signs in in Hebrew, right to left", async () => {
     await open("/sign-in", {}, "he");
-    expect(
-      screen.getByRole("heading", { level: 1, name: "כניסה ל-HT-Commerce" }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 1, name: "כניסה" })).toBeInTheDocument();
     expect(document.documentElement.dir).toBe("rtl");
   });
 });
@@ -125,12 +119,12 @@ describe("the second factor for Owners and Admins (AC-3.5.3)", () => {
     expect(screen.getByText("JBSWY3DPEHPK3PXP")).toBeInTheDocument();
 
     await user.type(screen.getByLabelText("Code from the app"), "000000");
-    await user.click(screen.getByRole("button", { name: "Confirm" }));
+    await user.click(screen.getByRole("button", { name: "Verify and sign in" }));
     expect(await screen.findByRole("alert")).toHaveTextContent("The code is wrong or expired.");
 
     await user.clear(screen.getByLabelText("Code from the app"));
     await user.type(screen.getByLabelText("Code from the app"), "123456");
-    await user.click(screen.getByRole("button", { name: "Confirm" }));
+    await user.click(screen.getByRole("button", { name: "Verify and sign in" }));
     expect(await screen.findByRole("heading", { level: 1, name: "Overview" })).toBeInTheDocument();
   });
 
@@ -138,10 +132,10 @@ describe("the second factor for Owners and Admins (AC-3.5.3)", () => {
     const { user } = await open("/", { signedIn: true, enrolled: true, assurance: "aal1" });
 
     expect(
-      await screen.findByRole("heading", { level: 1, name: "Confirm it is you" }),
+      await screen.findByRole("heading", { level: 1, name: "Two-step code" }),
     ).toBeInTheDocument();
     await user.type(screen.getByLabelText("Code from the app"), "123456");
-    await user.click(screen.getByRole("button", { name: "Confirm" }));
+    await user.click(screen.getByRole("button", { name: "Verify and sign in" }));
     expect(await screen.findByRole("heading", { level: 1, name: "Overview" })).toBeInTheDocument();
   });
 
@@ -160,9 +154,7 @@ describe("an account without an organization", () => {
     ).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: "Sign out" }));
 
-    expect(
-      await screen.findByRole("heading", { level: 1, name: "Sign in to HT-Commerce" }),
-    ).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { level: 1, name: "Sign in" })).toBeInTheDocument();
     expect(backend.state.signedIn).toBe(false);
   });
 });
@@ -225,9 +217,7 @@ describe("security settings", () => {
     await user.click(screen.getByRole("button", { name: "Account and preferences" }));
     await user.click(screen.getByRole("menuitem", { name: "Sign out" }));
 
-    expect(
-      await screen.findByRole("heading", { level: 1, name: "Sign in to HT-Commerce" }),
-    ).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { level: 1, name: "Sign in" })).toBeInTheDocument();
     expect(backend.state.signedIn).toBe(false);
   });
 });
