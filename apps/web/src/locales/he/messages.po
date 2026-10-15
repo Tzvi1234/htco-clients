@@ -577,6 +577,10 @@ msgstr "מהנדס דיבאג ואמינות"
 msgid "Demo"
 msgstr "דמו"
 
+#: src/shared/ui/DemoScreen.tsx
+msgid "DEMO"
+msgstr "דמו"
+
 #: src/shared/ui/kit/kit.tsx
 #: src/shared/ui/SoonTag.tsx
 msgid "Demo — coming soon"
