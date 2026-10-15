@@ -317,7 +317,7 @@ function ProductsDemo() {
                   {ltr(sku)}
                   <span className="font-light text-muted">{ltr(`$${PRODUCT_PRICES[k]}`)}</span>
                 </span>
-                <ProductThumb kind={k} size={150} radius={16} />
+                <ProductThumb kind={k} size={150} radius={16} className="max-sm:!size-[112px]" />
                 <span className="mt-3 text-body">{names[k]}</span>
                 <span className="mt-1.5 text-caption text-secondary">{text(sold)}</span>
               </button>

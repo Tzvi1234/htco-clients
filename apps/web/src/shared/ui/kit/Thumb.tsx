@@ -1,3 +1,5 @@
+import { cx } from "../../lib/cx.ts";
+
 export type ProductKind = "star" | "pet" | "towel" | "mug";
 
 const STARS: readonly [number, number][] = [
@@ -17,18 +19,21 @@ export function ProductThumb({
   kind,
   size = 48,
   radius = 10,
+  className,
 }: {
   kind: ProductKind;
   size?: number;
   radius?: number;
+  /** Sizes the thumbnail per screen width (it fills its box). */
+  className?: string;
 }) {
   return (
     <span
       aria-hidden="true"
-      className="inline-block shrink-0 overflow-hidden"
+      className={cx("inline-block max-w-full shrink-0 overflow-hidden", className)}
       style={{ width: size, height: size, borderRadius: radius }}
     >
-      <svg viewBox="0 0 48 48" width={size} height={size}>
+      <svg viewBox="0 0 48 48" width="100%" height="100%">
         <rect width="48" height="48" fill="#F0F0EF" />
         {kind === "star" ? (
           <>

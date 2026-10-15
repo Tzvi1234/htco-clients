@@ -123,7 +123,7 @@ function TaskColumn({
         <button
           type="button"
           aria-label={t`New task`}
-          className="flex min-h-20 items-center justify-center rounded-card border border-dashed border-line transition-colors hover:bg-hover"
+          className="flex min-h-20 items-center justify-center rounded-card border border-dashed max-sm:hidden border-line transition-colors hover:bg-hover"
         >
           <InkDisc>
             <PlusGlyph size={14} />
@@ -140,14 +140,16 @@ function TasksDemo() {
   const agent = useAgent();
   return (
     <Screen layout="lc3s">
-      <TaskColumn title={<Trans>Queued</Trans>} rows={TASKS.queued} status="queued" />
-      <TaskColumn
-        title={<Trans>Running</Trans>}
-        rows={TASKS.running}
-        status="running"
-        highlightFirst
-      />
-      <TaskColumn title={<Trans>Waiting / blocked</Trans>} rows={TASKS.wait} />
+      <div className="-mx-2 flex snap-x snap-mandatory gap-2 overflow-x-auto px-2 sm:contents [&>*]:max-sm:w-[85%] [&>*]:max-sm:shrink-0 [&>*]:max-sm:snap-center">
+        <TaskColumn title={<Trans>Queued</Trans>} rows={TASKS.queued} status="queued" />
+        <TaskColumn
+          title={<Trans>Running</Trans>}
+          rows={TASKS.running}
+          status="running"
+          highlightFirst
+        />
+        <TaskColumn title={<Trans>Waiting / blocked</Trans>} rows={TASKS.wait} />
+      </div>
       <Strip
         title={<Trans>Completed today</Trans>}
         meta={ltr(8)}
