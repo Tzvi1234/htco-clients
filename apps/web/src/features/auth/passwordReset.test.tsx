@@ -115,7 +115,7 @@ describe("setting a new password from the emailed link (AC-3.5.6)", () => {
     await user.type(screen.getByLabelText("Repeat the password"), "a long new password");
     await user.click(screen.getByRole("button", { name: "Save and sign in" }));
 
-    expect(await screen.findByRole("heading", { level: 1, name: "Overview" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { level: 1, name: "Home" })).toBeInTheDocument();
     expect(backend.state.reset).toEqual({
       access_token: "reset-at",
       refresh_token: "reset-rt",
@@ -212,7 +212,7 @@ describe("setting a new password from the emailed link (AC-3.5.6)", () => {
     await user.type(screen.getByLabelText("Code from the app"), "123456");
     await user.click(screen.getByRole("button", { name: "Save and sign in" }));
 
-    expect(await screen.findByRole("heading", { level: 1, name: "Overview" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { level: 1, name: "Home" })).toBeInTheDocument();
     expect(backend.state.reset).toMatchObject({ code: "123456" });
   });
 });

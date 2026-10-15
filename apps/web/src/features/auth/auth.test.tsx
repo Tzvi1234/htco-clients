@@ -70,7 +70,7 @@ describe("signing in", () => {
   it("sends the CSRF header and keeps no token in the browser (AC-3.5.1)", async () => {
     const { user, backend } = await open("/sign-in", { role: "support" });
     await signIn(user);
-    await screen.findByRole("heading", { level: 1, name: "Overview" });
+    await screen.findByRole("heading", { level: 1, name: "Home" });
 
     const signInRequest = backend.requests.find((r) => r.url.endsWith("/v1/auth/sign-in"));
     expect(signInRequest?.headers.get("X-HTCO-CSRF")).toBe("1");
@@ -131,7 +131,7 @@ describe("the second factor for Owners and Admins (AC-3.5.3)", () => {
     await user.clear(screen.getByLabelText("Code from the app"));
     await user.type(screen.getByLabelText("Code from the app"), "123456");
     await user.click(screen.getByRole("button", { name: "Confirm" }));
-    expect(await screen.findByRole("heading", { level: 1, name: "Overview" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { level: 1, name: "Home" })).toBeInTheDocument();
   });
 
   it("asks an enrolled Owner for the code before the dashboard", async () => {
@@ -142,12 +142,12 @@ describe("the second factor for Owners and Admins (AC-3.5.3)", () => {
     ).toBeInTheDocument();
     await user.type(screen.getByLabelText("Code from the app"), "123456");
     await user.click(screen.getByRole("button", { name: "Confirm" }));
-    expect(await screen.findByRole("heading", { level: 1, name: "Overview" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { level: 1, name: "Home" })).toBeInTheDocument();
   });
 
   it("lets other roles in without a second factor", async () => {
     await open("/", { signedIn: true, role: "support" });
-    expect(screen.getByRole("heading", { level: 1, name: "Overview" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 1, name: "Home" })).toBeInTheDocument();
   });
 });
 
@@ -182,7 +182,7 @@ describe("signing out when the API is unavailable", () => {
     expect(await screen.findByRole("alert")).toHaveTextContent(
       "You are still signed in. Try signing out again shortly.",
     );
-    expect(screen.getByRole("heading", { level: 1, name: "Overview" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 1, name: "Home" })).toBeInTheDocument();
     expect(backend.state.signedIn).toBe(true);
   });
 

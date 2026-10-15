@@ -165,7 +165,12 @@ const routeTree = rootRoute.addChildren([
   signedInRoute.addChildren([
     secondFactorRoute,
     appRoute.addChildren([
-      createRoute({ getParentRoute: () => appRoute, path: "/", component: OverviewPage }),
+      createRoute({
+        getParentRoute: () => appRoute,
+        path: "/",
+        staticData: { layout: "panels" },
+        component: OverviewPage,
+      }),
       createRoute({ getParentRoute: () => appRoute, path: "/shops", component: ShopsPage }),
       createRoute({ getParentRoute: () => appRoute, path: "/settings", component: SettingsPage }),
       createRoute({

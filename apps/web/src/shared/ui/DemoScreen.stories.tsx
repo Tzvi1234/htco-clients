@@ -27,7 +27,7 @@ export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await expect(canvas.getAllByRole("heading", { level: 1 })).toHaveLength(1);
-    await expect(canvas.getByText(/Demo — coming soon|הדגמה — בקרוב/)).toBeInTheDocument();
+    await expect(canvas.getByText(/Demo — coming soon|דמו — בקרוב/)).toBeInTheDocument();
   },
 };
 
