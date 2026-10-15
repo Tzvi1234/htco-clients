@@ -280,7 +280,12 @@ function Today() {
           <Trans>in the web app</Trans>
         </span>
       </header>
-      <ul className="m-0 flex list-none snap-x overflow-x-auto border-t border-line p-0 [scrollbar-width:none] md:grid md:grid-cols-4">
+      {/* On phones the strip scrolls sideways, so it takes keyboard focus to scroll it. */}
+      <ul
+        tabIndex={0}
+        aria-labelledby="today-title"
+        className="m-0 flex list-none snap-x outline-offset-[-2px] overflow-x-auto border-t border-line p-0 [scrollbar-width:none] md:grid md:grid-cols-4"
+      >
         {items.map((item, index) => (
           <li
             key={item.label}
@@ -331,6 +336,8 @@ function Planned() {
     <section
       id="planned"
       aria-labelledby="planned-title"
+      // Phones scroll the cards sideways: focusable, so the keyboard can scroll them too.
+      tabIndex={0}
       className="-mx-2 flex snap-x scroll-px-2 gap-2 overflow-x-auto px-2 [scrollbar-width:none] md:mx-0 md:grid md:grid-cols-3 md:overflow-visible md:px-0"
     >
       <h2 id="planned-title" className="sr-only">
