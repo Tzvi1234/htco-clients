@@ -65,10 +65,10 @@ export function Navigation() {
             to={to}
             activeOptions={{ exact: to === "/", includeSearch: false }}
             className={cx(
-              "group flex flex-col items-center justify-center gap-0.5 rounded-button text-[11px] leading-[14px] font-medium no-underline outline-none",
+              "group flex flex-col items-center justify-center gap-0.5 text-[11px] leading-[14px] font-medium no-underline outline-none",
               "transition-[background-color,color] duration-[var(--motion-duration-fast)]",
-              // Phones: the white floating tab bar, the current tab on a soft iris pill.
-              "h-14 rounded-[22px] text-secondary aria-[current=page]:bg-selected aria-[current=page]:text-accent-text",
+              // Phones: the white capsule tab bar, the current tab on a concentric iris capsule.
+              "h-14 rounded-pill text-secondary aria-[current=page]:bg-selected aria-[current=page]:text-accent-text",
               // Rail and sidebar: on the ink app ground.
               "sm:size-10 sm:self-center sm:rounded-button sm:text-app-muted sm:hover:bg-app-hover sm:hover:text-app-text sm:aria-[current=page]:bg-app-selected sm:aria-[current=page]:text-app-text",
               "lg:h-[34px] lg:w-full lg:flex-row lg:justify-start lg:gap-2.5 lg:px-2.5 lg:text-body",

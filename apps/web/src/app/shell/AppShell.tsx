@@ -23,7 +23,7 @@ export function AppShell() {
     <div className="flex min-h-dvh flex-col bg-app sm:flex-row">
       <aside
         className={cx(
-          "fixed inset-x-4 bottom-4 z-20 flex rounded-[28px] border border-border-subtle bg-surface p-1.5 shadow-3",
+          "fixed inset-x-4 bottom-4 z-20 flex gap-1 rounded-pill border border-border-subtle bg-surface p-1.5 shadow-3",
           "sm:sticky sm:inset-x-auto sm:top-0 sm:bottom-auto sm:h-dvh sm:w-16 sm:shrink-0 sm:flex-col sm:rounded-none sm:border-0 sm:bg-transparent sm:p-0 sm:py-3 sm:shadow-none",
           "lg:w-62",
           intro && "animate-sidebar-in",
@@ -45,7 +45,7 @@ export function AppShell() {
         <div className="hidden px-3 pb-2 lg:block">
           <ShopSwitcher />
         </div>
-        <div className="grid place-items-center px-1 sm:place-items-stretch sm:px-2 lg:px-3">
+        <div className="grid place-items-center sm:place-items-stretch sm:px-2 lg:px-3">
           <UserMenu />
         </div>
       </aside>
