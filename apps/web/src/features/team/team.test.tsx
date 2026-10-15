@@ -30,9 +30,8 @@ describe("the team (FR-IAM-02)", () => {
     await open("/settings/team", owner);
 
     const members = await screen.findByRole("list", { name: "Members" });
-    const rows = within(members).getAllByRole("listitem");
-    expect(rows).toHaveLength(1);
-    expect(within(rows[0]!).getByText("Owner")).toBeInTheDocument();
+    expect(within(members).getAllByRole("listitem")).toHaveLength(1);
+    expect(within(members).getByText("Owner")).toBeInTheDocument();
   });
 
   it("invites a user as Admin and hands the owner the link to send", async () => {

@@ -31,6 +31,10 @@ msgstr "Account and preferences"
 msgid "Active listings"
 msgstr "Active listings"
 
+#: src/features/team/TeamPage.tsx
+msgid "Admin"
+msgstr "Admin"
+
 #: src/features/overview/OverviewPage.tsx
 msgid "After a shop is connected"
 msgstr "After a shop is connected"
@@ -51,6 +55,10 @@ msgstr "Android"
 msgid "Any browser, nothing to install."
 msgstr "Any browser, nothing to install."
 
+#: src/features/auth/AcceptInvitePage.tsx
+msgid "At least 12 characters."
+msgstr "At least 12 characters."
+
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Authenticator app"
 msgstr "Authenticator app"
@@ -67,9 +75,17 @@ msgstr "Big changes, sensitive messages and anything unusual always come to you.
 msgid "Cannot scan? Type this key into the app:"
 msgstr "Cannot scan? Type this key into the app:"
 
+#: src/features/team/TeamPage.tsx
+msgid "Check the email address."
+msgstr "Check the email address."
+
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Checking your account"
 msgstr "Checking your account"
+
+#: src/features/auth/AcceptInvitePage.tsx
+msgid "Choose a longer password that is harder to guess."
+msgstr "Choose a longer password that is harder to guess."
 
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Code from the app"
@@ -82,6 +98,10 @@ msgstr "Confirm"
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Confirm it is you"
 msgstr "Confirm it is you"
+
+#: src/features/team/TeamPage.tsx
+msgid "Confirm with your authenticator app, then try again."
+msgstr "Confirm with your authenticator app, then try again."
 
 #: src/features/shops/ShopsPage.tsx
 msgid "Connect Etsy shop"
@@ -103,6 +123,14 @@ msgstr "Connected shops appear here with their sync status and capabilities."
 msgid "Connecting a shop opens in a coming release."
 msgstr "Connecting a shop opens in a coming release."
 
+#: src/features/team/TeamPage.tsx
+msgid "Copied"
+msgstr "Copied"
+
+#: src/features/team/TeamPage.tsx
+msgid "Copy link"
+msgstr "Copy link"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "Customers answered"
 msgstr "Customers answered"
@@ -115,6 +143,10 @@ msgstr "Dark"
 #: src/features/overview/OverviewPage.tsx
 msgid "Decisions waiting"
 msgstr "Decisions waiting"
+
+#: src/features/team/TeamPage.tsx
+msgid "Developer"
+msgstr "Developer"
 
 #: src/features/overview/OverviewPage.tsx
 msgid "Done"
@@ -129,6 +161,7 @@ msgid "Each specialist acts under your policies and handles the day-to-day."
 msgstr "Each specialist acts under your policies and handles the day-to-day."
 
 #: src/features/auth/SignInPage.tsx
+#: src/features/team/TeamPage.tsx
 msgid "Email"
 msgstr "Email"
 
@@ -151,6 +184,10 @@ msgstr "Every order, verified"
 #: src/features/welcome/WelcomePage.tsx
 msgid "Everything your Etsy shop needs, working together in one AI office."
 msgstr "Everything your Etsy shop needs, working together in one AI office."
+
+#: src/features/team/TeamPage.tsx
+msgid "Finance"
+msgstr "Finance"
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "Get the apps"
@@ -213,6 +250,31 @@ msgstr "HTCO checks orders, tracking and listings, and asks you before anything 
 msgid "In development"
 msgstr "In development"
 
+#: src/features/team/TeamPage.tsx
+msgid "Invitation link"
+msgstr "Invitation link"
+
+#: src/features/team/TeamPage.tsx
+msgid "Invitations cannot be sent right now. Try again shortly."
+msgstr "Invitations cannot be sent right now. Try again shortly."
+
+#: src/features/team/TeamPage.tsx
+msgid "Invite"
+msgstr "Invite"
+
+#: src/features/settings/SettingsPage.tsx
+#: src/features/team/TeamPage.tsx
+msgid "Invite people and choose what they can do."
+msgstr "Invite people and choose what they can do."
+
+#: src/features/team/TeamPage.tsx
+msgid "Invite someone"
+msgstr "Invite someone"
+
+#: src/features/team/TeamPage.tsx
+msgid "Invited member"
+msgstr "Invited member"
+
 #: src/features/overview/OverviewPage.tsx
 msgid "Key numbers"
 msgstr "Key numbers"
@@ -253,6 +315,10 @@ msgstr "Match the system"
 msgid "Meet your office"
 msgstr "Meet your office"
 
+#: src/features/team/TeamPage.tsx
+msgid "Members"
+msgstr "Members"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "Messages sorted, drafted and escalated with the order history beside them."
 msgstr "Messages sorted, drafted and escalated with the order history beside them."
@@ -260,6 +326,10 @@ msgstr "Messages sorted, drafted and escalated with the order history beside the
 #: src/features/welcome/WelcomePage.tsx
 msgid "Named specialists work under your policies and bring you every risky decision."
 msgstr "Named specialists work under your policies and bring you every risky decision."
+
+#: src/features/auth/AcceptInvitePage.tsx
+msgid "New password"
+msgstr "New password"
 
 #: src/features/auth/SignInPage.tsx
 msgid "No account yet? The workspace owner sends invitations."
@@ -293,6 +363,10 @@ msgstr "One office for the whole business"
 msgid "Open the web app"
 msgstr "Open the web app"
 
+#: src/features/team/TeamPage.tsx
+msgid "Operations"
+msgstr "Operations"
+
 #: src/features/overview/OverviewPage.tsx
 #: src/features/shops/ShopsPage.tsx
 msgid "Orders today"
@@ -314,6 +388,10 @@ msgstr "Orders, tracking and listings start flowing in."
 #: src/features/overview/OverviewPage.tsx
 msgid "Overview"
 msgstr "Overview"
+
+#: src/features/team/TeamPage.tsx
+msgid "Owner"
+msgstr "Owner"
 
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Owners and Admins sign in with a password and a code from an app such as Google Authenticator, Microsoft Authenticator or 1Password."
@@ -347,6 +425,10 @@ msgstr "Quick actions"
 msgid "Records"
 msgstr "Records"
 
+#: src/features/auth/AcceptInvitePage.tsx
+msgid "Repeat the password"
+msgstr "Repeat the password"
+
 #: src/shared/ui/ErrorState.tsx
 msgid "Request ID <0>{requestId}</0>"
 msgstr "Request ID <0>{requestId}</0>"
@@ -358,6 +440,14 @@ msgstr "Revenue, 30 days"
 #: src/features/overview/OverviewPage.tsx
 msgid "Review security"
 msgstr "Review security"
+
+#: src/features/team/TeamPage.tsx
+msgid "Role"
+msgstr "Role"
+
+#: src/features/auth/AcceptInvitePage.tsx
+msgid "Save and sign in"
+msgstr "Save and sign in"
 
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Scan the QR code with the app."
@@ -380,6 +470,14 @@ msgstr "Secure your account"
 msgid "Security"
 msgstr "Security"
 
+#: src/features/team/TeamPage.tsx
+msgid "Send on WhatsApp"
+msgstr "Send on WhatsApp"
+
+#: src/features/team/TeamPage.tsx
+msgid "Send this link to them yourself. It works once; when it expires, invite them again."
+msgstr "Send this link to them yourself. It works once; when it expires, invite them again."
+
 #: src/features/security/SecurityPage.tsx
 msgid "Set one up"
 msgstr "Set one up"
@@ -387,6 +485,10 @@ msgstr "Set one up"
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Set up your authenticator app"
 msgstr "Set up your authenticator app"
+
+#: src/features/auth/AcceptInvitePage.tsx
+msgid "Set your password"
+msgstr "Set your password"
 
 #: src/app/shell/Navigation.tsx
 #: src/features/settings/SettingsPage.tsx
@@ -448,9 +550,18 @@ msgstr "Specialists for listings, orders, customers and money work on your shop 
 msgid "Start with your shop"
 msgstr "Start with your shop"
 
+#: src/features/team/TeamPage.tsx
+msgid "Support"
+msgstr "Support"
+
 #: src/features/shops/ShopsPage.tsx
 msgid "Sync"
 msgstr "Sync"
+
+#: src/features/settings/SettingsPage.tsx
+#: src/features/team/TeamPage.tsx
+msgid "Team"
+msgstr "Team"
 
 #: src/app/RouteStates.tsx
 msgid "The address may be mistyped, or the page has moved."
@@ -472,6 +583,10 @@ msgstr "The email or the password is wrong."
 msgid "The marketplace shops this organization runs."
 msgstr "The marketplace shops this organization runs."
 
+#: src/features/auth/AcceptInvitePage.tsx
+msgid "The passwords are not the same."
+msgstr "The passwords are not the same."
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "The web app is ready today. The Windows and Android apps are coming soon with the same features."
 msgstr "The web app is ready today. The Windows and Android apps are coming soon with the same features."
@@ -489,13 +604,23 @@ msgstr "These preferences are remembered on this device."
 msgid "This device"
 msgstr "This device"
 
+#: src/features/auth/AcceptInvitePage.tsx
 #: src/features/auth/SecondFactorPage.tsx
+#: src/features/team/TeamPage.tsx
 msgid "This did not work. Try again shortly."
 msgstr "This did not work. Try again shortly."
+
+#: src/features/auth/AcceptInvitePage.tsx
+msgid "This invitation link has expired or was already used. Ask for a new one."
+msgstr "This invitation link has expired or was already used. Ask for a new one."
 
 #: src/features/auth/SignInPage.tsx
 msgid "This page could not sign you in. Reload it and try again."
 msgstr "This page could not sign you in. Reload it and try again."
+
+#: src/features/team/TeamPage.tsx
+msgid "This person is already a member."
+msgstr "This person is already a member."
 
 #: src/app/RouteStates.tsx
 msgid "This screen could not be shown"
@@ -505,6 +630,7 @@ msgstr "This screen could not be shown"
 msgid "Titles, photos and claims audited and fixed as drafts you approve."
 msgstr "Titles, photos and claims audited and fixed as drafts you approve."
 
+#: src/features/auth/AcceptInvitePage.tsx
 #: src/features/auth/SecondFactorPage.tsx
 #: src/features/auth/SignInPage.tsx
 msgid "Too many attempts. Wait 15 minutes and try again."
@@ -530,6 +656,10 @@ msgstr "Unknown device"
 msgid "Use it anywhere"
 msgstr "Use it anywhere"
 
+#: src/features/team/TeamPage.tsx
+msgid "Viewer"
+msgstr "Viewer"
+
 #: src/features/overview/OverviewPage.tsx
 msgid "Waiting for you"
 msgstr "Waiting for you"
@@ -553,6 +683,14 @@ msgstr "You approve what's risky"
 #: src/app/shell/AppShell.tsx
 msgid "You are offline. What you see may be out of date; changes are paused."
 msgstr "You are offline. What you see may be out of date; changes are paused."
+
+#: src/features/auth/AcceptInvitePage.tsx
+msgid "You were invited to HT-Commerce. Choose a password to finish."
+msgstr "You were invited to HT-Commerce. Choose a password to finish."
+
+#: src/features/team/TeamPage.tsx
+msgid "You're invited to HT-Commerce: {link}"
+msgstr "You're invited to HT-Commerce: {link}"
 
 #: src/features/overview/OverviewPage.tsx
 msgid "Your AI office"

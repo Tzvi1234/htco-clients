@@ -89,7 +89,7 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
       return json(200, { user_id: user, assurance: state.assurance });
     }
     if (route === "POST /v1/auth/invitations/accept") {
-      if (body["access_token"] !== "invite-at") return problem(401, "sign-in-refused");
+      if (body["access_token"] !== "invite-at") return problem(401, "invitation-refused");
       state.accepted = body;
       state.signedIn = true;
       return json(200, { user_id: user, assurance: state.assurance });
