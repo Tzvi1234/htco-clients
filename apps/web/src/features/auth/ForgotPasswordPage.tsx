@@ -9,6 +9,8 @@ import { ApiError, apiError, useApi } from "../../shared/api/api.tsx";
 import { Button } from "../../shared/ui/Button.tsx";
 import { TextField } from "../../shared/ui/TextField.tsx";
 
+const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 /**
  * Asks the API to email a reset link. The API answers the same whether or not the account exists
  * (AC-3.5.6), so the page says the same thing too.
@@ -17,7 +19,7 @@ export function ForgotPasswordPage() {
   const { t } = useLingui();
   const api = useApi();
   const [email, setEmail] = useState("");
-  const [empty, setEmpty] = useState(false);
+  const [problem, setProblem] = useState<"empty" | "format" | null>(null);
 
   const send = useMutation({
     mutationFn: async (address: string) => {
@@ -29,9 +31,11 @@ export function ForgotPasswordPage() {
   });
 
   function message(): string | undefined {
-    if (empty) return t`Enter your email.`;
+    if (problem === "empty") return t`Enter your email.`;
+    if (problem === "format") return t`Enter a valid email address.`;
     const error = send.error;
     if (error === null) return undefined;
+    if (error instanceof ApiError && error.status === 422) return t`Enter a valid email address.`;
     if (error instanceof ApiError && error.type === "too-many-attempts")
       return t`Too many attempts. Wait 15 minutes and try again.`;
     return t`This did not work. Try again shortly.`;
@@ -40,8 +44,10 @@ export function ForgotPasswordPage() {
   function submit(event: SyntheticEvent) {
     event.preventDefault();
     const address = email.trim();
-    setEmpty(address === "");
-    if (address !== "") send.mutate(address);
+    // A light check for typing mistakes; the sign-in service decides what is deliverable.
+    const next = address === "" ? "empty" : EMAIL.test(address) ? null : "format";
+    setProblem(next);
+    if (next === null) send.mutate(address);
   }
 
   const backToSignIn = (

@@ -184,6 +184,10 @@ msgstr "Each specialist acts under your policies and handles the day-to-day."
 msgid "Email"
 msgstr "Email"
 
+#: src/features/auth/ForgotPasswordPage.tsx
+msgid "Enter a valid email address."
+msgstr "Enter a valid email address."
+
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "Enter the 6-digit code from your authenticator app to finish."
 msgstr "Enter the 6-digit code from your authenticator app to finish."

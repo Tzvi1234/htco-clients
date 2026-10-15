@@ -184,6 +184,10 @@ msgstr "כל מומחה פועל לפי המדיניות שלך ומטפל בש�
 msgid "Email"
 msgstr "אימייל"
 
+#: src/features/auth/ForgotPasswordPage.tsx
+msgid "Enter a valid email address."
+msgstr "הזינו כתובת אימייל תקינה."
+
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "Enter the 6-digit code from your authenticator app to finish."
 msgstr "כדי לסיים, הזינו את הקוד בן 6 הספרות מאפליקציית האימות."
