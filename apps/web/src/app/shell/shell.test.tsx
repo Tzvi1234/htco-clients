@@ -154,12 +154,13 @@ describe("the sidebar (Design 1C)", () => {
 
 describe("the screen's panel", () => {
   it("scrolls an existing screen inside the panel, which clips to its corners", async () => {
-    await open("/settings/team");
+    // Members & access lays out its own panels now; Shops is still a screen in the shell panel.
+    await open("/shops");
     const scroller = document.querySelector("main [data-screen-scroll]");
 
     expect(scroller).toHaveClass("overflow-auto");
     expect(scroller?.parentElement).toHaveClass("overflow-hidden");
-    expect(scroller).toContainElement(screen.getByRole("list", { name: "Members" }));
+    expect(scroller?.childElementCount).toBeGreaterThan(0);
   });
 });
 
