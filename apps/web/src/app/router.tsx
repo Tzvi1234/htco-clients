@@ -11,7 +11,7 @@ import {
 
 import { NotFound, RouteError } from "./RouteStates.tsx";
 import { AppShell } from "./shell/AppShell.tsx";
-import { DemoRoute } from "./shell/DemoRoute.tsx";
+import { DemoRoute, loadDemoScreens } from "./shell/DemoRoute.tsx";
 import { AREAS } from "./shell/nav.ts";
 import { AcceptInvitePage } from "../features/auth/AcceptInvitePage.tsx";
 import { ForgotPasswordPage } from "../features/auth/ForgotPasswordPage.tsx";
@@ -132,6 +132,8 @@ const demoRoutes = AREAS.flatMap((area) =>
         getParentRoute: () => appRoute,
         path: tab.to,
         staticData: { layout: "panels" },
+        // The area's demo screens are their own chunk, fetched when one of its tabs opens.
+        loader: () => loadDemoScreens(area.id),
         component: function Demo() {
           return <DemoRoute area={area.id} tab={tab.id} />;
         },

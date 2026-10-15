@@ -116,10 +116,10 @@ function LiveMap({ modes }: { modes: ReactNode }) {
 
   // Keep the latest callbacks for the scene without rebuilding it.
   const toast = useToast();
-  const latest = useRef({ t: i18n, toast });
+  const latest = useRef({ t: i18n, toast, still });
   useEffect(() => {
-    latest.current = { t: i18n, toast };
-  }, [i18n, toast]);
+    latest.current = { t: i18n, toast, still };
+  }, [i18n, toast, still]);
 
   useEffect(() => {
     let cancelled = false;
@@ -147,7 +147,8 @@ function LiveMap({ modes }: { modes: ReactNode }) {
           onGo: () => {
             latest.current.toast(latest.current.t._(COMING_SOON));
           },
-          still,
+          // The setting now, which may have changed while the module was loading.
+          still: latest.current.still,
         });
         scene.current = created;
         created.start();
@@ -167,6 +168,11 @@ function LiveMap({ modes }: { modes: ReactNode }) {
   useEffect(() => {
     scene.current?.setPalette(palette);
   }, [palette]);
+
+  // The system's reduced-motion setting can change while the map is open.
+  useEffect(() => {
+    scene.current?.setStill(still);
+  }, [still]);
 
   useEffect(() => {
     scene.current?.relabel();

@@ -83,6 +83,8 @@ const hash01 = (n: number) => {
 /** One living office on a canvas. `dispose()` frees the GPU resources and the listeners. */
 export class OfficeScene {
   private readonly o: OfficeSceneOptions;
+  /** Reduced motion now: it follows the system setting after the scene is built. */
+  private still: boolean;
   private P: ScenePalette;
   private readonly renderer: THREE.WebGLRenderer;
   private scene = new THREE.Scene();
@@ -120,6 +122,7 @@ export class OfficeScene {
 
   constructor(options: OfficeSceneOptions) {
     this.o = options;
+    this.still = options.still;
     this.P = SCENE_PALETTES[options.palette];
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setClearColor(0x000000, 0);
@@ -148,7 +151,7 @@ export class OfficeScene {
 
   /** Animate; under reduced motion draw one still frame and redraw only on interaction. */
   start(): void {
-    if (this.o.still) {
+    if (this.still) {
       this.render(0);
       return;
     }
@@ -180,6 +183,19 @@ export class OfficeScene {
     this.o.overlay.replaceChildren();
   }
 
+  /**
+   * Reduced motion turned on or off while the map is open: stop the frame loop and keep one
+   * still frame, or start animating again.
+   */
+  setStill(still: boolean): void {
+    if (still === this.still) return;
+    this.still = still;
+    if (still) {
+      this.stop();
+      this.render(0);
+    } else this.start();
+  }
+
   setPalette(palette: "sbb" | "d4"): void {
     if (SCENE_PALETTES[palette] === this.P) return;
     this.P = SCENE_PALETTES[palette];
@@ -203,7 +219,7 @@ export class OfficeScene {
 
   /** Draws a frame when the loop is not running (reduced motion): the camera jumps there. */
   private redraw(): void {
-    if (!this.running) this.render(this.o.still ? 0 : 0.05);
+    if (!this.running) this.render(this.still ? 0 : 0.05);
   }
 
   /* ------------------------------------------------------------------ helpers */
