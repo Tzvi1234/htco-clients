@@ -46,7 +46,15 @@ export function ProductThumb({
             <rect x="10" y="8" width="28" height="32" rx="1" fill="#fff" stroke="#D3D3D3" />
             <circle cx="24" cy="22" r="7" fill="var(--accent-mark)" />
             <path d="M18 17l2-5 3 4M30 17l-2-5-3 4" fill="var(--accent-mark)" />
-            <rect x="15" y="32" width="18" height="4" rx="2" fill="var(--accent-mark)" opacity=".35" />
+            <rect
+              x="15"
+              y="32"
+              width="18"
+              height="4"
+              rx="2"
+              fill="var(--accent-mark)"
+              opacity=".35"
+            />
           </>
         ) : null}
         {kind === "towel" ? (

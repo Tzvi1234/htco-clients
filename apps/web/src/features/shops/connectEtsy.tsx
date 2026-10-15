@@ -3,7 +3,8 @@ import { useMutation } from "@tanstack/react-query";
 import { useState, type ReactNode, type SyntheticEvent } from "react";
 import { Dialog, Heading, Modal, ModalOverlay } from "react-aria-components";
 
-import { CodeField, useCodeMessage } from "../auth/SecondFactorPage.tsx";
+import { CodeBoxes } from "./CodeBoxes.tsx";
+import { useCodeMessage } from "../auth/SecondFactorPage.tsx";
 import { ApiError, apiError, useApi } from "../../shared/api/api.tsx";
 import { browser } from "../../shared/lib/browser.ts";
 import { Button } from "../../shared/ui/Button.tsx";
@@ -165,7 +166,7 @@ function StepUpDialog({
                 </Trans>
               </p>
             </div>
-            <CodeField value={code} onChange={setCode} autoFocus />
+            <CodeBoxes value={code} onChange={setCode} autoFocus invalid={confirm.isError} />
             <FormAlert message={codeMessage(confirm.error)} />
             <div className="grid grid-cols-2 gap-2">
               <Button slot="close" size="lg">

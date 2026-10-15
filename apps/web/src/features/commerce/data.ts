@@ -2,6 +2,7 @@
 // only inside demo frames and Demo-marked parts until orders, listings and suppliers sync.
 import { useLingui } from "@lingui/react/macro";
 
+import type { AgentId } from "../work/agents.ts";
 import type { WorkStatus } from "../../shared/ui/kit/Bits.tsx";
 import { bi, useBi, type Bi } from "../../shared/ui/kit/bi.ts";
 import type { ProductKind } from "../../shared/ui/kit/Thumb.tsx";
@@ -13,7 +14,12 @@ export const PRODUCT_NAMES: Record<ProductKind, Bi> = {
   mug: bi("ספל קרמיקה עם שם", "Ceramic name mug"),
 };
 
-export const PRODUCT_PRICES: Record<ProductKind, number> = { star: 42, pet: 72, towel: 18, mug: 24 };
+export const PRODUCT_PRICES: Record<ProductKind, number> = {
+  star: 42,
+  pet: 72,
+  towel: 18,
+  mug: 24,
+};
 
 export type DemoShop = "prints" | "home";
 
@@ -67,7 +73,7 @@ export interface DemoOrder {
   status: OrderStatus;
   shop: DemoShop;
   tracking: string;
-  agent: string;
+  agent: AgentId;
 }
 
 const CUSTOMERS = ["Emma R.", "Liam K.", "Sofia M.", "Noah B.", "Olivia P.", "Ava T."];
@@ -94,7 +100,7 @@ export const ORDERS: readonly DemoOrder[] = (() => {
     if (n === 3152 || n === 3160) status = "late";
     const customer =
       n === 3152 ? "Emma R." : n === 3160 ? "Liam K." : (CUSTOMERS[k % 6] ?? "Emma R.");
-    const agent =
+    const agent: AgentId =
       status === "paid"
         ? "maya"
         : status === "prod"
@@ -112,8 +118,7 @@ export const ORDERS: readonly DemoOrder[] = (() => {
       total: fixed ?? PRODUCT_PRICES[item] * qty,
       status,
       shop: PRODUCT_SHOP[item],
-      tracking:
-        status === "paid" || status === "prod" ? "" : `9400 1118 9922 ${n} 0${(k % 9) + 1}`,
+      tracking: status === "paid" || status === "prod" ? "" : `9400 1118 9922 ${n} 0${(k % 9) + 1}`,
       agent,
     });
   }

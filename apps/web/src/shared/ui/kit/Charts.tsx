@@ -150,7 +150,13 @@ export function DotColumns({
   const H = rows * pitch;
   return (
     <div role="img" aria-label={label} className="flex flex-col items-center">
-      <svg aria-hidden="true" width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ direction: "ltr" }}>
+      <svg
+        aria-hidden="true"
+        width={W}
+        height={H}
+        viewBox={`0 0 ${W} ${H}`}
+        style={{ direction: "ltr" }}
+      >
         {values.map((v, i) => {
           const n = Math.round((v / max) * rows);
           const x = i * gap + gap / 2;

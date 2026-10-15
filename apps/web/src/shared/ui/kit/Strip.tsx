@@ -80,9 +80,11 @@ export function StripCard({
         <span className="font-light text-muted">{topEnd}</span>
       </div>
       {middle}
-      {line === undefined ? null : <div className="mt-2.5 text-caption">{line}</div>}
+      {line === undefined ? null : <div className="mt-2.5 w-full min-w-0 text-caption">{line}</div>}
       {task === undefined ? null : (
-        <div className="mt-1.5 w-full truncate text-caption leading-[1.3] text-secondary">{task}</div>
+        <div className="mt-1.5 w-full truncate text-caption leading-[1.3] text-secondary">
+          {task}
+        </div>
       )}
     </div>
   );

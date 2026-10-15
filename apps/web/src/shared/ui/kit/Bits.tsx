@@ -97,10 +97,7 @@ export function KeyValues({
   return (
     <dl className={cx("m-0 grid grid-cols-[1fr_auto] gap-4", className)}>
       {items.map((item, index) => (
-        <div
-          key={item.key ?? index}
-          className={cx("min-w-0", index % 2 === 1 && "text-end")}
-        >
+        <div key={item.key ?? index} className={cx("min-w-0", index % 2 === 1 && "text-end")}>
           <dt className="mb-0.5 block text-caption font-light text-muted">{item.label}</dt>
           <dd className="m-0 text-body">{item.value}</dd>
         </div>
@@ -214,7 +211,10 @@ export function StatusGlyph({ status, size = 10 }: { status: WorkStatus; size?: 
   switch (status) {
     case "running":
       return (
-        <svg {...common} className="shrink-0 motion-safe:animate-[htco-led_2.4s_ease-in-out_infinite]">
+        <svg
+          {...common}
+          className="shrink-0 motion-safe:animate-[htco-led_2.4s_ease-in-out_infinite]"
+        >
           <circle cx="5" cy="5" r="4" fill="var(--success-dot)" />
         </svg>
       );
@@ -326,7 +326,9 @@ export function StatusText({
 }) {
   const labels = useStatusLabels();
   return (
-    <span className={cx("inline-flex items-center gap-1.5 text-caption whitespace-nowrap", className)}>
+    <span
+      className={cx("inline-flex items-center gap-1.5 text-caption whitespace-nowrap", className)}
+    >
       <StatusGlyph status={status} />
       {label ?? labels[status]}
     </span>

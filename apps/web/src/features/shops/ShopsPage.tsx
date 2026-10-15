@@ -14,7 +14,7 @@ import { PageHeader } from "../../shared/ui/PageHeader.tsx";
 import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
 import { WorkspacePicker, pickWorkspace } from "../../shared/ui/WorkspacePicker.tsx";
 import { CheckGlyph, PlusGlyph } from "../../shared/ui/kit/glyphs.tsx";
-import { IdBlock, InkDisc } from "../../shared/ui/kit/Bits.tsx";
+import { Dot, IdBlock, InkDisc, Pill, PillPair } from "../../shared/ui/kit/Bits.tsx";
 import { Screen } from "../../shared/ui/kit/Layout.tsx";
 
 /**
@@ -304,24 +304,54 @@ function HowConnecting() {
   ];
   return (
     <Panel className="max-sm:hidden">
-      <PanelHeader title={<Trans>How connecting works</Trans>} meta={<span className="ltr">3</span>} />
-      <ol className="m-0 flex grow list-none flex-col justify-center gap-2 px-6 pb-6">
-        {steps.map((step, index) => (
-          <li
-            key={index}
-            style={{ animationDelay: `${120 + index * 80}ms` }}
-            className="flex items-center gap-4 rounded-card p-3 transition-colors hover:bg-hover motion-safe:animate-enter"
-          >
-            <span className="ltr flex size-10 shrink-0 items-center justify-center rounded-pill border border-line-strong text-body">
-              {index + 1}
-            </span>
-            <span className="flex min-w-0 flex-col">
-              <span className="text-body">{step.title}</span>
-              <span className="text-caption text-secondary">{step.text}</span>
-            </span>
-          </li>
-        ))}
-      </ol>
+      <PanelHeader
+        title={<Trans>How connecting works</Trans>}
+        meta={<span className="ltr">3</span>}
+      />
+      <div className="flex min-h-0 grow flex-col justify-between gap-6 px-6 pb-6">
+        <IdBlock label={<Trans>Connecting takes:</Trans>} id={<Trans>About a minute</Trans>} />
+        <ol className="m-0 flex list-none flex-col gap-1 p-0">
+          {steps.map((step, index) => (
+            <li
+              key={index}
+              style={{ animationDelay: `${120 + index * 80}ms` }}
+              className="flex items-center gap-4 rounded-card p-3 transition-colors hover:bg-hover motion-safe:animate-enter"
+            >
+              <span className="ltr flex size-10 shrink-0 items-center justify-center rounded-pill border border-line-strong text-body">
+                {index + 1}
+              </span>
+              <span className="flex min-w-0 flex-col">
+                <span className="text-body">{step.title}</span>
+                <span className="text-caption text-secondary">{step.text}</span>
+              </span>
+            </li>
+          ))}
+        </ol>
+        <PillPair
+          items={[
+            {
+              key: "needs",
+              label: <Trans>You need:</Trans>,
+              pill: (
+                <Pill wide>
+                  <Dot tone="ink" />
+                  <Trans>Authenticator app</Trans>
+                </Pill>
+              ),
+            },
+            {
+              key: "access",
+              label: <Trans>Etsy access:</Trans>,
+              pill: (
+                <Pill wide>
+                  <Dot tone="good" />
+                  <Trans>Read only</Trans>
+                </Pill>
+              ),
+            },
+          ]}
+        />
+      </div>
     </Panel>
   );
 }

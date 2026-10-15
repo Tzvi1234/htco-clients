@@ -204,9 +204,15 @@ export function ShopCard({
               <Trans>Loading connection details</Trans>
             </span>
             {["w-3/5", "w-2/5"].map((width) => (
-              <span key={width} aria-hidden="true" className="flex h-6 items-center justify-between gap-3">
+              <span
+                key={width}
+                aria-hidden="true"
+                className="flex h-6 items-center justify-between gap-3"
+              >
                 <span className="h-2.5 w-16 rounded-pill bg-hover motion-safe:animate-pulse" />
-                <span className={`h-2.5 rounded-pill bg-hover motion-safe:animate-pulse ${width}`} />
+                <span
+                  className={`h-2.5 rounded-pill bg-hover motion-safe:animate-pulse ${width}`}
+                />
               </span>
             ))}
             <div aria-hidden="true" className="grid grid-cols-2 gap-2">
@@ -267,10 +273,7 @@ export function ShopCard({
                           <Trans>Not synced yet</Trans>
                         </span>
                       ) : (
-                        <time
-                          className="truncate"
-                          dateTime={integration.last_successful_call_at}
-                        >
+                        <time className="truncate" dateTime={integration.last_successful_call_at}>
                           {t`Last synced ${ago(integration.last_successful_call_at, now, locale)}`}
                         </time>
                       )}

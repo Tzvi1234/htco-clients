@@ -5,7 +5,16 @@ import { DemoPart } from "../../shared/ui/kit/Demo.tsx";
 import { Strip, StripCard } from "../../shared/ui/kit/Strip.tsx";
 import { ProductThumb, type ProductKind } from "../../shared/ui/kit/Thumb.tsx";
 
-const LISTINGS: readonly ProductKind[] = ["star", "pet", "towel", "mug", "star", "pet", "mug", "towel"];
+const LISTINGS: readonly ProductKind[] = [
+  "star",
+  "pet",
+  "towel",
+  "mug",
+  "star",
+  "pet",
+  "mug",
+  "towel",
+];
 
 /**
  * The demo's "Top listings" strip under the shop panels. Listings sync is planned (phase 11),

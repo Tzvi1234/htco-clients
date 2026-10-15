@@ -10,6 +10,8 @@ export interface Column<Row> {
   end?: boolean;
   /** False: left out on phones, which show fewer columns. */
   phone?: boolean;
+  /** "wide": only on wide screens (from 1600 px), like the demo's shop column. */
+  only?: "wide";
   className?: string;
 }
 
@@ -43,9 +45,10 @@ export function DataTable<Row>({
                 key={column.key}
                 scope="col"
                 className={cx(
-                  "sticky top-0 z-1 h-9 border-b border-line bg-table-head px-3 text-start text-caption font-light whitespace-nowrap text-muted",
+                  "sticky top-0 z-1 h-9 border-b border-line bg-table-head px-3 max-xl:px-[9px] text-start text-caption font-light whitespace-nowrap text-muted",
                   column.end && "text-end",
                   column.phone === false && "max-sm:hidden",
+                  column.only === "wide" && "max-xl:hidden",
                 )}
               >
                 {column.header}
@@ -66,13 +69,14 @@ export function DataTable<Row>({
                   <td
                     key={column.key}
                     className={cx(
-                      "h-12 border-b px-3 whitespace-nowrap transition-colors duration-[var(--motion-duration-fast)]",
+                      "h-12 border-b px-3 whitespace-nowrap max-xl:px-[9px] transition-colors duration-[var(--motion-duration-fast)]",
                       "group-hover:bg-hover",
                       on
                         ? "border-transparent bg-selected group-hover:bg-selected first:rounded-s-[12px] last:rounded-e-[12px]"
                         : "border-line",
                       column.end && "tabular text-end",
                       column.phone === false && "max-sm:hidden",
+                      column.only === "wide" && "max-xl:hidden",
                       column.className,
                     )}
                   >

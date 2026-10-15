@@ -58,11 +58,7 @@ export function DownloadGlyph({ size = 16, ...props }: GlyphProps) {
 
 export function UpGlyph({ size = 12, ...props }: GlyphProps) {
   return (
-    <svg
-      {...base(size, props, "0 0 12 12")}
-      {...stroke(1.4)}
-      stroke="var(--success-dot)"
-    >
+    <svg {...base(size, props, "0 0 12 12")} {...stroke(1.4)} stroke="var(--success-dot)">
       <path d="M6 10V2M2.5 5.5L6 2l3.5 3.5" />
     </svg>
   );

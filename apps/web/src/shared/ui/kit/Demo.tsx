@@ -5,7 +5,8 @@ import { cx } from "../../lib/cx.ts";
 import { useToast } from "../Toast.tsx";
 
 /** What a click on a demo control can land on. */
-const CONTROL = "button, a, input, select, textarea, label, [role='button'], [role='tab'], tbody tr";
+const CONTROL =
+  "button, a, input, select, textarea, label, [role='button'], [role='tab'], tbody tr";
 
 /**
  * A screen that is designed but not built (redesign brief, rule 2): the demo's full screen with
@@ -26,18 +27,25 @@ export function DemoFrame({ children }: { children: ReactNode }) {
 
   return (
     <div data-demo-frame="" className="relative flex min-h-0 grow flex-col" onClickCapture={stop}>
-      <div className="pointer-events-none absolute inset-x-0 top-2 z-20 flex justify-center max-sm:sticky max-sm:top-2 max-sm:h-0 max-sm:overflow-visible">
+      <div className="pointer-events-none absolute inset-x-0 -top-[60px] z-20 flex justify-center max-sm:sticky max-sm:top-2 max-sm:mb-2">
         <p className="m-0 flex h-12 items-center gap-3 rounded-pill bg-inverse ps-5 pe-6 text-on-inverse shadow-popover motion-safe:animate-pop-in max-sm:h-10 max-sm:ps-4 max-sm:pe-5">
           <span
             aria-hidden="true"
             className="size-2.5 rounded-pill bg-accent-on-inverse motion-safe:animate-[htco-demo-shimmer_2.4s_ease-in-out_infinite]"
           />
-          <span className="font-display text-[26px] leading-none font-light tracking-[0.18em] uppercase max-sm:text-[20px]">
+          <span
+            aria-hidden="true"
+            className="font-display text-[26px] leading-none font-light tracking-[0.18em] uppercase max-sm:text-[20px]"
+          >
             {t`Demo`}
           </span>
-          <span className="text-caption font-light text-on-inverse-muted max-sm:hidden">
+          <span
+            aria-hidden="true"
+            className="text-caption font-light text-on-inverse-muted max-sm:hidden"
+          >
             {t`Sample data · coming soon`}
           </span>
+          <span className="sr-only">{t`Demo — coming soon`}</span>
         </p>
       </div>
       <div className="flex min-h-0 grow flex-col opacity-[0.78] saturate-[0.85]">{children}</div>
