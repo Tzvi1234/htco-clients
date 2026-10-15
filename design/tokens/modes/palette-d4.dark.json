@@ -5,9 +5,6 @@
       "ground": {
         "$value": "{palette.d4-dark.ground}"
       },
-      "panel": {
-        "$value": "{palette.d4-dark.panel}"
-      },
       "raised": {
         "$value": "{palette.d4-dark.raised}"
       },
@@ -22,6 +19,9 @@
       },
       "card": {
         "$value": "{palette.d4-dark.card}"
+      },
+      "panel-base": {
+        "$value": "{palette.d4-dark.panel}"
       }
     },
     "border": {
@@ -423,6 +423,71 @@
           "hex": "#111015"
         },
         "$description": "The designed ground's gradient, bottom"
+      },
+      "1-fade": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.549,
+            0.4627,
+            0.8392
+          ],
+          "alpha": 0,
+          "hex": "#8c76d6"
+        }
+      },
+      "2-fade": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.7608,
+            0.4824,
+            0.7686
+          ],
+          "alpha": 0,
+          "hex": "#c27bc4"
+        }
+      },
+      "3-fade": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9294,
+            0.8471,
+            0.0118
+          ],
+          "alpha": 0,
+          "hex": "#edd803"
+        }
+      },
+      "4-fade": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.6627,
+            0.5882,
+            0.9098
+          ],
+          "alpha": 0,
+          "hex": "#a996e8"
+        }
+      },
+      "5-fade": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            1,
+            1
+          ],
+          "alpha": 0,
+          "hex": "#ffffff"
+        }
       }
     },
     "info": {

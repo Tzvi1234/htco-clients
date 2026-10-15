@@ -13,9 +13,9 @@ import { ChevronIcon, SearchIcon, SidebarIcon } from "../../shared/ui/icons.tsx"
 import { Logo } from "../../shared/ui/Logo.tsx";
 import { SoonTag } from "../../shared/ui/SoonTag.tsx";
 
-/** A 40 px circle outline (Design 1C `.cb`) around an icon. */
+/** A 40 px circle (Design 1C `.cb`) around an icon; add its outline colour. */
 export const CIRCLE =
-  "relative inline-flex size-10 shrink-0 items-center justify-center rounded-pill border border-line-strong " +
+  "relative inline-flex size-10 shrink-0 items-center justify-center rounded-pill border " +
   "transition-[border-color,background-color,color,box-shadow,scale] duration-[var(--motion-duration-fast)] ease-standard";
 
 /** Labels fade back in when the sidebar opens (they are removed while it is collapsed). */
@@ -93,7 +93,9 @@ function Category({
   const name = labels.area(area);
   const circle = cx(
     CIRCLE,
-    active ? "border-inverse bg-inverse text-on-inverse" : "group-hover/cat:border-line-hover",
+    active
+      ? "border-inverse bg-inverse text-on-inverse"
+      : "border-line-strong group-hover/cat:border-line-hover",
     active && mini && "shadow-[0_0_0_3px_var(--bg-sidebar),0_0_0_4px_var(--border-strong)]",
   );
   const head = cx(
@@ -255,7 +257,7 @@ export function Sidebar() {
           onClick={toggleMini}
           className={cx(
             CIRCLE,
-            "cursor-default text-primary hover:border-line-hover active:scale-95",
+            "cursor-default border-line-strong text-primary hover:border-line-hover active:scale-95",
           )}
         >
           <SidebarIcon />

@@ -6,6 +6,7 @@
     <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Light">
             <SolidColorBrush x:Key="HtcoBgGroundBrush" Color="#FFE5E5E5" />
+            <SolidColorBrush x:Key="HtcoBgPanelBaseBrush" Color="#FFE1E1E0" />
             <SolidColorBrush x:Key="HtcoBgPanelBrush" Color="#FFE1E1E0" />
             <SolidColorBrush x:Key="HtcoBgRaisedBrush" Color="#FFF0F0EF" />
             <SolidColorBrush x:Key="HtcoBgSidebarBrush" Color="#FFF3F3F2" />
@@ -23,9 +24,9 @@
             <SolidColorBrush x:Key="HtcoTextOnBrandBrush" Color="#FF000000" />
             <SolidColorBrush x:Key="HtcoTextLinkBrush" Color="#FF000000" />
             <SolidColorBrush x:Key="HtcoTextOnInverseBrush" Color="#FFFFFFFF" />
-            <SolidColorBrush x:Key="HtcoTextSecondaryBrush" Color="#FF4F4F4F" />
+            <SolidColorBrush x:Key="HtcoTextSecondaryBrush" Color="#FF646464" />
             <SolidColorBrush x:Key="HtcoTextMutedBrush" Color="#FF646464" />
-            <SolidColorBrush x:Key="HtcoIconDefaultBrush" Color="#FF4F4F4F" />
+            <SolidColorBrush x:Key="HtcoIconDefaultBrush" Color="#FF646464" />
             <SolidColorBrush x:Key="HtcoIconFaintBrush" Color="#FF9A9A9A" />
             <SolidColorBrush x:Key="HtcoIconMutedBrush" Color="#FF808080" />
             <SolidColorBrush x:Key="HtcoBorderSubtleBrush" Color="#FFD3D3D3" />
@@ -136,6 +137,7 @@
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
             <SolidColorBrush x:Key="HtcoBgGroundBrush" Color="#FF161616" />
+            <SolidColorBrush x:Key="HtcoBgPanelBaseBrush" Color="#FF1E1E1E" />
             <SolidColorBrush x:Key="HtcoBgPanelBrush" Color="#FF1E1E1E" />
             <SolidColorBrush x:Key="HtcoBgRaisedBrush" Color="#FF282828" />
             <SolidColorBrush x:Key="HtcoBgSidebarBrush" Color="#FF1C1C1C" />

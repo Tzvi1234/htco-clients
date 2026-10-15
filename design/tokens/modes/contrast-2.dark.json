@@ -15,19 +15,6 @@
           "hex": "#101010"
         }
       },
-      "panel": {
-        "$type": "color",
-        "$value": {
-          "colorSpace": "srgb",
-          "components": [
-            0.1333,
-            0.1333,
-            0.1333
-          ],
-          "alpha": 1,
-          "hex": "#222222"
-        }
-      },
       "raised": {
         "$type": "color",
         "$value": {
@@ -91,6 +78,19 @@
           ],
           "alpha": 1,
           "hex": "#282828"
+        }
+      },
+      "panel-base": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1333,
+            0.1333,
+            0.1333
+          ],
+          "alpha": 1,
+          "hex": "#222222"
         }
       }
     },

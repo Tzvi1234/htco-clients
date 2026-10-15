@@ -6,8 +6,12 @@
         "$value": "{palette.sbb.ground}",
         "$description": "The app ground (--ground) behind the floating panels"
       },
-      "panel": {
+      "panel-base": {
         "$value": "{palette.sbb.panel}",
+        "$description": "The panel's own fill (--panel-base); glass mixes from it"
+      },
+      "panel": {
+        "$value": "{color.bg.panel-base}",
         "$description": "Panels and the work area (--panel)"
       },
       "raised": {
@@ -74,12 +78,12 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.3098,
-            0.3098,
-            0.3098
+            0.3922,
+            0.3922,
+            0.3922
           ],
           "alpha": 1,
-          "hex": "#4f4f4f"
+          "hex": "#646464"
         }
       },
       "muted": {
@@ -556,6 +560,71 @@
           "hex": "#d2d2d1"
         },
         "$description": "The designed ground's gradient, bottom"
+      },
+      "1-fade": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            0.498,
+            0.2118
+          ],
+          "alpha": 0,
+          "hex": "#ff7f36"
+        }
+      },
+      "2-fade": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            0.5882,
+            0.3529
+          ],
+          "alpha": 0,
+          "hex": "#ff965a"
+        }
+      },
+      "3-fade": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            1,
+            1
+          ],
+          "alpha": 0,
+          "hex": "#ffffff"
+        }
+      },
+      "4-fade": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.4706,
+            0.4706,
+            0.4706
+          ],
+          "alpha": 0,
+          "hex": "#787878"
+        }
+      },
+      "5-fade": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1176,
+            0.1176,
+            0.1176
+          ],
+          "alpha": 0,
+          "hex": "#1e1e1e"
+        }
       }
     },
     "info": {

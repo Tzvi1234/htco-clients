@@ -1,8 +1,10 @@
 // Load the DTCG token sources for one theme with Style Dictionary, which merges the files and
 // resolves references, and return a typed, flat list of tokens with their raw values.
+import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import StyleDictionary from "style-dictionary";
+import type { DesignTokens } from "style-dictionary/types";
 
 export interface DtcgColor {
   colorSpace: string;
@@ -34,6 +36,8 @@ export type Token = {
   path: string[];
   /** Set when the source names another semantic token (`{color.bg.panel}`): CSS keeps the link. */
   alias?: string[];
+  /** Set for a colour mixed from another token (frosted glass): CSS writes the color-mix. */
+  mix?: Mix;
 } & (
   | { type: "color"; value: DtcgColor }
   | { type: "dimension"; value: Dimension }
@@ -117,12 +121,15 @@ export async function loadTokens(
   tokensDir = TOKENS_DIR,
   overlays: readonly string[] = [],
 ): Promise<Token[]> {
-  // Style Dictionary reads `source` as glob patterns, which need forward slashes.
-  const source = ["base.json", `semantic.${theme}.json`, ...overlays].map((name) =>
-    join(tokensDir, name).replaceAll("\\", "/"),
-  );
+  // A later file replaces a whole token (a shadow's layers are not merged index by index, as
+  // Style Dictionary's own deep merge of sources would), so the files are merged here.
+  const tokens: DesignTokens = {};
+  for (const name of ["base.json", `semantic.${theme}.json`, ...overlays]) {
+    const source: unknown = JSON.parse(readFileSync(join(tokensDir, name), "utf8"));
+    mergeTokens(tokens, source);
+  }
   const dictionary = new StyleDictionary({
-    source,
+    tokens,
     usesDtcg: true,
     log: { verbosity: "silent" },
     platforms: { raw: { transforms: [] } },
@@ -133,6 +140,71 @@ export async function loadTokens(
     const typed = toToken(token.path, token.$type, value);
     const original: unknown = token.original.$value;
     const reference = typeof original === "string" ? SEMANTIC_REFERENCE.exec(original) : null;
-    return reference?.[1] === undefined ? typed : { ...typed, alias: reference[1].split(".") };
+    const extensions: unknown = token["$extensions"];
+    const mix = isRecord(extensions) ? toMix(extensions[MIX_EXTENSION]) : undefined;
+    return {
+      ...typed,
+      ...(reference?.[1] === undefined ? {} : { alias: reference[1].split(".") }),
+      ...(mix === undefined ? {} : { mix }),
+    };
   });
+}
+
+/** Merge DTCG trees: groups merge, a token (an object with `$value`) is replaced whole. */
+function mergeTokens(target: Record<string, unknown>, source: unknown): void {
+  if (!isRecord(source)) return;
+  for (const [key, value] of Object.entries(source)) {
+    const current = target[key];
+    if (isRecord(value) && !("$value" in value) && isRecord(current) && !("$value" in current)) {
+      mergeTokens(current, value);
+    } else {
+      target[key] = structuredClone(value);
+    }
+  }
+}
+
+/**
+ * `$extensions["app.htco.mix"]`: the colour is `color-mix(in srgb, <base> <amount>, <with>)`,
+ * as Design 1C writes its glass, so it follows whatever the base is in the mode (contrast
+ * level, palette). `$value` holds the result for the default base.
+ */
+export const MIX_EXTENSION = "app.htco.mix";
+
+export interface Mix {
+  /** The token mixed in, as a path (`color.bg.panel-base`). */
+  base: string[];
+  /** The share of the base, from 0 to 1. */
+  amount: number;
+  /** The other colour; usually fully transparent. */
+  with: DtcgColor;
+}
+
+function toMix(value: unknown): Mix | undefined {
+  if (!isRecord(value)) return undefined;
+  const { base, amount, with: other } = value;
+  if (typeof base !== "string" || typeof amount !== "number" || !isColor(other)) {
+    throw new Error(`${MIX_EXTENSION} needs base, amount and with: ${JSON.stringify(value)}`);
+  }
+  return { base: base.split("."), amount, with: other };
+}
+
+/** `color-mix(in srgb, a amount, b)`: premultiplied sRGB, as browsers compute it. */
+export function mixColors(a: DtcgColor, amount: number, b: DtcgColor): DtcgColor {
+  const channels = (color: DtcgColor) =>
+    [1, 3, 5].map((offset) => parseInt(color.hex.slice(offset, offset + 2), 16) / 255);
+  const alphaA = (a.alpha ?? 1) * amount;
+  const alphaB = (b.alpha ?? 1) * (1 - amount);
+  const alpha = alphaA + alphaB;
+  const [ca, cb] = [channels(a), channels(b)];
+  const components = ca.map((value, index) =>
+    alpha === 0 ? 0 : (value * alphaA + (cb[index] ?? 0) * alphaB) / alpha,
+  );
+  const hex = `#${components
+    .map((value) =>
+      Math.round(value * 255)
+        .toString(16)
+        .padStart(2, "0"),
+    )
+    .join("")}`;
+  return { colorSpace: "srgb", components, alpha, hex };
 }

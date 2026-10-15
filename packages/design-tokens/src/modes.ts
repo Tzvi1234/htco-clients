@@ -38,6 +38,10 @@ export function overlaysFor(mode: Mode): string[] {
     files.push(`modes/glass-${String(glass)}.${theme}.json`);
     if (palette === "d4") files.push(`modes/glass-${String(glass)}-d4.${theme}.json`);
   }
+  // The design keeps more of the panel under strong glass at contrast level 3.
+  if (tweaksApply(palette) && glass === 3 && contrast === 3) {
+    files.push(`modes/glass-3-contrast-3.${theme}.json`);
+  }
   return files;
 }
 
@@ -104,6 +108,10 @@ export const CSS_LAYERS: { layer: string; rules: CssRule[] }[] = [
         when: `[data-pal="d4"][data-t2="${String(level)}"]`,
         file: (theme: Theme) => `modes/glass-${String(level)}-d4.${theme}.json`,
       })),
+      {
+        when: ':not([data-pal="d4"])[data-t1="3"][data-t2="3"]',
+        file: (theme: Theme) => `modes/glass-3-contrast-3.${theme}.json`,
+      },
     ],
   },
 ];

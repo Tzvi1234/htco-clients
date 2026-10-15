@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { modeFailures } from "../src/build.ts";
 import { CONTRAST_PAIRS, composite, contrastFailures, contrastRatio } from "../src/contrast.ts";
 import { ALL_MODES, modeName } from "../src/modes.ts";
-import { loadTokens } from "../src/tokens.ts";
+import { loadTokens, mixColors } from "../src/tokens.ts";
 import { aColor } from "./fixtures.ts";
 
 describe("contrastRatio (WCAG 2.2)", () => {
@@ -112,4 +112,19 @@ describe("every Design 1C mode: palette × theme × tweak levels (client ADR-000
       expect(await modeFailures(mode)).toEqual([]);
     },
   );
+});
+
+describe("mixColors (color-mix in srgb)", () => {
+  it("mixes a colour with transparency into the same colour at that alpha", () => {
+    expect(mixColors(aColor("#e1e1e0"), 0.52, aColor("#000000", 0))).toMatchObject({
+      hex: "#e1e1e0",
+      alpha: 0.52,
+    });
+  });
+
+  it("premultiplies a translucent second colour, as browsers do", () => {
+    const mixed = mixColors(aColor("#e1e1e0"), 0.3, aColor("#fffaf6", 0.08));
+    expect(mixed.alpha).toBeCloseTo(0.356, 3);
+    expect(mixed.hex).toBe("#e6e5e3");
+  });
 });

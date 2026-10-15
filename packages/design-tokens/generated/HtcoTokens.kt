@@ -10,6 +10,7 @@ import androidx.compose.ui.unit.sp
 object HtcoColors {
     object Light {
         val bgGround = Color(0xFFE5E5E5)
+        val bgPanelBase = Color(0xFFE1E1E0)
         val bgPanel = Color(0xFFE1E1E0)
         val bgRaised = Color(0xFFF0F0EF)
         val bgSidebar = Color(0xFFF3F3F2)
@@ -27,9 +28,9 @@ object HtcoColors {
         val textOnBrand = Color(0xFF000000)
         val textLink = Color(0xFF000000)
         val textOnInverse = Color(0xFFFFFFFF)
-        val textSecondary = Color(0xFF4F4F4F)
+        val textSecondary = Color(0xFF646464)
         val textMuted = Color(0xFF646464)
-        val iconDefault = Color(0xFF4F4F4F)
+        val iconDefault = Color(0xFF646464)
         val iconFaint = Color(0xFF9A9A9A)
         val iconMuted = Color(0xFF808080)
         val borderSubtle = Color(0xFFD3D3D3)
@@ -141,6 +142,7 @@ object HtcoColors {
 
     object Dark {
         val bgGround = Color(0xFF161616)
+        val bgPanelBase = Color(0xFF1E1E1E)
         val bgPanel = Color(0xFF1E1E1E)
         val bgRaised = Color(0xFF282828)
         val bgSidebar = Color(0xFF1C1C1C)

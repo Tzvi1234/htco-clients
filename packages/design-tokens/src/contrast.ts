@@ -7,7 +7,7 @@
 // floats on before measuring: panels, the sidebar and menus over every backdrop sample of the
 // mode (the plain ground, or the designed bloom's colours over both ends of its gradient), and
 // fills inside a panel (raised, hover, selected, tints) over the panel composited the same way.
-import type { DtcgColor, Token } from "./tokens.ts";
+import { mixColors, type DtcgColor, type Token } from "./tokens.ts";
 
 export type ContrastPair = readonly [foreground: string, background: string, minimum: number];
 
@@ -156,6 +156,21 @@ export function contrastFailures(
         : [],
     ),
   );
+  // Mixed colours (glass) are computed from their base in this mode, as the browser does.
+  const mixed = (token: Token): DtcgColor | undefined => {
+    if (token.mix === undefined || token.type !== "color") return undefined;
+    const base = tokens.find((candidate) => candidate.path.join(".") === token.mix?.base.join("."));
+    const baseColour =
+      base === undefined
+        ? undefined
+        : (mixed(base) ?? (base.type === "color" ? base.value : undefined));
+    if (baseColour === undefined) throw new Error(`Missing mix base for ${token.path.join(".")}`);
+    return mixColors(baseColour, token.mix.amount, token.mix.with);
+  };
+  for (const token of tokens) {
+    const value = mixed(token);
+    if (value !== undefined) colours.set(token.path.slice(1).join("."), value);
+  }
   const colour = (name: string): DtcgColor => {
     const value = colours.get(name);
     if (value === undefined) throw new Error(`Contrast pair names a missing colour: ${name}`);

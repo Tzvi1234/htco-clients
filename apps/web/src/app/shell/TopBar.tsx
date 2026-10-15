@@ -15,7 +15,7 @@ import { Segmented } from "../../shared/ui/Segmented.tsx";
 
 const ACTION = cx(
   CIRCLE,
-  "cursor-default text-primary outline-none hover:border-line-hover active:scale-95",
+  "cursor-default border-line-strong text-primary outline-none hover:border-line-hover active:scale-95",
 );
 
 /** Where the page is: its area and tab, the last one in ink (Design 1C `.crumb`). */

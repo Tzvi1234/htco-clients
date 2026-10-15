@@ -319,7 +319,12 @@
     --bloom: none;
   }
 
-  :root:is([data-t2="2"], [data-t2="3"]) {
+  /* Exactly the design's filters: glass has no brightness step, strong glass does. */
+  :root[data-t2="2"] {
+    --glass-backdrop: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  }
+
+  :root[data-t2="3"] {
     --glass-backdrop: blur(var(--glass-blur)) saturate(var(--glass-saturate))
       brightness(var(--glass-brightness));
   }
@@ -327,20 +332,20 @@
   /* The designed ground behind the glass: soft blooms in the palette (Design 1C). */
   :root:is([data-t2="2"], [data-t2="3"]):not([data-pal="plain"], [data-pal="d4"]) {
     --bloom:
-      radial-gradient(38vw 38vw at 74% 14%, var(--bloom-1), transparent 70%),
-      radial-gradient(30vw 30vw at 96% 92%, var(--bloom-2), transparent 70%),
-      radial-gradient(46vw 46vw at 8% 88%, var(--bloom-3), transparent 70%),
-      radial-gradient(34vw 30vw at 40% 46%, var(--bloom-4), transparent 70%),
-      radial-gradient(28vw 28vw at 12% 10%, var(--bloom-5), transparent 70%),
+      radial-gradient(38vw 38vw at 74% 14%, var(--bloom-1), var(--bloom-1-fade) 70%),
+      radial-gradient(30vw 30vw at 96% 92%, var(--bloom-2), var(--bloom-2-fade) 70%),
+      radial-gradient(46vw 46vw at 8% 88%, var(--bloom-3), var(--bloom-3-fade) 70%),
+      radial-gradient(34vw 30vw at 40% 46%, var(--bloom-4), var(--bloom-4-fade) 70%),
+      radial-gradient(28vw 28vw at 12% 10%, var(--bloom-5), var(--bloom-5-fade) 70%),
       linear-gradient(160deg, var(--bloom-start), var(--bloom-end));
   }
 
   :root[data-pal="d4"]:is([data-t2="2"], [data-t2="3"]) {
     --bloom:
-      radial-gradient(40vw 40vw at 76% 12%, var(--bloom-1), transparent 70%),
-      radial-gradient(36vw 36vw at 12% 86%, var(--bloom-2), transparent 70%),
-      radial-gradient(22vw 22vw at 92% 88%, var(--bloom-3), transparent 70%),
-      radial-gradient(34vw 30vw at 44% 50%, var(--bloom-4), transparent 70%),
+      radial-gradient(40vw 40vw at 76% 12%, var(--bloom-1), var(--bloom-1-fade) 70%),
+      radial-gradient(36vw 36vw at 12% 86%, var(--bloom-2), var(--bloom-2-fade) 70%),
+      radial-gradient(22vw 22vw at 92% 88%, var(--bloom-3), var(--bloom-3-fade) 70%),
+      radial-gradient(34vw 30vw at 44% 50%, var(--bloom-4), var(--bloom-4-fade) 70%),
       linear-gradient(160deg, var(--bloom-start), var(--bloom-end));
   }
 

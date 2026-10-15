@@ -70,3 +70,14 @@ describe("the overlay files", () => {
     }
   });
 });
+
+describe("strong glass at contrast level 3", () => {
+  it("keeps more of the panel, as the design does, in the default palettes only", () => {
+    expect(overlaysFor({ ...DEFAULT, contrast: 3, glass: 3 })).toContain(
+      "modes/glass-3-contrast-3.light.json",
+    );
+    expect(overlaysFor({ ...DEFAULT, palette: "d4", contrast: 3, glass: 3 })).not.toContain(
+      "modes/glass-3-contrast-3.light.json",
+    );
+  });
+});

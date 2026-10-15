@@ -13,7 +13,24 @@
           ],
           "alpha": 0.52,
           "hex": "#ffffff"
-        }
+        },
+        "$extensions": {
+          "app.htco.mix": {
+            "base": "color.bg.panel-base",
+            "amount": 0.52,
+            "with": {
+              "colorSpace": "srgb",
+              "components": [
+                0,
+                0,
+                0
+              ],
+              "alpha": 0,
+              "hex": "#000000"
+            }
+          }
+        },
+        "$description": "Glass panels: the panel base mixed with transparency (--panel)"
       },
       "raised": {
         "$type": "color",
@@ -52,6 +69,22 @@
           ],
           "alpha": 0.58,
           "hex": "#ffffff"
+        },
+        "$extensions": {
+          "app.htco.mix": {
+            "base": "color.bg.panel-base",
+            "amount": 0.58,
+            "with": {
+              "colorSpace": "srgb",
+              "components": [
+                0,
+                0,
+                0
+              ],
+              "alpha": 0,
+              "hex": "#000000"
+            }
+          }
         }
       },
       "menu": {
@@ -63,8 +96,24 @@
             1,
             1
           ],
-          "alpha": 0.53,
+          "alpha": 0.5332,
           "hex": "#ffffff"
+        },
+        "$extensions": {
+          "app.htco.mix": {
+            "base": "color.bg.raised",
+            "amount": 0.86,
+            "with": {
+              "colorSpace": "srgb",
+              "components": [
+                0,
+                0,
+                0
+              ],
+              "alpha": 0,
+              "hex": "#000000"
+            }
+          }
         }
       },
       "table-head": {
@@ -78,6 +127,22 @@
           ],
           "alpha": 0.94,
           "hex": "#ffffff"
+        },
+        "$extensions": {
+          "app.htco.mix": {
+            "base": "color.bg.panel-base",
+            "amount": 0.94,
+            "with": {
+              "colorSpace": "srgb",
+              "components": [
+                0,
+                0,
+                0
+              ],
+              "alpha": 0,
+              "hex": "#000000"
+            }
+          }
         }
       }
     },
@@ -128,12 +193,12 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.2902,
-            0.2902,
-            0.2745
+            0.3098,
+            0.3098,
+            0.2902
           ],
           "alpha": 1,
-          "hex": "#4a4a46"
+          "hex": "#4f4f4a"
         }
       },
       "muted": {

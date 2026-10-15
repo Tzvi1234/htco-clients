@@ -15,19 +15,6 @@
           "hex": "#cbcbca"
         }
       },
-      "panel": {
-        "$type": "color",
-        "$value": {
-          "colorSpace": "srgb",
-          "components": [
-            0.949,
-            0.949,
-            0.9451
-          ],
-          "alpha": 1,
-          "hex": "#f2f2f1"
-        }
-      },
       "raised": {
         "$type": "color",
         "$value": {
@@ -72,6 +59,19 @@
       },
       "card": {
         "$value": "{palette.sbb.card}"
+      },
+      "panel-base": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.949,
+            0.949,
+            0.9451
+          ],
+          "alpha": 1,
+          "hex": "#f2f2f1"
+        }
       }
     },
     "border": {
@@ -121,12 +121,12 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.2863,
-            0.2863,
-            0.2863
+            0.3373,
+            0.3373,
+            0.3373
           ],
           "alpha": 1,
-          "hex": "#494949"
+          "hex": "#565656"
         }
       },
       "muted": {

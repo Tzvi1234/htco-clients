@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { renderCss } from "../src/css.ts";
 import { renderKotlin } from "../src/kotlin.ts";
 import { renderXaml } from "../src/xaml.ts";
-import { aTheme } from "./fixtures.ts";
+import { aColor, aTheme } from "./fixtures.ts";
 
 const light = aTheme("#f4f7fa", "#0a1a2c");
 const dark = aTheme("#030f1f", "#eef4fa");
@@ -27,7 +27,7 @@ describe("renderCss", () => {
     expect(root).toContain("--font-weight-semibold: 600;");
     expect(root).toContain("--motion-duration-fast: 120ms;");
     expect(root).toContain("--motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);");
-    expect(root).toContain("--elevation-1: 0px 1px 2px 0px rgb(3 15 31 / 0.06);");
+    expect(root).toContain("--elevation-1: 0px 1px 2px 0px rgba(3, 15, 31, 0.06);");
   });
 
   it("quotes font names but not generic families", () => {
@@ -149,5 +149,35 @@ describe("renderXaml", () => {
     const closed = xaml.match(/<\/[A-Za-z:.]+>/g) ?? [];
 
     expect(opened).toHaveLength(closed.length);
+  });
+});
+
+describe("glass colours", () => {
+  it("are written as the design's color-mix of their base, following the base everywhere", () => {
+    const [canvas] = light;
+    if (canvas?.type !== "color") throw new Error("fixture");
+    const css = renderCss(
+      [
+        {
+          ...canvas,
+          path: ["color", "bg", "panel"],
+          mix: { base: ["color", "bg", "panel-base"], amount: 0.52, with: aColor("#000000", 0) },
+        },
+        {
+          ...canvas,
+          path: ["color", "bg", "card"],
+          mix: { base: ["color", "bg", "panel-base"], amount: 0.3, with: aColor("#fffaf6", 0.08) },
+        },
+      ],
+      [],
+    );
+    expect(css).toContain("--bg-panel: color-mix(in srgb, var(--bg-panel-base) 52%, transparent);");
+    expect(css).toContain(
+      "--bg-card: color-mix(in srgb, var(--bg-panel-base) 30%, rgba(255, 250, 246, 0.08));",
+    );
+  });
+
+  it("write translucent colours in the legacy syntax, which browsers keep at 8-bit alpha like the design", () => {
+    expect(renderCss(aTheme("#ffffff", "#000000"), [])).toContain("rgba(3, 15, 31, 0.06)");
   });
 });

@@ -47,6 +47,13 @@ const propertyName = (path: string[]): string =>
 function cssValue(token: Token): string {
   // A semantic alias stays a link, so it follows its target in every palette and tweak.
   if (token.alias !== undefined) return `var(${propertyName(token.alias)})`;
+  // Glass mixes its base in the page, so it follows the base in every palette and tweak.
+  if (token.mix !== undefined) {
+    const { base, amount, with: other } = token.mix;
+    const share = `${String(Math.round(amount * 10000) / 100)}%`;
+    const second = (other.alpha ?? 1) === 0 ? "transparent" : cssColor(other);
+    return `color-mix(in srgb, var(${propertyName(base)}) ${share}, ${second})`;
+  }
   switch (token.type) {
     case "color":
       return cssColor(token.value);
