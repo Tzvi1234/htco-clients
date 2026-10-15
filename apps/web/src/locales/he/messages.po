@@ -15,6 +15,10 @@ msgstr "0 מתוך 3 הושלמו"
 msgid "1 of 3 done"
 msgstr "1 מתוך 3 הושלמו"
 
+#: src/features/welcome/WelcomePage.tsx
+msgid "A native desktop app."
+msgstr "אפליקציה טבעית למחשב."
+
 #: src/app/shell/UserMenu.tsx
 msgid "Account"
 msgstr "חשבון"
@@ -22,6 +26,34 @@ msgstr "חשבון"
 #: src/app/shell/UserMenu.tsx
 msgid "Account and preferences"
 msgstr "חשבון והעדפות"
+
+#: src/features/overview/OverviewPage.tsx
+msgid "Active listings"
+msgstr "מודעות פעילות"
+
+#: src/features/overview/OverviewPage.tsx
+msgid "After a shop is connected"
+msgstr "אחרי חיבור חנות"
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "An AI office you control"
+msgstr "משרד AI בשליטתך"
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "An APK for your phone."
+msgstr "קובץ APK לטלפון."
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "Android"
+msgstr "Android"
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "Any browser, nothing to install."
+msgstr "בכל דפדפן, בלי התקנה."
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "Anything risky waits for your approval, with the reason and the receipt."
+msgstr "כל דבר מסוכן מחכה לאישור שלך, עם הסיבה והקבלה."
 
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Authenticator app"
@@ -55,6 +87,10 @@ msgstr "אישור זהות"
 msgid "Connect Etsy shop"
 msgstr "לחבר חנות Etsy"
 
+#: src/features/welcome/WelcomePage.tsx
+msgid "Connect your Etsy shop"
+msgstr "מחברים את חנות ה-Etsy"
+
 #: src/features/overview/OverviewPage.tsx
 msgid "Connect your first shop"
 msgstr "לחבר את החנות הראשונה"
@@ -67,14 +103,30 @@ msgstr "חנויות מחוברות יופיעו כאן עם מצב הסנכרו
 msgid "Connecting a shop opens in a coming release."
 msgstr "חיבור חנות ייפתח בגרסה קרובה."
 
+#: src/features/welcome/WelcomePage.tsx
+msgid "Customers answered"
+msgstr "לקוחות מקבלים מענה"
+
 #: src/app/shell/UserMenu.tsx
 #: src/features/settings/SettingsPage.tsx
 msgid "Dark"
 msgstr "כהה"
 
 #: src/features/overview/OverviewPage.tsx
+msgid "Decisions waiting"
+msgstr "החלטות ממתינות"
+
+#: src/features/overview/OverviewPage.tsx
 msgid "Done"
 msgstr "הושלם"
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "Download"
+msgstr "הורדה"
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "Each specialist acts under your policies and shows its work."
+msgstr "כל מומחה פועל לפי המדיניות שלך ומראה את העבודה."
 
 #: src/features/auth/SignInPage.tsx
 msgid "Email"
@@ -95,6 +147,14 @@ msgstr "Etsy · לא מחוברת"
 #: src/features/auth/AuthLayout.tsx
 msgid "Every action an AI employee takes has a reason, a policy and a receipt, and anything risky waits for you."
 msgstr "לכל פעולה של עובד AI יש סיבה, מדיניות וקבלה, וכל דבר מסוכן מחכה לך."
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "Every order, verified"
+msgstr "כל הזמנה, מאומתת"
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "Get the apps"
+msgstr "לאפליקציות"
 
 #: src/features/overview/OverviewPage.tsx
 msgid "Getting started"
@@ -117,17 +177,41 @@ msgstr "למעבר לחנויות"
 msgid "Go to the overview"
 msgstr "למעבר לסקירה"
 
+#: src/features/auth/SignInPage.tsx
+msgid "Hide password"
+msgstr "הסתרת הסיסמה"
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "How it works"
+msgstr "איך זה עובד"
+
 #: src/features/security/SecurityPage.tsx
 msgid "How you sign in, and where you are signed in."
 msgstr "איך נכנסים, ובאילו מכשירים את/ה מחובר/ת."
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "HT-Commerce by H.T.Z Studios"
+msgstr "HT-Commerce מבית H.T.Z Studios"
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "HT-Commerce runs your Etsy business with an AI office that checks every order, keeps listings healthy and asks you before anything risky."
+msgstr "HT-Commerce מנהלת את עסק ה-Etsy שלך עם משרד AI שבודק כל הזמנה, שומר על המודעות תקינות ושואל אותך לפני כל דבר מסוכן."
 
 #: src/features/auth/AuthLayout.tsx
 msgid "HTCO · the operating system for your marketplace business"
 msgstr "HTCO · מערכת ההפעלה של העסק שלך במרקטפלייס"
 
 #: src/features/overview/OverviewPage.tsx
-msgid "HTCO checks orders, tracking and listings, and asks you before anything risky. Three steps get it ready."
-msgstr "HTCO בודקת הזמנות, מעקב משלוחים ומודעות, ושואלת אותך לפני כל דבר מסוכן. שלושה צעדים ומתחילים."
+msgid "HTCO checks orders, tracking and listings, and asks you before anything risky."
+msgstr "HTCO בודקת הזמנות, מעקב משלוחים ומודעות, ושואלת אותך לפני כל דבר מסוכן."
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "In development"
+msgstr "בפיתוח"
+
+#: src/features/overview/OverviewPage.tsx
+msgid "Key numbers"
+msgstr "מספרים מרכזיים"
 
 #: src/app/shell/UserMenu.tsx
 #: src/features/settings/SettingsPage.tsx
@@ -148,6 +232,10 @@ msgstr "סנכרון אחרון"
 msgid "Light"
 msgstr "בהירה"
 
+#: src/features/welcome/WelcomePage.tsx
+msgid "Listings that stay healthy"
+msgstr "מודעות שנשארות תקינות"
+
 #: src/app/shell/Navigation.tsx
 msgid "Main"
 msgstr "ראשי"
@@ -160,6 +248,18 @@ msgstr "לפי המערכת"
 #: src/features/overview/OverviewPage.tsx
 msgid "Meet your office"
 msgstr "הכירו את המשרד"
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "Messages sorted, drafted and escalated with the order history beside them."
+msgstr "הודעות ממוינות, מנוסחות ומועברות הלאה עם היסטוריית ההזמנה לצידן."
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "Named specialists work under your policies and bring you every risky decision."
+msgstr "מומחים בעלי שם עובדים לפי המדיניות שלך ומביאים אליך כל החלטה מסוכנת."
+
+#: src/features/auth/SignInPage.tsx
+msgid "No account yet? The workspace owner sends invitations."
+msgstr "עדיין אין חשבון? בעלי סביבת העבודה שולחים הזמנות."
 
 #: src/features/security/SecurityPage.tsx
 msgid "No authenticator app yet."
@@ -177,13 +277,34 @@ msgstr "עדיין אין חנויות"
 msgid "Nothing matches."
 msgstr "לא נמצאה התאמה."
 
+#: src/features/overview/OverviewPage.tsx
+msgid "Numbers appear after a shop is connected."
+msgstr "המספרים יופיעו אחרי חיבור חנות."
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "One place for the whole business"
+msgstr "מקום אחד לכל העסק"
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "Open the web app"
+msgstr "לפתיחת אפליקציית הרשת"
+
+#: src/features/overview/OverviewPage.tsx
 #: src/features/shops/ShopsPage.tsx
 msgid "Orders today"
 msgstr "הזמנות היום"
 
+#: src/features/welcome/WelcomePage.tsx
+msgid "Orders, listings and messages start flowing in."
+msgstr "הזמנות, מודעות והודעות מתחילות לזרום."
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "Orders, tracking and delivery checked against the marketplace, with the receipt to prove it."
+msgstr "הזמנות, מעקב ומסירה נבדקים מול המרקטפלייס, עם קבלה שמוכיחה."
+
 #: src/features/overview/OverviewPage.tsx
-msgid "Orders, tracking and listings appear after you connect an Etsy shop. Connecting opens in a coming release."
-msgstr "הזמנות, מעקב ומודעות יופיעו אחרי חיבור חנות Etsy. החיבור ייפתח בגרסה קרובה."
+msgid "Orders, tracking and listings start flowing in."
+msgstr "הזמנות, מעקב ומודעות מתחילים לזרום."
 
 #: src/app/shell/Navigation.tsx
 #: src/features/overview/OverviewPage.tsx
@@ -206,6 +327,10 @@ msgstr "סיסמה"
 msgid "Password and an authenticator app."
 msgstr "סיסמה ואפליקציית אימות."
 
+#: src/features/welcome/WelcomePage.tsx
+msgid "Product"
+msgstr "המוצר"
+
 #: src/features/auth/SecondFactorPage.tsx
 msgid "QR code for your authenticator app"
 msgstr "קוד QR לאפליקציית האימות"
@@ -223,6 +348,10 @@ msgid "Request ID <0>{requestId}</0>"
 msgstr "מזהה בקשה <0>{requestId}</0>"
 
 #: src/features/overview/OverviewPage.tsx
+msgid "Revenue, 30 days"
+msgstr "הכנסות, 30 יום"
+
+#: src/features/overview/OverviewPage.tsx
 msgid "Review security"
 msgstr "לבדיקת האבטחה"
 
@@ -233,6 +362,10 @@ msgstr "סרקו את קוד ה-QR באפליקציה."
 #: src/app/shell/CommandMenu.tsx
 msgid "Search actions"
 msgstr "חיפוש פעולות"
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "Sections"
+msgstr "אזורים"
 
 #: src/features/overview/OverviewPage.tsx
 msgid "Secure your account"
@@ -265,17 +398,22 @@ msgstr "חנות"
 msgid "Shops"
 msgstr "חנויות"
 
+#: src/features/auth/SignInPage.tsx
+msgid "Show password"
+msgstr "הצגת הסיסמה"
+
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Show the QR code"
 msgstr "הצגת קוד ה-QR"
 
 #: src/features/auth/SignInPage.tsx
+#: src/features/welcome/WelcomePage.tsx
 msgid "Sign in"
 msgstr "כניסה"
 
 #: src/features/auth/SignInPage.tsx
-msgid "Sign in to HTCO"
-msgstr "כניסה ל-HTCO"
+msgid "Sign in to HT-Commerce"
+msgstr "כניסה ל-HT-Commerce"
 
 #: src/app/shell/UserMenu.tsx
 #: src/features/security/SecurityPage.tsx
@@ -297,6 +435,14 @@ msgstr "מכשירים מחוברים"
 #: src/app/RouteStates.tsx
 msgid "Something went wrong while showing it. Try again; your data was not changed."
 msgstr "משהו השתבש בהצגת המסך. אפשר לנסות שוב; הנתונים לא השתנו."
+
+#: src/features/overview/OverviewPage.tsx
+msgid "Specialists for listings, orders, customers and money work on your shop under your policies, and bring you every risky decision."
+msgstr "מומחים למודעות, הזמנות, לקוחות וכספים עובדים על החנות שלך לפי המדיניות שלך, ומביאים אליך כל החלטה מסוכנת."
+
+#: src/features/overview/OverviewPage.tsx
+msgid "Start with your shop"
+msgstr "מתחילים מהחנות"
 
 #: src/features/shops/ShopsPage.tsx
 msgid "Sync"
@@ -321,6 +467,10 @@ msgstr "האימייל או הסיסמה שגויים."
 #: src/features/shops/ShopsPage.tsx
 msgid "The marketplace shops this organization runs."
 msgstr "החנויות שהארגון מפעיל בזירות המסחר."
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "The web app is ready today. The Windows and Android apps follow with the same features."
+msgstr "אפליקציית הרשת מוכנה כבר היום. אפליקציות Windows ו-Android יגיעו עם אותן יכולות."
 
 #: src/app/shell/UserMenu.tsx
 #: src/features/settings/SettingsPage.tsx
@@ -347,6 +497,10 @@ msgstr "הדף לא הצליח להכניס אותך. טענו אותו מחדש
 msgid "This screen could not be shown"
 msgstr "לא ניתן להציג את המסך"
 
+#: src/features/welcome/WelcomePage.tsx
+msgid "Titles, photos and claims audited and fixed as drafts you approve."
+msgstr "כותרות, תמונות וטענות נבדקות ומתוקנות כטיוטות שאת/ה מאשר/ת."
+
 #: src/features/auth/SecondFactorPage.tsx
 #: src/features/auth/SignInPage.tsx
 msgid "Too many attempts. Wait 15 minutes and try again."
@@ -368,9 +522,9 @@ msgstr "הקלידו פעולה או עמוד"
 msgid "Unknown device"
 msgstr "מכשיר לא מזוהה"
 
-#: src/features/auth/SignInPage.tsx
-msgid "Use the email you were invited with."
-msgstr "השתמשו באימייל שאליו נשלחה ההזמנה."
+#: src/features/welcome/WelcomePage.tsx
+msgid "Use it anywhere"
+msgstr "בכל מקום"
 
 #: src/features/overview/OverviewPage.tsx
 msgid "Waiting"
@@ -380,6 +534,14 @@ msgstr "ממתין"
 msgid "Waiting for you"
 msgstr "מחכה לך"
 
+#: src/features/welcome/WelcomePage.tsx
+msgid "Web"
+msgstr "רשת"
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "Windows"
+msgstr "Windows"
+
 #: src/app/shell/Navigation.tsx
 msgid "Workspace"
 msgstr "סביבת עבודה"
@@ -388,7 +550,28 @@ msgstr "סביבת עבודה"
 msgid "You are offline. What you see may be out of date; changes are paused."
 msgstr "אין חיבור לאינטרנט. ייתכן שהמידע אינו עדכני; שינויים מושהים."
 
+#: src/features/welcome/WelcomePage.tsx
+msgid "You decide"
+msgstr "ההחלטה שלך"
+
+#: src/features/overview/OverviewPage.tsx
+msgid "Your AI office"
+msgstr "משרד ה-AI שלך"
+
+#: src/features/welcome/WelcomePage.tsx
+msgid "Your office gets to work"
+msgstr "המשרד מתחיל לעבוד"
+
+#: src/features/auth/SignInPage.tsx
+msgid "Your password"
+msgstr "הסיסמה שלך"
+
 #: src/features/auth/AuthLayout.tsx
 #: src/features/overview/OverviewPage.tsx
+#: src/features/welcome/WelcomePage.tsx
 msgid "Your shop runs. You decide."
 msgstr "החנות רצה. ההחלטה שלך."
+
+#: src/features/auth/SignInPage.tsx
+msgid "Your shops, orders and AI office in one place."
+msgstr "החנויות, ההזמנות ומשרד ה-AI שלך במקום אחד."

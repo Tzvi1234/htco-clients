@@ -1,5 +1,5 @@
 import { Trans } from "@lingui/react/macro";
-import { Store } from "lucide-react";
+import { StorefrontIcon as Storefront } from "@phosphor-icons/react";
 
 import { StatusDot } from "../../shared/ui/StatusDot.tsx";
 
@@ -14,7 +14,7 @@ export function ShopSwitcher() {
         aria-hidden="true"
         className="grid size-7 shrink-0 place-items-center rounded-control border border-dashed border-border-control text-icon-muted"
       >
-        <Store size={14} strokeWidth={1.85} />
+        <Storefront size={14} weight="duotone" />
       </span>
       <span className="min-w-0 grow">
         <span className="block truncate text-body-sm font-semibold">

@@ -4,7 +4,7 @@ import { Label, RadioButton, RadioField, RadioGroup } from "react-aria-component
 
 import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
 import { useTheme } from "../../shared/theme/ThemeProvider.tsx";
-import { Settings } from "lucide-react";
+import { GearSixIcon as GearSix } from "@phosphor-icons/react";
 
 import { PageBody, PageHeader } from "../../shared/ui/PageHeader.tsx";
 import { ObjectIcon } from "../../shared/ui/Tag.tsx";
@@ -40,7 +40,7 @@ export function SettingsPage() {
       <PageHeader
         title={<Trans>Settings</Trans>}
         description={<Trans>These preferences are remembered on this device.</Trans>}
-        icon={<ObjectIcon hue="slate" icon={<Settings size={13} strokeWidth={2} />} />}
+        icon={<ObjectIcon hue="slate" icon={GearSix} />}
       />
       <PageBody>
         <div className="grid max-w-[720px] gap-4 md:grid-cols-2">

@@ -1,7 +1,7 @@
 import { useLingui } from "@lingui/react/macro";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "@tanstack/react-router";
-import { ChevronsUpDown, UserRound } from "lucide-react";
+import { CaretUpDownIcon as CaretUpDown, UserIcon as User } from "@phosphor-icons/react";
 import {
   Button,
   Header,
@@ -57,10 +57,10 @@ export function UserMenu() {
           aria-hidden="true"
           className="grid size-7 shrink-0 place-items-center rounded-pill bg-presence-iris text-presence-fg"
         >
-          <UserRound size={15} strokeWidth={2} />
+          <User size={15} weight="fill" />
         </span>
         <span className="hidden grow text-start font-medium text-primary lg:block">{t`Account`}</span>
-        <ChevronsUpDown aria-hidden="true" size={14} className="hidden text-icon-muted lg:block" />
+        <CaretUpDown aria-hidden="true" size={14} className="hidden text-icon-muted lg:block" />
       </Button>
       <Popover
         placement="top start"

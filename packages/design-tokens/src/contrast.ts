@@ -13,6 +13,7 @@ export interface ContrastFailure {
 }
 
 const SURFACES = [
+  "bg.app",
   "bg.canvas",
   "bg.sidebar",
   "bg.surface",

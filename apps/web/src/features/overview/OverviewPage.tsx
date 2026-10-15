@@ -1,101 +1,171 @@
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
+import {
+  ArrowRightIcon as ArrowRight,
+  BuildingsIcon as Buildings,
+  CurrencyCircleDollarIcon as CurrencyCircleDollar,
+  HandPalmIcon as HandPalm,
+  HouseIcon as House,
+  PackageIcon as Package,
+  ShieldCheckIcon as ShieldCheck,
+  StorefrontIcon as Storefront,
+  TagIcon as TagIcon,
+  type Icon,
+} from "@phosphor-icons/react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import { House, ShieldCheck, Store, Users } from "lucide-react";
 import type { ReactNode } from "react";
 
+import { Aura } from "../../shared/art/Aura.tsx";
 import { sessionQuery, useApi } from "../../shared/api/api.tsx";
 import { DecisionRing } from "../../shared/ui/DecisionRing.tsx";
 import { PageBody, PageHeader } from "../../shared/ui/PageHeader.tsx";
 import { StatusLabel } from "../../shared/ui/StatusDot.tsx";
 import { ObjectIcon, Tag, type Hue } from "../../shared/ui/Tag.tsx";
 
-/** The owner's home: what is set up, and the one step that waits for them. */
+/**
+ * The owner's home (Attio's density, the reference's warmth): the greeting, the four numbers the
+ * owner checks first, and what is left to set up. No figure is invented: until a shop is
+ * connected each metric says so.
+ */
 export function OverviewPage() {
+  const { t } = useLingui();
   const api = useApi();
   const session = useQuery(sessionQuery(api));
   const secured = session.data?.assurance === "aal2";
+  const metrics: { label: string; hue: Hue; icon: Icon }[] = [
+    { label: t`Orders today`, hue: "sky", icon: Package },
+    { label: t`Revenue, 30 days`, hue: "mint", icon: CurrencyCircleDollar },
+    { label: t`Active listings`, hue: "rose", icon: TagIcon },
+    { label: t`Decisions waiting`, hue: "saffron", icon: HandPalm },
+  ];
 
   return (
     <>
-      <PageHeader
-        title={<Trans>Overview</Trans>}
-        icon={<ObjectIcon hue="iris" icon={<House size={13} strokeWidth={2} />} />}
-      />
-      <PageBody aura>
-        <section className="flex flex-col gap-2">
+      <PageHeader title={<Trans>Overview</Trans>} icon={<ObjectIcon hue="iris" icon={House} />} />
+      <PageBody>
+        <section className="relative isolate -mx-4 -mt-6 overflow-hidden px-4 pt-8 pb-2 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+          <Aura variant="page" className="-z-10 max-md:hidden" />
           <p className="m-0 font-display text-title font-semibold sm:text-display-sm">
             <Trans>Your shop runs. You decide.</Trans>
           </p>
-          <p className="m-0 max-w-[60ch] text-secondary">
+          <p className="m-0 mt-1.5 max-w-[56ch] text-secondary max-sm:hidden">
             <Trans>
-              HTCO checks orders, tracking and listings, and asks you before anything risky. Three
-              steps get it ready.
+              HTCO checks orders, tracking and listings, and asks you before anything risky.
             </Trans>
           </p>
         </section>
 
-        <section
-          aria-labelledby="getting-started"
-          className="max-w-[760px] overflow-hidden rounded-card border border-border-subtle bg-surface shadow-1"
+        <ul
+          aria-label={t`Key numbers`}
+          className="m-0 grid list-none grid-cols-2 gap-3 p-0 lg:grid-cols-4"
         >
-          <header className="flex items-center justify-between gap-3 border-b border-border-subtle bg-sunken px-4 py-2.5">
-            <h2 id="getting-started" className="m-0 text-body font-semibold">
-              <Trans>Getting started</Trans>
-            </h2>
-            <span className="tabular text-body-sm text-muted">
-              {secured ? <Trans>1 of 3 done</Trans> : <Trans>0 of 3 done</Trans>}
-            </span>
-          </header>
-          <ol className="m-0 list-none p-0">
-            <Step
-              hue="mint"
-              icon={<ShieldCheck size={14} strokeWidth={2} />}
-              title={<Trans>Secure your account</Trans>}
-              detail={<Trans>Password and an authenticator app.</Trans>}
-              status={
-                secured ? (
-                  <StatusLabel status="done">
-                    <Trans>Done</Trans>
+          {metrics.map(({ label, hue, icon }) => (
+            <li
+              key={label}
+              className="flex flex-col gap-3 rounded-card border border-border-subtle bg-surface p-4 shadow-1 max-sm:gap-1.5 max-sm:p-3"
+            >
+              <div className="flex items-start justify-between gap-2">
+                <span className="text-body-sm font-medium text-secondary">{label}</span>
+                <ObjectIcon hue={hue} size="md" icon={icon} />
+              </div>
+              <div className="flex flex-col gap-0.5">
+                <span className="tabular font-display text-title font-semibold text-muted">—</span>
+                <span className="text-caption text-muted max-sm:hidden">
+                  <Trans>After a shop is connected</Trans>
+                </span>
+              </div>
+            </li>
+          ))}
+        </ul>
+        <p className="m-0 -mt-3 text-caption text-muted sm:hidden">
+          <Trans>Numbers appear after a shop is connected.</Trans>
+        </p>
+
+        <div className="grid gap-4 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
+          <section
+            aria-labelledby="getting-started"
+            className="overflow-hidden rounded-card border border-border-subtle bg-surface shadow-1"
+          >
+            <header className="flex items-center justify-between gap-3 border-b border-border-subtle px-4 py-3">
+              <h2 id="getting-started" className="m-0 text-body font-semibold">
+                <Trans>Getting started</Trans>
+              </h2>
+              <Tag hue={secured ? "mint" : "slate"}>
+                <span className="tabular">
+                  {secured ? <Trans>1 of 3 done</Trans> : <Trans>0 of 3 done</Trans>}
+                </span>
+              </Tag>
+            </header>
+            <ol className="m-0 list-none p-0">
+              <Step
+                hue="mint"
+                icon={ShieldCheck}
+                title={<Trans>Secure your account</Trans>}
+                detail={<Trans>Password and an authenticator app.</Trans>}
+                status={
+                  secured ? (
+                    <StatusLabel status="done">
+                      <Trans>Done</Trans>
+                    </StatusLabel>
+                  ) : (
+                    <Link to="/settings/security" className="text-link underline">
+                      <Trans>Review security</Trans>
+                    </Link>
+                  )
+                }
+              />
+              <Step
+                hue="coral"
+                icon={Storefront}
+                title={<Trans>Connect your first shop</Trans>}
+                detail={<Trans>Orders, tracking and listings start flowing in.</Trans>}
+                status={
+                  <DecisionRing>
+                    <Tag hue="saffron" dot>
+                      <Trans>Waiting for you</Trans>
+                    </Tag>
+                  </DecisionRing>
+                }
+              />
+              <Step
+                hue="sky"
+                icon={Buildings}
+                title={<Trans>Meet your office</Trans>}
+                detail={<Trans>The AI employees start once a shop is connected.</Trans>}
+                status={
+                  <StatusLabel status="waiting">
+                    <Trans>Waiting</Trans>
                   </StatusLabel>
-                ) : (
-                  <Link to="/settings/security" className="text-link underline">
-                    <Trans>Review security</Trans>
-                  </Link>
-                )
-              }
-            />
-            <Step
-              hue="coral"
-              icon={<Store size={14} strokeWidth={2} />}
-              title={<Trans>Connect your first shop</Trans>}
-              detail={
+                }
+              />
+            </ol>
+          </section>
+
+          <section
+            aria-labelledby="office"
+            className="flex flex-col justify-between gap-4 rounded-card border border-border-subtle bg-brand p-5 shadow-1"
+          >
+            <div className="flex flex-col gap-1.5">
+              <ObjectIcon hue="iris" size="lg" icon={Buildings} />
+              <h2 id="office" className="m-0 mt-2 font-display text-title-sm font-semibold">
+                <Trans>Your AI office</Trans>
+              </h2>
+              <p className="m-0 text-body-sm text-secondary">
                 <Trans>
-                  Orders, tracking and listings appear after you connect an Etsy shop. Connecting
-                  opens in a coming release.
+                  Specialists for listings, orders, customers and money work on your shop under your
+                  policies, and bring you every risky decision.
                 </Trans>
-              }
-              status={
-                <DecisionRing>
-                  <Tag hue="saffron" dot>
-                    <Trans>Waiting for you</Trans>
-                  </Tag>
-                </DecisionRing>
-              }
-            />
-            <Step
-              hue="sky"
-              icon={<Users size={14} strokeWidth={2} />}
-              title={<Trans>Meet your office</Trans>}
-              detail={<Trans>The AI employees start once a shop is connected.</Trans>}
-              status={
-                <StatusLabel status="waiting">
-                  <Trans>Waiting</Trans>
-                </StatusLabel>
-              }
-            />
-          </ol>
-        </section>
+              </p>
+            </div>
+            <Link
+              to="/shops"
+              className="inline-flex items-center gap-1.5 self-start text-body-sm font-medium text-link no-underline hover:underline"
+            >
+              <Trans>Start with your shop</Trans>
+              <ArrowRight size={14} weight="bold" className="rtl:-scale-x-100" />
+            </Link>
+          </section>
+        </div>
       </PageBody>
     </>
   );
@@ -109,17 +179,17 @@ function Step({
   status,
 }: {
   hue: Hue;
-  icon: ReactNode;
+  icon: Icon;
   title: ReactNode;
   detail: ReactNode;
   status: ReactNode;
 }) {
   return (
-    <li className="flex items-center gap-3 border-b border-border-subtle px-4 py-3.5 last:border-b-0">
+    <li className="flex items-center gap-3 border-b border-border-subtle px-4 py-3.5 transition-colors last:border-b-0 hover:bg-hover">
       <ObjectIcon hue={hue} size="md" icon={icon} />
       <div className="flex min-w-0 grow flex-col">
         <span className="font-medium">{title}</span>
-        <span className="text-body-sm text-muted">{detail}</span>
+        <span className="text-body-sm text-muted max-sm:hidden">{detail}</span>
       </div>
       <div className="shrink-0 text-body-sm">{status}</div>
     </li>

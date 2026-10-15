@@ -17,6 +17,7 @@ import { OverviewPage } from "../features/overview/OverviewPage.tsx";
 import { SecurityPage } from "../features/security/SecurityPage.tsx";
 import { SettingsPage } from "../features/settings/SettingsPage.tsx";
 import { ShopsPage } from "../features/shops/ShopsPage.tsx";
+import { WelcomePage } from "../features/welcome/WelcomePage.tsx";
 import { meQuery, needsSecondFactor, sessionQuery } from "../shared/api/api.tsx";
 
 export interface RouterContext {
@@ -27,6 +28,13 @@ export interface RouterContext {
 const rootRoute = createRootRouteWithContext<RouterContext>()({
   component: Outlet,
   notFoundComponent: NotFound,
+});
+
+/** The public front door: what HTCO is, the web app, and the apps that follow. */
+const welcomeRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/welcome",
+  component: WelcomePage,
 });
 
 const signInRoute = createRoute({
@@ -50,7 +58,10 @@ const signedInRoute = createRoute({
       staleTime: "static",
     });
     if (session === null) {
+      // The bare address opens the front door; any other page goes to sign-in and comes back.
       // TanStack Router's redirect is thrown by design.
+      // eslint-disable-next-line @typescript-eslint/only-throw-error
+      if (location.pathname === "/") throw redirect({ to: "/welcome" });
       // eslint-disable-next-line @typescript-eslint/only-throw-error
       throw redirect({ to: "/sign-in", search: { redirect: location.href } });
     }
@@ -77,6 +88,7 @@ const appRoute = createRoute({
 });
 
 const routeTree = rootRoute.addChildren([
+  welcomeRoute,
   signInRoute,
   signedInRoute.addChildren([
     secondFactorRoute,

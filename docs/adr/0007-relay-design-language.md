@@ -55,6 +55,16 @@ A Codex review of the first plan flagged four problems:
   - There are no table-row staggers.
   - Reduced motion removes travel and drawing entirely.
 
+## Revision — round 2 (2026-10-15, owner feedback)
+
+- **Solid colour or glass only:** no blurred glows, gradient fills or faded tinted chips. Tags and object icons are solid fills with white glyphs and text. The aura became solid organic shapes.
+- **Icons:** Phosphor instead of Lucide (duotone in navigation, filled on solid tiles).
+- **App frame:** the work floats on a white panel over a pale app ground. On phones, a floating tab bar and denser-is-fewer layouts.
+- **Overview** became a dashboard: four key numbers with honest empty values, getting started, and the AI office card.
+- **Empty states** show the shape of what will appear.
+- **Sign-in** says "HT-Commerce", carries the logo large above the title, and uses 44 px fields with icons and a show-password control. The brand panel keeps its first design.
+- A public **front door** (`/welcome`): what HTCO is, the web app to open now, and the Windows and Android apps marked "In development" until they exist. A signed-out visitor at the bare address lands there.
+
 ## Alternatives
 
 | Option | Why not |

@@ -27,10 +27,22 @@ Work passes through the office the way the logo's interlocked C and O pass into 
 
 ## Backgrounds: the aura
 
-Brand moments sit on an **aura**: large, soft gradient shapes in the illustration palette (peach into iris from one top corner, sky into iris across the middle) on irregular rounded outlines, lightly blurred, with one hand-drawn coral stroke in a lower corner. It came from the owner's sign-in reference.
+Brand moments sit on an **aura**: large organic shapes in **solid** pastel colours (`shape.iris`, `shape.sky`, `shape.peach`, `shape.mint`, `shape.saffron`; deep tones in the dark theme) with crisp edges, plus one hand-drawn coral stroke. It came from the owner's sign-in reference.
 
-- **Where:** the sign-in screens (the brand panel and a corner of the form side). On work screens it appears only as a faint glow at the top of greeting pages such as the overview (`PageBody aura`), never behind a table, a form or a list.
-- **How:** `Aura` (`brand`, `corner`, `page`). Decorative (`aria-hidden`), static apart from a one-time fade, logical positions so it mirrors in right-to-left layouts, lower opacity in the dark theme. Text always sits on a solid surface or keeps its contrast over the aura.
+- **Solid colour or glass, never tints, blurs or gradients.** This is the owner's rule for the whole product: no blurred glows, no gradient fills, and no faded tinted chips.
+- **Where:**
+  - the sign-in form side, as a cluster in the lower corner clear of the form;
+  - the landing hero;
+  - beside the greeting on the overview.
+  - Never behind a table, a form or a list, and never under text.
+- **How:** `Aura` (`form`, `brand`, `page`, `hero`). It is decorative (`aria-hidden`), static apart from a one-time entrance, and positioned with logical properties.
+
+## The app frame
+
+- The app ground is `bg-app`, a pale graphite.
+- The sidebar sits directly on it.
+- The work floats beside it on a white panel (`bg-canvas`, radius 16, 1 px line, `elevation-2`, an 8 px margin).
+- On phones the page fills the screen, and navigation is a floating tab bar at the bottom, 12 px from the edges, with radius 16.
 
 ## The logo
 
@@ -60,7 +72,7 @@ Brand moments sit on an **aura**: large, soft gradient shapes in the illustratio
   - `bg-brand` for brand-moment grounds.
 - **Text:** `text-primary`, `text-secondary` and `text-muted`, each at least 4.5:1 on every surface. **Lines:** `border-subtle` for dividers, `border-strong` for card and chip outlines, `border-control` for inputs (3:1).
 - **Tags:**
-  - Hues: iris, saffron, coral, mint, sky, rose, slate. Each has a soft tint, a darker text colour and a dot, with its own dark-theme values.
+  - Hues: iris, saffron, coral, mint, sky, rose, slate. A tag is a **solid** fill in its hue (the `presence.*` colours) with white text, at least 4.5:1. The softer `tag.*` tints remain only for large panels such as `bg-brand`, never for chips.
   - Tags are for values (stages, categories, ranges), not decoration.
   - Colour is never the only signal.
 - **Presence:** seven flag colours for AI employees, white names on top (4.5:1). Seven colours cannot identify 16 employees, so a flag always shows the name.
@@ -121,12 +133,12 @@ Brand moments sit on an **aura**: large, soft gradient shapes in the illustratio
   - tags 20 px with radius 4;
   - cards radius 12, dialogs radius 16.
   - Cards have a 1 px line and the faintest shadow; menus and dialogs float with `elevation-3`.
-- **Object icons:** each record type has a 20 px (or 28 px) rounded tile in its hue: Overview iris, Shops coral, Security mint, Settings slate. Later records get their own hue once.
+- **Object icons:** each record type has a **solid** tile in its hue with a white filled glyph, at 20, 32 or 40 px. Overview is iris, Shops coral, Security mint and Settings slate. Later records get their own hue once.
 - Spacing on a 4 px grid (`space-*`). Breakpoints 640, 900, 1200, 1600.
 
 ## Iconography
 
-Lucide outline icons at 16 px (13–15 px inside tiles) with a 1.75–2 px stroke, everywhere. Directional icons mirror in right-to-left layouts; logos, media controls, time axes and codes do not. No emoji in the product.
+[Phosphor](https://phosphoricons.com) icons everywhere: `duotone` at 18–20 px for navigation and inline UI, `fill` in white on solid object tiles and on the current navigation item, `bold` for small arrows. Import the `…Icon` names. Directional icons mirror in right-to-left layouts; logos, media controls, time axes and codes do not. No emoji in the product.
 
 ## Motion
 
@@ -151,7 +163,8 @@ Lucide outline icons at 16 px (13–15 px inside tiles) with a 1.75–2 px strok
 4. **The decision ring means "needs you".** Never decorative, always beside words.
 5. **AI actions are governed in the open.** A proposed action shows the records affected, the reason, the policy used and a preview or diff. Approval states its scope (once, batch, time-limited, or a policy change). Every action has an actor, an audit entry and, where possible, undo. An AI draft never silently becomes a committed marketplace action.
 6. **Say where data comes from and how fresh it is** ("Etsy · 4 min ago"). Say "Estimated" when a figure is not verified. Show sync conflicts, stale data and partial failure, each with a retry.
-7. **Empty states teach:** brand art, one sentence and one action, or say plainly when the action is not available yet.
+7. **Empty states teach.** Show the record type's 40 px icon over three faded placeholder rows in the shape of what will appear (never fake data), a title, one sentence, and one action, or say plainly when the action is not available yet.
+11. **Adapt, don't shrink, on phones.** Show fewer things, not smaller ones: the key numbers in a compact 2×2 grid with one shared note, steps without their descriptions, lists instead of tables, a large title, and the floating tab bar.
 8. **Loading** uses skeletons in the shape of what is coming, never a full-page spinner. **Errors** are inline: the cause and the next step, never an apology.
 9. **Right-to-left by construction:** logical CSS only, mirrored directional icons, codes in an LTR isolate. Hebrew and English are both first-class; test both directions and both themes.
 10. **Destructive actions** confirm in words that say what will happen.

@@ -17,6 +17,7 @@
 
 @theme inline {
   --color-*: initial;
+  --color-app: var(--bg-app);
   --color-canvas: var(--bg-canvas);
   --color-sidebar: var(--bg-sidebar);
   --color-surface: var(--bg-surface);
@@ -93,6 +94,11 @@
   --color-presence-saffron: var(--presence-saffron-bg);
   --color-presence-slate: var(--presence-slate-bg);
   --color-presence-fg: var(--presence-iris-fg);
+  --color-shape-iris: var(--shape-iris);
+  --color-shape-sky: var(--shape-sky);
+  --color-shape-peach: var(--shape-peach);
+  --color-shape-mint: var(--shape-mint);
+  --color-shape-saffron: var(--shape-saffron);
   --color-art-iris: var(--illustration-iris);
   --color-art-saffron: var(--illustration-saffron);
   --color-art-coral: var(--illustration-coral);
@@ -197,7 +203,7 @@
 
 @layer base {
   html {
-    background: var(--bg-canvas);
+    background: var(--bg-app);
     color: var(--text-primary);
     font-family: var(--font-family-latin);
     font-size: 100%;

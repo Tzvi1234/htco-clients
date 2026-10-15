@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Light">
+            <SolidColorBrush x:Key="HtcoBgAppBrush" Color="#FFF4F3F9" />
             <SolidColorBrush x:Key="HtcoBgCanvasBrush" Color="#FFFFFFFF" />
             <SolidColorBrush x:Key="HtcoBgSidebarBrush" Color="#FFFAFAFB" />
             <SolidColorBrush x:Key="HtcoBgSurfaceBrush" Color="#FFFFFFFF" />
@@ -88,6 +89,11 @@
             <SolidColorBrush x:Key="HtcoPresenceSaffronFgBrush" Color="#FFFFFFFF" />
             <SolidColorBrush x:Key="HtcoPresenceSlateBgBrush" Color="#FF5B6170" />
             <SolidColorBrush x:Key="HtcoPresenceSlateFgBrush" Color="#FFFFFFFF" />
+            <SolidColorBrush x:Key="HtcoShapeIrisBrush" Color="#FFDCD6FF" />
+            <SolidColorBrush x:Key="HtcoShapeSkyBrush" Color="#FFCDE1FF" />
+            <SolidColorBrush x:Key="HtcoShapePeachBrush" Color="#FFFFD8C4" />
+            <SolidColorBrush x:Key="HtcoShapeMintBrush" Color="#FFC9F0DE" />
+            <SolidColorBrush x:Key="HtcoShapeSaffronBrush" Color="#FFFFE6A3" />
             <SolidColorBrush x:Key="HtcoIllustrationIrisBrush" Color="#FFA79CF0" />
             <SolidColorBrush x:Key="HtcoIllustrationSaffronBrush" Color="#FFF2B72F" />
             <SolidColorBrush x:Key="HtcoIllustrationCoralBrush" Color="#FFF08A6E" />
@@ -103,6 +109,7 @@
             <SolidColorBrush x:Key="HtcoDataviz5Brush" Color="#FF8A5A00" />
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
+            <SolidColorBrush x:Key="HtcoBgAppBrush" Color="#FF09090C" />
             <SolidColorBrush x:Key="HtcoBgCanvasBrush" Color="#FF0E0E12" />
             <SolidColorBrush x:Key="HtcoBgSidebarBrush" Color="#FF121218" />
             <SolidColorBrush x:Key="HtcoBgSurfaceBrush" Color="#FF181820" />
@@ -186,6 +193,11 @@
             <SolidColorBrush x:Key="HtcoPresenceSaffronFgBrush" Color="#FFFFFFFF" />
             <SolidColorBrush x:Key="HtcoPresenceSlateBgBrush" Color="#FF5B6170" />
             <SolidColorBrush x:Key="HtcoPresenceSlateFgBrush" Color="#FFFFFFFF" />
+            <SolidColorBrush x:Key="HtcoShapeIrisBrush" Color="#FF26214A" />
+            <SolidColorBrush x:Key="HtcoShapeSkyBrush" Color="#FF172A47" />
+            <SolidColorBrush x:Key="HtcoShapePeachBrush" Color="#FF3A2420" />
+            <SolidColorBrush x:Key="HtcoShapeMintBrush" Color="#FF12302A" />
+            <SolidColorBrush x:Key="HtcoShapeSaffronBrush" Color="#FF33290F" />
             <SolidColorBrush x:Key="HtcoIllustrationIrisBrush" Color="#FFA79CF0" />
             <SolidColorBrush x:Key="HtcoIllustrationSaffronBrush" Color="#FFF2B72F" />
             <SolidColorBrush x:Key="HtcoIllustrationCoralBrush" Color="#FFF08A6E" />

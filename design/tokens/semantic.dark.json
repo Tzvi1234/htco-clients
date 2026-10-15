@@ -2,9 +2,13 @@
   "$description": "HTCO Relay semantic tokens, dark theme.",
   "color": {
     "bg": {
+      "app": {
+        "$value": "{palette.graphite.d-app}",
+        "$description": "The app ground behind the floating work panel and the sidebar"
+      },
       "canvas": {
         "$value": "{palette.graphite.d-canvas}",
-        "$description": "Page background"
+        "$description": "Page background (the work panel)"
       },
       "sidebar": {
         "$value": "{palette.graphite.d-sidebar}",
@@ -320,6 +324,24 @@
         "fg": {
           "$value": "{palette.graphite.0}"
         }
+      }
+    },
+    "shape": {
+      "iris": {
+        "$value": "{palette.shape.d-iris}",
+        "$description": "Solid background shapes (the aura); decorative, never behind text"
+      },
+      "sky": {
+        "$value": "{palette.shape.d-sky}"
+      },
+      "peach": {
+        "$value": "{palette.shape.d-peach}"
+      },
+      "mint": {
+        "$value": "{palette.shape.d-mint}"
+      },
+      "saffron": {
+        "$value": "{palette.shape.d-saffron}"
       }
     },
     "illustration": {

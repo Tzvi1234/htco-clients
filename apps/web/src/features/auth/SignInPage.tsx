@@ -1,7 +1,15 @@
 import { Trans, useLingui } from "@lingui/react/macro";
+import {
+  ArrowRightIcon as ArrowRight,
+  EnvelopeIcon as Envelope,
+  EyeIcon as Eye,
+  EyeSlashIcon as EyeSlash,
+  LockSimpleIcon as LockSimple,
+} from "@phosphor-icons/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter, useSearch } from "@tanstack/react-router";
 import { useState, type SyntheticEvent } from "react";
+import { Button as AriaButton } from "react-aria-components";
 
 import { AuthLayout, FormAlert } from "./AuthLayout.tsx";
 import { ApiError, apiError, safeRedirect, useApi } from "../../shared/api/api.tsx";
@@ -17,6 +25,7 @@ export function SignInPage() {
   const search: { redirect?: string } = useSearch({ strict: false });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const signIn = useMutation({
     mutationFn: async () => {
@@ -56,13 +65,15 @@ export function SignInPage() {
 
   return (
     <AuthLayout
-      title={<Trans>Sign in to HTCO</Trans>}
-      description={<Trans>Use the email you were invited with.</Trans>}
+      title={<Trans>Sign in to HT-Commerce</Trans>}
+      description={<Trans>Your shops, orders and AI office in one place.</Trans>}
     >
-      <form className="flex flex-col gap-4" onSubmit={submit} noValidate>
+      <form className="flex flex-col gap-5" onSubmit={submit} noValidate>
         <TextField
           size="lg"
+          icon={Envelope}
           label={t`Email`}
+          placeholder="you@company.com"
           type="email"
           autoComplete="username"
           ltr
@@ -72,17 +83,44 @@ export function SignInPage() {
         />
         <TextField
           size="lg"
+          icon={LockSimple}
           label={t`Password`}
-          type="password"
+          placeholder={t`Your password`}
+          type={showPassword ? "text" : "password"}
           autoComplete="current-password"
           isRequired
           value={password}
           onChange={setPassword}
+          end={
+            <AriaButton
+              aria-label={showPassword ? t`Hide password` : t`Show password`}
+              onPress={() => {
+                setShowPassword((shown) => !shown);
+              }}
+              className="grid size-7 shrink-0 cursor-default place-items-center rounded-control text-icon-muted outline-none data-[hovered]:bg-hover data-[hovered]:text-primary"
+            >
+              {showPassword ? (
+                <EyeSlash aria-hidden="true" size={18} weight="duotone" />
+              ) : (
+                <Eye aria-hidden="true" size={18} weight="duotone" />
+              )}
+            </AriaButton>
+          }
         />
         <FormAlert message={message(signIn.error)} />
-        <Button type="submit" variant="primary" size="lg" isPending={signIn.isPending}>
+        <Button
+          type="submit"
+          variant="primary"
+          size="lg"
+          isPending={signIn.isPending}
+          className="h-11 text-body"
+        >
           <Trans>Sign in</Trans>
+          <ArrowRight aria-hidden="true" size={16} weight="bold" className="rtl:-scale-x-100" />
         </Button>
+        <p className="m-0 text-center text-body-sm text-muted">
+          <Trans>No account yet? The workspace owner sends invitations.</Trans>
+        </p>
       </form>
     </AuthLayout>
   );

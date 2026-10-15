@@ -1,18 +1,69 @@
 import { cx } from "../lib/cx.ts";
 
 /*
- * The aura (design/README.md, "Backgrounds"): soft gradient shapes in the illustration palette
- * behind brand moments, with a hand-drawn stroke in one corner. Decorative only, static (it fades
- * in once), positioned with logical properties so it mirrors in right-to-left layouts, and kept
- * off dense work surfaces: there it is a faint glow at the top of a page, never behind a table.
+ * The aura (design/README.md, "Backgrounds"): large organic shapes in solid pastel colours
+ * (`shape.*` tokens, deep tones in the dark theme) with crisp edges and no gradients, plus one
+ * hand-drawn coral stroke. Taken from the owner's sign-in reference. Decorative only, static apart
+ * from a one-time entrance, positioned with logical properties (mirrors in right-to-left), and
+ * never under text: on work screens it sits beside the greeting, never behind a table.
  */
 
-type AuraVariant = "brand" | "corner" | "page";
+const BLOB = {
+  round: "M100 6c38 0 78 20 90 58 12 38-6 82-40 108-34 26-84 30-118 6S-2 110 8 70 62 6 100 6Z",
+  swoosh: "M10 150C22 84 92 22 162 14c32-4 44 22 30 52-20 44-80 82-136 108-34 16-52 6-46-24Z",
+  pebble:
+    "M120 10c40 10 70 50 66 92-4 44-42 84-88 88-46 4-86-30-90-74C4 70 30 30 68 14c18-8 36-8 52-4Z",
+} as const;
 
-/** One organic shape: a two-colour gradient on an irregular rounded outline, softly blurred. */
-function Shape({ className }: { className: string }) {
-  return <span className={cx("absolute block animate-enter", className)} />;
+type Fill = "iris" | "sky" | "peach" | "mint" | "saffron";
+
+const FILL: Record<Fill, string> = {
+  iris: "fill-shape-iris",
+  sky: "fill-shape-sky",
+  peach: "fill-shape-peach",
+  mint: "fill-shape-mint",
+  saffron: "fill-shape-saffron",
+};
+
+function Blob({
+  shape,
+  fill,
+  className,
+}: {
+  shape: keyof typeof BLOB;
+  fill: Fill;
+  className: string;
+}) {
+  return (
+    <svg
+      viewBox="0 0 200 200"
+      preserveAspectRatio="none"
+      className={cx("absolute block animate-art-in", className)}
+    >
+      <path d={BLOB[shape]} className={FILL[fill]} />
+    </svg>
+  );
 }
+
+/** The hand-drawn stroke, drawn on once. */
+function Squiggle({ className }: { className: string }) {
+  return (
+    <svg viewBox="0 0 120 120" className={cx("absolute rtl:-scale-x-100", className)}>
+      <path
+        d="M14 86c18-30 52-46 66-34 12 10-10 34-26 44-12 8-22 4-14-8 10-14 40-30 62-26"
+        fill="none"
+        stroke="var(--illustration-coral)"
+        strokeWidth="4.5"
+        strokeLinecap="round"
+        pathLength={1}
+        strokeDasharray="1"
+        className="animate-ring-draw [animation-delay:420ms] [animation-duration:900ms]"
+      />
+    </svg>
+  );
+}
+
+type AuraVariant = "brand" | "form" | "page" | "hero";
 
 export function Aura({ variant, className }: { variant: AuraVariant; className?: string }) {
   return (
@@ -22,38 +73,97 @@ export function Aura({ variant, className }: { variant: AuraVariant; className?:
     >
       {variant === "brand" ? (
         <>
-          {/* Peach to iris, rising from the top corner. */}
-          <Shape className="-end-24 -top-32 size-[460px] rotate-[24deg] rounded-[58%_42%_60%_40%/46%_54%_46%_54%] bg-linear-to-br from-art-saffron via-art-coral to-art-iris opacity-60 blur-xl dark:opacity-30" />
-          {/* Sky to iris, sweeping across the middle. */}
-          <Shape className="-start-40 top-[38%] h-[340px] w-[620px] -rotate-[18deg] rounded-[64%_36%_52%_48%/58%_44%_56%_42%] bg-linear-to-r from-art-sky to-art-iris opacity-45 blur-xl dark:opacity-25" />
-          {/* A small cool accent near the bottom. */}
-          <Shape className="-bottom-28 end-[18%] size-[300px] rounded-full bg-linear-to-tr from-art-iris to-art-sky opacity-30 blur-3xl dark:opacity-20" />
+          <Blob
+            shape="swoosh"
+            fill="sky"
+            className="-end-20 -top-16 h-[420px] w-[520px] rotate-[-8deg]"
+          />
+          <Blob
+            shape="round"
+            fill="peach"
+            className="-end-28 -top-28 size-[300px] [animation-delay:80ms]"
+          />
+          <Blob
+            shape="pebble"
+            fill="iris"
+            className="-start-32 bottom-[-120px] size-[380px] [animation-delay:160ms]"
+          />
+          <Blob
+            shape="round"
+            fill="saffron"
+            className="start-[42%] bottom-[-40px] size-[110px] [animation-delay:240ms]"
+          />
         </>
       ) : null}
-      {variant === "corner" ? (
+      {variant === "form" ? (
         <>
-          <Shape className="-end-36 -bottom-40 size-[380px] rotate-12 rounded-[60%_40%_55%_45%/50%_60%_40%_50%] bg-linear-to-tl from-art-iris via-art-sky to-art-mint opacity-40 blur-xl dark:opacity-20" />
-          <svg
-            viewBox="0 0 120 120"
-            className="absolute end-[12%] bottom-6 w-24 animate-art-in [animation-delay:300ms] rtl:-scale-x-100"
-          >
-            <path
-              d="M14 86c18-30 52-46 66-34 12 10-10 34-26 44-12 8-22 4-14-8 10-14 40-30 62-26"
-              fill="none"
-              stroke="var(--illustration-coral)"
-              strokeWidth="4.5"
-              strokeLinecap="round"
-              pathLength={1}
-              strokeDasharray="1"
-              className="animate-ring-draw [animation-delay:420ms] [animation-duration:900ms]"
-            />
-          </svg>
+          {/* A cluster in the lower inline-end corner, clear of the form column. */}
+          <Blob shape="pebble" fill="peach" className="-end-28 -bottom-32 size-[340px]" />
+          <Blob
+            shape="swoosh"
+            fill="sky"
+            className="-end-40 bottom-24 h-[220px] w-[360px] rotate-[-14deg] [animation-delay:80ms] max-sm:hidden"
+          />
+          <Blob
+            shape="round"
+            fill="iris"
+            className="end-[14%] bottom-[38%] size-[64px] [animation-delay:160ms] max-lg:hidden"
+          />
+          <Blob
+            shape="round"
+            fill="mint"
+            className="end-10 top-10 size-[44px] [animation-delay:240ms] max-sm:hidden"
+          />
+          <Blob
+            shape="round"
+            fill="saffron"
+            className="-end-6 top-1/3 size-[90px] [animation-delay:200ms] max-lg:hidden"
+          />
+          <Squiggle className="end-[22%] bottom-10 w-24" />
         </>
       ) : null}
       {variant === "page" ? (
         <>
-          <Shape className="-end-32 -top-48 h-[320px] w-[560px] rotate-[8deg] rounded-[60%_40%_58%_42%/48%_56%_44%_52%] bg-linear-to-l from-art-saffron via-art-coral to-art-iris opacity-25 blur-3xl dark:opacity-15" />
-          <Shape className="-top-40 end-[38%] size-[280px] rounded-full bg-art-sky opacity-20 blur-3xl dark:opacity-10" />
+          <Blob
+            shape="swoosh"
+            fill="sky"
+            className="-end-16 -top-24 h-[230px] w-[380px] rotate-[-6deg]"
+          />
+          <Blob
+            shape="round"
+            fill="peach"
+            className="-end-20 -top-24 size-[170px] [animation-delay:80ms]"
+          />
+          <Blob
+            shape="round"
+            fill="iris"
+            className="end-[300px] -top-10 size-[70px] [animation-delay:160ms]"
+          />
+        </>
+      ) : null}
+      {variant === "hero" ? (
+        <>
+          <Blob
+            shape="swoosh"
+            fill="sky"
+            className="-end-24 top-8 h-[460px] w-[620px] rotate-[-10deg]"
+          />
+          <Blob
+            shape="round"
+            fill="peach"
+            className="-end-32 -top-32 size-[380px] [animation-delay:80ms]"
+          />
+          <Blob
+            shape="pebble"
+            fill="iris"
+            className="-start-40 top-[45%] size-[360px] [animation-delay:160ms]"
+          />
+          <Blob
+            shape="round"
+            fill="mint"
+            className="start-[30%] -bottom-24 size-[200px] [animation-delay:240ms]"
+          />
+          <Squiggle className="end-[8%] bottom-16 w-28" />
         </>
       ) : null}
     </div>
