@@ -25,6 +25,8 @@ The owner's web app: a calm, bilingual, accessible shell where they sign in and 
 | AC-3.5.3 | An Owner or Admin reaches the dashboard only after setting up, or confirming, an authenticator app. | 3.5 (web) | Pass |
 | AC-3.5.4 | A user sees their signed-in devices and signs any other one out. | 3.5 (web) | Pass |
 | AC-3.6.1 | The generated API types match the pinned OpenAPI copy. | 3.6 | Pass |
+| AC-3.8.1 | Every page carries the security policies (CSP, referrer), over HTTPS only; see client ADR-0006 for why they travel in the page. | 3.8 | Pass (unit); live check after the first deploy |
+| AC-3.8.2 | The deployed app passes the sign-in journey with a real account. | 3.8 | Open (needs the owner's account) |
 | AC-3.1.2 | A failing Vitest, Storybook interaction or axe check fails `ci-gate`. | 3.1 (Vitest now; Storybook and axe with slice 3.4) | Partly verified |
 
 ## Scope
@@ -32,6 +34,7 @@ The owner's web app: a calm, bilingual, accessible shell where they sign in and 
 - **In (3.1, part 1):** pnpm workspace (`pnpm-workspace.yaml`), Node 24 (`.node-version`), TypeScript 6.0 strict, ESLint 10 with typescript-eslint's strict and stylistic type-checked rules, Prettier, Vitest 5, repository scripts (`scripts/`) for the pull request title, SHA pins and test integrity, the CI workflow with `ci-gate`, Renovate.
 - **In (3.1 part 2, 3.3 part 1):** the logical-CSS lint rule; `apps/web` with Vite 8, React 19, Tailwind 4 driven only by the design tokens, React Aria Components, TanStack Router and Query, Lingui 6 (English source, Hebrew catalog); the app shell (sidebar at 1200 px, rail from 640 px, bottom bar on phones), shop switcher placeholder, account menu (language, theme), overview and shops empty states, settings, offline banner, not-found and route-error states.
 - **In (3.6, 3.5 web):** `packages/api-client` (openapi-typescript types, an openapi-fetch client that sends the CSRF header); the Vite dev proxy `/api` to the local API; sign-in, authenticator setup and confirmation, the security settings page (two-factor status, signed-in devices), sign-out from the account menu; route guards that send a visitor to sign-in and back, and an Owner or Admin to the second factor; any 401 from the API returns to sign-in.
+- **In (3.8):** `apps/web/Dockerfile` builds the app for App Platform's static site at `https://dash.ht-co.app`; the CSP and referrer policy are written into the built page; the app refuses to run inside a frame ([client ADR-0006](../../adr/0006-static-web-hosting.md)). The app spec, ingress and DNS live in `htco-platform`.
 - **Out (3.3 part 2 and 3.4):** Playwright journeys with axe in he/en × light/dark, Storybook with the accessibility addon, the rest of the core components. Path filters arrive with the first expensive job.
 
 ## External facts learned

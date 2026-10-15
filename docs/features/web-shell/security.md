@@ -20,6 +20,15 @@
 | Error messages | Information disclosure: account enumeration | One message for an unknown email and a wrong password | `auth.test.tsx` |
 | QR code | Tampering | Rendered only from the API's `data:` image; the CSP (slice 3.8) allows `img-src data:` and nothing third-party | Slice 3.8 |
 
+## The deployed site (slice 3.8)
+
+| Element | Threat | Control | Test |
+|---|---|---|---|
+| Built page | Tampering: injected script or style | CSP in a `<meta>`: `'self'` only, no `unsafe-*`, one hashed React Aria `<style>`, `object-src 'none'`, `base-uri 'self'`, `form-action 'self'` | `csp.test.ts`; checked in a browser against the built page (a foreign `<style>` is blocked, the hashed one applies) |
+| Transport | Information disclosure | `.app` is HSTS-preloaded in browsers; App Platform redirects HTTP to HTTPS | Live check after deploy |
+| Framing | Spoofing: clickjacking | The app renders nothing inside a frame (`frame-ancestors` is ignored in a `<meta>`) | `csp.test.ts` |
+| Referrer | Information disclosure: addresses leaking to other sites | `<meta name="referrer" content="same-origin">` | `csp.test.ts` |
+
 ## ASVS 5.0 requirements covered
 
 | Requirement | How it is met | Evidence |

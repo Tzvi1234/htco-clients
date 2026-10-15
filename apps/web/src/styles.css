@@ -129,3 +129,8 @@
     }
   }
 }
+
+/* React Aria also injects this rule; it is repeated here in case the CSP blocks a changed copy. */
+[data-react-aria-pressable] {
+  touch-action: pan-x pan-y pinch-zoom;
+}

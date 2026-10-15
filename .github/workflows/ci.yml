@@ -62,6 +62,25 @@ jobs:
       - name: Unit tests
         run: pnpm run test
 
+  web-build:
+    name: web-build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # The same build App Platform runs for the static site (client ADR-0006).
+      - name: Build the web app's image
+        run: docker build --file apps/web/Dockerfile --tag htco-web .
+      - name: The built page carries its security policies
+        run: |
+          docker run --rm htco-web cat /src/apps/web/dist/index.html > index.html
+          grep -q 'http-equiv="Content-Security-Policy"' index.html
+          grep -q '<meta name="referrer" content="same-origin" />' index.html
+
   security:
     name: security
     runs-on: ubuntu-24.04
@@ -163,7 +182,7 @@ jobs:
   ci-gate:
     name: ci-gate
     if: always()
-    needs: [checks, tests, security, workflows, test-integrity, pr-title]
+    needs: [checks, tests, web-build, security, workflows, test-integrity, pr-title]
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     permissions: {}
