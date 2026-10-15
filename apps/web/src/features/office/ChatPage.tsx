@@ -6,31 +6,34 @@ import { RiskChip } from "../../shared/demo/AgentBits.tsx";
 import { agent, dept, type AgentId } from "../../shared/demo/office.ts";
 import { cx } from "../../shared/lib/cx.ts";
 import { GearIcon, MoreIcon, SearchIcon } from "../../shared/ui/icons.tsx";
-import {
-  ClipGlyph,
-  DocGlyph,
-  DownloadGlyph,
-  PlusGlyph,
-  SendGlyph,
-} from "../../shared/ui/kit/glyphs.tsx";
+import { Button } from "../../shared/ui/Button.tsx";
+import { Panel, PanelBody, PanelHeader } from "../../shared/ui/Panel.tsx";
+import { StarMapThumb } from "./thumbs.tsx";
 import {
   Avatar,
-  Cb,
+  Card,
   Chip,
+  CircleButton,
+  ClipGlyph,
   DemoFrame,
+  DocGlyph,
   Dot,
+  DownloadGlyph,
+  InkDisc,
   KV,
   KV2,
+  ListRow,
   N,
+  PILL,
   Pill,
+  PlusGlyph,
+  SendGlyph,
+  Stack,
   Status,
   StatusGlyph,
   Typing,
-  useStatusLabel,
-} from "../../shared/ui/kit/kit.tsx";
-import { PageHeader } from "../../shared/ui/PageHeader.tsx";
-import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
-import { StarMapThumb } from "./thumbs.tsx";
+  useStatusLabels,
+} from "../../shared/ui/kit/index.ts";
 
 /**
  * Office › Chat (Design 1C `P.chat`), a demo frame: conversations with the AI employees, the
@@ -41,19 +44,14 @@ export function ChatPage() {
   const [chat, setChat] = useState<AgentId>("maya");
   const c = agent(chat);
   return (
-    <>
-      <PageHeader title={t(c.name)} />
-      <DemoFrame>
-        <div className="k-grid k-l3 k-enter">
-          <Conversations chat={chat} onChat={setChat} />
-          <Thread chat={chat} />
-          <div className="k-stack k-phone-hide">
-            <AgentCard id={chat} />
-            <Shared />
-          </div>
-        </div>
-      </DemoFrame>
-    </>
+    <DemoFrame title={t(c.name)} views layout="l3">
+      <Conversations chat={chat} onChat={setChat} />
+      <Thread chat={chat} />
+      <Stack className="max-sm:hidden">
+        <AgentCard id={chat} />
+        <Shared />
+      </Stack>
+    </DemoFrame>
   );
 }
 
@@ -64,10 +62,10 @@ function Conversations({ chat, onChat }: { chat: AgentId; onChat: (id: AgentId) 
       <PanelHeader
         title={t`Conversations`}
         meta={<N>8</N>}
-        actions={<Cb label={t`New chat`} icon={PlusGlyph} />}
+        actions={<CircleButton label={t`New chat`} icon={<PlusGlyph />} />}
       />
       <div className="px-4 pb-2">
-        <div className="k-pill k-w h-10 justify-start text-muted">
+        <div className={cx(PILL, "h-10 w-full justify-start text-muted")}>
           <SearchIcon size={14} />
           {t`Search agents`}
         </div>
@@ -132,7 +130,7 @@ function Thread({ chat }: { chat: AgentId }) {
           <>
             <Status status={c.status} live />
             <span className="w-3" />
-            <Cb label={t`More`} icon={MoreIcon} />
+            <CircleButton label={t`More`} icon={<MoreIcon />} />
           </>
         }
       />
@@ -141,11 +139,11 @@ function Thread({ chat }: { chat: AgentId }) {
         {chat === "maya" ? <MayaThread /> : <ShortThread chat={chat} />}
       </div>
       <div className="k-composer">
-        <Cb label={t`Attach`} icon={ClipGlyph} />
+        <CircleButton label={t`Attach`} icon={<ClipGlyph />} />
         <input aria-label={t`Message ${name}`} placeholder={t`Message ${name}…`} />
-        <button type="button" className="k-kdisc" aria-label={t`Send`} title={t`Send`}>
+        <InkDisc label={t`Send`} accent>
           <SendGlyph size={14} />
-        </button>
+        </InkDisc>
       </div>
     </Panel>
   );
@@ -163,7 +161,7 @@ function MayaThread() {
         <div className="k-bub">{t`Good morning Tzvi. Overnight order intake is done — here is what I found.`}</div>
       </div>
       <div className="k-msg">
-        <div className="k-card k-tool">
+        <Card className="k-tool">
           <div className="k-hd">
             <span>{t`Tool call · evidence`}</span>
             <span>
@@ -178,14 +176,12 @@ function MayaThread() {
           </div>
           <div className="flex items-center justify-between gap-2">
             <Chip>
-              <Dot tone="o" />
+              <Dot tone="attention" />
               {t`2 late`} · <N>#3152 · #3160</N>
             </Chip>
-            <button type="button" className="k-btn">
-              {t`View evidence`}
-            </button>
+            <Button>{t`View evidence`}</Button>
           </div>
-        </div>
+        </Card>
       </div>
       <div className="k-msg k-me">
         <div className="k-meta">
@@ -232,7 +228,7 @@ function MayaThread() {
         </div>
       </div>
       <div className="k-msg">
-        <div className="k-card k-r k-apc">
+        <Card raised className="k-apc">
           <div className="flex items-center justify-between">
             <span className="k-lb">{t`Approval request`}</span>
             <span className="k-lb">
@@ -253,15 +249,13 @@ function MayaThread() {
               </Chip>
             </div>
             <div className="flex gap-1.5">
-              <button type="button" className="k-btn k-lg">
-                {t`Reject`}
-              </button>
-              <button type="button" className="k-btn k-pri k-lg">
+              <Button size="lg">{t`Reject`}</Button>
+              <Button variant="primary" size="lg">
                 {t`Approve`}
-              </button>
+              </Button>
             </div>
           </div>
-        </div>
+        </Card>
       </div>
       <div className="k-msg">
         <div className="k-meta">{t`${maya} is typing…`}</div>
@@ -285,13 +279,13 @@ function ShortThread({ chat }: { chat: AgentId }) {
         <div className="k-bub">{t(item.last)}</div>
       </div>
       <div className="k-msg">
-        <div className="k-card k-tool">
+        <Card className="k-tool">
           <div className="k-hd">
             <span>{t`Current task`}</span>
             <Status status={c.status} live />
           </div>
           <div className="mt-2 text-[15px]">{t(c.task)}</div>
-        </div>
+        </Card>
       </div>
     </>
   );
@@ -299,15 +293,15 @@ function ShortThread({ chat }: { chat: AgentId }) {
 
 export function AgentCard({ id, title }: { id: AgentId; title?: string }) {
   const { t } = useLingui();
-  const statusLabel = useStatusLabel();
+  const statusLabels = useStatusLabels();
   const a = agent(id);
   return (
     <Panel>
       <PanelHeader
         title={<N>{title ?? "Claude · agent-worker"}</N>}
-        actions={<Cb label={t`Agent settings`} icon={GearIcon} />}
+        actions={<CircleButton label={t`Agent settings`} icon={<GearIcon />} />}
       />
-      <div className="k-pb k-between">
+      <PanelBody className="justify-between">
         <div className="flex items-center justify-center gap-4">
           <Avatar initial={t(a.name).charAt(0)} size="lg" ink />
           <div className="text-start">
@@ -328,19 +322,19 @@ export function AgentCard({ id, title }: { id: AgentId; title?: string }) {
               t`Status:`,
               <Pill wide key="status">
                 <StatusGlyph status={a.status} live />
-                {statusLabel(a.status)}
+                {statusLabels[a.status]}
               </Pill>,
             ],
             [
               t`Autonomy:`,
               <Pill wide key="autonomy">
-                <Dot tone="o" />
+                <Dot tone="attention" />
                 {t`Asks first`}
               </Pill>,
             ],
           ]}
         />
-      </div>
+      </PanelBody>
     </Panel>
   );
 }
@@ -355,30 +349,31 @@ function Shared() {
   return (
     <Panel>
       <PanelHeader title={t`Shared in this chat`} meta={<N>3</N>} />
-      <div className="k-pb pt-0">
+      <PanelBody className="pt-0">
         {items.map((item) => (
-          <div key={item.name} className="k-svcrow">
-            <span className="k-av k-sm overflow-hidden rounded-[10px]">
-              {item.icon === "doc" ? (
-                <DocGlyph size={14} />
-              ) : item.icon === "search" ? (
-                <SearchIcon size={14} />
-              ) : (
-                <StarMapThumb size={28} />
-              )}
-            </span>
-            <div className="min-w-0 grow">
-              <div className="k-nm text-body-sm">
-                <N>{item.name}</N>
-              </div>
-              <div className="k-ln">
+          <ListRow
+            key={item.name}
+            lead={
+              <span className="flex size-7 shrink-0 items-center justify-center overflow-hidden rounded-[10px] border border-line bg-raised">
+                {item.icon === "doc" ? (
+                  <DocGlyph size={14} />
+                ) : item.icon === "search" ? (
+                  <SearchIcon size={14} />
+                ) : (
+                  <StarMapThumb size={28} />
+                )}
+              </span>
+            }
+            title={<N className="text-body-sm">{item.name}</N>}
+            line={
+              <>
                 {item.kind} · <N>{item.size}</N>
-              </div>
-            </div>
-            <DownloadGlyph size={14} />
-          </div>
+              </>
+            }
+            end={<DownloadGlyph size={14} />}
+          />
         ))}
-      </div>
+      </PanelBody>
     </Panel>
   );
 }

@@ -1,27 +1,21 @@
 import { useLingui } from "@lingui/react/macro";
 
 import { agent, type AgentId, type Risk } from "./office.ts";
-import { Avatar, Chip, Dot, type DotTone } from "../ui/kit/kit.tsx";
+import { Chip, Dot, initialOf, Who, type DotTone } from "../ui/kit/index.ts";
 
 /** An employee's initial in the current language, as the demo's avatars show it. */
 export function useAgentInitial(): (id: AgentId) => string {
   const { t } = useLingui();
-  return (id) => t(agent(id).name).charAt(0);
+  return (id) => initialOf(t(agent(id).name));
 }
 
 /** An employee's avatar and name (the demo's `who`). */
-export function Who({ id }: { id: AgentId }) {
+export function AgentWho({ id }: { id: AgentId }) {
   const { t } = useLingui();
-  const a = agent(id);
-  return (
-    <span className="k-who">
-      <Avatar initial={t(a.name).charAt(0)} size="xs" />
-      {t(a.name)}
-    </span>
-  );
+  return <Who name={t(agent(id).name)} />;
 }
 
-const RISK_TONE: Record<Risk, DotTone> = { low: "g", med: "b", high: "o" };
+const RISK_TONE: Record<Risk, DotTone> = { low: "success", med: "info", high: "attention" };
 
 /** "Risk low / medium / high" with its dot (the demo's `riskPill`). */
 export function RiskChip({ risk }: { risk: Risk }) {

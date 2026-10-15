@@ -13,9 +13,16 @@ import { Button } from "../../shared/ui/Button.tsx";
 import { PageHeader } from "../../shared/ui/PageHeader.tsx";
 import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
 import { WorkspacePicker, pickWorkspace } from "../../shared/ui/WorkspacePicker.tsx";
-import { CheckGlyph, PlusGlyph } from "../../shared/ui/kit/glyphs.tsx";
-import { Dot, IdBlock, InkDisc, Pill, PillPair } from "../../shared/ui/kit/Bits.tsx";
-import { Screen } from "../../shared/ui/kit/Layout.tsx";
+import {
+  CheckGlyph,
+  Dot,
+  IdBlock,
+  InkDisc,
+  KV2,
+  Pill,
+  PlusGlyph,
+  Screen,
+} from "../../shared/ui/kit/index.ts";
 
 /**
  * The organization's shops (Commerce / Shops) in the Design 1C shop panels: one panel per shop
@@ -93,7 +100,10 @@ function Shops({
             role="alert"
             className="flex grow flex-col items-center justify-center gap-4 px-6 py-16 text-center"
           >
-            <IdBlock label={<Trans>Shops:</Trans>} id={<Trans>Shops could not be loaded</Trans>} />
+            <IdBlock
+              label={<Trans>Shops:</Trans>}
+              value={<Trans>Shops could not be loaded</Trans>}
+            />
             <p className="m-0 text-body-sm text-secondary">
               <Trans>Check your connection and try again.</Trans>
             </p>
@@ -221,7 +231,7 @@ function ConnectPanel({ etsy }: { etsy: ConnectEtsy }) {
             <PlusGlyph size={14} />
           </InkDisc>
         </span>
-        <IdBlock label={<Trans>Marketplace:</Trans>} id={<span className="ltr">Etsy</span>} />
+        <IdBlock label={<Trans>Marketplace:</Trans>} value={<span className="ltr">Etsy</span>} />
         <p className="m-0 max-w-[320px] text-body-sm text-secondary">
           <Trans>
             Add another Etsy shop to this workspace. You confirm with your authenticator code, then
@@ -250,7 +260,7 @@ function NoShops({ etsy }: { etsy: ConnectEtsy | undefined }) {
     <Panel>
       <PanelHeader title={<Trans>Shops</Trans>} meta={<span className="ltr">0</span>} />
       <div className="flex min-h-0 grow flex-col items-center justify-between gap-5 px-6 pb-6 text-center">
-        <IdBlock label={<Trans>Shops:</Trans>} id={<Trans>No shops yet</Trans>} />
+        <IdBlock label={<Trans>Shops:</Trans>} value={<Trans>No shops yet</Trans>} />
         <div className="flex min-h-0 grow items-center justify-center max-sm:h-28 max-sm:grow-0">
           <img
             src={parcel}
@@ -309,7 +319,7 @@ function HowConnecting() {
         meta={<span className="ltr">3</span>}
       />
       <div className="flex min-h-0 grow flex-col justify-between gap-6 px-6 pb-6">
-        <IdBlock label={<Trans>Connecting takes:</Trans>} id={<Trans>About a minute</Trans>} />
+        <IdBlock label={<Trans>Connecting takes:</Trans>} value={<Trans>About a minute</Trans>} />
         <ol className="m-0 flex list-none flex-col gap-1 p-0">
           {steps.map((step, index) => (
             <li
@@ -327,28 +337,22 @@ function HowConnecting() {
             </li>
           ))}
         </ol>
-        <PillPair
+        <KV2
           items={[
-            {
-              key: "needs",
-              label: <Trans>You need:</Trans>,
-              pill: (
-                <Pill wide>
-                  <Dot tone="ink" />
-                  <Trans>Authenticator app</Trans>
-                </Pill>
-              ),
-            },
-            {
-              key: "access",
-              label: <Trans>Etsy access:</Trans>,
-              pill: (
-                <Pill wide>
-                  <Dot tone="good" />
-                  <Trans>Read only</Trans>
-                </Pill>
-              ),
-            },
+            [
+              <Trans>You need:</Trans>,
+              <Pill wide>
+                <Dot tone="ink" />
+                <Trans>Authenticator app</Trans>
+              </Pill>,
+            ],
+            [
+              <Trans>Etsy access:</Trans>,
+              <Pill wide>
+                <Dot tone="success" />
+                <Trans>Read only</Trans>
+              </Pill>,
+            ],
           ]}
         />
       </div>

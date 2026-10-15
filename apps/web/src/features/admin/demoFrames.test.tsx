@@ -70,7 +70,7 @@ describe("the demo screens of Customers, Finance and Admin", () => {
     await open("/finance/ledger", "he");
     expect(screen.getByRole("heading", { level: 1, name: "ספר חשבונות" })).toBeInTheDocument();
     expect(screen.getByText("יתרה ב־Etsy:")).toBeInTheDocument();
-    expect(screen.getByText("הדגמה — בקרוב")).toBeInTheDocument();
+    expect(screen.getByText("דמו — בקרוב")).toBeInTheDocument();
   });
 });
 

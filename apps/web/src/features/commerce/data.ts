@@ -3,9 +3,13 @@
 import { useLingui } from "@lingui/react/macro";
 
 import type { AgentId } from "../work/agents.ts";
-import type { WorkStatus } from "../../shared/ui/kit/Bits.tsx";
-import { bi, useBi, type Bi } from "../../shared/ui/kit/bi.ts";
-import type { ProductKind } from "../../shared/ui/kit/Thumb.tsx";
+import {
+  bi,
+  useBi,
+  type AgentStatus,
+  type Bi,
+  type ProductKind,
+} from "../../shared/ui/kit/index.ts";
 
 export const PRODUCT_NAMES: Record<ProductKind, Bi> = {
   star: bi("הדפס מפת כוכבים אישית", "Personalized star map print"),
@@ -45,7 +49,7 @@ export function useProductNames(): Record<ProductKind, string> {
 
 export type OrderStatus = "paid" | "prod" | "ship" | "deliv" | "late";
 
-export const ORDER_GLYPH: Record<OrderStatus, WorkStatus> = {
+export const ORDER_GLYPH: Record<OrderStatus, AgentStatus> = {
   paid: "idle",
   prod: "running",
   ship: "waitext",

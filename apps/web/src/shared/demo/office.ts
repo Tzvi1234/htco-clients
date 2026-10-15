@@ -3,9 +3,10 @@
 // approvals that wait for the owner. Only demo frames and Demo-labelled parts show it; nothing
 // here is live. Names and titles are messages, so they read in Hebrew and English.
 import { msg } from "@lingui/core/macro";
+import { useLingui } from "@lingui/react/macro";
 import type { MessageDescriptor } from "@lingui/core";
 
-import type { AgentStatus } from "../ui/kit/kit.tsx";
+import type { OfficeStatus } from "../ui/kit/status.tsx";
 
 export type DeptId = "exec" | "studio" | "proc" | "oa" | "mkt" | "cs" | "eng";
 
@@ -48,7 +49,7 @@ export interface Agent {
   name: MessageDescriptor;
   role: MessageDescriptor;
   dept: DeptId;
-  status: AgentStatus;
+  status: OfficeStatus;
   task: MessageDescriptor;
 }
 
@@ -195,6 +196,30 @@ export function dept(id: DeptId): Dept {
   return found;
 }
 
+/** An employee in the user's language, for screens that show words rather than messages. */
+export interface AgentView {
+  id: AgentId;
+  name: string;
+  role: string;
+  dept: string;
+  deptId: DeptId;
+  status: OfficeStatus;
+}
+
+/** The sixteen employees in the user's language, in the demo's order, and one by id. */
+export function useAgents(): { list: AgentView[]; byId: (id: AgentId) => AgentView } {
+  const { t } = useLingui();
+  const view = (a: Agent): AgentView => ({
+    id: a.id,
+    name: t(a.name),
+    role: t(a.role),
+    dept: t(dept(a.dept).name),
+    deptId: a.dept,
+    status: a.status,
+  });
+  return { list: AGENTS.map(view), byId: (id) => view(agent(id)) };
+}
+
 /** An employee's badge code, as on the demo's cards: department code and seat number. */
 export function badge(a: Agent): string {
   return `${dept(a.dept).code}-${String(AGENTS.indexOf(a) + 1).padStart(2, "0")}`;
@@ -204,7 +229,7 @@ export function badge(a: Agent): string {
 export const SERVICES: readonly {
   name: MessageDescriptor;
   items: string;
-  status: AgentStatus;
+  status: OfficeStatus;
 }[] = [
   {
     name: msg`Automations`,

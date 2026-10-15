@@ -117,7 +117,7 @@
   cursor: pointer;
   animation:
     fl-pop var(--motion-duration-base) var(--motion-easing-standard) both,
-    k-pulse 1.4s ease-in-out infinite;
+    htco-pulse 1.4s ease-in-out infinite;
 }
 .fl-b3.fl-ic {
   width: 24px;
@@ -251,7 +251,7 @@
   color: var(--inverse-text);
   border-color: var(--inverse-bg);
 }
-.fl-hs.k-on .k-av {
+.fl-hs.k-on [data-avatar] {
   background: var(--inverse-bg-hover);
   color: var(--inverse-text);
   border-color: var(--inverse-bg);

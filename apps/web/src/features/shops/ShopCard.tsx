@@ -9,17 +9,18 @@ import { Ltr } from "../../shared/ui/Ltr.tsx";
 import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
 import {
   CircleButton,
+  DemoPart,
   Dot,
   IdBlock,
+  KV2,
+  N,
   Pill,
-  PillPair,
+  RefreshGlyph,
   StatusGlyph,
   Tile,
+  type AgentStatus,
   type DotTone,
-  type WorkStatus,
-} from "../../shared/ui/kit/Bits.tsx";
-import { DemoPart } from "../../shared/ui/kit/Demo.tsx";
-import { RefreshGlyph } from "../../shared/ui/kit/glyphs.tsx";
+} from "../../shared/ui/kit/index.ts";
 
 const DAY = 86_400_000;
 
@@ -43,13 +44,13 @@ export function ago(iso: string, now: number, locale: string): string {
 }
 
 /** The connection's status as the demo's status glyph: the shape carries it, not the colour. */
-const STATUS_GLYPH: Record<IntegrationView["status"], WorkStatus> = {
+const STATUS_GLYPH: Record<IntegrationView["status"], AgentStatus> = {
   connected: "running",
   needs_reauth: "waityou",
   disconnected: "offline",
 };
 
-const HEALTH_GLYPH: Record<IntegrationView["token_health"], WorkStatus> = {
+const HEALTH_GLYPH: Record<IntegrationView["token_health"], AgentStatus> = {
   ok: "running",
   expiring: "waityou",
   needs_reauth: "waityou",
@@ -57,10 +58,10 @@ const HEALTH_GLYPH: Record<IntegrationView["token_health"], WorkStatus> = {
 };
 
 const SYNC_DOT: Record<IntegrationView["token_health"], DotTone> = {
-  ok: "good",
+  ok: "success",
   expiring: "attention",
   needs_reauth: "attention",
-  disconnected: "faint",
+  disconnected: "muted",
 };
 
 /** One labelled line of the connection details (`.kv` in the demo's words). */
@@ -168,7 +169,7 @@ export function ShopCard({
         }
       />
       <div className="flex min-h-0 grow flex-col justify-between gap-4 overflow-auto px-6 pb-6">
-        <IdBlock label={<Trans>Shop:</Trans>} id={shop.name} idId={titleId}>
+        <IdBlock label={<Trans>Shop:</Trans>} value={shop.name} valueId={titleId}>
           <p className="m-0 mt-1 truncate text-caption font-light text-muted">
             {integration === undefined ? (
               <Trans>Etsy</Trans>
@@ -190,12 +191,12 @@ export function ShopCard({
             )}
           />
         </div>
-        <DemoPart>
+        <DemoPart tag="edge">
           <div className="grid grid-cols-4 gap-2 max-sm:grid-cols-2 max-sm:[&>*:nth-child(n+3)]:hidden">
-            <Tile label={<Trans>Orders today</Trans>} value="23" animate={false} />
-            <Tile label={<Trans>Revenue today</Trans>} value="$842" animate={false} />
-            <Tile label={<Trans>Favourites</Trans>} value="1,204" animate={false} />
-            <Tile label={<Trans>Rating</Trans>} value="4.9" animate={false} />
+            <Tile label={<Trans>Orders today</Trans>} value={<N>23</N>} />
+            <Tile label={<Trans>Revenue today</Trans>} value={<N>$842</N>} />
+            <Tile label={<Trans>Favourites</Trans>} value={<N>1,204</N>} />
+            <Tile label={<Trans>Rating</Trans>} value={<N>4.9</N>} />
           </div>
         </DemoPart>
         {detailsLoading ? (
@@ -226,7 +227,7 @@ export function ShopCard({
             <dl className="m-0 flex flex-col">
               <Detail label={<Trans>Connection</Trans>}>
                 <span className="inline-flex items-center gap-2">
-                  <StatusGlyph status={HEALTH_GLYPH[integration.token_health]} />
+                  <StatusGlyph live status={HEALTH_GLYPH[integration.token_health]} />
                   <span>{health(integration)}</span>
                 </span>
               </Detail>
@@ -249,37 +250,31 @@ export function ShopCard({
                 )}
               </Detail>
             </dl>
-            <PillPair
+            <KV2
               className="max-sm:grid-cols-1"
               items={[
-                {
-                  key: "status",
-                  label: <Trans>Status:</Trans>,
-                  pill: (
-                    <Pill wide>
-                      <StatusGlyph status={STATUS_GLYPH[integration.status]} />
-                      <span className="truncate">{statusLabel[integration.status]}</span>
-                    </Pill>
-                  ),
-                },
-                {
-                  key: "sync",
-                  label: <Trans>Last sync:</Trans>,
-                  pill: (
-                    <Pill wide>
-                      <Dot tone={SYNC_DOT[integration.token_health]} />
-                      {integration.last_successful_call_at === null ? (
-                        <span className="truncate text-muted">
-                          <Trans>Not synced yet</Trans>
-                        </span>
-                      ) : (
-                        <time className="truncate" dateTime={integration.last_successful_call_at}>
-                          {t`Last synced ${ago(integration.last_successful_call_at, now, locale)}`}
-                        </time>
-                      )}
-                    </Pill>
-                  ),
-                },
+                [
+                  <Trans>Status:</Trans>,
+                  <Pill wide>
+                    <StatusGlyph live status={STATUS_GLYPH[integration.status]} />
+                    <span className="truncate">{statusLabel[integration.status]}</span>
+                  </Pill>,
+                ],
+                [
+                  <Trans>Last sync:</Trans>,
+                  <Pill wide>
+                    <Dot tone={SYNC_DOT[integration.token_health]} />
+                    {integration.last_successful_call_at === null ? (
+                      <span className="truncate text-muted">
+                        <Trans>Not synced yet</Trans>
+                      </span>
+                    ) : (
+                      <time className="truncate" dateTime={integration.last_successful_call_at}>
+                        {t`Last synced ${ago(integration.last_successful_call_at, now, locale)}`}
+                      </time>
+                    )}
+                  </Pill>,
+                ],
               ]}
             />
             {reconnect === undefined ? null : (

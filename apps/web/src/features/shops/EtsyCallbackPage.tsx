@@ -7,8 +7,8 @@ import { ApiError, apiError, shopKeys, useApi } from "../../shared/api/api.tsx";
 import parcel from "../../assets/commerce/parcel.webp";
 import { cx } from "../../shared/lib/cx.ts";
 import { PageHeader } from "../../shared/ui/PageHeader.tsx";
-import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
-import { IdBlock } from "../../shared/ui/kit/Bits.tsx";
+import { PanelHeader } from "../../shared/ui/Panel.tsx";
+import { IdBlock } from "../../shared/ui/kit/index.ts";
 
 /** What Etsy put in the address when it sent the owner back. */
 export interface EtsyReturn {
@@ -99,7 +99,8 @@ export function EtsyCallbackPage() {
   return (
     <>
       <PageHeader title={<Trans>Connecting Etsy</Trans>} />
-      <Panel className="grow motion-safe:animate-enter">
+      {/* One panel: the shell's own, which this screen fills. */}
+      <div className="flex grow flex-col motion-safe:animate-enter">
         <PanelHeader
           title={
             <>
@@ -121,7 +122,10 @@ export function EtsyCallbackPage() {
           />
           {outcome === null ? (
             <div role="status" className="flex flex-col items-center gap-3">
-              <IdBlock label={<Trans>Etsy:</Trans>} id={<Trans>Connecting your Etsy shop</Trans>} />
+              <IdBlock
+                label={<Trans>Etsy:</Trans>}
+                value={<Trans>Connecting your Etsy shop</Trans>}
+              />
               <p className="m-0 text-body-sm text-secondary">
                 <Trans>This takes a few seconds. Keep this page open.</Trans>
               </p>
@@ -139,7 +143,7 @@ export function EtsyCallbackPage() {
             <Failure outcome={outcome} />
           )}
         </div>
-      </Panel>
+      </div>
     </>
   );
 }
@@ -175,7 +179,7 @@ function Failure({ outcome }: { outcome: Outcome }) {
     <div role="alert" className="flex max-w-[480px] flex-col items-center gap-3">
       <IdBlock
         label={<Trans>Etsy:</Trans>}
-        id={
+        value={
           outcome.kind === "cancelled" ? (
             <Trans>Connection cancelled</Trans>
           ) : (

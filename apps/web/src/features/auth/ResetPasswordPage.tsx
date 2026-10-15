@@ -4,7 +4,8 @@ import { Link, useRouter, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState, type SyntheticEvent } from "react";
 
 import { AUTH_SUBMIT, AuthLayout, FormAlert } from "./AuthLayout.tsx";
-import { CodeBoxes, PasswordField } from "./fields.tsx";
+import { PasswordField } from "./fields.tsx";
+import { CodeBoxes } from "../../shared/ui/kit/index.ts";
 import { passwordProblem, tokensOf, type LinkTokens } from "./linkTokens.ts";
 import { ApiError, apiError, useApi } from "../../shared/api/api.tsx";
 import { Button } from "../../shared/ui/Button.tsx";

@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRef, useState, type RefObject, type SyntheticEvent } from "react";
 import { Dialog, Heading, Modal, ModalOverlay } from "react-aria-components";
 
+import { useAgents } from "../../shared/demo/office.ts";
 import {
   ApiError,
   apiError,
@@ -20,24 +21,29 @@ import { Button } from "../../shared/ui/Button.tsx";
 import { CheckIcon, CloseIcon } from "../../shared/ui/icons.tsx";
 import { PageHeader } from "../../shared/ui/PageHeader.tsx";
 import { Panel, PanelBody, PanelHeader } from "../../shared/ui/Panel.tsx";
-import { DemoPart, DemoTag } from "../../shared/ui/d1c/DemoFrame.tsx";
-import { useEmployees, useStateWords } from "../../shared/ui/d1c/employees.ts";
-import { ChoiceChips, PillField } from "../../shared/ui/d1c/Form.tsx";
-import { CopyIcon, PlusIcon, WhatsappIcon } from "../../shared/ui/d1c/icons.tsx";
 import {
   Avatar,
+  ChoiceChips,
   CircleButton,
+  CopyGlyph,
+  DataTable,
+  DemoPart,
+  DemoTag,
   Dot,
   IdBlock,
   KV,
   KV2,
+  PillField,
+  PlusGlyph,
+  Screen,
   SectionLabel,
-  StateLabel,
+  Stack,
+  Status,
   Toggle,
+  WhatsappGlyph,
   Who,
-} from "../../shared/ui/d1c/Parts.tsx";
-import { Screen, Stack } from "../../shared/ui/d1c/Layout.tsx";
-import { DataTable } from "../../shared/ui/d1c/Table.tsx";
+  useStatusLabels,
+} from "../../shared/ui/kit/index.ts";
 
 type Role = components["schemas"]["Role"];
 type Member = components["schemas"]["MemberView"];
@@ -101,7 +107,7 @@ export function TeamPage() {
             meta={<MemberCount organizationId={organizationId} />}
             actions={
               organizationId === undefined ? undefined : (
-                <CircleButton label={t`Invite member`} icon={<PlusIcon />} onPress={startInvite} />
+                <CircleButton label={t`Invite member`} icon={<PlusGlyph />} onClick={startInvite} />
               )
             }
           />
@@ -287,13 +293,9 @@ function MembersTable({
               —
             </span>,
             member.display_name === null ? (
-              <StateLabel key="status" state="queued">
-                {t`Invited`}
-              </StateLabel>
+              <Status key="status" live status="queued" label={t`Invited`} />
             ) : (
-              <StateLabel key="status" state="running">
-                {t`Active`}
-              </StateLabel>
+              <Status key="status" live status="running" label={t`Active`} />
             ),
           ],
         };
@@ -305,8 +307,8 @@ function MembersTable({
 /** The AI employees as members: planned with the living office, shown as a demo. */
 function EmployeesDemo() {
   const { t } = useLingui();
-  const { list } = useEmployees();
-  const words = useStateWords();
+  const { list } = useAgents();
+  const words = useStatusLabels();
   return (
     <section aria-label={t`AI employees`} className="mt-2 max-sm:hidden">
       <div className="flex items-center gap-2 px-6 pb-1">
@@ -327,14 +329,12 @@ function EmployeesDemo() {
               <span key="type" className="ltr">
                 AI
               </span>,
-              employee.title,
-              employee.department === "exec" ? t`Read + act` : t`Read + draft`,
-              employee.department === "exec" || employee.department === "proc"
+              employee.role,
+              employee.deptId === "exec" ? t`Read + act` : t`Read + draft`,
+              employee.deptId === "exec" || employee.deptId === "proc"
                 ? t`Money, refunds`
                 : t`Publishing`,
-              <StateLabel key="state" state={employee.state}>
-                {words[employee.state]}
-              </StateLabel>,
+              <Status key="state" live status={employee.status} label={words[employee.status]} />,
             ],
           }))}
         />
@@ -471,7 +471,7 @@ function InvitePanel({
                 });
               }}
             >
-              {copied ? <CheckIcon size={14} /> : <CopyIcon size={14} />}
+              {copied ? <CheckIcon size={14} /> : <CopyGlyph size={14} />}
               {copied ? <Trans>Copied</Trans> : <Trans>Copy link</Trans>}
             </Button>
             <a
@@ -480,7 +480,7 @@ function InvitePanel({
               rel="noreferrer noopener"
               className="inline-flex h-10 items-center justify-center gap-1.5 rounded-button border border-line-strong px-4 text-body-sm whitespace-nowrap text-primary no-underline transition-colors hover:border-line-hover-strong hover:bg-hover"
             >
-              <WhatsappIcon size={14} />
+              <WhatsappGlyph size={14} />
               <Trans>Send on WhatsApp</Trans>
             </a>
           </div>
@@ -491,7 +491,7 @@ function InvitePanel({
               setTimeout(() => emailRef.current?.focus(), 0);
             }}
           >
-            <PlusIcon size={14} />
+            <PlusGlyph size={14} />
             <Trans>Invite someone else</Trans>
           </Button>
         </PanelBody>
@@ -605,7 +605,7 @@ function MemberPanel({
           <CircleButton
             label={sheet ? t`Close` : t`Back to inviting`}
             icon={<CloseIcon size={14} />}
-            onPress={onClose}
+            onClick={onClose}
           />
         }
       />
@@ -737,7 +737,7 @@ function PolicyPanel() {
     <Panel className="max-sm:hidden" label={t`Policy`}>
       <PanelHeader title={<Trans>Policy</Trans>} actions={<DemoTag className="me-4" />} />
       <PanelBody className="justify-between gap-4">
-        <DemoPart tag={false} className="flex flex-col gap-4">
+        <DemoPart tag={false} contentClassName="flex flex-col gap-4">
           <IdBlock
             label={t`Policy version:`}
             value={<span className="ltr font-mono text-[22px]">2026-10-15.1</span>}

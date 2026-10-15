@@ -9,6 +9,7 @@ import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
 import { cx } from "../../shared/lib/cx.ts";
 import { useTweaks } from "../../shared/theme/ThemeProvider.tsx";
 import { Ltr } from "../../shared/ui/Ltr.tsx";
+import { DemoTag } from "../../shared/ui/kit/index.ts";
 import { Logo } from "../../shared/ui/Logo.tsx";
 import { Segmented } from "../../shared/ui/Segmented.tsx";
 
@@ -194,10 +195,7 @@ function AuthArt({ art }: { art: "office" | "parcel" }) {
       </div>
       {art === "office" ? (
         <div className="relative z-10 shrink-0 border-t border-line">
-          <span className="absolute -top-3 start-6 z-10 inline-flex h-6 items-center gap-1.5 rounded-pill border border-line-strong bg-panel px-2.5 text-caption text-secondary">
-            <span aria-hidden="true" className="size-1.5 rounded-pill bg-accent-mark" />
-            {t`Demo`}
-          </span>
+          <DemoTag className="absolute -top-2.5 start-6 z-10" />
           <dl className="m-0 grid grid-cols-4 opacity-55 saturate-50">
             {kpis.map((kpi, index) => (
               <div

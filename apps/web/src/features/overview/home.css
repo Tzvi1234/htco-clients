@@ -89,13 +89,10 @@
   border-radius: 3px;
   background: var(--text-primary);
 }
-.k-demopart.home-orders-disc {
+[data-demo-part].home-orders-disc {
   position: absolute;
   bottom: 40px;
   inset-inline-end: 20px;
-}
-.home-orders-disc > .k-demotag {
-  display: none;
 }
 @media (max-width: 1199.98px) {
   .k-stage.home-stage {
@@ -136,9 +133,6 @@
   }
   .home-needs .k-ap:nth-child(n + 3) {
     display: none;
-  }
-  .home-pulse .k-cards {
-    padding-bottom: 12px;
   }
   .home-orders-disc {
     display: none;

@@ -113,8 +113,8 @@ describe("Home (Design 1C P.home)", () => {
     const parts = [...document.querySelectorAll("[data-demo-part]")];
     expect(parts.length).toBeGreaterThanOrEqual(4);
     for (const part of parts) {
-      expect(part).toHaveAttribute("inert");
-      expect(part).toHaveAttribute("aria-hidden", "true");
+      // The part's sample content is inert and hidden; its tag and the spoken label are beside it.
+      expect(part.querySelector(":scope > [inert][aria-hidden='true']")).not.toBeNull();
       expect(part).toHaveTextContent("Demo");
     }
     const needs = panel("What needs you");

@@ -1,7 +1,7 @@
 import { createMemoryHistory } from "@tanstack/react-router";
 import { cleanup, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { App } from "../../app/App.tsx";
 import { memoryStorage } from "../../shared/lib/storage.ts";
@@ -226,7 +226,11 @@ describe("the planned parts of Members & access", () => {
     expect(policy.querySelector("[inert]")).not.toBeNull();
 
     await user.click(within(employees).getByText("Maya"));
-    expect(await screen.findByText("Demo — coming soon")).toBeInTheDocument();
+    // The toast says it (each demo part also carries the words for screen readers).
+    const toast = document.querySelector("[aria-live='polite'][aria-atomic='true']");
+    await vi.waitFor(() => {
+      expect(toast).toHaveTextContent("Demo — coming soon");
+    });
   });
 });
 

@@ -5,35 +5,37 @@ import { useState } from "react";
 import { THREADS, type TeamThread } from "./data.ts";
 import { agent, type AgentId } from "../../shared/demo/office.ts";
 import { cx } from "../../shared/lib/cx.ts";
-import {
-  BellGlyph,
-  BoltGlyph,
-  CheckGlyph,
-  CloseGlyph,
-  EyeGlyph,
-  FilterGlyph,
-  NextGlyph,
-  PauseGlyph,
-  PlusGlyph,
-} from "../../shared/ui/kit/glyphs.tsx";
+import { Button } from "../../shared/ui/Button.tsx";
+import { Panel, PanelBody, PanelHeader } from "../../shared/ui/Panel.tsx";
 import {
   Avatar,
-  Cb,
+  Avatars,
+  BellGlyph,
+  BoltGlyph,
+  Card,
+  CheckGlyph,
   Chip,
+  CircleButton,
+  CloseGlyph,
   DemoFrame,
   Dot,
+  EyeGlyph,
+  FilterGlyph,
   IdBlock,
   KV,
   KV2,
   N,
+  NextGlyph,
+  PauseGlyph,
   Pill,
+  PlusGlyph,
+  Stack,
   Status,
   StatusGlyph,
   Typing,
-  useStatusLabel,
-} from "../../shared/ui/kit/kit.tsx";
-import { PageHeader } from "../../shared/ui/PageHeader.tsx";
-import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
+  initialOf,
+  useStatusLabels,
+} from "../../shared/ui/kit/index.ts";
 
 /**
  * Office › Team room (Design 1C `P.team`), a demo frame: the owner watches the AI employees
@@ -45,96 +47,88 @@ export function TeamRoomPage() {
   const current = THREADS.find((x) => x.id === thread) ?? THREADS[0];
   if (current === undefined) return null;
   return (
-    <>
-      <PageHeader title={t(current.title)} />
-      <DemoFrame>
-        <div className="k-grid k-l3 k-enter">
-          <Panel>
-            <PanelHeader
-              title={t`Team threads`}
-              meta={<N>4</N>}
-              actions={<Cb label={t`Filter`} icon={FilterGlyph} />}
-            />
-            <ul className="k-scroll m-0 min-h-0 grow list-none px-2 pb-2" data-demo-view="">
-              {THREADS.map((item) => (
-                <li key={item.id}>
-                  <button
-                    type="button"
-                    aria-current={thread === item.id ? "true" : undefined}
-                    className={cx("k-row", thread === item.id && "k-sel")}
-                    onClick={() => {
-                      setThread(item.id);
-                    }}
-                  >
-                    <span className="k-grow">
-                      <span className="k-nm">
-                        <span className="truncate">{t(item.title)}</span>
-                        <small>
-                          <N>{typeof item.at === "string" ? item.at : t(item.at)}</N>
-                        </small>
-                      </span>
-                      <span className="mt-1.5 flex items-center justify-between">
-                        <span className="k-avs">
-                          {item.people.map((id) => (
-                            <Avatar key={id} initial={t(agent(id).name).charAt(0)} size="xs" />
-                          ))}
-                        </span>
-                        {item.live ? (
-                          <Status status="running" label={t`Live`} live />
-                        ) : (
-                          <span className="k-st k-mute">{t`Closed`}</span>
-                        )}
-                      </span>
-                    </span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </Panel>
+    <DemoFrame title={t(current.title)} views layout="l3">
+      <Panel>
+        <PanelHeader
+          title={t`Team threads`}
+          meta={<N>4</N>}
+          actions={<CircleButton label={t`Filter`} icon={<FilterGlyph />} />}
+        />
+        <ul className="k-scroll m-0 min-h-0 grow list-none px-2 pb-2" data-demo-view="">
+          {THREADS.map((item) => (
+            <li key={item.id}>
+              <button
+                type="button"
+                aria-current={thread === item.id ? "true" : undefined}
+                className={cx("k-row", thread === item.id && "k-sel")}
+                onClick={() => {
+                  setThread(item.id);
+                }}
+              >
+                <span className="k-grow">
+                  <span className="k-nm">
+                    <span className="truncate">{t(item.title)}</span>
+                    <small>
+                      <N>{typeof item.at === "string" ? item.at : t(item.at)}</N>
+                    </small>
+                  </span>
+                  <span className="mt-1.5 flex items-center justify-between">
+                    <Avatars
+                      size="xs"
+                      initials={item.people.map((id) => initialOf(t(agent(id).name)))}
+                    />
+                    {item.live ? (
+                      <Status status="running" label={t`Live`} live />
+                    ) : (
+                      <span className="text-caption whitespace-nowrap text-muted">{t`Closed`}</span>
+                    )}
+                  </span>
+                </span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      </Panel>
 
-          <Panel>
-            <PanelHeader
-              title={t(current.title)}
-              actions={
-                <Chip>
-                  <EyeGlyph size={12} />
-                  {t`Read-only`}
-                </Chip>
-              }
-            />
-            <div className="k-thread" key={thread}>
-              {thread === "t1" ? (
-                <LiveThread />
-              ) : (
-                <>
-                  <div className="k-daysep">{t`Archive`}</div>
-                  <Event icon={CheckGlyph} time="18:00">
-                    {t`Thread closed`}
-                  </Event>
-                </>
-              )}
-            </div>
-            <div className="k-ro">
-              <span>{t`You are watching agents talk. They keep working.`}</span>
-              <div className="flex shrink-0 gap-1.5">
-                <button type="button" className="k-btn">
-                  <PauseGlyph size={14} />
-                  {t`Pause thread`}
-                </button>
-                <button type="button" className="k-btn k-pri">
-                  {t`Join conversation`}
-                </button>
-              </div>
-            </div>
-          </Panel>
-
-          <div className="k-stack k-phone-hide" style={{ gridTemplateRows: "auto 1fr" }}>
-            <Participants />
-            <LinkedTask />
+      <Panel>
+        <PanelHeader
+          title={t(current.title)}
+          actions={
+            <Chip>
+              <EyeGlyph size={12} />
+              {t`Read-only`}
+            </Chip>
+          }
+        />
+        <div className="k-thread" key={thread}>
+          {thread === "t1" ? (
+            <LiveThread />
+          ) : (
+            <>
+              <div className="k-daysep">{t`Archive`}</div>
+              <Event icon={CheckGlyph} time="18:00">
+                {t`Thread closed`}
+              </Event>
+            </>
+          )}
+        </div>
+        <div className="k-ro">
+          <span>{t`You are watching agents talk. They keep working.`}</span>
+          <div className="flex shrink-0 gap-1.5">
+            <Button>
+              <PauseGlyph size={14} />
+              {t`Pause thread`}
+            </Button>
+            <Button variant="primary">{t`Join conversation`}</Button>
           </div>
         </div>
-      </DemoFrame>
-    </>
+      </Panel>
+
+      <Stack className="max-sm:hidden">
+        <Participants />
+        <LinkedTask />
+      </Stack>
+    </DemoFrame>
   );
 }
 
@@ -210,7 +204,7 @@ function LiveThread() {
         id="amir"
         time="08:21"
         extra={
-          <div className="k-card k-tool mt-2">
+          <Card className="k-tool mt-2">
             <div className="k-hd">
               <span>{t`Diagnosis`}</span>
               <span className="k-code">agent-worker</span>
@@ -220,7 +214,7 @@ function LiveThread() {
               <br />
               carrier.token expires_at 2026-10-15T07:38Z
             </div>
-          </div>
+          </Card>
         }
       >
         {t`Found it: the carrier API token expired at 07:38, every call gets a 502 from the gateway. Rotating the token and re-running the sync.`}
@@ -268,7 +262,7 @@ function Participants() {
 
 function LinkedTask() {
   const { t } = useLingui();
-  const statusLabel = useStatusLabel();
+  const statusLabels = useStatusLabels();
   const steps = [
     { done: true, label: t`2 late orders flagged`, time: "08:02" },
     { done: true, label: t`Root cause found`, time: "08:21" },
@@ -276,8 +270,11 @@ function LinkedTask() {
   ];
   return (
     <Panel>
-      <PanelHeader title={t`Linked task`} actions={<Cb label={t`To tasks`} icon={NextGlyph} />} />
-      <div className="k-pb k-between">
+      <PanelHeader
+        title={t`Linked task`}
+        actions={<CircleButton label={t`To tasks`} icon={<NextGlyph />} />}
+      />
+      <PanelBody className="justify-between">
         <IdBlock label={t`Task:`} value={<N>T-2041</N>}>
           <div className="mt-1 text-body-sm">{t`Resolve late orders #3152, #3160`}</div>
         </IdBlock>
@@ -290,7 +287,7 @@ function LinkedTask() {
                 </span>
               ) : (
                 <span className="k-ck k-now" aria-hidden="true">
-                  <Dot tone="o" />
+                  <Dot tone="attention" />
                 </span>
               )}
               <span className="grow">{step.label}</span>
@@ -317,19 +314,19 @@ function LinkedTask() {
               t`Status:`,
               <Pill wide key="s">
                 <StatusGlyph status="blocked" />
-                {statusLabel("blocked")}
+                {statusLabels.blocked}
               </Pill>,
             ],
             [
               t`Approval:`,
               <Pill wide key="a">
-                <Dot tone="o" />
+                <Dot tone="attention" />
                 <N>AP-118</N>
               </Pill>,
             ],
           ]}
         />
-      </div>
+      </PanelBody>
     </Panel>
   );
 }

@@ -6,7 +6,7 @@ import { useState, type SyntheticEvent } from "react";
 import { Button as AriaButton } from "react-aria-components";
 
 import { AUTH_LINK, AUTH_SUBMIT, AuthLayout, FormAlert } from "./AuthLayout.tsx";
-import { CodeBoxes } from "./fields.tsx";
+import { CodeBoxes } from "../../shared/ui/kit/index.ts";
 import { ApiError, apiError, mfaQuery, useApi } from "../../shared/api/api.tsx";
 import { useSignOut } from "../../shared/api/useSignOut.ts";
 import { Button } from "../../shared/ui/Button.tsx";

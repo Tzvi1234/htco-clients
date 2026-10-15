@@ -19,34 +19,82 @@ import { GearIcon } from "../../shared/ui/icons.tsx";
 import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
 import {
   Card,
-  CircleButton,
-  CountUp,
-  Dot,
-  IdBlock,
-  InkDisc,
-  KeyValues,
-  Pill,
-  PillPair,
-  SectionLabel,
-  StatusGlyph,
-  StatusText,
-  Who,
-} from "../../shared/ui/kit/Bits.tsx";
-import { DotColumns, Matrix } from "../../shared/ui/kit/Charts.tsx";
-import {
   ChatGlyph,
   CheckGlyph,
+  CircleButton,
+  CloseGlyph,
+  CountUp,
+  DataTable,
+  DemoFrame,
+  Dot,
+  DotColumns,
   DownloadGlyph,
   FilterGlyph,
+  IdBlock,
+  InkDisc,
+  KV,
+  KV2,
+  Matrix,
+  Pill,
   PlusGlyph,
+  ProductThumb,
+  Screen,
   SearchGlyph,
-  CloseGlyph,
-} from "../../shared/ui/kit/glyphs.tsx";
-import { Screen, Stack } from "../../shared/ui/kit/Layout.tsx";
-import { Strip, StripCard } from "../../shared/ui/kit/Strip.tsx";
-import { DataTable, type Column } from "../../shared/ui/kit/Table.tsx";
-import { ProductThumb, type ProductKind } from "../../shared/ui/kit/Thumb.tsx";
-import { bi, useBi, type Bi } from "../../shared/ui/kit/bi.ts";
+  SectionLabel,
+  Stack,
+  Status,
+  StatusGlyph,
+  Strip,
+  StripCard,
+  Who,
+  Zoom,
+  bi,
+  useBi,
+  type Bi,
+  type ProductKind,
+  type TableRow,
+} from "../../shared/ui/kit/index.ts";
+
+/** A column of the demo's tables: its head, how a row fills it, and where it shows. */
+interface Column<Row> {
+  key: string;
+  header: ReactNode;
+  cell: (row: Row) => ReactNode;
+  /** Numbers and amounts align to the end. */
+  end?: boolean;
+  /** False: left out on phones, which show fewer columns. */
+  phone?: boolean;
+  /** "wide": only on wide screens (from 1600 px), like the demo's shop column. */
+  only?: "wide";
+}
+
+/** The kit's DataTable props from column definitions. */
+function columnsTable<Row>(
+  columns: readonly Column<Row>[],
+  rows: readonly Row[],
+  rowKey: (row: Row) => string,
+  selected?: (row: Row) => boolean,
+): {
+  head: ReactNode[];
+  rows: TableRow[];
+  ends: number[];
+  phoneHidden: number[];
+  wideOnly: number[];
+} {
+  const where = (test: (column: Column<Row>) => boolean) =>
+    columns.flatMap((column, index) => (test(column) ? [index] : []));
+  return {
+    head: columns.map((column) => column.header),
+    rows: rows.map((row) => ({
+      key: rowKey(row),
+      ...(selected === undefined ? {} : { selected: selected(row) }),
+      cells: columns.map((column) => column.cell(row)),
+    })),
+    ends: where((column) => column.end === true),
+    phoneHidden: where((column) => column.phone === false),
+    wideOnly: where((column) => column.only === "wide"),
+  };
+}
 
 const ltr = (text: ReactNode) => <span className="ltr">{text}</span>;
 const money = (n: number) => `$${n.toFixed(2)}`;
@@ -119,7 +167,6 @@ function OrdersDemo() {
       key: "check",
       header: <span className="sr-only">{t`Selected`}</span>,
       cell: (o) => <RoundCheck on={SELECTED.has(o.n)} />,
-      className: "w-11",
     },
     { key: "order", header: t`Order`, cell: (o) => ltr(`#${o.n}`) },
     { key: "customer", header: t`Customer`, cell: (o) => ltr(o.customer), phone: false },
@@ -139,7 +186,7 @@ function OrdersDemo() {
     {
       key: "status",
       header: t`Status`,
-      cell: (o) => <StatusText status={ORDER_GLYPH[o.status]} label={statusLabel[o.status]} />,
+      cell: (o) => <Status live status={ORDER_GLYPH[o.status]} label={statusLabel[o.status]} />,
     },
     {
       key: "tracking",
@@ -151,7 +198,7 @@ function OrdersDemo() {
       key: "agent",
       header: t`Handled by`,
       phone: false,
-      cell: (o) => <Who person={agent(o.agent)} />,
+      cell: (o) => <Who name={agent(o.agent).name} />,
     },
   ];
   return (
@@ -164,7 +211,7 @@ function OrdersDemo() {
         <Body className="justify-between gap-6">
           <IdBlock
             label={<Trans>Orders shown:</Trans>}
-            id={ltr(<CountUp value={String(ORDERS.length)} />)}
+            value={ltr(<CountUp value={String(ORDERS.length)} />)}
           />
           <div>
             <SectionLabel>
@@ -190,15 +237,15 @@ function OrdersDemo() {
               <FilterTab>{SHOP_NAMES.home}</FilterTab>
             </div>
           </div>
-          <KeyValues
+          <KV
             items={[
-              {
-                label: <Trans>Total shown</Trans>,
-                value: ltr(`$${sum.toLocaleString("en-US", { minimumFractionDigits: 2 })}`),
-              },
-              { label: <Trans>Late</Trans>, value: ltr(count("late")) },
-              { label: <Trans>Average order</Trans>, value: ltr(money(sum / ORDERS.length)) },
-              { label: <Trans>Handled by agents</Trans>, value: ltr("100%") },
+              [
+                <Trans>Total shown</Trans>,
+                ltr(`$${sum.toLocaleString("en-US", { minimumFractionDigits: 2 })}`),
+              ],
+              [<Trans>Late</Trans>, ltr(count("late"))],
+              [<Trans>Average order</Trans>, ltr(money(sum / ORDERS.length))],
+              [<Trans>Handled by agents</Trans>, ltr("100%")],
             ]}
           />
           <div className="max-sm:hidden">
@@ -245,10 +292,12 @@ function OrdersDemo() {
         </div>
         <DataTable
           label={t`Orders`}
-          columns={columns}
-          rows={ORDERS}
-          rowKey={(o) => o.n}
-          selected={(o) => SELECTED.has(o.n)}
+          {...columnsTable(
+            columns,
+            ORDERS,
+            (o) => o.n,
+            (o) => SELECTED.has(o.n),
+          )}
         />
       </Panel>
     </Screen>
@@ -278,7 +327,7 @@ function ProductsDemo() {
           actions={<CircleButton label={t`Edit`} icon={<GearIcon size={16} />} />}
         />
         <Body className="justify-between gap-6">
-          <IdBlock label={<Trans>SKU:</Trans>} id={ltr("STAR-01")}>
+          <IdBlock label={<Trans>SKU:</Trans>} value={ltr("STAR-01")}>
             <div className="text-body-sm">{names[kind]}</div>
           </IdBlock>
           <div className="flex justify-center">
@@ -286,12 +335,12 @@ function ProductsDemo() {
               <ProductThumb kind={kind} size={140} radius={16} />
             </span>
           </div>
-          <KeyValues
+          <KV
             items={[
-              { label: <Trans>Price</Trans>, value: ltr(`$${String(price)}`) },
-              { label: <Trans>Production cost</Trans>, value: ltr(money(price * 0.38)) },
-              { label: <Trans>Shop</Trans>, value: SHOP_NAMES[PRODUCT_SHOP[kind]] },
-              { label: <Trans>Supplier</Trans>, value: ltr("Printful") },
+              [<Trans>Price</Trans>, ltr(`$${String(price)}`)],
+              [<Trans>Production cost</Trans>, ltr(money(price * 0.38))],
+              [<Trans>Shop</Trans>, SHOP_NAMES[PRODUCT_SHOP[kind]]],
+              [<Trans>Supplier</Trans>, ltr("Printful")],
             ]}
           />
         </Body>
@@ -369,7 +418,8 @@ function ShippingDemo() {
       key: "status",
       header: t`Status`,
       cell: (o) => (
-        <StatusText
+        <Status
+          live
           status={o.status === "late" ? "waityou" : "waitext"}
           label={statusLabel[o.status]}
         />
@@ -385,24 +435,24 @@ function ShippingDemo() {
           actions={<CircleButton label={t`Settings`} icon={<GearIcon size={16} />} />}
         />
         <Body className="justify-between gap-6">
-          <IdBlock label={<Trans>In transit:</Trans>} id={ltr(<CountUp value="12" />)} />
-          <KeyValues
+          <IdBlock label={<Trans>In transit:</Trans>} value={ltr(<CountUp value="12" />)} />
+          <KV
             items={[
-              { label: <Trans>Shipped today</Trans>, value: ltr(9) },
-              { label: <Trans>Late</Trans>, value: ltr(2) },
-              { label: <Trans>Avg. transit</Trans>, value: <Trans>4.2 days</Trans> },
-              { label: <Trans>Tracking sync</Trans>, value: <StatusText status="failed" /> },
+              [<Trans>Shipped today</Trans>, ltr(9)],
+              [<Trans>Late</Trans>, ltr(2)],
+              [<Trans>Avg. transit</Trans>, <Trans>4.2 days</Trans>],
+              [<Trans>Tracking sync</Trans>, <Status live status="failed" />],
             ]}
           />
           <div className="max-sm:hidden">
             <Matrix
               top={<Trans>Delivery performance</Trans>}
-              left={<Trans>On time</Trans>}
-              right={<Trans>Cost</Trans>}
+              start={<Trans>On time</Trans>}
+              end={<Trans>Cost</Trans>}
               bottom={<Trans>Speed</Trans>}
               value="88"
               caption={<Trans>On target</Trans>}
-              strength={4}
+              k={4}
               label={t`Delivery performance 88%, on target`}
             />
           </div>
@@ -414,12 +464,7 @@ function ShippingDemo() {
           meta={ltr(12)}
           actions={<CircleButton label={t`Export`} icon={<DownloadGlyph />} />}
         />
-        <DataTable
-          label={t`Active shipments`}
-          columns={columns}
-          rows={shipments}
-          rowKey={(o) => o.n}
-        />
+        <DataTable label={t`Active shipments`} {...columnsTable(columns, shipments, (o) => o.n)} />
       </Panel>
       <Stack>
         {(
@@ -434,27 +479,23 @@ function ShippingDemo() {
               actions={<CircleButton label={t`Settings`} icon={<GearIcon size={16} />} />}
             />
             <Body className="justify-between gap-4">
-              <IdBlock label={<Trans>Carrier:</Trans>} id={ltr(carrier)} />
-              <PillPair
+              <IdBlock label={<Trans>Carrier:</Trans>} value={ltr(carrier)} />
+              <KV2
                 items={[
-                  {
-                    label: <Trans>Shipments:</Trans>,
-                    pill: (
-                      <Pill wide>
-                        <Dot tone="ink" />
-                        {ltr(count)}
-                      </Pill>
-                    ),
-                  },
-                  {
-                    label: <Trans>Avg. label:</Trans>,
-                    pill: (
-                      <Pill wide>
-                        <Dot tone="good" />
-                        {ltr(price)}
-                      </Pill>
-                    ),
-                  },
+                  [
+                    <Trans>Shipments:</Trans>,
+                    <Pill wide>
+                      <Dot tone="ink" />
+                      {ltr(count)}
+                    </Pill>,
+                  ],
+                  [
+                    <Trans>Avg. label:</Trans>,
+                    <Pill wide>
+                      <Dot tone="success" />
+                      {ltr(price)}
+                    </Pill>,
+                  ],
                 ]}
               />
             </Body>
@@ -530,12 +571,12 @@ function SuppliersDemo() {
       header: t`Status`,
       cell: (s) =>
         s.active ? (
-          <StatusText status="running" label={t`Active`} />
+          <Status live status="running" label={t`Active`} />
         ) : (
-          <StatusText status="waitext" />
+          <Status live status="waitext" />
         ),
     },
-    { key: "owner", header: t`Owner`, cell: () => <Who person={agent("tom")} />, phone: false },
+    { key: "owner", header: t`Owner`, cell: () => <Who name={agent("tom").name} />, phone: false },
   ];
   return (
     <Screen layout="l2rs">
@@ -545,7 +586,7 @@ function SuppliersDemo() {
           meta={ltr(3)}
           actions={<CircleButton label={t`New supplier`} icon={<PlusGlyph />} />}
         />
-        <DataTable label={t`Suppliers`} columns={columns} rows={SUPPLIERS} rowKey={(s) => s.name} />
+        <DataTable label={t`Suppliers`} {...columnsTable(columns, SUPPLIERS, (s) => s.name)} />
       </Panel>
       <Panel>
         <PanelHeader
@@ -553,35 +594,31 @@ function SuppliersDemo() {
           actions={<CircleButton label={t`Chat with Tom`} icon={<ChatGlyph />} />}
         />
         <Body className="justify-between gap-5">
-          <IdBlock label={<Trans>Supplier:</Trans>} id={ltr("Gelato")} />
-          <KeyValues
+          <IdBlock label={<Trans>Supplier:</Trans>} value={ltr("Gelato")} />
+          <KV
             items={[
-              { label: <Trans>Current price</Trans>, value: ltr("$8.50") },
-              { label: <Trans>Quoted price</Trans>, value: ltr("$6.40") },
-              { label: <Trans>Monthly saving</Trans>, value: ltr("$132") },
-              { label: <Trans>Approval</Trans>, value: ltr("AP-119") },
+              [<Trans>Current price</Trans>, ltr("$8.50")],
+              [<Trans>Quoted price</Trans>, ltr("$6.40")],
+              [<Trans>Monthly saving</Trans>, ltr("$132")],
+              [<Trans>Approval</Trans>, ltr("AP-119")],
             ]}
           />
-          <PillPair
+          <KV2
             items={[
-              {
-                label: <Trans>Status:</Trans>,
-                pill: (
-                  <Pill wide>
-                    <StatusGlyph status="waitext" />
-                    <Trans>Waiting</Trans>
-                  </Pill>
-                ),
-              },
-              {
-                label: <Trans>Risk:</Trans>,
-                pill: (
-                  <Pill wide>
-                    <Dot tone="info" />
-                    <Trans>Medium</Trans>
-                  </Pill>
-                ),
-              },
+              [
+                <Trans>Status:</Trans>,
+                <Pill wide>
+                  <StatusGlyph live status="waitext" />
+                  <Trans>Waiting</Trans>
+                </Pill>,
+              ],
+              [
+                <Trans>Risk:</Trans>,
+                <Pill wide>
+                  <Dot tone="info" />
+                  <Trans>Medium</Trans>
+                </Pill>,
+              ],
             ]}
           />
           <div className="flex justify-center gap-1.5">
@@ -597,6 +634,7 @@ function SuppliersDemo() {
       <Strip
         title={<Trans>Unit cost by product</Trans>}
         meta={ltr(8)}
+        zoom={<Zoom page={0} labels={{ less: t`Fewer`, more: t`More` }} />}
         actions={<CircleButton label={t`Filter`} icon={<FilterGlyph />} />}
       >
         {UNIT_COSTS.map(([kind, supplier, cost], i) => (
@@ -605,18 +643,29 @@ function SuppliersDemo() {
             selected={i === 3}
             topStart={ltr(supplier)}
             topEnd={ltr(cost)}
-            middle={<ProductThumb kind={kind} size={48} />}
+
             line={<span className="block truncate">{names[kind]}</span>}
-          />
+          >
+            {<ProductThumb kind={kind} size={48} />}
+          </StripCard>
         ))}
       </Strip>
     </Screen>
   );
 }
 
-export const demoScreens: Record<string, ComponentType> = {
-  "commerce/orders": OrdersDemo,
-  "commerce/products": ProductsDemo,
-  "commerce/shipping": ShippingDemo,
-  "commerce/suppliers": SuppliersDemo,
+/** In the demo frame: dimmed, inert, the DEMO pill in the top bar (app/shell/DemoRoute.tsx). */
+const framed =
+  (Content: ComponentType) =>
+  ({ title }: { title: string }) => (
+    <DemoFrame title={title}>
+      <Content />
+    </DemoFrame>
+  );
+
+export const demoScreens = {
+  "commerce/orders": framed(OrdersDemo),
+  "commerce/products": framed(ProductsDemo),
+  "commerce/shipping": framed(ShippingDemo),
+  "commerce/suppliers": framed(SuppliersDemo),
 };

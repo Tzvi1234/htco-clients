@@ -78,7 +78,7 @@ The web app exists (`apps/web`, slice 3.3 part 1). Each command is created by th
 
 ## Building a screen
 
-The navigation (`apps/web/src/app/shell/nav.ts`) lists the seven areas and every tab of Design 1C. A tab without a screen has a route that renders `DemoScreen`, and a `SoonTag` beside it in the navigation. To build one: write the feature under `src/features/`, give its route the component in `src/app/router.tsx` (with `staticData: { layout: "panels" }` when it lays out its own `Panel`s), set `built: true` in `nav.ts`, and update `docs/ux/NAVIGATION_MAP.md`. The page's `PageHeader` puts its title in the top bar.
+The navigation (`apps/web/src/app/shell/nav.ts`) lists the seven areas and every tab of Design 1C. A tab without a screen has a route that renders its demo screen (a feature's `demoScreens.tsx`, in the kit's `DemoFrame`; `DemoScreen` when nothing is drawn yet), and a `SoonTag` beside it in the navigation. Screens are built from the one screen kit, `apps/web/src/shared/ui/kit/` (import from `kit/index.ts`). To build one: write the feature under `src/features/`, give its route the component in `src/app/router.tsx` (with `staticData: { layout: "panels" }` when it lays out its own `Panel`s), set `built: true` in `nav.ts`, and update `docs/ux/NAVIGATION_MAP.md`. The page's `PageHeader` puts its title in the top bar.
 
 ## Ask the owner first
 

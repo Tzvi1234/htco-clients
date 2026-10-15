@@ -9,32 +9,37 @@ import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
 import {
   Avatar,
   Card,
-  Chip,
-  CircleButton,
-  CountUp,
-  Dot,
-  IdBlock,
-  InkDisc,
-  KeyValues,
-  Pill,
-  PillPair,
-  SectionLabel,
-  StatusText,
-  Who,
-  type DotTone,
-  type WorkStatus,
-} from "../../shared/ui/kit/Bits.tsx";
-import { DotColumns, Matrix } from "../../shared/ui/kit/Charts.tsx";
-import {
   ChatGlyph,
   CheckGlyph,
-  FilterGlyph,
-  PlusGlyph,
+  Chip,
+  CircleButton,
   CloseGlyph,
-} from "../../shared/ui/kit/glyphs.tsx";
-import { Screen } from "../../shared/ui/kit/Layout.tsx";
-import { Strip, StripCard } from "../../shared/ui/kit/Strip.tsx";
-import { bi, useBi, type Bi } from "../../shared/ui/kit/bi.ts";
+  CountUp,
+  DemoFrame,
+  Dot,
+  DotColumns,
+  FilterGlyph,
+  IdBlock,
+  InkDisc,
+  KV,
+  KV2,
+  Matrix,
+  Pill,
+  PlusGlyph,
+  Screen,
+  SectionLabel,
+  Status,
+  Strip,
+  StripCard,
+  Who,
+  Zoom,
+  bi,
+  initialOf,
+  useBi,
+  type AgentStatus,
+  type Bi,
+  type DotTone,
+} from "../../shared/ui/kit/index.ts";
 
 const ltr = (text: ReactNode) => <span className="ltr">{text}</span>;
 
@@ -45,7 +50,7 @@ function Body({ children, className }: { children: ReactNode; className?: string
 
 /* ------------------------------------------------------------------ Tasks */
 
-type TaskRow = [id: string, name: Bi, agent: AgentId, status?: WorkStatus];
+type TaskRow = [id: string, name: Bi, agent: AgentId, status?: AgentStatus];
 
 const TASKS: Record<"queued" | "running" | "wait", readonly TaskRow[]> = {
   queued: [
@@ -86,7 +91,7 @@ function TaskColumn({
 }: {
   title: ReactNode;
   rows: readonly TaskRow[];
-  status?: WorkStatus;
+  status?: AgentStatus;
   highlightFirst?: boolean;
 }) {
   const { t } = useLingui();
@@ -111,11 +116,11 @@ function TaskColumn({
           >
             <div className="flex items-center justify-between text-caption text-secondary">
               {ltr(id)}
-              <StatusText status={own ?? status ?? "queued"} />
+              <Status live status={own ?? status ?? "queued"} />
             </div>
             <div className="text-body">{text(name)}</div>
             <div className="flex items-center justify-between text-caption text-secondary">
-              <Who person={agent(who)} />
+              <Who name={agent(who).name} />
               {ltr(TIMES[i])}
             </div>
           </div>
@@ -153,6 +158,7 @@ function TasksDemo() {
       <Strip
         title={<Trans>Completed today</Trans>}
         meta={ltr(8)}
+        zoom={<Zoom page={0} labels={{ less: t`Fewer`, more: t`More` }} />}
         actions={<CircleButton label={t`Filter`} icon={<FilterGlyph />} />}
       >
         {DONE.map(([id, who, name], i) => {
@@ -163,7 +169,7 @@ function TasksDemo() {
               selected={i === 0}
               topStart={ltr(id)}
               topEnd={person.name}
-              middle={<Avatar person={person} showStatus={false} />}
+
               line={<span className="block truncate">{text(name)}</span>}
               task={
                 <span className="inline-flex items-center gap-1.5">
@@ -171,7 +177,9 @@ function TasksDemo() {
                   <Trans>Done</Trans>
                 </span>
               }
-            />
+            >
+              {<Avatar initial={initialOf(person.name)} />}
+            </StripCard>
           );
         })}
       </Strip>
@@ -181,7 +189,7 @@ function TasksDemo() {
 
 /* -------------------------------------------------------------- Approvals */
 
-const RISK_DOT: Record<Risk, DotTone> = { low: "good", med: "info", high: "attention" };
+const RISK_DOT: Record<Risk, DotTone> = { low: "success", med: "info", high: "attention" };
 
 function useRiskLabels(): Record<Risk, string> {
   const { t } = useLingui();
@@ -241,24 +249,24 @@ function ApprovalsDemo() {
           actions={<CircleButton label={t`Filter`} icon={<FilterGlyph />} />}
         />
         <Body className="justify-between gap-6">
-          <IdBlock label={<Trans>Pending:</Trans>} id={ltr(<CountUp value="3" />)} />
-          <KeyValues
+          <IdBlock label={<Trans>Pending:</Trans>} value={ltr(<CountUp value="3" />)} />
+          <KV
             items={[
-              { label: <Trans>Low risk</Trans>, value: ltr(1) },
-              { label: <Trans>Medium risk</Trans>, value: ltr(1) },
-              { label: <Trans>High risk</Trans>, value: ltr(1) },
-              { label: <Trans>Oldest</Trans>, value: ltr("42 min") },
+              [<Trans>Low risk</Trans>, ltr(1)],
+              [<Trans>Medium risk</Trans>, ltr(1)],
+              [<Trans>High risk</Trans>, ltr(1)],
+              [<Trans>Oldest</Trans>, ltr("42 min")],
             ]}
           />
           <div className="max-sm:hidden">
             <Matrix
               top={<Trans>Decision value</Trans>}
-              left={<Trans>Urgent</Trans>}
-              right={<Trans>Reversible</Trans>}
+              start={<Trans>Urgent</Trans>}
+              end={<Trans>Reversible</Trans>}
               bottom={<Trans>Risk</Trans>}
               value="92"
               caption={<Trans>Within policy</Trans>}
-              strength={4}
+              k={4}
               label={t`Decision value 92%, within policy`}
             />
           </div>
@@ -282,7 +290,7 @@ function ApprovalsDemo() {
                   item.id === selected.id ? "bg-selected" : "hover:bg-hover",
                 )}
               >
-                <Avatar person={by} />
+                <Avatar initial={initialOf(by.name)} status={by.status} />
                 <div className="min-w-0 grow">
                   <div className="truncate text-caption font-light text-muted">
                     {by.name} · {by.role} · {ltr(item.id)} · {ltr(item.age)}
@@ -313,7 +321,7 @@ function ApprovalsDemo() {
                 key={text(what)}
                 className="flex items-center gap-3 rounded-card px-4 py-3 opacity-75"
               >
-                <Avatar person={by} size="sm" showStatus={false} />
+                <Avatar initial={initialOf(by.name)} size="sm" />
                 <div className="min-w-0 grow">
                   <div className="text-body-sm">{text(what)}</div>
                   <div className="truncate text-caption text-secondary">
@@ -335,21 +343,21 @@ function ApprovalsDemo() {
           actions={<CircleButton label={t`Chat with requester`} icon={<ChatGlyph />} />}
         />
         <Body className="justify-between gap-5 overflow-auto">
-          <IdBlock label={<Trans>Approval ID:</Trans>} id={ltr(selected.id)}>
+          <IdBlock label={<Trans>Approval ID:</Trans>} value={ltr(selected.id)}>
             <div className="mt-1 px-2 text-body-sm">{text(selected.what)}</div>
           </IdBlock>
-          <KeyValues
+          <KV
             items={[
-              { label: <Trans>Requested by</Trans>, value: requester.name },
-              { label: <Trans>Value</Trans>, value: ltr(selected.value) },
-              {
-                label: <Trans>Policy</Trans>,
-                value: <code className="ltr font-mono text-caption">{selected.policy}</code>,
-              },
-              {
-                label: <Trans>Version</Trans>,
-                value: <code className="ltr font-mono text-caption">2026-10-15.1</code>,
-              },
+              [<Trans>Requested by</Trans>, requester.name],
+              [<Trans>Value</Trans>, ltr(selected.value)],
+              [
+                <Trans>Policy</Trans>,
+                <code className="ltr font-mono text-caption">{selected.policy}</code>,
+              ],
+              [
+                <Trans>Version</Trans>,
+                <code className="ltr font-mono text-caption">2026-10-15.1</code>,
+              ],
             ]}
           />
           <Card className="text-caption leading-normal text-secondary max-sm:hidden">
@@ -363,26 +371,22 @@ function ApprovalsDemo() {
               ),
             )}
           </Card>
-          <PillPair
+          <KV2
             items={[
-              {
-                label: <Trans>Risk:</Trans>,
-                pill: (
-                  <Pill wide>
-                    <Dot tone={RISK_DOT[selected.risk]} />
-                    {risk[selected.risk]}
-                  </Pill>
-                ),
-              },
-              {
-                label: <Trans>Reversible:</Trans>,
-                pill: (
-                  <Pill wide>
-                    <Dot tone="good" />
-                    <Trans>Yes, 24 h</Trans>
-                  </Pill>
-                ),
-              },
+              [
+                <Trans>Risk:</Trans>,
+                <Pill wide>
+                  <Dot tone={RISK_DOT[selected.risk]} />
+                  {risk[selected.risk]}
+                </Pill>,
+              ],
+              [
+                <Trans>Reversible:</Trans>,
+                <Pill wide>
+                  <Dot tone="success" />
+                  <Trans>Yes, 24 h</Trans>
+                </Pill>,
+              ],
             ]}
           />
           <div className="flex justify-center">
@@ -428,13 +432,13 @@ function ActivityDemo() {
       <Panel>
         <PanelHeader title={<Trans>Today in numbers</Trans>} />
         <Body className="justify-between gap-6">
-          <IdBlock label={<Trans>Events today:</Trans>} id={ltr(<CountUp value="128" />)} />
-          <KeyValues
+          <IdBlock label={<Trans>Events today:</Trans>} value={ltr(<CountUp value="128" />)} />
+          <KV
             items={[
-              { label: <Trans>Agent actions</Trans>, value: ltr(96) },
-              { label: <Trans>Approvals</Trans>, value: ltr(4) },
-              { label: <Trans>Errors</Trans>, value: ltr(3) },
-              { label: <Trans>Automations</Trans>, value: ltr(25) },
+              [<Trans>Agent actions</Trans>, ltr(96)],
+              [<Trans>Approvals</Trans>, ltr(4)],
+              [<Trans>Errors</Trans>, ltr(3)],
+              [<Trans>Automations</Trans>, ltr(25)],
             ]}
           />
           <div className="max-sm:hidden">
@@ -466,7 +470,7 @@ function ActivityDemo() {
                   className="flex gap-4 border-t border-line py-3 first:border-t-0 motion-safe:animate-enter"
                 >
                   <span className="ltr w-12 shrink-0 pt-1.5 text-caption text-muted">{time}</span>
-                  <Avatar person={person} size="sm" />
+                  <Avatar initial={initialOf(person.name)} status={person.status} size="sm" />
                   <div className="min-w-0 grow">
                     <div className="text-body">
                       {person.name} · <span className="text-secondary">{text(what)}</span>
@@ -483,8 +487,17 @@ function ActivityDemo() {
   );
 }
 
-export const demoScreens: Record<string, ComponentType> = {
-  "work/tasks": TasksDemo,
-  "work/approvals": ApprovalsDemo,
-  "work/activity": ActivityDemo,
+/** In the demo frame: dimmed, inert, the DEMO pill in the top bar (app/shell/DemoRoute.tsx). */
+const framed =
+  (Content: ComponentType) =>
+  ({ title }: { title: string }) => (
+    <DemoFrame title={title}>
+      <Content />
+    </DemoFrame>
+  );
+
+export const demoScreens = {
+  "work/tasks": framed(TasksDemo),
+  "work/approvals": framed(ApprovalsDemo),
+  "work/activity": framed(ActivityDemo),
 };

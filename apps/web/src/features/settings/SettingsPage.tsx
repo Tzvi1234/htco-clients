@@ -20,12 +20,20 @@ import { ArrowEndIcon } from "../../shared/ui/icons.tsx";
 import { PageHeader } from "../../shared/ui/PageHeader.tsx";
 import { Panel, PanelBody, PanelHeader } from "../../shared/ui/Panel.tsx";
 import { LevelDots, Segmented } from "../../shared/ui/Segmented.tsx";
-import { DemoPart, DemoTag } from "../../shared/ui/d1c/DemoFrame.tsx";
-import { ShieldIcon } from "../../shared/ui/d1c/icons.tsx";
-import { Avatar, ListRow, StateLabel, Toggle } from "../../shared/ui/d1c/Parts.tsx";
-import { Screen, Stack } from "../../shared/ui/d1c/Layout.tsx";
-import { PillSelect, PillValue } from "../../shared/ui/d1c/Select.tsx";
 import { cx } from "../../shared/lib/cx.ts";
+import {
+  Avatar,
+  DemoPart,
+  DemoTag,
+  ListRow,
+  PillSelect,
+  PillValue,
+  Screen,
+  ShieldGlyph,
+  Stack,
+  Status,
+  Toggle,
+} from "../../shared/ui/kit/index.ts";
 
 /**
  * Settings (FR-ADM-01), the Design 1C screen (`P.settings`): the interface language, the design
@@ -68,7 +76,7 @@ function GeneralPanel() {
             { id: "en", label: "English", lang: "en", textValue: "English" },
           ]}
         />
-        <DemoPart className="flex flex-col gap-4" tagClassName="-top-0.5">
+        <DemoPart contentClassName="flex flex-col gap-4" tag="edge">
           <PillValue label={t`Business name`} value={<span className="ltr">HT Commerce</span>} />
           <PillValue label={t`Time zone`} value={<span className="ltr">Asia/Jerusalem</span>} />
           <PillValue label={t`Currency`} value={<span className="ltr">USD $</span>} />
@@ -134,7 +142,7 @@ function AccessPanel() {
           to="/settings/security"
           icon={
             <span className="flex size-10 shrink-0 items-center justify-center rounded-pill border border-line bg-raised">
-              <ShieldIcon size={16} />
+              <ShieldGlyph size={16} />
             </span>
           }
           title={<Trans>Security</Trans>}
@@ -143,9 +151,11 @@ function AccessPanel() {
               <Trans>How you sign in, and where you are signed in.</Trans>
             ) : (
               <span className="inline-flex items-center gap-2">
-                <StateLabel state={mfa.data.enrolled ? "running" : "waityou"}>
-                  {mfa.data.enrolled ? t`Two-step sign-in on` : t`Two-step sign-in off`}
-                </StateLabel>
+                <Status
+                  live
+                  status={mfa.data.enrolled ? "running" : "waityou"}
+                  label={mfa.data.enrolled ? t`Two-step sign-in on` : t`Two-step sign-in off`}
+                />
                 {devices === undefined ? null : (
                   <span className="text-muted">
                     · {devices === 1 ? t`1 device` : t`${devices} devices`}
@@ -362,11 +372,11 @@ function ConnectionsPanel() {
             <span className="block truncate text-caption text-secondary">{shopsLine}</span>
           </span>
           {count === undefined ? null : count === 0 ? (
-            <StateLabel state="offline">{t`Not connected`}</StateLabel>
+            <Status live status="offline" label={t`Not connected`} />
           ) : connected === undefined ? null : connected === count ? (
-            <StateLabel state="running">{t`Connected`}</StateLabel>
+            <Status live status="running" label={t`Connected`} />
           ) : (
-            <StateLabel state="waityou">{t`${connected} of ${count} connected`}</StateLabel>
+            <Status live status="waityou" label={t`${connected} of ${count} connected`} />
           )}
         </Link>
         {(
@@ -377,16 +387,14 @@ function ConnectionsPanel() {
           ] as const
         ).map(([name, line, state]) => (
           <div key={name} className="border-t border-line">
-            <DemoPart tagClassName="top-2">
+            <DemoPart>
               <ListRow
                 className="py-3.5"
                 lead={<Avatar initial={name.slice(0, 1)} />}
                 title={<span className="ltr">{name}</span>}
                 line={line}
                 end={
-                  <StateLabel state={state}>
-                    {state === "running" ? t`Connected` : t`Off`}
-                  </StateLabel>
+                  <Status live status={state} label={state === "running" ? t`Connected` : t`Off`} />
                 }
               />
             </DemoPart>

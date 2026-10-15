@@ -42,15 +42,15 @@ The office shows only recorded activity from the API (activity records, tasks, e
 
 ## The web app's navigation (Design 1C, client ADR-0008)
 
-Seven areas in the owner's order and wording, defined once in `apps/web/src/app/shell/nav.ts`. Every tab has an address now; a tab without a screen renders `DemoScreen` and carries a "Soon" tag ("בקרוב") in the sidebar, the flyout, the phone sheet and quick actions.
+Seven areas in the owner's order and wording, defined once in `apps/web/src/app/shell/nav.ts`. Every tab has an address now; a tab that is not built shows the demo's full screen in the demo frame (dimmed, inert, the DEMO pill in the top bar; `features/*/demoScreens.tsx`) and carries a "Soon" tag ("בקרוב") in the sidebar, the flyout, the phone sheet and quick actions.
 
 | Area (he) | Tab | Address | Screen |
 |---|---|---|---|
-| Home (בית) | — | `/` | Overview (built) |
-| Office (המשרד) | Floor · Chat · Team room · AI ops · Engineering | `/office/floor` · `/office/chat` · `/office/team` · `/office/aiops` · `/office/eng` | Soon |
-| Work (עבודה) | Tasks · Approvals · Activity | `/work/tasks` · `/work/approvals` · `/work/activity` | Soon |
-| Commerce (מסחר) | Shops | `/shops` (also `/commerce/shops`; the Etsy return `/integrations/etsy/callback` belongs here) | Built |
-| | Orders · Products · Shipping · Suppliers | `/commerce/orders` · `/commerce/products` · `/commerce/shipping` · `/commerce/suppliers` | Soon |
+| Home (בית) | — | `/` | Built: greeting, shops, getting started; approvals, key numbers and the office pulse as demos |
+| Office (המשרד) | Floor · Chat · Team room · AI ops · Engineering | `/office/floor` · `/office/chat` · `/office/team` · `/office/aiops` · `/office/eng` | Soon (the demo's full screens in the demo frame; the floor is the living 3D office) |
+| Work (עבודה) | Tasks · Approvals · Activity | `/work/tasks` · `/work/approvals` · `/work/activity` | Soon (the demo's full screens in the demo frame) |
+| Commerce (מסחר) | Shops | `/shops` (also `/commerce/shops`; the Etsy return `/integrations/etsy/callback` belongs here) | Built: shops and their connection, connecting with the step-up code; sales tiles and top listings as demos |
+| | Orders · Products · Shipping · Suppliers | `/commerce/orders` · `/commerce/products` · `/commerce/shipping` · `/commerce/suppliers` | Soon (the demo's full screens in the demo frame) |
 | Customers (לקוחות) | Tickets · Customers · Mail · Marketing | `/customers/tickets` · `/customers/customers` · `/customers/mail` · `/customers/marketing` | Soon (the demo's full screens in the demo frame) |
 | Finance (כספים) | Overview · Ledger | `/finance/overview` · `/finance/ledger` | Soon (the demo's full screens in the demo frame) |
 | Admin (ניהול) | Health · Automations | `/admin/health` · `/admin/automations` | Soon (the demo's full screens in the demo frame) |

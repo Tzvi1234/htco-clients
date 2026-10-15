@@ -1,27 +1,31 @@
 import { Trans, useLingui } from "@lingui/react/macro";
 
+import { useAgents, type AgentId } from "../../shared/demo/office.ts";
 import { Panel, PanelBody, PanelHeader } from "../../shared/ui/Panel.tsx";
 import { ChatIcon, GearIcon } from "../../shared/ui/icons.tsx";
-import { MatrixChart } from "../../shared/ui/d1c/Charts.tsx";
-import { DemoFrame } from "../../shared/ui/d1c/DemoFrame.tsx";
-import { useEmployees, useStateWords } from "../../shared/ui/d1c/employees.ts";
-import { FilterIcon, PlusIcon } from "../../shared/ui/d1c/icons.tsx";
 import {
   CircleButton,
+  DataTable,
+  DemoFrame,
   Dot,
   DotBar,
+  FilterGlyph,
   IdBlock,
   KV,
   KV2,
+  Matrix,
+  PlusGlyph,
   SectionLabel,
-  StateGlyph,
-  StateLabel,
+  Status,
+  StatusGlyph,
+  Strip,
+  StripCard,
   Toggle,
   Who,
-  type WorkState,
-} from "../../shared/ui/d1c/Parts.tsx";
-import { StripCard, StripPanel, ZoomControl } from "../../shared/ui/d1c/Layout.tsx";
-import { DataTable } from "../../shared/ui/d1c/Table.tsx";
+  Zoom,
+  useStatusLabels,
+  type AgentStatus,
+} from "../../shared/ui/kit/index.ts";
 
 const Code = ({ children, size = "text-body-sm" }: { children: string; size?: string }) => (
   <span className={`ltr font-mono ${size}`}>{children}</span>
@@ -41,8 +45,8 @@ export function useZoomLabels() {
 /** Admin › Health (`P.health`): the system's state, its services and their uptime. */
 export function HealthDemo({ title }: { title: string }) {
   const { t } = useLingui();
-  const words = useStateWords();
-  const services: [string, WorkState, string, string][] = [
+  const words = useStatusLabels();
+  const services: [string, AgentStatus, string, string][] = [
     ["api", "running", "182 ms", "v1.13"],
     ["postgres", "running", "12 ms", "16.4"],
     ["agent-worker", "running", t`3 jobs`, "v0.42"],
@@ -73,7 +77,7 @@ export function HealthDemo({ title }: { title: string }) {
               [t`Last backup`, <L key="d">03:00</L>],
             ]}
           />
-          <MatrixChart
+          <Matrix
             top={t`System health`}
             start={t`Uptime`}
             end={t`Capacity`}
@@ -94,7 +98,7 @@ export function HealthDemo({ title }: { title: string }) {
               >
                 <div className="flex items-center justify-between gap-2">
                   <Code>{name}</Code>
-                  <StateLabel state={state}>{words[state]}</StateLabel>
+                  <Status live status={state} label={words[state]} />
                 </div>
                 <div className="font-display text-display-sm leading-[1.2] font-light">
                   <L>{metric}</L>
@@ -130,10 +134,10 @@ export function HealthDemo({ title }: { title: string }) {
 /** Admin › Automations (`P.automations`): the deterministic automations and their runs. */
 export function AutomationsDemo({ title }: { title: string }) {
   const { t } = useLingui();
-  const words = useStateWords();
-  const { byId } = useEmployees();
+  const words = useStatusLabels();
+  const { byId } = useAgents();
   const zoom = useZoomLabels();
-  const automations: [string, string, string, WorkState, string, string, boolean][] = [
+  const automations: [string, string, string, AgentStatus, string, AgentId, boolean][] = [
     [
       "a1",
       "etsy.order_intake",
@@ -162,7 +166,7 @@ export function AutomationsDemo({ title }: { title: string }) {
       false,
     ],
   ];
-  const runs: [string, string, WorkState, string][] = [
+  const runs: [string, string, AgentStatus, string][] = [
     ["R-981", "tracking.sync", "failed", "08:42"],
     ["R-980", "etsy.order_intake", "running", "08:28"],
     ["R-979", "tracking.sync", "failed", "08:12"],
@@ -178,7 +182,7 @@ export function AutomationsDemo({ title }: { title: string }) {
         <PanelHeader
           title={<Trans>Automations</Trans>}
           meta={<L>3</L>}
-          actions={<CircleButton label={t`New automation`} icon={<PlusIcon />} />}
+          actions={<CircleButton label={t`New automation`} icon={<PlusGlyph />} />}
         />
         <DataTable
           label={t`Automations`}
@@ -190,9 +194,7 @@ export function AutomationsDemo({ title }: { title: string }) {
             cells: [
               <Code key="n">{name}</Code>,
               description,
-              <StateLabel key="s" state={state}>
-                {words[state]}
-              </StateLabel>,
+              <Status key="s" live status={state} label={words[state]} />,
               <L key="t">{time}</L>,
               <Who key="o" name={byId(owner).name} />,
               <Toggle key="g" label={name} isSelected={on} />,
@@ -226,7 +228,7 @@ export function AutomationsDemo({ title }: { title: string }) {
               [
                 t`Status:`,
                 <>
-                  <StateGlyph state="failed" />
+                  <StatusGlyph live status="failed" />
                   {words.failed}
                 </>,
               ],
@@ -241,21 +243,19 @@ export function AutomationsDemo({ title }: { title: string }) {
           />
         </PanelBody>
       </Panel>
-      <StripPanel
+      <Strip
         title={<Trans>Recent runs</Trans>}
         meta={<L>8</L>}
-        zoom={<ZoomControl label={zoom} page={0} />}
-        actions={<CircleButton label={t`Filter`} icon={<FilterIcon />} />}
+        zoom={<Zoom labels={zoom} page={0} />}
+        actions={<CircleButton label={t`Filter`} icon={<FilterGlyph />} />}
       >
         {runs.map(([id, name, state, time], index) => (
           <StripCard
             key={id}
-            a={<L>{id}</L>}
-            b={<L>{time}</L>}
+            topStart={<L>{id}</L>}
+            topEnd={<L>{time}</L>}
             line={
-              <StateLabel state={state}>
-                {state === "idle" ? t`Succeeded` : words[state]}
-              </StateLabel>
+              <Status live status={state} label={state === "idle" ? t`Succeeded` : words[state]} />
             }
             selected={index === 0}
           >
@@ -264,7 +264,7 @@ export function AutomationsDemo({ title }: { title: string }) {
             </span>
           </StripCard>
         ))}
-      </StripPanel>
+      </Strip>
     </DemoFrame>
   );
 }

@@ -13,30 +13,38 @@ import { AGENTS, APPROVALS, agent, badge, type AgentId } from "../../shared/demo
 import { cx } from "../../shared/lib/cx.ts";
 import { useTweaks } from "../../shared/theme/ThemeProvider.tsx";
 import { ArrowEndIcon, GearIcon, GridIcon, MoreIcon, SearchIcon } from "../../shared/ui/icons.tsx";
-import {
-  BackGlyph,
-  CheckGlyph,
-  MinusGlyph,
-  NextGlyph,
-  PlusGlyph,
-} from "../../shared/ui/kit/glyphs.tsx";
+import { PageHeader } from "../../shared/ui/PageHeader.tsx";
+import { Button, buttonStyle } from "../../shared/ui/Button.tsx";
+import { Panel, PanelBody, PanelHeader } from "../../shared/ui/Panel.tsx";
 import {
   Avatar,
-  Cb,
+  BackGlyph,
+  CheckGlyph,
+  CircleButton,
   DemoPart,
   Dot,
   DotBar,
   DotColumns,
   IdBlock,
+  InkDisc,
+  KV2,
   Kpi,
   Kpis,
   N,
+  NextGlyph,
+  Pill,
+  PlusGlyph,
+  Screen,
+  Stack,
   Status,
   StatusGlyph,
+  Strip,
+  StripCard,
+  StripCards,
   Zoom,
-} from "../../shared/ui/kit/kit.tsx";
-import { PageHeader } from "../../shared/ui/PageHeader.tsx";
-import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
+  circleStyle,
+  initialOf,
+} from "../../shared/ui/kit/index.ts";
 
 /**
  * Home (Design 1C `P.home`): what needs the owner, today with the hero carousel and its key
@@ -49,15 +57,15 @@ export function OverviewPage() {
   return (
     <>
       <PageHeader title={t`Home`} />
-      <div className="k-grid k-l3s k-enter home-grid">
+      <Screen layout="l3s" className="home-grid">
         <NeedsYou />
         <Today />
-        <div className="k-stack home-side">
+        <Stack className="home-side">
           <ShopsCard />
           <GettingStarted />
-        </div>
+        </Stack>
         <OfficePulse />
-      </div>
+      </Screen>
     </>
   );
 }
@@ -75,13 +83,13 @@ function NeedsYou() {
             to="/work/approvals"
             aria-label={t`All approvals`}
             title={t`All approvals`}
-            className="k-cb"
+            className={circleStyle()}
           >
             <ArrowEndIcon size={16} className="rtl:-scale-x-100" />
           </Link>
         }
       />
-      <DemoPart className="k-pb">
+      <DemoPart className="flex min-h-0 grow flex-col px-6 pb-6">
         <div className="flex min-h-0 grow flex-col">
           <IdBlock label={t`Waiting for you:`} value={<N>{APPROVALS.length}</N>} />
           <ul className="k-scroll m-0 mt-1 min-h-0 grow list-none p-0">
@@ -90,7 +98,7 @@ function NeedsYou() {
               return (
                 <li key={item.id} className="k-ap">
                   <div className="k-who">
-                    <Avatar initial={t(by.name).charAt(0)} size="xs" />
+                    <Avatar initial={initialOf(t(by.name))} size="xs" />
                     <span>
                       {t(by.name)} · {t(by.role)} · <N>{item.age}</N>
                     </span>
@@ -99,12 +107,8 @@ function NeedsYou() {
                   <div className="k-act">
                     <RiskChip risk={item.risk} />
                     <div className="flex gap-1.5">
-                      <button type="button" className="k-btn">
-                        {t`Reject`}
-                      </button>
-                      <button type="button" className="k-btn k-pri">
-                        {t`Approve`}
-                      </button>
+                      <Button>{t`Reject`}</Button>
+                      <Button variant="primary">{t`Approve`}</Button>
                     </div>
                   </div>
                 </li>
@@ -163,7 +167,12 @@ function Today() {
           </>
         }
         actions={
-          <Link to="/settings" aria-label={t`Settings`} title={t`Settings`} className="k-cb">
+          <Link
+            to="/settings"
+            aria-label={t`Settings`}
+            title={t`Settings`}
+            className={circleStyle()}
+          >
             <MoreIcon size={16} />
           </Link>
         }
@@ -179,7 +188,7 @@ function Today() {
           )
         }
       />
-      <DemoPart edge>
+      <DemoPart tag="edge">
         <Kpis label={t`Key numbers`}>
           <Kpi
             label={t`Revenue`}
@@ -272,31 +281,26 @@ function Hero({ footer }: { footer: ReactNode }) {
         </div>
         <span>{footer}</span>
       </div>
-      <Cb
+      <CircleButton
         className="k-side k-s"
         label={t`Previous concept`}
-        icon={BackGlyph}
+        icon={<BackGlyph />}
         onClick={() => {
           step(-1);
         }}
       />
-      <Cb
+      <CircleButton
         className="k-side k-e"
         label={t`Next concept`}
-        icon={NextGlyph}
+        icon={<NextGlyph />}
         onClick={() => {
           step(1);
         }}
       />
-      <DemoPart className="home-orders-disc">
-        <button
-          type="button"
-          className="k-kdisc"
-          aria-label={t`Today’s orders`}
-          title={t`Today’s orders`}
-        >
+      <DemoPart className="home-orders-disc" tag={false}>
+        <InkDisc label={t`Today’s orders`}>
           <PlusGlyph size={14} />
-        </button>
+        </InkDisc>
       </DemoPart>
     </div>
   );
@@ -335,7 +339,12 @@ function ShopsCard() {
   const { t } = useLingui();
   const shops = useShops();
   const settings = (
-    <Link to="/shops" aria-label={t`Shop settings`} title={t`Shop settings`} className="k-cb">
+    <Link
+      to="/shops"
+      aria-label={t`Shop settings`}
+      title={t`Shop settings`}
+      className={circleStyle()}
+    >
       <GearIcon size={16} />
     </Link>
   );
@@ -344,18 +353,16 @@ function ShopsCard() {
     return (
       <Panel className="home-shop">
         <PanelHeader title={t`Shops`} actions={settings} />
-        <div className="k-pb items-center justify-center gap-3 text-center">
+        <PanelBody className="items-center justify-center gap-3 text-center">
           <p className="m-0 text-body-sm text-secondary">{t`Shops could not be loaded`}</p>
-          <button
-            type="button"
-            className="k-btn"
-            onClick={() => {
+          <Button
+            onPress={() => {
               shops.refetch();
             }}
           >
             {t`Try again`}
-          </button>
-        </div>
+          </Button>
+        </PanelBody>
       </Panel>
     );
 
@@ -363,11 +370,11 @@ function ShopsCard() {
     return (
       <Panel className="home-shop" label={t`Loading shops`}>
         <PanelHeader title={t`Shops`} actions={settings} />
-        <div className="k-pb items-center justify-center gap-4" aria-busy="true">
+        <PanelBody className="items-center justify-center gap-4" aria-busy="true">
           <span className="h-3 w-16 animate-pulse rounded-pill bg-raised" />
           <span className="h-9 w-40 animate-pulse rounded-pill bg-raised" />
           <span className="h-8 w-full animate-pulse rounded-pill bg-raised" />
-        </div>
+        </PanelBody>
       </Panel>
     );
 
@@ -395,7 +402,7 @@ function ShopCard({
         meta={count > 1 ? t`${shopCount} shops` : undefined}
         actions={settings}
       />
-      <div className="k-pb k-between">
+      <PanelBody className="justify-between">
         <IdBlock label={t`Shop:`} value={<N>{shop.name}</N>}>
           <div className="mt-1 flex justify-center">
             <Status
@@ -408,24 +415,26 @@ function ShopCard({
           <div>
             <DotColumns values={[5, 7, 6, 9, 8, 11, 12]} rows={5} pitch={9} gap={16} />
           </div>
-          <div className="k-kv2">
-            <div>
-              <div className="k-lb">{t`Orders today:`}</div>
-              <button type="button" className="k-pill k-w">
-                <Dot tone="k" />
-                <N>23</N>
-              </button>
-            </div>
-            <div>
-              <div className="k-lb">{t`Revenue today:`}</div>
-              <button type="button" className="k-pill k-w">
-                <Dot tone="g" />
-                <N>$842</N>
-              </button>
-            </div>
-          </div>
+          <KV2
+            items={[
+              [
+                t`Orders today:`,
+                <Pill wide key="orders">
+                  <Dot tone="ink" />
+                  <N>23</N>
+                </Pill>,
+              ],
+              [
+                t`Revenue today:`,
+                <Pill wide key="revenue">
+                  <Dot tone="success" />
+                  <N>$842</N>
+                </Pill>,
+              ],
+            ]}
+          />
         </DemoPart>
-      </div>
+      </PanelBody>
     </Panel>
   );
 }
@@ -435,7 +444,7 @@ function ConnectShop() {
   return (
     <Panel className="home-shop">
       <PanelHeader title={<N>Etsy</N>} />
-      <div className="k-pb k-between gap-4">
+      <PanelBody className="justify-between gap-4">
         <IdBlock label={t`Shops connected:`} value={<N>0</N>}>
           <p className="m-0 mt-2 text-body-sm font-light text-secondary">
             <Trans>
@@ -443,11 +452,11 @@ function ConnectShop() {
             </Trans>
           </p>
         </IdBlock>
-        <Link to="/shops" className="k-btn k-pri k-lg w-full no-underline">
+        <Link to="/shops" className={cx(buttonStyle({ variant: "primary", size: "lg" }), "w-full")}>
           {t`Connect a shop`}
           <ArrowEndIcon size={14} className="rtl:-scale-x-100" />
         </Link>
-      </div>
+      </PanelBody>
     </Panel>
   );
 }
@@ -488,12 +497,17 @@ function GettingStarted() {
         title={t`Getting started`}
         meta={t`${doneCount} of ${totalCount} done`}
         actions={
-          <Link to="/settings" aria-label={t`Settings`} title={t`Settings`} className="k-cb">
+          <Link
+            to="/settings"
+            aria-label={t`Settings`}
+            title={t`Settings`}
+            className={circleStyle()}
+          >
             <GearIcon size={16} />
           </Link>
         }
       />
-      <div className="k-pb k-between gap-3">
+      <PanelBody className="justify-between gap-3">
         <IdBlock label={t`Steps done:`} value={<N>{`${doneCount}/${totalCount}`}</N>} />
         <ol className="m-0 flex list-none flex-col p-0">
           {steps.map((step, index) => (
@@ -504,7 +518,7 @@ function GettingStarted() {
                 </span>
               ) : (
                 <span className={cx("k-ck", index === current && "k-now")} aria-hidden="true">
-                  {index === current ? <Dot tone="o" /> : null}
+                  {index === current ? <Dot tone="attention" /> : null}
                 </span>
               )}
               <span className={cx("grow truncate", step.done && "text-secondary")}>
@@ -530,7 +544,7 @@ function GettingStarted() {
           accent={0}
           label={t`${doneCount} of ${totalCount} done`}
         />
-      </div>
+      </PanelBody>
     </Panel>
   );
 }
@@ -544,27 +558,19 @@ function OfficePulse() {
   const [page, setPage] = useState<0 | 1>(0);
   const list = page === 0 ? PULSE : AGENTS.slice(8).map((a) => a.id);
   return (
-    <Panel className="k-strip home-pulse">
-      <div className="k-strip-h">
-        <div className="flex min-w-0 items-baseline gap-2.5">
-          <h2 className="m-0 text-body-sm font-normal whitespace-nowrap">{t`Office pulse`}</h2>
-          <span className="truncate text-caption font-light text-muted">
-            {t`3 running · 1 waiting for you · 1 failed`}
-          </span>
-        </div>
-        <Zoom
-          page={page}
-          onPage={setPage}
-          labels={{ less: t`Fewer`, more: t`More` }}
-          icons={{ less: MinusGlyph, more: PlusGlyph }}
-        />
-        <div className="k-acts">
-          <Cb label={t`Find agent`} icon={SearchIcon} />
+    <Strip
+      className="home-pulse"
+      title={t`Office pulse`}
+      meta={t`3 running · 1 waiting for you · 1 failed`}
+      zoom={<Zoom page={page} onPage={setPage} labels={{ less: t`Fewer`, more: t`More` }} />}
+      actions={
+        <>
+          <CircleButton label={t`Find agent`} icon={<SearchIcon />} />
           <Link
             to="/office/floor"
             aria-label={t`Office floor`}
             title={t`Office floor`}
-            className="k-cb"
+            className={circleStyle()}
           >
             <GridIcon size={16} />
           </Link>
@@ -572,40 +578,34 @@ function OfficePulse() {
             to="/settings"
             aria-label={t`Settings`}
             title={t`Settings`}
-            className="k-cb k-phone-hide"
+            className={cx(circleStyle(), "max-sm:hidden")}
           >
             <GearIcon size={16} />
           </Link>
-        </div>
-      </div>
-      <DemoPart edge className="flex min-h-0 grow flex-col">
-        <div className="k-cards" key={page}>
+        </>
+      }
+      cards={false}
+    >
+      <DemoPart tag="edge" className="flex min-h-0 grow flex-col">
+        <StripCards>
           {list.map((id, i) => {
             const a = agent(id);
             return (
-              <button
+              <StripCard
                 key={id}
-                type="button"
-                className={cx("k-sc", i === 0 && page === 0 && "k-sel")}
-                style={{
-                  animation: `htco-enter var(--motion-duration-slow) var(--motion-easing-enter) ${String(i * 30)}ms both`,
-                }}
+                selected={i === 0 && page === 0}
+                style={{ animationDelay: `${String(i * 30)}ms` }}
+                className="motion-safe:animate-enter"
+                topStart={t(a.name)}
+                topEnd={<N>{badge(a)}</N>}
+                line={<Status status={a.status} live />}
               >
-                <span className="k-top">
-                  <span>{t(a.name)}</span>
-                  <span className="k-mute">
-                    <N>{badge(a)}</N>
-                  </span>
-                </span>
-                <Avatar initial={t(a.name).charAt(0)} />
-                <span className="mt-2.5">
-                  <Status status={a.status} live />
-                </span>
-              </button>
+                <Avatar initial={initialOf(t(a.name))} />
+              </StripCard>
             );
           })}
-        </div>
+        </StripCards>
       </DemoPart>
-    </Panel>
+    </Strip>
   );
 }

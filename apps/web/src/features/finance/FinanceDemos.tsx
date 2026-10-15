@@ -1,25 +1,31 @@
 import { Trans, useLingui } from "@lingui/react/macro";
 import type { ReactNode } from "react";
 
+import { useAgents, type AgentId } from "../../shared/demo/office.ts";
 import { Panel, PanelBody, PanelHeader } from "../../shared/ui/Panel.tsx";
 import { GearIcon } from "../../shared/ui/icons.tsx";
-import { DotColumns, MatrixChart, UpIcon } from "../../shared/ui/d1c/Charts.tsx";
-import { DemoFrame } from "../../shared/ui/d1c/DemoFrame.tsx";
-import { useEmployees } from "../../shared/ui/d1c/employees.ts";
-import { DownloadIcon, RightIcon } from "../../shared/ui/d1c/icons.tsx";
+import { useZoomLabels } from "../admin/AdminDemos.tsx";
 import {
   CircleButton,
+  DataTable,
+  DemoFrame,
   Dot,
   DotBar,
+  DotColumns,
+  DownloadGlyph,
   IdBlock,
   KV,
   KV2,
+  Matrix,
+  NextGlyph,
+  Stack,
+  Strip,
+  StripCard,
   Tile,
+  TrendGlyph,
   Who,
-} from "../../shared/ui/d1c/Parts.tsx";
-import { Stack, StripCard, StripPanel, ZoomControl } from "../../shared/ui/d1c/Layout.tsx";
-import { DataTable } from "../../shared/ui/d1c/Table.tsx";
-import { useZoomLabels } from "../admin/AdminDemos.tsx";
+  Zoom,
+} from "../../shared/ui/kit/index.ts";
 
 const L = ({ children }: { children: ReactNode }) => <span className="ltr">{children}</span>;
 
@@ -47,7 +53,7 @@ export function FinanceOverviewDemo({ title }: { title: string }) {
               [t`AI costs`, <L key="d">$12.40</L>],
             ]}
           />
-          <MatrixChart
+          <Matrix
             top={t`Financial health`}
             start={t`Margin`}
             end={t`Growth`}
@@ -61,7 +67,7 @@ export function FinanceOverviewDemo({ title }: { title: string }) {
         <PanelHeader
           title={<Trans>Daily revenue</Trans>}
           meta={<L>1–15.10</L>}
-          actions={<CircleButton label={t`Export`} icon={<DownloadIcon />} />}
+          actions={<CircleButton label={t`Export`} icon={<DownloadGlyph />} />}
         />
         <PanelBody className="items-center justify-center gap-6">
           <DotColumns
@@ -88,7 +94,7 @@ export function FinanceOverviewDemo({ title }: { title: string }) {
           <Panel key={name}>
             <PanelHeader
               title={<Trans>By shop</Trans>}
-              actions={<CircleButton label={t`Ledger`} icon={<RightIcon />} />}
+              actions={<CircleButton label={t`Ledger`} icon={<NextGlyph />} />}
             />
             <PanelBody className="justify-between gap-4">
               <IdBlock label={<L>{name}</L>} value={<L>{value}</L>} />
@@ -105,7 +111,7 @@ export function FinanceOverviewDemo({ title }: { title: string }) {
                   [
                     t`Trend:`,
                     <>
-                      <UpIcon size={10} />
+                      <TrendGlyph size={10} />
                       <L>+8%</L>
                     </>,
                   ],
@@ -122,10 +128,10 @@ export function FinanceOverviewDemo({ title }: { title: string }) {
 /** Finance › Ledger (`P.ledger`): balances, the ledger, and net by day. */
 export function LedgerDemo({ title }: { title: string }) {
   const { t } = useLingui();
-  const { byId } = useEmployees();
+  const { byId } = useAgents();
   const zoom = useZoomLabels();
   const all = t`All shops`;
-  const rows: [string, string, string, string, string, string][] = [
+  const rows: [string, string, string, string, string, AgentId][] = [
     ["15.10", t`Daily sales`, t`Revenue`, all, "+$1,284.00", "roni"],
     ["15.10", t`Etsy fees`, t`Fees`, all, "−$124.60", "roni"],
     ["14.10", t`Printful invoice #4471`, t`Production`, "HTZ Prints", "−$312.40", "roni"],
@@ -167,7 +173,7 @@ export function LedgerDemo({ title }: { title: string }) {
         <PanelHeader
           title={<Trans>Ledger</Trans>}
           meta={<Trans>October</Trans>}
-          actions={<CircleButton label={t`Export CSV`} icon={<DownloadIcon />} />}
+          actions={<CircleButton label={t`Export CSV`} icon={<DownloadGlyph />} />}
         />
         <DataTable
           label={t`Ledger`}
@@ -187,17 +193,17 @@ export function LedgerDemo({ title }: { title: string }) {
           }))}
         />
       </Panel>
-      <StripPanel
+      <Strip
         title={<Trans>Net by day</Trans>}
         meta={<L>8–15.10</L>}
-        zoom={<ZoomControl label={zoom} page={0} />}
-        actions={<CircleButton label={t`Export`} icon={<DownloadIcon />} />}
+        zoom={<Zoom labels={zoom} page={0} />}
+        actions={<CircleButton label={t`Export`} icon={<DownloadGlyph />} />}
       >
         {days.map(([day, gross, net], i) => (
           <StripCard
             key={day}
-            a={<L>{day}</L>}
-            b={weekdays[i]}
+            topStart={<L>{day}</L>}
+            topEnd={weekdays[i]}
             selected={i === 7}
             line={
               <>
@@ -210,7 +216,7 @@ export function LedgerDemo({ title }: { title: string }) {
             </div>
           </StripCard>
         ))}
-      </StripPanel>
+      </Strip>
     </DemoFrame>
   );
 }

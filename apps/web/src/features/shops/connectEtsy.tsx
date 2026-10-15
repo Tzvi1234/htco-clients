@@ -3,7 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useState, type ReactNode, type SyntheticEvent } from "react";
 import { Dialog, Heading, Modal, ModalOverlay } from "react-aria-components";
 
-import { CodeBoxes } from "./CodeBoxes.tsx";
+import { CodeBoxes } from "../../shared/ui/kit/index.ts";
 import { useCodeMessage } from "../auth/SecondFactorPage.tsx";
 import { ApiError, apiError, useApi } from "../../shared/api/api.tsx";
 import { browser } from "../../shared/lib/browser.ts";

@@ -2,7 +2,7 @@
 // read CSS custom properties, so the scene keeps the demo's values here, matched to the tokens of
 // each palette (accent orange or lilac, lemon for "needs you" in Design 4). The dark theme keeps
 // the light model, as the demo does, on a darker stage.
-import type { AgentStatus } from "../../../shared/ui/kit/kit.tsx";
+import type { OfficeStatus } from "../../../shared/ui/kit/index.ts";
 import type { BotBody, RoomId } from "./plan.ts";
 
 export interface ScenePalette {
@@ -45,8 +45,8 @@ export interface ScenePalette {
   visor: string;
   eye: number;
   hemiGround: number;
-  status: Record<AgentStatus, number>;
-  screen: Record<AgentStatus, number>;
+  status: Record<OfficeStatus, number>;
+  screen: Record<OfficeStatus, number>;
   leds: readonly [number, number, number, number, number, number];
   body: Record<BotBody, readonly [string, string]>;
 }

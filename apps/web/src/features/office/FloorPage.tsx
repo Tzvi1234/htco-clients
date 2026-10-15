@@ -25,31 +25,34 @@ import { cx } from "../../shared/lib/cx.ts";
 import { REDUCED_MOTION_QUERY, useMediaQuery } from "../../shared/lib/useMediaQuery.ts";
 import { useTweaks } from "../../shared/theme/ThemeProvider.tsx";
 import { GearIcon, GridIcon, SearchIcon } from "../../shared/ui/icons.tsx";
-import {
-  BackGlyph,
-  MinusGlyph,
-  MoveGlyph,
-  NextGlyph,
-  PauseGlyph,
-  PlayGlyph,
-  PlusGlyph,
-} from "../../shared/ui/kit/glyphs.tsx";
+import { useToast } from "../../shared/ui/Toast.tsx";
+import { Panel, PanelBody, PanelHeader } from "../../shared/ui/Panel.tsx";
 import {
   AGENT_STATUSES,
   Avatar,
-  Cb,
+  Avatars,
+  BackGlyph,
   Chip,
+  CircleButton,
   DemoFrame,
   IdBlock,
   KV,
+  ListRow,
   Matrix,
+  MoveGlyph,
   N,
+  NextGlyph,
+  PILL,
+  PauseGlyph,
+  PlayGlyph,
+  Screen,
+  Stack,
   Status,
+  Strip,
+  StripCard,
   Zoom,
-} from "../../shared/ui/kit/kit.tsx";
-import { PageHeader } from "../../shared/ui/PageHeader.tsx";
-import { useToast } from "../../shared/ui/Toast.tsx";
-import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
+  initialOf,
+} from "../../shared/ui/kit/index.ts";
 
 /**
  * Office › Floor (Design 1C `P.floor`), a demo frame: the living office as a 3D map where the
@@ -81,12 +84,9 @@ export function FloorPage() {
     </div>
   );
   return (
-    <>
-      <PageHeader title={t({ message: "Floor", context: "navigation" })} />
-      <DemoFrame>
-        {view === "map" ? <LiveMap modes={modes} /> : <FloorList modes={modes} noWebgl={!webgl} />}
-      </DemoFrame>
-    </>
+    <DemoFrame title={t({ message: "Floor", context: "navigation" })} views>
+      {view === "map" ? <LiveMap modes={modes} /> : <FloorList modes={modes} noWebgl={!webgl} />}
+    </DemoFrame>
   );
 }
 
@@ -180,7 +180,7 @@ function LiveMap({ modes }: { modes: ReactNode }) {
     AGENTS.filter((a) => a.status === status).length;
 
   return (
-    <div className="k-grid k-lmap k-enter">
+    <Screen layout="l1">
       <Panel className="relative">
         <PanelHeader
           title={t`Floor 1 · live`}
@@ -193,7 +193,7 @@ function LiveMap({ modes }: { modes: ReactNode }) {
               <span className="w-2" />
               <button
                 type="button"
-                className="k-pill fl-head-extra"
+                className={cx(PILL, "fl-head-extra hover:border-line-hover hover:bg-hover")}
                 aria-label={t`Speed ${speed}×`}
                 onClick={() => {
                   setSpeed(speed === 1 ? 2 : 1);
@@ -201,17 +201,17 @@ function LiveMap({ modes }: { modes: ReactNode }) {
               >
                 <N>{`${String(speed)}×`}</N>
               </button>
-              <Cb
+              <CircleButton
                 label={t`Reset view`}
-                icon={MoveGlyph}
+                icon={<MoveGlyph />}
                 onClick={() => {
                   scene.current?.resetView();
                 }}
               />
-              <Cb
+              <CircleButton
                 label={playing ? t`Pause` : t`Play`}
-                icon={playing ? PauseGlyph : PlayGlyph}
-                on={!playing}
+                icon={playing ? <PauseGlyph /> : <PlayGlyph />}
+                active={!playing}
                 onClick={() => {
                   setPlaying(!playing);
                 }}
@@ -242,13 +242,12 @@ function LiveMap({ modes }: { modes: ReactNode }) {
           <PanelHeader
             title={t`Live activity`}
             actions={
-              <span className="k-st me-2">
-                <Status
-                  status={playing && !still ? "running" : "idle"}
-                  label={playing && !still ? t`Live` : t`Paused`}
-                  live
-                />
-              </span>
+              <Status
+                className="me-2"
+                status={playing && !still ? "running" : "idle"}
+                label={playing && !still ? t`Live` : t`Paused`}
+                live
+              />
             }
           />
           <ol aria-live="polite">
@@ -265,7 +264,7 @@ function LiveMap({ modes }: { modes: ReactNode }) {
           </ol>
         </section>
       </Panel>
-    </div>
+    </Screen>
   );
 }
 
@@ -313,13 +312,13 @@ function FloorList({ modes, noWebgl }: { modes: ReactNode; noWebgl: boolean }) {
   };
   const shown = AGENTS.slice(page * 8, page * 8 + 8);
   return (
-    <div className="k-grid k-l3s k-enter" data-demo-view="">
-      <Panel className="k-phone-hide">
+    <Screen layout="l3s" data-demo-view="">
+      <Panel className="max-sm:hidden">
         <PanelHeader
           title={t`Department details`}
-          actions={<Cb label={t`Department settings`} icon={GearIcon} />}
+          actions={<CircleButton label={t`Department settings`} icon={<GearIcon />} />}
         />
-        <div className="k-pb k-between">
+        <PanelBody className="justify-between">
           <IdBlock label={t`Department:`} value={t(d.name)} />
           <KV
             items={[
@@ -337,7 +336,7 @@ function FloorList({ modes, noWebgl }: { modes: ReactNode; noWebgl: boolean }) {
             value={deptId === "eng" ? "64" : deptId === "oa" ? "41" : "80"}
             caption={t`Stable performance`}
           />
-        </div>
+        </PanelBody>
       </Panel>
 
       <Panel>
@@ -349,7 +348,7 @@ function FloorList({ modes, noWebgl }: { modes: ReactNode; noWebgl: boolean }) {
               {noWebgl ? <Chip>{t`No WebGL · list view`}</Chip> : null}
               {modes}
               <span className="w-1" />
-              <Cb label={t`Full screen`} icon={MoveGlyph} />
+              <CircleButton label={t`Full screen`} icon={<MoveGlyph />} />
             </div>
           }
         />
@@ -370,11 +369,7 @@ function FloorList({ modes, noWebgl }: { modes: ReactNode; noWebgl: boolean }) {
                     pick(x.id);
                   }}
                 >
-                  <span className="k-avs">
-                    {people.map((p) => (
-                      <Avatar key={p.id} initial={t(p.name).charAt(0)} size="xs" />
-                    ))}
-                  </span>
+                  <Avatars size="xs" initials={people.map((p) => initialOf(t(p.name)))} />
                   <span className="max-sm:hidden">{t(x.name)}</span>
                 </button>
               );
@@ -392,18 +387,18 @@ function FloorList({ modes, noWebgl }: { modes: ReactNode; noWebgl: boolean }) {
               );
             })}
           </div>
-          <Cb
+          <CircleButton
             className="k-side k-s"
             label={t`Previous department`}
-            icon={BackGlyph}
+            icon={<BackGlyph />}
             onClick={() => {
               step(-1);
             }}
           />
-          <Cb
+          <CircleButton
             className="k-side k-e"
             label={t`Next department`}
-            icon={NextGlyph}
+            icon={<NextGlyph />}
             onClick={() => {
               step(1);
             }}
@@ -411,81 +406,66 @@ function FloorList({ modes, noWebgl }: { modes: ReactNode; noWebgl: boolean }) {
         </div>
       </Panel>
 
-      <div className="k-stack k-phone-hide">
+      <Stack className="max-sm:hidden">
         <AgentCard id={agentId} title={t`Claude · model`} />
         <Panel>
           <PanelHeader
             title={t`Service departments`}
-            actions={<Cb label={t`Automations`} icon={NextGlyph} />}
+            actions={<CircleButton label={t`Automations`} icon={<NextGlyph />} />}
           />
-          <div className="k-pb justify-center pt-0">
+          <PanelBody className="justify-center pt-0">
             {SERVICES.map((s) => (
-              <div key={s.items} className="k-svcrow">
-                <span className="k-ic k-hatch" aria-hidden="true" />
-                <div className="min-w-0 grow">
-                  <div className="k-nm flex justify-between">
+              <ListRow
+                key={s.items}
+                lead={
+                  <span
+                    className="k-hatch size-10 shrink-0 rounded-[12px] border border-dashed border-line-hover"
+                    aria-hidden="true"
+                  />
+                }
+                title={
+                  <span className="flex justify-between gap-2">
                     {t(s.name)}
                     <Status status={s.status} live />
-                  </div>
-                  <div className="k-ln truncate">
-                    <N>{s.items.split(" · ").slice(0, 2).join(" · ")}</N>
-                  </div>
-                </div>
-              </div>
+                  </span>
+                }
+                line={<N>{s.items.split(" · ").slice(0, 2).join(" · ")}</N>}
+              />
             ))}
-          </div>
+          </PanelBody>
         </Panel>
-      </div>
+      </Stack>
 
-      <Panel className="k-strip">
-        <div className="k-strip-h">
-          <div className="flex items-baseline gap-2.5">
-            <h2 className="m-0 text-body-sm font-normal">{t`All employees`}</h2>
-            <span className="text-caption font-light text-muted">
-              <N>{page === 1 ? "9–16 / 16" : "1–8 / 16"}</N>
-            </span>
-          </div>
-          <Zoom
-            page={page}
-            onPage={setPage}
-            labels={{ less: t`Fewer`, more: t`More` }}
-            icons={{ less: MinusGlyph, more: PlusGlyph }}
-          />
-          <div className="k-acts">
-            <Cb label={t`Find agent`} icon={SearchIcon} />
-            <Cb label={t`Grid view`} icon={GridIcon} />
-            <Cb label={t`Settings`} icon={GearIcon} className="k-phone-hide" />
-          </div>
-        </div>
-        <div className="k-cards" key={page}>
-          {shown.map((a, i) => (
-            <button
-              key={a.id}
-              type="button"
-              aria-pressed={agentId === a.id}
-              className={cx("k-sc", agentId === a.id && "k-sel")}
-              style={{
-                animation: `htco-enter var(--motion-duration-slow) var(--motion-easing-enter) ${String(i * 30)}ms both`,
-              }}
-              onClick={() => {
-                setAgent(a.id);
-                setDept(a.dept);
-              }}
-            >
-              <span className="k-top">
-                <span>{t(a.name)}</span>
-                <span className="k-mute">
-                  <N>{badge(a)}</N>
-                </span>
-              </span>
-              <Avatar initial={t(a.name).charAt(0)} ink={agentId === a.id} />
-              <span className="mt-2.5">
-                <Status status={a.status} live />
-              </span>
-            </button>
-          ))}
-        </div>
-      </Panel>
-    </div>
+      <Strip
+        title={t`All employees`}
+        meta={<N>{page === 1 ? "9–16 / 16" : "1–8 / 16"}</N>}
+        zoom={<Zoom page={page} onPage={setPage} labels={{ less: t`Fewer`, more: t`More` }} />}
+        actions={
+          <>
+            <CircleButton label={t`Find agent`} icon={<SearchIcon />} />
+            <CircleButton label={t`Grid view`} icon={<GridIcon />} />
+            <CircleButton label={t`Settings`} icon={<GearIcon />} className="max-sm:hidden" />
+          </>
+        }
+      >
+        {shown.map((a, i) => (
+          <StripCard
+            key={a.id}
+            selected={agentId === a.id}
+            style={{ animationDelay: `${String(i * 30)}ms` }}
+            className="motion-safe:animate-enter"
+            onClick={() => {
+              setAgent(a.id);
+              setDept(a.dept);
+            }}
+            topStart={t(a.name)}
+            topEnd={<N>{badge(a)}</N>}
+            line={<Status status={a.status} live />}
+          >
+            <Avatar initial={initialOf(t(a.name))} ink={agentId === a.id} />
+          </StripCard>
+        ))}
+      </Strip>
+    </Screen>
   );
 }

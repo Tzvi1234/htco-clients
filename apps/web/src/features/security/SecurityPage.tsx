@@ -15,10 +15,21 @@ import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
 import { Button } from "../../shared/ui/Button.tsx";
 import { PageHeader } from "../../shared/ui/PageHeader.tsx";
 import { Panel, PanelBody, PanelHeader } from "../../shared/ui/Panel.tsx";
-import { DemoPart, DemoTag } from "../../shared/ui/d1c/DemoFrame.tsx";
-import { LaptopIcon, PhoneIcon, ShieldIcon } from "../../shared/ui/d1c/icons.tsx";
-import { Dot, IdBlock, KV, KV2, ListRow, StateLabel } from "../../shared/ui/d1c/Parts.tsx";
-import { Screen, Stack } from "../../shared/ui/d1c/Layout.tsx";
+import {
+  DemoPart,
+  DemoTag,
+  Dot,
+  IdBlock,
+  KV,
+  KV2,
+  LaptopGlyph,
+  ListRow,
+  PhoneGlyph,
+  Screen,
+  ShieldGlyph,
+  Stack,
+  Status,
+} from "../../shared/ui/kit/index.ts";
 
 /**
  * Security (slice 3.5, AC-3.5.4, FR-IAM-05), a page of Settings in the Design 1C language: the
@@ -52,7 +63,7 @@ function SecondFactor() {
       <PanelBody className="justify-between gap-5">
         <div className="flex flex-col items-center gap-3 pt-2">
           <span className="flex size-16 items-center justify-center rounded-pill border border-line bg-raised">
-            <ShieldIcon size={24} />
+            <ShieldGlyph size={24} />
           </span>
           <IdBlock
             label={t`Two-step sign-in:`}
@@ -77,19 +88,27 @@ function SecondFactor() {
         />
         {enrolled === undefined ? null : enrolled ? (
           <p className="m-0 flex animate-enter items-center justify-center gap-2 rounded-card bg-raised p-3 text-body-sm">
-            <StateLabel state="running">
-              <span className="text-body-sm">
-                <Trans>Authenticator app is set up</Trans>
-              </span>
-            </StateLabel>
+            <Status
+              live
+              status="running"
+              label={
+                <span className="text-body-sm">
+                  <Trans>Authenticator app is set up</Trans>
+                </span>
+              }
+            />
           </p>
         ) : (
           <p className="m-0 flex animate-enter flex-wrap items-center justify-center gap-2 rounded-card bg-raised p-3 text-body-sm">
-            <StateLabel state="waityou">
-              <span className="text-body-sm">
-                <Trans>No authenticator app yet.</Trans>
-              </span>
-            </StateLabel>{" "}
+            <Status
+              live
+              status="waityou"
+              label={
+                <span className="text-body-sm">
+                  <Trans>No authenticator app yet.</Trans>
+                </span>
+              }
+            />{" "}
             <Link to="/security/setup" className="text-link underline underline-offset-[3px]">
               <Trans>Set one up</Trans>
             </Link>
@@ -107,7 +126,7 @@ function RecoveryDemo() {
     <Panel label={t`Recovery`} className="max-sm:hidden">
       <PanelHeader title={<Trans>Recovery</Trans>} actions={<DemoTag className="me-4" />} />
       <PanelBody className="justify-between gap-4">
-        <DemoPart tag={false} className="flex flex-col gap-4">
+        <DemoPart tag={false} contentClassName="flex flex-col gap-4">
           <IdBlock label={t`Recovery codes left:`} value={<span className="ltr">8 / 10</span>} />
           <KV2
             items={[
@@ -182,16 +201,14 @@ function Devices() {
                 }
               >
                 <span className="flex size-10 shrink-0 items-center justify-center rounded-pill border border-line bg-raised">
-                  {mobile ? <PhoneIcon size={16} /> : <LaptopIcon size={16} />}
+                  {mobile ? <PhoneGlyph size={16} /> : <LaptopGlyph size={16} />}
                 </span>
                 <ListRow
                   className="min-w-0 flex-1 py-0"
                   title={device}
                   line={
                     session.current ? (
-                      <StateLabel state="running">
-                        <Trans>This device</Trans>
-                      </StateLabel>
+                      <Status live status="running" label={<Trans>This device</Trans>} />
                     ) : (
                       <Trans>Last active {seen.format(new Date(session.last_seen_at))}</Trans>
                     )

@@ -1,6 +1,7 @@
 import { Trans, useLingui } from "@lingui/react/macro";
 import type { ReactNode } from "react";
 
+import { useAgents } from "../../shared/demo/office.ts";
 import { cx } from "../../shared/lib/cx.ts";
 import { Panel, PanelBody, PanelHeader } from "../../shared/ui/Panel.tsx";
 import {
@@ -11,34 +12,36 @@ import {
   MoreIcon,
   SearchIcon,
 } from "../../shared/ui/icons.tsx";
-import { DotColumns, MatrixChart } from "../../shared/ui/d1c/Charts.tsx";
-import { DemoFrame } from "../../shared/ui/d1c/DemoFrame.tsx";
-import { useEmployees, useStateWords } from "../../shared/ui/d1c/employees.ts";
-import {
-  ClipIcon,
-  DocIcon,
-  FilterIcon,
-  PlusIcon,
-  RightIcon,
-  SendIcon,
-} from "../../shared/ui/d1c/icons.tsx";
+import { useZoomLabels } from "../admin/AdminDemos.tsx";
 import {
   Avatar,
   CircleButton,
+  ClipGlyph,
+  DataTable,
+  DemoFrame,
+  DocGlyph,
   Dot,
+  DotColumns,
+  FilterGlyph,
   IdBlock,
   InkDisc,
   KV,
   KV2,
   ListRow,
-  StateGlyph,
-  StateLabel,
+  Matrix,
+  NextGlyph,
+  PlusGlyph,
+  SendGlyph,
+  Stack,
+  Status,
+  StatusGlyph,
+  Strip,
+  StripCard,
+  Zoom,
+  useStatusLabels,
+  type AgentStatus,
   type DotTone,
-  type WorkState,
-} from "../../shared/ui/d1c/Parts.tsx";
-import { Stack, StripCard, StripPanel, ZoomControl } from "../../shared/ui/d1c/Layout.tsx";
-import { DataTable } from "../../shared/ui/d1c/Table.tsx";
-import { useZoomLabels } from "../admin/AdminDemos.tsx";
+} from "../../shared/ui/kit/index.ts";
 
 const L = ({ children }: { children: ReactNode }) => <span className="ltr">{children}</span>;
 
@@ -127,9 +130,9 @@ function DaySeparator({ children }: { children: ReactNode }) {
 /** Customers › Tickets (`P.tickets`): the queue, the open conversation, and the customer. */
 export function TicketsDemo({ title }: { title: string }) {
   const { t } = useLingui();
-  const words = useStateWords();
-  const { byId } = useEmployees();
-  const tickets: [string, string, string, WorkState, string][] = [
+  const words = useStatusLabels();
+  const { byId } = useAgents();
+  const tickets: [string, string, string, AgentStatus, string][] = [
     ["TK-88", "Emma R.", t`Where is my order? #3152`, "waityou", "09:05"],
     ["TK-87", "Liam K.", t`Shipping address update`, "running", "08:50"],
     ["TK-86", "Sofia M.", t`Question about A3 print size`, "queued", "08:12"],
@@ -142,7 +145,7 @@ export function TicketsDemo({ title }: { title: string }) {
         <PanelHeader
           title={<Trans>Tickets</Trans>}
           meta={<L>4</L>}
-          actions={<CircleButton label={t`Filter`} icon={<FilterIcon />} />}
+          actions={<CircleButton label={t`Filter`} icon={<FilterGlyph />} />}
         />
         <div className="min-h-0 overflow-auto px-2 pb-2">
           {tickets.map(([id, customer, subject, state, time], index) => (
@@ -154,7 +157,7 @@ export function TicketsDemo({ title }: { title: string }) {
               selected={index === 0}
               foot={
                 <div className="mt-1.5 flex justify-between">
-                  <StateLabel state={state}>{words[state]}</StateLabel>
+                  <Status live status={state} label={words[state]} />
                   <span className="ltr text-caption text-muted">{id}</span>
                 </div>
               }
@@ -167,7 +170,7 @@ export function TicketsDemo({ title }: { title: string }) {
           title={t`Where is my order? #3152`}
           actions={
             <span className="me-4">
-              <StateLabel state="waityou">{words.waityou}</StateLabel>
+              <Status live status="waityou" label={words.waityou} />
             </span>
           }
         />
@@ -217,15 +220,17 @@ export function TicketsDemo({ title }: { title: string }) {
           </div>
         </div>
         <div className="mx-4 mb-4 flex h-14 shrink-0 items-center gap-2 rounded-pill border border-line-strong px-2">
-          <CircleButton label={t`Attach`} icon={<ClipIcon />} />
+          <CircleButton label={t`Attach`} icon={<ClipGlyph />} />
           <span className="flex-1 px-2 text-body text-muted">{t`Edit reply…`}</span>
-          <InkDisc label={t`Send`} icon={<SendIcon size={14} />} />
+          <InkDisc label={t`Send`}>
+            <SendGlyph size={14} />
+          </InkDisc>
         </div>
       </Panel>
       <Panel className="max-sm:hidden">
         <PanelHeader
           title={<Trans>Customer</Trans>}
-          actions={<CircleButton label={t`Customers`} icon={<RightIcon />} />}
+          actions={<CircleButton label={t`Customers`} icon={<NextGlyph />} />}
         />
         <PanelBody className="justify-between gap-6">
           <IdBlock label={t`Customer:`} value={<L>Emma R.</L>} />
@@ -293,7 +298,7 @@ export function CustomersDemo({ title }: { title: string }) {
               [t`Open tickets`, <L key="d">4</L>],
             ]}
           />
-          <MatrixChart
+          <Matrix
             k={4}
             top={t`Loyalty`}
             start={t`Frequency`}
@@ -330,9 +335,7 @@ export function CustomersDemo({ title }: { title: string }) {
               <L key="l">#{3152 + i * 4}</L>,
               <L key="s">{i % 2 === 1 ? "HTZ Home" : "HTZ Prints"}</L>,
               i === 0 ? (
-                <StateLabel key="k" state="waityou">
-                  <L>TK-88</L>
-                </StateLabel>
+                <Status key="k" live status="waityou" label={<L>TK-88</L>} />
               ) : (
                 <span key="k" className="text-muted">
                   —
@@ -342,17 +345,17 @@ export function CustomersDemo({ title }: { title: string }) {
           }))}
         />
       </Panel>
-      <StripPanel
+      <Strip
         title={<Trans>Segments</Trans>}
         meta={<L>8</L>}
-        zoom={<ZoomControl label={zoom} page={0} />}
+        zoom={<Zoom labels={zoom} page={0} />}
         actions={<CircleButton label={t`Search`} icon={<SearchIcon />} />}
       >
         {segments.map(([name, value, tone], i) => (
           <StripCard
             key={name}
-            a={name}
-            b={<L>S-0{i + 1}</L>}
+            topStart={name}
+            topEnd={<L>S-0{i + 1}</L>}
             selected={i === 2}
             line={
               <span className="inline-flex items-center gap-1.5">
@@ -366,7 +369,7 @@ export function CustomersDemo({ title }: { title: string }) {
             </div>
           </StripCard>
         ))}
-      </StripPanel>
+      </Strip>
     </DemoFrame>
   );
 }
@@ -374,7 +377,7 @@ export function CustomersDemo({ title }: { title: string }) {
 /** Customers › Mail (`P.mail`): the inbox, the open message, and the assistant's notes. */
 export function MailDemo({ title }: { title: string }) {
   const { t } = useLingui();
-  const { byId } = useEmployees();
+  const { byId } = useAgents();
   const lia = byId("lia");
   const mail: [string, string, string][] = [
     ["Etsy", t`Your weekly sales summary`, "07:00"],
@@ -393,7 +396,7 @@ export function MailDemo({ title }: { title: string }) {
         <PanelHeader
           title={<Trans>Inbox</Trans>}
           meta={<L>4</L>}
-          actions={<CircleButton label={t`Compose`} icon={<PlusIcon />} />}
+          actions={<CircleButton label={t`Compose`} icon={<PlusGlyph />} />}
         />
         <div className="min-h-0 overflow-auto px-2 pb-2">
           {mail.map(([from, subject, time], index) => (
@@ -424,7 +427,7 @@ export function MailDemo({ title }: { title: string }) {
           <div className="flex gap-2">
             <div className="flex items-center gap-3 rounded-card border border-line-strong py-2 ps-2 pe-3.5">
               <span className="flex size-12 items-center justify-center rounded-[12px] bg-raised">
-                <DocIcon size={20} />
+                <DocGlyph size={20} />
               </span>
               <div>
                 <div className="text-body-sm">
@@ -500,9 +503,9 @@ export function MailDemo({ title }: { title: string }) {
 /** Customers › Marketing (`P.marketing`): the active campaign, clicks per day, and the others. */
 export function MarketingDemo({ title }: { title: string }) {
   const { t } = useLingui();
-  const words = useStateWords();
-  const { byId } = useEmployees();
-  const campaigns: [string, string, WorkState, string][] = [
+  const words = useStatusLabels();
+  const { byId } = useAgents();
+  const campaigns: [string, string, AgentStatus, string][] = [
     ["Q4-HOME", t`Holiday towels`, "idle", t`$3 / day`],
     ["EMAIL-10", t`October newsletter`, "queued", "1,486"],
   ];
@@ -528,7 +531,7 @@ export function MarketingDemo({ title }: { title: string }) {
               [
                 t`Owner:`,
                 <>
-                  <StateGlyph state="offline" />
+                  <StatusGlyph live status="offline" />
                   {byId("gal").name}
                 </>,
               ],
@@ -571,7 +574,7 @@ export function MarketingDemo({ title }: { title: string }) {
                   [
                     t`Status:`,
                     <>
-                      <StateGlyph state={state} />
+                      <StatusGlyph live status={state} />
                       {words[state]}
                     </>,
                   ],

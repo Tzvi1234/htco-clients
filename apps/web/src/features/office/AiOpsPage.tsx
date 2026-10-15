@@ -2,23 +2,23 @@ import { useLingui } from "@lingui/react/macro";
 import type { ReactNode } from "react";
 
 import { GearIcon } from "../../shared/ui/icons.tsx";
-import { DownloadGlyph } from "../../shared/ui/kit/glyphs.tsx";
+import { Panel, PanelBody, PanelHeader } from "../../shared/ui/Panel.tsx";
 import {
-  Cb,
+  CircleButton,
   DemoFrame,
   Dot,
   DotBar,
   DotColumns,
+  DownloadGlyph,
   IdBlock,
   KV,
   KV2,
   N,
   Pill,
+  Stack,
   StatusGlyph,
   Tile,
-} from "../../shared/ui/kit/kit.tsx";
-import { PageHeader } from "../../shared/ui/PageHeader.tsx";
-import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
+} from "../../shared/ui/kit/index.ts";
 
 const DAILY = [0.6, 0.9, 0.7, 1.1, 0.8, 0.5, 0.4, 1.2, 0.9, 0.7, 1.0, 0.8, 0.6, 0.9, 1.92];
 const DAYS = ["1", "", "", "", "5", "", "", "", "", "10", "", "", "", "", "15"];
@@ -27,112 +27,107 @@ const DAYS = ["1", "", "", "", "5", "", "", "", "", "10", "", "", "", "", "15"];
 export function AiOpsPage() {
   const { t } = useLingui();
   return (
-    <>
-      <PageHeader title={t({ message: "AI ops", context: "navigation" })} />
-      <DemoFrame>
-        <div className="k-grid k-l3 k-enter">
-          <Panel>
-            <PanelHeader
-              title={t`AI budget`}
-              meta={t`October`}
-              actions={<Cb label={t`Limits`} icon={GearIcon} />}
-            />
-            <div className="k-pb k-between gap-4">
-              <IdBlock label={t`Spent this month:`} value={<N>$12.40</N>}>
-                <div className="text-caption text-secondary">
-                  {t`of`} <N>$50.00</N>
-                </div>
-              </IdBlock>
-              <DotBar count={50} filled={12} label={t`$12.40 of $50.00 spent`} />
-              <KV
-                items={[
-                  [t`Daily cap`, <N key="a">$5.00</N>],
-                  [t`Today`, <N key="b">$1.92</N>],
-                  [t`Month-end forecast`, <N key="c">$24.80</N>],
-                  [t`Remaining`, <N key="d">$37.60</N>],
-                ]}
-              />
-              <KV2
-                items={[
-                  [
-                    t`Mode:`,
-                    <Pill wide key="m">
-                      <Dot tone="g" />
-                      {t`On budget`}
-                    </Pill>,
-                  ],
-                  [
-                    t`Alert at:`,
-                    <Pill wide key="x">
-                      <Dot tone="o" />
-                      <N>80%</N>
-                    </Pill>,
-                  ],
-                ]}
-              />
+    <DemoFrame title={t({ message: "AI ops", context: "navigation" })} views layout="l3">
+      <Panel>
+        <PanelHeader
+          title={t`AI budget`}
+          meta={t`October`}
+          actions={<CircleButton label={t`Limits`} icon={<GearIcon />} />}
+        />
+        <PanelBody className="justify-between gap-4">
+          <IdBlock label={t`Spent this month:`} value={<N>$12.40</N>}>
+            <div className="text-caption text-secondary">
+              {t`of`} <N>$50.00</N>
             </div>
-          </Panel>
+          </IdBlock>
+          <DotBar count={50} filled={12} label={t`$12.40 of $50.00 spent`} />
+          <KV
+            items={[
+              [t`Daily cap`, <N key="a">$5.00</N>],
+              [t`Today`, <N key="b">$1.92</N>],
+              [t`Month-end forecast`, <N key="c">$24.80</N>],
+              [t`Remaining`, <N key="d">$37.60</N>],
+            ]}
+          />
+          <KV2
+            items={[
+              [
+                t`Mode:`,
+                <Pill wide key="m">
+                  <Dot tone="success" />
+                  {t`On budget`}
+                </Pill>,
+              ],
+              [
+                t`Alert at:`,
+                <Pill wide key="x">
+                  <Dot tone="attention" />
+                  <N>80%</N>
+                </Pill>,
+              ],
+            ]}
+          />
+        </PanelBody>
+      </Panel>
 
-          <Panel>
-            <PanelHeader
-              title={t`Daily spend`}
-              meta={<N>1–15.10</N>}
-              actions={<Cb label={t`Export`} icon={DownloadGlyph} />}
-            />
-            <div className="k-pb items-center justify-center gap-6">
-              <div className="max-w-full overflow-x-auto">
-                <DotColumns
-                  values={DAILY}
-                  rows={14}
-                  highlight={14}
-                  pitch={12}
-                  gap={30}
-                  labels={DAYS}
-                  label={t`Daily AI spend, 1 to 15 October`}
-                />
-              </div>
-              <div className="k-grid4 w-full">
-                <Tile label="Claude" value={<N>$10.10</N>} sub={t`15 employees`} />
-                <Tile label="GPT Images" value={<N>$2.30</N>} sub={t`Nika`} />
-                <Tile label={t`Calls`} value={<N>1,942</N>} sub={t`this month`} />
-                <Tile label={t`Per call`} value={<N>$0.006</N>} />
-              </div>
-            </div>
-          </Panel>
-
-          <div className="k-stack">
-            <ModelCard
-              vendor="Anthropic"
-              model="Claude"
-              note={t`For all employees`}
-              usage="$10.10"
-              usageTone="k"
-              second={[
-                t`Status:`,
-                <>
-                  <StatusGlyph status="running" live />
-                  {t`Healthy`}
-                </>,
-              ]}
-            />
-            <ModelCard
-              vendor="OpenAI"
-              model="GPT Images"
-              note={t`For Nika only`}
-              usage="$2.30"
-              usageTone="o"
-              second={[
-                t`Images:`,
-                <>
-                  <Dot tone="k" />
-                  <N>46</N>
-                </>,
-              ]}
+      <Panel>
+        <PanelHeader
+          title={t`Daily spend`}
+          meta={<N>1–15.10</N>}
+          actions={<CircleButton label={t`Export`} icon={<DownloadGlyph />} />}
+        />
+        <PanelBody className="items-center justify-center gap-6">
+          <div className="max-w-full overflow-x-auto">
+            <DotColumns
+              values={DAILY}
+              rows={14}
+              highlight={14}
+              pitch={12}
+              gap={30}
+              labels={DAYS}
+              label={t`Daily AI spend, 1 to 15 October`}
             />
           </div>
-        </div>
-      </DemoFrame>
-    </>
+          <div className="grid grid-cols-4 gap-2 w-full">
+            <Tile label="Claude" value={<N>$10.10</N>} sub={t`15 employees`} />
+            <Tile label="GPT Images" value={<N>$2.30</N>} sub={t`Nika`} />
+            <Tile label={t`Calls`} value={<N>1,942</N>} sub={t`this month`} />
+            <Tile label={t`Per call`} value={<N>$0.006</N>} />
+          </div>
+        </PanelBody>
+      </Panel>
+
+      <Stack>
+        <ModelCard
+          vendor="Anthropic"
+          model="Claude"
+          note={t`For all employees`}
+          usage="$10.10"
+          usageTone="ink"
+          second={[
+            t`Status:`,
+            <>
+              <StatusGlyph status="running" live />
+              {t`Healthy`}
+            </>,
+          ]}
+        />
+        <ModelCard
+          vendor="OpenAI"
+          model="GPT Images"
+          note={t`For Nika only`}
+          usage="$2.30"
+          usageTone="attention"
+          second={[
+            t`Images:`,
+            <>
+              <Dot tone="ink" />
+              <N>46</N>
+            </>,
+          ]}
+        />
+      </Stack>
+    </DemoFrame>
   );
 }
 
@@ -148,7 +143,7 @@ function ModelCard({
   model: string;
   note: string;
   usage: string;
-  usageTone: "k" | "o";
+  usageTone: "ink" | "attention";
   second: readonly [string, ReactNode];
 }) {
   const { t } = useLingui();
@@ -156,9 +151,9 @@ function ModelCard({
     <Panel>
       <PanelHeader
         title={<N>{vendor}</N>}
-        actions={<Cb label={t`Model settings`} icon={GearIcon} />}
+        actions={<CircleButton label={t`Model settings`} icon={<GearIcon />} />}
       />
-      <div className="k-pb k-between">
+      <PanelBody className="justify-between">
         <IdBlock label={t`Model:`} value={model}>
           <div className="text-caption text-secondary">{note}</div>
         </IdBlock>
@@ -179,7 +174,7 @@ function ModelCard({
             ],
           ]}
         />
-      </div>
+      </PanelBody>
     </Panel>
   );
 }
