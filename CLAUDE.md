@@ -57,8 +57,9 @@ The web app exists (`apps/web`, slice 3.3 part 1). Each command is created by th
 | `pnpm web` | The web app's dev server on http://localhost:5173; add `?demo` (signed in) or `?demo=signed-out` to run it on the in-memory API without a local API server (development builds only) | Slice 3.3 |
 | `pnpm i18n:check` | Lingui catalogs in sync with the code, and no missing Hebrew translation (part of `pnpm check`); `pnpm --filter @htco/web i18n:extract` updates them | Slice 3.3 |
 | `pnpm api:generate` | Regenerate `packages/api-client/generated/schema.d.ts` from the pinned `packages/api-client/openapi.yaml`; a test fails when they drift | Slice 3.6 |
-| `pnpm storybook` | Component previews | Slice 3.4 |
-| `pnpm test:e2e` | Playwright journeys with axe (he/en × light/dark) | Slice 3.3 (part 2) |
+| `pnpm storybook` | Component previews on http://localhost:6006, with Hebrew/English and light/dark in the toolbar | Slice 3.4 |
+| `pnpm test:storybook` | Every story as a Vitest browser test in Chromium: render, play function (keyboard, focus ring), axe | Slice 3.4 |
+| `pnpm test:e2e` | Builds Storybook, then Playwright: every story in he/en × light/dark with axe and a screenshot (screenshots compared only in CI's Linux image; see `docs/features/web-shell/operations.md`); journeys arrive in slice 3.3 part 2 | Slice 3.4 (journeys: 3.3 part 2) |
 | `./gradlew check` | Android: lint, unit and screenshot tests | Slice 16.1 |
 | `dotnet test` | Windows: unit and UI tests | Slice 17.2 |
 

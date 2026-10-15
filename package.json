@@ -18,6 +18,9 @@
     "tokens": "pnpm --filter @htco/design-tokens build",
     "i18n:check": "pnpm --filter @htco/web exec lingui check sync && pnpm --filter @htco/web exec lingui check missing",
     "web": "pnpm --filter @htco/web dev",
+    "storybook": "pnpm --filter @htco/web storybook",
+    "test:storybook": "pnpm --filter @htco/web test:storybook",
+    "test:e2e": "pnpm --filter @htco/web storybook:build && pnpm --filter @htco/web test:e2e",
     "api:generate": "pnpm --filter @htco/api-client generate"
   },
   "devDependencies": {

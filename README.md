@@ -68,9 +68,13 @@ You need Node.js 24 (see `.node-version`) and pnpm; the pnpm version is pinned i
 ```bash
 pnpm install   # dependencies, at least seven days old (minimumReleaseAge)
 pnpm check     # lint, formatting, types and tests: what CI runs
+pnpm web       # the web app on http://localhost:5173 (add ?demo to run it without an API)
+pnpm storybook # component previews on http://localhost:6006, in he/en × light/dark
+pnpm test:storybook  # every story as a browser test: interactions, keyboard, axe
+pnpm test:e2e  # Playwright: every story in he/en × light/dark with axe and screenshots
 ```
 
-The web app's own commands (`pnpm dev`, Storybook, Playwright) arrive with it in Phase 3.
+Browser tests need Chromium once: `pnpm --filter @htco/web exec playwright install chromium`. Screenshots are compared only in CI's Linux image ([operations](docs/features/web-shell/operations.md)).
 
 ## Security
 

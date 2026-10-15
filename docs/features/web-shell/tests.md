@@ -9,6 +9,8 @@
 | Web units | Locale (direction, browser languages, remembered choice), theme (system default, remembered choice, `data-theme`), guarded storage | `apps/web/src/shared/**/*.test.ts` |
 | Web app | Shell and navigation (`aria-current`), Hebrew start, language switch both ways from the account menu, theme choice and return to system, offline banner, not-found recovery | `apps/web/src/app/App.test.tsx` |
 | i18n | Catalogs in sync with the code and complete in Hebrew | `pnpm i18n:check` (`lingui check sync`, `lingui check missing`) |
+| Component stories | Every story renders in Chromium, its play function passes (keyboard reach, focus ring, Enter and Space, typing, announced errors, bidi order) and axe finds no violation (the accessibility addon with `a11y.test: "error"`) | `apps/web/src/shared/ui/*.stories.tsx`, `pnpm test:storybook` (`apps/web/vitest.storybook.config.ts`) |
+| Component matrix | Every story of the built Storybook in he/en × light/dark: no serious or critical axe violation, and a screenshot equal to its baseline | `apps/web/e2e/components/stories.spec.ts`, baselines in `apps/web/e2e/__screenshots__/` |
 | CI | The pipeline itself | `.github/workflows/ci.yml` |
 
 ## Acceptance criteria coverage
@@ -24,7 +26,11 @@
 | AC-3.5.3 | `auth.test.tsx`: "sends an Owner without an authenticator app to set one up...", "asks an enrolled Owner for the code...", "lets other roles in..." |
 | AC-3.5.4 | `auth.test.tsx`: "lists this user's devices and signs another one out" |
 | AC-3.6.1 | `packages/api-client/test/client.test.ts`: "match the pinned OpenAPI document" |
-| AC-3.1.2 | The `tests` job runs Vitest and `ci-gate` requires it (Storybook and axe in part 2) |
+| AC-3.1.2 | The `tests` job runs Vitest and the `storybook` job runs the story tests (interactions, axe) and the component matrix; `ci-gate` requires both |
+| AC-3.4.1 | Every story: axe through the accessibility addon (`pnpm test:storybook`, any violation fails) and `@axe-core/playwright` in he/en × light/dark (`stories.spec.ts`, serious or critical fail) |
+| AC-3.4.2 | `Keyboard` stories of Button, IconButton and TextField, `KeyboardDisabled` (Button), `WithAction` (Banner): Tab reaches the control, the focus ring is the 2 px `--border-focus` outline (or the field's focus border and ring), Enter and Space press |
+| AC-3.4.3 | `stories.spec.ts`: one screenshot per story in he/en × light/dark |
+| AC-3.4.4 | `Ltr.stories.tsx` "Tracking Number In Hebrew": each character of `2024-0042-IL` sits to the right of the one before it, the Hebrew words around it read right to left, and the same number without `Ltr` is reordered (the check can fail) |
 
 ## Verification evidence
 

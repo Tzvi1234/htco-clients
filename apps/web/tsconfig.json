@@ -8,5 +8,5 @@
     "jsx": "react-jsx",
     "types": ["vite/client", "@testing-library/jest-dom/vitest"]
   },
-  "include": ["src", "e2e", "*.config.ts"]
+  "include": ["src", "e2e", ".storybook/*.ts", ".storybook/*.tsx", "*.config.ts"]
 }
