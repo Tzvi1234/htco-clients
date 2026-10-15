@@ -653,6 +653,10 @@ msgstr "Type a command or a page"
 msgid "Unknown device"
 msgstr "Unknown device"
 
+#: src/features/auth/AcceptInvitePage.tsx
+msgid "Use between 12 and 128 characters."
+msgstr "Use between 12 and 128 characters."
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "Use it anywhere"
 msgstr "Use it anywhere"
@@ -674,6 +678,7 @@ msgid "Windows"
 msgstr "Windows"
 
 #: src/app/shell/Navigation.tsx
+#: src/features/team/TeamPage.tsx
 msgid "Workspace"
 msgstr "Workspace"
 
@@ -688,6 +693,11 @@ msgstr "You are not in a workspace yet"
 #: src/app/shell/AppShell.tsx
 msgid "You are offline. What you see may be out of date; changes are paused."
 msgstr "You are offline. What you see may be out of date; changes are paused."
+
+#: src/app/RouteStates.tsx
+#: src/app/shell/UserMenu.tsx
+msgid "You are still signed in. Try signing out again shortly."
+msgstr "You are still signed in. Try signing out again shortly."
 
 #: src/features/auth/AcceptInvitePage.tsx
 msgid "You were invited to HT-Commerce. Choose a password to finish."

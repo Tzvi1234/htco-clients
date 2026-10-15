@@ -24,7 +24,7 @@ export function AppShell() {
       <aside
         className={cx(
           "fixed inset-x-4 bottom-4 z-20 flex gap-1 rounded-pill border border-border-subtle bg-surface p-1.5 shadow-3",
-          "sm:sticky sm:inset-x-auto sm:top-0 sm:bottom-auto sm:h-dvh sm:w-16 sm:shrink-0 sm:flex-col sm:rounded-none sm:border-0 sm:bg-transparent sm:p-0 sm:py-3 sm:shadow-none",
+          "sm:sticky sm:gap-0 sm:inset-x-auto sm:top-0 sm:bottom-auto sm:h-dvh sm:w-16 sm:shrink-0 sm:flex-col sm:rounded-none sm:border-0 sm:bg-transparent sm:p-0 sm:py-3 sm:shadow-none",
           "lg:w-62",
           intro && "animate-sidebar-in",
         )}

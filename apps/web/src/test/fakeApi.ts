@@ -20,6 +20,10 @@ export interface FakeState {
   inviteLink: string;
   /** False: signed in, but not a member of any organization (403 no-membership). */
   member: boolean;
+  /** True: sign-out fails with 503 and the session stays. */
+  signOutFails: boolean;
+  /** Extra organizations the user is Owner of, by ID. */
+  otherOrgs: string[];
   accepted?: Record<string, unknown>;
 }
 
@@ -64,6 +68,8 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
     ],
     invited: [],
     member: true,
+    signOutFails: false,
+    otherOrgs: [],
     inviteLink: "https://example.supabase.co/auth/v1/verify?token=t&type=invite",
     ...initial,
   };
@@ -99,6 +105,21 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
     }
     if (!state.signedIn) return problem(401, "session-ended");
 
+    const orgRoute = /^(GET|POST) \/v1\/organizations\/([^/]+)\/(members|invitations)$/.exec(route);
+    if (orgRoute !== null) {
+      if (orgRoute[3] === "members")
+        return json(200, { items: state.members.map((m) => ({ ...m, shop_ids: [] })) });
+      state.invited.push({ email: body["email"], role: body["role"] });
+      const member = {
+        id: `b0000000-0000-7000-8000-00000000000${String(state.members.length + 1)}`,
+        user_id: `a1b2c3d4-0000-7000-8000-00000000000${String(state.members.length + 1)}`,
+        display_name: null,
+        role: String(body["role"]),
+      };
+      state.members.push(member);
+      return json(201, { ...member, shop_ids: [], invite_link: state.inviteLink });
+    }
+
     switch (route) {
       case "GET /v1/auth/session":
         return json(200, { user_id: user, assurance: state.assurance });
@@ -107,7 +128,10 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
         return json(200, {
           user_id: user,
           assurance: state.assurance,
-          memberships: [{ organization_id: org, role: state.role }],
+          memberships: [
+            { organization_id: org, role: state.role },
+            ...state.otherOrgs.map((id) => ({ organization_id: id, role: "owner" })),
+          ],
         });
       case "GET /v1/auth/mfa":
         return json(200, {
@@ -142,21 +166,9 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
             })),
         });
       case "POST /v1/auth/sign-out":
+        if (state.signOutFails) return problem(503, "auth-unavailable");
         state.signedIn = false;
         return json(204, null);
-      case `GET /v1/organizations/${org}/members`:
-        return json(200, { items: state.members.map((m) => ({ ...m, shop_ids: [] })) });
-      case `POST /v1/organizations/${org}/invitations`: {
-        state.invited.push({ email: body["email"], role: body["role"] });
-        const member = {
-          id: `b0000000-0000-7000-8000-00000000000${String(state.members.length + 1)}`,
-          user_id: `a1b2c3d4-0000-7000-8000-00000000000${String(state.members.length + 1)}`,
-          display_name: null,
-          role: String(body["role"]),
-        };
-        state.members.push(member);
-        return json(201, { ...member, shop_ids: [], invite_link: state.inviteLink });
-      }
       case "GET /v1/shops":
         return json(200, { items: [], next_cursor: null });
       default: {

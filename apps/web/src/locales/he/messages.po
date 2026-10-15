@@ -653,6 +653,10 @@ msgstr "הקלידו פעולה או עמוד"
 msgid "Unknown device"
 msgstr "מכשיר לא מזוהה"
 
+#: src/features/auth/AcceptInvitePage.tsx
+msgid "Use between 12 and 128 characters."
+msgstr "השתמש/י ב-12 עד 128 תווים."
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "Use it anywhere"
 msgstr "בכל מקום"
@@ -674,6 +678,7 @@ msgid "Windows"
 msgstr "Windows"
 
 #: src/app/shell/Navigation.tsx
+#: src/features/team/TeamPage.tsx
 msgid "Workspace"
 msgstr "סביבת עבודה"
 
@@ -688,6 +693,11 @@ msgstr "עדיין אינך חלק מסביבת עבודה"
 #: src/app/shell/AppShell.tsx
 msgid "You are offline. What you see may be out of date; changes are paused."
 msgstr "אין חיבור לאינטרנט. ייתכן שהמידע אינו עדכני; שינויים מושהים."
+
+#: src/app/RouteStates.tsx
+#: src/app/shell/UserMenu.tsx
+msgid "You are still signed in. Try signing out again shortly."
+msgstr "עדיין מחובר/ת. נסה/י להתנתק שוב בעוד רגע."
 
 #: src/features/auth/AcceptInvitePage.tsx
 msgid "You were invited to HT-Commerce. Choose a password to finish."

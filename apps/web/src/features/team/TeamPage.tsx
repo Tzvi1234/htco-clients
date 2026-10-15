@@ -38,6 +38,9 @@ const ROLE_HUES: Record<Role, Hue> = {
 
 const INVITABLE: Role[] = ["admin", "operations", "finance", "support", "developer", "viewer"];
 
+const CHIP =
+  "flex h-8 cursor-default items-center rounded-pill border border-border-subtle px-3 text-body-sm font-medium outline-none transition-colors data-[focus-visible]:ring-2 data-[focus-visible]:ring-focus data-[hovered]:bg-hover data-[selected]:border-transparent data-[selected]:bg-app data-[selected]:text-app-text";
+
 const CARD = "overflow-hidden rounded-card border border-border-subtle bg-surface shadow-1";
 const CARD_HEADER =
   "m-0 border-b border-border-subtle bg-sunken px-4 py-2.5 text-body font-semibold";
@@ -58,11 +61,15 @@ function membersQuery(api: ApiClient, organizationId: string) {
 
 /** Who works in the organization, and inviting someone new (FR-IAM-02). Owners and Admins. */
 export function TeamPage() {
+  const { t } = useLingui();
   const api = useApi();
   const me = useQuery(meQuery(api));
-  const organizationId = me.data?.memberships.find(
-    (m) => m.role === "owner" || m.role === "admin",
-  )?.organization_id;
+  const managed = (me.data?.memberships ?? [])
+    .filter((m) => m.role === "owner" || m.role === "admin")
+    .map((m) => m.organization_id);
+  const [chosen, setChosen] = useState<string | null>(null);
+  // One workspace: that one. Several: the user picks explicitly, never the first by accident.
+  const organizationId = managed.length === 1 ? managed[0] : (chosen ?? undefined);
 
   return (
     <>
@@ -72,12 +79,34 @@ export function TeamPage() {
         icon={<ObjectIcon icon={UsersThree} />}
       />
       <PageBody>
-        {organizationId === undefined ? null : (
-          <div className="flex max-w-[760px] flex-col gap-4">
-            <Invite organizationId={organizationId} />
-            <Members organizationId={organizationId} />
-          </div>
-        )}
+        <div className="flex max-w-[760px] flex-col gap-4">
+          {managed.length > 1 ? (
+            <RadioGroup
+              value={chosen}
+              onChange={setChosen}
+              className="flex flex-col gap-2 rounded-card border border-border-subtle bg-surface p-4 shadow-1"
+            >
+              <Label className="text-body-sm font-medium text-secondary">{t`Workspace`}</Label>
+              <div className="flex flex-wrap gap-2">
+                {managed.map((id) => (
+                  <RadioField key={id} value={id}>
+                    <RadioButton className={CHIP}>
+                      <span dir="ltr" className="font-mono">
+                        {id.slice(0, 8)}
+                      </span>
+                    </RadioButton>
+                  </RadioField>
+                ))}
+              </div>
+            </RadioGroup>
+          ) : null}
+          {organizationId === undefined ? null : (
+            <>
+              <Invite key={organizationId} organizationId={organizationId} />
+              <Members organizationId={organizationId} />
+            </>
+          )}
+        </div>
       </PageBody>
     </>
   );
@@ -215,9 +244,7 @@ function Invite({ organizationId }: { organizationId: string }) {
           <div className="flex flex-wrap gap-2">
             {INVITABLE.map((value) => (
               <RadioField key={value} value={value}>
-                <RadioButton className="flex h-8 cursor-default items-center rounded-pill border border-border-subtle px-3 text-body-sm font-medium outline-none transition-colors data-[focus-visible]:ring-2 data-[focus-visible]:ring-focus data-[hovered]:bg-hover data-[selected]:border-transparent data-[selected]:bg-app data-[selected]:text-app-text">
-                  {roleLabel(value)}
-                </RadioButton>
+                <RadioButton className={CHIP}>{roleLabel(value)}</RadioButton>
               </RadioField>
             ))}
           </div>
