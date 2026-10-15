@@ -1,27 +1,50 @@
 import { useLingui } from "@lingui/react/macro";
-import { useQuery } from "@tanstack/react-query";
+import { useQueries, useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 
 import { meQuery, shopsQuery, useApi } from "../../shared/api/api.tsx";
 import { cx } from "../../shared/lib/cx.ts";
 import { ChevronIcon } from "../../shared/ui/icons.tsx";
 
+interface WorkspaceShops {
+  status: "pending" | "error" | "success";
+  count: number;
+}
+
 /**
- * The shop card at the top of the sidebar (Design 1C `.shop`): which shops the screens show.
- * It says plainly when none is connected, and opens Shops. It becomes a switcher of the user's
- * granted shops once screens filter by shop.
+ * What the card can honestly say from every workspace's shops: there are shops as soon as one
+ * workspace has some; none only when every workspace answered with none; otherwise unknown
+ * (still loading, or a list could not be read).
+ */
+export function shopCardState(workspaces: readonly WorkspaceShops[]): "shops" | "none" | "unknown" {
+  if (workspaces.some(({ status, count }) => status === "success" && count > 0)) return "shops";
+  if (workspaces.length > 0 && workspaces.every(({ status }) => status === "success")) {
+    return "none";
+  }
+  return "unknown";
+}
+
+/**
+ * The shop card at the top of the sidebar (Design 1C `.shop`): the shops of every workspace the
+ * user belongs to. It says "No shop connected" only once every workspace has answered, and opens
+ * Shops. It becomes a switcher of the user's granted shops once screens filter by shop.
  */
 export function ShopSwitcher() {
   const { t } = useLingui();
   const api = useApi();
   const me = useQuery(meQuery(api));
-  const organizationId = me.data?.memberships[0]?.organization_id;
-  const shops = useQuery({
-    ...shopsQuery(api, organizationId ?? ""),
-    enabled: organizationId !== undefined,
+  const organizations = me.data?.memberships.map((m) => m.organization_id) ?? [];
+  const workspaces = useQueries({
+    queries: organizations.map((organizationId) => shopsQuery(api, organizationId)),
+    combine: (results) =>
+      results.map((result): WorkspaceShops => ({
+        status: result.status,
+        count: result.data?.length ?? 0,
+      })),
   });
-  const count = shops.data?.length ?? 0;
-  const name = count > 0 ? t`All shops` : t`No shop connected`;
+  const state = shopCardState(workspaces);
+  const name =
+    state === "shops" ? t`All shops` : state === "none" ? t`No shop connected` : t`Your shops`;
   return (
     <Link
       to="/shops"
@@ -37,7 +60,7 @@ export function ShopSwitcher() {
         aria-hidden="true"
         className="grid size-10 shrink-0 place-items-center rounded-pill bg-inverse text-caption text-on-inverse"
       >
-        {count > 0 ? "AS" : "HT"}
+        {state === "shops" ? "AS" : "HT"}
       </span>
       <span className="min-w-0 grow group-data-[mini]/sb:hidden">
         <span className="block truncate text-body leading-tight">{name}</span>

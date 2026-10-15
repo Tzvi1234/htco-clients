@@ -1284,6 +1284,10 @@ msgstr "החנות רצה. ההחלטה שלך."
 msgid "Your shop runs. You decide<0>.</0>"
 msgstr "החנות רצה. ההחלטה שלך<0>.</0>"
 
+#: src/app/shell/ShopSwitcher.tsx
+msgid "Your shops"
+msgstr "החנויות שלך"
+
 #: src/features/auth/SignInPage.tsx
 msgid "Your shops, orders and AI office in one place."
 msgstr "החנויות, ההזמנות ומשרד ה-AI שלך במקום אחד."
