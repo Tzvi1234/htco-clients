@@ -97,7 +97,10 @@ function PhoneArt({ art }: { art: "office" | "parcel" }) {
         src={src}
         alt=""
         draggable={false}
-        className="auth-art pointer-events-none absolute top-1/2 end-[-28%] w-[118%] max-w-none select-none"
+        className={cx(
+          "auth-art pointer-events-none absolute top-1/2 max-w-none select-none",
+          art === "parcel" ? "end-[-2%] w-[52%]" : "end-[-28%] w-[118%]",
+        )}
       />
     </div>
   );
