@@ -36,7 +36,7 @@ export function AcceptInvitePage() {
   const [tokens] = useState(() => tokensOf(hash));
   const [password, setPassword] = useState("");
   const [repeat, setRepeat] = useState("");
-  const [mismatch, setMismatch] = useState(false);
+  const [problem, setProblem] = useState<"length" | "mismatch" | null>(null);
 
   useEffect(() => {
     if (hash !== "") void router.navigate({ to: "/accept-invite", hash: "", replace: true });
@@ -61,7 +61,8 @@ export function AcceptInvitePage() {
   });
 
   function message(): string | undefined {
-    if (mismatch) return t`The passwords are not the same.`;
+    if (problem === "length") return t`Use between 12 and 128 characters.`;
+    if (problem === "mismatch") return t`The passwords are not the same.`;
     const error = accept.error;
     if (error === null) return undefined;
     if (!(error instanceof ApiError)) return t`This did not work. Try again shortly.`;
@@ -80,9 +81,15 @@ export function AcceptInvitePage() {
   function submit(event: SyntheticEvent) {
     event.preventDefault();
     if (tokens === null) return;
-    const same = password === repeat;
-    setMismatch(!same);
-    if (same) accept.mutate(tokens);
+    // Checked here as the API does, so the user gets a clear answer (Codex review).
+    const next =
+      password.length < 12 || password.length > 128
+        ? "length"
+        : password === repeat
+          ? null
+          : "mismatch";
+    setProblem(next);
+    if (next === null) accept.mutate(tokens);
   }
 
   if (tokens === null) {

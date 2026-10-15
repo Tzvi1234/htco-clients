@@ -1,8 +1,8 @@
 import { Trans } from "@lingui/react/macro";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useRouter } from "@tanstack/react-router";
 
-import { ApiError, useApi } from "../shared/api/api.tsx";
+import { ApiError } from "../shared/api/api.tsx";
+import { useSignOut } from "../shared/api/useSignOut.ts";
 
 import { Button } from "../shared/ui/Button.tsx";
 import { ErrorState } from "../shared/ui/ErrorState.tsx";
@@ -49,16 +49,7 @@ export function NotFound() {
 
 /** Signed in, but no organization has added this account yet: only an invitation helps. */
 function NoWorkspace() {
-  const api = useApi();
-  const queryClient = useQueryClient();
-  const router = useRouter();
-  const signOut = useMutation({
-    mutationFn: () => api.POST("/v1/auth/sign-out"),
-    onSettled: async () => {
-      queryClient.clear();
-      await router.navigate({ to: "/sign-in" });
-    },
-  });
+  const signOut = useSignOut();
   return (
     <ErrorState
       headingLevel={1}
@@ -79,6 +70,11 @@ function NoWorkspace() {
       >
         <Trans>Sign out</Trans>
       </Button>
+      {signOut.isError ? (
+        <p role="alert" className="m-0 text-body-sm text-danger-text">
+          <Trans>You are still signed in. Try signing out again shortly.</Trans>
+        </p>
+      ) : null}
     </ErrorState>
   );
 }

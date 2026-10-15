@@ -192,9 +192,9 @@ describe("signing out when the API is unavailable", () => {
     await screen.findByRole("heading", { level: 1, name: "You are not in a workspace yet" });
     await user.click(screen.getByRole("button", { name: "Sign out" }));
 
-    expect(await screen.findByRole("alert")).toHaveTextContent(
-      "You are still signed in. Try signing out again shortly.",
-    );
+    expect(
+      await screen.findByText("You are still signed in. Try signing out again shortly."),
+    ).toHaveAttribute("role", "alert");
   });
 });
 
