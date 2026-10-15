@@ -1,13 +1,12 @@
 import { Trans, useLingui } from "@lingui/react/macro";
-import { ArrowRightIcon as ArrowRight, EnvelopeIcon as Envelope } from "@phosphor-icons/react";
 import { useMutation } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { useState, type SyntheticEvent } from "react";
 
-import { AuthLayout, FormAlert } from "./AuthLayout.tsx";
+import { AUTH_LINK, AUTH_SUBMIT, AuthLayout, FormAlert } from "./AuthLayout.tsx";
+import { AuthField } from "./fields.tsx";
 import { ApiError, apiError, useApi } from "../../shared/api/api.tsx";
 import { Button } from "../../shared/ui/Button.tsx";
-import { TextField } from "../../shared/ui/TextField.tsx";
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -51,33 +50,40 @@ export function ForgotPasswordPage() {
   }
 
   const backToSignIn = (
-    <Link to="/sign-in" className="text-center text-body-sm font-medium text-link">
+    <Link to="/sign-in" className={AUTH_LINK}>
       <Trans>Back to sign-in</Trans>
     </Link>
   );
 
   if (send.isSuccess) {
     return (
-      <AuthLayout title={<Trans>Check your email</Trans>}>
-        <p role="status" className="m-0 text-center text-secondary">
-          <Trans>If an account exists for this email, we sent a link to reset the password.</Trans>
+      <AuthLayout eyebrow={<Trans>Password</Trans>} title={<Trans>Check your email</Trans>}>
+        <div className="flex items-center gap-4 rounded-card border border-line bg-raised p-4">
+          <SentMark />
+          <p role="status" className="m-0 text-body-sm text-secondary">
+            <Trans>
+              If an account exists for this email, we sent a link to reset the password.
+            </Trans>
+          </p>
+        </div>
+        <p className="m-0 text-caption font-light text-muted">
+          <Trans>The link works once. Check the spam folder if it does not arrive.</Trans>
         </p>
-        {backToSignIn}
+        <div>{backToSignIn}</div>
       </AuthLayout>
     );
   }
 
   return (
     <AuthLayout
+      eyebrow={<Trans>Password</Trans>}
       title={<Trans>Reset your password</Trans>}
       description={<Trans>Enter your email and we will send you a link to choose a new one.</Trans>}
     >
-      <form className="flex flex-col gap-5" onSubmit={submit} noValidate>
-        <TextField
-          size="lg"
-          icon={Envelope}
+      <form className="flex flex-col gap-6" onSubmit={submit} noValidate>
+        <AuthField
           label={t`Email`}
-          placeholder="you@company.com"
+          placeholder="name@company.com"
           type="email"
           autoComplete="username"
           ltr
@@ -86,18 +92,35 @@ export function ForgotPasswordPage() {
           onChange={setEmail}
         />
         <FormAlert message={message()} />
-        <Button
-          type="submit"
-          variant="primary"
-          size="lg"
-          isPending={send.isPending}
-          className="h-11 text-body"
-        >
+        <Button type="submit" variant="primary" isPending={send.isPending} className={AUTH_SUBMIT}>
           <Trans>Send the link</Trans>
-          <ArrowRight aria-hidden="true" size={16} weight="bold" className="rtl:-scale-x-100" />
         </Button>
-        {backToSignIn}
+        <div>{backToSignIn}</div>
       </form>
     </AuthLayout>
+  );
+}
+
+/** A sent letter in a circle, popping in once (the demo's check toast, as a mark). */
+export function SentMark() {
+  return (
+    <span
+      aria-hidden="true"
+      className="auth-mark grid size-12 shrink-0 place-items-center rounded-pill bg-inverse text-on-inverse"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        width="20"
+        height="20"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <rect x="3.5" y="5.5" width="17" height="13" rx="2.5" />
+        <path d="m4.5 7 7.5 6 7.5-6" />
+      </svg>
+    </span>
   );
 }
