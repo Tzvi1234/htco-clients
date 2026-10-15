@@ -125,6 +125,7 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
       if (state.resetNeedsCode && body["code"] !== "123456")
         return problem(401, "mfa-code-refused");
       if (String(body["password"]).includes("weak")) return problem(422, "weak-password");
+      if (body["password"] === state.password) return problem(422, "same-password");
       state.reset = body;
       state.signedIn = true;
       if (state.resetNeedsCode) state.assurance = "aal2";

@@ -140,6 +140,18 @@ describe("setting a new password from the emailed link (AC-3.5.6)", () => {
     );
   });
 
+  it("says when the new password is the current one", async () => {
+    const { user } = await open(link);
+
+    await user.type(screen.getByLabelText("New password"), "correct horse battery");
+    await user.type(screen.getByLabelText("Repeat the password"), "correct horse battery");
+    await user.click(screen.getByRole("button", { name: "Save and sign in" }));
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "This is your current password. Choose a different one.",
+    );
+  });
+
   it("says when the link expired, and offers a new one", async () => {
     await open("/reset-password#error=access_denied&error_code=otp_expired&error_description=x");
 
