@@ -282,6 +282,10 @@ msgstr "Dark"
 msgid "Decisions waiting"
 msgstr "Decisions waiting"
 
+#: src/shared/ui/DemoScreen.tsx
+msgid "DEMO"
+msgstr "DEMO"
+
 #: src/shared/ui/SoonTag.tsx
 msgid "Demo — coming soon"
 msgstr "Demo — coming soon"

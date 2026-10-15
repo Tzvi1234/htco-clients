@@ -46,8 +46,14 @@ function Frame() {
       {panels ? (
         <Outlet />
       ) : (
-        <Panel className={cx("grow", !phone && "overflow-auto")}>
-          <Outlet />
+        <Panel className="grow">
+          {/* The panel clips to its radius; the screen scrolls inside it on wide screens. */}
+          <div
+            data-screen-scroll=""
+            className={cx("flex min-h-0 grow flex-col", !phone && "overflow-auto")}
+          >
+            <Outlet />
+          </div>
         </Panel>
       )}
     </TopBarSlotContext>

@@ -282,6 +282,10 @@ msgstr "כהה"
 msgid "Decisions waiting"
 msgstr "החלטות ממתינות"
 
+#: src/shared/ui/DemoScreen.tsx
+msgid "DEMO"
+msgstr "דמו"
+
 #: src/shared/ui/SoonTag.tsx
 msgid "Demo — coming soon"
 msgstr "הדגמה — בקרוב"

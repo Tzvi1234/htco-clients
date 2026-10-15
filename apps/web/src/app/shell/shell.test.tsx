@@ -152,6 +152,17 @@ describe("the sidebar (Design 1C)", () => {
   });
 });
 
+describe("the screen's panel", () => {
+  it("scrolls an existing screen inside the panel, which clips to its corners", async () => {
+    await open("/settings/team");
+    const scroller = document.querySelector("main [data-screen-scroll]");
+
+    expect(scroller).toHaveClass("overflow-auto");
+    expect(scroller?.parentElement).toHaveClass("overflow-hidden");
+    expect(scroller).toContainElement(screen.getByRole("list", { name: "Members" }));
+  });
+});
+
 describe("routes for every area and tab", () => {
   it.each(
     AREAS.flatMap((area) =>
