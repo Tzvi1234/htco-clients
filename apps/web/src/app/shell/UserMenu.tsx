@@ -34,6 +34,16 @@ function selected(keys: Selection): string | undefined {
   return typeof first === "string" ? first : undefined;
 }
 
+/**
+ * The role the account card can show: the one role every workspace gives, or "several" when
+ * they differ (the card is not tied to a workspace), or none before the account is known.
+ */
+export function accountRole(memberships: readonly { role: string }[]): string | undefined {
+  const roles = new Set(memberships.map(({ role }) => role));
+  if (roles.size === 0) return undefined;
+  return roles.size === 1 ? [...roles][0] : "several";
+}
+
 /** The owner's avatar: an ink circle with the account glyph's initial. */
 function Avatar({ initial }: { initial: string }) {
   return (
@@ -58,7 +68,7 @@ export function UserMenu({ compact = false }: { compact?: boolean }) {
   const signOut = useSignOut();
   const me = useQuery(meQuery(useApi()));
   const roleLabel = useRoleLabel();
-  const role = me.data?.memberships[0]?.role;
+  const role = accountRole(me.data?.memberships ?? []);
   const name = t`Account`;
   const initial = name.slice(0, 1);
 
@@ -89,7 +99,11 @@ export function UserMenu({ compact = false }: { compact?: boolean }) {
               <span className="min-w-0 grow group-data-[mini]/sb:hidden">
                 <span className="block truncate text-body leading-tight">{name}</span>
                 <span className="block truncate text-caption font-light text-muted">
-                  {role === undefined ? " " : roleLabel(role)}
+                  {role === undefined
+                    ? " "
+                    : role === "several"
+                      ? t`Several workspaces`
+                      : roleLabel(role)}
                 </span>
               </span>
               <ChevronIcon

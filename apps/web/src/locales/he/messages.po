@@ -909,6 +909,10 @@ msgctxt "navigation"
 msgid "Settings"
 msgstr "הגדרות"
 
+#: src/app/shell/UserMenu.tsx
+msgid "Several workspaces"
+msgstr "כמה סביבות עבודה"
+
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
 msgid "Shipping"
