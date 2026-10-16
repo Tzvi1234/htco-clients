@@ -50,7 +50,7 @@ export function useRechecks(organizationId: string): Rechecks {
     },
     onSuccess: async (_, shopId) => {
       await queries.invalidateQueries({ queryKey: shopKeys.integrations(organizationId) });
-      setLast({ shopId, feedback: { tone: "done" } });
+      setLast({ shopId, feedback: { tone: "done", at: Date.now() } });
     },
     onError: (error, shopId) => {
       setLast({ shopId, feedback: { tone: "error", message: message(error) } });

@@ -15,8 +15,11 @@ const STATE_GLYPH: Record<CapabilityView["state"], AgentStatus> = {
   unknown: "queued",
 };
 
-/** What the owner sees after pressing "Re-check": done, or why not. */
-export type RecheckFeedback = { tone: "done" } | { tone: "error"; message: string };
+/** What the owner sees after pressing "Re-check": done (at a time), or why not. */
+export type RecheckFeedback = { tone: "done"; at: number } | { tone: "error"; message: string };
+
+/** "Checked just now." shows this long after the check, then the check age says the rest. */
+const DONE_SHOWN_MS = 10_000;
 
 export interface Recheck {
   onPress: () => void;
@@ -155,9 +158,11 @@ export function Capabilities({
         </ul>
       )}
       {recheck?.feedback === undefined ? null : recheck.feedback.tone === "done" ? (
-        <p role="status" className="m-0 text-caption text-secondary">
-          <Trans>Checked just now.</Trans>
-        </p>
+        now - recheck.feedback.at > DONE_SHOWN_MS ? null : (
+          <p role="status" className="m-0 text-caption text-secondary">
+            <Trans>Checked just now.</Trans>
+          </p>
+        )
       ) : (
         <FormAlert message={recheck.feedback.message} />
       )}

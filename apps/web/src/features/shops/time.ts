@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 const DAY = 86_400_000;
 
 /** Whole days until `iso`, rounded down so "within N days" is never later than the truth. */
@@ -17,4 +19,18 @@ export function ago(iso: string, now: number, locale: string): string {
   for (const [unit, size] of units)
     if (Math.abs(seconds) >= size) return format.format(Math.trunc(seconds / size), unit);
   return format.format(0, "second");
+}
+
+/** The current time, moving on every `everyMs`, so relative times on screen stay true. */
+export function useNow(everyMs: number): number {
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setNow(Date.now());
+    }, everyMs);
+    return () => {
+      clearInterval(timer);
+    };
+  }, [everyMs]);
+  return now;
 }

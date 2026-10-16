@@ -6,6 +6,7 @@ import { useState, type ReactNode } from "react";
 import { useConnectEtsy, type ConnectEtsy } from "./connectEtsy.tsx";
 import { ShopCard, needsReconnect, useReconnectLabel } from "./ShopCard.tsx";
 import { useDisconnects, useRechecks } from "./shopActions.tsx";
+import { useNow } from "./time.ts";
 import { TopListings } from "./TopListings.tsx";
 import parcel from "../../assets/commerce/parcel.webp";
 import { FormAlert } from "../auth/AuthLayout.tsx";
@@ -93,6 +94,8 @@ function Shops({
   });
   const reconnectLabel = useReconnectLabel();
   const rechecks = useRechecks(organizationId);
+  // Relative times ("Checked 3 minutes ago") move on while the page stays open (Codex, #31).
+  const clock = useNow(30_000);
   const disconnects = useDisconnects(organizationId);
 
   if (shops.isError)
@@ -202,7 +205,7 @@ function Shops({
                 shop={shop}
                 integration={integration}
                 detailsLoading={seesConnections && integrations.isPending}
-                now={integrations.dataUpdatedAt}
+                now={Math.max(integrations.dataUpdatedAt, clock)}
                 {...(seesConnections
                   ? {
                       onRefresh: () => {
