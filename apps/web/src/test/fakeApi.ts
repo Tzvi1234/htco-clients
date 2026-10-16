@@ -1,6 +1,7 @@
 import { createApiClient, type ApiClient, type components } from "@htco/api-client";
 
 type IntegrationView = components["schemas"]["IntegrationView"];
+type CapabilityView = components["schemas"]["CapabilityView"];
 
 /** The API's sign-in, MFA and identity endpoints in memory, for the web app's tests. */
 export interface FakeBackend {
@@ -58,6 +59,11 @@ export interface FakeState {
   callbackProblem?: string;
   /** The bodies the Etsy callback received, in order. */
   callbacks: unknown[];
+  /** Shops re-checked (`POST …/capability-checks`) and disconnected, in order. */
+  rechecks: string[];
+  disconnects: string[];
+  /** True: a re-check answers 429 capability-check-too-soon (Retry-After 30). */
+  recheckTooSoon: boolean;
 }
 
 const PROBLEMS = "https://ht-co.app/problems/";
@@ -80,6 +86,29 @@ const CALLBACK_STATUS: Record<string, number> = {
 };
 
 const DAY = 86_400_000;
+
+/** What the read-only probes found for a healthy shop whose buyer addresses Etsy shares. */
+export function fakeCapabilities(
+  checkedAt: string,
+  overrides: Partial<Record<CapabilityView["capability"], [CapabilityView["state"], string]>> = {},
+): CapabilityView[] {
+  const found: Record<CapabilityView["capability"], [CapabilityView["state"], string]> = {
+    granted_scopes: ["available", "verified_by_reads"],
+    shop_details: ["available", "read_ok"],
+    receipts_read: ["available", "read_ok"],
+    buyer_address: ["available", "address_fields_present"],
+    listings_read: ["available", "read_ok"],
+    webhooks: ["unavailable", "not_configured"],
+    shipment_write: ["unknown", "no_safe_probe"],
+    ...overrides,
+  };
+  return Object.entries(found).map(([capability, [state, detail]]) => ({
+    capability: capability as CapabilityView["capability"],
+    state,
+    detail,
+    checked_at: checkedAt,
+  }));
+}
 
 /** An Etsy connection in the given health; "expiring" runs out in five days. */
 export function fakeIntegration(
@@ -108,6 +137,10 @@ export function fakeIntegration(
     last_successful_call_at: new Date(now - 4 * 60_000).toISOString(),
     connected_at: "2026-10-01T09:00:00Z",
     updated_at: "2026-10-15T09:00:00Z",
+    disconnected_at: null,
+    purge_after: null,
+    capabilities:
+      health === "disconnected" ? [] : fakeCapabilities(new Date(now - 4 * 60_000).toISOString()),
     ...overrides,
   };
 }
@@ -125,7 +158,12 @@ export function demoShops(): Pick<FakeState, "shops" | "integrations"> {
     shops,
     integrations: [
       fakeIntegration(a, "ok"),
-      fakeIntegration(b, "expiring", { etsy_shop_id: 39_002_114 }),
+      fakeIntegration(b, "expiring", {
+        etsy_shop_id: 39_002_114,
+        capabilities: fakeCapabilities(new Date(Date.now() - 4 * 60_000).toISOString(), {
+          buyer_address: ["unavailable", "address_fields_hidden"],
+        }),
+      }),
       fakeIntegration(c, "needs_reauth", {
         etsy_shop_id: 50_331_907,
         last_successful_call_at: new Date(Date.now() - 2 * DAY).toISOString(),
@@ -134,6 +172,8 @@ export function demoShops(): Pick<FakeState, "shops" | "integrations"> {
         etsy_shop_id: 28_640_515,
         scopes: [],
         last_successful_call_at: null,
+        disconnected_at: new Date(Date.now() - 2 * DAY).toISOString(),
+        purge_after: new Date(Date.now() + 28 * DAY).toISOString(),
       }),
     ],
   };
@@ -183,6 +223,9 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
     authorizationUrl: "https://www.etsy.com/oauth/connect?response_type=code&state=s-1",
     etsyDown: false,
     callbacks: [],
+    rechecks: [],
+    disconnects: [],
+    recheckTooSoon: false,
     ...initial,
   };
   const requests: Request[] = [];
@@ -284,6 +327,59 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
         if (member.user_id === user) state.role = role as FakeState["role"];
         return json(200, { ...member, shop_ids: member.shop_ids ?? [] });
       }
+    }
+
+    // Re-checking what HTCO may do (slice 4.5) and disconnecting (slice 4.7).
+    const shopRoute =
+      /^POST \/v1\/shop-integrations\/([^/]+)\/(capability-checks|disconnect)$/.exec(route);
+    if (shopRoute !== null) {
+      const [, shopId, action] = shopRoute;
+      const index = state.integrations.findIndex((i) => i.shop_id === shopId);
+      const integration = state.integrations[index];
+      if (integration === undefined) return problem(404, "not-found");
+      if (action === "capability-checks") {
+        if (state.role !== "owner" && state.role !== "admin") return problem(403, "forbidden");
+        if (integration.status !== "connected") return problem(409, "shop-not-connected");
+        if (state.recheckTooSoon)
+          return new Response(
+            JSON.stringify({
+              type: PROBLEMS + "capability-check-too-soon",
+              title: "Checked moments ago",
+              status: 429,
+              detail: "x",
+              request_id: "r",
+            }),
+            {
+              status: 429,
+              headers: { "content-type": "application/problem+json", "retry-after": "30" },
+            },
+          );
+        state.rechecks.push(String(shopId));
+        const checkedAt = new Date().toISOString();
+        const capabilities = fakeCapabilities(checkedAt);
+        state.integrations[index] = {
+          ...integration,
+          capabilities,
+          last_successful_call_at: checkedAt,
+        };
+        return json(200, { shop_id: shopId, capabilities });
+      }
+      if (state.role !== "owner") return problem(403, "forbidden");
+      if (state.assurance !== "aal2") return problem(403, "mfa-required");
+      if (!state.steppedUp) return problem(403, "step-up-required");
+      state.disconnects.push(String(shopId));
+      const now = Date.now();
+      const disconnected: IntegrationView = {
+        ...integration,
+        status: "disconnected",
+        token_health: "disconnected",
+        access_expires_at: null,
+        refresh_expires_at: null,
+        disconnected_at: new Date(now).toISOString(),
+        purge_after: new Date(now + 30 * DAY).toISOString(),
+      };
+      state.integrations[index] = disconnected;
+      return json(200, disconnected);
     }
 
     switch (route) {
