@@ -244,14 +244,6 @@ export function ShopCard({
                 </Detail>
               ) : null}
             </dl>
-            {asleep ? null : (
-              <Capabilities
-                shopName={shop.name}
-                integration={integration}
-                now={now}
-                recheck={recheck}
-              />
-            )}
             <KV2
               className="max-sm:grid-cols-1"
               items={[
@@ -284,6 +276,14 @@ export function ShopCard({
                 {reconnect}
                 {disconnect}
               </div>
+            )}
+            {asleep ? null : (
+              <Capabilities
+                shopName={shop.name}
+                integration={integration}
+                now={now}
+                recheck={recheck}
+              />
             )}
           </div>
         )}
