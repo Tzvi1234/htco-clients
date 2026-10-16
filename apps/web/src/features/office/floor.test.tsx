@@ -65,10 +65,9 @@ afterEach(() => {
   scenes.length = 0;
 });
 
-/** Waits (in real time, up to ten seconds: a busy CI runner can take more than two to import the
- * module) until the page has built its scene from the imported module. */
+/** Waits (in real time) until the page has built its scene from the imported module. */
 async function sceneBuilt() {
-  for (let i = 0; i < 200 && scenes.length === 0; i++)
+  for (let i = 0; i < 40 && scenes.length === 0; i++)
     await act(() => new Promise((resolve) => setTimeout(resolve, 50)));
   expect(scenes).toHaveLength(1);
 }
@@ -85,7 +84,7 @@ function openFloor() {
   );
 }
 
-describe("the live office map", { timeout: 20_000 }, () => {
+describe("the live office map", () => {
   // First: the scene module is imported only once per file, so only this test sees it load.
   it("builds the scene with the motion setting of when it arrives, not of when it was asked for", async () => {
     const setReduce = motionSetting(false);
