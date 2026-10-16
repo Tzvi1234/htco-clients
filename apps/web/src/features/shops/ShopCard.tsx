@@ -6,6 +6,8 @@ import type { IntegrationView, ShopView } from "../../shared/api/api.tsx";
 import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
 import { cx } from "../../shared/lib/cx.ts";
 import { Ltr } from "../../shared/ui/Ltr.tsx";
+import { Capabilities, type Recheck } from "./Capabilities.tsx";
+import { ago, daysLeft } from "./time.ts";
 import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
 import {
   CircleButton,
@@ -21,27 +23,6 @@ import {
   type AgentStatus,
   type DotTone,
 } from "../../shared/ui/kit/index.ts";
-
-const DAY = 86_400_000;
-
-/** Whole days until `iso`, rounded down so "within N days" is never later than the truth. */
-export function daysLeft(iso: string, now: number): number {
-  return Math.max(0, Math.floor((Date.parse(iso) - now) / DAY));
-}
-
-/** "4 minutes ago", "yesterday": the largest whole unit, in the user's language. */
-export function ago(iso: string, now: number, locale: string): string {
-  const seconds = Math.round((Date.parse(iso) - now) / 1000);
-  const format = new Intl.RelativeTimeFormat(locale, { numeric: "auto" });
-  const units: [Intl.RelativeTimeFormatUnit, number][] = [
-    ["day", 86_400],
-    ["hour", 3_600],
-    ["minute", 60],
-  ];
-  for (const [unit, size] of units)
-    if (Math.abs(seconds) >= size) return format.format(Math.trunc(seconds / size), unit);
-  return format.format(0, "second");
-}
 
 /** The connection's status as the demo's status glyph: the shape carries it, not the colour. */
 const STATUS_GLYPH: Record<IntegrationView["status"], AgentStatus> = {
@@ -100,6 +81,8 @@ export function ShopCard({
   now,
   reconnect,
   onRefresh,
+  recheck,
+  disconnect,
   detailsLoading = false,
 }: {
   shop: ShopView;
@@ -112,6 +95,10 @@ export function ShopCard({
   reconnect?: ReactNode;
   /** Loads the connection details again (Owners and Admins). */
   onRefresh?: () => void;
+  /** Owners and Admins: probe what HTCO can do again (slice 4.5). */
+  recheck?: Recheck;
+  /** The Owner's disconnect button (slice 4.7). */
+  disconnect?: ReactNode;
 }) {
   const { t } = useLingui();
   const { locale } = useLocale();
@@ -249,6 +236,13 @@ export function ShopCard({
                   </ul>
                 )}
               </Detail>
+              {asleep && integration.purge_after != null ? (
+                <Detail label={<Trans>Data</Trans>}>
+                  <time dateTime={integration.purge_after}>
+                    {t`Data deleted after ${new Intl.DateTimeFormat(locale, { dateStyle: "medium" }).format(new Date(integration.purge_after))}`}
+                  </time>
+                </Detail>
+              ) : null}
             </dl>
             <KV2
               className="max-sm:grid-cols-1"
@@ -277,10 +271,19 @@ export function ShopCard({
                 ],
               ]}
             />
-            {reconnect === undefined ? null : (
-              <div className="flex justify-center [&>*]:min-w-[200px] max-sm:[&>*]:w-full">
+            {reconnect === undefined && disconnect === undefined ? null : (
+              <div className="flex flex-wrap justify-center gap-2 [&>*]:min-w-[200px] max-sm:[&>*]:w-full">
                 {reconnect}
+                {disconnect}
               </div>
+            )}
+            {asleep ? null : (
+              <Capabilities
+                shopName={shop.name}
+                integration={integration}
+                now={now}
+                recheck={recheck}
+              />
             )}
           </div>
         )}

@@ -18,3 +18,6 @@
 | Every callback problem | `explains %s` (seven problem slugs), `says when the owner cancelled on Etsy…`, `says when the address has no code` |
 | Card states | `shows a healthy connection…`, `asks to reconnect before an expiring connection runs out`, `asks to reconnect a connection Etsy no longer accepts`, `shows a disconnected shop`, `reconnects through Etsy`, Admin and other roles |
 | Trademark notice | `shows Etsy's trademark notice` |
+| Capabilities (4.5, AC-4.6.1) | `lists each capability in plain words with when it was checked`, `explains the allowed alternative for what is blocked or not known`, `says when nothing was checked yet`, `offers no re-check for a disconnected shop` |
+| Re-check | `re-checks on request and says it is done`, `says when to try again after a re-check moments ago`, `lets an Admin re-check` |
+| Disconnect (4.7) | `asks for confirmation and does nothing when cancelled`, `confirms with the authenticator code, then shows the shop disconnected`, `disconnects at once after a recent confirmation`, `does not offer an Admin to disconnect`, `shows when a disconnected shop's data is deleted` |

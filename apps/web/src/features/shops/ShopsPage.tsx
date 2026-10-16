@@ -5,6 +5,8 @@ import { useState, type ReactNode } from "react";
 
 import { useConnectEtsy, type ConnectEtsy } from "./connectEtsy.tsx";
 import { ShopCard, needsReconnect, useReconnectLabel } from "./ShopCard.tsx";
+import { useDisconnects, useRechecks } from "./shopActions.tsx";
+import { useNow } from "./time.ts";
 import { TopListings } from "./TopListings.tsx";
 import parcel from "../../assets/commerce/parcel.webp";
 import { FormAlert } from "../auth/AuthLayout.tsx";
@@ -91,6 +93,10 @@ function Shops({
     enabled: seesConnections,
   });
   const reconnectLabel = useReconnectLabel();
+  const rechecks = useRechecks(organizationId);
+  // Relative times ("Checked 3 minutes ago") move on while the page stays open (Codex, #31).
+  const clock = useNow(30_000);
+  const disconnects = useDisconnects(organizationId);
 
   if (shops.isError)
     return (
@@ -159,6 +165,21 @@ function Shops({
         )}
       </p>,
     );
+  if (disconnects.done !== undefined)
+    notices.push(
+      <p
+        key="disconnected"
+        role="status"
+        className="m-0 inline-flex h-10 items-center gap-2 rounded-pill bg-inverse ps-3 pe-5 text-body-sm text-on-inverse motion-safe:animate-pop-in"
+      >
+        <span className="flex size-6 items-center justify-center rounded-pill bg-accent text-on-accent">
+          <CheckGlyph size={12} />
+        </span>
+        {t`${disconnects.done} is disconnected.`}
+      </p>,
+    );
+  if (disconnects.message !== undefined)
+    notices.push(<FormAlert key="disconnect-failed" message={disconnects.message} />);
   if (integrations.isError)
     notices.push(
       <div key="details" className="flex flex-wrap items-center gap-3">
@@ -184,12 +205,42 @@ function Shops({
                 shop={shop}
                 integration={integration}
                 detailsLoading={seesConnections && integrations.isPending}
-                now={integrations.dataUpdatedAt}
+                now={Math.max(integrations.dataUpdatedAt, clock)}
                 {...(seesConnections
                   ? {
                       onRefresh: () => {
                         void integrations.refetch();
                       },
+                    }
+                  : {})}
+                {...(seesConnections && integration?.status === "connected"
+                  ? {
+                      recheck: {
+                        onPress: () => {
+                          rechecks.run(shop.id);
+                        },
+                        pending: rechecks.pendingShop === shop.id,
+                        feedback: rechecks.feedbackFor(shop.id),
+                      },
+                    }
+                  : {})}
+                {...(etsy !== undefined &&
+                integration !== undefined &&
+                integration.status !== "disconnected"
+                  ? {
+                      disconnect: (
+                        <Button
+                          variant="ghost"
+                          size="lg"
+                          aria-label={t`Disconnect ${shop.name}`}
+                          isPending={disconnects.pendingShop === shop.id}
+                          onPress={() => {
+                            disconnects.ask(shop);
+                          }}
+                        >
+                          <Trans>Disconnect</Trans>
+                        </Button>
+                      ),
                     }
                   : {})}
                 {...(etsy !== undefined && needsReconnect(integration)
@@ -216,6 +267,7 @@ function Shops({
         </div>
         <TopListings />
       </Screen>
+      {disconnects.dialogs}
     </>
   );
 }

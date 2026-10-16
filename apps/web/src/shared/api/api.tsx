@@ -111,6 +111,7 @@ export function safeRedirect(target: unknown): string {
 
 export type ShopView = components["schemas"]["ShopView"];
 export type IntegrationView = components["schemas"]["IntegrationView"];
+export type CapabilityView = components["schemas"]["CapabilityView"];
 
 export const shopKeys = {
   all: ["shops"] as const,
