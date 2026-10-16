@@ -1,6 +1,6 @@
 import { focusManager } from "@tanstack/react-query";
 import { createMemoryHistory } from "@tanstack/react-router";
-import { render, screen, within } from "@testing-library/react";
+import { act, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { StrictMode } from "react";
 import { describe, expect, it, vi } from "vitest";
@@ -513,5 +513,28 @@ describe("disconnecting a shop (slice 4.7)", () => {
     const card = await screen.findByRole("article", { name: "Old Harbor Goods" });
     expect(within(card).getByText(/Data deleted after/)).toBeInTheDocument();
     expect(within(card).queryByRole("button", { name: /^Disconnect/ })).not.toBeInTheDocument();
+  });
+});
+
+describe("Codex review of #31", () => {
+  it("keeps the check age current and lets the done message go while the page stays open", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true, toFake: ["Date", "setInterval", "clearInterval"] });
+    try {
+      const { backend } = await open("/shops", { ...owner, ...demoShops() });
+      const user = userEvent.setup({ advanceTimers: (ms) => vi.advanceTimersByTime(ms) });
+      const card = await screen.findByRole("article", { name: "Willow & Wick" });
+      await user.click(within(card).getByRole("button", { name: recheckLabel("Willow & Wick") }));
+      expect(await within(card).findByRole("status")).toHaveTextContent("Checked just now.");
+      expect(backend.state.rechecks).toHaveLength(1);
+
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(3 * 60_000);
+      });
+
+      expect(within(card).getByText(/Checked 3 minutes ago/)).toBeInTheDocument();
+      expect(within(card).queryByText("Checked just now.")).not.toBeInTheDocument();
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });
