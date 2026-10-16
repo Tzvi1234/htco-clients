@@ -363,7 +363,7 @@ describe("what HTCO can do with the shop (slice 4.5)", () => {
       "Instant order alerts",
       "Tracking upload",
     ]);
-    const orders = items[2] as HTMLElement;
+    const orders = within(list).getByText("Orders").closest("li") as HTMLElement;
     expect(within(orders).getByText("Works")).toBeInTheDocument();
     expect(within(card).getByText(/Checked 4 minutes ago/)).toBeInTheDocument();
   });

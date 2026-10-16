@@ -105,14 +105,20 @@ export function useConnectEtsy(): ConnectEtsy {
 }
 
 /** "Confirm it is you": the 6-digit code that opens a ten-minute window for sensitive actions. */
-function StepUpDialog({
+export function StepUpDialog({
   isOpen,
   onClose,
   onConfirmed,
+  context,
+  purpose,
 }: {
   isOpen: boolean;
   onClose: () => void;
   onConfirmed: () => void;
+  /** The small line above the title: what is being confirmed (default: connecting a shop). */
+  context?: ReactNode;
+  /** What the code is for, after "Enter the 6-digit code…". */
+  purpose?: ReactNode;
 }) {
   const api = useApi();
   const codeMessage = useCodeMessage();
@@ -152,7 +158,7 @@ function StepUpDialog({
           <form className="flex flex-col gap-6" onSubmit={submit} noValidate>
             <div className="flex flex-col gap-1.5 text-start">
               <p className="m-0 text-caption font-light text-muted">
-                <Trans>Connect an Etsy shop</Trans>
+                {context ?? <Trans>Connect an Etsy shop</Trans>}
               </p>
               <Heading
                 slot="title"
@@ -161,9 +167,11 @@ function StepUpDialog({
                 <Trans>Confirm it is you</Trans>
               </Heading>
               <p className="m-0 text-body-sm text-secondary">
-                <Trans>
-                  Enter the 6-digit code from your authenticator app to connect the shop.
-                </Trans>
+                {purpose ?? (
+                  <Trans>
+                    Enter the 6-digit code from your authenticator app to connect the shop.
+                  </Trans>
+                )}
               </p>
             </div>
             <CodeBoxes value={code} onChange={setCode} autoFocus invalid={confirm.isError} />

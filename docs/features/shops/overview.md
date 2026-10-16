@@ -3,19 +3,19 @@
 | | |
 |---|---|
 | **Slug** | `shops` |
-| **Phase / slices** | Phase 4 — slices 4.3 (connect flow, web side) and 4.6 (Shops UI, first part) |
+| **Phase / slices** | Phase 4 — slices 4.3 (connect flow, web side), 4.5 (capabilities on the card), 4.6 (Shops UI) and 4.7 (disconnect, web side) |
 | **Platform side** | [htco-platform `docs/features/etsy-integration/`](https://github.com/Tzvi1234/htco-platform/tree/main/docs/features/etsy-integration) |
 | **Status** | In progress |
-| **Last updated** | 2026-10-15 |
+| **Last updated** | 2026-10-16 |
 
 ## What and why
 
-The Owner connects an Etsy shop from the web app and then sees, per shop, whether the connection works, what HTCO may read, how healthy the connection's tokens are and when it last synced, in plain words. Owners and Admins see the connection details; other roles see the shops they were granted.
+The Owner connects an Etsy shop from the web app and then sees, per shop, whether the connection works, what HTCO may read, what HTCO can do with the shop (each capability checked by the server's read-only probes, with the allowed alternative for anything blocked or not known), how healthy the connection's tokens are and when it last synced, in plain words. Owners and Admins can re-check; the Owner can disconnect. HTCO never writes to Etsy. Owners and Admins see the connection details; other roles see the shops they were granted.
 
 ## Users and actors
 
-- **Owner:** connects and reconnects shops (two factors, and a code from the authenticator app within the last ten minutes).
-- **Admin:** sees every shop's connection, cannot connect.
+- **Owner:** connects, reconnects and disconnects shops (two factors, and a code from the authenticator app within the last ten minutes); re-checks capabilities.
+- **Admin:** sees every shop's connection and re-checks capabilities; cannot connect or disconnect.
 - **Other roles:** see their granted shops without connection details.
 
 ## Acceptance criteria
@@ -28,7 +28,10 @@ The Owner connects an Etsy shop from the web app and then sees, per shop, whethe
 | — | Without a recent second factor, connecting asks for the authenticator code and continues | 4.3 | Pass |
 | AC-4.4.2 (card part) | `needs_reauth` is shown on the shop card with a Reconnect action | 4.6 | Pass |
 | AC-4.6.2 | All card states have screenshot tests in he/en × light/dark | 4.6 | Open (needs the Playwright/Storybook setup) |
-| AC-4.6.1 | Capability-blocked states explain the alternative | 4.6 | Open (capabilities arrive with 4.5) |
+| AC-4.6.1 | Capability-blocked states explain the alternative | 4.6 | Pass (`explains the allowed alternative for what is blocked or not known`) |
+| AC-4.5.1 (web) | Capabilities shown with when they were checked; "Works" only as the server reports it | 4.5 | Pass |
+| — | Re-check by Owner and Admin, with feedback (done, too soon with the wait, not connected) | 4.5 | Pass |
+| — | Disconnect: confirmation dialog, then the authenticator code when needed; the card shows the disconnected state, the data deletion date and Reconnect | 4.7 | Pass |
 
 ## External facts learned
 
@@ -37,5 +40,6 @@ The Owner connects an Etsy shop from the web app and then sees, per shop, whethe
 
 ## Known limits
 
-- No capabilities (slice 4.5), no disconnect (slice 4.7), no overview banner for a connection that needs reconnecting yet.
+- No overview banner for a connection that needs reconnecting yet.
+- "Instant order alerts" stays "Blocked" until Phase 5 sets up Etsy webhooks; "Tracking upload" is always "Not known" (the server never probes a write).
 - Connecting asks the API with no workspace parameter; the API connects to the Owner's workspace.

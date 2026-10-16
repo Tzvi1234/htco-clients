@@ -5,7 +5,8 @@
 | Screen | States | Platforms |
 |---|---|---|
 | Shops (`/shops`) | loading (skeleton cards) · empty (record-table shape, Connect for the Owner, "The workspace owner connects shops." for others) · populated (shop cards) · error (retry) · connected / reconnected confirmation · several workspaces (picker) | web |
-| Shop card | connected (renews automatically) · expiring ("Reconnect within N days") · needs reconnecting · disconnected · no connection details (roles below Admin) | web |
+| Shop card | connected (renews automatically) · expiring ("Reconnect within N days") · needs reconnecting · disconnected (data deletion date, Reconnect) · no connection details (roles below Admin) · capabilities (not checked yet · checked, with Works / Blocked / Not known and the alternative) · re-checking · re-check done / too soon / failed | web |
+| Disconnect confirmation | asking (what is deleted and when) · code dialog when the confirmation is older than ten minutes · disconnected confirmation · refused | web |
 | Code dialog | asking · wrong code · too many attempts | web |
 | Etsy return (`/integrations/etsy/callback`) | connecting · cancelled on Etsy · incomplete link · one message per problem (`etsy-state-rejected`, `etsy-authorization-refused`, `etsy-unreachable`, `etsy-no-shop`, `etsy-shop-connected-elsewhere`, `web-session-required`, `etsy-unavailable`) | web |
 
@@ -29,6 +30,8 @@ The card is a white card (radius 12, hairline, faintest shadow): the shop's icon
 | `POST /v1/shops/etsy/connect` | Etsy's consent address | `step-up-required` opens the code dialog, then the request is sent again; only https or same-origin addresses are followed |
 | `POST /v1/auth/step-up` | The authenticator code | Opens a ten-minute window |
 | `POST /v1/integrations/etsy/callback` | Finish connecting | Sent once; invalidates the shop queries |
+| `POST /v1/shop-integrations/{shop_id}/capability-checks` | Re-check what HTCO can do | Owner and Admin, connected shops; 429 `capability-check-too-soon` shows the `Retry-After` wait; refetches the connection details |
+| `POST /v1/shop-integrations/{shop_id}/disconnect` | Disconnect | Owner; after the confirmation dialog; `step-up-required` opens the code dialog and the request is sent again; refetches shops and connection details |
 
 ## Client state
 
@@ -40,4 +43,6 @@ Server state in TanStack Query (`["shops", organizationId]`, `["shops", organiza
 |---|---|---|
 | Cards instead of the record table once shops exist | Table rows | The owner asked for an Attio-like card per shop; few shops per workspace |
 | Days left rounded down | Rounded up | "Reconnect within N days" must never promise more time than there is |
-| Reconnect also offered when disconnected | Only for expiring and needs reconnecting | A disconnected shop has no other way back until disconnect/reconnect lands in 4.7 |
+| Reconnect also offered when disconnected | Only for expiring and needs reconnecting | Reconnecting is the way back after a disconnect (4.7) |
+| Capabilities as a list with the alternative under anything not working | Pills only | AC-4.6.1 asks for the allowed alternative in words; the glyph's shape (filled, square, dashed ring) carries the state besides colour |
+| A confirmation dialog before the code dialog | Code dialog only | Disconnecting stops syncing at once; the owner should read what happens first |
