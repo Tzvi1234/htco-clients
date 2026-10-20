@@ -1,6 +1,6 @@
 import { focusManager } from "@tanstack/react-query";
 import { createMemoryHistory } from "@tanstack/react-router";
-import { render, screen, within } from "@testing-library/react";
+import { act, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { StrictMode } from "react";
 import { describe, expect, it, vi } from "vitest";
@@ -342,5 +342,199 @@ describe("Codex review findings", () => {
     await vi.waitFor(() => {
       expect(screen.queryByText("Your Etsy shop is connected.")).not.toBeInTheDocument();
     });
+  });
+});
+
+const recheckLabel = (name: string) => `Re-check what HTCO can do with ${name}`;
+
+describe("what HTCO can do with the shop (slice 4.5)", () => {
+  it("lists each capability in plain words with when it was checked", async () => {
+    await open("/shops", { ...owner, ...demoShops() });
+
+    const card = await screen.findByRole("article", { name: "Willow & Wick" });
+    const list = within(card).getByRole("list", { name: "What HTCO can do" });
+    const items = within(list).getAllByRole("listitem");
+    expect(items.map((item) => item.querySelector("[data-capability]")?.textContent)).toEqual([
+      "Approved access",
+      "Shop details",
+      "Orders",
+      "Buyer addresses",
+      "Listings",
+      "Instant order alerts",
+      "Tracking upload",
+    ]);
+    const orders = within(list).getByText("Orders").closest("li") as HTMLElement;
+    expect(within(orders).getByText("Works")).toBeInTheDocument();
+    expect(within(card).getByText(/Checked 4 minutes ago/)).toBeInTheDocument();
+  });
+
+  it("explains the allowed alternative for what is blocked or not known", async () => {
+    await open("/shops", { ...owner, ...demoShops() });
+
+    const card = await screen.findByRole("article", { name: "Linen Lane Studio" });
+    const list = within(card).getByRole("list", { name: "What HTCO can do" });
+    const tracking = within(list).getByText("Tracking upload").closest("li") as HTMLElement;
+    expect(within(tracking).getByText("Not known")).toBeInTheDocument();
+    expect(
+      within(tracking).getByText(
+        "HTCO never writes to your shop. AutoVA uploads tracking to Etsy; HTCO reads it there.",
+      ),
+    ).toBeInTheDocument();
+    const addresses = within(list).getByText("Buyer addresses").closest("li") as HTMLElement;
+    expect(within(addresses).getByText("Blocked")).toBeInTheDocument();
+    expect(
+      within(addresses).getByText(
+        "Etsy hides buyer addresses for this shop. Your fulfillment partner gets them from Etsy; HTCO does not need them.",
+      ),
+    ).toBeInTheDocument();
+    const alerts = within(list).getByText("Instant order alerts").closest("li") as HTMLElement;
+    expect(
+      within(alerts).getByText(
+        "Not set up yet. HTCO checks Etsy for new orders regularly instead.",
+      ),
+    ).toBeInTheDocument();
+  });
+
+  it("re-checks on request and says it is done", async () => {
+    const { user, backend } = await open("/shops", { ...owner, ...demoShops() });
+
+    const card = await screen.findByRole("article", { name: "Willow & Wick" });
+    await user.click(within(card).getByRole("button", { name: recheckLabel("Willow & Wick") }));
+
+    expect(await within(card).findByRole("status")).toHaveTextContent("Checked just now.");
+    expect(backend.state.rechecks).toEqual(["d0000000-0000-7000-8000-000000000001"]);
+    expect(within(card).getByText(/Checked now/)).toBeInTheDocument();
+  });
+
+  it("says when to try again after a re-check moments ago", async () => {
+    const { user } = await open("/shops", { ...owner, ...demoShops(), recheckTooSoon: true });
+
+    const card = await screen.findByRole("article", { name: "Willow & Wick" });
+    await user.click(within(card).getByRole("button", { name: recheckLabel("Willow & Wick") }));
+
+    expect(await within(card).findByRole("alert")).toHaveTextContent(
+      "Checked moments ago. Try again in 30 seconds.",
+    );
+  });
+
+  it("lets an Admin re-check", async () => {
+    await open("/shops", { ...owner, role: "admin", ...demoShops() });
+
+    const card = await screen.findByRole("article", { name: "Willow & Wick" });
+    expect(
+      within(card).getByRole("button", { name: recheckLabel("Willow & Wick") }),
+    ).toBeInTheDocument();
+  });
+
+  it("offers no re-check for a disconnected shop", async () => {
+    await open("/shops", { ...owner, ...demoShops() });
+
+    const card = await screen.findByRole("article", { name: "Old Harbor Goods" });
+    expect(within(card).queryByRole("button", { name: /Re-check/ })).not.toBeInTheDocument();
+    expect(within(card).queryByRole("list", { name: "What HTCO can do" })).not.toBeInTheDocument();
+  });
+
+  it("says when nothing was checked yet", async () => {
+    const { shops, integrations } = demoShops();
+    await open("/shops", {
+      ...owner,
+      shops,
+      integrations: integrations.map((i) => ({ ...i, capabilities: [] })),
+    });
+
+    const card = await screen.findByRole("article", { name: "Willow & Wick" });
+    expect(within(card).getByText("Not checked yet.")).toBeInTheDocument();
+  });
+});
+
+describe("disconnecting a shop (slice 4.7)", () => {
+  const disconnectLabel = "Disconnect Willow & Wick";
+
+  it("asks for confirmation and does nothing when cancelled", async () => {
+    const { user, backend } = await open("/shops", { ...owner, ...demoShops() });
+
+    const card = await screen.findByRole("article", { name: "Willow & Wick" });
+    await user.click(within(card).getByRole("button", { name: disconnectLabel }));
+    const dialog = await screen.findByRole("alertdialog", { name: "Disconnect Willow & Wick?" });
+    expect(dialog).toHaveTextContent(
+      "HTCO deletes its access to this shop at once and stops syncing. The shop's data in HTCO is deleted after 30 days unless you reconnect.",
+    );
+    await user.click(within(dialog).getByRole("button", { name: "Cancel" }));
+
+    await vi.waitFor(() => {
+      expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument();
+    });
+    expect(backend.state.disconnects).toEqual([]);
+  });
+
+  it("confirms with the authenticator code, then shows the shop disconnected", async () => {
+    const { user, backend } = await open("/shops", { ...owner, ...demoShops() });
+
+    const card = await screen.findByRole("article", { name: "Willow & Wick" });
+    await user.click(within(card).getByRole("button", { name: disconnectLabel }));
+    const confirm = await screen.findByRole("alertdialog", { name: "Disconnect Willow & Wick?" });
+    await user.click(within(confirm).getByRole("button", { name: "Disconnect" }));
+    const code = await screen.findByRole("dialog", { name: "Confirm it is you" });
+    await user.type(within(code).getByLabelText("Code from the app"), "123456");
+    await user.click(within(code).getByRole("button", { name: "Confirm" }));
+
+    expect(await screen.findByText("Willow & Wick is disconnected.")).toBeInTheDocument();
+    expect(backend.state.disconnects).toEqual(["d0000000-0000-7000-8000-000000000001"]);
+    const after = screen.getByRole("article", { name: "Willow & Wick" });
+    expect(await within(after).findByText("Disconnected")).toBeInTheDocument();
+    expect(within(after).getByText(/Data deleted after/)).toBeInTheDocument();
+    expect(within(after).getByRole("button", { name: /Reconnect/ })).toBeInTheDocument();
+    expect(within(after).queryByRole("button", { name: disconnectLabel })).not.toBeInTheDocument();
+  });
+
+  it("disconnects at once after a recent confirmation", async () => {
+    const { user, backend } = await open("/shops", { ...owner, ...demoShops(), steppedUp: true });
+
+    const card = await screen.findByRole("article", { name: "Willow & Wick" });
+    await user.click(within(card).getByRole("button", { name: disconnectLabel }));
+    const confirm = await screen.findByRole("alertdialog", { name: "Disconnect Willow & Wick?" });
+    await user.click(within(confirm).getByRole("button", { name: "Disconnect" }));
+
+    expect(await screen.findByText("Willow & Wick is disconnected.")).toBeInTheDocument();
+    expect(screen.queryByRole("dialog", { name: "Confirm it is you" })).not.toBeInTheDocument();
+    expect(backend.state.disconnects).toHaveLength(1);
+  });
+
+  it("does not offer an Admin to disconnect", async () => {
+    await open("/shops", { ...owner, role: "admin", ...demoShops() });
+
+    const card = await screen.findByRole("article", { name: "Willow & Wick" });
+    expect(within(card).queryByRole("button", { name: disconnectLabel })).not.toBeInTheDocument();
+  });
+
+  it("shows when a disconnected shop's data is deleted", async () => {
+    await open("/shops", { ...owner, ...demoShops() });
+
+    const card = await screen.findByRole("article", { name: "Old Harbor Goods" });
+    expect(within(card).getByText(/Data deleted after/)).toBeInTheDocument();
+    expect(within(card).queryByRole("button", { name: /^Disconnect/ })).not.toBeInTheDocument();
+  });
+});
+
+describe("Codex review of #31", () => {
+  it("keeps the check age current and lets the done message go while the page stays open", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true, toFake: ["Date", "setInterval", "clearInterval"] });
+    try {
+      const { backend } = await open("/shops", { ...owner, ...demoShops() });
+      const user = userEvent.setup({ advanceTimers: (ms) => vi.advanceTimersByTime(ms) });
+      const card = await screen.findByRole("article", { name: "Willow & Wick" });
+      await user.click(within(card).getByRole("button", { name: recheckLabel("Willow & Wick") }));
+      expect(await within(card).findByRole("status")).toHaveTextContent("Checked just now.");
+      expect(backend.state.rechecks).toHaveLength(1);
+
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(3 * 60_000);
+      });
+
+      expect(within(card).getByText(/Checked 3 minutes ago/)).toBeInTheDocument();
+      expect(within(card).queryByText("Checked just now.")).not.toBeInTheDocument();
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });
