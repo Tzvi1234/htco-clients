@@ -84,7 +84,9 @@ function openFloor() {
   );
 }
 
-describe("the live office map", () => {
+// The two tests share one module import (it loads once per file), so their order matters:
+// keep them in file order even though the suite shuffles tests.
+describe("the live office map", { shuffle: false }, () => {
   // First: the scene module is imported only once per file, so only this test sees it load.
   it("builds the scene with the motion setting of when it arrives, not of when it was asked for", async () => {
     const setReduce = motionSetting(false);
@@ -102,6 +104,7 @@ describe("the live office map", () => {
     const setReduce = motionSetting(false);
     openFloor();
     await screen.findByRole("heading", { level: 1, name: "Floor" });
+    loading.open(); // already open after the first test; harmless if it runs alone
     await sceneBuilt();
     const scene = scenes[0];
     expect(scene?.still).toBe(false);
