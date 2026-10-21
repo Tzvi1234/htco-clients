@@ -129,3 +129,24 @@ workaround, P3 polish. Every item marked **Fixed** is in this pull request.
   and 375×812).
 - Screenshots: before and after sets of the 210 captures were reviewed side by side; baselines in
   CI were regenerated where the focus ring, radii, the shop cards or the Demo tags changed.
+
+## Remaining findings for the next rounds
+
+Round 1 (this pass) fixed the shell and the real screens' defects above. Left for round 2 (other
+design skills) and round 3 (a fresh Impeccable pass):
+
+- **Demo screens' contrast:** muted sample text under the Demo dimming measures about 3:1 (axe on
+  the office screens). Consider dimming with a veil that keeps text at 4.5:1, or exempting
+  inert demo content explicitly.
+- **Phone targets:** 40 px circle buttons and the 5 px hero dots (24 px hit area) are under the
+  44 px phone guideline; a coarse-pointer hit-area extension would keep the look.
+- **Empty space in tall panels:** Etsy callback, Security's two-step panel, Eng › incident and
+  the empty Shops "how to connect" panel leave large voids at 1440×900; group content or pin the
+  footer facts.
+- **Settings › Security line:** "Two-step sign-in on · 2 devices" spacing around the middle dot.
+- **Help and documentation** (heuristic 10 scored 2): no contextual help yet.
+- **Office floor:** 11 px room labels on the map; check legibility at 375 px.
+- **Bounce curve on the logo's dot drop** kept as the brand's one authored moment; confirm with
+  the owner.
+- **Impeccable sidecar** (`.impeccable/design.json`) not written: the repository's no-junk rule;
+  decide whether the live panel is wanted.
