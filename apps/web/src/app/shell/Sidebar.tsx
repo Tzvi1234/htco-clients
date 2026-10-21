@@ -246,7 +246,11 @@ export function Sidebar() {
       )}
     >
       <div className="flex h-[72px] shrink-0 items-center justify-between ps-[22px] pe-[15px] group-data-[mini]/sb:justify-center group-data-[mini]/sb:p-0">
-        <Link to="/" aria-label="HTCO" className={cx(LABEL, "rounded-control outline-none")}>
+        <Link
+          to="/"
+          aria-label="HTCO"
+          className={cx(LABEL, "inline-flex min-h-6 items-center rounded-control outline-none")}
+        >
           <Logo height={22} animated={intro} />
         </Link>
         <button
