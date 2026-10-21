@@ -36,6 +36,7 @@ import {
   bi,
   initialOf,
   useBi,
+  useMinutes,
   type AgentStatus,
   type Bi,
   type DotTone,
@@ -236,6 +237,7 @@ const PAST: readonly [AgentId, Bi, "ok" | "no", Bi | string][] = [
 function ApprovalsDemo() {
   const { t } = useLingui();
   const text = useBi();
+  const minutes = useMinutes();
   const agent = useAgent();
   const risk = useRiskLabels();
   const selected = APPROVALS[0];
@@ -255,7 +257,7 @@ function ApprovalsDemo() {
               [<Trans>Low risk</Trans>, ltr(1)],
               [<Trans>Medium risk</Trans>, ltr(1)],
               [<Trans>High risk</Trans>, ltr(1)],
-              [<Trans>Oldest</Trans>, ltr("42 min")],
+              [<Trans>Oldest</Trans>, minutes(42)],
             ]}
           />
           <div className="max-sm:hidden">
@@ -293,7 +295,7 @@ function ApprovalsDemo() {
                 <Avatar initial={initialOf(by.name)} status={by.status} />
                 <div className="min-w-0 grow">
                   <div className="truncate text-caption font-light text-muted">
-                    {by.name} · {by.role} · {ltr(item.id)} · {ltr(item.age)}
+                    {by.name} · {by.role} · {ltr(item.id)} · {minutes(item.minutes)}
                   </div>
                   <div className="mt-1 mb-1.5 text-body">{text(item.what)}</div>
                   <div className="flex flex-wrap gap-1.5">

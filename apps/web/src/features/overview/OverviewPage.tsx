@@ -38,6 +38,7 @@ import {
   Stack,
   Status,
   StatusGlyph,
+  useMinutes,
   Strip,
   StripCard,
   StripCards,
@@ -74,6 +75,7 @@ export function OverviewPage() {
 
 function NeedsYou() {
   const { t } = useLingui();
+  const minutes = useMinutes();
   return (
     <Panel className="home-needs">
       <PanelHeader
@@ -100,7 +102,8 @@ function NeedsYou() {
                   <div className="k-who">
                     <Avatar initial={initialOf(t(by.name))} size="xs" />
                     <span>
-                      {t(by.name)} · {t(by.role)} · <N>{item.age}</N>
+                      {t(by.name)} · {t(by.role)} ·{" "}
+                      <span className="tabular">{minutes(item.minutes)}</span>
                     </span>
                   </div>
                   <div className="k-what">{t(item.what)}</div>
@@ -530,7 +533,7 @@ function GettingStarted() {
               ) : (
                 <Link
                   to={step.to}
-                  className="text-caption text-primary underline underline-offset-[3px]"
+                  className="-my-1 inline-block rounded-[4px] py-1 text-caption text-primary underline underline-offset-[3px]"
                 >
                   {step.soon === true ? t`Soon` : step.action}
                 </Link>

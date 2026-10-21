@@ -61,6 +61,18 @@ function Frame() {
 
   return (
     <div className={cx("flex", phone ? "min-h-dvh flex-col" : "h-dvh")}>
+      {/* Keyboard users skip the navigation; the link shows only while it has focus. */}
+      <a
+        href="#main"
+        onClick={(event) => {
+          // Focus moves without touching the address (the router owns it).
+          event.preventDefault();
+          document.getElementById("main")?.focus();
+        }}
+        className="fixed start-3 top-3 z-50 -translate-y-24 rounded-pill bg-inverse px-5 py-2.5 text-body-sm text-on-inverse no-underline shadow-popover transition-[translate] duration-[var(--motion-duration-fast)] focus-visible:translate-y-0"
+      >
+        <Trans>Skip to content</Trans>
+      </a>
       {phone ? null : (
         <div className="flex min-h-0">
           <Sidebar />
@@ -76,7 +88,14 @@ function Frame() {
             </Banner>
           </div>
         )}
-        <main className={cx("flex min-h-0 grow flex-col gap-2 px-2", phone ? "pb-24" : "pb-2")}>
+        <main
+          id="main"
+          tabIndex={-1}
+          className={cx(
+            "flex min-h-0 grow flex-col gap-2 px-2 outline-none",
+            phone ? "pb-24" : "pb-2",
+          )}
+        >
           {screen}
         </main>
       </div>

@@ -893,6 +893,10 @@ msgid "Controller"
 msgstr "Controller"
 
 #: src/features/office/ChatPage.tsx
+msgid "Conversation with {name}"
+msgstr "Conversation with {name}"
+
+#: src/features/office/ChatPage.tsx
 msgid "Conversations"
 msgstr "Conversations"
 
@@ -3469,6 +3473,10 @@ msgstr "Signs you out first"
 #: src/features/welcome/WelcomePage.tsx
 msgid "Sixteen AI employees in seven departments, working under your policies."
 msgstr "Sixteen AI employees in seven departments, working under your policies."
+
+#: src/app/shell/AppShell.tsx
+msgid "Skip to content"
+msgstr "Skip to content"
 
 #: src/features/commerce/demoScreens.tsx
 msgid "SKU:"

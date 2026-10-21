@@ -25,7 +25,13 @@ export function AcceptInvitePage() {
   const [problem, setProblem] = useState<"length" | "mismatch" | null>(null);
 
   useEffect(() => {
-    if (hash !== "") void router.navigate({ to: "/accept-invite", hash: "", replace: true });
+    if (hash !== "")
+      void router.navigate({
+        to: "/accept-invite",
+        hash: "",
+        replace: true,
+        viewTransition: false,
+      });
   }, [hash, router]);
 
   const accept = useMutation({

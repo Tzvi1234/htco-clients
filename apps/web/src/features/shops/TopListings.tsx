@@ -29,7 +29,7 @@ export function TopListings() {
   const { t } = useLingui();
   const names = useProductNames();
   return (
-    <DemoPart className="min-h-0 lg:col-span-full max-sm:hidden" tag="center">
+    <DemoPart className="min-h-0 lg:col-span-full max-sm:hidden" tag="corner">
       <Strip
         title={<Trans>Top listings</Trans>}
         zoom={<Zoom page={0} labels={{ less: t`Fewer`, more: t`More` }} />}

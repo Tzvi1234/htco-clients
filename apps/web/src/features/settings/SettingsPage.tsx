@@ -247,7 +247,7 @@ function AppearancePanel() {
         actions={
           <AriaButton
             onPress={resetTweaks}
-            className="me-4 cursor-default rounded-pill px-1.5 text-caption text-muted underline underline-offset-[3px] outline-none data-[hovered]:text-primary data-[focus-visible]:outline-2 data-[focus-visible]:outline-focus"
+            className="-my-1 me-4 cursor-default rounded-pill px-1.5 py-1 text-caption text-muted underline underline-offset-[3px] outline-none data-[hovered]:text-primary data-[focus-visible]:outline-2 data-[focus-visible]:outline-focus"
           >
             {t`Reset`}
           </AriaButton>
@@ -387,14 +387,21 @@ function ConnectionsPanel() {
           ] as const
         ).map(([name, line, state]) => (
           <div key={name} className="border-t border-line">
-            <DemoPart>
+            {/* The tag sits beside the sample status, in one column for every row. */}
+            <DemoPart tagClassName="end-[108px] top-1/2 -translate-y-1/2">
               <ListRow
                 className="py-3.5"
                 lead={<Avatar initial={name.slice(0, 1)} />}
                 title={<span className="ltr">{name}</span>}
                 line={line}
                 end={
-                  <Status live status={state} label={state === "running" ? t`Connected` : t`Off`} />
+                  <span className="inline-flex min-w-24 justify-end">
+                    <Status
+                      live
+                      status={state}
+                      label={state === "running" ? t`Connected` : t`Off`}
+                    />
+                  </span>
                 }
               />
             </DemoPart>

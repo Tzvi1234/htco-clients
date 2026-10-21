@@ -161,6 +161,7 @@ export function DemoPart({
   className,
   contentClassName,
   tag = "corner",
+  tagClassName,
   as: Element = "div",
 }: {
   children: ReactNode;
@@ -171,6 +172,8 @@ export function DemoPart({
    * over it, or `false` when the panel's header already carries a DemoTag.
    */
   tag?: "corner" | "edge" | "center" | false;
+  /** Places the tag elsewhere, beside a row's own status, say (replaces the `tag` position). */
+  tagClassName?: string;
   as?: "div" | "section";
 }) {
   const { t } = useLingui();
@@ -189,10 +192,13 @@ export function DemoPart({
           aria-hidden="true"
           className={cx(
             "pointer-events-none absolute z-[4] flex",
-            tag === "corner" && "end-2.5 top-2.5",
-            tag === "edge" && "end-2.5 -top-2.5",
-            tag === "center" &&
-              "start-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rtl:translate-x-1/2",
+            tagClassName ??
+              cx(
+                tag === "corner" && "end-2.5 top-2.5",
+                tag === "edge" && "end-2.5 -top-2.5",
+                tag === "center" &&
+                  "start-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rtl:translate-x-1/2",
+              ),
           )}
         >
           <DemoTag />

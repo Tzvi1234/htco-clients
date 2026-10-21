@@ -99,7 +99,7 @@ function Category({
     active && mini && "shadow-[0_0_0_3px_var(--bg-sidebar),0_0_0_4px_var(--border-strong)]",
   );
   const head = cx(
-    "group/cat relative flex h-12 w-full cursor-default items-center gap-3 rounded-3xl ps-1 pe-2.5 text-start whitespace-nowrap no-underline text-primary outline-none",
+    "group/cat relative flex h-12 w-full cursor-default items-center gap-3 rounded-[24px] ps-1 pe-2.5 text-start whitespace-nowrap no-underline text-primary outline-none",
     "transition-[background-color,scale] duration-[var(--motion-duration-fast)] ease-standard hover:bg-hover active:scale-[0.99]",
     "group-data-[mini]/sb:justify-center group-data-[mini]/sb:p-0",
   );
@@ -180,7 +180,7 @@ function Category({
         <div className="overflow-hidden">
           <ul
             aria-label={t`${name} tabs`}
-            className="relative m-0 ms-6 list-none py-1 pb-2 ps-5 before:absolute before:start-0 before:top-0 before:bottom-3 before:w-px before:bg-line-strong"
+            className="relative m-0 ms-6 list-none py-1 pe-1 pb-2 ps-5 before:absolute before:start-0 before:top-0 before:bottom-3 before:w-px before:bg-line-strong"
           >
             {area.tabs.map((tab) => (
               <li key={tab.id}>
@@ -290,7 +290,7 @@ export function Sidebar() {
       </button>
       <nav
         aria-label={t`Main`}
-        className="min-h-0 grow overflow-auto px-3 pb-3 [scrollbar-width:thin] group-data-[mini]/sb:px-4"
+        className="min-h-0 grow overflow-auto px-3 pt-1 pb-3 [scrollbar-width:thin] group-data-[mini]/sb:px-4"
       >
         {groups.map(({ group, areas }) => (
           <div key={group}>

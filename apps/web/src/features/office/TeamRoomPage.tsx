@@ -100,7 +100,14 @@ export function TeamRoomPage() {
             </Chip>
           }
         />
-        <div className="k-thread" key={thread}>
+        {/* Focusable so the conversation scrolls from the keyboard too. */}
+        <div
+          className="k-thread"
+          key={thread}
+          role="log"
+          tabIndex={0}
+          aria-label={t(current.title)}
+        >
           {thread === "t1" ? (
             <LiveThread />
           ) : (

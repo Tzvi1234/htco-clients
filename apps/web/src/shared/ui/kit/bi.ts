@@ -17,3 +17,15 @@ export function useBi(): (text: Bi | string) => string {
   const { locale } = useLocale();
   return (text) => (typeof text === "string" ? text : text[locale]);
 }
+
+/** "12 min" / "12 דק׳": a sample age in minutes, in the user's language (never isolated
+ * left-to-right: the unit is a word of the sentence). */
+export function useMinutes(): (minutes: number) => string {
+  const { locale } = useLocale();
+  const format = new Intl.NumberFormat(locale, {
+    style: "unit",
+    unit: "minute",
+    unitDisplay: "short",
+  });
+  return (minutes) => format.format(minutes);
+}

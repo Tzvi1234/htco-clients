@@ -113,7 +113,7 @@ export function CommandMenu() {
                       <MenuItem
                         id={item.id}
                         textValue={item.label}
-                        className="flex h-11 cursor-default items-center justify-between gap-3 rounded-xl px-4 text-body-sm text-primary outline-none transition-colors duration-[var(--motion-duration-fast)] data-[focused]:bg-panel"
+                        className="flex h-11 cursor-default items-center justify-between gap-3 rounded-[12px] px-4 text-body-sm text-primary outline-none transition-colors duration-[var(--motion-duration-fast)] data-[focused]:bg-panel"
                       >
                         {item.label}
                         {item.built ? null : <SoonTag className="text-muted" />}

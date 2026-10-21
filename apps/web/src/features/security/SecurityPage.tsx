@@ -205,6 +205,7 @@ function Devices() {
                 </span>
                 <ListRow
                   className="min-w-0 flex-1 py-0"
+                  wrapLine
                   title={device}
                   line={
                     session.current ? (
