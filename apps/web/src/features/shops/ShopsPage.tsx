@@ -370,14 +370,14 @@ function HowConnecting() {
         title={<Trans>How connecting works</Trans>}
         meta={<span className="ltr">3</span>}
       />
-      <div className="flex min-h-0 grow flex-col justify-between gap-6 px-6 pb-6">
+      <div className="flex min-h-0 grow flex-col gap-6 px-6 pb-6">
         <IdBlock label={<Trans>Connecting takes:</Trans>} value={<Trans>About a minute</Trans>} />
-        <ol className="m-0 flex list-none flex-col gap-1 p-0">
+        <ol className="m-0 my-auto flex list-none flex-col gap-5 p-0 [&>li+li]:relative [&>li+li]:before:absolute [&>li+li]:before:inset-s-[32px] [&>li+li]:before:-top-[29px] [&>li+li]:before:h-[38px] [&>li+li]:before:border-s [&>li+li]:before:border-line-strong [&>li+li]:before:content-['']">
           {steps.map((step, index) => (
             <li
               key={index}
               style={{ animationDelay: `${String(120 + index * 80)}ms` }}
-              className="flex items-center gap-4 rounded-card p-3 transition-colors hover:bg-hover motion-safe:animate-enter"
+              className="flex items-center gap-4 rounded-card p-3 motion-safe:animate-enter"
             >
               <span className="ltr flex size-10 shrink-0 items-center justify-center rounded-pill border border-line-strong text-body">
                 {index + 1}

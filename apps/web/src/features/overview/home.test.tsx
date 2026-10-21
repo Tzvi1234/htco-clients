@@ -107,6 +107,31 @@ describe("Home (Design 1C P.home)", () => {
     );
   });
 
+  it.each([
+    ["en", "ArrowRight", "ArrowLeft"],
+    ["he", "ArrowLeft", "ArrowRight"],
+  ] as const)(
+    "moves between the concept tabs with the arrow keys along the reading direction (%s)",
+    async (locale, forward, back) => {
+      const { user } = await open({}, locale);
+      const tabs = within(screen.getByRole("tablist")).getAllByRole("tab");
+      // One tab stop: only the chosen concept is in the tab order.
+      expect(tabs.map((tab) => tab.tabIndex)).toEqual([0, -1, -1, -1, -1]);
+
+      tabs[0]?.focus();
+      await user.keyboard(`{${forward}}`);
+      expect(tabs[1]).toHaveAttribute("aria-selected", "true");
+      expect(tabs[1]).toHaveFocus();
+      await user.keyboard(`{${back}}{${back}}`);
+      expect(tabs[4]).toHaveAttribute("aria-selected", "true");
+      await user.keyboard("{Home}");
+      expect(tabs[0]).toHaveFocus();
+      await user.keyboard("{End}");
+      expect(tabs[4]).toHaveAttribute("aria-selected", "true");
+      expect(tabs.map((tab) => tab.tabIndex)).toEqual([-1, -1, -1, -1, 0]);
+    },
+  );
+
   it("labels the parts that need unbuilt features as Demo and keeps them out of reach", async () => {
     await open();
 

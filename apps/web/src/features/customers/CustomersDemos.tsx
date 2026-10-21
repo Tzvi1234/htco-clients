@@ -322,7 +322,7 @@ export function CustomersDemo({ title }: { title: string }) {
         />
         <DataTable
           label={t`All customers`}
-          ends={[3]}
+          ends={[2, 3]}
           phoneHidden={[1, 4, 5]}
           head={[t`Customer`, t`Country`, t`Orders`, t`Total`, t`Last order`, t`Shop`, t`Ticket`]}
           rows={customers.map((name, i) => ({

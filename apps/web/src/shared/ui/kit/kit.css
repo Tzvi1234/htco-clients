@@ -128,6 +128,20 @@
   }
 }
 
+/* ---------- demo legibility ---------- */
+/* Demo content is dimmed (a frame to 0.78, a part to 0.7, kit/demo.tsx) yet stays readable:
+   its secondary and muted text are drawn from the ink at a fixed strength, so after the dimming
+   they still measure 4.5:1 on their panel in every palette, theme and tweak. Primary text stays
+   ink, so the hierarchy holds; the DEMO pill and Demo tags keep it clearly a demo. */
+.k-demo {
+  --text-secondary: color-mix(in srgb, var(--text-primary) 78%, transparent);
+  --text-muted: color-mix(in srgb, var(--text-primary) 78%, transparent);
+}
+.k-demo-part {
+  --text-secondary: color-mix(in srgb, var(--text-primary) 85%, transparent);
+  --text-muted: color-mix(in srgb, var(--text-primary) 85%, transparent);
+}
+
 /* ---------- helpers ---------- */
 .k-scroll {
   overflow: auto;

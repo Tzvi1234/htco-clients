@@ -8,7 +8,7 @@ import parcel from "../../assets/commerce/parcel.webp";
 import { cx } from "../../shared/lib/cx.ts";
 import { PageHeader } from "../../shared/ui/PageHeader.tsx";
 import { PanelHeader } from "../../shared/ui/Panel.tsx";
-import { IdBlock } from "../../shared/ui/kit/index.ts";
+import { IdBlock, Note, ShieldGlyph } from "../../shared/ui/kit/index.ts";
 
 /** What Etsy put in the address when it sent the owner back. */
 export interface EtsyReturn {
@@ -143,6 +143,11 @@ export function EtsyCallbackPage() {
             <Failure outcome={outcome} />
           )}
         </div>
+        <Note icon={<ShieldGlyph size={16} />} className="mx-auto mb-6 max-w-[560px]">
+          <Trans>
+            HTCO never writes to your shop. AutoVA uploads tracking to Etsy; HTCO reads it there.
+          </Trans>
+        </Note>
       </div>
     </>
   );

@@ -208,6 +208,51 @@ export function IdBlock({
   );
 }
 
+/**
+ * The middle dot between two facts on one line ("On · 2 devices"), with the same space on both
+ * sides. Screen readers hear a comma instead of "dot".
+ */
+export function Sep({ className }: { className?: string }) {
+  return (
+    <>
+      <span aria-hidden="true" className={cx("mx-1 text-muted", className)}>
+        ·
+      </span>
+      <span className="sr-only">, </span>
+    </>
+  );
+}
+
+/**
+ * A quiet line of help at the foot of a panel: what to do next, or what is safe to know
+ * (contextual help, so a screen never leaves the owner guessing).
+ */
+export function Note({
+  icon,
+  children,
+  className,
+}: {
+  icon?: ReactNode;
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <p
+      className={cx(
+        "m-0 flex items-start gap-2.5 rounded-card bg-raised px-4 py-3 text-start text-body-sm text-secondary",
+        className,
+      )}
+    >
+      {icon === undefined ? null : (
+        <span aria-hidden="true" className="mt-0.5 flex shrink-0 text-icon">
+          {icon}
+        </span>
+      )}
+      <span className="min-w-0 text-pretty">{children}</span>
+    </p>
+  );
+}
+
 export type Pair = readonly [ReactNode, ReactNode];
 
 /** `.kv`: label and value pairs, two to a row, the second aligned to the end. */
@@ -405,8 +450,8 @@ export function Toggle({
             "relative block h-6 w-10 rounded-pill border border-line-strong transition-colors duration-[var(--motion-duration-fast)]",
             "group-data-[selected]:border-inverse group-data-[selected]:bg-inverse",
             "group-data-[focus-visible]:outline-2 group-data-[focus-visible]:outline-offset-2 group-data-[focus-visible]:outline-focus",
-            "after:absolute after:start-[3px] after:top-[3px] after:size-4 after:rounded-pill after:bg-line-hover after:transition-[inset-inline-start] after:duration-[var(--motion-duration-fast)] after:content-['']",
-            "group-data-[selected]:after:start-[19px] group-data-[selected]:after:bg-on-inverse",
+            "after:absolute after:inset-s-[3px] after:top-[3px] after:size-4 after:rounded-pill after:bg-line-hover after:transition-[inset-inline-start] after:duration-[var(--motion-duration-fast)] after:content-['']",
+            "group-data-[selected]:after:inset-s-[19px] group-data-[selected]:after:bg-on-inverse",
           )}
         />
       </SwitchButton>

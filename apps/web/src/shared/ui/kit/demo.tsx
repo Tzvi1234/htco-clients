@@ -124,7 +124,7 @@ export function DemoFrame({
           inert={views ? undefined : true}
           aria-hidden={views ? undefined : true}
           className={cx(
-            "flex min-h-0 grow flex-col opacity-[0.78] brightness-[0.97] saturate-[0.85] transition-opacity duration-[var(--motion-duration-base)]",
+            "k-demo flex min-h-0 grow flex-col opacity-[0.78] brightness-[0.97] saturate-[0.85] transition-opacity duration-[var(--motion-duration-base)]",
             views ? "hover:opacity-[0.86]" : "select-none",
           )}
         >
@@ -194,10 +194,10 @@ export function DemoPart({
             "pointer-events-none absolute z-[4] flex",
             tagClassName ??
               cx(
-                tag === "corner" && "end-2.5 top-2.5",
-                tag === "edge" && "end-2.5 -top-2.5",
+                tag === "corner" && "inset-e-2.5 top-2.5",
+                tag === "edge" && "inset-e-2.5 -top-2.5",
                 tag === "center" &&
-                  "start-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rtl:translate-x-1/2",
+                  "inset-s-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rtl:translate-x-1/2",
               ),
           )}
         >
@@ -209,7 +209,7 @@ export function DemoPart({
         inert
         aria-hidden="true"
         className={cx(
-          "h-full opacity-[0.62] saturate-[0.85] transition-opacity duration-[var(--motion-duration-base)] select-none",
+          "k-demo-part h-full opacity-[0.7] saturate-[0.85] transition-opacity duration-[var(--motion-duration-base)] select-none",
           contentClassName,
         )}
       >

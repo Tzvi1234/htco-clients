@@ -24,6 +24,7 @@ import {
   KV2,
   LaptopGlyph,
   ListRow,
+  Note,
   PhoneGlyph,
   Screen,
   ShieldGlyph,
@@ -60,8 +61,8 @@ function SecondFactor() {
   return (
     <Panel label={t`Two-factor sign-in`}>
       <PanelHeader title={<Trans>Two-factor sign-in</Trans>} />
-      <PanelBody className="justify-between gap-5">
-        <div className="flex flex-col items-center gap-3 pt-2">
+      <PanelBody className="justify-center gap-6">
+        <div className="flex flex-col items-center gap-3">
           <span className="flex size-16 items-center justify-center rounded-pill border border-line bg-raised">
             <ShieldGlyph size={24} />
           </span>
@@ -197,7 +198,7 @@ function Devices() {
                 style={{ animationDelay: `${String(index * 40)}ms` }}
                 className={
                   "flex animate-[htco-row-in_280ms_var(--motion-easing-enter)_both] items-center gap-3 rounded-card p-3 transition-colors duration-[var(--motion-duration-fast)] " +
-                  (session.current ? "bg-selected" : "hover:bg-hover")
+                  (session.current ? "bg-selected" : "")
                 }
               >
                 <span className="flex size-10 shrink-0 items-center justify-center rounded-pill border border-line bg-raised">
@@ -211,7 +212,9 @@ function Devices() {
                     session.current ? (
                       <Status live status="running" label={<Trans>This device</Trans>} />
                     ) : (
-                      <Trans>Last active {seen.format(new Date(session.last_seen_at))}</Trans>
+                      <Trans>
+                        Last active <bdi>{seen.format(new Date(session.last_seen_at))}</bdi>
+                      </Trans>
                     )
                   }
                 />
@@ -230,6 +233,14 @@ function Devices() {
             );
           })}
         </ul>
+        {sessions.data === undefined ? null : (
+          <Note icon={<ShieldGlyph size={16} />} className="mx-2 mt-auto mb-2">
+            <Trans>
+              Don’t recognise a device? Sign it out here. Only that device is signed out; this one
+              stays signed in.
+            </Trans>
+          </Note>
+        )}
       </PanelBody>
     </Panel>
   );
