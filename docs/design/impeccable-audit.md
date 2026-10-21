@@ -132,6 +132,8 @@ workaround, P3 polish. Every item marked **Fixed** is in this pull request.
 
 ## Remaining findings for the next rounds
 
+Round 2 fixed or answered each of these: see [round2-review.md](round2-review.md).
+
 Round 1 (this pass) fixed the shell and the real screens' defects above. Left for round 2 (other
 design skills) and round 3 (a fresh Impeccable pass):
 
