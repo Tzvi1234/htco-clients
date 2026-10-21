@@ -37,7 +37,7 @@ export function AuthField({
       <Label className={FIELD_LABEL}>{label}</Label>
       <Group className={FIELD_GROUP}>
         <Input
-          dir={ltr ? "ltr" : undefined}
+          dir={ltr ? "ltr" : "auto"}
           {...(placeholder === undefined ? {} : { placeholder })}
           className={cx(
             "h-full min-w-0 grow bg-transparent text-body text-primary outline-none placeholder:text-muted",

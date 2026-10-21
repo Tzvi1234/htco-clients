@@ -1,11 +1,16 @@
 import type { ReactNode, SVGProps } from "react";
 
+import { cx } from "../lib/cx.ts";
+
 // Design 1C's own glyphs, copied from the design: solid shapes on a 24 grid for areas and
 // actions, thin strokes on a 12 grid for chevrons. They take the current text colour and are
 // decorative (`aria-hidden`); the control around them carries the name.
+// Directional glyphs (`mirror`: they point along the reading direction, or draw the layout)
+// flip in right-to-left layouts themselves, so call sites never add `rtl:-scale-x-100`; marks
+// with a fixed meaning (check, close, play, clock, search) never flip.
 type IconProps = Omit<SVGProps<SVGSVGElement>, "viewBox" | "children"> & { size?: number };
 
-function glyph(viewBox: string, body: ReactNode, stroke?: { width: number }) {
+function glyph(viewBox: string, body: ReactNode, stroke?: { width: number }, mirror = false) {
   return function Glyph({ size = 16, className, ...props }: IconProps) {
     return (
       <svg
@@ -14,7 +19,7 @@ function glyph(viewBox: string, body: ReactNode, stroke?: { width: number }) {
         viewBox={viewBox}
         width={size}
         height={size}
-        className={className}
+        className={cx(mirror && "rtl:-scale-x-100", className) || undefined}
         {...(stroke === undefined
           ? { fill: "currentColor" }
           : {
@@ -95,10 +100,21 @@ export const GearIcon = glyph(
 /** Down chevron (12 grid); rotates 180° when its list is open. */
 export const ChevronIcon = glyph("0 0 12 12", <path d="M3 4.5l3 3 3-3" />, { width: 1.4 });
 /** The crumb separator: points to the inline end, so it mirrors in right-to-left layouts. */
-export const CrumbIcon = glyph("0 0 12 12", <path d="M4.5 2.5l3.5 3.5-3.5 3.5" />, {
-  width: 1.4,
-});
-export const ArrowEndIcon = glyph("0 0 24 24", <path d="M9.5 6l6 6-6 6" />, { width: 1.6 });
+export const CrumbIcon = glyph(
+  "0 0 12 12",
+  <path d="M4.5 2.5l3.5 3.5-3.5 3.5" />,
+  { width: 1.4 },
+  true,
+);
+/** Forward: points to the inline end (right in English, left in Hebrew). */
+export const ArrowEndIcon = glyph("0 0 24 24", <path d="M9.5 6l6 6-6 6" />, { width: 1.6 }, true);
+/** Back: points to the inline start. */
+export const ArrowStartIcon = glyph(
+  "0 0 24 24",
+  <path d="M14.5 6l-6 6 6 6" />,
+  { width: 1.6 },
+  true,
+);
 export const CheckIcon = glyph("0 0 24 24", <path d="M5 12.5l4.5 4.5L19 7.5" />, { width: 2.4 });
 export const CloseIcon = glyph("0 0 24 24", <path d="M6 6l12 12M18 6L6 18" />, { width: 2 });
 export const MoreIcon = glyph(
@@ -109,7 +125,7 @@ export const MoreIcon = glyph(
     <circle cx="18.5" cy="12" r="1.8" />
   </>,
 );
-/** The sidebar toggle: a window with its sidebar. */
+/** The sidebar toggle: a window with its sidebar at the inline start (mirrors with it). */
 export const SidebarIcon = glyph(
   "0 0 24 24",
   <>
@@ -117,6 +133,7 @@ export const SidebarIcon = glyph(
     <path d="M9.5 4.5v15" />
   </>,
   { width: 1.6 },
+  true,
 );
 /** The tweaks control: two sliders. */
 export const TweaksIcon = glyph(

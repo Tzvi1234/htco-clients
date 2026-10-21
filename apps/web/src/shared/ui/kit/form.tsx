@@ -47,7 +47,7 @@ export function PillField({
       <Label className="text-caption font-light text-muted">{label}</Label>
       <Input
         ref={inputRef}
-        dir={ltr ? "ltr" : undefined}
+        dir={ltr ? "ltr" : "auto"}
         {...(placeholder === undefined ? {} : { placeholder })}
         className={cx(
           "h-12 w-full min-w-0 rounded-pill border border-line-strong bg-transparent px-5 text-body text-primary outline-none placeholder:text-muted",

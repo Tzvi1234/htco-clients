@@ -20,7 +20,7 @@ import { cx } from "../../shared/lib/cx.ts";
 import { REDUCED_MOTION_QUERY, useMediaQuery } from "../../shared/lib/useMediaQuery.ts";
 import { useTweaks } from "../../shared/theme/ThemeProvider.tsx";
 import { TweaksButton } from "../../shared/theme/TweaksPanel.tsx";
-import { ArrowEndIcon } from "../../shared/ui/icons.tsx";
+import { ArrowEndIcon, ArrowStartIcon } from "../../shared/ui/icons.tsx";
 import { Ltr } from "../../shared/ui/Ltr.tsx";
 import { Logo } from "../../shared/ui/Logo.tsx";
 import { Segmented } from "../../shared/ui/Segmented.tsx";
@@ -144,7 +144,7 @@ function Hero() {
         <div className="flex flex-wrap gap-2">
           <Link to="/sign-in" className={PILL_PRIMARY}>
             <Trans>Open the web app</Trans>
-            <ArrowEndIcon size={14} className="rtl:-scale-x-100" />
+            <ArrowEndIcon size={14} />
           </Link>
           <a href="#today" className={PILL_SECONDARY}>
             <Trans>What works today</Trans>
@@ -232,9 +232,9 @@ function Carousel() {
           onClick={() => {
             step(-1);
           }}
-          className="absolute start-4 top-1/2 grid size-10 -translate-y-1/2 place-items-center rounded-pill border border-line-strong text-primary transition-[border-color,background-color,scale] hover:border-line-hover-strong hover:bg-hover active:scale-95"
+          className="absolute inset-s-4 top-1/2 grid size-10 -translate-y-1/2 place-items-center rounded-pill border border-line-strong text-primary transition-[border-color,background-color,scale] hover:border-line-hover-strong hover:bg-hover active:scale-95"
         >
-          <ArrowEndIcon size={16} className="-scale-x-100 rtl:scale-x-100" />
+          <ArrowStartIcon size={16} />
         </button>
         <button
           type="button"
@@ -242,23 +242,26 @@ function Carousel() {
           onClick={() => {
             step(1);
           }}
-          className="absolute end-4 top-1/2 grid size-10 -translate-y-1/2 place-items-center rounded-pill border border-line-strong text-primary transition-[border-color,background-color,scale] hover:border-line-hover-strong hover:bg-hover active:scale-95"
+          className="absolute inset-e-4 top-1/2 grid size-10 -translate-y-1/2 place-items-center rounded-pill border border-line-strong text-primary transition-[border-color,background-color,scale] hover:border-line-hover-strong hover:bg-hover active:scale-95"
         >
-          <ArrowEndIcon size={16} className="rtl:-scale-x-100" />
+          <ArrowEndIcon size={16} />
         </button>
       </div>
-      <div className="flex justify-center gap-1.5 pb-5" dir="ltr">
+      {/* The dots follow the reading direction, like the arrows above them. Each has a 24 px tall
+          target; on a touch screen they only show the position and the arrows move. */}
+      <div className="flex justify-center gap-1.5 pb-5">
         {images.map((src, at) => (
           <button
             key={src}
             type="button"
             aria-label={t`Show render ${String(at + 1)}`}
             aria-current={at === index ? "true" : undefined}
+            data-hit="own"
             onClick={() => {
               setIndex(at);
             }}
             className={cx(
-              "h-1.5 rounded-pill transition-[width,background-color] duration-[var(--motion-duration-slow)] ease-standard",
+              "relative h-1.5 rounded-pill transition-[width,background-color] duration-[var(--motion-duration-slow)] ease-standard after:absolute after:-inset-x-[3px] after:-inset-y-[9px] after:content-[''] pointer-coarse:pointer-events-none",
               at === index ? "w-5 bg-inverse" : "w-1.5 bg-faint hover:bg-icon-muted",
             )}
           />
@@ -453,7 +456,7 @@ function Apps() {
       >
         <Link to="/sign-in" className={cx(PILL_PRIMARY, "w-full")}>
           <Trans>Open the web app</Trans>
-          <ArrowEndIcon size={14} className="rtl:-scale-x-100" />
+          <ArrowEndIcon size={14} />
         </Link>
       </AppCard>
       <AppCard

@@ -29,7 +29,7 @@ export const Default: Story = {
             <p className="m-0 text-body-sm text-secondary">
               {say(
                 "Panels sit on the ground with 8 px between them.",
-                "הפאנלים יושבים על הרקע ו-8 פיקסלים ביניהם.",
+                "הפאנלים יושבים על הרקע ו־8 פיקסלים ביניהם.",
               )}
             </p>
           </PanelBody>

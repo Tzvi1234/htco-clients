@@ -34,7 +34,7 @@ function Crumbs() {
       {trail.map((crumb, index) => (
         // By position: an area and its tab may share a name (Customers › Customers).
         <Fragment key={index}>
-          {index === 0 ? null : <CrumbIcon size={12} className="shrink-0 rtl:-scale-x-100" />}
+          {index === 0 ? null : <CrumbIcon size={12} className="shrink-0" />}
           {index === trail.length - 1 ? (
             <span className="truncate text-primary">{crumb}</span>
           ) : (
