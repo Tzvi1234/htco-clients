@@ -128,7 +128,7 @@ test("the keyboard always shows the one focus ring, also on controls that hide t
   await page.keyboard.press("Tab");
   expect((await focusRing(page))?.name).toBe("Skip to content");
 
-  // Every later stop up to the screen's own controls draws the 2 px ring (sidebar items, the
+  // Every later stop up to the screen's own controls draws the ring (sidebar items, the
   // top bar's round buttons, the account card).
   const rings: { name: string; outline: string; width: string }[] = [];
   for (let step = 0; step < 16; step++) {
@@ -138,6 +138,8 @@ test("the keyboard always shows the one focus ring, also on controls that hide t
   }
   expect(rings.length).toBeGreaterThan(5);
   for (const ring of rings) {
-    expect(ring, ring.name).toMatchObject({ outline: "solid", width: "2px" });
+    // Solid and at least 2 px wide (browsers round the token's width differently).
+    expect(ring.outline, ring.name).toBe("solid");
+    expect(Number.parseFloat(ring.width), ring.name).toBeGreaterThanOrEqual(2);
   }
 });
