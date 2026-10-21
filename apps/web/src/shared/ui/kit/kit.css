@@ -213,6 +213,13 @@
   background: var(--inverse-bg);
   color: var(--inverse-text);
 }
+/* Side by side, a segment's touch layer only grows up and down (styles.css), so on a touch
+   screen the segment itself is 44 px wide. */
+@media (any-pointer: coarse) {
+  .k-seg button {
+    min-width: 44px;
+  }
+}
 
 /* ---------- list rows ---------- */
 .k-row {

@@ -37,19 +37,20 @@ test("every control on a touch screen has a 44 px target that covers no other (r
       const px = (value: string) => (value.endsWith("px") ? parseFloat(value) : 0);
       const name = (element: Element) =>
         (element.getAttribute("aria-label") ?? element.textContent).trim().slice(0, 40);
-      // The target: the control's box, grown by its touch layer when it has one.
+      // The target: the control's box, grown by its touch layer (::after, or ::before where
+      // ::after draws something) when it has one.
       const targets = controls.map((element) => {
         const box = element.getBoundingClientRect();
-        const layer = getComputedStyle(element, "::after");
-        const grown = layer.content !== "none" && layer.position === "absolute";
-        return {
-          element,
-          box,
-          left: grown ? Math.min(box.left, box.left + px(layer.left)) : box.left,
-          right: grown ? Math.max(box.right, box.right - px(layer.right)) : box.right,
-          top: grown ? Math.min(box.top, box.top + px(layer.top)) : box.top,
-          bottom: grown ? Math.max(box.bottom, box.bottom - px(layer.bottom)) : box.bottom,
-        };
+        let [left, right, top, bottom] = [box.left, box.right, box.top, box.bottom];
+        for (const part of ["::after", "::before"]) {
+          const layer = getComputedStyle(element, part);
+          if (layer.content === "none" || layer.position !== "absolute") continue;
+          left = Math.min(left, box.left + px(layer.left));
+          right = Math.max(right, box.right - px(layer.right));
+          top = Math.min(top, box.top + px(layer.top));
+          bottom = Math.max(bottom, box.bottom - px(layer.bottom));
+        }
+        return { element, box, left, right, top, bottom };
       });
       const small = targets
         .filter((t) => t.right - t.left < 43.5 || t.bottom - t.top < 43.5)

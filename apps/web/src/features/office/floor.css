@@ -100,6 +100,16 @@
   border-top-color: inherit;
   border-bottom: 0;
 }
+/* A status bubble is a link; its ::after draws the tail, so on a touch screen its 44 px target
+   is a ::before layer instead (the shared touch layer in styles.css is ::after). */
+@media (any-pointer: coarse) {
+  .fl-b3[role="link"]::before {
+    content: "";
+    position: absolute;
+    inset-block: min(0px, (100% - 44px) / 2);
+    inset-inline: min(0px, (100% - 44px) / 2);
+  }
+}
 .fl-b3.fl-say::after,
 .fl-b3.fl-ic::after {
   border-top-color: var(--border-strong);
