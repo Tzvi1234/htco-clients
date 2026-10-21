@@ -4,7 +4,7 @@ Client-specific documentation. Product, plan, system architecture and engineerin
 
 | Area | Documents |
 |---|---|
-| **Design** | [Brand book](../design/README.md) · [Tokens](../design/tokens/README.md) · [Component specification](../design/COMPONENT_SPEC.md) · [Live reference](https://claude.ai/artifact/Bgq6rDafP6qyXiJBCsq8nf) |
+| **Design** | [Brand book](../design/README.md) · [Tokens](../design/tokens/README.md) · [Component specification](../design/COMPONENT_SPEC.md) · [Live reference](https://claude.ai/artifact/Bgq6rDafP6qyXiJBCsq8nf) · [DESIGN.md](../DESIGN.md) and [PRODUCT.md](../PRODUCT.md) (Impeccable context) · [Impeccable audit](design/impeccable-audit.md) |
 | **Architecture** | [Client architecture](architecture/CLIENT_ARCHITECTURE.md) |
 | **UX** | [Navigation map](ux/NAVIGATION_MAP.md) · [Content style](ux/CONTENT_STYLE.md) · [Accessibility and right-to-left](ux/ACCESSIBILITY.md) |
 | **Decisions** | [Client ADRs](adr/README.md) |
