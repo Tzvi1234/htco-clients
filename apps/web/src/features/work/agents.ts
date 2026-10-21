@@ -16,7 +16,8 @@ export interface Approval {
   what: Bi;
   risk: Risk;
   policy: string;
-  age: string;
+  /** How long it has waited. */
+  minutes: number;
   value: string;
 }
 
@@ -30,7 +31,7 @@ export const APPROVALS: readonly Approval[] = [
     ),
     risk: "low",
     policy: "refunds.partial ≤ $20",
-    age: "12 min",
+    minutes: 12,
     value: "$7.20",
   },
   {
@@ -42,7 +43,7 @@ export const APPROVALS: readonly Approval[] = [
     ),
     risk: "med",
     policy: "suppliers.change",
-    age: "38 min",
+    minutes: 38,
     value: "−$2.10",
   },
   {
@@ -54,7 +55,7 @@ export const APPROVALS: readonly Approval[] = [
     ),
     risk: "high",
     policy: "listings.publish",
-    age: "42 min",
+    minutes: 42,
     value: "4 img",
   },
 ];

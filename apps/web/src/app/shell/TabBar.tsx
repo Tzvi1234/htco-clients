@@ -149,7 +149,7 @@ export function TabBar() {
                   onClick={() => {
                     setMore(false);
                   }}
-                  className="flex items-center gap-3 rounded-3xl p-1 text-body text-primary no-underline outline-none hover:bg-hover"
+                  className="flex items-center gap-3 rounded-[24px] p-1 text-body text-primary no-underline outline-none hover:bg-hover"
                 >
                   <span
                     className={cx(

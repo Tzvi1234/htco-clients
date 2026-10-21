@@ -96,3 +96,50 @@ test("a tweak changed in the app shows on the landing page, and back (one prefer
   await expect(pageTitle(page, "Home")).toBeVisible();
   await expect(root(page)).not.toHaveAttribute("data-pal", "d4");
 });
+
+/**
+ * The focused control's name and outline. A React Aria radio keeps focus on its hidden input and
+ * marks the visible control around it with `data-focus-visible`, which is what draws the ring.
+ */
+async function focusRing(page: Page) {
+  return page.evaluate(() => {
+    const active = document.activeElement;
+    if (active === null) return null;
+    const element =
+      active instanceof HTMLInputElement
+        ? (active.closest("[data-focus-visible]") ?? active)
+        : active;
+    const style = getComputedStyle(element);
+    return {
+      name: element.getAttribute("aria-label") ?? element.textContent.trim(),
+      outline: style.outlineStyle,
+      width: style.outlineWidth,
+    };
+  });
+}
+
+test("the keyboard always shows the one focus ring, also on controls that hide the browser's (WCAG 2.4.7)", async ({
+  page,
+}) => {
+  await openApp(page, "/", "signed-in");
+  await expect(pageTitle(page, "Home")).toBeVisible();
+
+  // The first stop skips the navigation.
+  await page.keyboard.press("Tab");
+  expect((await focusRing(page))?.name).toBe("Skip to content");
+
+  // Every later stop up to the screen's own controls draws the ring (sidebar items, the
+  // top bar's round buttons, the account card).
+  const rings: { name: string; outline: string; width: string }[] = [];
+  for (let step = 0; step < 16; step++) {
+    await page.keyboard.press("Tab");
+    const ring = await focusRing(page);
+    if (ring !== null) rings.push(ring);
+  }
+  expect(rings.length).toBeGreaterThan(5);
+  for (const ring of rings) {
+    // Solid and at least 2 px wide (browsers round the token's width differently).
+    expect(ring.outline, ring.name).toBe("solid");
+    expect(Number.parseFloat(ring.width), ring.name).toBeGreaterThanOrEqual(2);
+  }
+});

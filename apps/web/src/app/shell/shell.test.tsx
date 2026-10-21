@@ -421,3 +421,21 @@ describe("the demo label", () => {
     },
   );
 });
+
+describe("skipping the navigation (WCAG 2.4.1)", () => {
+  it("offers 'Skip to content' as the first stop, and it moves focus to the screen", async () => {
+    const { user } = await open("/settings");
+
+    await user.tab();
+    const skip = screen.getByRole("link", { name: "Skip to content" });
+    expect(skip).toHaveFocus();
+
+    await user.keyboard("{Enter}");
+    expect(screen.getByRole("main")).toHaveFocus();
+  });
+
+  it("says it in Hebrew too", async () => {
+    await open("/settings", { locale: "he" });
+    expect(screen.getByRole("link", { name: "דילוג לתוכן" })).toBeInTheDocument();
+  });
+});

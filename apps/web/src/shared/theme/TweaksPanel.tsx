@@ -93,7 +93,7 @@ export function TweaksPanel({ className }: { className?: string }) {
         </Heading>
         <Button
           onPress={resetTweaks}
-          className="cursor-default rounded-pill px-1.5 text-caption text-muted underline underline-offset-[3px] outline-none data-[hovered]:text-primary data-[focus-visible]:outline-2 data-[focus-visible]:outline-focus"
+          className="-my-1 cursor-default rounded-pill px-1.5 py-1 text-caption text-muted underline underline-offset-[3px] outline-none data-[hovered]:text-primary data-[focus-visible]:outline-2 data-[focus-visible]:outline-focus"
         >
           {t`Reset`}
         </Button>

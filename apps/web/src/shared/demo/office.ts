@@ -253,7 +253,8 @@ export const APPROVALS: readonly {
   what: MessageDescriptor;
   risk: Risk;
   policy: string;
-  age: string;
+  /** How long it has waited. */
+  minutes: number;
   value: string;
 }[] = [
   {
@@ -262,7 +263,7 @@ export const APPROVALS: readonly {
     what: msg`Partial refund 15% ($7.20) on order #3152 for Emma R.`,
     risk: "low",
     policy: "refunds.partial ≤ $20",
-    age: "12 min",
+    minutes: 12,
     value: "$7.20",
   },
   {
@@ -271,7 +272,7 @@ export const APPROVALS: readonly {
     what: msg`Switch linen towels to Gelato (−$2.10 per unit)`,
     risk: "med",
     policy: "suppliers.change",
-    age: "38 min",
+    minutes: 38,
     value: "−$2.10",
   },
   {
@@ -280,7 +281,7 @@ export const APPROVALS: readonly {
     what: msg`Publish 4 new images to the star map listing`,
     risk: "high",
     policy: "listings.publish",
-    age: "42 min",
+    minutes: 42,
     value: "4 img",
   },
 ];

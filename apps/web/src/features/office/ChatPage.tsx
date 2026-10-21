@@ -134,7 +134,15 @@ function Thread({ chat }: { chat: AgentId }) {
           </>
         }
       />
-      <div className="k-thread" ref={thread} key={chat}>
+      {/* Focusable so the conversation scrolls from the keyboard too. */}
+      <div
+        className="k-thread"
+        ref={thread}
+        key={chat}
+        role="log"
+        tabIndex={0}
+        aria-label={t`Conversation with ${name}`}
+      >
         <div className="k-daysep">{t`Today`}</div>
         {chat === "maya" ? <MayaThread /> : <ShortThread chat={chat} />}
       </div>

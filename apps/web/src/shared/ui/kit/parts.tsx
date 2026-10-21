@@ -420,12 +420,15 @@ export function ListRow({
   line,
   lead,
   end,
+  wrapLine = false,
   className,
 }: {
   title: ReactNode;
   line?: ReactNode;
   lead?: ReactNode;
   end?: ReactNode;
+  /** The line wraps instead of being cut (a date that must be read whole). */
+  wrapLine?: boolean;
   className?: string;
 }) {
   return (
@@ -436,7 +439,9 @@ export function ListRow({
       <div className="min-w-0 flex-1">
         <div className="truncate text-body">{title}</div>
         {line === undefined ? null : (
-          <div className="truncate text-caption text-secondary">{line}</div>
+          <div className={cx("text-caption text-secondary", wrapLine ? "text-pretty" : "truncate")}>
+            {line}
+          </div>
         )}
       </div>
       {end}

@@ -24,7 +24,7 @@ import type { ThemePreference } from "../../shared/theme/theme.ts";
 import { ChevronIcon } from "../../shared/ui/icons.tsx";
 
 const ITEM =
-  "flex h-9 cursor-default items-center gap-2 rounded-xl px-3 text-body-sm outline-none transition-colors duration-[var(--motion-duration-fast)] data-[focused]:bg-panel data-[disabled]:text-muted " +
+  "flex h-9 cursor-default items-center gap-2 rounded-[12px] px-3 text-body-sm outline-none transition-colors duration-[var(--motion-duration-fast)] data-[focused]:bg-panel data-[disabled]:text-muted " +
   "before:inline-block before:w-4 before:text-accent-text data-[selected]:before:content-['✓']";
 const SECTION_HEADER = "px-3 pt-2 pb-1 text-caption font-light text-muted";
 
@@ -86,7 +86,7 @@ export function UserMenu({ compact = false }: { compact?: boolean }) {
         <Button
           aria-label={t`Account and preferences`}
           className={cx(
-            "flex cursor-default items-center gap-3 rounded-3xl text-start whitespace-nowrap text-primary outline-none",
+            "flex cursor-default items-center gap-3 rounded-[24px] text-start whitespace-nowrap text-primary outline-none",
             "transition-[background-color,scale] duration-[var(--motion-duration-fast)] ease-standard data-[hovered]:bg-hover data-[pressed]:scale-[0.98]",
             compact
               ? "rounded-pill"

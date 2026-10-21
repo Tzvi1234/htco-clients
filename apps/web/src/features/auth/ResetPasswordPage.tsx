@@ -30,7 +30,13 @@ export function ResetPasswordPage() {
   const [problem, setProblem] = useState<"length" | "mismatch" | "code" | null>(null);
 
   useEffect(() => {
-    if (hash !== "") void router.navigate({ to: "/reset-password", hash: "", replace: true });
+    if (hash !== "")
+      void router.navigate({
+        to: "/reset-password",
+        hash: "",
+        replace: true,
+        viewTransition: false,
+      });
   }, [hash, router]);
 
   const reset = useMutation({

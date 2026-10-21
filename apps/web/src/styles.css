@@ -378,13 +378,6 @@
     text-wrap: balance;
   }
 
-  /* One focus ring everywhere: 2 px border-focus with a 2 px offset. */
-  :focus-visible,
-  [data-focus-visible] {
-    outline: var(--border-width-focus) solid var(--border-focus);
-    outline-offset: 2px;
-  }
-
   /* Reduced motion removes travel and drawing, not only time (design/README.md). */
   @media (prefers-reduced-motion: reduce) {
     *,
@@ -422,6 +415,41 @@
     direction: ltr;
     unicode-bidi: isolate;
   }
+}
+
+/* One focus ring everywhere: 2 px border-focus with a 2 px offset, following the control's
+   radius. It is outside every cascade layer on purpose: an `outline-none` utility (which in
+   Tailwind 4 also sets the outline style that `focus-visible:outline-2` relies on) can never
+   hide it. Fields show focus on their pill (focus-within), menu and list items with their
+   highlight, and dialogs and programmatic focus targets (tabindex -1) need no ring. */
+:where(:focus-visible, [data-focus-visible]):not(
+  input,
+  textarea,
+  select,
+  tr,
+  [role="dialog"],
+  [role="alertdialog"],
+  [role="menu"],
+  [role="listbox"],
+  [role="option"],
+  [role="menuitem"],
+  [role="menuitemradio"],
+  [role="menuitemcheckbox"],
+  [tabindex="-1"]
+) {
+  outline: var(--border-width-focus) solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+/* The parts of the page the browser draws, in the palette: selection, the caret and scrollbars. */
+::selection {
+  background-color: var(--accent-subtle);
+  color: var(--text-primary);
+}
+
+:root {
+  caret-color: var(--text-primary);
+  scrollbar-color: var(--border-strong) transparent;
 }
 
 /* React Aria also injects this rule; it is repeated here in case the CSP blocks a changed copy. */

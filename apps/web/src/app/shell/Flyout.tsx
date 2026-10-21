@@ -38,9 +38,9 @@ export function Flyout() {
     <aside
       id="sb-flyout"
       aria-label={name}
-      className="glass my-2 ms-2 flex w-[208px] min-h-0 shrink-0 animate-fly-in flex-col overflow-hidden rounded-panel border border-sidebar-line bg-sidebar px-3 pt-4 pb-3 shadow-sidebar"
+      className="glass my-2 ms-2 flex w-[208px] min-h-0 shrink-0 animate-fly-in flex-col overflow-hidden rounded-panel border border-sidebar-line bg-sidebar px-2 pt-4 pb-3 shadow-sidebar"
     >
-      <div className="mb-2.5 flex items-center gap-2.5 border-b border-line px-1 pb-3.5">
+      <div className="mx-1 mb-2.5 flex items-center gap-2.5 border-b border-line px-1 pb-3.5">
         <span className="grid size-10 shrink-0 place-items-center rounded-pill bg-inverse text-on-inverse">
           <area.icon />
         </span>
@@ -49,7 +49,8 @@ export function Flyout() {
           <p className="m-0 truncate text-[15px] font-medium">{name}</p>
         </div>
       </div>
-      <ul className="m-0 flex min-h-0 grow list-none flex-col gap-1 overflow-auto p-0">
+      {/* The 4 px padding leaves room for the focus ring inside the scroller. */}
+      <ul className="m-0 flex min-h-0 grow list-none flex-col gap-1 overflow-auto p-1">
         {area.tabs.map((tab) => (
           <li key={tab.id}>
             <TabLink
@@ -67,7 +68,7 @@ export function Flyout() {
           setFlyout(null);
         }}
         className={cx(
-          "mt-2 flex h-[34px] cursor-default items-center justify-center gap-1.5 rounded-[17px] border border-line-strong text-caption text-secondary outline-none",
+          "mx-1 mt-2 flex h-[34px] cursor-default items-center justify-center gap-1.5 rounded-[17px] border border-line-strong text-caption text-secondary outline-none",
           "transition-[background-color,color,scale] duration-[var(--motion-duration-fast)] ease-standard hover:bg-hover hover:text-primary active:scale-[0.98]",
         )}
       >

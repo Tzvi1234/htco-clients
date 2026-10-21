@@ -61,7 +61,10 @@ export function WelcomePage() {
         <p className="m-0 text-caption font-light text-muted">
           <Trans>HT-Commerce by H.T.Z Studios</Trans>
         </p>
-        <Link to="/sign-in" className="text-caption text-primary underline underline-offset-[3px]">
+        <Link
+          to="/sign-in"
+          className="-my-1 inline-block rounded-[4px] py-1 text-caption text-primary underline underline-offset-[3px]"
+        >
           <Trans>Sign in</Trans>
         </Link>
       </footer>

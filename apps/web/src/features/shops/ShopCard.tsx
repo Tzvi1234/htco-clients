@@ -155,7 +155,7 @@ export function ShopCard({
           )
         }
       />
-      <div className="flex min-h-0 grow flex-col justify-between gap-4 overflow-auto px-6 pb-6">
+      <div className="flex min-h-0 grow flex-col gap-4 overflow-auto px-6 pb-6">
         <IdBlock label={<Trans>Shop:</Trans>} value={shop.name} valueId={titleId}>
           <p className="m-0 mt-1 truncate text-caption font-light text-muted">
             {integration === undefined ? (
@@ -167,7 +167,9 @@ export function ShopCard({
             )}
           </p>
         </IdBlock>
-        <div className="flex min-h-20 grow basis-0 items-center justify-center max-lg:h-36 max-lg:grow-0 max-lg:basis-auto max-sm:h-24">
+        {/* One art height for every card, so cards side by side keep their rows level whether or
+            not one of them shows Reconnect; the leftover space collects under the last row. */}
+        <div className="flex h-36 shrink-0 items-center justify-center max-sm:h-24 lg:h-[clamp(72px,calc(100dvh-820px),160px)]">
           <img
             src={parcel}
             alt=""

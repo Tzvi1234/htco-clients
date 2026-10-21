@@ -37,7 +37,15 @@
   }
 }
 
-/* The sent-mail and done marks draw in. */
+/* The sent-mail and done marks settle in on the system's enter curve (no overshoot). */
 .auth-mark {
-  animation: auth-pop 420ms cubic-bezier(0.3, 0, 0, 1.4) both;
+  animation: auth-pop 420ms var(--motion-easing-enter) both;
+}
+
+/* Its keyframes were missing, so the mark never animated. */
+@keyframes auth-pop {
+  from {
+    opacity: 0;
+    scale: 0.6;
+  }
 }

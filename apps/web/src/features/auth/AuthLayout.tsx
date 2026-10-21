@@ -229,9 +229,9 @@ export const FIELD_GROUP = cx(
   "group-data-[invalid]:border-danger",
 );
 
-/** The demo's `.lnk`: a small underlined link. */
+/** The demo's `.lnk`: a small underlined link; padding gives it a 24 px target without moving it. */
 export const AUTH_LINK =
-  "cursor-default rounded-[4px] text-caption text-primary underline decoration-1 underline-offset-[3px] outline-none transition-colors hover:text-secondary data-[hovered]:text-secondary";
+  "-my-1 inline-block cursor-default rounded-[4px] py-1 text-caption text-primary underline decoration-1 underline-offset-[3px] outline-none transition-colors hover:text-secondary data-[hovered]:text-secondary";
 
 /** The full-width 48 px primary button of the sign-in screens. */
 export const AUTH_SUBMIT = "h-12 w-full text-body-sm";
