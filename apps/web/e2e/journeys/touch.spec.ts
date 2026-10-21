@@ -10,7 +10,7 @@ test.use({ hasTouch: true, isMobile: true });
 test("every control on a touch screen has a 44 px target that covers no other (round 2)", async ({
   page,
 }, info) => {
-  test.skip(info.project.name !== "journeys-phone", "touch targets are measured on the phone");
+  test.skip(!info.project.name.startsWith("journeys"), "touch targets are measured in the app");
   for (const [path, title, as] of [
     ["/", "Home", "signed-in"],
     ["/settings", "Settings", "shops"],
@@ -50,11 +50,29 @@ test("every control on a touch screen has a 44 px target that covers no other (r
           top = Math.min(top, box.top + px(layer.top));
           bottom = Math.max(bottom, box.bottom - px(layer.bottom));
         }
-        return { element, box, left, right, top, bottom };
+        const size = { width: right - left, height: bottom - top };
+        // A layer is cut off where a scrolling ancestor clips it; taps there never reach it.
+        for (let node = element.parentElement; node !== null; node = node.parentElement) {
+          const style = getComputedStyle(node);
+          if (style.overflowX === "visible" && style.overflowY === "visible") continue;
+          const clip = node.getBoundingClientRect();
+          left = Math.max(left, clip.left);
+          right = Math.min(right, clip.right);
+          top = Math.max(top, clip.top);
+          bottom = Math.min(bottom, clip.bottom);
+        }
+        // The control itself, cut off the same way.
+        const own = {
+          left: Math.max(box.left, left),
+          right: Math.min(box.right, right),
+          top: Math.max(box.top, top),
+          bottom: Math.min(box.bottom, bottom),
+        };
+        return { element, box: own, size, left, right, top, bottom };
       });
       const small = targets
-        .filter((t) => t.right - t.left < 43.5 || t.bottom - t.top < 43.5)
-        .map((t) => `${name(t.element)} (${String(t.right - t.left)}×${String(t.bottom - t.top)})`);
+        .filter((t) => t.size.width < 43.5 || t.size.height < 43.5)
+        .map((t) => `${name(t.element)} (${String(t.size.width)}×${String(t.size.height)})`);
       // A target never covers another control, or a tap meant for it lands on its neighbour.
       // (The floating tab bar lies over the scrolling page by design; it is left out.)
       const floating = (element: Element) => {

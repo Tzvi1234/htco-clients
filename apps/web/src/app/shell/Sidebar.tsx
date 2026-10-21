@@ -50,6 +50,9 @@ export function TabLink({
         connector
           ? "h-[34px] text-body-sm before:absolute before:-inset-s-5 before:top-1/2 before:h-px before:w-3.5 before:bg-line-strong"
           : "h-[38px] px-3.5 text-[13.5px]",
+        // Stacked rows: on a touch screen each row is 44 px tall itself, as a touch layer
+        // reaching past the row would cover the next one (styles.css, "Touch").
+        "any-pointer-coarse:h-11",
         current ? "bg-inverse text-on-inverse" : "text-secondary hover:bg-hover hover:text-primary",
       )}
     >

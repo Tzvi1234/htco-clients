@@ -110,7 +110,7 @@ extends its hit area to 44 × 44 px (`inset: min(0px, (100% − 44px) / 2)`); th
 position still wins (the layer is in the base layer), and a control that draws with `::after`
 sets `data-hit="own"` (Home's dots, the floor's speech bubbles). On a touch screen the carousel
 dots only show the position: they are 6 px apart, and the 44 px arrows beside them move.
-Radios and tabs side by side extend only up and down (so one option's layer never covers its neighbour); the tweaks' small level switches are 44 px wide on touch screens. A phone journey (`e2e/journeys/touch.spec.ts`) measures every control on Home, Settings and Shops, and checks that no target covers another control.
+Radios and tabs side by side extend only up and down (so one option's layer never covers its neighbour); every segment (Segmented, the kit's `.k-seg`) is 44 px wide and every sidebar row 44 px tall on touch screens, so no layer reaches into a neighbour; the floor's status bubbles, which draw their tail with `::after`, get a `::before` touch layer. A journey (`e2e/journeys/touch.spec.ts`, on the phone and on a 1440 px touch screen) measures every control on Home, Settings and Shops and checks that no target covers another control.
 
 ## 3. The designer skills
 
