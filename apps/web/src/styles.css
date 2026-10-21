@@ -398,11 +398,14 @@
     direction: inherit;
   }
 
-  /* Touch: on a coarse pointer every control's target reaches 44 × 44 px (WCAG 2.5.5, the
-     platforms' 44 pt) without changing its look. An invisible layer centred on the control
-     extends the hit area; a control that draws with ::after itself sets data-hit="own". The
-     layer is in this base layer, so a control's own position (absolute, sticky) still wins. */
-  @media (pointer: coarse) {
+  /* Touch: wherever a touch screen is present (also a laptop's), every control's target reaches
+     44 × 44 px (WCAG 2.5.5, the platforms' 44 pt) without changing its look. An invisible layer
+     centred on the control extends the hit area; a control that draws with ::after itself sets
+     data-hit="own". The layer is in this base layer, so a control's own position (absolute,
+     sticky) still wins. Options that sit side by side in a group (radios, tabs) extend only
+     up and down, so one option's layer never covers its neighbour; their groups give them
+     44 px of width themselves (Segmented). */
+  @media (any-pointer: coarse) {
     :where(
       a[href],
       button,
@@ -436,6 +439,10 @@
       position: absolute;
       inset-block: min(0px, (100% - 44px) / 2);
       inset-inline: min(0px, (100% - 44px) / 2);
+    }
+
+    :where([role="radio"], [role="tab"]):not([data-hit="own"])::after {
+      inset-inline: 0;
     }
   }
 

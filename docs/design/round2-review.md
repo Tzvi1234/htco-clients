@@ -104,13 +104,13 @@ palette suggestions):
 | 9 Navigation | Tab-bar ≤5, current state visible; carousel keyboard fixed. |
 | 10 Charts | Charts carry `role="img"` and a label; legends and numbers labelled. |
 
-**Touch targets** (`styles.css`, base layer): on a coarse pointer every link, button, tab,
+**Touch targets** (`styles.css`, base layer): wherever a touch screen is present (`any-pointer: coarse`, also touch laptops) every link, button, tab,
 radio, switch, checkbox, menu item and option gets an invisible layer centred on it that
 extends its hit area to 44 × 44 px (`inset: min(0px, (100% − 44px) / 2)`); the control's own
 position still wins (the layer is in the base layer), and a control that draws with `::after`
 sets `data-hit="own"` (Home's dots, the floor's speech bubbles). On a touch screen the carousel
 dots only show the position: they are 6 px apart, and the 44 px arrows beside them move.
-A phone journey (`e2e/journeys/touch.spec.ts`) measures every control on Home, Settings and Shops.
+Radios and tabs side by side extend only up and down (so one option's layer never covers its neighbour); the tweaks' small level switches are 44 px wide on touch screens. A phone journey (`e2e/journeys/touch.spec.ts`) measures every control on Home, Settings and Shops, and checks that no target covers another control.
 
 ## 3. The designer skills
 

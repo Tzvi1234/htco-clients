@@ -7,7 +7,9 @@ import { openApp, pageTitle } from "./support.ts";
 // "Touch"). Measured on the phone with a coarse pointer, on the screens with the most controls.
 test.use({ hasTouch: true, isMobile: true });
 
-test("every control on a touch screen has a 44 px target (round 2)", async ({ page }, info) => {
+test("every control on a touch screen has a 44 px target that covers no other (round 2)", async ({
+  page,
+}, info) => {
   test.skip(info.project.name !== "journeys-phone", "touch targets are measured on the phone");
   for (const [path, title, as] of [
     ["/", "Home", "signed-in"],
@@ -16,33 +18,63 @@ test("every control on a touch screen has a 44 px target (round 2)", async ({ pa
   ] as const) {
     await openApp(page, path, as);
     await expect(pageTitle(page, title)).toBeVisible();
-    const small = await page.evaluate(() => {
-      const controls = document.querySelectorAll(
-        "a[href], button, [role=button], [role=link], [role=tab], [role=radio], [role=switch], [role=checkbox]",
-      );
-      const found: string[] = [];
-      for (const element of controls) {
+    const { small, overlaps } = await page.evaluate(() => {
+      const controls = [
+        ...document.querySelectorAll(
+          "a[href], button, [role=button], [role=link], [role=tab], [role=radio], [role=switch], [role=checkbox]",
+        ),
+      ].filter((element) => {
         const box = element.getBoundingClientRect();
         const style = getComputedStyle(element);
-        if (box.width === 0 || box.height === 0 || style.visibility === "hidden") continue;
-        if (style.pointerEvents === "none" || element.closest("[inert], [aria-hidden='true']")) {
-          continue;
-        }
-        let width = box.width;
-        let height = box.height;
+        return (
+          box.width > 0 &&
+          box.height > 0 &&
+          style.visibility !== "hidden" &&
+          style.pointerEvents !== "none" &&
+          element.closest("[inert], [aria-hidden='true']") === null
+        );
+      });
+      const px = (value: string) => (value.endsWith("px") ? parseFloat(value) : 0);
+      const name = (element: Element) =>
+        (element.getAttribute("aria-label") ?? element.textContent).trim().slice(0, 40);
+      // The target: the control's box, grown by its touch layer when it has one.
+      const targets = controls.map((element) => {
+        const box = element.getBoundingClientRect();
         const layer = getComputedStyle(element, "::after");
-        if (layer.content !== "none" && layer.position === "absolute") {
-          const px = (value: string) => (value.endsWith("px") ? parseFloat(value) : 0);
-          width = Math.max(width, box.width - px(layer.left) - px(layer.right));
-          height = Math.max(height, box.height - px(layer.top) - px(layer.bottom));
+        const grown = layer.content !== "none" && layer.position === "absolute";
+        return {
+          element,
+          box,
+          left: grown ? Math.min(box.left, box.left + px(layer.left)) : box.left,
+          right: grown ? Math.max(box.right, box.right - px(layer.right)) : box.right,
+          top: grown ? Math.min(box.top, box.top + px(layer.top)) : box.top,
+          bottom: grown ? Math.max(box.bottom, box.bottom - px(layer.bottom)) : box.bottom,
+        };
+      });
+      const small = targets
+        .filter((t) => t.right - t.left < 43.5 || t.bottom - t.top < 43.5)
+        .map((t) => `${name(t.element)} (${String(t.right - t.left)}×${String(t.bottom - t.top)})`);
+      // A target never covers another control, or a tap meant for it lands on its neighbour.
+      // (The floating tab bar lies over the scrolling page by design; it is left out.)
+      const floating = (element: Element) => {
+        for (let node: Element | null = element; node !== null; node = node.parentElement) {
+          if (getComputedStyle(node).position === "fixed") return true;
         }
-        if (width < 43.5 || height < 43.5) {
-          const name = element.getAttribute("aria-label") ?? element.textContent;
-          found.push(`${name.trim().slice(0, 40)} (${String(width)}×${String(height)})`);
+        return false;
+      };
+      const overlaps: string[] = [];
+      for (const a of targets) {
+        for (const b of targets) {
+          if (a === b || a.element.contains(b.element) || b.element.contains(a.element)) continue;
+          if (floating(a.element) !== floating(b.element)) continue;
+          const x = Math.min(a.right, b.box.right) - Math.max(a.left, b.box.left);
+          const y = Math.min(a.bottom, b.box.bottom) - Math.max(a.top, b.box.top);
+          if (x > 1 && y > 1) overlaps.push(`${name(a.element)} covers ${name(b.element)}`);
         }
       }
-      return found;
+      return { small, overlaps };
     });
     expect(small, path).toEqual([]);
+    expect(overlaps, path).toEqual([]);
   }
 });

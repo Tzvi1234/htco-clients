@@ -17,7 +17,11 @@ const SIZES = {
   // The top bar's language switch (Design 1C `.seg`).
   md: { group: "h-8 p-[3px] gap-0.5", item: "h-6 px-2.5 text-caption" },
   // The tweaks panel's level switches (Design 1C `.tws`), each a 24 px target (WCAG 2.5.8).
-  sm: { group: "h-[30px] p-[3px] gap-0.5", item: "h-6 min-w-[30px] px-1.5 gap-0.5" },
+  // On a touch screen each is 44 px wide (its touch layer only grows up and down; styles.css).
+  sm: {
+    group: "h-[30px] p-[3px] gap-0.5",
+    item: "h-6 min-w-[30px] px-1.5 gap-0.5 any-pointer-coarse:min-w-11",
+  },
 } as const;
 
 /**
