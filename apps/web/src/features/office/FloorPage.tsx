@@ -370,6 +370,7 @@ function FloorList({ modes, noWebgl }: { modes: ReactNode; noWebgl: boolean }) {
                   type="button"
                   aria-pressed={x.id === deptId}
                   className={cx("fl-hs", x.id === deptId && "k-on")}
+                  // eslint-disable-next-line htco/logical-properties -- a spot on the floor render, a picture that does not mirror
                   style={{ left: `${String(left * 100)}%`, top: `${String(top * 100)}%` }}
                   onClick={() => {
                     pick(x.id);
@@ -386,6 +387,7 @@ function FloorList({ modes, noWebgl }: { modes: ReactNode; noWebgl: boolean }) {
                 <span
                   key={i}
                   className="fl-hs fl-svc max-sm:hidden"
+                  // eslint-disable-next-line htco/logical-properties -- a spot on the floor render, a picture that does not mirror
                   style={{ left: `${String(left * 100)}%`, top: `${String(top * 100)}%` }}
                 >
                   {t(s.name)}

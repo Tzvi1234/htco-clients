@@ -165,7 +165,7 @@ export function TweaksButton({ className }: { className?: string }) {
         {changed > 0 ? (
           <span
             aria-hidden="true"
-            className="absolute -end-[3px] -top-[3px] grid h-[18px] min-w-[18px] place-items-center rounded-pill border-2 border-ground bg-inverse px-[5px] text-[11px] font-medium text-on-inverse"
+            className="absolute -inset-e-[3px] -top-[3px] grid h-[18px] min-w-[18px] place-items-center rounded-pill border-2 border-ground bg-inverse px-[5px] text-[11px] font-medium text-on-inverse"
           >
             {changed}
           </span>

@@ -53,7 +53,7 @@ export function TabBar() {
               insetInlineStart: `calc(6px + ${String(slot)} * ((100% - 28px) / 5 + 4px))`,
             }}
           >
-            <span className="absolute top-2 end-3 size-1.5 rounded-pill bg-accent-on-inverse" />
+            <span className="absolute top-2 inset-e-3 size-1.5 rounded-pill bg-accent-on-inverse" />
           </span>
         )}
         {ON_BAR.map((id) => {
