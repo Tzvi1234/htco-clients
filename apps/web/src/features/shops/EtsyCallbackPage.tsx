@@ -91,7 +91,14 @@ export function EtsyCallbackPage() {
   useEffect(() => {
     if (started.current) return;
     started.current = true;
-    void navigate({ to: "/integrations/etsy/callback", search: {}, replace: true });
+    // Cleaning the address right after the page opens skips the view transition (a second
+    // transition would abort the first: "Transition was skipped").
+    void navigate({
+      to: "/integrations/etsy/callback",
+      search: {},
+      replace: true,
+      viewTransition: false,
+    });
     if (sent.error === undefined && sent.code !== undefined)
       finish.mutate({ code: sent.code, state: sent.state });
   }, [finish, navigate, sent]);
