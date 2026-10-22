@@ -21,6 +21,7 @@ import {
   type OrderPeriod,
   type ShopOrder,
 } from "./live.tsx";
+import { RefundChip, RefundDetails } from "./refunds.tsx";
 import { ShopChips } from "./ShopChips.tsx";
 import { useApi } from "../../shared/api/api.tsx";
 import { cx } from "../../shared/lib/cx.ts";
@@ -215,7 +216,21 @@ function Orders({ shopId, chips }: { shopId: string; chips: ReactNode }) {
   const weekdays = week.map((d) => String(Number(d.date.slice(8, 10))));
 
   const columns: { header: ReactNode; cell: (o: ShopOrder) => ReactNode }[] = [
-    { header: t`Order`, cell: (o) => <N>{`#${String(o.order_id)}`}</N> },
+    {
+      header: t`Order`,
+      cell: (o) => (
+        <button
+          type="button"
+          onClick={() => {
+            setOpen(o);
+          }}
+          aria-label={t`Open order ${String(o.order_id)}`}
+          className="-mx-1 rounded-[4px] px-1 underline decoration-line-strong underline-offset-[3px] outline-none hover:decoration-current focus-visible:outline-2 focus-visible:outline-focus"
+        >
+          <N>{`#${String(o.order_id)}`}</N>
+        </button>
+      ),
+    },
     {
       header: t`Customer`,
       cell: (o) => (o.buyer === null ? <span className="text-muted">—</span> : <N>{o.buyer}</N>),
@@ -249,7 +264,10 @@ function Orders({ shopId, chips }: { shopId: string; chips: ReactNode }) {
     {
       header: t`Status`,
       cell: (o) => (
-        <Status live status={ORDER_STATE_GLYPH[shownState(o)]} label={states[shownState(o)]} />
+        <span className="inline-flex items-center gap-2">
+          <Status live status={ORDER_STATE_GLYPH[shownState(o)]} label={states[shownState(o)]} />
+          <RefundChip order={o} />
+        </span>
       ),
     },
     {
@@ -617,11 +635,15 @@ function OrderRow({ order, onOpen }: { order: ShopOrder; onOpen: () => void }) {
           {order.ship_by === null ? null : t`ship by ${date(order.ship_by)}`}
         </span>
       </span>
+      <RefundChip order={order} className="self-start" />
     </button>
   );
 }
 
-/** One order's items, shipment and dates, in a sheet over the list (phones). */
+/**
+ * One order's items, shipment, dates and any refund or cancellation, in a sheet over the list
+ * (a row on phones, the order number on wider screens opens it).
+ */
 function OrderSheet({
   order,
   photos,
@@ -644,9 +666,9 @@ function OrderSheet({
       onOpenChange={(isOpen) => {
         if (!isOpen) onClose();
       }}
-      className="fixed inset-0 z-50 flex items-end bg-[color-mix(in_srgb,var(--bg-ground)_60%,transparent)]"
+      className="fixed inset-0 z-50 flex items-end justify-center bg-[color-mix(in_srgb,var(--bg-ground)_60%,transparent)] sm:items-center"
     >
-      <Modal className="w-full animate-[htco-sheet-in_var(--motion-duration-slow)_var(--motion-easing-enter)_both] p-2 pb-[max(8px,env(safe-area-inset-bottom))]">
+      <Modal className="w-full sm:max-w-[560px] animate-[htco-sheet-in_var(--motion-duration-slow)_var(--motion-easing-enter)_both] p-2 pb-[max(8px,env(safe-area-inset-bottom))]">
         <Dialog className="outline-none" aria-label={t`Order ${String(order.order_id)}`}>
           <Panel>
             <PanelHeader
@@ -685,6 +707,7 @@ function OrderSheet({
                   ],
                 ]}
               />
+              <RefundDetails order={order} />
               <ul className="m-0 flex list-none flex-col gap-2 p-0">
                 {order.items.map((item, i) => (
                   <li

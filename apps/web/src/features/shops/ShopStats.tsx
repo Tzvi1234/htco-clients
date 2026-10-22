@@ -13,6 +13,7 @@ import {
   type AllTimeSales,
   type ShopStats as Stats,
 } from "../commerce/live.tsx";
+import { useReason } from "../commerce/refunds.tsx";
 import { useApi } from "../../shared/api/api.tsx";
 import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
 import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
@@ -138,6 +139,7 @@ function ShopFigures({ shop, picker }: { shop: LiveShop; picker: ReactNode }) {
           <Countries sales={data.sales} />
         </FlowRow>
       )}
+      {data.sales === null || data.sales.orders === 0 ? null : <Refunds sales={data.sales} />}
     </>
   );
 }
@@ -353,6 +355,87 @@ function TopProducts({ sales }: { sales: AllTimeSales }) {
           ),
         }))}
       />
+    </Panel>
+  );
+}
+
+/**
+ * Refunds and cancellations by Etsy's reason (a cancellation takes the reason of its refund):
+ * orders and amounts as horizontal bars, with the refund and cancellation rates over the orders
+ * read. "No reason given" when Etsy has none.
+ */
+function Refunds({ sales }: { sales: AllTimeSales }) {
+  const { t } = useLingui();
+  const money = useMoney();
+  const count = useCount();
+  const reason = useReason();
+  const rows = sales.refunds_and_cancellations;
+  const refunded = rows.filter((r) => r.kind === "refund").reduce((n, r) => n + r.orders, 0);
+  const cancelled = rows.filter((r) => r.kind === "cancellation").reduce((n, r) => n + r.orders, 0);
+  const rate = (n: number) =>
+    sales.receipts_read === 0
+      ? "0%"
+      : `${(Math.round((n / sales.receipts_read) * 1000) / 10).toString()}%`;
+  return (
+    <Panel>
+      <PanelHeader
+        title={<Trans>Refunds and cancellations</Trans>}
+        meta={<Trans>by Etsy's reason</Trans>}
+      />
+      {rows.length === 0 ? (
+        <p className="m-0 px-6 pb-6 text-body-sm text-secondary">
+          <Trans>No refunds or cancellations in these orders.</Trans>
+        </p>
+      ) : (
+        <div className="grid gap-6 px-6 pb-6 max-sm:px-4 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+          <dl className="m-0 flex flex-col gap-4" aria-label={t`Refund rate`}>
+            <div className="flex flex-col gap-0.5">
+              <dt className="text-caption text-secondary">
+                <Trans>Refund rate</Trans>
+              </dt>
+              <dd className="m-0 font-display text-title font-light">
+                <N>{rate(refunded)}</N>
+              </dd>
+              <dd className="m-0 text-caption text-muted">
+                {t`${count(refunded)} of ${count(sales.receipts_read)} orders refunded`}
+              </dd>
+            </div>
+            <div className="flex flex-col gap-0.5">
+              <dt className="text-caption text-secondary">
+                <Trans>Cancellation rate</Trans>
+              </dt>
+              <dd className="m-0 font-display text-title font-light">
+                <N>{rate(cancelled)}</N>
+              </dd>
+              <dd className="m-0 text-caption text-muted">
+                {t`${count(cancelled)} of ${count(sales.receipts_read)} orders cancelled`}
+              </dd>
+            </div>
+          </dl>
+          <HBarList
+            label={t`Refunds and cancellations by reason`}
+            items={rows.map((r) => ({
+              key: `${r.kind}:${r.reason ?? ""}`,
+              label: (
+                <>
+                  <span className="text-secondary">
+                    {r.kind === "cancellation" ? t`Cancelled` : t`Refunded`}
+                    {" · "}
+                  </span>
+                  <span dir="auto">{reason(r.reason)}</span>
+                </>
+              ),
+              value: r.orders,
+              text: (
+                <>
+                  <Plural value={r.orders} one="# order" other="# orders" /> ·{" "}
+                  <N>{money(r.amount)}</N>
+                </>
+              ),
+            }))}
+          />
+        </div>
+      )}
     </Panel>
   );
 }
