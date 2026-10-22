@@ -2430,6 +2430,11 @@ msgstr "New task"
 msgid "New this month"
 msgstr "New this month"
 
+#. placeholder {0}: count(all.data.items.length)
+#: src/features/commerce/OrdersPage.tsx
+msgid "newest {0} orders, before Etsy's fees"
+msgstr "newest {0} orders, before Etsy's fees"
+
 #: src/features/customers/CustomersPage.tsx
 msgid "Newest first"
 msgstr "Newest first"

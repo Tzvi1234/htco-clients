@@ -101,14 +101,14 @@ function ShopFigures({ shop, picker }: { shop: LiveShop; picker: ReactNode }) {
   if (stats.isError)
     return (
       <Panel>
-        <PanelHeader title={<Trans>Since the shop opened</Trans>} />
+        <PanelHeader title={<Trans>Since the shop opened</Trans>} actions={picker} />
         <LiveProblem error={stats.error} onRetry={() => void stats.refetch()} />
       </Panel>
     );
   if (data === undefined)
     return (
       <Panel>
-        <PanelHeader title={<Trans>Since the shop opened</Trans>} />
+        <PanelHeader title={<Trans>Since the shop opened</Trans>} actions={picker} />
         <LiveSkeleton rows={5} label={t`Loading statistics`} />
       </Panel>
     );

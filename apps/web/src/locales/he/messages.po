@@ -2430,6 +2430,11 @@ msgstr "משימה חדשה"
 msgid "New this month"
 msgstr "חדשים החודש"
 
+#. placeholder {0}: count(all.data.items.length)
+#: src/features/commerce/OrdersPage.tsx
+msgid "newest {0} orders, before Etsy's fees"
+msgstr "{0} ההזמנות האחרונות, לפני עמלות Etsy"
+
 #: src/features/customers/CustomersPage.tsx
 msgid "Newest first"
 msgstr "החדשות קודם"

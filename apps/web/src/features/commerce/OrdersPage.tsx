@@ -377,7 +377,13 @@ function Orders({ shopId, chips }: { shopId: string; chips: ReactNode }) {
               <Figure
                 label={<Trans>Revenue</Trans>}
                 value={<N>{money(revenue, { whole: true })}</N>}
-                note={<Trans>paid orders, before Etsy's fees</Trans>}
+                note={
+                  // A period cut at the API's cap: the sum covers the orders read, and says so
+                  // (Codex, #38).
+                  period !== "30d" && all.data?.partial === true
+                    ? t`newest ${count(all.data.items.length)} orders, before Etsy's fees`
+                    : t`paid orders, before Etsy's fees`
+                }
               />
             )}
           </Figures>
