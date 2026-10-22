@@ -18,6 +18,10 @@ import { ForgotPasswordPage } from "../features/auth/ForgotPasswordPage.tsx";
 import { ResetPasswordPage } from "../features/auth/ResetPasswordPage.tsx";
 import { SecondFactorPage } from "../features/auth/SecondFactorPage.tsx";
 import { SignInPage } from "../features/auth/SignInPage.tsx";
+import { OrdersPage } from "../features/commerce/OrdersPage.tsx";
+import { ProductsPage } from "../features/commerce/ProductsPage.tsx";
+import { ShippingPage } from "../features/commerce/ShippingPage.tsx";
+import { CustomersPage } from "../features/customers/CustomersPage.tsx";
 import { OverviewPage } from "../features/overview/OverviewPage.tsx";
 import { SecurityPage } from "../features/security/SecurityPage.tsx";
 import { SettingsPage } from "../features/settings/SettingsPage.tsx";
@@ -178,6 +182,31 @@ const routeTree = rootRoute.addChildren([
         path: "/shops",
         staticData: { layout: "panels" },
         component: ShopsPage,
+      }),
+      // The shop's live data from Etsy (platform: dashboard data, slice 4.6).
+      createRoute({
+        getParentRoute: () => appRoute,
+        path: "/commerce/orders",
+        staticData: { layout: "panels" },
+        component: OrdersPage,
+      }),
+      createRoute({
+        getParentRoute: () => appRoute,
+        path: "/commerce/products",
+        staticData: { layout: "panels" },
+        component: ProductsPage,
+      }),
+      createRoute({
+        getParentRoute: () => appRoute,
+        path: "/commerce/shipping",
+        staticData: { layout: "panels" },
+        component: ShippingPage,
+      }),
+      createRoute({
+        getParentRoute: () => appRoute,
+        path: "/customers/customers",
+        staticData: { layout: "panels" },
+        component: CustomersPage,
       }),
       createRoute({
         getParentRoute: () => appRoute,

@@ -14,8 +14,9 @@ export const CONTENT_SECURITY_POLICY = [
   // React Aria injects one fixed <style> (touch-action for pressable elements); its hash only.
   // styles.css repeats the rule, so an upgrade that changes the hash degrades nothing.
   `style-src 'self' '${REACT_ARIA_PRESSABLE_STYLE}'`,
-  // The authenticator QR code arrives from the API as a data: image.
-  "img-src 'self' data:",
+  // The authenticator QR code arrives from the API as a data: image; listing photos come from
+  // Etsy's image host (read only, no cookies; the referrer stays on this site).
+  "img-src 'self' data: https://i.etsystatic.com",
   "font-src 'self'",
   "connect-src 'self'",
   "object-src 'none'",

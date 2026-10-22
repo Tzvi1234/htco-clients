@@ -170,7 +170,7 @@ export function DotColumns({
   /** What the chart says, for screen readers; without it the chart is decorative. */
   label?: string;
 }) {
-  const max = Math.max(...values);
+  const max = Math.max(1, ...values);
   const w = values.length * gap;
   const h = rows * pitch;
   return (

@@ -46,12 +46,14 @@ Seven areas in the owner's order and wording, defined once in `apps/web/src/app/
 
 | Area (he) | Tab | Address | Screen |
 |---|---|---|---|
-| Home (בית) | — | `/` | Built: greeting, shops, getting started; approvals, key numbers and the office pulse as demos |
+| Home (בית) | — | `/` | Built: greeting, shops, getting started, revenue and orders today live from Etsy, the shop card's 7-day orders; approvals, tickets, incidents and the office pulse as demos |
 | Office (המשרד) | Floor · Chat · Team room · AI ops · Engineering | `/office/floor` · `/office/chat` · `/office/team` · `/office/aiops` · `/office/eng` | Soon (the demo's full screens in the demo frame; the floor is the living 3D office) |
 | Work (עבודה) | Tasks · Approvals · Activity | `/work/tasks` · `/work/approvals` · `/work/activity` | Soon (the demo's full screens in the demo frame) |
-| Commerce (מסחר) | Shops | `/shops` (also `/commerce/shops`; the Etsy return `/integrations/etsy/callback` belongs here) | Built: shops and their connection, connecting with the step-up code; sales tiles and top listings as demos |
-| | Orders · Products · Shipping · Suppliers | `/commerce/orders` · `/commerce/products` · `/commerce/shipping` · `/commerce/suppliers` | Soon (the demo's full screens in the demo frame) |
-| Customers (לקוחות) | Tickets · Customers · Mail · Marketing | `/customers/tickets` · `/customers/customers` · `/customers/mail` · `/customers/marketing` | Soon (the demo's full screens in the demo frame) |
+| Commerce (מסחר) | Shops | `/shops` (also `/commerce/shops`; the Etsy return `/integrations/etsy/callback` belongs here) | Built: shops and their connection, connecting with the step-up code; sales tiles and top listings live from Etsy |
+| | Orders · Products · Shipping | `/commerce/orders` · `/commerce/products` · `/commerce/shipping` | Built, live from Etsy (read-through until Phase 5 ingests orders); production cost, supplier, tracking sync and delivery performance as Demo parts |
+| | Suppliers | `/commerce/suppliers` | Soon (the demo's full screen in the demo frame) |
+| Customers (לקוחות) | Customers | `/customers/customers` | Built: the shop's reviews live from Etsy; customer health and list as Demo parts (a customer store arrives with Phase 5) |
+| | Tickets · Mail · Marketing | `/customers/tickets` · `/customers/mail` · `/customers/marketing` | Soon (the demo's full screens in the demo frame) |
 | Finance (כספים) | Overview · Ledger | `/finance/overview` · `/finance/ledger` | Soon (the demo's full screens in the demo frame) |
 | Admin (ניהול) | Health · Automations | `/admin/health` · `/admin/automations` | Soon (the demo's full screens in the demo frame) |
 | | Members & access | `/settings/team` (also `/admin/members`) | Built: members, inviting with the one-time link, role changes, shop access, removal; AI employees and the approval policy as demos |

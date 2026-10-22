@@ -60,7 +60,10 @@ export const AREAS: readonly NavArea[] = [
     to: "/shops",
     tabs: [
       { id: "shops", to: "/shops", built: true, also: ["/integrations/etsy/callback"] },
-      ...soon("commerce", "orders", "products", "shipping", "suppliers"),
+      { id: "orders", to: "/commerce/orders", built: true },
+      { id: "products", to: "/commerce/products", built: true },
+      { id: "shipping", to: "/commerce/shipping", built: true },
+      ...soon("commerce", "suppliers"),
     ],
   },
   {
@@ -68,7 +71,11 @@ export const AREAS: readonly NavArea[] = [
     group: "workspace",
     icon: ChatIcon,
     to: "/customers/tickets",
-    tabs: soon("customers", "tickets", "customers", "mail", "marketing"),
+    tabs: [
+      ...soon("customers", "tickets"),
+      { id: "customers", to: "/customers/customers", built: true },
+      ...soon("customers", "mail", "marketing"),
+    ],
   },
   {
     id: "finance",
