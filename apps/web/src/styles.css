@@ -404,7 +404,8 @@
      data-hit="own". The layer is in this base layer, so a control's own position (absolute,
      sticky) still wins. Options that sit side by side in a group (radios, tabs) extend only
      up and down, so one option's layer never covers its neighbour; their groups give them
-     44 px of width themselves (Segmented). */
+     44 px of width themselves (Segmented). Stacked rows (menus, lists, the sidebar) are 44 px
+     tall themselves. */
   @media (any-pointer: coarse) {
     :where(
       a[href],
@@ -417,6 +418,8 @@
       [role="switch"],
       [role="checkbox"],
       [role="menuitem"],
+      [role="menuitemradio"],
+      [role="menuitemcheckbox"],
       [role="option"]
     ):not([data-hit="own"]) {
       position: relative;
@@ -433,6 +436,8 @@
         [role="switch"],
         [role="checkbox"],
         [role="menuitem"],
+        [role="menuitemradio"],
+        [role="menuitemcheckbox"],
         [role="option"]
       ):not([data-hit="own"])::after {
       content: "";
@@ -443,6 +448,21 @@
 
     :where([role="radio"], [role="tab"]):not([data-hit="own"])::after {
       inset-inline: 0;
+    }
+
+    /* Menu and list rows are stacked: each is 44 px tall itself and its layer does not grow
+       up or down into the next row. */
+    :where([role="menuitem"], [role="menuitemradio"], [role="menuitemcheckbox"], [role="option"]) {
+      min-height: 44px;
+    }
+
+    :where(
+        [role="menuitem"],
+        [role="menuitemradio"],
+        [role="menuitemcheckbox"],
+        [role="option"]
+      ):not([data-hit="own"])::after {
+      inset-block: 0;
     }
   }
 
