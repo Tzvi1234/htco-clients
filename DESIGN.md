@@ -127,8 +127,10 @@ and a top bar that carries the page's light 24 px title. Nothing shouts. What is
 One accent, orange (lilac in Design 4), marks what needs the owner and what is live.
 
 The density is an operations room's: 300 px side columns, 8 px gaps between panels, 24 px
-gutters inside them, label-over-value pairs, round outline buttons in panel headers, dotted
-progress and matrix charts. Hebrew and English are equals; the whole layout mirrors.
+gutters inside them, label-over-value pairs, round outline buttons in panel headers, and plain
+charts in the tertiary orange (bars, a line, horizontal bars). Hebrew and English are equals; the
+whole layout mirrors, and time in a chart runs in the reading direction (the newest at the left in
+Hebrew).
 
 The design breathes rather than decorates: LED-like pulses on live things, panels that enter one
 after another, screens that settle back and arrive along the navigation's direction, and the
@@ -251,6 +253,19 @@ explicit value) — Tailwind's own radius scale is removed.
 - **Secondary:** transparent with a strong hairline; hover darkens the hairline and fills hover.
 - **Circle button (`.cb`):** 40 px outline circle with an icon, named by its label and tooltip.
 - **Focus:** one 2 px ink ring, 2 px offset, following the control's radius, on every control.
+
+### Charts
+
+- **Kit:** `BarChart` (counts per day or month), `LineChart` (an amount over time, over a soft
+  area), `HBarList` (rankings: top products, countries) and `ProgressBar`, hand-drawn in
+  `shared/ui/kit/charts/`; no chart library. The dotted matrix and strip are kept for Demo screens.
+- **Colour:** the current or best period in the full tertiary orange, the other bars in a lighter
+  wash of it (`.k-bar-soft`); the line in `tertiary-text` so it holds 3:1 on every ground. Values,
+  axis labels and tips use the text tokens, never orange.
+- **Reading:** every bar carries its value as text (or the key ones, for long series) and a tip on
+  hover or tap; gridlines are dashed hairlines. Each chart is one image named with every value.
+- **Direction:** values come oldest first and the columns follow `dir`, so the newest period is at
+  the left in Hebrew and at the right in English. Under 28rem, long axes name every other column.
 
 ### Chips and tags
 

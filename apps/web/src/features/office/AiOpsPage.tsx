@@ -7,13 +7,13 @@ import {
   CircleButton,
   DemoFrame,
   Dot,
-  DotBar,
-  DotColumns,
+  BarChart,
   DownloadGlyph,
   IdBlock,
   KV,
   KV2,
   N,
+  ProgressBar,
   Pill,
   Stack,
   StatusGlyph,
@@ -40,7 +40,7 @@ export function AiOpsPage() {
               {t`of`} <N>$50.00</N>
             </div>
           </IdBlock>
-          <DotBar count={50} filled={12} label={t`$12.40 of $50.00 spent`} />
+          <ProgressBar value={12.4} max={50} label={t`$12.40 of $50.00 spent`} />
           <KV
             items={[
               [t`Daily cap`, <N key="a">$5.00</N>],
@@ -77,15 +77,15 @@ export function AiOpsPage() {
           actions={<CircleButton label={t`Export`} icon={<DownloadGlyph />} />}
         />
         <PanelBody className="items-center justify-center gap-6">
-          <div className="max-w-full overflow-x-auto">
-            <DotColumns
+          <div className="w-full">
+            <BarChart
               values={DAILY}
-              rows={14}
               highlight={14}
-              pitch={12}
-              gap={30}
+
               labels={DAYS}
               label={t`Daily AI spend, 1 to 15 October`}
+              valueLabels="key"
+              format={(v) => `$${v.toFixed(2)}`}
             />
           </div>
           <div className="grid grid-cols-4 gap-2 w-full">

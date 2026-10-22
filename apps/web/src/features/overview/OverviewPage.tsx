@@ -29,8 +29,7 @@ import {
   DemoPart,
   DemoTag,
   Dot,
-  DotBar,
-  DotColumns,
+  BarChart,
   Figure,
   Figures,
   Flow,
@@ -39,6 +38,7 @@ import {
   Focus,
   IdBlock,
   N,
+  ProgressBar,
   Status,
   StatusGlyph,
   StripCard,
@@ -519,13 +519,13 @@ function ShopCard({
               <span className="h-[45px] w-40 rounded-pill bg-hover motion-safe:animate-pulse" />
             ) : (
               <>
-                <DotColumns
+                <BarChart
                   values={week.map((d) => d.orders)}
-                  rows={5}
-                  pitch={9}
-                  gap={16}
+                  labels={week.map((d) => String(Number(d.date.slice(8, 10))))}
                   highlight={week.length - 1}
-                  label={t`Orders in the last 7 days: ${week.map((d) => String(d.orders)).join(", ")}`}
+                  height={88}
+                  className="max-w-[260px]"
+                  label={t`Orders in the last 7 days`}
                 />
                 <span className="text-caption font-light text-muted">{t`Orders, last 7 days`}</span>
               </>
@@ -602,12 +602,7 @@ function GettingStarted() {
             </li>
           ))}
         </ol>
-        <DotBar
-          count={24}
-          filled={Math.round((done / total) * 24)}
-          accent={0}
-          label={t`${doneCount} of ${totalCount} done`}
-        />
+        <ProgressBar value={done} max={total} label={t`${doneCount} of ${totalCount} done`} />
       </FlowBody>
     </section>
   );

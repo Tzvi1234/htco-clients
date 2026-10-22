@@ -17,7 +17,7 @@ import {
   CountUp,
   DemoFrame,
   Dot,
-  DotColumns,
+  BarChart,
   FilterGlyph,
   IdBlock,
   InkDisc,
@@ -444,13 +444,12 @@ function ActivityDemo() {
             ]}
           />
           <div className="max-sm:hidden">
-            <DotColumns
+            <BarChart
               values={[4, 6, 3, 8, 12, 16, 14, 22, 18, 11, 8, 6]}
-              rows={8}
               highlight={7}
-              gap={22}
               labels={["00", "", "", "06", "", "", "12", "", "", "18", "", "23"]}
               label={t`Events by hour, busiest at 14:00`}
+              valueLabels="key"
             />
           </div>
         </Body>

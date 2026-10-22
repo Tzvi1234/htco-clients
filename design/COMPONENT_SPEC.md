@@ -280,7 +280,9 @@ Frame for every chart: title, legend, the chart, and the source line.
 - Series colours in order `dataviz-1` … `dataviz-5`; never more than five series.
 - Axis labels and gridlines in `text-muted` and `border-subtle`.
 - Footer states source, period and freshness; estimated values use a dashed line.
-- Every chart has a table view for screen readers.
+- Every chart has a table view for screen readers, or (the web kit's `BarChart` and `LineChart`) is one image whose name lists every point and value; `HBarList` stays a list of its words.
+- Time runs in the reading direction: oldest first in the data, the newest at the left in Hebrew.
+- One highlighted period in the full tertiary orange, the rest in its lighter wash (DESIGN.md, Charts).
 
 ### Ltr
 

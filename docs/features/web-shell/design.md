@@ -49,7 +49,8 @@ apps/web/src/
                       layout (Screen grids l3 … lc3s, Stack), parts (CircleButton, InkDisc, Pill, Chip,
                       Dot, IdBlock, KV, KV2, SectionLabel, Card, Tile, CountUp, Toggle, ListRow, Kpis,
                       Typing, N), status (StatusGlyph, Status, the nine statuses), avatar (Avatar, Who,
-                      Avatars), charts (Matrix, DotColumns, DotBar), table (DataTable), strip (Strip,
+                      Avatars), charts/ (BarChart, LineChart, HBarList,
+                      ProgressBar), dotted (Matrix, DotBar: Demo screens only), table (DataTable), strip (Strip,
                       StripCards, StripCard, Zoom), thumb (ProductThumb), form (PillField, ChoiceChips,
                       PillSelect, CodeBoxes), demo (DemoFrame, DemoPart, DemoTag), glyphs, bi (sample
                       text in both languages), kit.css (live motion and the chat, row and stage patterns)

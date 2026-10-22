@@ -37,9 +37,9 @@ import {
   FlowBody,
   FlowRow,
   Focus,
+  HBarList,
   KV,
   ListRow,
-  Matrix,
   N,
   SectionLabel,
   Status,
@@ -330,17 +330,15 @@ function Shipping({ shopId, chips }: { shopId: string; chips: ReactNode }) {
                         <Trans key="t">Tracking sync</Trans>,
                         <Status key="tv" live status="failed" />,
                       ],
-                      [<Trans key="o">On time</Trans>, <N key="ov">88%</N>],
                     ]}
                   />
-                  <Matrix
-                    top={<Trans>Delivery performance</Trans>}
-                    start={<Trans>On time</Trans>}
-                    end={<Trans>Cost</Trans>}
-                    bottom={<Trans>Speed</Trans>}
-                    value="88"
-                    caption={<Trans>On target</Trans>}
-                    k={4}
+                  <HBarList
+                    label={t`Delivery performance`}
+                    max={100}
+                    items={[
+                      { key: "on-time", label: t`On time`, value: 88, text: <N>88%</N> },
+                      { key: "tracked", label: t`Tracked`, value: 96, text: <N>96%</N> },
+                    ]}
                   />
                 </div>
               </DemoPart>

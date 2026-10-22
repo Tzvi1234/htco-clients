@@ -10,13 +10,13 @@ import {
   DataTable,
   DemoFrame,
   Dot,
-  DotBar,
-  DotColumns,
+  BarChart,
   DownloadGlyph,
   IdBlock,
   KV,
   KV2,
   Matrix,
+  ProgressBar,
   NextGlyph,
   Stack,
   Strip,
@@ -70,16 +70,16 @@ export function FinanceOverviewDemo({ title }: { title: string }) {
           actions={<CircleButton label={t`Export`} icon={<DownloadGlyph />} />}
         />
         <PanelBody className="items-center justify-center gap-6">
-          <DotColumns
+          <BarChart
             label={t`Daily revenue, 1 to 15 October: $780 to $1,284, highest today`}
             values={[
               840, 920, 780, 1010, 1100, 960, 880, 1150, 990, 1040, 1210, 1090, 970, 1180, 1284,
             ]}
-            rows={14}
             highlight={14}
-            pitch={12}
-            gap={30}
+
             labels={["1", "", "", "", "5", "", "", "", "", "10", "", "", "", "", "15"]}
+            valueLabels="key"
+            format={(v) => `$${v.toLocaleString("en-US")}`}
           />
           <div className="grid w-full grid-cols-2 gap-2 md:grid-cols-4">
             <Tile label={t`Today`} value={<L>$1,284</L>} />
@@ -98,7 +98,7 @@ export function FinanceOverviewDemo({ title }: { title: string }) {
             />
             <PanelBody className="justify-between gap-4">
               <IdBlock label={<L>{name}</L>} value={<L>{value}</L>} />
-              <DotBar count={40} filled={dots} />
+              <ProgressBar value={dots} max={40} />
               <KV2
                 items={[
                   [
@@ -166,7 +166,7 @@ export function LedgerDemo({ title }: { title: string }) {
               [t`Controller`, byId("roni").name],
             ]}
           />
-          <DotBar count={40} filled={26} />
+          <ProgressBar value={26} max={40} />
         </PanelBody>
       </Panel>
       <Panel>

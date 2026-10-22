@@ -33,7 +33,7 @@ import { Segmented } from "../../shared/ui/Segmented.tsx";
 import {
   Chip,
   DataTable,
-  DotColumns,
+  BarChart,
   Figure,
   Figures,
   Flow,
@@ -411,14 +411,14 @@ function Orders({ shopId, chips }: { shopId: string; chips: ReactNode }) {
         }
         aside={
           week.length === 0 ? undefined : (
-            <div className="flex flex-col items-center gap-2">
-              <DotColumns
+            <div className="flex w-[280px] flex-col items-center gap-2">
+              <BarChart
                 values={week.map((d) => d.orders)}
-                rows={6}
-                highlight={6}
-                gap={28}
                 labels={weekdays}
-                label={t`Orders per day in the last 7 days: ${week.map((d) => String(d.orders)).join(", ")}`}
+                tips={week.map((d) => date(`${d.date}T12:00:00`))}
+                highlight={week.length - 1}
+                format={count}
+                label={t`Orders per day in the last 7 days`}
               />
               <span className="text-caption font-light text-muted">
                 <Trans>Orders per day, last 7 days</Trans>

@@ -20,7 +20,7 @@ import {
   DemoFrame,
   DocGlyph,
   Dot,
-  DotColumns,
+  BarChart,
   FilterGlyph,
   IdBlock,
   InkDisc,
@@ -513,14 +513,13 @@ export function MarketingDemo({ title }: { title: string }) {
       <Panel>
         <PanelHeader title={<Trans>Clicks per day</Trans>} meta={<L>1–15.10</L>} />
         <PanelBody className="items-center justify-center">
-          <DotColumns
+          <BarChart
             label={t`Clicks per day, 1 to 15 October: 18 to 41, highest today`}
             values={[18, 22, 25, 21, 30, 28, 33, 26, 31, 35, 29, 27, 34, 38, 41]}
-            rows={14}
             highlight={14}
-            pitch={12}
-            gap={30}
+
             labels={["1", "", "", "", "5", "", "", "", "", "10", "", "", "", "", "15"]}
+            valueLabels="key"
           />
         </PanelBody>
       </Panel>

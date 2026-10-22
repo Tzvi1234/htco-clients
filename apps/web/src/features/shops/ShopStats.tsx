@@ -17,7 +17,16 @@ import { useApi } from "../../shared/api/api.tsx";
 import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
 import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
 import { Segmented } from "../../shared/ui/Segmented.tsx";
-import { DotColumns, Figure, Figures, FlowRow, Focus, N } from "../../shared/ui/kit/index.ts";
+import {
+  BarChart,
+  Figure,
+  Figures,
+  FlowRow,
+  Focus,
+  HBarList,
+  LineChart,
+  N,
+} from "../../shared/ui/kit/index.ts";
 
 interface LiveShop {
   id: string;
@@ -34,12 +43,12 @@ function monthsBetween(from: Date, to: Date): number {
   );
 }
 
-function useMonthName(): (iso: string, style?: "long" | "short") => string {
+function useMonthName(): (iso: string, style?: "long" | "short" | "axis") => string {
   const { locale } = useLocale();
   return (iso, style = "long") =>
     new Intl.DateTimeFormat(locale, {
-      month: style,
-      year: "numeric",
+      month: style === "axis" ? "short" : style,
+      ...(style === "axis" ? {} : { year: "numeric" }),
       timeZone: "UTC",
     }).format(new Date(`${iso.slice(0, 10)}T00:00:00Z`));
 }
@@ -115,6 +124,7 @@ function ShopFigures({ shop, picker }: { shop: LiveShop; picker: ReactNode }) {
   return (
     <>
       <Hero shop={shop} stats={data} picker={picker} />
+      {data.sales !== null && data.sales.orders > 0 ? <Monthly sales={data.sales} /> : null}
       {data.sales === null ? (
         <Panel>
           <p className="m-0 px-6 py-10 text-center text-body-sm text-secondary">
@@ -224,14 +234,14 @@ function Hero({ shop, stats, picker }: { shop: LiveShop; stats: Stats; picker: R
       }
       aside={
         recent.length === 0 ? undefined : (
-          <div className="flex flex-col items-center gap-2">
-            <DotColumns
+          <div className="flex w-[360px] flex-col items-center gap-2">
+            <BarChart
               values={recent.map((m) => m.orders)}
-              rows={8}
+              labels={recent.map((m) => monthName(m.month, "axis"))}
+              tips={recent.map((m) => monthName(m.month))}
               highlight={recent.length - 1}
-              gap={20}
-              labels={recent.map((m) => String(Number(m.month.slice(5, 7))))}
-              label={t`Orders per month, last 12 months: ${recent.map((m) => String(m.orders)).join(", ")}`}
+              format={count}
+              label={t`Orders per month, last 12 months`}
             />
             <span className="text-caption font-light text-muted">
               <Trans>Orders per month, last 12 months</Trans>
@@ -240,6 +250,53 @@ function Hero({ shop, stats, picker }: { shop: LiveShop; stats: Stats; picker: R
         )
       }
     />
+  );
+}
+
+/**
+ * Revenue per month over the last 12 months, the current month marked. On screens without the
+ * focus's side column (phones, tablets) the orders per month show here too, above it.
+ */
+function Monthly({ sales }: { sales: AllTimeSales }) {
+  const { t } = useLingui();
+  const money = useMoney();
+  const count = useCount();
+  const monthName = useMonthName();
+  const recent = sales.monthly.slice(-12);
+  if (recent.length < 2) return null;
+  const amount = (value: number) =>
+    money({ amount: String(value), currency: sales.currency }, { whole: true });
+  return (
+    <Panel>
+      <PanelHeader
+        title={<Trans>Revenue per month</Trans>}
+        meta={<Trans>last 12 months, before Etsy's fees</Trans>}
+      />
+      <div className="flex flex-col gap-6 px-6 pb-6 max-sm:px-4">
+        <div className="flex flex-col gap-2 lg:hidden">
+          <span className="text-caption text-secondary">
+            <Trans>Orders per month, last 12 months</Trans>
+          </span>
+          <BarChart
+            values={recent.map((m) => m.orders)}
+            labels={recent.map((m) => monthName(m.month, "axis"))}
+            tips={recent.map((m) => monthName(m.month))}
+            highlight={recent.length - 1}
+            format={count}
+            label={t`Orders per month, last 12 months`}
+          />
+        </div>
+        <LineChart
+          values={recent.map((m) => Number(m.revenue))}
+          labels={recent.map((m) => monthName(m.month, "axis"))}
+          tips={recent.map((m) => monthName(m.month))}
+          highlight={recent.length - 1}
+          format={amount}
+          label={t`Revenue per month, last 12 months`}
+          height={160}
+        />
+      </div>
+    </Panel>
   );
 }
 
@@ -281,27 +338,27 @@ function TopProducts({ sales }: { sales: AllTimeSales }) {
   return (
     <Panel>
       <PanelHeader title={<Trans>Top products</Trans>} meta={<Trans>by units sold</Trans>} />
-      <ol className="m-0 flex list-none flex-col gap-1 px-4 pb-4">
-        {sales.top_products.map((p, i) => (
-          <li
-            key={p.listing_id}
-            className="flex items-baseline gap-3 rounded-card px-2 py-1.5 text-body-sm"
-          >
-            <N className="w-4 shrink-0 text-muted">{String(i + 1)}</N>
-            <span dir="auto" className="min-w-0 grow truncate text-start">
-              {p.title}
-            </span>
-            <span className="shrink-0 text-caption text-secondary">
+      <HBarList
+        ranked
+        label={t`Top products`}
+        className="px-6 pb-6"
+        items={sales.top_products.map((p) => ({
+          key: String(p.listing_id),
+          label: p.title,
+          value: p.units,
+          text: (
+            <>
               <N>{count(p.units)}</N> {t`sold`} · <N>{money(p.revenue, { whole: true })}</N>
-            </span>
-          </li>
-        ))}
-      </ol>
+            </>
+          ),
+        }))}
+      />
     </Panel>
   );
 }
 
 function Countries({ sales }: { sales: AllTimeSales }) {
+  const { t } = useLingui();
   const count = useCount();
   const countryName = useCountryName();
   const shown = sales.countries.slice(0, 6);
@@ -314,27 +371,24 @@ function Countries({ sales }: { sales: AllTimeSales }) {
           <Trans>Etsy gave no destination countries for these orders.</Trans>
         </p>
       ) : (
-        <ul className="m-0 flex list-none flex-col gap-2.5 px-6 pb-6">
-          {shown.map((c) => {
+        <HBarList
+          label={t`Where orders go`}
+          className="px-6 pb-6"
+          max={total}
+          items={shown.map((c) => {
             const share = total === 0 ? 0 : Math.round((c.orders / total) * 100);
-            return (
-              <li key={c.country} className="flex flex-col gap-1">
-                <span className="flex items-baseline justify-between gap-3 text-body-sm">
-                  <span>{countryName(c.country)}</span>
-                  <span className="text-caption text-secondary">
-                    <N>{count(c.orders)}</N> · <N>{`${String(share)}%`}</N>
-                  </span>
-                </span>
-                <span aria-hidden="true" className="h-1 w-full rounded-pill bg-hover">
-                  <span
-                    className="block h-1 rounded-pill bg-tertiary"
-                    style={{ width: `${String(Math.max(2, share))}%` }}
-                  />
-                </span>
-              </li>
-            );
+            return {
+              key: c.country,
+              label: countryName(c.country),
+              value: c.orders,
+              text: (
+                <>
+                  <N>{count(c.orders)}</N> · <N>{`${String(share)}%`}</N>
+                </>
+              ),
+            };
           })}
-        </ul>
+        />
       )}
     </Panel>
   );
