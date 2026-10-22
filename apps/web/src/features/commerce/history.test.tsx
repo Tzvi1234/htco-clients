@@ -5,7 +5,7 @@ import { describe, expect, it, vi } from "vitest";
 
 import { App } from "../../app/App.tsx";
 import { memoryStorage } from "../../shared/lib/storage.ts";
-import { fakeBackend, fakeIntegration, type FakeState } from "../../test/fakeApi.ts";
+import { demoShops, fakeBackend, fakeIntegration, type FakeState } from "../../test/fakeApi.ts";
 
 // The owner's report on the live shop (2026-10-22): "there are reviews, so there were orders,
 // but the completed orders don't show". The dashboard read 30 days only and every order was
@@ -205,5 +205,34 @@ describe("Shops › Statistics: the shop since it opened", () => {
     const figures = within(focus).getByRole("list", { name: "סטטיסטיקת החנות" });
     const number = within(figures).getAllByText(/^[\d,]+$/)[0];
     expect(number?.closest("[dir='ltr'], .ltr")).not.toBeNull();
+  });
+
+  it("keeps the shop picker when one shop's statistics fail (Codex, #38)", async () => {
+    const { user } = await open("/shops", { ...demoShops(), statsFailFor: [WILLOW] });
+    await screen.findByRole("article", { name: "Willow & Wick" });
+
+    await user.click(screen.getByRole("tab", { name: "Statistics" }));
+
+    const failed = await panel("Since the shop opened");
+    expect(await within(failed).findByRole("alert")).toBeInTheDocument();
+    const picker = within(failed).getByRole("radiogroup", { name: "Shop" });
+    await user.click(within(picker).getByRole("radio", { name: "Linen Lane Studio" }));
+
+    const focus = await panel("Since the shop opened");
+    expect(within(focus).getByRole("list", { name: "Shop statistics" })).toBeInTheDocument();
+  });
+});
+
+describe("Orders: a capped period's revenue says what it covers (Codex, #38)", () => {
+  it("labels the revenue as that of the newest orders when the period was cut", async () => {
+    const { user } = await open("/commerce/orders", { liveTrouble: "partial" });
+    await panel("Last 30 days");
+
+    await user.click(screen.getByRole("radio", { name: "All time" }));
+
+    const focus = await panel("All time");
+    expect(
+      await within(focus).findByText(/^newest [\d,]+ orders, before Etsy's fees$/),
+    ).toBeInTheDocument();
   });
 });

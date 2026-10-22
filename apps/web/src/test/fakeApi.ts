@@ -84,6 +84,8 @@ export interface FakeState {
     | undefined;
   /** Workspaces whose shop list answers 500. */
   shopsFailFor?: string[];
+  /** Shops whose statistics (`GET /v1/shops/{id}/stats`) answer 503 etsy-data-unavailable. */
+  statsFailFor?: string[];
   /** True: the shops are busy, 160 orders in 30 days (more than one page of 100). */
   liveBusy?: boolean;
 }
@@ -598,6 +600,8 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
       );
     if (view === "reviews") return json(200, mark(data.reviews));
     if (view === "stats") {
+      if (state.statsFailFor?.includes(shopId) === true)
+        return problem(503, "etsy-data-unavailable");
       if (trouble === "quiet")
         return json(200, {
           ...data.stats(),
