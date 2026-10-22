@@ -21,6 +21,7 @@ flowchart LR
 | Connect | Elevation of privilege | Offered to the Owner only; the API enforces Owner, aal2 and a recent step-up | `does not offer a admin/support to connect a shop` |
 | Shop card | Information disclosure | The API never returns tokens; roles below Admin get no connection details | `shows other roles their shops without connection details` |
 | Disconnect | Elevation of privilege / mistakes | Offered to the Owner only, behind a confirmation dialog; the API enforces Owner, aal2, a recent step-up and CSRF | `does not offer an Admin to disconnect`, `asks for confirmation and does nothing when cancelled` |
+| Remove shop | Elevation of privilege / mistakes (irreversible) | Owner only, out of the way at the card's bottom; the shop's name must be typed, then the code; the API enforces Owner, aal2, a recent step-up and CSRF and makes no Etsy call | `offers a admin no removal`, `stays disabled until the shop's name is typed, and cancelling removes nothing` |
 | Capabilities | Information disclosure | The server stores presence only (never a buyer address); the card shows states and fixed sentences, never anything Etsy answered | `lists each capability in plain words…` |
 
 ## Personal data

@@ -7,24 +7,42 @@ export type Me = components["schemas"]["Me"];
 export type MfaView = components["schemas"]["MfaView"];
 export type SessionItem = components["schemas"]["SessionItem"];
 
-/** A failed API call; `type` is the problem type's last segment (`sign-in-refused`). */
+/**
+ * A failed API call; `type` is the problem type's last segment (`sign-in-refused`). `reason`
+ * is the problem's own reason when it has one: `shop-not-connected` says `needs_reauth`
+ * (reconnect the shop), `disconnected` or `not_connected`.
+ */
 export class ApiError extends Error {
   readonly status: number;
   readonly type: string | undefined;
+  readonly reason: string | undefined;
 
-  constructor(status: number, type: string | undefined) {
+  constructor(status: number, type: string | undefined, reason?: string) {
     super(`API error ${String(status)}${type === undefined ? "" : ` (${type})`}`);
     this.status = status;
     this.type = type;
+    this.reason = reason;
   }
 }
 
 export function apiError(response: Response, body: unknown): ApiError {
+  const problem = typeof body === "object" && body !== null ? body : {};
   const type =
-    typeof body === "object" && body !== null && "type" in body && typeof body.type === "string"
-      ? body.type.split("/").at(-1)
+    "type" in problem && typeof problem.type === "string"
+      ? problem.type.split("/").at(-1)
       : undefined;
-  return new ApiError(response.status, type);
+  const reason =
+    "reason" in problem && typeof problem.reason === "string" ? problem.reason : undefined;
+  return new ApiError(response.status, type, reason);
+}
+
+/** The shop's connection must be renewed: the API says so, or answers a shop-not-connected. */
+export function needsReconnecting(error: unknown): boolean {
+  return (
+    error instanceof ApiError &&
+    error.type === "shop-not-connected" &&
+    error.reason !== "disconnected"
+  );
 }
 
 const ApiContext = createContext<ApiClient | undefined>(undefined);

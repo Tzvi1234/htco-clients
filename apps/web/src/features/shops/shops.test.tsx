@@ -516,6 +516,120 @@ describe("disconnecting a shop (slice 4.7)", () => {
   });
 });
 
+describe("removing a shop", () => {
+  const removeLabel = "Remove Willow & Wick";
+  const WILLOW = "d0000000-0000-7000-8000-000000000001";
+
+  async function confirmByName(user: ReturnType<typeof userEvent.setup>, typed: string) {
+    const card = await screen.findByRole("article", { name: "Willow & Wick" });
+    await user.click(within(card).getByRole("button", { name: removeLabel }));
+    const dialog = await screen.findByRole("alertdialog", { name: "Remove Willow & Wick?" });
+    expect(dialog).toHaveTextContent("This cannot be undone.");
+    await user.type(within(dialog).getByLabelText("Type the shop's name to confirm"), typed);
+    return dialog;
+  }
+
+  it("offers the Owner a quiet Remove shop at the bottom of the card", async () => {
+    await open("/shops", { ...owner, ...demoShops() });
+
+    const card = await screen.findByRole("article", { name: "Willow & Wick" });
+    expect(within(card).getByRole("button", { name: removeLabel })).toBeInTheDocument();
+    expect(within(card).getByText("Deletes the shop and all its data in HTCO")).toBeInTheDocument();
+  });
+
+  it.each(["admin", "support"] as const)("offers a %s no removal", async (role) => {
+    await open("/shops", { ...owner, role, ...demoShops() });
+
+    const card = await screen.findByRole("article", { name: "Willow & Wick" });
+    expect(within(card).queryByRole("button", { name: removeLabel })).not.toBeInTheDocument();
+  });
+
+  it("stays disabled until the shop's name is typed, and cancelling removes nothing", async () => {
+    const { user, backend } = await open("/shops", { ...owner, ...demoShops() });
+
+    const dialog = await confirmByName(user, "Willow");
+    expect(within(dialog).getByRole("button", { name: "Remove shop" })).toBeDisabled();
+    await user.click(within(dialog).getByRole("button", { name: "Cancel" }));
+
+    await vi.waitFor(() => {
+      expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument();
+    });
+    expect(backend.state.removals).toEqual([]);
+  });
+
+  it("removes after the name and the authenticator code, then the shop is gone", async () => {
+    const { user, backend } = await open("/shops", { ...owner, ...demoShops() });
+
+    const dialog = await confirmByName(user, "Willow & Wick");
+    await user.click(within(dialog).getByRole("button", { name: "Remove shop" }));
+    const code = await screen.findByRole("dialog", { name: "Confirm it is you" });
+    expect(code).toHaveTextContent("Remove a shop");
+    await user.type(within(code).getByLabelText("Code from the app"), "123456");
+    await user.click(within(code).getByRole("button", { name: "Confirm" }));
+
+    expect(await screen.findByText("Willow & Wick and its data were removed.")).toBeInTheDocument();
+    expect(backend.state.removals).toEqual([WILLOW]);
+    await vi.waitFor(() => {
+      expect(screen.queryByRole("article", { name: "Willow & Wick" })).not.toBeInTheDocument();
+    });
+  });
+
+  it("says why when the server refuses, and keeps the shop", async () => {
+    const { user, backend } = await open("/shops", { ...owner, ...demoShops(), steppedUp: true });
+    const refused = vi.spyOn(backend.client, "DELETE").mockResolvedValueOnce({
+      data: undefined,
+      error: { type: "https://ht-co.app/problems/mfa-required", title: "x", status: 403 },
+      response: new Response(null, { status: 403 }),
+    } as never);
+
+    const dialog = await confirmByName(user, "Willow & Wick");
+    await user.click(within(dialog).getByRole("button", { name: "Remove shop" }));
+
+    expect(
+      await screen.findByText("Set up two-factor sign-in in Security first, then remove the shop."),
+    ).toBeInTheDocument();
+    expect(backend.state.removals).toEqual([]);
+    expect(screen.getByRole("article", { name: "Willow & Wick" })).toBeInTheDocument();
+    refused.mockRestore();
+  });
+});
+
+describe("Disconnect and Re-check after the Etsy app key was replaced", () => {
+  it("Re-check of a connection Etsy refused says to reconnect, in plain words", async () => {
+    const { user, backend } = await open("/shops", { ...owner, ...demoShops() });
+    const card = await screen.findByRole("article", { name: "Willow & Wick" });
+    // The server found out meanwhile: Etsy refused the tokens.
+    const [first] = backend.state.integrations;
+    if (first === undefined) throw new Error("no integration");
+    backend.state.integrations[0] = { ...first, status: "needs_reauth" };
+
+    await user.click(within(card).getByRole("button", { name: /Re-check/ }));
+
+    expect(
+      await within(card).findByText(
+        "This shop needs reconnecting: Etsy no longer accepts its connection. Press Reconnect.",
+      ),
+    ).toBeInTheDocument();
+  });
+
+  it("Disconnect that cannot reach the server says so instead of nothing", async () => {
+    const { user, backend } = await open("/shops", { ...owner, ...demoShops(), steppedUp: true });
+    const card = await screen.findByRole("article", { name: "Willow & Wick" });
+    const fetchFailure = vi
+      .spyOn(backend.client, "POST")
+      .mockRejectedValueOnce(new TypeError("Failed to fetch"));
+
+    await user.click(within(card).getByRole("button", { name: "Disconnect Willow & Wick" }));
+    const confirm = await screen.findByRole("alertdialog", { name: "Disconnect Willow & Wick?" });
+    await user.click(within(confirm).getByRole("button", { name: "Disconnect" }));
+
+    expect(
+      await screen.findByText("HTCO could not be reached. Check your connection."),
+    ).toBeInTheDocument();
+    fetchFailure.mockRestore();
+  });
+});
+
 describe("Codex review of #31", () => {
   it("keeps the check age current and lets the done message go while the page stays open", async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true, toFake: ["Date", "setInterval", "clearInterval"] });

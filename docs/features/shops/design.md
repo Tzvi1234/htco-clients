@@ -6,7 +6,9 @@
 |---|---|---|
 | Shops (`/shops`) | loading (skeleton cards) · empty (record-table shape, Connect for the Owner, "The workspace owner connects shops." for others) · populated (shop cards) · error (retry) · connected / reconnected confirmation · several workspaces (picker) | web |
 | Shop card | connected (renews automatically) · expiring ("Reconnect within N days") · needs reconnecting · disconnected (data deletion date, Reconnect) · no connection details (roles below Admin) · capabilities (not checked yet · checked, with Works / Blocked / Not known and the alternative) · re-checking · re-check done / too soon / failed | web |
-| Disconnect confirmation | asking (what is deleted and when) · code dialog when the confirmation is older than ten minutes · disconnected confirmation · refused | web |
+| Disconnect confirmation | asking (what is deleted and when) · code dialog when the confirmation is older than ten minutes · disconnected confirmation · refused (a plain sentence per problem, also "HTCO could not be reached" without an answer) | web |
+| Remove shop (Owner, the card's quiet danger zone) | asking (what is deleted, cannot be undone; the button stays disabled until the shop's name is typed) · code dialog · removed confirmation (the card goes) · refused | web |
+| Reconnect banner (Home, Orders, Products, Shipping, Customers; Statistics and Top listings on Shops) | shown when the connection says `needs_reauth` or a data call answers `shop-not-connected` with a reason other than `disconnected`: "This shop needs reconnecting", Reconnect for the Owner (the Etsy connect flow), "The workspace owner can reconnect it." for others; the panels say the same instead of an empty screen | web |
 | Code dialog | asking · wrong code · too many attempts | web |
 | Etsy return (`/integrations/etsy/callback`) | connecting · cancelled on Etsy · incomplete link · one message per problem (`etsy-state-rejected`, `etsy-authorization-refused`, `etsy-unreachable`, `etsy-no-shop`, `etsy-shop-connected-elsewhere`, `web-session-required`, `etsy-unavailable`) | web |
 
@@ -32,6 +34,8 @@ The card is a white card (radius 12, hairline, faintest shadow): the shop's icon
 | `POST /v1/integrations/etsy/callback` | Finish connecting | Sent once; invalidates the shop queries |
 | `POST /v1/shop-integrations/{shop_id}/capability-checks` | Re-check what HTCO can do | Owner and Admin, connected shops; 429 `capability-check-too-soon` shows the `Retry-After` wait; refetches the connection details |
 | `POST /v1/shop-integrations/{shop_id}/disconnect` | Disconnect | Owner; after the confirmation dialog; `step-up-required` opens the code dialog and the request is sent again; refetches shops and connection details |
+| `DELETE /v1/shops/{shop_id}` | Remove shop | Owner; after typing the shop's name; `step-up-required` opens the code dialog and the request is sent again; 204, or 404 (already removed), drops the shop's live data and refetches shops and connection details |
+| Every data endpoint | 409 `shop-not-connected` | `reason`: `needs_reauth` shows the reconnect banner; `disconnected` keeps "Open Shops" |
 
 ## Client state
 

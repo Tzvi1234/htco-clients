@@ -27,6 +27,11 @@ msgstr "{0, plural, one {One order is late to ship. Start there.} other {# order
 msgid "{0, plural, one {One order waits to ship; none is late.} other {# orders wait to ship; none is late.}}"
 msgstr "{0, plural, one {One order waits to ship; none is late.} other {# orders wait to ship; none is late.}}"
 
+#. placeholder {0}: removals.done
+#: src/features/shops/ShopsPage.tsx
+msgid "{0} and its data were removed."
+msgstr "{0} and its data were removed."
+
 #. placeholder {0}: count(profile.digital_listing_count)
 #: src/features/shops/ShopStats.tsx
 msgid "{0} digital"
@@ -1243,6 +1248,10 @@ msgstr "Decision value"
 msgid "Decision value 92%, within policy"
 msgstr "Decision value 92%, within policy"
 
+#: src/features/shops/ShopCard.tsx
+msgid "Deletes the shop and all its data in HTCO"
+msgstr "Deletes the shop and all its data in HTCO"
+
 #: src/shared/ui/kit/status.tsx
 msgid "Delivered"
 msgstr "Delivered"
@@ -1329,6 +1338,10 @@ msgstr "Disconnect a shop"
 msgid "Disconnected"
 msgstr "Disconnected"
 
+#: src/features/shops/shopActions.tsx
+msgid "Disconnecting is unavailable on the server right now. Try again in a few minutes."
+msgstr "Disconnecting is unavailable on the server right now. Try again in a few minutes."
+
 #: src/features/security/SecurityPage.tsx
 msgid "Don’t recognise a device? Sign it out here. Only that device is signed out; this one stays signed in."
 msgstr "Don’t recognise a device? Sign it out here. Only that device is signed out; this one stays signed in."
@@ -1406,6 +1419,10 @@ msgstr "Enter the 6-digit code from your authenticator app to disconnect the sho
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "Enter the 6-digit code from your authenticator app to finish."
 msgstr "Enter the 6-digit code from your authenticator app to finish."
+
+#: src/features/shops/shopActions.tsx
+msgid "Enter the 6-digit code from your authenticator app to remove the shop and its data."
+msgstr "Enter the 6-digit code from your authenticator app to remove the shop and its data."
 
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Enter the 6-digit code the app shows."
@@ -1504,6 +1521,14 @@ msgstr "Etsy is not answering and there is no recent copy to show. Try again in 
 #: src/features/shops/ShopCard.tsx
 msgid "Etsy is not answering right now; the shop's numbers will be back shortly."
 msgstr "Etsy is not answering right now; the shop's numbers will be back shortly."
+
+#: src/features/commerce/live.tsx
+msgid "Etsy no longer accepts the shop's connection. Reconnect it to see its data."
+msgstr "Etsy no longer accepts the shop's connection. Reconnect it to see its data."
+
+#: src/features/commerce/live.tsx
+msgid "Etsy no longer accepts the shop's connection. The workspace owner can reconnect it."
+msgstr "Etsy no longer accepts the shop's connection. The workspace owner can reconnect it."
 
 #: src/features/shops/Capabilities.tsx
 msgid "Etsy refused this. Reconnect the shop; if it stays blocked, Etsy has limited the app."
@@ -1883,8 +1908,16 @@ msgid "HT-Commerce is the operating system for your Etsy business: your shops, y
 msgstr "HT-Commerce is the operating system for your Etsy business: your shops, your team and, step by step, an AI office that asks you before anything risky."
 
 #: src/features/shops/shopActions.tsx
+msgid "HTCO could not be reached. Check your connection."
+msgstr "HTCO could not be reached. Check your connection."
+
+#: src/features/shops/shopActions.tsx
 msgid "HTCO deletes its access to this shop at once and stops syncing. The shop's data in HTCO is deleted after 30 days unless you reconnect."
 msgstr "HTCO deletes its access to this shop at once and stops syncing. The shop's data in HTCO is deleted after 30 days unless you reconnect."
+
+#: src/features/shops/shopActions.tsx
+msgid "HTCO disconnects the shop and deletes everything it stored about it at once: its orders and their history, buyers, refunds, statistics and connection. This cannot be undone."
+msgstr "HTCO disconnects the shop and deletes everything it stored about it at once: its orders and their history, buyers, refunds, statistics and connection. This cannot be undone."
 
 #: src/features/shops/Capabilities.tsx
 #: src/features/shops/EtsyCallbackPage.tsx
@@ -2668,6 +2701,10 @@ msgstr "Not synced yet"
 msgid "Not syncing. Connect it again to resume."
 msgstr "Not syncing. Connect it again to resume."
 
+#: src/features/shops/shopActions.tsx
+msgid "Nothing changes in your Etsy shop."
+msgstr "Nothing changes in your Etsy shop."
+
 #: src/app/shell/CommandMenu.tsx
 msgid "Nothing matches."
 msgstr "Nothing matches."
@@ -2794,6 +2831,10 @@ msgstr "Only the workspace owner can connect a shop."
 #: src/features/shops/shopActions.tsx
 msgid "Only the workspace owner can disconnect a shop."
 msgstr "Only the workspace owner can disconnect a shop."
+
+#: src/features/shops/shopActions.tsx
+msgid "Only the workspace owner can remove a shop."
+msgstr "Only the workspace owner can remove a shop."
 
 #: src/features/shops/shopActions.tsx
 msgid "Only the workspace owner or an admin can re-check a shop."
@@ -3329,6 +3370,7 @@ msgstr "Recent reviews are all four or five stars."
 msgid "Recent runs"
 msgstr "Recent runs"
 
+#: src/features/commerce/live.tsx
 #: src/features/shops/ShopsPage.tsx
 msgid "Reconnect"
 msgstr "Reconnect"
@@ -3449,17 +3491,39 @@ msgstr "Remaining"
 msgid "Remove"
 msgstr "Remove"
 
+#. placeholder {0}: shop.name
+#: src/features/shops/ShopsPage.tsx
+msgid "Remove {0}"
+msgstr "Remove {0}"
+
 #: src/features/team/TeamPage.tsx
 msgid "Remove {name} from this workspace? Their access ends at once."
 msgstr "Remove {name} from this workspace? Their access ends at once."
+
+#: src/features/shops/shopActions.tsx
+msgid "Remove {name}?"
+msgstr "Remove {name}?"
+
+#: src/features/shops/shopActions.tsx
+msgid "Remove a shop"
+msgstr "Remove a shop"
 
 #: src/features/team/TeamPage.tsx
 msgid "Remove from workspace"
 msgstr "Remove from workspace"
 
+#: src/features/shops/shopActions.tsx
+#: src/features/shops/ShopsPage.tsx
+msgid "Remove shop"
+msgstr "Remove shop"
+
 #: src/features/team/TeamPage.tsx
 msgid "Remove yourself from this workspace? You lose access at once."
 msgstr "Remove yourself from this workspace? You lose access at once."
+
+#: src/features/shops/shopActions.tsx
+msgid "Removing shops is unavailable on the server right now. Try again in a few minutes."
+msgstr "Removing shops is unavailable on the server right now. Try again in a few minutes."
 
 #: src/features/auth/AcceptInvitePage.tsx
 #: src/features/auth/ResetPasswordPage.tsx
@@ -3775,6 +3839,10 @@ msgstr "Set up two-factor sign-in in Security first, then connect the shop."
 #: src/features/shops/shopActions.tsx
 msgid "Set up two-factor sign-in in Security first, then disconnect the shop."
 msgstr "Set up two-factor sign-in in Security first, then disconnect the shop."
+
+#: src/features/shops/shopActions.tsx
+msgid "Set up two-factor sign-in in Security first, then remove the shop."
+msgstr "Set up two-factor sign-in in Security first, then remove the shop."
 
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Set up your authenticator app"
@@ -4391,6 +4459,10 @@ msgstr "The shop was not connected"
 msgid "The shop was not disconnected. Try again shortly."
 msgstr "The shop was not disconnected. Try again shortly."
 
+#: src/features/shops/shopActions.tsx
+msgid "The shop was not removed. Try again shortly."
+msgstr "The shop was not removed. Try again shortly."
+
 #: src/features/commerce/ProductsPage.tsx
 msgid "The shop's active listings, live from Etsy."
 msgstr "The shop's active listings, live from Etsy."
@@ -4422,6 +4494,10 @@ msgstr "The web app is open today"
 #: src/features/settings/AppearanceChoices.tsx
 msgid "The whole app, and the direction it reads in."
 msgstr "The whole app, and the direction it reads in."
+
+#: src/features/commerce/live.tsx
+msgid "The workspace owner can reconnect it."
+msgstr "The workspace owner can reconnect it."
 
 #: src/features/auth/AcceptInvitePage.tsx
 msgid "The workspace owner can send a new invitation from Members & access."
@@ -4519,6 +4595,10 @@ msgstr "This shop has more orders than one read covers: the newest {0} are liste
 msgid "This shop has no active listings."
 msgstr "This shop has no active listings."
 
+#: src/features/shops/shopActions.tsx
+msgid "This shop is no longer here. Refresh the page."
+msgstr "This shop is no longer here. Refresh the page."
+
 #: src/features/commerce/live.tsx
 msgid "This shop is not available to you."
 msgstr "This shop is not available to you."
@@ -4530,6 +4610,15 @@ msgstr "This shop is not connected to Etsy right now. Reconnect it on Shops to s
 #: src/features/shops/shopActions.tsx
 msgid "This shop is not connected. Reconnect it first."
 msgstr "This shop is not connected. Reconnect it first."
+
+#: src/features/commerce/live.tsx
+#: src/features/overview/OverviewPage.tsx
+msgid "This shop needs reconnecting"
+msgstr "This shop needs reconnecting"
+
+#: src/features/shops/shopActions.tsx
+msgid "This shop needs reconnecting: Etsy no longer accepts its connection. Press Reconnect."
+msgstr "This shop needs reconnecting: Etsy no longer accepts its connection. Press Reconnect."
 
 #: src/features/shops/EtsyCallbackPage.tsx
 msgid "This takes a few seconds. Keep this page open."
@@ -4745,6 +4834,10 @@ msgstr "Two-step sign-in:"
 #: src/features/team/TeamPage.tsx
 msgid "Type"
 msgstr "Type"
+
+#: src/features/shops/shopActions.tsx
+msgid "Type the shop's name to confirm"
+msgstr "Type the shop's name to confirm"
 
 #: src/features/office/ChatPage.tsx
 msgid "Tzvi"

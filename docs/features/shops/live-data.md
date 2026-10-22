@@ -21,7 +21,7 @@ The Orders, Products, Shipping and Customers tabs are `built` (no Soon tag, no D
 
 ## States
 
-Loading skeletons (`aria-busy`), no shop connected (a link to Shops), a shop with no orders or listings, a period without orders in a shop that has sold ("No orders in the last 30 days", Etsy's sales count, and "Show all time"; never a bare empty table), a connection that needs reconnecting or lacks a scope (409: "Open Shops"), Etsy not answering with nothing cached (503: "Try again"), and stale data marked "Etsy is not answering · showing data from 10:42". A disconnected shop is never asked for data.
+Loading skeletons (`aria-busy`), no shop connected (a link to Shops), a shop with no orders or listings, a period without orders in a shop that has sold ("No orders in the last 30 days", Etsy's sales count, and "Show all time"; never a bare empty table), a connection that needs reconnecting (409 `shop-not-connected` with `reason: needs_reauth`, or the connection's own `needs_reauth`: the banner "This shop needs reconnecting" on top of the screen and in each panel, with Reconnect for the Owner), a disconnected shop or a missing scope (409: "Open Shops"), Etsy not answering with nothing cached (503: "Try again"), and stale data marked "Etsy is not answering · showing data from 10:42". A disconnected shop is never asked for data.
 
 ## Rules kept
 

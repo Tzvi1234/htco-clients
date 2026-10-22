@@ -7,11 +7,15 @@ import { useQueries, useQuery, queryOptions } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { useState, type ReactNode } from "react";
 
+import { useConnectEtsy } from "../shops/connectEtsy.tsx";
 import { ago, useNow } from "../shops/time.ts";
+import { FormAlert } from "../auth/AuthLayout.tsx";
 import {
   ApiError,
   apiError,
+  integrationsQuery,
   meQuery,
+  needsReconnecting,
   shopsQuery,
   useApi,
   type ShopView,
@@ -310,6 +314,105 @@ export function LiveNote({
 
 /* ------------------------------------------------------------------ honest states */
 
+/**
+ * "This shop needs reconnecting" and the way out: the Owner gets the Reconnect button, which
+ * runs the Etsy connect flow (the step-up code, then Etsy's approval); everyone else is told
+ * who can do it.
+ */
+export function ReconnectNotice({ compact = false }: { compact?: boolean }) {
+  const api = useApi();
+  const me = useQuery(meQuery(api));
+  const etsy = useConnectEtsy();
+  const isOwner = (me.data?.memberships ?? []).some((m) => m.role === "owner");
+  return (
+    <div
+      role="alert"
+      className={cx(
+        "flex flex-col items-center justify-center gap-3 text-center",
+        compact ? "py-4" : "grow px-6 py-12",
+      )}
+    >
+      <p className="m-0 max-w-[380px] font-display text-title font-light text-balance">
+        <Trans>This shop needs reconnecting</Trans>
+      </p>
+      <p className="m-0 max-w-[380px] text-body-sm text-secondary">
+        {isOwner ? (
+          <Trans>Etsy no longer accepts the shop's connection. Reconnect it to see its data.</Trans>
+        ) : (
+          <Trans>
+            Etsy no longer accepts the shop's connection. The workspace owner can reconnect it.
+          </Trans>
+        )}
+      </p>
+      {isOwner ? (
+        <>
+          <Button
+            variant="primary"
+            isPending={etsy.pendingKey === "reconnect"}
+            onPress={() => {
+              etsy.start("reconnect");
+            }}
+          >
+            <Trans>Reconnect</Trans>
+          </Button>
+          <FormAlert message={etsy.message} />
+          {etsy.dialog}
+        </>
+      ) : null}
+    </div>
+  );
+}
+
+/**
+ * The banner a shop screen shows above everything when the shop's connection must be renewed:
+ * the connection says `needs_reauth` (Owners and Admins see it), or the shop's data answers
+ * shop-not-connected. Nothing when the connection works.
+ */
+export function ShopReconnectBanner({ shop }: { shop: ShopView }) {
+  const api = useApi();
+  const me = useQuery(meQuery(api));
+  const etsy = useConnectEtsy();
+  const role = me.data?.memberships.find((m) => m.organization_id === shop.organization_id)?.role;
+  const integrations = useQuery({
+    ...integrationsQuery(api, shop.organization_id),
+    enabled: role === "owner" || role === "admin",
+  });
+  const overview = useQuery(overviewQuery(api, shop.id));
+  const integration = integrations.data?.find((i) => i.shop_id === shop.id);
+  const show = integration?.status === "needs_reauth" || needsReconnecting(overview.error);
+  if (!show) return null;
+  return (
+    <div
+      role="alert"
+      className="flex shrink-0 animate-enter flex-wrap items-center gap-3 rounded-card bg-tertiary-subtle px-4 py-3 text-body-sm text-primary sm:px-6"
+    >
+      <span aria-hidden="true" className="size-2 shrink-0 rounded-pill bg-tertiary" />
+      <p className="m-0 min-w-0 grow">
+        <Trans>This shop needs reconnecting</Trans> · <bdi>{shop.name}</bdi>
+      </p>
+      {role === "owner" ? (
+        <>
+          <Button
+            variant="primary"
+            isPending={etsy.pendingKey === shop.id}
+            onPress={() => {
+              etsy.start(shop.id);
+            }}
+          >
+            <Trans>Reconnect</Trans>
+          </Button>
+          <FormAlert message={etsy.message} />
+          {etsy.dialog}
+        </>
+      ) : (
+        <span className="text-caption text-muted">
+          <Trans>The workspace owner can reconnect it.</Trans>
+        </span>
+      )}
+    </div>
+  );
+}
+
 /** Why live data is not shown, in plain words, with the way forward. */
 export function LiveProblem({
   error,
@@ -322,6 +425,8 @@ export function LiveProblem({
 }) {
   const { t } = useLingui();
   const type = error instanceof ApiError ? error.type : undefined;
+  // Never an empty screen when the connection must be renewed: say so, with the way out.
+  if (needsReconnecting(error)) return <ReconnectNotice compact={compact} />;
   const reconnect = type === "shop-not-connected" || type === "etsy-scope-missing";
   const message =
     type === "shop-not-connected"

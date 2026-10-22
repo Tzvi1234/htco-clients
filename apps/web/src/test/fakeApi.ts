@@ -64,6 +64,8 @@ export interface FakeState {
   /** Shops re-checked (`POST …/capability-checks`) and disconnected, in order. */
   rechecks: string[];
   disconnects: string[];
+  /** Shops removed with `DELETE /v1/shops/{shop_id}`. */
+  removals: string[];
   /** True: a re-check answers 429 capability-check-too-soon (Retry-After 30). */
   recheckTooSoon: boolean;
   /**
@@ -203,13 +205,21 @@ export function demoShops(): Pick<FakeState, "shops" | "integrations"> {
   };
 }
 
-function problem(status: number, type: string): Response {
+function problem(status: number, type: string, extra: Record<string, string> = {}): Response {
   return json(status, {
     type: PROBLEMS + type,
     title: type,
     status,
     detail: type,
     request_id: "r",
+    ...extra,
+  });
+}
+
+/** 409 shop-not-connected with its reason, as the API answers it. */
+function notConnected(integration: IntegrationView): Response {
+  return problem(409, "shop-not-connected", {
+    reason: integration.status === "disconnected" ? "disconnected" : "needs_reauth",
   });
 }
 
@@ -249,6 +259,7 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
     callbacks: [],
     rechecks: [],
     disconnects: [],
+    removals: [],
     recheckTooSoon: false,
     ...initial,
   };
@@ -363,7 +374,7 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
       if (integration === undefined) return problem(404, "not-found");
       if (action === "capability-checks") {
         if (state.role !== "owner" && state.role !== "admin") return problem(403, "forbidden");
-        if (integration.status !== "connected") return problem(409, "shop-not-connected");
+        if (integration.status !== "connected") return notConnected(integration);
         if (state.recheckTooSoon)
           return new Response(
             JSON.stringify({
@@ -404,6 +415,20 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
       };
       state.integrations[index] = disconnected;
       return json(200, disconnected);
+    }
+
+    // Removing a shop with all its data: the Owner, a second factor, a recent step-up.
+    const removal = /^DELETE \/v1\/shops\/([^/]+)$/.exec(route);
+    if (removal !== null) {
+      const shopId = removal[1] ?? "";
+      if (!state.shops.some((shop) => shop.id === shopId)) return problem(404, "not-found");
+      if (state.role !== "owner") return problem(403, "forbidden");
+      if (state.assurance !== "aal2") return problem(403, "mfa-required");
+      if (!state.steppedUp) return problem(403, "step-up-required");
+      state.removals.push(shopId);
+      state.shops = state.shops.filter((shop) => shop.id !== shopId);
+      state.integrations = state.integrations.filter((i) => i.shop_id !== shopId);
+      return new Response(null, { status: 204 });
     }
 
     const live =
@@ -527,7 +552,7 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
     if (shop === undefined) return problem(404, "not-found");
     const integration = state.integrations.find((i) => i.shop_id === shopId);
     if (integration !== undefined && integration.status !== "connected")
-      return problem(409, "shop-not-connected");
+      return notConnected(integration);
     const trouble = state.liveTrouble;
     if (trouble === "hang") return new Promise<Response>(() => undefined);
     if (trouble === "unavailable") return problem(503, "etsy-data-unavailable");
