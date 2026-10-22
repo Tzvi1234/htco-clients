@@ -45,7 +45,8 @@ test("the settings page shows the three personal settings first", async ({ page 
 
 test("the navigation opens and closes without motion under reduced motion", async ({ page }) => {
   const wide = (page.viewportSize()?.width ?? 0) >= 640;
-  test.skip(!wide, "the sidebar is a wide-screen navigation");
+  // The sidebar is the wide-screen navigation; phones have the tab bar.
+  if (!wide) return;
   // The project runs with reducedMotion "reduce" (playwright.config.ts).
   await openApp(page, "/", "signed-in");
   await expect(pageTitle(page, "Home")).toBeVisible();
@@ -73,7 +74,8 @@ test("the navigation springs open with motion allowed, and the glass is frosted"
   page,
 }) => {
   const wide = (page.viewportSize()?.width ?? 0) >= 640;
-  test.skip(!wide, "the sidebar is a wide-screen navigation");
+  // The sidebar is the wide-screen navigation; phones have the tab bar.
+  if (!wide) return;
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await openApp(page, "/", "signed-in");
   await expect(pageTitle(page, "Home")).toBeVisible();
