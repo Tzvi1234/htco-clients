@@ -23,8 +23,12 @@ async function open(state: Partial<FakeState> = {}, locale: "en" | "he" = "en") 
   return { user: userEvent.setup(), backend, history };
 }
 
-const panel = (name: string) => {
-  const heading = screen.getByRole("heading", { level: 2, name });
+const panel = (...names: string[]) => {
+  const heading = screen
+    .getAllByRole("heading", { level: 2 })
+    .find((h) => names.includes(h.textContent));
+  const name = names.join(" / ");
+  if (heading === undefined) throw new Error(`No panel ${name}`);
   const section = heading.closest("section");
   if (section === null) throw new Error(`No panel ${name}`);
   return section;
@@ -89,54 +93,58 @@ describe("Home (Design 1C P.home)", () => {
     );
   });
 
-  it("steps through the hero concepts", async () => {
-    const { user } = await open();
+  it("shows one calm studio render beside today, with no carousel to work", async () => {
+    await open();
 
-    const hero = screen.getByRole("group", { name: "Hero concepts" });
-    expect(within(hero).getByRole("img", { name: "Miniature AI office" })).toBeInTheDocument();
-    await user.click(within(hero).getByRole("button", { name: "Next concept" }));
-    expect(within(hero).getByRole("img", { name: "Desk, monitor and robot" })).toBeInTheDocument();
-    expect(within(hero).getByText("2/5")).toBeInTheDocument();
-    await user.click(within(hero).getByRole("button", { name: "Previous concept" }));
-    await user.click(within(hero).getByRole("button", { name: "Previous concept" }));
-    expect(within(hero).getByRole("img", { name: "Shop kiosk" })).toBeInTheDocument();
-    await user.click(within(hero).getByRole("tab", { name: "Printed product stack" }));
-    expect(within(hero).getByRole("tab", { name: "Printed product stack" })).toHaveAttribute(
-      "aria-selected",
-      "true",
-    );
+    // The carousel, its dots and arrows left Home in the clarity redesign (round 3): the focus
+    // is today's numbers and the one next step.
+    expect(screen.queryByRole("group", { name: "Hero concepts" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Next concept" })).not.toBeInTheDocument();
+    const today = panel("Good morning", "Good afternoon", "Good evening", "Good night");
+    expect(today.querySelectorAll("img")).toHaveLength(1);
+  });
+
+  it("leads with the next step: ship what waits, or open the orders", async () => {
+    await open({ shops: [{ id: "s-1", name: "Willow & Wick", status: "active" }] });
+
+    const today = panel("Good morning", "Good afternoon", "Good evening", "Good night");
+    const next = await within(today).findByRole("link", { name: /Open orders|what waits to ship/ });
+    expect(next.getAttribute("href")).toMatch(/^\/commerce\/(orders|shipping)$/);
   });
 
   it.each([
     ["en", "ArrowRight", "ArrowLeft"],
     ["he", "ArrowLeft", "ArrowRight"],
   ] as const)(
-    "moves between the concept tabs with the arrow keys along the reading direction (%s)",
+    "moves between Today and Office with the arrow keys along the reading direction (%s)",
     async (locale, forward, back) => {
       const { user } = await open({}, locale);
       const tabs = within(screen.getByRole("tablist")).getAllByRole("tab");
-      // One tab stop: only the chosen concept is in the tab order.
-      expect(tabs.map((tab) => tab.tabIndex)).toEqual([0, -1, -1, -1, -1]);
+      // One tab stop: only the chosen view is in the tab order.
+      expect(tabs.map((tab) => tab.tabIndex)).toEqual([0, -1]);
 
       tabs[0]?.focus();
       await user.keyboard(`{${forward}}`);
-      expect(tabs[1]).toHaveAttribute("aria-selected", "true");
-      expect(tabs[1]).toHaveFocus();
-      await user.keyboard(`{${back}}{${back}}`);
-      expect(tabs[4]).toHaveAttribute("aria-selected", "true");
-      await user.keyboard("{Home}");
-      expect(tabs[0]).toHaveFocus();
-      await user.keyboard("{End}");
-      expect(tabs[4]).toHaveAttribute("aria-selected", "true");
-      expect(tabs.map((tab) => tab.tabIndex)).toEqual([-1, -1, -1, -1, 0]);
+      const office = within(screen.getByRole("tablist")).getAllByRole("tab")[1];
+      expect(office).toHaveAttribute("aria-selected", "true");
+      expect(office).toHaveFocus();
+      expect(screen.getByRole("tabpanel")).toHaveAttribute("aria-labelledby", office?.id);
+      await user.keyboard(`{${back}}`);
+      expect(within(screen.getByRole("tablist")).getAllByRole("tab")[0]).toHaveAttribute(
+        "aria-selected",
+        "true",
+      );
     },
   );
 
   it("labels the parts that need unbuilt features as Demo and keeps them out of reach", async () => {
-    await open();
+    const { user } = await open({
+      shops: [{ id: "s-1", name: "Willow & Wick", status: "active" }],
+    });
 
+    // Today: the approvals; Office (its own sub-tab): the pulse, tickets and incidents.
     const parts = [...document.querySelectorAll("[data-demo-part]")];
-    expect(parts.length).toBeGreaterThanOrEqual(4);
+    expect(parts.length).toBeGreaterThanOrEqual(1);
     for (const part of parts) {
       // The part's sample content is inert and hidden; its tag and the spoken label are beside it.
       expect(part.querySelector(":scope > [inert][aria-hidden='true']")).not.toBeNull();
@@ -146,11 +154,14 @@ describe("Home (Design 1C P.home)", () => {
     expect(within(needs).queryByRole("button", { name: "Approve" })).not.toBeInTheDocument();
     expect(within(needs).getByText("Demo — coming soon")).toBeInTheDocument();
     // Revenue and orders are live from Etsy (commerce/live.test.tsx); tickets and incidents are
-    // still Demo parts inside the same row.
+    // Demo parts under the Office sub-tab.
     const numbers = screen.getByRole("list", { name: "Key numbers" });
     expect(within(numbers).getByText("Revenue").closest("[data-demo-part]")).toBeNull();
-    expect(
-      within(numbers).getByText("Open tickets", { ignore: false }).closest("[data-demo-part]"),
-    ).not.toBeNull();
+    await user.click(screen.getByRole("tab", { name: /Office/ }));
+    const officeParts = screen.getByRole("tabpanel").querySelectorAll("[data-demo-part]");
+    expect(officeParts.length).toBeGreaterThanOrEqual(3);
+    for (const part of officeParts) {
+      expect(part.querySelector(":scope > [inert][aria-hidden='true']")).not.toBeNull();
+    }
   });
 });

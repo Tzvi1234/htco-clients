@@ -1,7 +1,7 @@
-import { Trans, useLingui } from "@lingui/react/macro";
+import { Plural, Trans, useLingui } from "@lingui/react/macro";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import { useRouterState } from "@tanstack/react-router";
-import { useState, type ReactNode } from "react";
+import { useId, useState, type ReactNode } from "react";
 
 import { useConnectEtsy, type ConnectEtsy } from "./connectEtsy.tsx";
 import { ShopCard, needsReconnect, useReconnectLabel } from "./ShopCard.tsx";
@@ -19,12 +19,17 @@ import { WorkspacePicker, pickWorkspace } from "../../shared/ui/WorkspacePicker.
 import {
   CheckGlyph,
   Dot,
+  Figure,
+  Figures,
+  Flow,
+  FlowRow,
+  Focus,
   IdBlock,
-  InkDisc,
   KV2,
+  N,
   Pill,
-  PlusGlyph,
-  Screen,
+  SubTabs,
+  TabPanel,
 } from "../../shared/ui/kit/index.ts";
 
 /**
@@ -48,27 +53,29 @@ export function ShopsPage() {
   return (
     <>
       <PageHeader title={<Trans>Shops</Trans>} />
-      {ids.length > 1 ? (
-        <div className="shrink-0 motion-safe:animate-enter">
-          <WorkspacePicker ids={ids} value={chosen} onChange={setChosen} />
-        </div>
-      ) : null}
-      {organizationId === undefined || role === undefined ? null : (
-        <Shops
-          key={organizationId}
-          organizationId={organizationId}
-          seesConnections={role === "owner" || role === "admin"}
-          connected={connected?.organizationId === organizationId ? connected.outcome : undefined}
-          etsy={isOwner ? etsy : undefined}
-        />
-      )}
-      {etsy.dialog}
-      <p className="m-0 shrink-0 px-4 pt-1 text-caption font-light text-muted">
-        <Trans>
-          The term 'Etsy' is a trademark of Etsy, Inc. This application uses the Etsy API but is not
-          endorsed or certified by Etsy, Inc.
-        </Trans>
-      </p>
+      <Flow>
+        {ids.length > 1 ? (
+          <div className="shrink-0 motion-safe:animate-enter">
+            <WorkspacePicker ids={ids} value={chosen} onChange={setChosen} />
+          </div>
+        ) : null}
+        {organizationId === undefined || role === undefined ? null : (
+          <Shops
+            key={organizationId}
+            organizationId={organizationId}
+            seesConnections={role === "owner" || role === "admin"}
+            connected={connected?.organizationId === organizationId ? connected.outcome : undefined}
+            etsy={isOwner ? etsy : undefined}
+          />
+        )}
+        {etsy.dialog}
+        <p className="m-0 shrink-0 px-4 pt-1 pb-2 text-caption font-light text-muted">
+          <Trans>
+            The term 'Etsy' is a trademark of Etsy, Inc. This application uses the Etsy API but is
+            not endorsed or certified by Etsy, Inc.
+          </Trans>
+        </p>
+      </Flow>
     </>
   );
 }
@@ -112,50 +119,45 @@ function Shops({
       ),
   });
   const firstLive = asked.find((shop) => known.get(shop.id) !== "needs_reauth")?.id;
+  const tabs = useId();
+  const [tab, setTab] = useState<"shops" | "listings">("shops");
 
   if (shops.isError)
     return (
-      <Screen layout="lc2s">
-        <Panel className="lg:col-span-full">
-          <div
-            role="alert"
-            className="flex grow flex-col items-center justify-center gap-4 px-6 py-16 text-center"
-          >
-            <IdBlock
-              label={<Trans>Shops:</Trans>}
-              value={<Trans>Shops could not be loaded</Trans>}
-            />
-            <p className="m-0 text-body-sm text-secondary">
-              <Trans>Check your connection and try again.</Trans>
-            </p>
-            <Button variant="primary" size="lg" onPress={() => void shops.refetch()}>
-              <Trans>Try again</Trans>
-            </Button>
-          </div>
-        </Panel>
-      </Screen>
+      <Panel>
+        <div
+          role="alert"
+          className="flex grow flex-col items-center justify-center gap-4 px-6 py-16 text-center"
+        >
+          <IdBlock label={<Trans>Shops:</Trans>} value={<Trans>Shops could not be loaded</Trans>} />
+          <p className="m-0 text-body-sm text-secondary">
+            <Trans>Check your connection and try again.</Trans>
+          </p>
+          <Button variant="primary" size="lg" onPress={() => void shops.refetch()}>
+            <Trans>Try again</Trans>
+          </Button>
+        </div>
+      </Panel>
     );
 
   if (shops.data === undefined)
     return (
-      <Screen layout="lc2s">
+      <FlowRow layout="halves">
         <p role="status" className="sr-only">
           <Trans>Loading shops</Trans>
         </p>
         {[0, 1].map((n) => (
           <ShopPanelSkeleton key={n} />
         ))}
-        <TopListings loading />
-      </Screen>
+      </FlowRow>
     );
 
   if (shops.data.length === 0)
     return (
-      <Screen layout="lc2s">
+      <FlowRow layout="halves" className="items-stretch">
         <NoShops etsy={etsy} />
         <HowConnecting />
-        <TopListings />
-      </Screen>
+      </FlowRow>
     );
 
   // A role that lost access to connection details must not keep seeing cached ones.
@@ -205,120 +207,192 @@ function Shops({
       </div>,
     );
 
+  // The focus: the shops in three groups that add up to all of them (for the roles that see
+  // connections): working, needing the Owner (expiring or refused by Etsy), and disconnected.
+  const list = shops.data;
+  const group = (shop: (typeof list)[number]) => {
+    const integration = byShop.get(shop.id);
+    if (integration === undefined) return "unknown";
+    if (integration.status === "disconnected") return "disconnected";
+    return integration.token_health === "ok" ? "working" : "attention";
+  };
+  const groups = list.map(group);
+  const tally = (g: string) => groups.filter((x) => x === g).length;
+  const attention = tally("attention");
+  const working = tally("working");
+  const asleepCount = tally("disconnected");
+  const detailsKnown = seesConnections && integrations.data !== undefined;
+  const firstAttention = list.find((shop) => group(shop) === "attention");
+  const todays = [...live.values()].flatMap((l) =>
+    l.overview?.sales == null ? [] : [l.overview.sales.today.orders],
+  );
+  const ordersToday = todays.reduce((n, o) => n + o, 0);
+
   return (
     <>
-      {notices.length === 0 ? null : (
-        <div className="flex shrink-0 flex-wrap items-center gap-3 px-2">{notices}</div>
-      )}
-      <Screen layout="lc2s">
-        <div className="flex min-h-0 flex-col gap-2 lg:col-span-full lg:grid lg:auto-rows-[100%] lg:grid-cols-2 lg:overflow-y-auto lg:[scrollbar-width:thin]">
-          {shops.data.map((shop) => {
-            const integration = byShop.get(shop.id);
-            return (
-              <ShopCard
-                key={shop.id}
-                shop={shop}
-                integration={integration}
-                live={live.get(shop.id)}
-                detailsLoading={seesConnections && integrations.isPending}
-                now={Math.max(integrations.dataUpdatedAt, clock)}
-                {...(seesConnections
-                  ? {
-                      onRefresh: () => {
-                        void integrations.refetch();
-                      },
-                    }
-                  : {})}
-                {...(seesConnections && integration?.status === "connected"
-                  ? {
-                      recheck: {
-                        onPress: () => {
-                          rechecks.run(shop.id);
+      <Focus
+        title={<Trans>Your shops</Trans>}
+        meta={<Trans>Etsy · read only</Trans>}
+        lead={
+          !detailsKnown ? (
+            <Trans>Your Etsy shops and their numbers today, live from Etsy.</Trans>
+          ) : attention > 0 ? (
+            <Plural
+              value={attention}
+              one="One shop needs you: reconnect it so its data keeps flowing."
+              other="# shops need you: reconnect them so their data keeps flowing."
+            />
+          ) : asleepCount > 0 ? (
+            <Trans>
+              No connection needs you. A disconnected shop stays paused until you connect it again.
+            </Trans>
+          ) : (
+            <Trans>Your shops are connected. Nothing needs you here.</Trans>
+          )
+        }
+        figures={
+          <Figures label={t`Shop numbers`}>
+            <Figure label={<Trans>Shops</Trans>} value={<N>{String(list.length)}</N>} />
+            {detailsKnown ? (
+              <>
+                <Figure label={<Trans>Working</Trans>} value={<N>{String(working)}</N>} />
+                <Figure
+                  label={<Trans>Need you</Trans>}
+                  value={<N>{String(attention)}</N>}
+                  tone={attention > 0 ? "accent" : undefined}
+                  note={<Trans>reconnect soon</Trans>}
+                />
+                <Figure label={<Trans>Disconnected</Trans>} value={<N>{String(asleepCount)}</N>} />
+              </>
+            ) : null}
+            <Figure
+              label={<Trans>Orders today</Trans>}
+              value={<N>{todays.length === 0 ? "—" : String(ordersToday)}</N>}
+              note={<Trans>across the shops</Trans>}
+            />
+          </Figures>
+        }
+        actions={
+          etsy === undefined ? undefined : (
+            <>
+              {firstAttention === undefined ? null : (
+                <Button
+                  variant="primary"
+                  size="lg"
+                  isPending={etsy.pendingKey === firstAttention.id}
+                  onPress={() => {
+                    etsy.start(firstAttention.id);
+                  }}
+                >
+                  {t`Reconnect ${firstAttention.name} first`}
+                </Button>
+              )}
+              <Button
+                variant={firstAttention === undefined ? "primary" : "secondary"}
+                size="lg"
+                isPending={etsy.pendingKey === "new"}
+                onPress={() => {
+                  etsy.start("new");
+                }}
+              >
+                <Trans>Connect Etsy shop</Trans>
+              </Button>
+              <FormAlert message={etsy.message} />
+            </>
+          )
+        }
+        footer={
+          notices.length === 0 ? undefined : (
+            <div className="flex flex-wrap items-center gap-3">{notices}</div>
+          )
+        }
+      />
+      <SubTabs
+        label={t`Shops views`}
+        idBase={tabs}
+        value={tab}
+        onChange={setTab}
+        tabs={[
+          { id: "shops", label: <Trans>Shops</Trans>, count: list.length },
+          { id: "listings", label: <Trans>Top listings</Trans> },
+        ]}
+      />
+      <TabPanel idBase={tabs} tab={tab}>
+        {tab === "listings" ? (
+          <TopListings shopId={firstLive} />
+        ) : (
+          <FlowRow layout="halves" className="items-stretch">
+            {list.map((shop) => {
+              const integration = byShop.get(shop.id);
+              return (
+                <ShopCard
+                  key={shop.id}
+                  shop={shop}
+                  integration={integration}
+                  live={live.get(shop.id)}
+                  detailsLoading={seesConnections && integrations.isPending}
+                  now={Math.max(integrations.dataUpdatedAt, clock)}
+                  {...(seesConnections
+                    ? {
+                        onRefresh: () => {
+                          void integrations.refetch();
                         },
-                        pending: rechecks.pendingShop === shop.id,
-                        feedback: rechecks.feedbackFor(shop.id),
-                      },
-                    }
-                  : {})}
-                {...(etsy !== undefined &&
-                integration !== undefined &&
-                integration.status !== "disconnected"
-                  ? {
-                      disconnect: (
-                        <Button
-                          variant="ghost"
-                          size="lg"
-                          aria-label={t`Disconnect ${shop.name}`}
-                          isPending={disconnects.pendingShop === shop.id}
-                          onPress={() => {
-                            disconnects.ask(shop);
-                          }}
-                        >
-                          <Trans>Disconnect</Trans>
-                        </Button>
-                      ),
-                    }
-                  : {})}
-                {...(etsy !== undefined && needsReconnect(integration)
-                  ? {
-                      reconnect: (
-                        <Button
-                          variant="primary"
-                          size="lg"
-                          aria-label={reconnectLabel(shop.name)}
-                          isPending={etsy.pendingKey === shop.id}
-                          onPress={() => {
-                            etsy.start(shop.id);
-                          }}
-                        >
-                          <Trans>Reconnect</Trans>
-                        </Button>
-                      ),
-                    }
-                  : {})}
-              />
-            );
-          })}
-          {etsy === undefined ? null : <ConnectPanel etsy={etsy} />}
-        </div>
-        <TopListings shopId={firstLive} />
-      </Screen>
+                      }
+                    : {})}
+                  {...(seesConnections && integration?.status === "connected"
+                    ? {
+                        recheck: {
+                          onPress: () => {
+                            rechecks.run(shop.id);
+                          },
+                          pending: rechecks.pendingShop === shop.id,
+                          feedback: rechecks.feedbackFor(shop.id),
+                        },
+                      }
+                    : {})}
+                  {...(etsy !== undefined &&
+                  integration !== undefined &&
+                  integration.status !== "disconnected"
+                    ? {
+                        disconnect: (
+                          <Button
+                            variant="ghost"
+                            size="lg"
+                            aria-label={t`Disconnect ${shop.name}`}
+                            isPending={disconnects.pendingShop === shop.id}
+                            onPress={() => {
+                              disconnects.ask(shop);
+                            }}
+                          >
+                            <Trans>Disconnect</Trans>
+                          </Button>
+                        ),
+                      }
+                    : {})}
+                  {...(etsy !== undefined && needsReconnect(integration)
+                    ? {
+                        reconnect: (
+                          <Button
+                            size="lg"
+                            aria-label={reconnectLabel(shop.name)}
+                            isPending={etsy.pendingKey === shop.id}
+                            onPress={() => {
+                              etsy.start(shop.id);
+                            }}
+                          >
+                            <Trans>Reconnect</Trans>
+                          </Button>
+                        ),
+                      }
+                    : {})}
+                />
+              );
+            })}
+          </FlowRow>
+        )}
+      </TabPanel>
       {disconnects.dialogs}
     </>
-  );
-}
-
-/** The Owner's panel beside the shops: connect another Etsy shop. */
-function ConnectPanel({ etsy }: { etsy: ConnectEtsy }) {
-  return (
-    <Panel className="lg:min-h-full">
-      <PanelHeader title={<Trans>Connect a shop</Trans>} />
-      <div className="flex min-h-0 grow flex-col items-center justify-center gap-5 px-6 pb-6 text-center">
-        <span className="flex size-24 items-center justify-center rounded-pill border border-dashed border-line-hover max-sm:hidden">
-          <InkDisc>
-            <PlusGlyph size={14} />
-          </InkDisc>
-        </span>
-        <IdBlock label={<Trans>Marketplace:</Trans>} value={<span className="ltr">Etsy</span>} />
-        <p className="m-0 max-w-[320px] text-body-sm text-secondary">
-          <Trans>
-            Add another Etsy shop to this workspace. You confirm with your authenticator code, then
-            approve the access on Etsy.
-          </Trans>
-        </p>
-        <Button
-          variant="primary"
-          size="lg"
-          isPending={etsy.pendingKey === "new"}
-          onPress={() => {
-            etsy.start("new");
-          }}
-        >
-          <Trans>Connect Etsy shop</Trans>
-        </Button>
-        <FormAlert message={etsy.message} />
-      </div>
-    </Panel>
   );
 }
 

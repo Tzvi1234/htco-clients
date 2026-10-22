@@ -1,7 +1,7 @@
-import { Trans, useLingui } from "@lingui/react/macro";
+import { Plural, Trans, useLingui } from "@lingui/react/macro";
 import type { components } from "@htco/api-client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useRef, useState, type RefObject, type SyntheticEvent } from "react";
+import { useId, useRef, useState, type RefObject, type SyntheticEvent } from "react";
 import { Dialog, Heading, Modal, ModalOverlay } from "react-aria-components";
 
 import { useAgents } from "../../shared/demo/office.ts";
@@ -22,6 +22,7 @@ import { CheckIcon, CloseIcon } from "../../shared/ui/icons.tsx";
 import { PageHeader } from "../../shared/ui/PageHeader.tsx";
 import { Panel, PanelBody, PanelHeader } from "../../shared/ui/Panel.tsx";
 import {
+  Aside,
   Avatar,
   ChoiceChips,
   CircleButton,
@@ -30,15 +31,22 @@ import {
   DemoPart,
   DemoTag,
   Dot,
+  Figure,
+  Figures,
+  Flow,
+  FlowBody,
+  FlowRow,
+  Focus,
   IdBlock,
   KV,
   KV2,
   PillField,
+  N,
   PlusGlyph,
-  Screen,
   SectionLabel,
-  Stack,
   Status,
+  SubTabs,
+  TabPanel,
   Toggle,
   WhatsappGlyph,
   Who,
@@ -91,8 +99,12 @@ export function TeamPage() {
   const phone = useMediaQuery(PHONE_QUERY);
   const emailRef = useRef<HTMLInputElement>(null);
 
+  const tabs = useId();
+  const [tab, setTab] = useState<"people" | "employees" | "policy">("people");
+
   const startInvite = () => {
     setSelected(null);
+    setTab("people");
     // After the invite panel is back in place.
     setTimeout(() => emailRef.current?.focus(), 0);
   };
@@ -100,70 +112,93 @@ export function TeamPage() {
   return (
     <>
       <PageHeader title={t`Members & access`} />
-      <Screen layout="l2r">
-        <Panel className="max-lg:min-h-[420px] max-sm:min-h-0">
-          <PanelHeader
-            title={<Trans>Members & access</Trans>}
-            meta={<MemberCount organizationId={organizationId} />}
-            actions={
-              organizationId === undefined ? undefined : (
-                <CircleButton label={t`Invite member`} icon={<PlusGlyph />} onClick={startInvite} />
-              )
-            }
-          />
-          {managed.length > 1 ? (
-            <div className="px-6 pb-3">
-              <ChoiceChips
-                label={t`Workspace`}
-                value={organizationId ?? null}
-                onChange={(id) => {
-                  setChosen(id);
-                  setSelected(null);
-                }}
-                options={managed.map((id) => ({ id, label: id.slice(0, 8), ltr: true }))}
-              />
-            </div>
-          ) : null}
-          {organizationId === undefined ? (
-            managed.length > 1 ? (
-              <PanelBody className="items-center justify-center text-center">
-                <p className="m-0 max-w-[320px] text-body-sm font-light text-muted">
-                  <Trans>Choose the workspace whose members you want to see and invite.</Trans>
-                </p>
-              </PanelBody>
-            ) : null
-          ) : (
-            <div className="flex min-h-0 flex-1 flex-col overflow-auto [scrollbar-width:thin]">
-              <MembersTable
-                organizationId={organizationId}
-                selected={selected}
-                onSelect={setSelected}
-                myId={me.data?.user_id}
-              />
-              <EmployeesDemo />
-            </div>
-          )}
-        </Panel>
-        <Stack className="lg:grid-rows-[minmax(0,1.25fr)_minmax(0,1fr)]">
-          {organizationId === undefined ? (
+      <Flow>
+        <TeamFocus organizationId={organizationId} onInvite={startInvite} />
+        <SubTabs
+          label={t`Members views`}
+          idBase={tabs}
+          value={tab}
+          onChange={(next) => {
+            setTab(next);
+          }}
+          tabs={[
+            { id: "people", label: <Trans>People</Trans> },
+            { id: "employees", label: <Trans>AI employees</Trans>, demo: <DemoTag /> },
+            { id: "policy", label: <Trans>Policy</Trans>, demo: <DemoTag /> },
+          ]}
+        />
+        <TabPanel idBase={tabs} tab={tab}>
+          {tab === "employees" ? (
             <Panel>
-              <PanelHeader title={<Trans>Invite member</Trans>} />
+              <EmployeesDemo />
             </Panel>
-          ) : selected !== null && !phone ? (
-            <MemberPanel
-              key={selected}
-              organizationId={organizationId}
-              memberId={selected}
-              myId={me.data?.user_id}
-              actingOwner={actingOwner}
-              onClose={startInvite}
-            />
+          ) : tab === "policy" ? (
+            <PolicyPanel />
           ) : (
-            <InvitePanel key={organizationId} organizationId={organizationId} emailRef={emailRef} />
+            <FlowRow layout="main-side">
+              <Panel>
+                <PanelHeader
+                  title={<Trans>Members & access</Trans>}
+                  meta={<MemberCount organizationId={organizationId} />}
+                />
+                {managed.length > 1 ? (
+                  <div className="px-6 pb-3">
+                    <ChoiceChips
+                      label={t`Workspace`}
+                      value={organizationId ?? null}
+                      onChange={(id) => {
+                        setChosen(id);
+                        setSelected(null);
+                      }}
+                      options={managed.map((id) => ({ id, label: id.slice(0, 8), ltr: true }))}
+                    />
+                  </div>
+                ) : null}
+                {organizationId === undefined ? (
+                  managed.length > 1 ? (
+                    <FlowBody className="items-center py-10 text-center">
+                      <p className="m-0 max-w-[320px] text-body-sm font-light text-muted">
+                        <Trans>
+                          Choose the workspace whose members you want to see and invite.
+                        </Trans>
+                      </p>
+                    </FlowBody>
+                  ) : null
+                ) : (
+                  <MembersTable
+                    organizationId={organizationId}
+                    selected={selected}
+                    onSelect={setSelected}
+                    myId={me.data?.user_id}
+                  />
+                )}
+              </Panel>
+              <Aside>
+                {organizationId === undefined ? (
+                  <Panel>
+                    <PanelHeader title={<Trans>Invite member</Trans>} />
+                  </Panel>
+                ) : selected !== null && !phone ? (
+                  <MemberPanel
+                    key={selected}
+                    organizationId={organizationId}
+                    memberId={selected}
+                    myId={me.data?.user_id}
+                    actingOwner={actingOwner}
+                    onClose={startInvite}
+                  />
+                ) : (
+                  <InvitePanel
+                    key={organizationId}
+                    organizationId={organizationId}
+                    emailRef={emailRef}
+                  />
+                )}
+              </Aside>
+            </FlowRow>
           )}
-          <PolicyPanel />
-        </Stack>
-      </Screen>
+        </TabPanel>
+      </Flow>
       {phone && organizationId !== undefined && selected !== null ? (
         <ModalOverlay
           isOpen
@@ -190,6 +225,71 @@ export function TeamPage() {
         </ModalOverlay>
       ) : null}
     </>
+  );
+}
+
+/** The team at a glance: who is in, who is invited, and the one action (invite someone). */
+function TeamFocus({
+  organizationId,
+  onInvite,
+}: {
+  organizationId: string | undefined;
+  onInvite: () => void;
+}) {
+  const { t } = useLingui();
+  const api = useApi();
+  const members = useQuery({
+    ...membersQuery(api, organizationId ?? ""),
+    enabled: organizationId !== undefined,
+  });
+  const list = members.data ?? [];
+  const invited = list.filter((m) => m.display_name === null).length;
+  const leads = list.filter((m) => ORGANIZATION_WIDE.includes(m.role)).length;
+  const known = members.data !== undefined;
+  return (
+    <Focus
+      title={<Trans>Your team</Trans>}
+      meta={<Trans>People who work in the workspace, and what they may reach</Trans>}
+      lead={
+        !known ? undefined : invited > 0 ? (
+          <Plural
+            value={invited}
+            one="One invitation is not accepted yet. Send the link again if it expired."
+            other="# invitations are not accepted yet. Send the link again if one expired."
+          />
+        ) : list.length <= 1 ? (
+          <Trans>You work alone so far. Invite someone and choose what they may do.</Trans>
+        ) : (
+          <Trans>Everyone invited has joined.</Trans>
+        )
+      }
+      figures={
+        <Figures label={t`Team numbers`}>
+          <Figure
+            label={<Trans>Members</Trans>}
+            value={<N>{known ? String(list.length) : "—"}</N>}
+          />
+          <Figure
+            label={<Trans>Invited</Trans>}
+            value={<N>{known ? String(invited) : "—"}</N>}
+            tone={invited > 0 ? "accent" : undefined}
+          />
+          <Figure
+            label={<Trans>Owners and Admins</Trans>}
+            value={<N>{known ? String(leads) : "—"}</N>}
+            note={<Trans>see every shop</Trans>}
+          />
+        </Figures>
+      }
+      actions={
+        organizationId === undefined ? undefined : (
+          <Button size="lg" onPress={onInvite}>
+            <PlusGlyph size={14} />
+            <Trans>Invite member</Trans>
+          </Button>
+        )
+      }
+    />
   );
 }
 
@@ -269,7 +369,7 @@ function MembersTable({
   return (
     <DataTable
       label={t`Members`}
-      className="flex-none overflow-visible"
+      flow
       phoneHidden={[1, 3, 4]}
       head={[t`Name`, t`Type`, t`Role`, t`Access`, t`Needs approval`, t`Status`]}
       rows={(members.data ?? []).map((member) => {
@@ -310,17 +410,17 @@ function EmployeesDemo() {
   const { list } = useAgents();
   const words = useStatusLabels();
   return (
-    <section aria-label={t`AI employees`} className="mt-2 max-sm:hidden">
-      <div className="flex items-center gap-2 px-6 pb-1">
-        <SectionLabel>
-          <Trans>AI employees</Trans>
-        </SectionLabel>
-        <DemoTag className="mb-2" />
-      </div>
+    <section aria-label={t`AI employees`}>
+      <PanelHeader
+        title={<Trans>AI employees</Trans>}
+        meta={<Trans>They join as members with the living office</Trans>}
+        actions={<DemoTag className="me-4" />}
+      />
       <DemoPart tag={false}>
         <DataTable
           label={t`AI employees`}
-          className="flex-none overflow-visible"
+          flow
+          phoneHidden={[1, 2, 3, 4]}
           head={[t`Name`, t`Type`, t`Role`, t`Access`, t`Needs approval`, t`Status`]}
           rows={list.slice(0, 9).map((employee) => ({
             key: employee.id,
@@ -734,13 +834,13 @@ function PolicyPanel() {
   const api = useApi();
   const mfa = useQuery(mfaQuery(api));
   return (
-    <Panel className="max-sm:hidden" label={t`Policy`}>
+    <Panel label={t`Policy`}>
       <PanelHeader title={<Trans>Policy</Trans>} actions={<DemoTag className="me-4" />} />
-      <PanelBody className="justify-between gap-4">
+      <FlowBody className="max-w-[640px] gap-6">
         <DemoPart tag={false} contentClassName="flex flex-col gap-4">
           <IdBlock
             label={t`Policy version:`}
-            value={<span className="ltr font-mono text-[22px]">2026-10-15.1</span>}
+            value={<span className="ltr font-mono text-title-lg">2026-10-15.1</span>}
           />
           <KV
             items={[
@@ -783,7 +883,7 @@ function PolicyPanel() {
             ],
           ]}
         />
-      </PanelBody>
+      </FlowBody>
     </Panel>
   );
 }

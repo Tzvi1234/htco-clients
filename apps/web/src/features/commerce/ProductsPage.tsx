@@ -1,6 +1,6 @@
-import { Trans, useLingui } from "@lingui/react/macro";
+import { Plural, Trans, useLingui } from "@lingui/react/macro";
 import { useQuery } from "@tanstack/react-query";
-import { useState, type ReactNode } from "react";
+import { useRef, useState, type ReactNode } from "react";
 
 import {
   ListingPhoto,
@@ -18,27 +18,43 @@ import {
 import { ShopChips } from "./ShopChips.tsx";
 import { useApi } from "../../shared/api/api.tsx";
 import { cx } from "../../shared/lib/cx.ts";
+import {
+  PHONE_QUERY,
+  REDUCED_MOTION_QUERY,
+  useMediaQuery,
+} from "../../shared/lib/useMediaQuery.ts";
+import { Button } from "../../shared/ui/Button.tsx";
 import { PageHeader } from "../../shared/ui/PageHeader.tsx";
 import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
 import {
-  Card,
+  Aside,
   DemoPart,
+  DemoTag,
   Dot,
+  Figure,
+  Figures,
+  Flow,
+  FlowBody,
+  FlowRow,
+  Focus,
   IdBlock,
   InkDisc,
   KV,
   N,
   PlusGlyph,
-  Screen,
   SectionLabel,
   bi,
   useBi,
 } from "../../shared/ui/kit/index.ts";
 
+/** Listings shown at a time; "Show more" adds as many again (the page never scrolls a panel). */
+const PAGE = 24;
+
 /**
- * Commerce › Products, live from Etsy: the shop's active listings with photo, price, stock,
- * views, favourites, section and tags, and the chosen listing's details. Production cost,
- * suppliers and the product studio stay Demo until their phases (13 and 12).
+ * Commerce › Products, live from Etsy (clarity round 3): the catalog's health on top (active,
+ * sold out, views, favourites) with the one thing to look at, then the catalog beside the chosen
+ * listing's details. Production cost, suppliers and the product studio stay Demo until their
+ * phases (13 and 12), in their own panel under the details.
  */
 export function ProductsPage() {
   const { t } = useLingui();
@@ -46,14 +62,11 @@ export function ProductsPage() {
   return (
     <>
       <PageHeader title={t`Products`} />
-      {live.shop !== undefined ? (
-        <Products key={live.shop.id} shopId={live.shop.id} chips={<ShopChips live={live} />} />
-      ) : (
-        <Screen layout="l3">
+      <Flow>
+        {live.shop !== undefined ? (
+          <Products key={live.shop.id} shopId={live.shop.id} chips={<ShopChips live={live} />} />
+        ) : (
           <Panel>
-            <PanelHeader title={<Trans>Product details</Trans>} />
-          </Panel>
-          <Panel className="lg:col-[2/4]">
             <PanelHeader title={<Trans>Catalog</Trans>} />
             {live.isError ? (
               <LiveProblem error={new Error("shops")} onRetry={live.refetch} />
@@ -65,8 +78,8 @@ export function ProductsPage() {
               />
             )}
           </Panel>
-        </Screen>
-      )}
+        )}
+      </Flow>
     </>
   );
 }
@@ -76,147 +89,254 @@ function Products({ shopId, chips }: { shopId: string; chips: ReactNode }) {
   const api = useApi();
   const money = useMoney();
   const count = useCount();
+  const phone = useMediaQuery(PHONE_QUERY);
+  const reduced = useMediaQuery(REDUCED_MOTION_QUERY);
+  const details = useRef<HTMLDivElement>(null);
   const listings = useQuery(listingsQuery(api, shopId));
   const overview = useQuery(overviewQuery(api, shopId));
   const [section, setSection] = useState<number | "all">("all");
+  const [soldOutOnly, setSoldOutOnly] = useState(false);
   const [chosen, setChosen] = useState<number | null>(null);
-  const items = (listings.data?.items ?? []).filter(
-    (l) => section === "all" || l.section_id === section,
+  const [shown, setShown] = useState(PAGE);
+  const all = listings.data?.items ?? [];
+  const items = all.filter(
+    (l) =>
+      (section === "all" || l.section_id === section) &&
+      (!soldOutOnly || (l.quantity === 0 && !l.is_digital)),
   );
   const selected = items.find((l) => l.listing_id === chosen) ?? items[0];
   const sold = new Map(
     (overview.data?.sales?.top_listings ?? []).map((l) => [l.listing_id, l.units] as const),
   );
+  const soldOut = all.filter((l) => l.quantity === 0 && !l.is_digital).length;
+  const views = all.reduce((n, l) => n + l.views, 0);
+  const favourites = all.reduce((n, l) => n + l.favorer_count, 0);
+  const known = listings.data !== undefined;
+  const choose = (id: number) => {
+    setChosen(id);
+    // On a phone the details sit under the catalog: bring them into view.
+    if (phone)
+      details.current?.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
+  };
 
   return (
-    <Screen layout="l3">
-      <Panel>
-        <PanelHeader title={<Trans>Product details</Trans>} />
-        <div className="flex min-h-0 grow flex-col justify-between gap-5 overflow-auto px-6 pb-6">
-          {selected === undefined ? (
-            listings.data === undefined && !listings.isError ? (
-              <LiveSkeleton rows={4} label={t`Loading products`} />
-            ) : null
-          ) : (
-            <Details listing={selected} sold={sold.get(selected.listing_id)} />
-          )}
-          {chips}
-          <DemoPart tag="edge">
-            <KV
-              items={[
-                [<Trans>Production cost</Trans>, <N key="c">$15.96</N>],
-                [<Trans>Supplier</Trans>, <N key="s">Printful</N>],
-              ]}
+    <>
+      <Focus
+        title={<Trans>Your catalog</Trans>}
+        meta={
+          listings.data === undefined ? undefined : (
+            <LiveNote fetchedAt={listings.data.fetched_at} stale={listings.data.stale} />
+          )
+        }
+        end={chips}
+        lead={
+          !known ? (
+            <Trans>The shop's active listings, live from Etsy.</Trans>
+          ) : soldOut > 0 ? (
+            <Plural
+              value={soldOut}
+              one="One listing is sold out. Restock it on Etsy so it keeps selling."
+              other="# listings are sold out. Restock them on Etsy so they keep selling."
             />
-          </DemoPart>
-        </div>
-      </Panel>
-      <Panel className="lg:col-[2/4]">
-        <PanelHeader
-          title={<Trans>Catalog</Trans>}
-          meta={
-            listings.data === undefined ? undefined : (
-              <>
-                <N>{count(listings.data.total_count)}</N> ·{" "}
-                <LiveNote fetchedAt={listings.data.fetched_at} stale={listings.data.stale} />
-              </>
-            )
-          }
-        />
-        {listings.isError ? (
-          <LiveProblem error={listings.error} onRetry={() => void listings.refetch()} />
-        ) : listings.data === undefined ? (
-          <LiveSkeleton rows={6} label={t`Loading products`} />
-        ) : listings.data.items.length === 0 ? (
-          <p className="m-0 flex grow items-center justify-center px-6 py-12 text-center text-body-sm text-secondary">
-            <Trans>This shop has no active listings.</Trans>
-          </p>
-        ) : (
-          <div className="flex min-h-0 grow flex-col gap-3 overflow-auto px-6 pb-6">
-            {listings.data.sections.length === 0 ? null : (
-              <div className="flex flex-wrap gap-1.5" role="group" aria-label={t`Sections`}>
-                {[{ section_id: "all" as const, title: t`All` }, ...listings.data.sections].map(
-                  (s) => (
+          ) : (
+            <Trans>Every active listing is in stock.</Trans>
+          )
+        }
+        figures={
+          <Figures label={t`Catalog numbers`}>
+            <Figure
+              label={<Trans>Active listings</Trans>}
+              value={<N>{known ? count(listings.data.total_count) : "—"}</N>}
+            />
+            <Figure
+              label={<Trans>Sold out</Trans>}
+              value={<N>{known ? count(soldOut) : "—"}</N>}
+              tone={soldOut > 0 ? "accent" : undefined}
+            />
+            <Figure label={<Trans>Views</Trans>} value={<N>{known ? count(views) : "—"}</N>} />
+            <Figure
+              label={<Trans>Favourites</Trans>}
+              value={<N>{known ? count(favourites) : "—"}</N>}
+            />
+          </Figures>
+        }
+        actions={
+          soldOut > 0 ? (
+            <Button
+              variant={soldOutOnly ? "secondary" : "primary"}
+              size="lg"
+              onPress={() => {
+                setSoldOutOnly((on) => !on);
+                setShown(PAGE);
+              }}
+            >
+              {soldOutOnly ? (
+                <Trans>Show every listing</Trans>
+              ) : (
+                <Trans>Show the sold-out listings</Trans>
+              )}
+            </Button>
+          ) : undefined
+        }
+      />
+      <FlowRow layout="main-side">
+        <Panel>
+          <PanelHeader
+            title={<Trans>Catalog</Trans>}
+            meta={known ? <N>{count(items.length)}</N> : undefined}
+          />
+          {listings.isError ? (
+            <LiveProblem error={listings.error} onRetry={() => void listings.refetch()} />
+          ) : listings.data === undefined ? (
+            <LiveSkeleton rows={6} label={t`Loading products`} />
+          ) : listings.data.items.length === 0 ? (
+            <p className="m-0 px-6 py-16 text-center text-body-sm text-secondary">
+              <Trans>This shop has no active listings.</Trans>
+            </p>
+          ) : (
+            <FlowBody className="gap-4">
+              {listings.data.sections.length === 0 ? null : (
+                <div className="flex flex-wrap gap-1.5" role="group" aria-label={t`Sections`}>
+                  {[{ section_id: "all" as const, title: t`All` }, ...listings.data.sections].map(
+                    (s) => (
+                      <button
+                        key={String(s.section_id)}
+                        type="button"
+                        aria-pressed={section === s.section_id}
+                        onClick={() => {
+                          setSection(s.section_id);
+                          setShown(PAGE);
+                        }}
+                        className={cx(
+                          "inline-flex h-9 items-center rounded-pill border px-3 text-caption outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus",
+                          section === s.section_id
+                            ? "border-inverse bg-inverse text-on-inverse"
+                            : "border-line-strong hover:border-line-hover",
+                        )}
+                      >
+                        <bdi>{s.title}</bdi>
+                      </button>
+                    ),
+                  )}
+                </div>
+              )}
+              {items.length === 0 ? (
+                <p className="m-0 py-10 text-center text-body-sm text-secondary">
+                  <Trans>No listing matches this view.</Trans>
+                </p>
+              ) : (
+                <div className="grid grid-cols-4 gap-2 max-2xl:grid-cols-3 max-md:grid-cols-2">
+                  {items.slice(0, shown).map((l) => (
                     <button
-                      key={String(s.section_id)}
                       type="button"
-                      aria-pressed={section === s.section_id}
+                      key={l.listing_id}
+                      aria-pressed={l.listing_id === selected?.listing_id}
                       onClick={() => {
-                        setSection(s.section_id);
+                        choose(l.listing_id);
                       }}
                       className={cx(
-                        "inline-flex h-9 items-center rounded-pill border px-3 text-caption outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus",
-                        section === s.section_id
-                          ? "border-inverse bg-inverse text-on-inverse"
-                          : "border-line-strong hover:border-line-hover",
+                        "flex min-w-0 flex-col items-center justify-between rounded-card border p-4 text-center transition-[background-color,translate] outline-none hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus max-sm:p-3",
+                        l.listing_id === selected?.listing_id
+                          ? "border-inverse bg-selected"
+                          : "border-line hover:bg-hover",
                       )}
                     >
-                      <bdi>{s.title}</bdi>
-                    </button>
-                  ),
-                )}
-              </div>
-            )}
-            <div className="grid grid-cols-4 gap-2 max-xl:grid-cols-3 max-md:grid-cols-2">
-              {items.map((l) => (
-                <button
-                  type="button"
-                  key={l.listing_id}
-                  aria-pressed={l.listing_id === selected?.listing_id}
-                  onClick={() => {
-                    setChosen(l.listing_id);
-                  }}
-                  className={cx(
-                    "flex min-w-0 flex-col items-center justify-between rounded-card border p-4 text-center transition-[background-color,translate] outline-none hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus max-sm:p-3",
-                    l.listing_id === selected?.listing_id
-                      ? "border-selected bg-selected"
-                      : "border-line hover:bg-hover",
-                  )}
-                >
-                  <span className="mb-2.5 flex w-full justify-between gap-2 text-caption">
-                    <N>{money(l.price)}</N>
-                    <span
-                      className={cx("font-light", l.quantity === 0 ? "text-primary" : "text-muted")}
-                    >
-                      {l.quantity === 0 ? (
-                        <span className="inline-flex h-5 items-center gap-1 rounded-pill border border-line-strong px-2 text-primary">
-                          <Dot tone="danger" />
-                          {t`Sold out`}
+                      <span className="mb-2.5 flex w-full justify-between gap-2 text-caption">
+                        <N>{money(l.price)}</N>
+                        <span
+                          className={cx(
+                            "font-light",
+                            l.quantity === 0 ? "text-primary" : "text-muted",
+                          )}
+                        >
+                          {l.quantity === 0 ? (
+                            <span className="inline-flex h-5 items-center gap-1 rounded-pill bg-accent-subtle px-2 text-accent-text">
+                              <Dot tone="attention" />
+                              {t`Sold out`}
+                            </span>
+                          ) : (
+                            <>
+                              <N>{count(l.quantity)}</N> {t`in stock`}
+                            </>
+                          )}
                         </span>
-                      ) : (
-                        <>
-                          <N>{count(l.quantity)}</N> {t`in stock`}
-                        </>
-                      )}
-                    </span>
-                  </span>
-                  <ListingPhoto
-                    src={l.image_url}
-                    alt={l.image_alt}
-                    title={l.title}
-                    size={140}
-                    className="max-sm:!size-[104px]"
-                  />
-                  <span dir="auto" className="mt-3 line-clamp-2 text-body-sm">
-                    {l.title}
-                  </span>
-                  <span className="mt-1.5 text-caption text-secondary">
-                    <N>{count(l.views)}</N> {t`views`} · <N>{count(l.favorer_count)}</N>{" "}
-                    {t`favourites`}
-                  </span>
-                </button>
-              ))}
-            </div>
-            {listings.data.truncated ? (
-              <p className="m-0 text-caption text-muted">
-                {t`Showing ${count(listings.data.items.length)} of ${count(listings.data.total_count)} listings.`}
-              </p>
-            ) : null}
-            <ProductStudioDemo />
+                      </span>
+                      <ListingPhoto
+                        src={l.image_url}
+                        alt={l.image_alt}
+                        title={l.title}
+                        size={132}
+                        className="max-sm:!size-[104px]"
+                      />
+                      <span dir="auto" className="mt-3 line-clamp-2 text-body-sm">
+                        {l.title}
+                      </span>
+                      <span className="mt-1.5 text-caption text-secondary">
+                        <N>{count(l.views)}</N> {t`views`} · <N>{count(l.favorer_count)}</N>{" "}
+                        {t`favourites`}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              )}
+              <div className="flex flex-col items-center gap-2">
+                {items.length > shown ? (
+                  <Button
+                    onPress={() => {
+                      setShown((n) => n + PAGE);
+                    }}
+                  >
+                    {t`Show more (${count(items.length - shown)} left)`}
+                  </Button>
+                ) : null}
+                {listings.data.truncated ? (
+                  <p className="m-0 text-caption text-muted">
+                    {t`Showing ${count(listings.data.items.length)} of ${count(listings.data.total_count)} listings.`}
+                  </p>
+                ) : null}
+              </div>
+            </FlowBody>
+          )}
+        </Panel>
+        <Aside>
+          <div ref={details} className="scroll-mt-20">
+            <Panel>
+              <PanelHeader title={<Trans>Product details</Trans>} />
+              <FlowBody>
+                {selected === undefined ? (
+                  listings.data === undefined && !listings.isError ? (
+                    <LiveSkeleton rows={4} label={t`Loading products`} />
+                  ) : (
+                    <p className="m-0 text-body-sm text-secondary">
+                      <Trans>Choose a listing to see its details.</Trans>
+                    </p>
+                  )
+                ) : (
+                  <Details listing={selected} sold={sold.get(selected.listing_id)} />
+                )}
+              </FlowBody>
+            </Panel>
           </div>
-        )}
-      </Panel>
-    </Screen>
+          <Panel label={t`Cost and supplier`}>
+            <PanelHeader
+              title={<Trans>Cost and supplier</Trans>}
+              actions={<DemoTag className="me-4" />}
+            />
+            <DemoPart tag={false} className="px-6 pb-6">
+              <div className="flex flex-col gap-4">
+                <KV
+                  items={[
+                    [<Trans key="c">Production cost</Trans>, <N key="cv">$15.96</N>],
+                    [<Trans key="s">Supplier</Trans>, <N key="sv">Printful</N>],
+                  ]}
+                />
+                <ProductStudioDemo />
+              </div>
+            </DemoPart>
+          </Panel>
+        </Aside>
+      </FlowRow>
+    </>
   );
 }
 
@@ -296,24 +416,22 @@ function Details({ listing, sold }: { listing: ShopListing; sold: number | undef
   );
 }
 
-/** The product studio (Phase 12) as the demo draws it. */
+/** The product studio (Phase 12) as the demo draws it, inside the Demo cost panel. */
 function ProductStudioDemo() {
   const text = useBi();
   return (
-    <DemoPart tag="corner">
-      <Card dashed className="flex items-center gap-4">
-        <InkDisc>
-          <PlusGlyph size={14} />
-        </InkDisc>
-        <div>
-          <div className="text-body">
-            {text(bi("ניקה מכינה 4 הדמיות חדשות", "Nika is preparing 4 new mockups"))}
-          </div>
-          <div className="text-caption text-secondary">
-            {text(bi("ממתין לאישור לפני פרסום", "Waiting for approval before publishing"))}
-          </div>
+    <div className="flex items-center gap-4 border-t border-line pt-4">
+      <InkDisc>
+        <PlusGlyph size={14} />
+      </InkDisc>
+      <div>
+        <div className="text-body">
+          {text(bi("ניקה מכינה 4 הדמיות חדשות", "Nika is preparing 4 new mockups"))}
         </div>
-      </Card>
-    </DemoPart>
+        <div className="text-caption text-secondary">
+          {text(bi("ממתין לאישור לפני פרסום", "Waiting for approval before publishing"))}
+        </div>
+      </div>
+    </div>
   );
 }

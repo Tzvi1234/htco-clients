@@ -1,7 +1,6 @@
 import { Plural, Trans, useLingui } from "@lingui/react/macro";
 import { useId, type ReactNode } from "react";
 
-import parcel from "../../assets/commerce/parcel.webp";
 import type { IntegrationView, ShopView } from "../../shared/api/api.tsx";
 import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
 import { cx } from "../../shared/lib/cx.ts";
@@ -14,13 +13,14 @@ import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
 import {
   CircleButton,
   Dot,
+  Figure,
+  Figures,
   IdBlock,
   KV2,
   N,
   Pill,
   RefreshGlyph,
   StatusGlyph,
-  Tile,
   type AgentStatus,
   type DotTone,
 } from "../../shared/ui/kit/index.ts";
@@ -112,38 +112,35 @@ function LiveTiles({ live }: { live: ShopLive }) {
   const rating = overview.profile.review_average;
   const reviews = overview.profile.review_count;
   return (
-    <div className="flex flex-col gap-2">
-      <div className={grid}>
-        <Tile
+    <div className="flex flex-col gap-3 border-y border-line py-4">
+      {/* Label over value with hairlines between, as in the screen's focus: no boxes in a box. */}
+      <Figures label={t`Today in this shop`}>
+        <Figure
           label={<Trans>Orders today</Trans>}
           value={<N>{sales === null ? "—" : count(sales.today.orders)}</N>}
         />
-        <Tile
+        <Figure
           label={<Trans>Revenue today</Trans>}
           value={<N>{sales === null ? "—" : money(sales.today.revenue, { whole: true })}</N>}
         />
-        <Tile
+        <Figure
           label={<Trans>Favourites</Trans>}
           value={<N>{count(overview.profile.favorer_count)}</N>}
         />
-        <Tile
+        <Figure
           label={<Trans>Rating</Trans>}
           value={<N>{rating === null ? "—" : Number(rating).toFixed(1)}</N>}
-          {...(reviews === null ? {} : { sub: t`${count(reviews)} reviews` })}
+          {...(reviews === null ? {} : { note: t`${count(reviews)} reviews` })}
         />
-      </div>
-      <LiveNote
-        fetchedAt={overview.fetched_at}
-        stale={overview.stale}
-        className="self-center lg:-mb-2"
-      />
+      </Figures>
+      <LiveNote fetchedAt={overview.fetched_at} stale={overview.stale} className="self-start" />
     </div>
   );
 }
 
 /**
  * A shop and its Etsy connection (slice 4.6), in the Design 1C shop panel: the shop's name as
- * the large identifier, the parcel, the shop's numbers live from Etsy (orders and revenue today,
+ * the large identifier, what needs the Owner first, the shop's numbers live from Etsy (orders and revenue today,
  * favourites, rating, with their freshness), then the connection: health in plain words, the
  * granted access, status and last sync. Never a token.
  */
@@ -213,7 +210,7 @@ export function ShopCard({
   const asleep = integration?.status === "disconnected";
 
   return (
-    <Panel as="article" labelledBy={titleId} className="lg:min-h-full">
+    <Panel as="article" labelledBy={titleId}>
       <PanelHeader
         title={
           <span className="ltr">
@@ -230,7 +227,7 @@ export function ShopCard({
           )
         }
       />
-      <div className="flex min-h-0 grow flex-col gap-4 overflow-auto px-6 pb-6">
+      <div className="flex grow flex-col gap-4 px-6 pb-6 max-sm:px-4">
         <IdBlock label={<Trans>Shop:</Trans>} value={shop.name} valueId={titleId}>
           <p className="m-0 mt-1 truncate text-caption font-light text-muted">
             {integration === undefined ? (
@@ -242,19 +239,15 @@ export function ShopCard({
             )}
           </p>
         </IdBlock>
-        {/* One art height for every card, so cards side by side keep their rows level whether or
-            not one of them shows Reconnect; the leftover space collects under the last row. */}
-        <div className="flex h-36 shrink-0 items-center justify-center max-sm:h-24 lg:h-[clamp(64px,calc(100dvh-860px),160px)]">
-          <img
-            src={parcel}
-            alt=""
-            draggable={false}
-            className={cx(
-              "h-full max-h-40 w-auto object-contain motion-safe:animate-[htco-float_6s_ease-in-out_infinite]",
-              asleep && "opacity-70 grayscale",
-            )}
-          />
-        </div>
+        {integration !== undefined && integration.token_health !== "ok" && !detailsLoading ? (
+          <p
+            role="note"
+            className="m-0 flex items-center gap-2.5 rounded-card bg-accent-subtle px-4 py-3 text-body-sm"
+          >
+            <span aria-hidden="true" className="size-2 shrink-0 rounded-pill bg-accent" />
+            <span className="min-w-0">{health(integration)}</span>
+          </p>
+        ) : null}
         {live === undefined || asleep ? null : <LiveTiles live={live} />}
         {detailsLoading ? (
           <div className="flex flex-col gap-3">
@@ -282,12 +275,15 @@ export function ShopCard({
         {integration === undefined || detailsLoading ? null : (
           <div className="flex flex-col gap-4 motion-safe:animate-enter">
             <dl className="m-0 flex flex-col">
-              <Detail label={<Trans>Connection</Trans>}>
-                <span className="inline-flex items-center gap-2">
-                  <StatusGlyph live status={HEALTH_GLYPH[integration.token_health]} />
-                  <span>{health(integration)}</span>
-                </span>
-              </Detail>
+              {/* A connection that needs the Owner says so at the top of the card instead. */}
+              {integration.token_health === "ok" ? (
+                <Detail label={<Trans>Connection</Trans>}>
+                  <span className="inline-flex items-center gap-2">
+                    <StatusGlyph live status={HEALTH_GLYPH[integration.token_health]} />
+                    <span>{health(integration)}</span>
+                  </span>
+                </Detail>
+              ) : null}
               <Detail label={<Trans>Access</Trans>} phone={false}>
                 {integration.scopes.length === 0 ? (
                   <span className="text-muted">

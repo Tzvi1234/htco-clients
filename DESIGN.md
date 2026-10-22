@@ -206,10 +206,20 @@ left-to-right inside Hebrew.
 The shell is a floating sidebar (264 px, a 72 px rail below 1360 px or by choice, with a flyout
 of the area's tabs) beside a column of the top bar (72 px) and the screen. Screens lay out panels
 on the demo's grids (`Screen`: `l3`, `l3s`, `l2`, `lc3s`…): 300 px side columns, a 184 px strip
-row, 8 px gaps. From 1200 px the screen fills the height and each panel scrolls on its own; from
+row, 8 px gaps. On those grids, from 1200 px the screen fills the height and each panel scrolls on its own; from
 900 px panels sit two to a row; under 640 px (phones) panels stack in the page under an iOS-style
 top bar whose large title shrinks on scroll, above a floating tab bar (Home, Office, Work,
 Commerce, More). Phones show fewer things, not smaller ones; KPI rows scroll sideways.
+
+**The clarity layout (round 3, `kit/flow.tsx`).** Every screen with a real feature (Home,
+Shops, Orders, Products, Shipping, Customers, Members & access, Security) scrolls as one page and
+reads the same way: one **focus** panel on top (a light 24 px title, one sentence of what matters
+now, up to four key figures with hairlines between them, the one primary action), then the work
+in rows of panels grouped by what belongs together, a side column that stays in view, and
+**sub-tabs** (an ink capsule that glides to the chosen pill) when there is too much for one page.
+No panel scrolls on its own; long lists page with "Show more". The figure that needs the owner
+carries the accent (its text colour and dot), and so does a table row or card that needs him (the
+accent's wash). Demo-only tabs carry the Demo tag in the tab.
 
 Inside panels: a 56 px header (title, quiet meta, actions at the end), 24 px gutters, rows with
 12 px padding and hairline dividers. Cards side by side keep their rows level.

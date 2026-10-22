@@ -25,6 +25,7 @@ export function DataTable({
   ends = [],
   phoneHidden = [],
   wideOnly = [],
+  flow = false,
   className,
 }: {
   /** The table's name, for screen readers. */
@@ -34,6 +35,11 @@ export function DataTable({
   ends?: readonly number[];
   phoneHidden?: readonly number[];
   wideOnly?: readonly number[];
+  /**
+   * In a page that scrolls as a whole (kit/flow.tsx): the table is as tall as its rows and only
+   * scrolls sideways when it is wider than its panel, never up and down on its own.
+   */
+  flow?: boolean;
   className?: string;
 }) {
   const keyed = (row: TableRow) => (event: KeyboardEvent) => {
@@ -50,7 +56,13 @@ export function DataTable({
       wideOnly.includes(index) && "max-xl:hidden",
     );
   return (
-    <div className={cx("min-h-0 flex-1 overflow-auto px-3 pb-3 [scrollbar-width:thin]", className)}>
+    <div
+      className={cx(
+        flow ? "overflow-x-auto overflow-y-hidden" : "min-h-0 flex-1 overflow-auto",
+        "px-3 pb-3 [scrollbar-width:thin]",
+        className,
+      )}
+    >
       <table aria-label={label} className="w-full border-separate border-spacing-0 text-body-sm">
         <thead>
           <tr>

@@ -1,4 +1,5 @@
-import { Trans, useLingui } from "@lingui/react/macro";
+import { Plural, Trans, useLingui } from "@lingui/react/macro";
+import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState, type ReactNode } from "react";
 import { Dialog, Modal, ModalOverlay } from "react-aria-components";
@@ -23,18 +24,20 @@ import { ShopChips } from "./ShopChips.tsx";
 import { useApi } from "../../shared/api/api.tsx";
 import { cx } from "../../shared/lib/cx.ts";
 import { PHONE_QUERY, useMediaQuery } from "../../shared/lib/useMediaQuery.ts";
-import { Button } from "../../shared/ui/Button.tsx";
+import { Button, buttonStyle } from "../../shared/ui/Button.tsx";
+import { ArrowEndIcon } from "../../shared/ui/icons.tsx";
 import { PageHeader } from "../../shared/ui/PageHeader.tsx";
 import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
 import {
-  CountUp,
+  Chip,
   DataTable,
   DotColumns,
-  IdBlock,
+  Figure,
+  Figures,
+  Flow,
+  Focus,
   KV,
   N,
-  Screen,
-  SectionLabel,
   Status,
   type AgentStatus,
 } from "../../shared/ui/kit/index.ts";
@@ -101,7 +104,7 @@ function FilterTab({
       )}
     >
       {children}
-      <span className={cx("ltr text-[11px]", on ? "text-on-inverse-muted" : "text-muted")}>
+      <span className={cx("ltr text-caption tabular", on ? "text-on-inverse-muted" : "text-muted")}>
         {count}
       </span>
     </button>
@@ -120,16 +123,11 @@ export function OrdersPage() {
   return (
     <>
       <PageHeader title={t`Orders`} />
-      {live.shop !== undefined ? (
-        <Orders key={live.shop.id} shopId={live.shop.id} chips={<ShopChips live={live} />} />
-      ) : (
-        <Screen layout="l2">
-          <Panel>
-            <PanelHeader title={<Trans>Filters</Trans>} />
-            {live.shops === undefined && !live.isError ? (
-              <LiveSkeleton rows={5} label={t`Loading orders`} />
-            ) : null}
-          </Panel>
+      <Flow>
+        {live.shop !== undefined ? (
+          <Orders key={live.shop.id} shopId={live.shop.id} chips={<ShopChips live={live} />} />
+        ) : (
+          // No shop yet (or still loading): one panel says so; no empty filters beside it.
           <Panel>
             <PanelHeader title={<Trans>Orders</Trans>} />
             {live.isError ? (
@@ -142,8 +140,8 @@ export function OrdersPage() {
               />
             )}
           </Panel>
-        </Screen>
-      )}
+        )}
+      </Flow>
     </>
   );
 }
@@ -243,12 +241,16 @@ function Orders({ shopId, chips }: { shopId: string; chips: ReactNode }) {
       cell: (o) => {
         const [sent] = o.shipments;
         if (sent === undefined) return <span className="text-muted">—</span>;
+        // The carrier as a chip; the tracking number cut to fit, whole in its tooltip.
         return (
-          <span className="flex max-w-[150px] flex-col leading-tight">
-            <N>{sent.carrier}</N>
+          <span className="inline-flex max-w-[200px] items-center gap-1.5">
+            <Chip className="ltr">{sent.carrier}</Chip>
             {sent.tracking_code === null ? null : (
-              <span className="truncate text-caption text-muted" title={sent.tracking_code}>
-                <N>{sent.tracking_code}</N>
+              <span
+                className="ltr min-w-0 truncate text-caption text-muted tabular"
+                title={sent.tracking_code}
+              >
+                {sent.tracking_code}
               </span>
             )}
           </span>
@@ -257,39 +259,129 @@ function Orders({ shopId, chips }: { shopId: string; chips: ReactNode }) {
     },
   ];
 
+  const late = counts?.overdue ?? 0;
+  const awaiting = overview.data?.sales?.awaiting_shipment ?? counts?.paid ?? 0;
+  const revenue30 = (overview.data?.sales?.daily ?? []).reduce((n, d) => n + Number(d.revenue), 0);
+
   return (
-    <Screen layout="l2">
+    <>
+      <Focus
+        title={<Trans>Last 30 days</Trans>}
+        meta={
+          all.data === undefined ? undefined : (
+            <LiveNote fetchedAt={all.data.fetched_at} stale={all.data.stale} />
+          )
+        }
+        end={chips}
+        lead={
+          all.data === undefined ? (
+            <Trans>The shop's orders, live from Etsy.</Trans>
+          ) : late > 0 ? (
+            <Plural
+              value={late}
+              one="One order is past its ship-by date. Look at it first."
+              other="# orders are past their ship-by date. Look at them first."
+            />
+          ) : awaiting > 0 ? (
+            <Plural
+              value={awaiting}
+              one="One order waits to ship; none is late."
+              other="# orders wait to ship; none is late."
+            />
+          ) : (
+            <Trans>Every paid order is shipped.</Trans>
+          )
+        }
+        figures={
+          <Figures label={t`Order numbers`}>
+            <Figure
+              label={<Trans>Orders</Trans>}
+              value={<N>{all.data === undefined ? "—" : count(all.data.total)}</N>}
+            />
+            <Figure
+              label={<Trans>Awaiting shipment</Trans>}
+              value={<N>{all.data === undefined ? "—" : count(awaiting)}</N>}
+              tone={awaiting > 0 ? "accent" : undefined}
+            />
+            <Figure
+              label={<Trans>Late</Trans>}
+              value={<N>{all.data === undefined ? "—" : count(late)}</N>}
+              tone={late > 0 ? "accent" : undefined}
+            />
+            {overview.data?.sales == null ? null : (
+              <Figure
+                label={<Trans>Revenue</Trans>}
+                value={
+                  <N>
+                    {money(
+                      { amount: String(revenue30), currency: overview.data.sales.currency },
+                      { whole: true },
+                    )}
+                  </N>
+                }
+                note={<Trans>paid orders, before Etsy's fees</Trans>}
+              />
+            )}
+          </Figures>
+        }
+        actions={
+          late > 0 && filter !== "overdue" ? (
+            <Button
+              variant="primary"
+              size="lg"
+              onPress={() => {
+                choose("overdue");
+              }}
+            >
+              <Trans>Show the late orders</Trans>
+            </Button>
+          ) : awaiting > 0 ? (
+            <Link
+              to="/commerce/shipping"
+              className={buttonStyle({ variant: "primary", size: "lg" })}
+            >
+              <Trans>Open what waits to ship</Trans>
+              <ArrowEndIcon size={14} />
+            </Link>
+          ) : undefined
+        }
+        aside={
+          week.length === 0 ? undefined : (
+            <div className="flex flex-col items-center gap-2">
+              <DotColumns
+                values={week.map((d) => d.orders)}
+                rows={6}
+                highlight={6}
+                gap={28}
+                labels={weekdays}
+                label={t`Orders per day in the last 7 days: ${week.map((d) => String(d.orders)).join(", ")}`}
+              />
+              <span className="text-caption font-light text-muted">
+                <Trans>Orders per day, last 7 days</Trans>
+              </span>
+            </div>
+          )
+        }
+      />
       <Panel>
         <PanelHeader title={<Trans>Filters</Trans>} />
-        <div className="flex min-h-0 grow flex-col justify-between gap-6 overflow-auto px-6 pb-6">
-          <IdBlock
-            label={<Trans>Orders shown:</Trans>}
-            value={
-              <N>{all.data === undefined ? "—" : <CountUp value={String(orders.length)} />}</N>
-            }
-          />
-          {chips}
-          <div>
-            <SectionLabel>
-              <Trans>Status</Trans>
-            </SectionLabel>
-            <div className="flex flex-wrap gap-1.5">
-              {FILTERS.map((f) => (
-                <FilterTab
-                  key={f}
-                  on={filter === f}
-                  count={countOf(f)}
-                  onPress={() => {
-                    choose(f);
-                  }}
-                >
-                  {f === "all" ? <Trans>All</Trans> : states[f]}
-                </FilterTab>
-              ))}
-            </div>
+        <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4 px-6 pb-5 max-sm:px-4">
+          <div className="flex flex-wrap gap-1.5" role="group" aria-label={t`Status`}>
+            {FILTERS.map((f) => (
+              <FilterTab
+                key={f}
+                on={filter === f}
+                count={countOf(f)}
+                onPress={() => {
+                  choose(f);
+                }}
+              >
+                {f === "all" ? <Trans>All</Trans> : states[f]}
+              </FilterTab>
+            ))}
           </div>
           <KV
-            className="max-sm:hidden"
+            className="min-w-[240px] max-sm:hidden"
             items={[
               [
                 <Trans>Total shown</Trans>,
@@ -303,35 +395,20 @@ function Orders({ shopId, chips }: { shopId: string; chips: ReactNode }) {
                     : money({ amount: String(sum / orders.length), currency })}
                 </N>,
               ],
-              [
-                <Trans>Awaiting shipment</Trans>,
-                <N key="wait">{count(overview.data?.sales?.awaiting_shipment ?? 0)}</N>,
-              ],
-              [<Trans>Late</Trans>, <N key="late">{count(counts?.overdue ?? 0)}</N>],
             ]}
           />
-          {week.length === 0 ? null : (
-            <div className="max-sm:hidden">
-              <DotColumns
-                values={week.map((d) => d.orders)}
-                rows={6}
-                highlight={6}
-                gap={36}
-                labels={weekdays}
-                label={t`Orders per day in the last 7 days: ${week.map((d) => String(d.orders)).join(", ")}`}
-              />
-            </div>
-          )}
         </div>
       </Panel>
       <Panel>
         <PanelHeader
           title={<Trans>Orders</Trans>}
           meta={
-            all.data === undefined ? (
-              <Trans>Last 30 days</Trans>
+            filter === "all" ? (
+              <Trans>All states</Trans>
             ) : (
-              <LiveNote fetchedAt={all.data.fetched_at} stale={all.data.stale} />
+              <>
+                {states[filter]} · <N>{count(orders.length)}</N>
+              </>
             )
           }
         />
@@ -340,7 +417,7 @@ function Orders({ shopId, chips }: { shopId: string; chips: ReactNode }) {
         ) : all.data === undefined ? (
           <LiveSkeleton rows={9} label={t`Loading orders`} />
         ) : orders.length === 0 ? (
-          <p className="m-0 flex grow items-center justify-center px-6 py-12 text-center text-body-sm text-secondary">
+          <p className="m-0 px-6 py-16 text-center text-body-sm text-secondary">
             {all.data.total === 0
               ? t`No orders in the last 30 days.`
               : t`No orders match this filter.`}
@@ -348,7 +425,7 @@ function Orders({ shopId, chips }: { shopId: string; chips: ReactNode }) {
         ) : (
           <>
             {phone ? (
-              <ul className="m-0 flex list-none flex-col gap-1.5 overflow-auto px-3 pb-24 [scrollbar-width:thin]">
+              <ul className="m-0 flex list-none flex-col gap-1.5 px-3 pb-2">
                 {orders.slice(0, shown).map((o) => (
                   <li key={o.order_id}>
                     <OrderRow
@@ -362,16 +439,18 @@ function Orders({ shopId, chips }: { shopId: string; chips: ReactNode }) {
               </ul>
             ) : (
               <DataTable
+                flow
                 label={t`Orders`}
                 head={columns.map((c) => c.header)}
                 ends={[3]}
                 rows={orders.slice(0, shown).map((o) => ({
                   key: String(o.order_id),
+                  ...(o.overdue ? { className: "k-row-late" } : {}),
                   cells: columns.map((c) => c.cell(o)),
                 }))}
               />
             )}
-            <div className="flex shrink-0 flex-col items-center gap-2 px-6 pt-2 pb-4 max-sm:pb-24">
+            <div className="flex flex-col items-center gap-2 px-6 pt-2 pb-5">
               {orders.length > shown ? (
                 <Button
                   onPress={() => {
@@ -399,7 +478,7 @@ function Orders({ shopId, chips }: { shopId: string; chips: ReactNode }) {
           }}
         />
       )}
-    </Screen>
+    </>
   );
 }
 
@@ -414,7 +493,10 @@ function OrderRow({ order, onOpen }: { order: ShopOrder; onOpen: () => void }) {
     <button
       type="button"
       onClick={onOpen}
-      className="flex w-full flex-col gap-1 rounded-card border border-line px-4 py-3 text-start outline-none hover:bg-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+      className={cx(
+        "flex w-full flex-col gap-1 rounded-card border px-4 py-3 text-start outline-none hover:bg-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus",
+        order.overdue ? "border-line-strong bg-accent-subtle" : "border-line",
+      )}
     >
       <span className="flex w-full items-baseline justify-between gap-3 text-body-sm">
         <N>{`#${String(order.order_id)}`}</N>

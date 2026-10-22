@@ -12,42 +12,50 @@ import {
   type SessionItem,
 } from "../../shared/api/api.tsx";
 import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
-import { Button } from "../../shared/ui/Button.tsx";
+import { Button, buttonStyle } from "../../shared/ui/Button.tsx";
 import { PageHeader } from "../../shared/ui/PageHeader.tsx";
-import { Panel, PanelBody, PanelHeader } from "../../shared/ui/Panel.tsx";
+import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
 import {
+  Aside,
   DemoPart,
   DemoTag,
   Dot,
+  Figure,
+  Figures,
+  Flow,
+  FlowBody,
+  FlowRow,
+  Focus,
   IdBlock,
-  KV,
   KV2,
   LaptopGlyph,
   ListRow,
+  N,
   Note,
   PhoneGlyph,
-  Screen,
   ShieldGlyph,
-  Stack,
   Status,
 } from "../../shared/ui/kit/index.ts";
 
 /**
- * Security (slice 3.5, AC-3.5.4, FR-IAM-05), a page of Settings in the Design 1C language: the
- * second factor beside the signed-in devices, each of which can be signed out.
+ * Security (slice 3.5, AC-3.5.4, FR-IAM-05), a page of Settings (clarity round 3): the second
+ * factor as the focus on top, with the one thing to do when it is missing, then the signed-in
+ * devices, each of which can be signed out, beside recovery (Demo until MFA recovery is built).
  */
 export function SecurityPage() {
   const { t } = useLingui();
   return (
     <>
       <PageHeader title={t`Security`} />
-      <Screen layout="l2">
-        <Stack className="lg:grid-rows-[minmax(0,1.3fr)_minmax(0,1fr)]">
-          <SecondFactor />
-          <RecoveryDemo />
-        </Stack>
-        <Devices />
-      </Screen>
+      <Flow>
+        <SecondFactor />
+        <FlowRow layout="main-side">
+          <Devices />
+          <Aside>
+            <RecoveryDemo />
+          </Aside>
+        </FlowRow>
+      </Flow>
     </>
   );
 }
@@ -57,38 +65,54 @@ function SecondFactor() {
   const api = useApi();
   const mfa = useQuery(mfaQuery(api));
   const session = useQuery(sessionQuery(api));
+  const sessions = useQuery(sessionsQuery(api));
   const enrolled = mfa.data?.enrolled;
   return (
-    <Panel label={t`Two-factor sign-in`}>
-      <PanelHeader title={<Trans>Two-factor sign-in</Trans>} />
-      <PanelBody className="justify-center gap-6">
-        <div className="flex flex-col items-center gap-3">
-          <span className="flex size-16 items-center justify-center rounded-pill border border-line bg-raised">
-            <ShieldGlyph size={24} />
-          </span>
-          <IdBlock
-            label={t`Two-step sign-in:`}
+    <Focus
+      label={t`Two-factor sign-in`}
+      title={<Trans>Two-factor sign-in</Trans>}
+      meta={<Trans>Required for Owners and Admins</Trans>}
+      lead={
+        enrolled === undefined ? undefined : enrolled ? (
+          <Trans>
+            Signing in asks for a code from your authenticator app, so a password alone is not
+            enough.
+          </Trans>
+        ) : (
+          <Trans>
+            Add an authenticator app: without it, a stolen password is enough to get in.
+          </Trans>
+        )
+      }
+      figures={
+        <Figures label={t`Security numbers`}>
+          <Figure
+            label={t`Two-step sign-in`}
             value={enrolled === undefined ? "…" : enrolled ? t`On` : t`Off`}
+            tone={enrolled === false ? "accent" : undefined}
           />
-        </div>
-        <KV
-          items={[
-            [t`Method`, t`Authenticator app`],
-            [
-              t`Codes set up`,
-              <span key="n" className="ltr">
-                {mfa.data?.factors.filter((f) => f.verified).length ?? "…"}
-              </span>,
-            ],
-            [
-              t`This session`,
-              session.data?.assurance === "aal2" ? t`Confirmed with a code` : t`Password only`,
-            ],
-            [t`Required for`, t`Owners and Admins`],
-          ]}
-        />
-        {enrolled === undefined ? null : enrolled ? (
-          <p className="m-0 flex animate-enter items-center justify-center gap-2 rounded-card bg-raised p-3 text-body-sm">
+          <Figure
+            label={t`Codes set up`}
+            value={<N>{String(mfa.data?.factors.filter((f) => f.verified).length ?? "…")}</N>}
+            note={t`Authenticator app`}
+          />
+          <Figure
+            label={t`This session`}
+            value={
+              <span className="text-title-lg">
+                {session.data?.assurance === "aal2" ? t`Confirmed with a code` : t`Password only`}
+              </span>
+            }
+          />
+          <Figure
+            label={t`Signed-in devices`}
+            value={<N>{sessions.data === undefined ? "…" : String(sessions.data.length)}</N>}
+          />
+        </Figures>
+      }
+      actions={
+        enrolled === undefined ? undefined : enrolled ? (
+          <p className="m-0 flex animate-enter items-center gap-2 text-body-sm">
             <Status
               live
               status="running"
@@ -100,23 +124,22 @@ function SecondFactor() {
             />
           </p>
         ) : (
-          <p className="m-0 flex animate-enter flex-wrap items-center justify-center gap-2 rounded-card bg-raised p-3 text-body-sm">
-            <Status
-              live
-              status="waityou"
-              label={
-                <span className="text-body-sm">
-                  <Trans>No authenticator app yet.</Trans>
-                </span>
-              }
-            />{" "}
-            <Link to="/security/setup" className="text-link underline underline-offset-[3px]">
+          <>
+            <Link to="/security/setup" className={buttonStyle({ variant: "primary", size: "lg" })}>
               <Trans>Set one up</Trans>
             </Link>
-          </p>
-        )}
-      </PanelBody>
-    </Panel>
+            <span className="text-body-sm text-secondary">
+              <Trans>No authenticator app yet.</Trans>
+            </span>
+          </>
+        )
+      }
+      aside={
+        <span className="flex size-28 items-center justify-center rounded-pill border border-line bg-raised">
+          <ShieldGlyph size={40} />
+        </span>
+      }
+    />
   );
 }
 
@@ -124,9 +147,9 @@ function SecondFactor() {
 function RecoveryDemo() {
   const { t } = useLingui();
   return (
-    <Panel label={t`Recovery`} className="max-sm:hidden">
+    <Panel label={t`Recovery`}>
       <PanelHeader title={<Trans>Recovery</Trans>} actions={<DemoTag className="me-4" />} />
-      <PanelBody className="justify-between gap-4">
+      <FlowBody className="gap-4">
         <DemoPart tag={false} contentClassName="flex flex-col gap-4">
           <IdBlock label={t`Recovery codes left:`} value={<span className="ltr">8 / 10</span>} />
           <KV2
@@ -148,7 +171,7 @@ function RecoveryDemo() {
             ]}
           />
         </DemoPart>
-      </PanelBody>
+      </FlowBody>
     </Panel>
   );
 }
@@ -172,12 +195,12 @@ function Devices() {
   const count = sessions.data?.length;
 
   return (
-    <Panel label={t`Signed-in devices`} className="max-lg:min-h-[320px]">
+    <Panel label={t`Signed-in devices`}>
       <PanelHeader
         title={<Trans>Signed-in devices</Trans>}
         meta={count === undefined ? undefined : <span className="ltr">{count}</span>}
       />
-      <PanelBody className="px-2 pb-2">
+      <FlowBody className="px-2 pb-2 max-sm:px-2">
         {sessions.isError ? (
           <p role="alert" className="m-0 px-4 py-3 text-body-sm text-danger-text">
             <Trans>The devices cannot be loaded right now. Try again shortly.</Trans>
@@ -234,14 +257,14 @@ function Devices() {
           })}
         </ul>
         {sessions.data === undefined ? null : (
-          <Note icon={<ShieldGlyph size={16} />} className="mx-2 mt-auto mb-2">
+          <Note icon={<ShieldGlyph size={16} />} className="mx-2 mt-3 mb-2">
             <Trans>
               Don’t recognise a device? Sign it out here. Only that device is signed out; this one
               stays signed in.
             </Trans>
           </Note>
         )}
-      </PanelBody>
+      </FlowBody>
     </Panel>
   );
 }

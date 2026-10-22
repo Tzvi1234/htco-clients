@@ -19,7 +19,7 @@ import {
 import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
 import { cx } from "../../shared/lib/cx.ts";
 import { Button, buttonStyle } from "../../shared/ui/Button.tsx";
-import { Dot, IdBlock, N } from "../../shared/ui/kit/index.ts";
+import { Dot } from "../../shared/ui/kit/index.ts";
 
 export type ShopOverview = components["schemas"]["ShopOverviewView"];
 export type ShopOrders = components["schemas"]["OrdersView"];
@@ -330,8 +330,10 @@ export function LiveProblem({
 export function NoShopYet({ what }: { what: ReactNode }) {
   return (
     <div className="flex grow flex-col items-center justify-center gap-4 px-6 py-12 text-center">
-      <IdBlock label={<Trans>Shops connected:</Trans>} value={<N>0</N>} />
-      <p className="m-0 max-w-[340px] text-body-sm text-secondary">{what}</p>
+      <p className="m-0 max-w-[360px] font-display text-title font-light text-balance">{what}</p>
+      <p className="m-0 text-caption text-muted">
+        <Trans>No shop is connected yet.</Trans>
+      </p>
       <Link to="/shops" className={buttonStyle({ variant: "primary", size: "lg" })}>
         <Trans>Connect a shop</Trans>
       </Link>
