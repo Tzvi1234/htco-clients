@@ -31,7 +31,7 @@ Demo/Soon conventions are unchanged. Round 3 (a fresh Impeccable pass) finalises
 | Measure (35 routes × 3 variants) | Before | After |
 |---|---|---|
 | axe `color-contrast` nodes (office demo screens) | 343 | **0** |
-| Phone targets under 44 px (Hebrew, touch) | 202 | **4** (the chat composer's field, the floor's two status bubbles) |
+| Phone targets under 44 px (Hebrew, touch) | 202 | **1** (the chat composer's field, inside its 56 px pill) |
 | axe `target-size` nodes | 30 | 15 (the landing page's carousel dots, see "Remaining") |
 | Pages with one `h1` and no skipped heading level | 35 | 35 |
 | Physical or deprecated layout in stylesheets, class lists and inline styles | 8 + 51 | **0** (the floor map's projected labels are physical by intent, and say why) |
@@ -168,7 +168,7 @@ that device is signed out; this one stays signed in.").
 | Finding | Fixed |
 |---|---|
 | Muted sample text on dimmed Demo screens (~3:1) | Demo content draws its secondary and muted text from the ink at a fixed strength (78 % in a frame, 85 % in a part) so it keeps 4.5:1 after the dimming in every mode; demo parts dim to 0.7 (was 0.62). The DEMO pill and Demo tags still say "demo", and primary text stays ink. axe: 343 → 0. |
-| 40 px circle buttons and carousel dots under 44 px on phones | The touch hit layer (above); 202 → 4 small phone targets. |
+| 40 px circle buttons and carousel dots under 44 px on phones | The touch hit layer (above); 202 → 1 small phone target; segments and sidebar rows grow on touch screens so no target covers another. |
 | Large empty areas in tall panels | Etsy callback: a reassurance note at the foot ("HTCO never writes to your shop…"). Security: the second factor reads as one centred group; the devices panel ends with help. Shops' "How connecting works": the three steps are a centred stepper with connectors, the facts close the panel. Engineering's incident: its own timeline (opened, taken, the failed rotation). |
 | Spacing around "·" | `Sep` (Settings › Security line, Engineering's incident). |
 | Office floor 11 px room labels | 12 px (labels, bubbles, tags). Phones already hide the map labels and show the list. |
@@ -179,9 +179,13 @@ that device is signed out; this one stays signed in.").
 - **Landing carousel dots** stay 6 px with a 12 × 24 px target (axe `target-size`): their
   equivalent is the 40 px arrows (WCAG 2.5.8's equivalent exception); on touch screens they
   only show the position. Consider the Home pattern (one tab stop) or larger spacing.
-- **The chat composer's field** (21 px tall inside its 56 px pill) and the floor's status
-  bubbles are the only touch targets under 44 px; the composer pill could take the focus and
-  the tap.
+- **The chat composer's field** (21 px tall inside its 56 px pill) is the only touch target
+  under 44 px; the composer pill could take the focus and the tap.
+- **Touch screens change a few sizes:** segments are 44 px wide and sidebar rows 44 px tall
+  under `any-pointer: coarse` (touch laptops too); confirm with the owner.
+- **Vitest 5.0.5** (GHSA-p458-7748-mcp3): the `osv-scanner.toml` exception expires 2026-10-29;
+  upgrade `vitest`, `@vitest/browser` and `@vitest/browser-playwright` once the seven-day
+  release age allows (2026-10-22 14:29 UTC).
 - **Hebrew captions at 350** and Hebrew `line-height: 1.5` change every Hebrew screen slightly;
   confirm with the owner.
 - **11 px meta text** remains in chat and team threads (times, file sizes, typing) and in
