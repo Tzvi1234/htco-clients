@@ -83,12 +83,19 @@ export function CustomersPage() {
           lead={
             data === undefined ? (
               <Trans>The shop's reviews on Etsy, newest first.</Trans>
-            ) : low > 0 ? (
+            ) : lowShown > 0 ? (
+              // What can be read here: the review texts the server sent (Codex, #37).
               <Plural
-                value={low}
+                value={lowShown}
                 one="One recent review has three stars or fewer. Read it first."
                 other="# recent reviews have three stars or fewer. Read them first."
               />
+            ) : low > 0 ? (
+              // Low ratings only in the wider sample: said as a count, with nothing to read here.
+              <Trans>
+                {low} of the newest {newest} ratings have three stars or fewer; none of them is
+                among the reviews shown here.
+              </Trans>
             ) : data.items.length === 0 ? (
               <Trans>No reviews yet. They appear here as buyers leave them on Etsy.</Trans>
             ) : (

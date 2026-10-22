@@ -407,6 +407,10 @@ describe("Each screen's one primary action (clarity round 3)", () => {
     expect(within(figures).getByText("88%")).toBeInTheDocument();
     expect(within(figures).getByText("4")).toBeInTheDocument();
     expect(within(figures).getAllByText("of the newest 100")).toHaveLength(2);
+    // The sentence counts what can be read here: one low review among the texts sent.
+    expect(
+      within(focus).getByText("One recent review has three stars or fewer. Read it first."),
+    ).toBeInTheDocument();
   });
 
   it("starts another shop with every review, and keeps the way back (Codex, #37)", async () => {

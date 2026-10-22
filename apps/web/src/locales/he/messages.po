@@ -82,8 +82,12 @@ msgid "{late, plural, one {One order is past its ship-by date. Ship it on Etsy f
 msgstr "{late, plural, one {הזמנה אחת עברה את מועד המשלוח. כדאי לשלוח אותה ב־Etsy קודם.} other {# הזמנות עברו את מועד המשלוח. כדאי לשלוח אותן ב־Etsy קודם.}}"
 
 #: src/features/customers/CustomersPage.tsx
-msgid "{low, plural, one {One recent review has three stars or fewer. Read it first.} other {# recent reviews have three stars or fewer. Read them first.}}"
-msgstr "{low, plural, one {ביקורת אחרונה אחת קיבלה שלושה כוכבים או פחות. כדאי לקרוא אותה קודם.} other {# ביקורות אחרונות קיבלו שלושה כוכבים או פחות. כדאי לקרוא אותן קודם.}}"
+msgid "{low} of the newest {newest} ratings have three stars or fewer; none of them is among the reviews shown here."
+msgstr "{low} מתוך {newest} הדירוגים האחרונים קיבלו שלושה כוכבים או פחות; אף אחד מהם אינו בין הביקורות שמוצגות כאן."
+
+#: src/features/customers/CustomersPage.tsx
+msgid "{lowShown, plural, one {One recent review has three stars or fewer. Read it first.} other {# recent reviews have three stars or fewer. Read them first.}}"
+msgstr "{lowShown, plural, one {ביקורת אחרונה אחת קיבלה שלושה כוכבים או פחות. כדאי לקרוא אותה קודם.} other {# ביקורות אחרונות קיבלו שלושה כוכבים או פחות. כדאי לקרוא אותן קודם.}}"
 
 #: src/features/office/ChatPage.tsx
 msgid "{maya} is typing…"
