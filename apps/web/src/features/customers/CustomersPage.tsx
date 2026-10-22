@@ -118,7 +118,7 @@ export function CustomersPage() {
               <Figure
                 label={<Trans>Three stars or fewer</Trans>}
                 value={<N>{data === undefined ? "—" : count(low)}</N>}
-                tone={low > 0 ? "accent" : undefined}
+                tone={low > 0 ? "tertiary" : undefined}
               />
             </Figures>
           }
@@ -172,7 +172,7 @@ function Star({ on }: { on: boolean }) {
     <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" className="shrink-0">
       <path
         d="M8 1.6l1.9 4 4.3.5-3.2 2.9.9 4.3L8 11.1l-3.9 2.2.9-4.3-3.2-2.9 4.3-.5z"
-        className={on ? "fill-accent stroke-accent" : "fill-none stroke-line-hover"}
+        className={on ? "fill-tertiary stroke-tertiary" : "fill-none stroke-line-hover"}
         strokeWidth="1.2"
         strokeLinejoin="round"
       />
@@ -251,7 +251,7 @@ function Reviews({
                 key={`${String(review.listing_id)}-${review.created_at}-${String(i)}`}
                 className={cx(
                   "flex min-w-0 flex-col gap-2.5 rounded-card border p-4",
-                  review.rating <= LOW ? "border-line-strong bg-accent-subtle" : "border-line",
+                  review.rating <= LOW ? "border-line-strong bg-tertiary-subtle" : "border-line",
                 )}
               >
                 <span className="flex items-center justify-between gap-2 text-caption">

@@ -89,7 +89,7 @@ function SecondFactor() {
           <Figure
             label={t`Two-step sign-in`}
             value={enrolled === undefined ? "…" : enrolled ? t`On` : t`Off`}
-            tone={enrolled === false ? "accent" : undefined}
+            tone={enrolled === false ? "tertiary" : undefined}
           />
           <Figure
             label={t`Codes set up`}

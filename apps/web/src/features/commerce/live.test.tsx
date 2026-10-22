@@ -354,6 +354,10 @@ describe("Each screen's one primary action (clarity round 3)", () => {
     expect(stars[0]).toHaveAccessibleName("3 of 5 stars");
     // Stars are drawn (an SVG each), not a text glyph a font may leave out.
     expect(stars[0]?.querySelectorAll("svg")).toHaveLength(5);
+    // As many filled (the tertiary orange) as the rating, the rest only outlined.
+    const paths = [...(stars[0]?.querySelectorAll("path") ?? [])];
+    expect(paths.filter((p) => p.classList.contains("fill-tertiary"))).toHaveLength(3);
+    expect(paths.filter((p) => p.classList.contains("fill-none"))).toHaveLength(2);
   });
 });
 

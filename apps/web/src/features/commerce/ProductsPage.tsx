@@ -151,7 +151,7 @@ function Products({ shopId, chips }: { shopId: string; chips: ReactNode }) {
             <Figure
               label={<Trans>Sold out</Trans>}
               value={<N>{known ? count(soldOut) : "—"}</N>}
-              tone={soldOut > 0 ? "accent" : undefined}
+              tone={soldOut > 0 ? "tertiary" : undefined}
             />
             <Figure label={<Trans>Views</Trans>} value={<N>{known ? count(views) : "—"}</N>} />
             <Figure
@@ -250,7 +250,7 @@ function Products({ shopId, chips }: { shopId: string; chips: ReactNode }) {
                           )}
                         >
                           {l.quantity === 0 ? (
-                            <span className="inline-flex h-5 items-center gap-1 rounded-pill bg-accent-subtle px-2 text-accent-text">
+                            <span className="inline-flex h-5 items-center gap-1 rounded-pill bg-tertiary-subtle px-2 text-tertiary-text">
                               <Dot tone="attention" />
                               {t`Sold out`}
                             </span>

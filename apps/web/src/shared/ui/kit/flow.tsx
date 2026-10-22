@@ -12,20 +12,20 @@ import { Panel } from "../Panel.tsx";
 // on their own. Every redesigned screen reads the same way:
 // - Focus: one panel on top that says what matters now, with its few key figures and the one
 //   primary action.
-// - Then the work: rows of panels grouped by what goes together (FlowRow), a side column that
-//   stays in view while the page scrolls (Aside), and sub-tabs when there is too much for one
-//   page (SubTabs and TabPanel).
+// - Then the work: rows of panels grouped by what goes together (FlowRow), a side column
+//   (Aside), and sub-tabs when there is too much for one page (SubTabs and TabPanel).
 // No panel here ever scrolls inside itself; long lists page with "Show more".
 
-/** The screen: one scrolling column of panels, 8 px apart, entering one after another. */
+/**
+ * The screen: one column of panels, 8 px apart, entering one after another. Its route says
+ * `scroll: "page"` (app/router.tsx), so the shell scrolls the whole page under the sticky glass
+ * top bar; nothing in here scrolls on its own.
+ */
 export function Flow({ children, className }: { children: ReactNode; className?: string }) {
   return (
     <div
       data-page-scroll=""
-      className={cx(
-        "k-flow flex min-h-0 grow flex-col gap-2 sm:overflow-y-auto sm:[scrollbar-width:thin] [&>*]:shrink-0",
-        className,
-      )}
+      className={cx("k-flow flex grow flex-col gap-2 [&>*]:shrink-0", className)}
     >
       {children}
     </div>
@@ -59,15 +59,11 @@ export function FlowRow({
 }
 
 /**
- * A side column that stays in view while the page scrolls past the main panel (from 1200 px,
- * only while it fits the screen; it never scrolls on its own).
+ * A side column beside the main panel (under it on phones). It is not sticky: a sticky column
+ * taller than the screen would hide its own end, and it never scrolls on its own.
  */
 export function Aside({ children, className }: { children: ReactNode; className?: string }) {
-  return (
-    <div className={cx("k-aside flex min-w-0 flex-col gap-2 lg:sticky lg:top-0", className)}>
-      {children}
-    </div>
-  );
+  return <div className={cx("k-aside flex min-w-0 flex-col gap-2", className)}>{children}</div>;
 }
 
 /** A panel's body that grows with its content (never a scroller). */
@@ -166,7 +162,7 @@ export function Figures({
 }
 
 /**
- * One key figure. `tone="accent"` marks the one that needs the owner (in the accent's text
+ * One key figure. `tone="tertiary"` marks the one that needs the owner (in the orange tertiary text
  * colour, with its dot: colour never alone); `note` says what it is against (yesterday, a share).
  */
 export function Figure({
@@ -180,7 +176,7 @@ export function Figure({
   value: ReactNode;
   note?: ReactNode;
   trend?: "up" | "down" | undefined;
-  tone?: "accent" | undefined;
+  tone?: "tertiary" | undefined;
 }) {
   return (
     <div
@@ -188,15 +184,15 @@ export function Figure({
       className="k-figure flex min-w-[120px] flex-col gap-0.5 pe-8 max-sm:min-w-0 max-sm:pe-3"
     >
       <span className="inline-flex items-center gap-1.5 truncate text-caption font-light text-muted">
-        {tone === "accent" ? (
-          <span aria-hidden="true" className="size-1.5 shrink-0 rounded-pill bg-accent" />
+        {tone === "tertiary" ? (
+          <span aria-hidden="true" className="size-1.5 shrink-0 rounded-pill bg-tertiary" />
         ) : null}
         {label}
       </span>
       <span
         className={cx(
           "font-display text-number-lg leading-[1.25] font-light tracking-[-0.01em] whitespace-nowrap",
-          tone === "accent" && "text-accent-text",
+          tone === "tertiary" && "text-tertiary-text",
         )}
       >
         {value}
@@ -341,7 +337,7 @@ export function SubTabs<K extends string>({
             )}
           >
             {on ? (
-              <span aria-hidden="true" className="size-1.5 shrink-0 rounded-pill bg-accent" />
+              <span aria-hidden="true" className="size-1.5 shrink-0 rounded-pill bg-tertiary" />
             ) : null}
             {tab.label}
             {tab.count === undefined ? null : (

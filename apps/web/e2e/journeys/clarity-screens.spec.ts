@@ -29,10 +29,7 @@ async function innerScrollers(page: Page): Promise<string[]> {
       // The page itself scrolls (the one column of the screen); nothing inside it may.
       if (element.hasAttribute("data-page-scroll")) continue;
       const style = getComputedStyle(element);
-      if (
-        /(auto|scroll)/.test(style.overflowY) &&
-        element.scrollHeight > element.clientHeight + 1
-      )
+      if (/(auto|scroll)/.test(style.overflowY) && element.scrollHeight > element.clientHeight + 1)
         found.push(`scrolls: ${element.tagName.toLowerCase()}.${element.className.slice(0, 80)}`);
       const box = element.parentElement;
       if (element.tagName === "TABLE" && box !== null && box.scrollWidth > box.clientWidth + 1)

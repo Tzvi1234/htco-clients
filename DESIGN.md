@@ -215,7 +215,7 @@ Commerce, More). Phones show fewer things, not smaller ones; KPI rows scroll sid
 Shops, Orders, Products, Shipping, Customers, Members & access, Security) scrolls as one page and
 reads the same way: one **focus** panel on top (a light 24 px title, one sentence of what matters
 now, up to four key figures with hairlines between them, the one primary action), then the work
-in rows of panels grouped by what belongs together, a side column that stays in view, and
+in rows of panels grouped by what belongs together, a side column, and
 **sub-tabs** (an ink capsule that glides to the chosen pill) when there is too much for one page.
 No panel scrolls on its own; long lists page with "Show more". The figure that needs the owner
 carries the accent (its text colour and dot), and so does a table row or card that needs him (the

@@ -301,12 +301,12 @@ function Orders({ shopId, chips }: { shopId: string; chips: ReactNode }) {
             <Figure
               label={<Trans>Awaiting shipment</Trans>}
               value={<N>{all.data === undefined ? "—" : count(awaiting)}</N>}
-              tone={awaiting > 0 ? "accent" : undefined}
+              tone={awaiting > 0 ? "tertiary" : undefined}
             />
             <Figure
               label={<Trans>Late</Trans>}
               value={<N>{all.data === undefined ? "—" : count(late)}</N>}
-              tone={late > 0 ? "accent" : undefined}
+              tone={late > 0 ? "tertiary" : undefined}
             />
             {overview.data?.sales == null ? null : (
               <Figure
@@ -495,7 +495,7 @@ function OrderRow({ order, onOpen }: { order: ShopOrder; onOpen: () => void }) {
       onClick={onOpen}
       className={cx(
         "flex w-full flex-col gap-1 rounded-card border px-4 py-3 text-start outline-none hover:bg-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus",
-        order.overdue ? "border-line-strong bg-accent-subtle" : "border-line",
+        order.overdue ? "border-line-strong bg-tertiary-subtle" : "border-line",
       )}
     >
       <span className="flex w-full items-baseline justify-between gap-3 text-body-sm">

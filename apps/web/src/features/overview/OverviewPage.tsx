@@ -318,12 +318,12 @@ function TodayFigures({ live }: { live: FirstShopLive }) {
       <Figure
         label={t`Awaiting shipment`}
         value={<N>{sales === null ? missing : count(sales.awaiting_shipment)}</N>}
-        tone={(sales?.awaiting_shipment ?? 0) > 0 ? "accent" : undefined}
+        tone={(sales?.awaiting_shipment ?? 0) > 0 ? "tertiary" : undefined}
       />
       <Figure
         label={t`Late`}
         value={<N>{sales === null ? missing : count(sales.overdue)}</N>}
-        tone={(sales?.overdue ?? 0) > 0 ? "accent" : undefined}
+        tone={(sales?.overdue ?? 0) > 0 ? "tertiary" : undefined}
         {...(sales === null ? {} : { note: t`past the ship-by date` })}
       />
     </>

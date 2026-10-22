@@ -242,9 +242,9 @@ export function ShopCard({
         {integration !== undefined && integration.token_health !== "ok" && !detailsLoading ? (
           <p
             role="note"
-            className="m-0 flex items-center gap-2.5 rounded-card bg-accent-subtle px-4 py-3 text-body-sm"
+            className="m-0 flex items-center gap-2.5 rounded-card bg-tertiary-subtle px-4 py-3 text-body-sm"
           >
-            <span aria-hidden="true" className="size-2 shrink-0 rounded-pill bg-accent" />
+            <span aria-hidden="true" className="size-2 shrink-0 rounded-pill bg-tertiary" />
             <span className="min-w-0">{health(integration)}</span>
           </p>
         ) : null}

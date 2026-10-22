@@ -272,7 +272,7 @@ function TeamFocus({
           <Figure
             label={<Trans>Invited</Trans>}
             value={<N>{known ? String(invited) : "—"}</N>}
-            tone={invited > 0 ? "accent" : undefined}
+            tone={invited > 0 ? "tertiary" : undefined}
           />
           <Figure
             label={<Trans>Owners and Admins</Trans>}

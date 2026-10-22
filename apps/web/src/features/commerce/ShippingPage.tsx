@@ -200,12 +200,12 @@ function Shipping({ shopId, chips }: { shopId: string; chips: ReactNode }) {
             <Figure
               label={<Trans>Awaiting shipment</Trans>}
               value={<N>{known ? count(awaiting) : "—"}</N>}
-              tone={awaiting > 0 ? "accent" : undefined}
+              tone={awaiting > 0 ? "tertiary" : undefined}
             />
             <Figure
               label={<Trans>Late</Trans>}
               value={<N>{known ? count(late) : "—"}</N>}
-              tone={late > 0 ? "accent" : undefined}
+              tone={late > 0 ? "tertiary" : undefined}
             />
             <Figure
               label={<Trans>Shipped, 30 days</Trans>}

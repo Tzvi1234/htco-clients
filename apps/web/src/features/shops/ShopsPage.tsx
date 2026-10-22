@@ -259,7 +259,7 @@ function Shops({
                 <Figure
                   label={<Trans>Need you</Trans>}
                   value={<N>{String(attention)}</N>}
-                  tone={attention > 0 ? "accent" : undefined}
+                  tone={attention > 0 ? "tertiary" : undefined}
                   note={<Trans>reconnect soon</Trans>}
                 />
                 <Figure label={<Trans>Disconnected</Trans>} value={<N>{String(asleepCount)}</N>} />
