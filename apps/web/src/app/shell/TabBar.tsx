@@ -22,9 +22,15 @@ const FLICK_VELOCITY = 0.5;
 const DRAG_DISTANCE = 96;
 
 interface Drag {
+  /** Where the finger went down. */
   from: number;
-  at: number;
+  /** How far the sheet has moved (damped when upward). */
   by: number;
+  /** The latest pointer sample, so the flick is measured on the last movement only. */
+  lastY: number;
+  lastAt: number;
+  /** Downward speed of the latest movement, in px per ms. */
+  velocity: number;
 }
 
 /**
@@ -129,19 +135,37 @@ export function TabBar() {
               // One finger at a time: a second touch does not restart the drag.
               if (drag !== null) return;
               event.currentTarget.setPointerCapture(event.pointerId);
-              setDrag({ from: event.clientY, at: event.timeStamp, by: 0 });
+              setDrag({
+                from: event.clientY,
+                by: 0,
+                lastY: event.clientY,
+                lastAt: event.timeStamp,
+                velocity: 0,
+              });
             }}
             onPointerMove={(event) => {
               if (drag === null) return;
               const delta = event.clientY - drag.from;
               // Down follows the finger; up is damped, so the sheet never hits a wall.
               const by = delta >= 0 ? delta : -Math.sqrt(-delta) * 2;
-              setDrag({ ...drag, by });
+              const elapsed = Math.max(1, event.timeStamp - drag.lastAt);
+              setDrag({
+                ...drag,
+                by,
+                lastY: event.clientY,
+                lastAt: event.timeStamp,
+                velocity: (event.clientY - drag.lastY) / elapsed,
+              });
             }}
             onPointerUp={(event) => {
               if (drag !== null) {
-                const elapsed = Math.max(1, event.timeStamp - drag.at);
-                const velocity = drag.by / elapsed;
+                // A pause before the flick does not slow it down: only the last movement
+                // (up to the release) counts.
+                const elapsed = event.timeStamp - drag.lastAt;
+                const velocity =
+                  elapsed > 0 && event.clientY !== drag.lastY
+                    ? (event.clientY - drag.lastY) / elapsed
+                    : drag.velocity;
                 if (drag.by > DRAG_DISTANCE || (drag.by > 8 && velocity > FLICK_VELOCITY)) {
                   setMore(false);
                 }
