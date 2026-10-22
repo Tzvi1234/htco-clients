@@ -500,7 +500,9 @@ export function Kpis({ children, label }: { children: ReactNode; label?: string 
     <div
       role="list"
       aria-label={label}
-      className="grid grid-cols-4 border-t border-line max-sm:flex max-sm:snap-x max-sm:snap-mandatory max-sm:overflow-x-auto max-sm:[scrollbar-width:none]"
+      // Phones scroll the numbers sideways: the region takes focus so keys can scroll it.
+      tabIndex={0}
+      className="grid grid-cols-4 border-t border-line outline-none focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus max-sm:flex max-sm:snap-x max-sm:snap-mandatory max-sm:overflow-x-auto max-sm:[scrollbar-width:none]"
     >
       {children}
     </div>
