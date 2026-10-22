@@ -73,6 +73,8 @@ export function TopBar({
         "flex shrink-0 items-center justify-between gap-4",
         // The glass is the ground's own colour, so at rest the bar sits on the ground unseen.
         "bg-[color-mix(in_srgb,var(--bg-ground)_78%,transparent)]",
+        // Under the device's "reduce transparency" the bar is solid (data-solid on <html>).
+        "[:root[data-solid]_&]:bg-ground",
         "border-b border-transparent transition-[border-color,padding] duration-[var(--motion-duration-base)] ease-standard data-[scrolled]:border-line",
         phone
           ? cx(

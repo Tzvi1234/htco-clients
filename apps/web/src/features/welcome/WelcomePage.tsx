@@ -349,8 +349,8 @@ function Planned() {
 /**
  * The signature: an example approval at the end of the passing office. It waits for the owner
  * in orange; as the scroll reaches it, the orange fills the button and the request becomes
- * "Approved by you". Under reduced motion it shows both states, side by side in time: the
- * request and, under it, what approving does.
+ * "Approved by you". Standing still (reduced motion, or no scroll-driven animations) it
+ * shows the outcome: the orange Approve and "Approved by you".
  */
 function Decision() {
   return (

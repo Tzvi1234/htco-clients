@@ -4,6 +4,19 @@
    rule in styles.css removes every animation) the page stands still in its final composition:
    everything is visible, nothing pins. */
 
+/* Under the device's "reduce transparency" the bar is solid in every colour. */
+:root[data-solid] .welcome .w-bar > header {
+  background-color: var(--bg-sidebar);
+}
+
+:root[data-solid] .welcome .w-bar > header[data-over="ink"] {
+  background-color: var(--w-ink);
+}
+
+:root[data-solid] .welcome .w-bar > header[data-over="orange"] {
+  background-color: var(--bg-ground);
+}
+
 /* The bar: frosted glass over the ground. Over the ink section it turns to dark glass, and over
    the orange one to a nearly solid ground, so its words keep their contrast (AA): on ink the colours
    swap to the inverse pair, whose contrast the tokens guarantee. The wrapper keeps the page's own colours to swap from. */
@@ -77,18 +90,19 @@
   flex-wrap: wrap;
 }
 
-/* The peak's decision rests on the request until the scroll decides it. */
-.welcome .w-done,
-.welcome .w-fill {
+/* Standing still, the decision shows its outcome: the orange Approve and "Approved by you"
+   (the request stays in the text for assistive technology). With motion, the request comes
+   first and the scroll decides it. */
+.welcome .w-ask {
   opacity: 0;
-}
-
-.welcome .w-fill {
-  clip-path: inset(0 100% 0 0);
 }
 
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
+    .welcome .w-ask {
+      opacity: 1;
+    }
+
     /* The hero: four planes part at different speeds over the first screen of scroll (the
        office plan far back moves least, the parcel in front most), while the words stay at the
        page's own speed. On arrival the planes settle in, back to front. */

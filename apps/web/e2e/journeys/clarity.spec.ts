@@ -96,3 +96,47 @@ test("the navigation springs open with motion allowed, and the glass is frosted"
   expect(style.transition).toContain("grid-template-rows");
   expect(style.glass).toContain("blur");
 });
+
+/** The bar's background alpha (1 is solid) and its backdrop filter. */
+async function bar(page: Page, selector: string) {
+  return page.evaluate((target) => {
+    const element = document.querySelector(target);
+    if (element === null) return null;
+    const style = getComputedStyle(element);
+    const alpha = /rgba?\((?:[^,]+,){3}\s*([\d.]+)\)|\/\s*([\d.]+)\)/.exec(style.backgroundColor);
+    return {
+      alpha: alpha === null ? 1 : Number(alpha[1] ?? alpha[2]),
+      filter: style.backdropFilter,
+    };
+  }, selector);
+}
+
+test("the glass bars turn solid when the device asks for less transparency", async ({ page }) => {
+  for (const [path, as, title, selector] of [
+    ["/settings", "signed-in", "Settings", "header[data-glass]"],
+    ["/welcome", "signed-out", "Your shop runs. You decide.", ".w-bar > header"],
+  ] as const) {
+    await openApp(page, path, as);
+    await expect(pageTitle(page, title)).toBeVisible();
+    expect((await bar(page, selector))?.alpha, path).toBeLessThan(1);
+    // The boot script and the app set this attribute from prefers-reduced-transparency.
+    await page.evaluate(() => {
+      document.documentElement.dataset["solid"] = "";
+    });
+    // The bar eases its colour (1 ms under reduced motion), so read it once it has settled.
+    await expect.poll(async () => (await bar(page, selector))?.alpha, { message: path }).toBe(1);
+    expect((await bar(page, selector))?.filter, path).toBe("none");
+  }
+});
+
+test("standing still, the landing page's approval example shows its outcome", async ({ page }) => {
+  // The project runs with reduced motion, so nothing is scroll-driven.
+  await openApp(page, "/welcome", "signed-out");
+  await expect(pageTitle(page, "Your shop runs. You decide.")).toBeVisible();
+  const decision = page.getByRole("article", { name: "Pause the summer sale on four listings?" });
+  await expect(decision.getByText("Approved by you")).toBeVisible();
+  const fill = await decision
+    .locator(".w-fill")
+    .evaluate((element) => getComputedStyle(element).opacity);
+  expect(fill).toBe("1");
+});
