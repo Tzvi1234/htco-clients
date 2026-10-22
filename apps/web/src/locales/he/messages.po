@@ -339,6 +339,10 @@ msgstr "אמיר"
 msgid "Amir joined the thread"
 msgstr "אמיר הצטרף לשיחה"
 
+#: src/features/office/EngineeringPage.tsx
+msgid "Amir took the incident"
+msgstr "אמיר לקח את התקלה"
+
 #: src/features/finance/FinanceDemos.tsx
 msgid "Amount"
 msgstr "סכום"
@@ -601,6 +605,10 @@ msgstr "חברה"
 msgid "Carrier token rotation"
 msgstr "החלפת token לספק מעקב"
 
+#: src/features/office/EngineeringPage.tsx
+msgid "Carrier token rotation failed (D-411)"
+msgstr "החלפת ה־token של ספק המעקב נכשלה (D-411)"
+
 #: src/features/commerce/demoScreens.tsx
 msgid "Carrier:"
 msgstr "חברת שילוח:"
@@ -823,7 +831,7 @@ msgstr "לחבר חנות Etsy"
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "Connect your Etsy shop"
-msgstr "מחברים את חנות ה-Etsy"
+msgstr "מחברים את חנות ה־Etsy"
 
 #: src/features/overview/OverviewPage.tsx
 msgid "Connect your Etsy shop and orders, tracking and listings start flowing in."
@@ -845,7 +853,7 @@ msgstr "חנויות מחוברות יופיעו כאן עם מצב הסנכרו
 
 #: src/features/shops/EtsyCallbackPage.tsx
 msgid "Connecting Etsy"
-msgstr "חיבור ל-Etsy"
+msgstr "חיבור ל־Etsy"
 
 #: src/features/shops/EtsyCallbackPage.tsx
 msgid "Connecting shops is unavailable right now. Try again in a few minutes."
@@ -857,7 +865,7 @@ msgstr "החיבור לוקח:"
 
 #: src/features/shops/EtsyCallbackPage.tsx
 msgid "Connecting your Etsy shop"
-msgstr "מחברים את חנות ה-Etsy שלך"
+msgstr "מחברים את חנות ה־Etsy שלך"
 
 #: src/features/shops/EtsyCallbackPage.tsx
 #: src/features/shops/ShopCard.tsx
@@ -1164,6 +1172,10 @@ msgstr "ניתוק חנות"
 msgid "Disconnected"
 msgstr "מנותקת"
 
+#: src/features/security/SecurityPage.tsx
+msgid "Don’t recognise a device? Sign it out here. Only that device is signed out; this one stays signed in."
+msgstr "לא מזהים מכשיר? אפשר לנתק אותו כאן. רק המכשיר ההוא יתנתק, והמכשיר הנוכחי יישאר מחובר."
+
 #: src/features/overview/OverviewPage.tsx
 msgid "done"
 msgstr "הושלם"
@@ -1292,7 +1304,7 @@ msgstr "גישה ל־Etsy:"
 
 #: src/features/shops/Capabilities.tsx
 msgid "Etsy asked HTCO to slow down. Re-check in a few minutes."
-msgstr "Etsy ביקשה מ-HTCO להאט. כדאי לבדוק שוב בעוד כמה דקות."
+msgstr "Etsy ביקשה מ־HTCO להאט. כדאי לבדוק שוב בעוד כמה דקות."
 
 #: src/features/shops/ShopsPage.tsx
 msgid "Etsy asks you to allow reading the shop, orders and listings."
@@ -1304,7 +1316,7 @@ msgstr "יתרה ב־Etsy:"
 
 #: src/features/shops/connectEtsy.tsx
 msgid "Etsy cannot be reached right now. Try again in a few minutes."
-msgstr "אין כרגע גישה ל-Etsy. אפשר לנסות שוב בעוד כמה דקות."
+msgstr "אין כרגע גישה ל־Etsy. אפשר לנסות שוב בעוד כמה דקות."
 
 #: src/features/shops/shopActions.tsx
 msgid "Etsy checks are unavailable right now. Try again in a few minutes."
@@ -1324,7 +1336,7 @@ msgstr "Etsy לא ענתה. שום דבר לא נשמר. אפשר לנסות ש�
 
 #: src/features/shops/shopActions.tsx
 msgid "Etsy does not let apps cancel their own access, so you can also remove HTCO in your Etsy account settings. Nothing changes in your Etsy shop."
-msgstr "Etsy לא מאפשרת לאפליקציות לבטל את הגישה שלהן בעצמן, ולכן אפשר גם להסיר את HTCO בהגדרות חשבון ה-Etsy. שום דבר לא משתנה בחנות ב-Etsy."
+msgstr "Etsy לא מאפשרת לאפליקציות לבטל את הגישה שלהן בעצמן, ולכן אפשר גם להסיר את HTCO בהגדרות חשבון ה־Etsy. שום דבר לא משתנה בחנות ב־Etsy."
 
 #: src/features/finance/FinanceDemos.tsx
 msgid "Etsy fees"
@@ -1332,7 +1344,7 @@ msgstr "עמלות Etsy"
 
 #: src/features/shops/Capabilities.tsx
 msgid "Etsy hides buyer addresses for this shop. Your fulfillment partner gets them from Etsy; HTCO does not need them."
-msgstr "Etsy מסתירה את כתובות הקונים בחנות הזו. שותף המשלוחים מקבל אותן מ-Etsy, ו-HTCO לא צריכה אותן."
+msgstr "Etsy מסתירה את כתובות הקונים בחנות הזו. שותף המשלוחים מקבל אותן מ־Etsy, ו־HTCO לא צריכה אותן."
 
 #: src/features/shops/Capabilities.tsx
 msgid "Etsy refused this. Reconnect the shop; if it stays blocked, Etsy has limited the app."
@@ -1699,11 +1711,12 @@ msgstr "הדמיות HT-Commerce"
 
 #: src/features/shops/shopActions.tsx
 msgid "HTCO deletes its access to this shop at once and stops syncing. The shop's data in HTCO is deleted after 30 days unless you reconnect."
-msgstr "HTCO מוחקת מיד את הגישה שלה לחנות ומפסיקה לסנכרן. נתוני החנות ב-HTCO יימחקו אחרי 30 יום, אלא אם החנות תחובר מחדש."
+msgstr "HTCO מוחקת מיד את הגישה שלה לחנות ומפסיקה לסנכרן. נתוני החנות ב־HTCO יימחקו אחרי 30 יום, אלא אם החנות תחובר מחדש."
 
 #: src/features/shops/Capabilities.tsx
+#: src/features/shops/EtsyCallbackPage.tsx
 msgid "HTCO never writes to your shop. AutoVA uploads tracking to Etsy; HTCO reads it there."
-msgstr "HTCO אף פעם לא כותבת לחנות. AutoVA מעלה את מספרי המעקב ל-Etsy, ו-HTCO קוראת אותם משם."
+msgstr "HTCO אף פעם לא כותבת לחנות. AutoVA מעלה את מספרי המעקב ל־Etsy, ו־HTCO קוראת אותם משם."
 
 #: src/features/team/TeamPage.tsx
 msgid "Human"
@@ -1855,8 +1868,8 @@ msgstr "30 ריצות אחרונות"
 
 #. placeholder {0}: seen.format(new Date(session.last_seen_at))
 #: src/features/security/SecurityPage.tsx
-msgid "Last active {0}"
-msgstr "פעילות אחרונה {0}"
+msgid "Last active <0>{0}</0>"
+msgstr "פעילות אחרונה <0>{0}</0>"
 
 #: src/features/admin/AdminDemos.tsx
 msgid "Last backup"
@@ -2361,7 +2374,7 @@ msgstr "לא ידוע"
 
 #: src/features/shops/Capabilities.tsx
 msgid "Not set up yet. HTCO checks Etsy for new orders regularly instead."
-msgstr "עוד לא הוגדר. במקום זה HTCO בודקת ב-Etsy הזמנות חדשות באופן קבוע."
+msgstr "עוד לא הוגדר. במקום זה HTCO בודקת ב־Etsy הזמנות חדשות באופן קבוע."
 
 #: src/features/shops/ShopCard.tsx
 msgid "Not synced yet"
@@ -2853,7 +2866,7 @@ msgstr "בדיקה מחדש"
 
 #: src/features/shops/Capabilities.tsx
 msgid "Re-check what HTCO can do with {shopName}"
-msgstr "בדיקה מחדש של מה ש-HTCO יכולה לעשות עם {shopName}"
+msgstr "בדיקה מחדש של מה ש־HTCO יכולה לעשות עם {shopName}"
 
 #: src/features/customers/CustomersDemos.tsx
 msgid "Reach:"
@@ -3168,7 +3181,7 @@ msgstr "סרקו את קוד ה־QR שנציג לכם."
 
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Scan the QR code with the app."
-msgstr "סרקו את קוד ה-QR באפליקציה."
+msgstr "סרקו את קוד ה־QR באפליקציה."
 
 #: src/features/admin/AdminDemos.tsx
 msgid "Schedule"
@@ -3233,7 +3246,7 @@ msgstr "שליחה"
 
 #: src/features/team/TeamPage.tsx
 msgid "Send on WhatsApp"
-msgstr "שליחה ב-WhatsApp"
+msgstr "שליחה ב־WhatsApp"
 
 #: src/features/auth/ForgotPasswordPage.tsx
 msgid "Send the link"
@@ -3277,7 +3290,7 @@ msgstr "הגדרת אפליקציית אימות"
 
 #: src/features/shops/Capabilities.tsx
 msgid "Set up. Confirmed when the first alert arrives; until then HTCO checks Etsy regularly."
-msgstr "הוגדר. יאושר כשתגיע ההתראה הראשונה; עד אז HTCO בודקת ב-Etsy באופן קבוע."
+msgstr "הוגדר. יאושר כשתגיע ההתראה הראשונה; עד אז HTCO בודקת ב־Etsy באופן קבוע."
 
 #: src/features/auth/AcceptInvitePage.tsx
 msgid "Set your password"
@@ -3429,7 +3442,7 @@ msgstr "הצגת הדמיה {0}"
 
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Show the QR code"
-msgstr "הצגת קוד ה-QR"
+msgstr "הצגת קוד ה־QR"
 
 #: src/app/shell/Sidebar.tsx
 msgid "Sidebar"
@@ -3741,7 +3754,7 @@ msgstr "החנות לא נותקה. אפשר לנסות שוב בעוד רגע."
 
 #: src/features/shops/ShopsPage.tsx
 msgid "The term 'Etsy' is a trademark of Etsy, Inc. This application uses the Etsy API but is not endorsed or certified by Etsy, Inc."
-msgstr "המונח 'Etsy' הוא סימן מסחרי של חברת Etsy, Inc. אפליקציה זו משתמשת ב-API של Etsy, אך חברת Etsy, Inc. אינה תומכת בה ואינה מאשרת אותה."
+msgstr "המונח ״Etsy״ הוא סימן מסחרי של חברת Etsy, Inc. אפליקציה זו משתמשת ב־API של Etsy, אך חברת Etsy, Inc. אינה תומכת בה ואינה מאשרת אותה."
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "The web app is open today"
@@ -3784,11 +3797,11 @@ msgstr "זה לא עבד. נסו שוב בעוד רגע."
 
 #: src/features/shops/EtsyCallbackPage.tsx
 msgid "This Etsy account has no shop yet. Open a shop on Etsy, then connect it."
-msgstr "לחשבון ה-Etsy הזה עדיין אין חנות. אפשר לפתוח חנות ב-Etsy ואז לחבר אותה."
+msgstr "לחשבון ה־Etsy הזה עדיין אין חנות. אפשר לפתוח חנות ב־Etsy ואז לחבר אותה."
 
 #: src/features/shops/EtsyCallbackPage.tsx
 msgid "This Etsy shop is already connected to another workspace."
-msgstr "חנות ה-Etsy הזו כבר מחוברת לסביבת עבודה אחרת."
+msgstr "חנות ה־Etsy הזו כבר מחוברת לסביבת עבודה אחרת."
 
 #: src/features/auth/AcceptInvitePage.tsx
 msgid "This invitation link has expired or was already used. Ask for a new one."
@@ -3871,6 +3884,10 @@ msgstr "שעה"
 #: src/features/settings/SettingsPage.tsx
 msgid "Time zone"
 msgstr "אזור זמן"
+
+#: src/features/office/EngineeringPage.tsx
+msgid "Timeline"
+msgstr "ציר זמן"
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "Titles, photos and claims audited, fixed as drafts you approve."
@@ -3962,6 +3979,10 @@ msgstr "ניסיון חוזר ל־tracking.sync נכשל"
 msgid "tracking.sync returns 502, looking."
 msgstr "tracking.sync מחזיר 502, בודק."
 
+#: src/features/office/EngineeringPage.tsx
+msgid "tracking.sync started failing with 502"
+msgstr "tracking.sync החל להחזיר 502"
+
 #: src/features/finance/FinanceDemos.tsx
 msgid "Trend:"
 msgstr "מגמה:"
@@ -4042,7 +4063,7 @@ msgstr "שימוש:"
 #: src/features/auth/AcceptInvitePage.tsx
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "Use between 12 and 128 characters."
-msgstr "השתמש/י ב-12 עד 128 תווים."
+msgstr "השתמש/י ב־12 עד 128 תווים."
 
 #: src/features/customers/CustomersDemos.tsx
 #: src/features/work/demoScreens.tsx
@@ -4247,11 +4268,11 @@ msgstr "את/ה צופה בשיחה בין סוכנים. הם ממשיכים ל�
 
 #: src/features/shops/EtsyCallbackPage.tsx
 msgid "You cancelled the connection on Etsy."
-msgstr "ביטלת את החיבור ב-Etsy."
+msgstr "ביטלת את החיבור ב־Etsy."
 
 #: src/features/shops/Capabilities.tsx
 msgid "You did not approve this on Etsy. Reconnect the shop and approve it."
-msgstr "ההרשאה הזו לא אושרה ב-Etsy. יש לחבר את החנות מחדש ולאשר אותה."
+msgstr "ההרשאה הזו לא אושרה ב־Etsy. יש לחבר את החנות מחדש ולאשר אותה."
 
 #: src/features/shops/ShopsPage.tsx
 msgid "You need:"
@@ -4259,11 +4280,11 @@ msgstr "צריך:"
 
 #: src/features/auth/AcceptInvitePage.tsx
 msgid "You were invited to HT-Commerce. Choose a password to finish."
-msgstr "הוזמנת ל-HT-Commerce. בחר/י סיסמה כדי לסיים."
+msgstr "הוזמנת ל־HT-Commerce. בחר/י סיסמה כדי לסיים."
 
 #: src/features/team/TeamPage.tsx
 msgid "You're invited to HT-Commerce: {link}"
-msgstr "הוזמנת ל-HT-Commerce: {link}"
+msgstr "הוזמנת ל־HT-Commerce: {link}"
 
 #: src/app/RouteStates.tsx
 msgid "Your account"
@@ -4279,11 +4300,11 @@ msgstr "משרד ה־AI שלך, במיניאטורה"
 
 #: src/features/shops/ShopsPage.tsx
 msgid "Your Etsy shop is connected."
-msgstr "חנות ה-Etsy שלך מחוברת."
+msgstr "חנות ה־Etsy שלך מחוברת."
 
 #: src/features/shops/ShopsPage.tsx
 msgid "Your Etsy shop is reconnected."
-msgstr "חנות ה-Etsy שלך חוברה מחדש."
+msgstr "חנות ה־Etsy שלך חוברה מחדש."
 
 #: src/features/auth/AuthLayout.tsx
 msgid "Your office"

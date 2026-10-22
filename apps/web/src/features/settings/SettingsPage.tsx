@@ -29,6 +29,7 @@ import {
   PillSelect,
   PillValue,
   Screen,
+  Sep,
   ShieldGlyph,
   Stack,
   Status,
@@ -110,7 +111,7 @@ function LinkRow({
       </span>
       <ArrowEndIcon
         size={14}
-        className="shrink-0 text-icon transition-transform duration-[var(--motion-duration-fast)] group-hover:translate-x-0.5 rtl:-scale-x-100 rtl:group-hover:-translate-x-0.5"
+        className="shrink-0 text-icon transition-transform duration-[var(--motion-duration-fast)] group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5"
       />
     </Link>
   );
@@ -150,16 +151,19 @@ function AccessPanel() {
             mfa.data === undefined ? (
               <Trans>How you sign in, and where you are signed in.</Trans>
             ) : (
-              <span className="inline-flex items-center gap-2">
+              <span className="inline-flex items-center">
                 <Status
                   live
                   status={mfa.data.enrolled ? "running" : "waityou"}
                   label={mfa.data.enrolled ? t`Two-step sign-in on` : t`Two-step sign-in off`}
                 />
                 {devices === undefined ? null : (
-                  <span className="text-muted">
-                    · {devices === 1 ? t`1 device` : t`${devices} devices`}
-                  </span>
+                  <>
+                    <Sep className="mx-2" />
+                    <span className="text-muted">
+                      {devices === 1 ? t`1 device` : t`${devices} devices`}
+                    </span>
+                  </>
                 )}
               </span>
             )
@@ -388,7 +392,7 @@ function ConnectionsPanel() {
         ).map(([name, line, state]) => (
           <div key={name} className="border-t border-line">
             {/* The tag sits beside the sample status, in one column for every row. */}
-            <DemoPart tagClassName="end-[108px] top-1/2 -translate-y-1/2">
+            <DemoPart tagClassName="inset-e-[108px] top-1/2 -translate-y-1/2">
               <ListRow
                 className="py-3.5"
                 lead={<Avatar initial={name.slice(0, 1)} />}

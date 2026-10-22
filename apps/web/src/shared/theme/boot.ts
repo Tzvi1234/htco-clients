@@ -21,6 +21,12 @@ export const TWEAKS_BOOT_SCRIPT = `(function () {
   else root.removeAttribute("data-theme");
   root.setAttribute("data-pal", pick(get("palette"), ["sbb", "d4", "plain"], "sbb"));
   root.setAttribute("data-t1", pick(get("contrast"), levels, "1"));
-  root.setAttribute("data-t2", pick(get("glass"), levels, "1"));
+  var solid = false;
+  try {
+    solid = window.matchMedia("(prefers-reduced-transparency: reduce)").matches;
+  } catch (error) {
+    solid = false;
+  }
+  root.setAttribute("data-t2", solid ? "1" : pick(get("glass"), levels, "1"));
   root.setAttribute("data-t3", pick(get("borders"), levels, "1"));
 })();`;

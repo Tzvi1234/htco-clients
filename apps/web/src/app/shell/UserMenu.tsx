@@ -77,7 +77,7 @@ export function UserMenu({ compact = false }: { compact?: boolean }) {
       {signOut.isError ? (
         <p
           role="alert"
-          className="fixed inset-x-4 top-4 z-30 m-0 rounded-card border border-line bg-menu px-4 py-3 text-body text-primary shadow-popover sm:start-auto sm:end-6 sm:w-96"
+          className="fixed inset-x-4 top-4 z-30 m-0 rounded-card border border-line bg-menu px-4 py-3 text-body text-primary shadow-popover sm:inset-s-auto sm:inset-e-6 sm:w-96"
         >
           {t`You are still signed in. Try signing out again shortly.`}
         </p>

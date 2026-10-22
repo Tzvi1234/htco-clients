@@ -148,7 +148,7 @@ function Thread({ chat }: { chat: AgentId }) {
       </div>
       <div className="k-composer">
         <CircleButton label={t`Attach`} icon={<ClipGlyph />} />
-        <input aria-label={t`Message ${name}`} placeholder={t`Message ${name}…`} />
+        <input dir="auto" aria-label={t`Message ${name}`} placeholder={t`Message ${name}…`} />
         <InkDisc label={t`Send`} accent>
           <SendGlyph size={14} />
         </InkDisc>

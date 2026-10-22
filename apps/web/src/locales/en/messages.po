@@ -339,6 +339,10 @@ msgstr "Amir"
 msgid "Amir joined the thread"
 msgstr "Amir joined the thread"
 
+#: src/features/office/EngineeringPage.tsx
+msgid "Amir took the incident"
+msgstr "Amir took the incident"
+
 #: src/features/finance/FinanceDemos.tsx
 msgid "Amount"
 msgstr "Amount"
@@ -600,6 +604,10 @@ msgstr "Carrier"
 #: src/features/office/EngineeringPage.tsx
 msgid "Carrier token rotation"
 msgstr "Carrier token rotation"
+
+#: src/features/office/EngineeringPage.tsx
+msgid "Carrier token rotation failed (D-411)"
+msgstr "Carrier token rotation failed (D-411)"
 
 #: src/features/commerce/demoScreens.tsx
 msgid "Carrier:"
@@ -1164,6 +1172,10 @@ msgstr "Disconnect a shop"
 msgid "Disconnected"
 msgstr "Disconnected"
 
+#: src/features/security/SecurityPage.tsx
+msgid "Don’t recognise a device? Sign it out here. Only that device is signed out; this one stays signed in."
+msgstr "Don’t recognise a device? Sign it out here. Only that device is signed out; this one stays signed in."
+
 #: src/features/overview/OverviewPage.tsx
 msgid "done"
 msgstr "done"
@@ -1702,6 +1714,7 @@ msgid "HTCO deletes its access to this shop at once and stops syncing. The shop'
 msgstr "HTCO deletes its access to this shop at once and stops syncing. The shop's data in HTCO is deleted after 30 days unless you reconnect."
 
 #: src/features/shops/Capabilities.tsx
+#: src/features/shops/EtsyCallbackPage.tsx
 msgid "HTCO never writes to your shop. AutoVA uploads tracking to Etsy; HTCO reads it there."
 msgstr "HTCO never writes to your shop. AutoVA uploads tracking to Etsy; HTCO reads it there."
 
@@ -1855,8 +1868,8 @@ msgstr "Last 30 runs"
 
 #. placeholder {0}: seen.format(new Date(session.last_seen_at))
 #: src/features/security/SecurityPage.tsx
-msgid "Last active {0}"
-msgstr "Last active {0}"
+msgid "Last active <0>{0}</0>"
+msgstr "Last active <0>{0}</0>"
 
 #: src/features/admin/AdminDemos.tsx
 msgid "Last backup"
@@ -3872,6 +3885,10 @@ msgstr "Time"
 msgid "Time zone"
 msgstr "Time zone"
 
+#: src/features/office/EngineeringPage.tsx
+msgid "Timeline"
+msgstr "Timeline"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "Titles, photos and claims audited, fixed as drafts you approve."
 msgstr "Titles, photos and claims audited, fixed as drafts you approve."
@@ -3961,6 +3978,10 @@ msgstr "tracking.sync retry failed"
 #: src/features/office/data.ts
 msgid "tracking.sync returns 502, looking."
 msgstr "tracking.sync returns 502, looking."
+
+#: src/features/office/EngineeringPage.tsx
+msgid "tracking.sync started failing with 502"
+msgstr "tracking.sync started failing with 502"
 
 #: src/features/finance/FinanceDemos.tsx
 msgid "Trend:"

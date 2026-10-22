@@ -81,13 +81,26 @@ export function writeTweak<Name extends TweakName>(
   writeSetting(storage, TWEAK_STORAGE_KEYS[name], String(value));
 }
 
-/** The attributes the token stylesheet reads; "system" removes data-theme. */
-export function applyTweaks(tweaks: Tweaks, root: HTMLElement): void {
+/** The device asks for less transparency: frosted glass then stays off, whatever the tweak. */
+export const REDUCED_TRANSPARENCY_QUERY = "(prefers-reduced-transparency: reduce)";
+
+function prefersSolid(): boolean {
+  return (
+    typeof window.matchMedia === "function" && window.matchMedia(REDUCED_TRANSPARENCY_QUERY).matches
+  );
+}
+
+/**
+ * The attributes the token stylesheet reads; "system" removes data-theme. Under the device's
+ * "reduce transparency" glass is applied as off (level 1), so every surface is solid with the
+ * contrast it was solved for; the remembered choice itself is kept.
+ */
+export function applyTweaks(tweaks: Tweaks, root: HTMLElement, solid = prefersSolid()): void {
   if (tweaks.theme === "system") root.removeAttribute("data-theme");
   else root.dataset["theme"] = tweaks.theme;
   root.dataset["pal"] = tweaks.palette;
   root.dataset["t1"] = String(tweaks.contrast);
-  root.dataset["t2"] = String(tweaks.glass);
+  root.dataset["t2"] = solid ? "1" : String(tweaks.glass);
   root.dataset["t3"] = String(tweaks.borders);
 }
 

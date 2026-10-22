@@ -13,6 +13,7 @@ import {
   applyTweaks,
   DEFAULT_TWEAKS,
   readTweaks,
+  REDUCED_TRANSPARENCY_QUERY,
   TWEAK_STORAGE_KEYS,
   writeTweak,
   type TweakName,
@@ -95,6 +96,19 @@ export function TweaksProvider({
       window.removeEventListener("storage", onStorage);
     };
   }, [storage, update]);
+
+  // The device's "reduce transparency" changed while the app is open: glass follows at once.
+  useEffect(() => {
+    if (typeof window.matchMedia !== "function") return undefined;
+    const list = window.matchMedia(REDUCED_TRANSPARENCY_QUERY);
+    const onChange = () => {
+      applyTweaks(tweaks, root);
+    };
+    list.addEventListener("change", onChange);
+    return () => {
+      list.removeEventListener("change", onChange);
+    };
+  }, [root, tweaks]);
 
   const state = useMemo(() => ({ tweaks, setTweak, resetTweaks }), [tweaks, setTweak, resetTweaks]);
   return <TweaksContext value={state}>{children}</TweaksContext>;

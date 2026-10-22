@@ -3,7 +3,7 @@ import "./home.css";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useState, type KeyboardEvent, type ReactNode } from "react";
 
 import { HERO_NAMES, HEROES } from "./heroes.ts";
 import { shopCardState } from "../../app/shell/ShopSwitcher.tsx";
@@ -11,6 +11,8 @@ import { meQuery, sessionQuery, shopsQuery, useApi, type ShopView } from "../../
 import { RiskChip } from "../../shared/demo/AgentBits.tsx";
 import { AGENTS, APPROVALS, agent, badge, type AgentId } from "../../shared/demo/office.ts";
 import { cx } from "../../shared/lib/cx.ts";
+import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
+import { directionOf } from "../../shared/i18n/locale.ts";
 import { useTweaks } from "../../shared/theme/ThemeProvider.tsx";
 import { ArrowEndIcon, GearIcon, GridIcon, MoreIcon, SearchIcon } from "../../shared/ui/icons.tsx";
 import { PageHeader } from "../../shared/ui/PageHeader.tsx";
@@ -87,7 +89,7 @@ function NeedsYou() {
             title={t`All approvals`}
             className={circleStyle()}
           >
-            <ArrowEndIcon size={16} className="rtl:-scale-x-100" />
+            <ArrowEndIcon size={16} />
           </Link>
         }
       />
@@ -234,9 +236,32 @@ function Hero({ footer }: { footer: ReactNode }) {
   const { t } = useLingui();
   const { tweaks } = useTweaks();
   const set = tweaks.palette === "d4" ? HEROES.d4 : HEROES.sbb;
+  const { locale } = useLocale();
   const [index, setIndex] = useState(0);
   const step = (by: number) => {
     setIndex((current) => (current + by + set.length) % set.length);
+  };
+  // The dots are tabs (WAI-ARIA tabs): one tab stop, the arrow keys move along the reading
+  // direction (the right arrow goes back in Hebrew), Home and End jump to the ends.
+  const keys = (event: KeyboardEvent<HTMLDivElement>) => {
+    const forward = directionOf(locale) === "rtl" ? "ArrowLeft" : "ArrowRight";
+    const back = forward === "ArrowLeft" ? "ArrowRight" : "ArrowLeft";
+    const last = set.length - 1;
+    const next =
+      event.key === forward
+        ? (index + 1) % set.length
+        : event.key === back
+          ? (index + last) % set.length
+          : event.key === "Home"
+            ? 0
+            : event.key === "End"
+              ? last
+              : undefined;
+    if (next === undefined) return;
+    event.preventDefault();
+    setIndex(next);
+    const tab = event.currentTarget.children.item(next);
+    if (tab instanceof HTMLElement) tab.focus();
   };
   const name = t(HERO_NAMES[index] ?? HERO_NAMES[0]);
   return (
@@ -267,14 +292,21 @@ function Hero({ footer }: { footer: ReactNode }) {
         {name}
       </span>
       <div className="k-dim home-hero-foot">
-        <div className="home-hero-dots" role="tablist" aria-label={t`Choose a concept`}>
+        <div
+          className="home-hero-dots"
+          role="tablist"
+          aria-label={t`Choose a concept`}
+          onKeyDown={keys}
+        >
           {set.map((src, i) => (
             <button
               key={src}
               type="button"
               role="tab"
               aria-selected={i === index}
+              tabIndex={i === index ? 0 : -1}
               aria-label={t(HERO_NAMES[i] ?? HERO_NAMES[0])}
+              data-hit="own"
               className={i === index ? "home-dot-on" : undefined}
               onClick={() => {
                 setIndex(i);
@@ -457,7 +489,7 @@ function ConnectShop() {
         </IdBlock>
         <Link to="/shops" className={cx(buttonStyle({ variant: "primary", size: "lg" }), "w-full")}>
           {t`Connect a shop`}
-          <ArrowEndIcon size={14} className="rtl:-scale-x-100" />
+          <ArrowEndIcon size={14} />
         </Link>
       </PanelBody>
     </Panel>

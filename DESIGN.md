@@ -269,7 +269,9 @@ explicit value) — Tailwind's own radius scale is removed.
 
 Unbuilt screens render the prototype's full screen at reduced light (opacity 0.78), inert,
 under a large ink **DEMO** pill centred in the top bar; real screens dim unbuilt parts
-(opacity 0.62) and tag them "Demo". A press says "Demo — coming soon".
+(opacity 0.7) and tag them "Demo". A press says "Demo — coming soon". Inside demo content,
+secondary and muted text are drawn from the ink at a fixed strength (`.k-demo`,
+`.k-demo-part`), so sample text keeps 4.5:1 after the dimming in every mode.
 
 ## Do's and Don'ts
 
@@ -281,6 +283,14 @@ under a large ink **DEMO** pill centred in the top bar; real screens dim unbuilt
   so utilities cannot hide it).
 - **Do** isolate codes, numbers and money left-to-right in Hebrew, and localise units ("12 דק׳").
 - **Do** give small text links and segment items at least a 24 px target.
+- **Do** let touch screens reach 44 px targets through the hit layer in `styles.css` (a control
+  that draws with `::after` sets `data-hit="own"`).
+- **Do** keep layout logical: `scripts/eslint-logical-properties.ts` and
+  `scripts/css-logical-properties.ts` fail on physical directions; a block that is physical by
+  intent says `/* physical: why */`.
+- **Do** write Hebrew with the maqaf after a prefix (ב־Etsy) and with ׳ ״ (דק׳, ״Etsy״); Hebrew
+  text keeps normal letter-spacing, 1.5 leading and 350 for light captions.
+- **Do** use `Sep` for "·" between facts and `Note` for a line of help at a panel's foot.
 
 ### Don't:
 

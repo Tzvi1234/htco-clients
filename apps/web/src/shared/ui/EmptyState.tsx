@@ -71,7 +71,7 @@ export function StateCard({
         <div className="relative mb-6 flex w-full justify-center">
           <PreviewRows />
           {icon === undefined ? null : (
-            <span className="absolute -bottom-5 start-1/2 -translate-x-1/2 rounded-button bg-canvas p-1 rtl:translate-x-1/2">
+            <span className="absolute -bottom-5 inset-s-1/2 -translate-x-1/2 rounded-button bg-canvas p-1 rtl:translate-x-1/2">
               <ObjectIcon hue={hue} size="lg" icon={icon} />
             </span>
           )}

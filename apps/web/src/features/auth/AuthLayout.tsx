@@ -100,7 +100,7 @@ function PhoneArt({ art }: { art: "office" | "parcel" }) {
         draggable={false}
         className={cx(
           "auth-art pointer-events-none absolute top-1/2 max-w-none select-none",
-          art === "parcel" ? "end-[-2%] w-[52%]" : "end-[-28%] w-[118%]",
+          art === "parcel" ? "inset-e-[-2%] w-[52%]" : "inset-e-[-28%] w-[118%]",
         )}
       />
     </div>
@@ -189,13 +189,15 @@ function AuthArt({ art }: { art: "office" | "parcel" }) {
           draggable={false}
           className={cx(
             "auth-art pointer-events-none absolute max-w-none select-none",
-            art === "parcel" ? "top-1/2 end-[-6%] w-[78%]" : "top-[54%] end-[-22%] w-[116%]",
+            art === "parcel"
+              ? "top-1/2 inset-e-[-6%] w-[78%]"
+              : "top-[54%] inset-e-[-22%] w-[116%]",
           )}
         />
       </div>
       {art === "office" ? (
         <div className="relative z-10 shrink-0 border-t border-line">
-          <DemoTag className="absolute -top-2.5 start-6 z-10" />
+          <DemoTag className="absolute -top-2.5 inset-s-6 z-10" />
           <dl className="m-0 grid grid-cols-4 opacity-55 saturate-50">
             {kpis.map((kpi, index) => (
               <div

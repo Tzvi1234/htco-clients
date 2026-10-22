@@ -26,7 +26,7 @@ export function IconButton({ icon, needsYou = false, className, ...props }: Icon
       {needsYou ? (
         <span
           aria-hidden="true"
-          className="absolute end-1 top-1 size-2 rounded-pill bg-attention ring-2 ring-panel"
+          className="absolute inset-e-1 top-1 size-2 rounded-pill bg-attention ring-2 ring-panel"
         />
       ) : null}
     </AriaButton>

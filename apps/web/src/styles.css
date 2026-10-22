@@ -372,6 +372,100 @@
     line-height: 1.4;
   }
 
+  /* Hebrew typography (Heebo): Hebrew letters need a little more leading than Latin ones, and
+     Heebo's light weight thins out at caption sizes, so Hebrew captions set light read at 350.
+     Codes and file paths keep their left-to-right order wherever they sit. */
+  :root:lang(he) body {
+    line-height: 1.5;
+  }
+
+  code,
+  samp,
+  pre {
+    direction: ltr;
+    unicode-bidi: isolate;
+  }
+
+  /* Keys ("Ctrl K") are isolated but keep the page's direction: a logical margin on them
+     (ms-auto) must resolve on the page's side. */
+  kbd {
+    unicode-bidi: isolate;
+  }
+
+  /* A free-text field picks its direction from what is typed (dir="auto"); while it is empty
+     its placeholder rests on the page's side. */
+  :where(input, textarea)[dir="auto"]:placeholder-shown {
+    direction: inherit;
+  }
+
+  /* Touch: wherever a touch screen is present (also a laptop's), every control's target reaches
+     44 × 44 px (WCAG 2.5.5, the platforms' 44 pt) without changing its look. An invisible layer
+     centred on the control extends the hit area; a control that draws with ::after itself sets
+     data-hit="own". The layer is in this base layer, so a control's own position (absolute,
+     sticky) still wins. Options that sit side by side in a group (radios, tabs) extend only
+     up and down, so one option's layer never covers its neighbour; their groups give them
+     44 px of width themselves (Segmented). Stacked rows (menus, lists, the sidebar) are 44 px
+     tall themselves. */
+  @media (any-pointer: coarse) {
+    :where(
+      a[href],
+      button,
+      summary,
+      [role="button"],
+      [role="link"],
+      [role="tab"],
+      [role="radio"],
+      [role="switch"],
+      [role="checkbox"],
+      [role="menuitem"],
+      [role="menuitemradio"],
+      [role="menuitemcheckbox"],
+      [role="option"]
+    ):not([data-hit="own"]) {
+      position: relative;
+    }
+
+    :where(
+        a[href],
+        button,
+        summary,
+        [role="button"],
+        [role="link"],
+        [role="tab"],
+        [role="radio"],
+        [role="switch"],
+        [role="checkbox"],
+        [role="menuitem"],
+        [role="menuitemradio"],
+        [role="menuitemcheckbox"],
+        [role="option"]
+      ):not([data-hit="own"])::after {
+      content: "";
+      position: absolute;
+      inset-block: min(0px, (100% - 44px) / 2);
+      inset-inline: min(0px, (100% - 44px) / 2);
+    }
+
+    :where([role="radio"], [role="tab"]):not([data-hit="own"])::after {
+      inset-inline: 0;
+    }
+
+    /* Menu and list rows are stacked: each is 44 px tall itself and its layer does not grow
+       up or down into the next row. */
+    :where([role="menuitem"], [role="menuitemradio"], [role="menuitemcheckbox"], [role="option"]) {
+      min-height: 44px;
+    }
+
+    :where(
+        [role="menuitem"],
+        [role="menuitemradio"],
+        [role="menuitemcheckbox"],
+        [role="option"]
+      ):not([data-hit="own"])::after {
+      inset-block: 0;
+    }
+  }
+
   h1,
   h2,
   h3 {
@@ -403,6 +497,17 @@
   /* Titles and numbers are set a little tighter. */
   .font-display {
     letter-spacing: var(--font-tracking-display);
+  }
+
+  /* Hebrew is never tracked tighter than normal (its letters touch), and its light captions
+     are set at 350 (see the base layer). Hebrew tracking wider than normal stays: it is
+     Hebrew's own emphasis. */
+  :root:lang(he) :is(.font-display, [class*="tracking-[-"]) {
+    letter-spacing: normal;
+  }
+
+  :root:lang(he) :is(.text-caption, .text-\[11px\], .text-\[12px\]).font-light {
+    font-weight: 350;
   }
 
   /* Frosted glass on floating surfaces (panels, the sidebar, menus) when tweak 2 is on. */
@@ -439,6 +544,28 @@
 ) {
   outline: var(--border-width-focus) solid var(--border-focus);
   outline-offset: 2px;
+}
+
+/* The device's own preferences (round 2, "user preference respect"). More contrast: secondary
+   and muted text move toward the ink and hairlines become strong lines, in every palette and
+   theme. Less transparency: frosted glass is applied as off (tweaks.ts, boot.ts). Forced
+   colours: controls keep a visible edge and the focus ring uses the system's highlight. */
+@media (prefers-contrast: more) {
+  :root {
+    --text-secondary: color-mix(in srgb, var(--text-primary) 82%, transparent);
+    --text-muted: color-mix(in srgb, var(--text-primary) 82%, transparent);
+    --border-subtle: var(--border-strong);
+  }
+}
+
+@media (forced-colors: active) {
+  :where(button, a[href], [role="button"], [role="radio"], [role="tab"], input, select, textarea) {
+    border-color: ButtonText;
+  }
+
+  :where(:focus-visible, [data-focus-visible]) {
+    outline-color: Highlight;
+  }
 }
 
 /* The parts of the page the browser draws, in the palette: selection, the caret and scrollbars. */

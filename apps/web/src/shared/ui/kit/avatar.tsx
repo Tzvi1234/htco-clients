@@ -42,7 +42,7 @@ export function Avatar({
     >
       {initial}
       {status === undefined ? null : (
-        <span className="absolute -end-0.5 -bottom-0.5 flex size-3.5 items-center justify-center rounded-pill bg-panel">
+        <span className="absolute -inset-e-0.5 -bottom-0.5 flex size-3.5 items-center justify-center rounded-pill bg-panel">
           <StatusGlyph status={status} size={8} />
         </span>
       )}

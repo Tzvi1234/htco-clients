@@ -85,6 +85,7 @@ export function CommandMenu() {
             >
               <SearchIcon size={16} className="text-secondary" />
               <Input
+                dir="auto"
                 placeholder={t`Search screens and actions…`}
                 className="h-full grow bg-transparent text-[15px] text-primary outline-none placeholder:text-muted [&::-webkit-search-cancel-button]:hidden"
               />

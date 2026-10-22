@@ -48,8 +48,11 @@ export function TabLink({
         "relative flex w-full items-center gap-2 rounded-pill px-3 text-start whitespace-nowrap no-underline outline-none",
         "transition-[background-color,color,scale] duration-[var(--motion-duration-fast)] ease-standard active:scale-[0.98]",
         connector
-          ? "h-[34px] text-body-sm before:absolute before:-start-5 before:top-1/2 before:h-px before:w-3.5 before:bg-line-strong"
+          ? "h-[34px] text-body-sm before:absolute before:-inset-s-5 before:top-1/2 before:h-px before:w-3.5 before:bg-line-strong"
           : "h-[38px] px-3.5 text-[13.5px]",
+        // Stacked rows: on a touch screen each row is 44 px tall itself, as a touch layer
+        // reaching past the row would cover the next one (styles.css, "Touch").
+        "any-pointer-coarse:h-11",
         current ? "bg-inverse text-on-inverse" : "text-secondary hover:bg-hover hover:text-primary",
       )}
     >
@@ -110,7 +113,7 @@ function Category({
         {active && mini ? (
           <span
             aria-hidden="true"
-            className="absolute -end-0.5 top-0 size-2 rounded-pill border-2 border-sidebar bg-accent-mark box-content"
+            className="absolute -inset-e-0.5 top-0 size-2 rounded-pill border-2 border-sidebar bg-accent-mark box-content"
           />
         ) : null}
       </span>
@@ -180,7 +183,7 @@ function Category({
         <div className="overflow-hidden">
           <ul
             aria-label={t`${name} tabs`}
-            className="relative m-0 ms-6 list-none py-1 pe-1 pb-2 ps-5 before:absolute before:start-0 before:top-0 before:bottom-3 before:w-px before:bg-line-strong"
+            className="relative m-0 ms-6 list-none py-1 pe-1 pb-2 ps-5 before:absolute before:inset-s-0 before:top-0 before:bottom-3 before:w-px before:bg-line-strong"
           >
             {area.tabs.map((tab) => (
               <li key={tab.id}>
@@ -246,7 +249,11 @@ export function Sidebar() {
       )}
     >
       <div className="flex h-[72px] shrink-0 items-center justify-between ps-[22px] pe-[15px] group-data-[mini]/sb:justify-center group-data-[mini]/sb:p-0">
-        <Link to="/" aria-label="HTCO" className={cx(LABEL, "rounded-control outline-none")}>
+        <Link
+          to="/"
+          aria-label="HTCO"
+          className={cx(LABEL, "inline-flex min-h-6 items-center rounded-control outline-none")}
+        >
           <Logo height={22} animated={intro} />
         </Link>
         <button

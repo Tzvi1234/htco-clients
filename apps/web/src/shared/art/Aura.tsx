@@ -76,50 +76,50 @@ export function Aura({ variant, className }: { variant: AuraVariant; className?:
           <Blob
             shape="swoosh"
             fill="sky"
-            className="-end-20 -top-16 h-[420px] w-[520px] rotate-[-8deg]"
+            className="-inset-e-20 -top-16 h-[420px] w-[520px] rotate-[-8deg]"
           />
           <Blob
             shape="round"
             fill="peach"
-            className="-end-28 -top-28 size-[300px] [animation-delay:80ms]"
+            className="-inset-e-28 -top-28 size-[300px] [animation-delay:80ms]"
           />
           <Blob
             shape="pebble"
             fill="iris"
-            className="-start-32 bottom-[-120px] size-[380px] [animation-delay:160ms]"
+            className="-inset-s-32 bottom-[-120px] size-[380px] [animation-delay:160ms]"
           />
           <Blob
             shape="round"
             fill="saffron"
-            className="start-[42%] bottom-[-40px] size-[110px] [animation-delay:240ms]"
+            className="inset-s-[42%] bottom-[-40px] size-[110px] [animation-delay:240ms]"
           />
         </>
       ) : null}
       {variant === "form" ? (
         <>
           {/* A cluster in the lower inline-end corner, clear of the form column. */}
-          <Blob shape="pebble" fill="peach" className="-end-28 -bottom-32 size-[340px]" />
+          <Blob shape="pebble" fill="peach" className="-inset-e-28 -bottom-32 size-[340px]" />
           <Blob
             shape="swoosh"
             fill="sky"
-            className="-end-40 bottom-24 h-[220px] w-[360px] rotate-[-14deg] [animation-delay:80ms] max-sm:hidden"
+            className="-inset-e-40 bottom-24 h-[220px] w-[360px] rotate-[-14deg] [animation-delay:80ms] max-sm:hidden"
           />
           <Blob
             shape="round"
             fill="iris"
-            className="end-[14%] bottom-[38%] size-[64px] [animation-delay:160ms] max-lg:hidden"
+            className="inset-e-[14%] bottom-[38%] size-[64px] [animation-delay:160ms] max-lg:hidden"
           />
           <Blob
             shape="round"
             fill="mint"
-            className="end-10 top-10 size-[44px] [animation-delay:240ms] max-sm:hidden"
+            className="inset-e-10 top-10 size-[44px] [animation-delay:240ms] max-sm:hidden"
           />
           <Blob
             shape="round"
             fill="saffron"
-            className="-end-6 top-1/3 size-[90px] [animation-delay:200ms] max-lg:hidden"
+            className="-inset-e-6 top-1/3 size-[90px] [animation-delay:200ms] max-lg:hidden"
           />
-          <Squiggle className="end-[22%] bottom-10 w-24" />
+          <Squiggle className="inset-e-[22%] bottom-10 w-24" />
         </>
       ) : null}
       {variant === "page" ? (
@@ -127,17 +127,17 @@ export function Aura({ variant, className }: { variant: AuraVariant; className?:
           <Blob
             shape="swoosh"
             fill="sky"
-            className="-end-16 -top-24 h-[230px] w-[380px] rotate-[-6deg]"
+            className="-inset-e-16 -top-24 h-[230px] w-[380px] rotate-[-6deg]"
           />
           <Blob
             shape="round"
             fill="peach"
-            className="-end-20 -top-24 size-[170px] [animation-delay:80ms]"
+            className="-inset-e-20 -top-24 size-[170px] [animation-delay:80ms]"
           />
           <Blob
             shape="round"
             fill="iris"
-            className="end-[300px] -top-10 size-[70px] [animation-delay:160ms]"
+            className="inset-e-[300px] -top-10 size-[70px] [animation-delay:160ms]"
           />
         </>
       ) : null}
@@ -146,24 +146,24 @@ export function Aura({ variant, className }: { variant: AuraVariant; className?:
           <Blob
             shape="swoosh"
             fill="sky"
-            className="-end-24 top-8 h-[460px] w-[620px] rotate-[-10deg]"
+            className="-inset-e-24 top-8 h-[460px] w-[620px] rotate-[-10deg]"
           />
           <Blob
             shape="round"
             fill="peach"
-            className="-end-32 -top-32 size-[380px] [animation-delay:80ms]"
+            className="-inset-e-32 -top-32 size-[380px] [animation-delay:80ms]"
           />
           <Blob
             shape="pebble"
             fill="iris"
-            className="-start-40 top-[45%] size-[360px] [animation-delay:160ms]"
+            className="-inset-s-40 top-[45%] size-[360px] [animation-delay:160ms]"
           />
           <Blob
             shape="round"
             fill="mint"
-            className="start-[30%] -bottom-24 size-[200px] [animation-delay:240ms]"
+            className="inset-s-[30%] -bottom-24 size-[200px] [animation-delay:240ms]"
           />
-          <Squiggle className="end-[8%] bottom-16 w-28" />
+          <Squiggle className="inset-e-[8%] bottom-16 w-28" />
         </>
       ) : null}
     </div>

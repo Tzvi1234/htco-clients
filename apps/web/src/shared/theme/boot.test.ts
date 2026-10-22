@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { TWEAKS_BOOT_SCRIPT } from "./boot.ts";
 import { applyTweaks, readTweaks } from "./tweaks.ts";
@@ -33,6 +33,21 @@ describe("the tweaks boot script (before first paint, client ADR-0008)", () => {
 
     expect(boot()).toEqual({ theme: "dark", pal: "d4", t1: "3", t2: "2", t3: "2" });
     expect(boot()).toEqual(app());
+  });
+
+  it("keeps frosted glass off when the device asks for less transparency, as the app does", () => {
+    localStorage.setItem("htco.glass", "3");
+    vi.stubGlobal("matchMedia", (query: string) => ({
+      matches: query === "(prefers-reduced-transparency: reduce)",
+    }));
+    try {
+      expect(boot()).toMatchObject({ t2: "1" });
+      expect(boot()).toEqual(app());
+      // The remembered choice is kept for when the device allows glass again.
+      expect(localStorage.getItem("htco.glass")).toBe("3");
+    } finally {
+      vi.unstubAllGlobals();
+    }
   });
 
   it("ignores values the app would ignore", () => {

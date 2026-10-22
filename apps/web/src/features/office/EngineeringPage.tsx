@@ -17,6 +17,7 @@ import {
   Matrix,
   N,
   Pill,
+  Sep,
   Status,
   StatusGlyph,
   useStatusLabels,
@@ -40,6 +41,11 @@ export function EngineeringPage() {
     ["D-407", t`New MCP tool: Etsy listings`, "mcp", "idle", "iris", "12.10"],
     ["D-406", t`Nightly postgres backup`, "postgres", "idle", "amir", "11.10"],
   ];
+  const timeline: [string, string][] = [
+    ["08:12", t`tracking.sync started failing with 502`],
+    ["08:14", t`Amir took the incident`],
+    ["08:21", t`Carrier token rotation failed (D-411)`],
+  ];
   return (
     <DemoFrame title={t({ message: "Engineering", context: "navigation" })} views layout="l3">
       <Panel>
@@ -50,9 +56,21 @@ export function EngineeringPage() {
         <PanelBody className="justify-between">
           <IdBlock label={t`Incident:`} value={<N>INC-07</N>}>
             <div className="mt-1 text-body-sm">
-              <N>tracking.sync</N> · <N>502</N>
+              <N>tracking.sync</N>
+              <Sep />
+              <N>502</N>
             </div>
           </IdBlock>
+          <ol aria-label={t`Timeline`} className="m-0 list-none p-0">
+            {timeline.map(([time, text]) => (
+              <li key={time} className="k-tl">
+                <span className="k-tm">
+                  <N>{time}</N>
+                </span>
+                <span className="text-body-sm">{text}</span>
+              </li>
+            ))}
+          </ol>
           <KV
             items={[
               [t({ message: "Owner", context: "responsible, he" }), t`Amir`],
@@ -91,6 +109,7 @@ export function EngineeringPage() {
         <DataTable
           label={t`Changes & deploys`}
           head={[t`ID`, t`Change`, t`Service`, t`Status`, t`Engineer`, t`Time`]}
+          ends={[5]}
           phoneHidden={[2, 4]}
           rows={deploys.map(([id, change, service, status, who, time]) => ({
             key: id,

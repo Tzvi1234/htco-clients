@@ -138,7 +138,7 @@ export function Matrix({
       </div>
       <div
         aria-hidden={words}
-        className="absolute -end-1.5 top-6 flex h-7 items-center gap-1.5 rounded-pill bg-[color-mix(in_srgb,var(--bg-raised)_88%,transparent)] px-3 whitespace-nowrap"
+        className="absolute -inset-e-1.5 top-6 flex h-7 items-center gap-1.5 rounded-pill bg-[color-mix(in_srgb,var(--bg-raised)_88%,transparent)] px-3 whitespace-nowrap"
       >
         <TrendGlyph size={12} />
         <span className="ltr tabular">{value}</span>

@@ -1635,6 +1635,8 @@ export class OfficeScene {
     el.textContent = this.o.text(b.text);
     if (b.kind !== "say") {
       el.dataset["go"] = b.go;
+      // The bubble draws its tail with ::after, so it keeps that layer on touch screens.
+      el.dataset["hit"] = "own";
       el.setAttribute("role", "link");
       el.tabIndex = 0;
     }

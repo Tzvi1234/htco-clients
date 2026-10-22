@@ -66,7 +66,7 @@ export function TextField({
           />
         )}
         <Input
-          dir={ltr ? "ltr" : undefined}
+          dir={ltr ? "ltr" : "auto"}
           {...(placeholder === undefined ? {} : { placeholder })}
           className={cx(
             "h-full min-w-0 grow bg-transparent text-body text-primary outline-none placeholder:text-muted",

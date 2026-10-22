@@ -72,7 +72,9 @@
     width var(--motion-duration-base) var(--motion-easing-standard),
     background-color var(--motion-duration-base) var(--motion-easing-standard);
 }
-/* A bigger hit area than the dot it shows. */
+/* A bigger hit area than the dot it shows (its own, so data-hit="own"). On a touch screen the
+   dots are too close for a finger: they only show the position there, and the arrows on each
+   side (44 px targets) move between the concepts. */
 .home-hero-dots button {
   position: relative;
 }
@@ -80,6 +82,11 @@
   content: "";
   position: absolute;
   inset: -8px -3px;
+}
+@media (pointer: coarse) {
+  .home-hero-dots button {
+    pointer-events: none;
+  }
 }
 .home-hero-dots button:hover {
   background: var(--border-hover);
