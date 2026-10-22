@@ -64,6 +64,12 @@
             <SolidColorBrush x:Key="HtcoAttentionRingBrush" Color="#FFFF7F36" />
             <SolidColorBrush x:Key="HtcoAttentionTextBrush" Color="#FFAF4000" />
             <SolidColorBrush x:Key="HtcoAttentionDotBrush" Color="#FFE05100" />
+            <SolidColorBrush x:Key="HtcoTertiaryFillBrush" Color="#FFFF7F36" />
+            <SolidColorBrush x:Key="HtcoTertiaryOnFillBrush" Color="#FF000000" />
+            <SolidColorBrush x:Key="HtcoTertiaryMarkBrush" Color="#FFFF7F36" />
+            <SolidColorBrush x:Key="HtcoTertiaryOnInverseBrush" Color="#FFFF7F36" />
+            <SolidColorBrush x:Key="HtcoTertiarySubtleBrush" Color="#FFFFE6D6" />
+            <SolidColorBrush x:Key="HtcoTertiaryTextBrush" Color="#FFAF4000" />
             <SolidColorBrush x:Key="HtcoSuccessSubtleBrush" Color="#FFE4F1DC" />
             <SolidColorBrush x:Key="HtcoSuccessTextBrush" Color="#FF347216" />
             <SolidColorBrush x:Key="HtcoSuccessDotBrush" Color="#FF43911C" />
@@ -195,6 +201,12 @@
             <SolidColorBrush x:Key="HtcoAttentionRingBrush" Color="#FFFF7F36" />
             <SolidColorBrush x:Key="HtcoAttentionTextBrush" Color="#FFFF7F36" />
             <SolidColorBrush x:Key="HtcoAttentionDotBrush" Color="#FFFF7F36" />
+            <SolidColorBrush x:Key="HtcoTertiaryFillBrush" Color="#FFFF7F36" />
+            <SolidColorBrush x:Key="HtcoTertiaryOnFillBrush" Color="#FF000000" />
+            <SolidColorBrush x:Key="HtcoTertiaryMarkBrush" Color="#FFFF7F36" />
+            <SolidColorBrush x:Key="HtcoTertiaryOnInverseBrush" Color="#FFD64E00" />
+            <SolidColorBrush x:Key="HtcoTertiarySubtleBrush" Color="#FF3A2416" />
+            <SolidColorBrush x:Key="HtcoTertiaryTextBrush" Color="#FFFF7F36" />
             <SolidColorBrush x:Key="HtcoSuccessSubtleBrush" Color="#FF1E2B17" />
             <SolidColorBrush x:Key="HtcoSuccessTextBrush" Color="#FF5AC326" />
             <SolidColorBrush x:Key="HtcoSuccessDotBrush" Color="#FF5AC326" />

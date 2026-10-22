@@ -351,6 +351,31 @@
         }
       }
     },
+    "tertiary": {
+      "$description": "Orange, the tertiary colour beside gray, black and white (round 3): primary emphasis, 'needs you', key numbers and selection; never decoration. The same orange in every palette.",
+      "fill": {
+        "$value": "{color.accent.fill}",
+        "$description": "Orange fills under ink text"
+      },
+      "on-fill": {
+        "$value": "{color.accent.on-fill}"
+      },
+      "mark": {
+        "$value": "{color.accent.mark}",
+        "$description": "Small orange marks: dots, the current item's mark"
+      },
+      "on-inverse": {
+        "$value": "{color.accent.on-inverse}"
+      },
+      "subtle": {
+        "$value": "{color.accent.subtle}",
+        "$description": "The orange wash behind a selection"
+      },
+      "text": {
+        "$value": "{color.accent.text}",
+        "$description": "Orange as text (key numbers, links that need you)"
+      }
+    },
     "success": {
       "subtle": {
         "$type": "color",

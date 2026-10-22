@@ -3031,6 +3031,14 @@
           "unit": "ms"
         },
         "$description": "Drawing marks on"
+      },
+      "screen": {
+        "$type": "duration",
+        "$value": {
+          "value": 240,
+          "unit": "ms"
+        },
+        "$description": "A screen-to-screen transition"
       }
     },
     "easing": {
@@ -3061,6 +3069,26 @@
           1,
           1
         ]
+      },
+      "spring": {
+        "$type": "cubicBezier",
+        "$value": [
+          0.32,
+          0.72,
+          0,
+          1
+        ],
+        "$description": "Spring-like and critically damped (no overshoot): the navigation's open and close, sheets and the moving current pill. Used as a CSS transition, so it can be interrupted and retargeted."
+      },
+      "out": {
+        "$type": "cubicBezier",
+        "$value": [
+          0.23,
+          1,
+          0.32,
+          1
+        ],
+        "$description": "A strong ease-out for things that enter: screens, menus, the flyout's content."
       }
     }
   },

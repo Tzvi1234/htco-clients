@@ -83,6 +83,8 @@ const declarations = (tokens: Token[], indent: string): string =>
 /** One overlay: the attributes on :root it needs, and the tokens it sets in each theme. */
 export interface CssOverlay {
   when: string;
+  /** A descendant selector the overlay applies inside (scoped overlays, modes.ts). */
+  scope?: string;
   light: Token[];
   dark: Token[];
 }
@@ -101,10 +103,20 @@ const block = (selector: string, tokens: Token[], indent: string): string[] => [
 ];
 
 /** Light on `:root<when>`; dark on `[data-theme="dark"]` and on a dark system preference. */
-function themedBlocks(when: string, light: Token[], dark: Token[], indent: string): string[] {
-  const root = `:root${when}`;
-  const explicit = when === "" ? '[data-theme="dark"]' : `:root${when}[data-theme="dark"]`;
-  const system = `:root${when}:not([data-theme="light"])`;
+function themedBlocks(
+  when: string,
+  light: Token[],
+  dark: Token[],
+  indent: string,
+  scope?: string,
+): string[] {
+  const inside = scope === undefined ? "" : ` ${scope}`;
+  const root = `:root${when}${inside}`;
+  const explicit =
+    when === "" && scope === undefined
+      ? '[data-theme="dark"]'
+      : `:root${when}[data-theme="dark"]${inside}`;
+  const system = `:root${when}:not([data-theme="light"])${inside}`;
   return [
     ...block(root, light, indent),
     "",
@@ -129,9 +141,9 @@ export function renderCss(light: Token[], dark: Token[], layers: CssLayer[] = []
   lines.push(`@layer ${LAYER_PREFIX}.base {`, ...themedBlocks("", root, darkThemed, "  "), "}");
   for (const { layer, overlays } of layers) {
     lines.push("", `@layer ${LAYER_PREFIX}.${layer} {`);
-    overlays.forEach(({ when, light: overlayLight, dark: overlayDark }, index) => {
+    overlays.forEach(({ when, scope, light: overlayLight, dark: overlayDark }, index) => {
       if (index > 0) lines.push("");
-      lines.push(...themedBlocks(when, overlayLight, overlayDark, "  "));
+      lines.push(...themedBlocks(when, overlayLight, overlayDark, "  ", scope));
     });
     lines.push("}");
   }

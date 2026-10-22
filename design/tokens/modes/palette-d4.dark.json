@@ -1,5 +1,5 @@
 {
-  "$description": "The Design 4 palette (html[data-pal=d4]), dark.",
+  "$description": "The Design 4 palette (html[data-pal=d4]), dark. Round 3: the cream ground keeps the logo's orange as its accent and attention (lilac and lemon retired), so both palettes share one orange.",
   "color": {
     "bg": {
       "ground": {
@@ -15,7 +15,8 @@
         "$value": "{palette.d4-dark.hover}"
       },
       "selected": {
-        "$value": "{palette.d4-dark.selected}"
+        "$value": "{color.accent.subtle}",
+        "$description": "Selection is the orange wash (round 3)"
       },
       "card": {
         "$value": "{palette.d4-dark.card}"
@@ -142,38 +143,42 @@
     },
     "accent": {
       "fill": {
-        "$value": "{palette.d4-dark.lilac-fill}"
+        "$value": "{palette.sbb-dark.accent}",
+        "$description": "Accent fills with on-fill text (--accent-fill)"
       },
       "on-fill": {
-        "$value": "{palette.d4-dark.ink}"
+        "$value": "{palette.sbb-dark.black}",
+        "$description": "(--on-accent)"
       },
       "mark": {
-        "$value": "{palette.d4-dark.lilac}"
+        "$value": "{palette.sbb-dark.accent}",
+        "$description": "Small accent marks: the current item's dot, the logo's CO (--accent)"
       },
       "on-inverse": {
         "$type": "color",
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.5216,
-            0.4157,
-            0.8706
+            0.8392,
+            0.3059,
+            0
           ],
           "alpha": 1,
-          "hex": "#856ade"
-        }
+          "hex": "#d64e00"
+        },
+        "$description": "The accent dot on the inverse fill"
       },
       "subtle": {
         "$type": "color",
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.1725,
-            0.1529,
-            0.251
+            0.2275,
+            0.1412,
+            0.0863
           ],
           "alpha": 1,
-          "hex": "#2c2740"
+          "hex": "#3a2416"
         }
       },
       "text": {
@@ -181,33 +186,35 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.6627,
-            0.5882,
-            0.9098
+            1,
+            0.498,
+            0.2118
           ],
           "alpha": 1,
-          "hex": "#a996e8"
+          "hex": "#ff7f36"
         }
       }
     },
     "attention": {
       "fill": {
-        "$value": "{palette.d4-dark.lemon}"
+        "$value": "{palette.sbb-dark.accent}",
+        "$description": "Badges and counters that need the owner (--attn)"
       },
       "on-fill": {
-        "$value": "{palette.d4-dark.black}"
+        "$value": "{palette.sbb-dark.black}",
+        "$description": "(--on-attn)"
       },
       "subtle": {
         "$type": "color",
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.1804,
-            0.1686,
-            0.0706
+            0.2275,
+            0.1412,
+            0.0863
           ],
           "alpha": 1,
-          "hex": "#2e2b12"
+          "hex": "#3a2416"
         }
       },
       "text": {
@@ -215,12 +222,12 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.9294,
-            0.8471,
-            0.0118
+            1,
+            0.498,
+            0.2118
           ],
           "alpha": 1,
-          "hex": "#edd803"
+          "hex": "#ff7f36"
         }
       },
       "dot": {
@@ -228,12 +235,12 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.9294,
-            0.8471,
-            0.0118
+            1,
+            0.498,
+            0.2118
           ],
           "alpha": 1,
-          "hex": "#edd803"
+          "hex": "#ff7f36"
         }
       }
     },
@@ -321,13 +328,16 @@
     },
     "logo": {
       "ht": {
-        "$value": "{palette.d4-dark.ink}"
+        "$value": "{palette.sbb-dark.ink}",
+        "$description": "The logo's HT (--logo-ht)"
       },
       "co": {
-        "$value": "{palette.d4-dark.lilac}"
+        "$value": "{palette.sbb-dark.accent}",
+        "$description": "The logo's CO (--logo-co)"
       },
       "dot": {
-        "$value": "{palette.d4-dark.lemon}"
+        "$value": "{palette.sbb-dark.ink}",
+        "$description": "The logo's dot (--logo-dot)"
       }
     },
     "bloom": {

@@ -68,6 +68,12 @@ object HtcoColors {
         val attentionRing = Color(0xFFFF7F36)
         val attentionText = Color(0xFFAF4000)
         val attentionDot = Color(0xFFE05100)
+        val tertiaryFill = Color(0xFFFF7F36)
+        val tertiaryOnFill = Color(0xFF000000)
+        val tertiaryMark = Color(0xFFFF7F36)
+        val tertiaryOnInverse = Color(0xFFFF7F36)
+        val tertiarySubtle = Color(0xFFFFE6D6)
+        val tertiaryText = Color(0xFFAF4000)
         val successSubtle = Color(0xFFE4F1DC)
         val successText = Color(0xFF347216)
         val successDot = Color(0xFF43911C)
@@ -200,6 +206,12 @@ object HtcoColors {
         val attentionRing = Color(0xFFFF7F36)
         val attentionText = Color(0xFFFF7F36)
         val attentionDot = Color(0xFFFF7F36)
+        val tertiaryFill = Color(0xFFFF7F36)
+        val tertiaryOnFill = Color(0xFF000000)
+        val tertiaryMark = Color(0xFFFF7F36)
+        val tertiaryOnInverse = Color(0xFFD64E00)
+        val tertiarySubtle = Color(0xFF3A2416)
+        val tertiaryText = Color(0xFFFF7F36)
         val successSubtle = Color(0xFF1E2B17)
         val successText = Color(0xFF5AC326)
         val successDot = Color(0xFF5AC326)
@@ -362,7 +374,10 @@ object HtcoMotion {
     val durationSlowMillis = 280
     val durationExpandMillis = 300
     val durationDrawMillis = 400
+    val durationScreenMillis = 240
     val easingStandard = CubicBezierEasing(0.2f, 0.7f, 0.2f, 1f)
     val easingEnter = CubicBezierEasing(0.2f, 0.7f, 0.2f, 1f)
     val easingExit = CubicBezierEasing(0.4f, 0f, 1f, 1f)
+    val easingSpring = CubicBezierEasing(0.32f, 0.72f, 0f, 1f)
+    val easingOut = CubicBezierEasing(0.23f, 1f, 0.32f, 1f)
 }

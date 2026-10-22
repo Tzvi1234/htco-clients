@@ -181,3 +181,31 @@ describe("glass colours", () => {
     expect(renderCss(aTheme("#ffffff", "#000000"), [])).toContain("rgba(3, 15, 31, 0.06)");
   });
 });
+
+describe("renderCss with a scoped overlay (the navigation's fixed glass)", () => {
+  const overlay = aTheme("#ffffff", "#000000").slice(0, 1);
+  const overlayDark = aTheme("#111111", "#eeeeee").slice(0, 1);
+  const css = renderCss(light, dark, [
+    {
+      layer: "nav-glass",
+      overlays: [
+        {
+          when: ":not([data-solid])",
+          scope: "[data-glass]",
+          light: overlay,
+          dark: overlayDark,
+        },
+      ],
+    },
+  ]);
+
+  it("applies the tokens inside the scope only, in light, dark and the system's dark", () => {
+    expect(css).toContain(":root:not([data-solid]) [data-glass] {\n    --bg-canvas: #ffffff;");
+    expect(css).toContain(
+      ':root:not([data-solid])[data-theme="dark"] [data-glass] {\n    --bg-canvas: #111111;',
+    );
+    expect(css).toContain(
+      ':root:not([data-solid]):not([data-theme="light"]) [data-glass] {\n      --bg-canvas: #111111;',
+    );
+  });
+});

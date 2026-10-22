@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { modeFailures } from "../src/build.ts";
 import { CONTRAST_PAIRS, composite, contrastFailures, contrastRatio } from "../src/contrast.ts";
-import { ALL_MODES, modeName } from "../src/modes.ts";
+import { ALL_MODES, modeName, NAV_GLASS_MODES } from "../src/modes.ts";
 import { loadTokens, mixColors } from "../src/tokens.ts";
 import { aColor } from "./fixtures.ts";
 
@@ -100,8 +100,8 @@ describe.each(["light", "dark"] as const)("the %s theme", (theme) => {
     expect(failures).toEqual([]);
   });
 
-  it("checks 205 pairs: text and controls on every surface, named pairs, tags, presence flags", () => {
-    expect(CONTRAST_PAIRS).toHaveLength(205);
+  it("checks 218 pairs: text and controls on every surface, named pairs, tags, presence flags", () => {
+    expect(CONTRAST_PAIRS).toHaveLength(218);
   });
 });
 
@@ -126,5 +126,30 @@ describe("mixColors (color-mix in srgb)", () => {
     const mixed = mixColors(aColor("#e1e1e0"), 0.3, aColor("#fffaf6", 0.08));
     expect(mixed.alpha).toBeCloseTo(0.356, 3);
     expect(mixed.hex).toBe("#e6e5e3");
+  });
+});
+
+describe("the navigation's fixed glass (round 3): glass level 2 over the plain ground", () => {
+  it.each(NAV_GLASS_MODES.map((mode) => [modeName(mode), mode] as const))(
+    "%s meets WCAG AA for every declared pair",
+    async (_name, mode) => {
+      expect(await modeFailures(mode, undefined, false)).toEqual([]);
+    },
+  );
+});
+
+describe("orange, the tertiary colour (round 3)", () => {
+  it("is the same orange in both palettes the settings offer", async () => {
+    for (const theme of ["light", "dark"] as const) {
+      const sbb = await loadTokens(theme);
+      const d4 = await loadTokens(theme, undefined, [`modes/palette-d4.${theme}.json`]);
+      const hex = (tokens: typeof sbb, name: string) => {
+        const token = tokens.find((candidate) => candidate.path.join(".") === `color.${name}`);
+        return token?.type === "color" ? token.value.hex : undefined;
+      };
+      for (const name of ["tertiary.fill", "tertiary.mark", "tertiary.text", "logo.co"]) {
+        expect(hex(d4, name), `${theme} ${name}`).toBe(hex(sbb, name));
+      }
+    }
   });
 });

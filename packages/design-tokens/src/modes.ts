@@ -76,7 +76,23 @@ export const modeName = ({ palette, theme, contrast, glass, borders }: Mode): st
 export interface CssRule {
   when: string;
   file: (theme: Theme) => string;
+  /** A descendant selector the overlay is scoped to (the tokens then apply inside it only). */
+  scope?: string;
 }
+
+/**
+ * The navigation and the top bar are frosted glass whatever the tweaks (round 3): the glass
+ * level 2 overlay, scoped to `[data-glass]`, over the plain ground (no bloom). The device's
+ * "reduce transparency" sets `data-solid` on <html>, which turns it off.
+ */
+export const NAV_GLASS_SCOPE = "[data-glass]";
+
+/** The modes the scoped nav glass is checked in: each palette and theme, glass 2, no bloom. */
+export const NAV_GLASS_MODES: Mode[] = (["sbb", "d4"] as const).flatMap((palette) =>
+  (["light", "dark"] as const).map(
+    (theme): Mode => ({ palette, theme, contrast: 1, glass: 2, borders: 1 }),
+  ),
+);
 
 export const CSS_LAYERS: { layer: string; rules: CssRule[] }[] = [
   {
@@ -111,6 +127,21 @@ export const CSS_LAYERS: { layer: string; rules: CssRule[] }[] = [
       {
         when: ':not([data-pal="d4"])[data-t1="3"][data-t2="3"]',
         file: (theme: Theme) => `modes/glass-3-contrast-3.${theme}.json`,
+      },
+    ],
+  },
+  {
+    layer: "nav-glass",
+    rules: [
+      {
+        when: ":not([data-solid])",
+        scope: NAV_GLASS_SCOPE,
+        file: (theme: Theme) => `modes/glass-2.${theme}.json`,
+      },
+      {
+        when: '[data-pal="d4"]:not([data-solid])',
+        scope: NAV_GLASS_SCOPE,
+        file: (theme: Theme) => `modes/glass-2-d4.${theme}.json`,
       },
     ],
   },
