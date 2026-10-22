@@ -12,6 +12,7 @@ msgid "(you)"
 msgstr "(you)"
 
 #. placeholder {0}: best.orders
+#. placeholder {0}: r.orders
 #: src/features/shops/ShopStats.tsx
 msgid "{0, plural, one {# order} other {# orders}}"
 msgstr "{0, plural, one {# order} other {# orders}}"
@@ -35,6 +36,18 @@ msgstr "{0} digital"
 #: src/features/shops/ShopsPage.tsx
 msgid "{0} is disconnected."
 msgstr "{0} is disconnected."
+
+#. placeholder {0}: count(cancelled)
+#. placeholder {1}: count(sales.receipts_read)
+#: src/features/shops/ShopStats.tsx
+msgid "{0} of {1} orders cancelled"
+msgstr "{0} of {1} orders cancelled"
+
+#. placeholder {0}: count(refunded)
+#. placeholder {1}: count(sales.receipts_read)
+#: src/features/shops/ShopStats.tsx
+msgid "{0} of {1} orders refunded"
+msgstr "{0} of {1} orders refunded"
 
 #. placeholder {0}: count(reviews)
 #: src/features/shops/ShopCard.tsx
@@ -689,6 +702,10 @@ msgid "Buyer addresses"
 msgstr "Buyer addresses"
 
 #: src/features/shops/ShopStats.tsx
+msgid "by Etsy's reason"
+msgstr "by Etsy's reason"
+
+#: src/features/shops/ShopStats.tsx
 msgid "by revenue"
 msgstr "by revenue"
 
@@ -714,7 +731,17 @@ msgstr "Campaign:"
 msgid "Cancel"
 msgstr "Cancel"
 
+#: src/features/commerce/refunds.tsx
+msgid "Cancellation"
+msgstr "Cancellation"
+
+#: src/features/shops/ShopStats.tsx
+msgid "Cancellation rate"
+msgstr "Cancellation rate"
+
 #: src/features/commerce/OrdersPage.tsx
+#: src/features/commerce/refunds.tsx
+#: src/features/shops/ShopStats.tsx
 msgid "Cancelled"
 msgstr "Cancelled"
 
@@ -2521,6 +2548,14 @@ msgstr "No orders match this filter."
 msgid "No orders yet."
 msgstr "No orders yet."
 
+#: src/features/commerce/refunds.tsx
+msgid "No reason given"
+msgstr "No reason given"
+
+#: src/features/shops/ShopStats.tsx
+msgid "No refunds or cancellations in these orders."
+msgstr "No refunds or cancellations in these orders."
+
 #: src/features/commerce/ShippingPage.tsx
 msgid "No return policy on Etsy."
 msgstr "No return policy on Etsy."
@@ -2792,6 +2827,11 @@ msgstr "Open invoices"
 msgid "Open on Etsy"
 msgstr "Open on Etsy"
 
+#. placeholder {0}: String(o.order_id)
+#: src/features/commerce/OrdersPage.tsx
+msgid "Open order {0}"
+msgstr "Open order {0}"
+
 #: src/features/overview/OverviewPage.tsx
 msgid "Open orders"
 msgstr "Open orders"
@@ -2980,6 +3020,11 @@ msgstr "Palette"
 #: src/features/office/ChatPage.tsx
 msgid "Partial refund"
 msgstr "Partial refund"
+
+#. placeholder {0}: money(order.refunded_total)
+#: src/features/commerce/refunds.tsx
+msgid "Partial refund {0}"
+msgstr "Partial refund {0}"
 
 #: src/shared/demo/office.ts
 msgid "Partial refund 15% ($7.20) on order #3152 for Emma R."
@@ -3350,6 +3395,10 @@ msgstr "Refund on #3152 is waiting for you."
 msgid "Refund on #3152?"
 msgstr "Refund on #3152?"
 
+#: src/features/shops/ShopStats.tsx
+msgid "Refund rate"
+msgstr "Refund rate"
+
 #: src/features/team/TeamPage.tsx
 msgid "Refund with approval"
 msgstr "Refund with approval"
@@ -3359,12 +3408,23 @@ msgid "Refund without approval"
 msgstr "Refund without approval"
 
 #: src/features/commerce/OrdersPage.tsx
+#: src/features/commerce/refunds.tsx
+#: src/features/shops/ShopStats.tsx
 msgid "Refunded"
 msgstr "Refunded"
 
+#: src/features/commerce/refunds.tsx
 #: src/features/finance/FinanceDemos.tsx
 msgid "Refunds"
 msgstr "Refunds"
+
+#: src/features/shops/ShopStats.tsx
+msgid "Refunds and cancellations"
+msgstr "Refunds and cancellations"
+
+#: src/features/shops/ShopStats.tsx
+msgid "Refunds and cancellations by reason"
+msgstr "Refunds and cancellations by reason"
 
 #: src/features/commerce/demoScreens.tsx
 #: src/features/office/ChatPage.tsx
@@ -3666,6 +3726,10 @@ msgstr "See all approvals"
 #: src/features/team/TeamPage.tsx
 msgid "see every shop"
 msgstr "see every shop"
+
+#: src/features/commerce/refunds.tsx
+msgid "Seller's note:"
+msgstr "Seller's note:"
 
 #: src/features/customers/CustomersDemos.tsx
 #: src/features/office/ChatPage.tsx

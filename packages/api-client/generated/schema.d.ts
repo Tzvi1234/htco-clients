@@ -516,6 +516,28 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/shops/{shop_id}/order-sync": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Start a sync of the shop's stored order history now
+         * @description The backfill from its checkpoint (or from the start), then the last 30 days; Etsy is
+         *     only read. Audited with the trigger only. Answers at once; the run goes on in the
+         *     background and one runs per shop at a time.
+         */
+        post: operations["start_order_sync"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/shops/{shop_id}/orders": {
         parameters: {
             query?: never;
@@ -665,6 +687,8 @@ export interface components {
             countries: components["schemas"]["CountryOrdersView"][];
             /** Currency */
             currency: string;
+            /** Customers */
+            customers?: number | null;
             /** First Order At */
             first_order_at: string | null;
             /** Monthly */
@@ -675,6 +699,13 @@ export interface components {
             partial: boolean;
             /** Receipts Read */
             receipts_read: number;
+            /**
+             * Refunds And Cancellations
+             * @default []
+             */
+            refunds_and_cancellations: components["schemas"]["ReasonCountView"][];
+            /** Repeat Customers Percent */
+            repeat_customers_percent?: string | null;
             revenue: components["schemas"]["MoneyView"];
             /** Top Products */
             top_products: components["schemas"]["TopListingView"][];
@@ -751,10 +782,10 @@ export interface components {
         };
         /**
          * DataSource
-         * @description Where a result comes from. Phase 5 adds the ingested store for orders.
+         * @description Where a result comes from: Etsy live, or HTCO's stored order history.
          * @enum {string}
          */
-        DataSource: "etsy_live";
+        DataSource: "etsy_live" | "htco_store";
         /** DestinationView */
         DestinationView: {
             additional_item: components["schemas"]["MoneyView"];
@@ -828,6 +859,11 @@ export interface components {
              */
             status: "ok";
         };
+        /**
+         * HistoryState
+         * @enum {string}
+         */
+        HistoryState: "syncing_history" | "complete";
         /** IntegrationList */
         IntegrationList: {
             /** Items */
@@ -929,7 +965,8 @@ export interface components {
              * Format: uuid
              */
             shop_id: string;
-            source: components["schemas"]["DataSource"];
+            /** DataSource */
+            source: string;
             /** Stale */
             stale: boolean;
             /** Total Count */
@@ -1143,9 +1180,11 @@ export interface components {
              * Format: uuid
              */
             shop_id: string;
-            source: components["schemas"]["DataSource"];
+            /** DataSource */
+            source: string;
             /** Stale */
             stale: boolean;
+            sync?: components["schemas"]["SyncView"] | null;
             /** Total */
             total: number;
             /**
@@ -1170,6 +1209,12 @@ export interface components {
             order_id: number;
             /** Overdue */
             overdue: boolean;
+            refunded_total?: components["schemas"]["MoneyView"] | null;
+            /**
+             * Refunds
+             * @default []
+             */
+            refunds: components["schemas"]["RefundView"][];
             /** Ship By */
             ship_by: string | null;
             /** Shipments */
@@ -1223,6 +1268,31 @@ export interface components {
              */
             status: "ready";
         };
+        /** ReasonCountView */
+        ReasonCountView: {
+            amount: components["schemas"]["MoneyView"];
+            /** Kind */
+            kind: string;
+            /** Orders */
+            orders: number;
+            /** Reason */
+            reason: string | null;
+        };
+        /** RefundView */
+        RefundView: {
+            amount: components["schemas"]["MoneyView"];
+            /** Note */
+            note: string | null;
+            /** Reason */
+            reason: string | null;
+            /**
+             * Refunded At
+             * Format: date-time
+             */
+            refunded_at: string;
+            /** Status */
+            status: string | null;
+        };
         /** ResetPasswordRequest */
         ResetPasswordRequest: {
             /** Access Token */
@@ -1267,7 +1337,8 @@ export interface components {
              * Format: uuid
              */
             shop_id: string;
-            source: components["schemas"]["DataSource"];
+            /** DataSource */
+            source: string;
             /** Stale */
             stale: boolean;
         };
@@ -1411,7 +1482,8 @@ export interface components {
              * Format: uuid
              */
             shop_id: string;
-            source: components["schemas"]["DataSource"];
+            /** DataSource */
+            source: string;
             /** Stale */
             stale: boolean;
         };
@@ -1442,7 +1514,8 @@ export interface components {
              * Format: uuid
              */
             shop_id: string;
-            source: components["schemas"]["DataSource"];
+            /** DataSource */
+            source: string;
             /** Stale */
             stale: boolean;
         };
@@ -1504,9 +1577,11 @@ export interface components {
              * Format: uuid
              */
             shop_id: string;
-            source: components["schemas"]["DataSource"];
+            /** DataSource */
+            source: string;
             /** Stale */
             stale: boolean;
+            sync?: components["schemas"]["SyncView"] | null;
         };
         /** ShopView */
         ShopView: {
@@ -1545,6 +1620,14 @@ export interface components {
         StepUpRequest: {
             /** Code */
             code: string;
+        };
+        /** SyncView */
+        SyncView: {
+            /** Last Synced At */
+            last_synced_at: string | null;
+            /** Orders Stored */
+            orders_stored: number;
+            state: components["schemas"]["HistoryState"];
         };
         /**
          * TokenHealth
@@ -3927,6 +4010,107 @@ export interface operations {
                 };
             };
             /** @description Etsy did not answer and nothing recent is cached (etsy-data-unavailable; see Retry-After), or live shop data is not set up (shop-data-unavailable) */
+            503: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    start_order_sync: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                shop_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SyncView"];
+                };
+            };
+            /** @description Not signed in, or the access token was rejected */
+            401: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Only the Owner and Admins start a sync (forbidden), or the request did not come from the web app (csrf-failed) */
+            403: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description No such shop for the caller */
+            404: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The shop is not connected (shop-not-connected) */
+            409: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Invalid shop ID */
+            422: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"];
+                };
+            };
+            /** @description Unexpected error. Quote the request ID when reporting it */
+            500: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The stored order history is not set up on this server (shop-data-unavailable) */
             503: {
                 headers: {
                     /** @description ID of this request, generated by the server. Quote it when reporting a problem. */

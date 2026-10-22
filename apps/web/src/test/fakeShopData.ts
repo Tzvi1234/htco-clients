@@ -230,6 +230,18 @@ function orders(now: number, seed: number, busy: boolean): Order[] {
     if (k === 2) state = "unpaid";
     if (product.digital === true && second === undefined && state === "paid") state = "shipped";
     const shippedAt = created + 1.6 * DAY;
+    const total = subtotal + shipping - discount;
+    // Refunds as Etsy gives them: the refunded order in full with a reason and the seller's note,
+    // the cancelled one in full with Etsy's reason, and one shipped order refunded in part with
+    // no reason at all.
+    const refunds: Order["refunds"] =
+      state === "refunded"
+        ? [refund(created + 2 * DAY, total, "Item arrived damaged", "Sorry, it broke in the post.")]
+        : state === "canceled"
+          ? [refund(created + 0.5 * DAY, total, "Buyer requested cancellation", null)]
+          : k === 15
+            ? [refund(created + 3 * DAY, 5, null, null)]
+            : [];
     found.push({
       order_id: 3_412_880_100 - k * 37,
       state,
@@ -276,9 +288,27 @@ function orders(now: number, seed: number, busy: boolean): Order[] {
             ]
           : [],
       buyer: BUYERS[k % BUYERS.length] ?? null,
+      refunds,
+      refunded_total:
+        refunds.length === 0 ? null : usd(refunds.reduce((n, r) => n + Number(r.amount.amount), 0)),
     });
   }
   return found;
+}
+
+function refund(
+  at: number,
+  amount: number,
+  reason: string | null,
+  note: string | null,
+): Order["refunds"][number] {
+  return {
+    amount: usd(amount),
+    refunded_at: new Date(at).toISOString(),
+    reason,
+    status: "succeeded",
+    note,
+  };
 }
 
 /**
@@ -297,8 +327,24 @@ function history(now: number, seed: number): Order[] {
     const template = recent[(k * 7) % recent.length] ?? recent[0];
     if (template === undefined) throw new Error("no orders to copy");
     const state: Order["state"] = k % 23 === 5 ? "canceled" : k % 31 === 9 ? "refunded" : "shipped";
+    const full = Number(template.total.amount);
+    const refunds: Order["refunds"] =
+      state === "refunded"
+        ? [refund(created + 4 * DAY, full, k % 2 === 0 ? "Item arrived damaged" : null, null)]
+        : state === "canceled"
+          ? [
+              refund(
+                created + DAY,
+                full,
+                k % 3 === 0 ? "Out of stock" : "Buyer requested cancellation",
+                null,
+              ),
+            ]
+          : [];
     return {
       ...template,
+      refunds,
+      refunded_total: refunds.length === 0 ? null : usd(full),
       order_id: 3_300_000_000 - k * 211,
       state,
       created_at: new Date(created).toISOString(),
@@ -520,6 +566,22 @@ export function fakeShopData(
       const code = country.get(o.order_id) ?? "US";
       byCountry.set(code, (byCountry.get(code) ?? 0) + 1);
     }
+    // Refunds and cancellations by Etsy's reason, as the API counts them: a cancellation takes
+    // the reason of its latest refund.
+    const reasons = new Map<
+      string,
+      { kind: string; reason: string | null; orders: number; amount: number }
+    >();
+    for (const o of read) {
+      if (o.refunds.length === 0) continue;
+      const kind = o.state === "canceled" ? "cancellation" : "refund";
+      const reason = o.refunds.at(-1)?.reason ?? null;
+      const key = `${kind}:${reason ?? ""}`;
+      const entry = reasons.get(key) ?? { kind, reason, orders: 0, amount: 0 };
+      entry.orders += 1;
+      entry.amount += o.refunds.reduce((n, r) => n + Number(r.amount.amount), 0);
+      reasons.set(key, entry);
+    }
     const best = monthly
       .filter((m) => m.orders > 0)
       .reduce<(typeof monthly)[number] | null>(
@@ -553,6 +615,14 @@ export function fakeShopData(
         first_order_at: read.at(-1)?.created_at ?? null,
         receipts_read: read.length,
         partial: false,
+        refunds_and_cancellations: [...reasons.values()]
+          .sort((a, b) => b.orders - a.orders || b.amount - a.amount)
+          .map((r) => ({
+            kind: r.kind,
+            reason: r.reason,
+            orders: r.orders,
+            amount: usd(r.amount),
+          })),
       },
     };
   };
