@@ -258,8 +258,13 @@ export function SubTabs<K extends string>({
         setMark(null);
         return;
       }
-      const start = rtl ? element.clientWidth - tab.offsetLeft - tab.offsetWidth : tab.offsetLeft;
-      setMark({ start, width: tab.offsetWidth });
+      // Exact (fractional) boxes, not the rounded offsets: the capsule fits its tab to the pixel.
+      const box = element.getBoundingClientRect();
+      const own = tab.getBoundingClientRect();
+      const start = rtl
+        ? box.right - element.clientLeft - own.right - element.scrollLeft
+        : own.left - box.left - element.clientLeft + element.scrollLeft;
+      setMark({ start, width: own.width });
     };
     measure();
     // The capsule follows its tab's own size too: a web font that arrives late widens the label
