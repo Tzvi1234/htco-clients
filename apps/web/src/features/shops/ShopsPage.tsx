@@ -7,6 +7,7 @@ import { useConnectEtsy, type ConnectEtsy } from "./connectEtsy.tsx";
 import { ShopCard, needsReconnect, useReconnectLabel } from "./ShopCard.tsx";
 import { useDisconnects, useRechecks } from "./shopActions.tsx";
 import { useNow } from "./time.ts";
+import { ShopStats } from "./ShopStats.tsx";
 import { TopListings } from "./TopListings.tsx";
 import { overviewQuery } from "../commerce/live.tsx";
 import parcel from "../../assets/commerce/parcel.webp";
@@ -120,7 +121,7 @@ function Shops({
   });
   const firstLive = asked.find((shop) => known.get(shop.id) !== "needs_reauth")?.id;
   const tabs = useId();
-  const [tab, setTab] = useState<"shops" | "listings">("shops");
+  const [tab, setTab] = useState<"shops" | "listings" | "stats">("shops");
 
   if (shops.isError)
     return (
@@ -327,11 +328,18 @@ function Shops({
         tabs={[
           { id: "shops", label: <Trans>Shops</Trans>, count: list.length },
           { id: "listings", label: <Trans>Top listings</Trans> },
+          { id: "stats", label: <Trans>Statistics</Trans> },
         ]}
       />
       <TabPanel idBase={tabs} tab={tab}>
         {tab === "listings" ? (
           <TopListings shopId={firstLive} />
+        ) : tab === "stats" ? (
+          <ShopStats
+            shops={asked
+              .filter((shop) => known.get(shop.id) !== "needs_reauth")
+              .map((shop) => ({ id: shop.id, name: shop.name }))}
+          />
         ) : (
           <FlowRow layout="halves" className="items-stretch">
             {list.map((shop) => {

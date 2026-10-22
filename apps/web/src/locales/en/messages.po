@@ -11,6 +11,11 @@ msgstr ""
 msgid "(you)"
 msgstr "(you)"
 
+#. placeholder {0}: best.orders
+#: src/features/shops/ShopStats.tsx
+msgid "{0, plural, one {# order} other {# orders}}"
+msgstr "{0, plural, one {# order} other {# orders}}"
+
 #. placeholder {0}: sales.overdue
 #: src/features/overview/OverviewPage.tsx
 msgid "{0, plural, one {One order is late to ship. Start there.} other {# orders are late to ship. Start there.}}"
@@ -20,6 +25,11 @@ msgstr "{0, plural, one {One order is late to ship. Start there.} other {# order
 #: src/features/overview/OverviewPage.tsx
 msgid "{0, plural, one {One order waits to ship; none is late.} other {# orders wait to ship; none is late.}}"
 msgstr "{0, plural, one {One order waits to ship; none is late.} other {# orders wait to ship; none is late.}}"
+
+#. placeholder {0}: count(profile.digital_listing_count)
+#: src/features/shops/ShopStats.tsx
+msgid "{0} digital"
+msgstr "{0} digital"
 
 #. placeholder {0}: disconnects.done
 #: src/features/shops/ShopsPage.tsx
@@ -105,6 +115,10 @@ msgstr "{range} days"
 msgid "{shopCount} shops"
 msgstr "{shopCount} shops"
 
+#: src/features/commerce/OrdersPage.tsx
+msgid "{sold} sales on Etsy since the shop opened, all before this period."
+msgstr "{sold} sales on Etsy since the shop opened, all before this period."
+
 #: src/features/commerce/ProductsPage.tsx
 msgid "{soldOut, plural, one {One listing is sold out. Restock it on Etsy so it keeps selling.} other {# listings are sold out. Restock them on Etsy so they keep selling.}}"
 msgstr "{soldOut, plural, one {One listing is sold out. Restock it on Etsy so it keeps selling.} other {# listings are sold out. Restock them on Etsy so they keep selling.}}"
@@ -116,6 +130,16 @@ msgstr "{value} of 5 stars"
 #: src/features/office/ChatPage.tsx
 msgid "#3152 (Emma R.) and #3160 (Liam K.) — a print delay at the supplier. I suggest a 15% partial refund on #3152, it is 4 days late."
 msgstr "#3152 (Emma R.) and #3160 (Liam K.) — a print delay at the supplier. I suggest a 15% partial refund on #3152, it is 4 days late."
+
+#. placeholder {0}: Number(profile.review_average).toFixed(1)
+#. placeholder {1}: count(profile.review_count)
+#: src/features/shops/ShopStats.tsx
+msgid "<0>{sold}</0> sales on Etsy, rated <1>{0}</1> in <2>{1}</2> reviews."
+msgstr "<0>{sold}</0> sales on Etsy, rated <1>{0}</1> in <2>{1}</2> reviews."
+
+#: src/features/shops/ShopStats.tsx
+msgid "<0>{sold}</0> sales on Etsy."
+msgstr "<0>{sold}</0> sales on Etsy."
 
 #: src/features/office/AiOpsPage.tsx
 msgid "$12.40 of $50.00 spent"
@@ -137,6 +161,10 @@ msgstr "1 device"
 #: src/features/team/TeamPage.tsx
 msgid "1 shop"
 msgstr "1 shop"
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "12 months"
+msgstr "12 months"
 
 #: src/features/office/AiOpsPage.tsx
 msgid "15 employees"
@@ -190,6 +218,10 @@ msgstr "3 jobs"
 msgid "3 running · 1 waiting for you · 1 failed"
 msgstr "3 running · 1 waiting for you · 1 failed"
 
+#: src/features/commerce/OrdersPage.tsx
+msgid "30 days"
+msgstr "30 days"
+
 #: src/features/admin/AdminDemos.tsx
 msgid "30-day uptime"
 msgstr "30-day uptime"
@@ -210,6 +242,7 @@ msgstr "4 star-map mockups"
 msgid "7 departments · 3 service"
 msgstr "7 departments · 3 service"
 
+#: src/features/commerce/OrdersPage.tsx
 #: src/features/team/TeamPage.tsx
 msgid "90 days"
 msgstr "90 days"
@@ -388,6 +421,14 @@ msgstr "All shops"
 msgid "All states"
 msgstr "All states"
 
+#: src/features/commerce/OrdersPage.tsx
+msgid "all time"
+msgstr "all time"
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "All time"
+msgstr "All time"
+
 #: src/features/office/EngineeringPage.tsx
 #: src/features/office/TeamRoomPage.tsx
 #: src/shared/demo/office.ts
@@ -565,6 +606,7 @@ msgid "Autonomy:"
 msgstr "Autonomy:"
 
 #: src/features/commerce/OrdersPage.tsx
+#: src/features/shops/ShopStats.tsx
 msgid "Average order"
 msgstr "Average order"
 
@@ -607,6 +649,16 @@ msgstr "Back to sign-in"
 msgid "Balances"
 msgstr "Balances"
 
+#. placeholder {0}: count(sales.receipts_read)
+#. placeholder {1}: date(sales.first_order_at)
+#: src/features/shops/ShopStats.tsx
+msgid "Based on the latest {0} orders, since {1}. Total sales is Etsy's own count; revenue, averages and months come from these orders."
+msgstr "Based on the latest {0} orders, since {1}. Total sales is Etsy's own count; revenue, averages and months come from these orders."
+
+#: src/features/shops/ShopStats.tsx
+msgid "Best month"
+msgstr "Best month"
+
 #: src/features/shops/Capabilities.tsx
 #: src/shared/ui/kit/status.tsx
 msgid "Blocked"
@@ -636,9 +688,17 @@ msgstr "Business name"
 msgid "Buyer addresses"
 msgstr "Buyer addresses"
 
+#: src/features/shops/ShopStats.tsx
+msgid "by revenue"
+msgstr "by revenue"
+
 #: src/features/finance/FinanceDemos.tsx
 msgid "By shop"
 msgstr "By shop"
+
+#: src/features/shops/ShopStats.tsx
+msgid "by units sold"
+msgstr "by units sold"
 
 #: src/features/office/AiOpsPage.tsx
 msgid "Calls"
@@ -1014,6 +1074,10 @@ msgstr "Could not be checked this time. Re-check later."
 #: src/features/customers/CustomersDemos.tsx
 msgid "Country"
 msgstr "Country"
+
+#: src/features/shops/ShopStats.tsx
+msgid "country only"
+msgstr "country only"
 
 #: src/features/settings/AppearanceChoices.tsx
 msgid "Cream"
@@ -1395,6 +1459,10 @@ msgstr "Etsy does not let apps cancel their own access, so you can also remove H
 msgid "Etsy fees"
 msgstr "Etsy fees"
 
+#: src/features/shops/ShopStats.tsx
+msgid "Etsy gave no destination countries for these orders."
+msgstr "Etsy gave no destination countries for these orders."
+
 #: src/features/shops/Capabilities.tsx
 msgid "Etsy hides buyer addresses for this shop. Your fulfillment partner gets them from Etsy; HTCO does not need them."
 msgstr "Etsy hides buyer addresses for this shop. Your fulfillment partner gets them from Etsy; HTCO does not need them."
@@ -1430,6 +1498,10 @@ msgstr "Etsy:"
 #: src/features/office/TeamRoomPage.tsx
 msgid "etsy.order_intake flagged 2 late orders"
 msgstr "etsy.order_intake flagged 2 late orders"
+
+#: src/features/shops/ShopStats.tsx
+msgid "Etsy's count"
+msgstr "Etsy's count"
 
 #: src/features/shops/connectEtsy.tsx
 msgid "Etsy's sign-in address looked wrong, so it was not opened. Try again shortly."
@@ -1516,6 +1588,7 @@ msgstr "favourites"
 
 #: src/features/commerce/ProductsPage.tsx
 #: src/features/shops/ShopCard.tsx
+#: src/features/shops/ShopStats.tsx
 msgid "Favourites"
 msgstr "Favourites"
 
@@ -1695,6 +1768,10 @@ msgstr "Gross"
 #: src/features/finance/FinanceDemos.tsx
 msgid "Gross profit"
 msgstr "Gross profit"
+
+#: src/features/shops/ShopStats.tsx
+msgid "gross, before Etsy's fees"
+msgstr "gross, before Etsy's fees"
 
 #: src/features/finance/FinanceDemos.tsx
 msgid "Growth"
@@ -1930,12 +2007,20 @@ msgid "Languages"
 msgstr "Languages"
 
 #: src/features/commerce/OrdersPage.tsx
+msgid "Last 12 months"
+msgstr "Last 12 months"
+
+#: src/features/commerce/OrdersPage.tsx
 msgid "Last 30 days"
 msgstr "Last 30 days"
 
 #: src/features/admin/AdminDemos.tsx
 msgid "Last 30 runs"
 msgstr "Last 30 runs"
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "Last 90 days"
+msgstr "Last 90 days"
 
 #. placeholder {0}: seen.format(new Date(session.last_seen_at))
 #: src/features/security/SecurityPage.tsx
@@ -2044,6 +2129,7 @@ msgid "Listing:"
 msgstr "Listing:"
 
 #: src/features/shops/Capabilities.tsx
+#: src/features/shops/ShopStats.tsx
 msgid "Listings"
 msgstr "Listings"
 
@@ -2100,6 +2186,10 @@ msgstr "Loading shipping profiles"
 #: src/features/shops/ShopsPage.tsx
 msgid "Loading shops"
 msgstr "Loading shops"
+
+#: src/features/shops/ShopStats.tsx
+msgid "Loading statistics"
+msgstr "Loading statistics"
 
 #: src/features/shops/ShopCard.tsx
 msgid "Loading the shop's numbers"
@@ -2397,13 +2487,26 @@ msgstr "No connection needs you. A disconnected shop stays paused until you conn
 msgid "No listing matches this view."
 msgstr "No listing matches this view."
 
+#: src/features/shops/ShopStats.tsx
+msgid "No month with sales yet."
+msgstr "No month with sales yet."
+
+#. placeholder {0}: periods[period].within
 #: src/features/commerce/OrdersPage.tsx
-msgid "No orders in the last 30 days."
-msgstr "No orders in the last 30 days."
+msgid "No orders in {0}."
+msgstr "No orders in {0}."
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "No orders in {within}"
+msgstr "No orders in {within}"
 
 #: src/features/commerce/OrdersPage.tsx
 msgid "No orders match this filter."
 msgstr "No orders match this filter."
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "No orders yet."
+msgstr "No orders yet."
 
 #: src/features/commerce/ShippingPage.tsx
 msgid "No return policy on Etsy."
@@ -2652,6 +2755,14 @@ msgstr "Only the workspace owner can disconnect a shop."
 msgid "Only the workspace owner or an admin can re-check a shop."
 msgstr "Only the workspace owner or an admin can re-check a shop."
 
+#: src/features/shops/ShopStats.tsx
+msgid "Open for {months, plural, one {# month} other {# months}}, since {since}:"
+msgstr "Open for {months, plural, one {# month} other {# months}}, since {since}:"
+
+#: src/features/shops/ShopStats.tsx
+msgid "Open for {years, plural, one {# year} other {# years}}, since {since}:"
+msgstr "Open for {years, plural, one {# year} other {# years}}, since {since}:"
+
 #: src/features/office/EngineeringPage.tsx
 msgid "Open incident"
 msgstr "Open incident"
@@ -2768,6 +2879,15 @@ msgstr "Orders per day in the last 7 days: {0}"
 msgid "Orders per day, last 7 days"
 msgstr "Orders per day, last 7 days"
 
+#: src/features/shops/ShopStats.tsx
+msgid "Orders per month, last 12 months"
+msgstr "Orders per month, last 12 months"
+
+#. placeholder {0}: recent.map((m) => String(m.orders)).join(", ")
+#: src/features/shops/ShopStats.tsx
+msgid "Orders per month, last 12 months: {0}"
+msgstr "Orders per month, last 12 months: {0}"
+
 #: src/features/commerce/ShippingPage.tsx
 msgid "Orders to ship"
 msgstr "Orders to ship"
@@ -2784,6 +2904,11 @@ msgstr "Orders, last 7 days"
 #: src/features/shops/ShopCard.tsx
 msgid "Orders, revenue and rating appear here while the shop is connected."
 msgstr "Orders, revenue and rating appear here while the shop is connected."
+
+#. placeholder {0}: count(sales.orders)
+#: src/features/shops/ShopStats.tsx
+msgid "over {0} orders"
+msgstr "over {0} orders"
 
 #: src/features/admin/AdminDemos.tsx
 msgid "Overall"
@@ -2923,6 +3048,10 @@ msgstr "People who work in the workspace, and what they may reach"
 #: src/features/office/AiOpsPage.tsx
 msgid "Per call"
 msgstr "Per call"
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "Period"
+msgstr "Period"
 
 #: src/features/commerce/OrdersPage.tsx
 msgid "Placed"
@@ -3327,6 +3456,7 @@ msgstr "Returns and partners"
 #: src/features/commerce/OrdersPage.tsx
 #: src/features/finance/FinanceDemos.tsx
 #: src/features/overview/OverviewPage.tsx
+#: src/features/shops/ShopStats.tsx
 msgid "Revenue"
 msgstr "Revenue"
 
@@ -3337,6 +3467,12 @@ msgstr "Revenue this month:"
 #: src/features/shops/ShopCard.tsx
 msgid "Revenue today"
 msgstr "Revenue today"
+
+#. placeholder {0}: count(sales.receipts_read)
+#. placeholder {1}: date(sales.first_order_at)
+#: src/features/shops/ShopStats.tsx
+msgid "Revenue, averages and months come from all {0} orders since {1}. Total sales is Etsy's own count of items sold."
+msgstr "Revenue, averages and months come from all {0} orders since {1}. Total sales is Etsy's own count of items sold."
 
 #: src/features/work/demoScreens.tsx
 msgid "Reversible"
@@ -3674,6 +3810,7 @@ msgstr "Shon"
 
 #: src/features/commerce/ShopChips.tsx
 #: src/features/finance/FinanceDemos.tsx
+#: src/features/shops/ShopStats.tsx
 msgid "Shop"
 msgstr "Shop"
 
@@ -3700,6 +3837,10 @@ msgstr "Shop numbers"
 #: src/features/overview/OverviewPage.tsx
 msgid "Shop settings"
 msgstr "Shop settings"
+
+#: src/features/shops/ShopStats.tsx
+msgid "Shop statistics"
+msgstr "Shop statistics"
 
 #: src/features/overview/OverviewPage.tsx
 #: src/features/shops/ShopCard.tsx
@@ -3736,6 +3877,10 @@ msgstr "Shops:"
 #: src/app/shell/ShopSwitcher.tsx
 msgid "Shops: {name}"
 msgstr "Shops: {name}"
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "Show all time"
+msgstr "Show all time"
 
 #: src/features/commerce/ProductsPage.tsx
 msgid "Show every listing"
@@ -3784,9 +3929,10 @@ msgid "Showing {0} of {1} listings."
 msgstr "Showing {0} of {1} listings."
 
 #. placeholder {0}: count(all.data.items.length)
+#. placeholder {1}: periods[period].within
 #: src/features/commerce/OrdersPage.tsx
-msgid "Showing the newest {0} orders of the last 30 days."
-msgstr "Showing the newest {0} orders of the last 30 days."
+msgid "Showing the newest {0} orders of {1}."
+msgstr "Showing the newest {0} orders of {1}."
 
 #: src/app/shell/Sidebar.tsx
 msgid "Sidebar"
@@ -3831,6 +3977,10 @@ msgstr "Signing in asks for a code from your authenticator app, so a password al
 msgid "Signs you out first"
 msgstr "Signs you out first"
 
+#: src/features/shops/ShopStats.tsx
+msgid "Since the shop opened"
+msgstr "Since the shop opened"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "Sixteen AI employees in seven departments, working under your policies."
 msgstr "Sixteen AI employees in seven departments, working under your policies."
@@ -3842,6 +3992,10 @@ msgstr "Skip to content"
 #: src/features/finance/FinanceDemos.tsx
 msgid "Software"
 msgstr "Software"
+
+#: src/features/shops/ShopStats.tsx
+msgid "sold"
+msgstr "sold"
 
 #: src/features/commerce/ProductsPage.tsx
 msgid "Sold out"
@@ -3894,6 +4048,14 @@ msgstr "Stable"
 #: src/features/office/FloorPage.tsx
 msgid "Stable performance"
 msgstr "Stable performance"
+
+#: src/features/shops/ShopsPage.tsx
+msgid "Statistics"
+msgstr "Statistics"
+
+#: src/features/shops/ShopStats.tsx
+msgid "Statistics appear here once a shop is connected."
+msgstr "Statistics appear here once a shop is connected."
 
 #: src/features/admin/AdminDemos.tsx
 #: src/features/commerce/demoScreens.tsx
@@ -4061,6 +4223,11 @@ msgstr "The AI office"
 msgid "The app shows a new code every 30 seconds"
 msgstr "The app shows a new code every 30 seconds"
 
+#. placeholder {0}: count(active)
+#: src/features/shops/ShopStats.tsx
+msgid "The best of <0>{0}</0> months with sales."
+msgstr "The best of <0>{0}</0> months with sales."
+
 #: src/features/shops/shopActions.tsx
 msgid "The check did not finish. Try again shortly."
 msgstr "The check did not finish. Try again shortly."
@@ -4089,6 +4256,18 @@ msgstr "The email or the password is wrong."
 #: src/features/settings/AppearanceChoices.tsx
 msgid "The ground behind your panels."
 msgstr "The ground behind your panels."
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "the last 12 months"
+msgstr "the last 12 months"
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "the last 30 days"
+msgstr "the last 30 days"
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "the last 90 days"
+msgstr "the last 90 days"
 
 #: src/features/auth/ForgotPasswordPage.tsx
 msgid "The link works once. Check the spam folder if it does not arrive."
@@ -4146,6 +4325,10 @@ msgstr "The shop's active listings, live from Etsy."
 #: src/features/overview/OverviewPage.tsx
 msgid "The shop's numbers are not available right now."
 msgstr "The shop's numbers are not available right now."
+
+#: src/features/shops/ShopStats.tsx
+msgid "The shop's orders could not be read from Etsy right now, so only Etsy's own counts show."
+msgstr "The shop's orders could not be read from Etsy right now, so only Etsy's own counts show."
 
 #: src/features/commerce/OrdersPage.tsx
 msgid "The shop's orders, live from Etsy."
@@ -4382,10 +4565,18 @@ msgstr "Tool call · evidence"
 msgid "Top listings"
 msgstr "Top listings"
 
+#: src/features/shops/ShopStats.tsx
+msgid "Top products"
+msgstr "Top products"
+
 #: src/features/commerce/OrdersPage.tsx
 #: src/features/customers/CustomersDemos.tsx
 msgid "Total"
 msgstr "Total"
+
+#: src/features/shops/ShopStats.tsx
+msgid "Total sales"
+msgstr "Total sales"
 
 #: src/features/commerce/OrdersPage.tsx
 msgid "Total shown"
@@ -4679,6 +4870,10 @@ msgstr "Where is my order?"
 #: src/features/customers/CustomersDemos.tsx
 msgid "Where is my order? #3152"
 msgstr "Where is my order? #3152"
+
+#: src/features/shops/ShopStats.tsx
+msgid "Where orders go"
+msgstr "Where orders go"
 
 #: src/features/office/ChatPage.tsx
 msgid "Which ones are late? Can we do something for the customers?"
