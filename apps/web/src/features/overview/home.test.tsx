@@ -145,9 +145,12 @@ describe("Home (Design 1C P.home)", () => {
     const needs = panel("What needs you");
     expect(within(needs).queryByRole("button", { name: "Approve" })).not.toBeInTheDocument();
     expect(within(needs).getByText("Demo — coming soon")).toBeInTheDocument();
-    expect(screen.queryByRole("list", { name: "Key numbers" })).not.toBeInTheDocument();
+    // Revenue and orders are live from Etsy (commerce/live.test.tsx); tickets and incidents are
+    // still Demo parts inside the same row.
+    const numbers = screen.getByRole("list", { name: "Key numbers" });
+    expect(within(numbers).getByText("Revenue").closest("[data-demo-part]")).toBeNull();
     expect(
-      screen.getByRole("list", { name: "Key numbers", hidden: true }).closest("[data-demo-part]"),
+      within(numbers).getByText("Open tickets", { ignore: false }).closest("[data-demo-part]"),
     ).not.toBeNull();
   });
 });

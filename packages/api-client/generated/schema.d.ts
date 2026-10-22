@@ -496,6 +496,108 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/shops/{shop_id}/listings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The shop's active listings, live from the marketplace
+         * @description Images, price, stock, views, favourites, tags and sections; up to 300 listings.
+         */
+        get: operations["list_shop_listings"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/shops/{shop_id}/orders": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The shop's orders of the last 30 days, live from the marketplace
+         * @description Newest first. Buyer display names and tracking numbers only for Owner, Admin,
+         *     Operations and Support; never cached by the browser.
+         */
+        get: operations["list_shop_orders"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/shops/{shop_id}/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The shop's profile and sales, live from the marketplace
+         * @description Every role that sees the shop. Sales count paid orders that were not cancelled or
+         *     fully refunded, by the day they were placed at `utc_offset_minutes` from UTC.
+         */
+        get: operations["get_shop_overview"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/shops/{shop_id}/reviews": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The shop's newest reviews, live from the marketplace
+         * @description The newest 25 reviews, the shop's average and count, and the stars of the newest 100.
+         */
+        get: operations["list_shop_reviews"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/shops/{shop_id}/shipping": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The shop's shipping profiles and policies, live from the marketplace
+         * @description Shipping profiles with destinations and costs, return policies, production partners.
+         */
+        get: operations["get_shop_shipping"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/shops/etsy/connect": {
         parameters: {
             query?: never;
@@ -578,6 +680,39 @@ export interface components {
             /** Reconnected */
             reconnected: boolean;
             shop: components["schemas"]["ShopView"];
+        };
+        /** DailySalesView */
+        DailySalesView: {
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /** Orders */
+            orders: number;
+            /** Revenue */
+            revenue: string;
+        };
+        /**
+         * DataSource
+         * @description Where a result comes from. Phase 5 adds the ingested store for orders.
+         * @enum {string}
+         */
+        DataSource: "etsy_live";
+        /** DestinationView */
+        DestinationView: {
+            additional_item: components["schemas"]["MoneyView"];
+            /** Country */
+            country: string | null;
+            first_item: components["schemas"]["MoneyView"];
+            /** Mail Class */
+            mail_class: string | null;
+            /** Max Delivery Days */
+            max_delivery_days: number | null;
+            /** Min Delivery Days */
+            min_delivery_days: number | null;
+            /** Region */
+            region: string | null;
         };
         /** EnrollmentView */
         EnrollmentView: {
@@ -717,6 +852,80 @@ export interface components {
              */
             user_id: string;
         };
+        /**
+         * ListingState
+         * @enum {string}
+         */
+        ListingState: "active" | "inactive" | "sold_out" | "draft" | "expired";
+        /** ListingsView */
+        ListingsView: {
+            /**
+             * Fetched At
+             * Format: date-time
+             */
+            fetched_at: string;
+            /** Items */
+            items: components["schemas"]["ListingView"][];
+            /** Sections */
+            sections: components["schemas"]["SectionView"][];
+            /**
+             * Shop Id
+             * Format: uuid
+             */
+            shop_id: string;
+            source: components["schemas"]["DataSource"];
+            /** Stale */
+            stale: boolean;
+            /** Total Count */
+            total_count: number;
+            /** Truncated */
+            truncated: boolean;
+        };
+        /** ListingView */
+        ListingView: {
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Favorer Count */
+            favorer_count: number;
+            /** Has Variations */
+            has_variations: boolean;
+            /** Image Alt */
+            image_alt: string | null;
+            /** Image Url */
+            image_url: string | null;
+            /** Is Digital */
+            is_digital: boolean;
+            /** Is Personalizable */
+            is_personalizable: boolean;
+            /** Listing Id */
+            listing_id: number;
+            price: components["schemas"]["MoneyView"];
+            /** Quantity */
+            quantity: number;
+            /** Section Id */
+            section_id: number | null;
+            /** Section Title */
+            section_title: string | null;
+            state: components["schemas"]["ListingState"];
+            /** Tags */
+            tags: string[];
+            /** Thumbnail Url */
+            thumbnail_url: string | null;
+            /** Title */
+            title: string;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+            /** Url */
+            url: string | null;
+            /** Views */
+            views: number;
+        };
         /** Me */
         Me: {
             /**
@@ -773,6 +982,13 @@ export interface components {
             /** Factors */
             factors: components["schemas"]["FactorView"][];
         };
+        /** MoneyView */
+        MoneyView: {
+            /** Amount */
+            amount: string;
+            /** Currency */
+            currency: string;
+        };
         /** NotReadyProblem */
         NotReadyProblem: {
             /** Checks */
@@ -790,6 +1006,108 @@ export interface components {
             /** Type */
             type: string;
         };
+        /** OrderCountsView */
+        OrderCountsView: {
+            /** Canceled */
+            canceled: number;
+            /** Overdue */
+            overdue: number;
+            /** Paid */
+            paid: number;
+            /** Refunded */
+            refunded: number;
+            /** Shipped */
+            shipped: number;
+            /** Unpaid */
+            unpaid: number;
+        };
+        /**
+         * OrderFilter
+         * @description The Orders screen's filters: every state, plus paid orders past their ship-by date.
+         * @enum {string}
+         */
+        OrderFilter: "unpaid" | "paid" | "shipped" | "canceled" | "refunded" | "overdue";
+        /** OrderItemView */
+        OrderItemView: {
+            /** Is Digital */
+            is_digital: boolean;
+            /** Listing Id */
+            listing_id: number | null;
+            /** Quantity */
+            quantity: number;
+            /** Sku */
+            sku: string | null;
+            /** Title */
+            title: string;
+            unit_price: components["schemas"]["MoneyView"];
+        };
+        /**
+         * OrderState
+         * @enum {string}
+         */
+        OrderState: "unpaid" | "paid" | "shipped" | "canceled" | "refunded";
+        /** OrdersView */
+        OrdersView: {
+            /** Buyer Details */
+            buyer_details: boolean;
+            counts: components["schemas"]["OrderCountsView"];
+            /**
+             * Fetched At
+             * Format: date-time
+             */
+            fetched_at: string;
+            /** Items */
+            items: components["schemas"]["OrderView"][];
+            /** Partial */
+            partial: boolean;
+            /**
+             * Shop Id
+             * Format: uuid
+             */
+            shop_id: string;
+            source: components["schemas"]["DataSource"];
+            /** Stale */
+            stale: boolean;
+            /** Total */
+            total: number;
+            /**
+             * Window Start
+             * Format: date-time
+             */
+            window_start: string;
+        };
+        /** OrderView */
+        OrderView: {
+            /** Buyer */
+            buyer: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            discount: components["schemas"]["MoneyView"];
+            /** Items */
+            items: components["schemas"]["OrderItemView"][];
+            /** Order Id */
+            order_id: number;
+            /** Overdue */
+            overdue: boolean;
+            /** Ship By */
+            ship_by: string | null;
+            /** Shipments */
+            shipments: components["schemas"]["ShipmentView"][];
+            shipping: components["schemas"]["MoneyView"];
+            state: components["schemas"]["OrderState"];
+            subtotal: components["schemas"]["MoneyView"];
+            total: components["schemas"]["MoneyView"];
+            /** Units */
+            units: number;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+        };
         /**
          * Problem
          * @description Problem details (RFC 9457) plus the request ID.
@@ -805,6 +1123,15 @@ export interface components {
             title: string;
             /** Type */
             type: string;
+        };
+        /** ProductionPartnerView */
+        ProductionPartnerView: {
+            /** Location */
+            location: string;
+            /** Name */
+            name: string;
+            /** Partner Id */
+            partner_id: number;
         };
         /** ReadinessStatus */
         ReadinessStatus: {
@@ -829,6 +1156,59 @@ export interface components {
             /** Refresh Token */
             refresh_token: string;
         };
+        /** ReturnPolicyView */
+        ReturnPolicyView: {
+            /** Accepts Exchanges */
+            accepts_exchanges: boolean;
+            /** Accepts Returns */
+            accepts_returns: boolean;
+            /** Policy Id */
+            policy_id: number;
+            /** Return Deadline Days */
+            return_deadline_days: number | null;
+        };
+        /** ReviewsView */
+        ReviewsView: {
+            /** Average */
+            average: string | null;
+            /** Count */
+            count: number;
+            /** Distribution */
+            distribution: components["schemas"]["StarCountView"][];
+            /**
+             * Fetched At
+             * Format: date-time
+             */
+            fetched_at: string;
+            /** Items */
+            items: components["schemas"]["ReviewView"][];
+            /** Sample Size */
+            sample_size: number;
+            /**
+             * Shop Id
+             * Format: uuid
+             */
+            shop_id: string;
+            source: components["schemas"]["DataSource"];
+            /** Stale */
+            stale: boolean;
+        };
+        /** ReviewView */
+        ReviewView: {
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Language */
+            language: string | null;
+            /** Listing Id */
+            listing_id: number;
+            /** Rating */
+            rating: number;
+            /** Text */
+            text: string | null;
+        };
         /**
          * Role
          * @description Organization roles (FR-IAM-02). Owner and Admin act on every shop of the organization.
@@ -838,6 +1218,41 @@ export interface components {
         /** RoleChange */
         RoleChange: {
             role: components["schemas"]["Role"];
+        };
+        /** SalesPeriodView */
+        SalesPeriodView: {
+            /** Orders */
+            orders: number;
+            revenue: components["schemas"]["MoneyView"];
+            /** Units */
+            units: number;
+        };
+        /** SalesView */
+        SalesView: {
+            /** Awaiting Shipment */
+            awaiting_shipment: number;
+            /** Currency */
+            currency: string;
+            /** Daily */
+            daily: components["schemas"]["DailySalesView"][];
+            last_7_days: components["schemas"]["SalesPeriodView"];
+            last_30_days: components["schemas"]["SalesPeriodView"];
+            /** Overdue */
+            overdue: number;
+            /** Partial */
+            partial: boolean;
+            today: components["schemas"]["SalesPeriodView"];
+            /** Top Listings */
+            top_listings: components["schemas"]["TopListingView"][];
+        };
+        /** SectionView */
+        SectionView: {
+            /** Active Listing Count */
+            active_listing_count: number;
+            /** Section Id */
+            section_id: number;
+            /** Title */
+            title: string;
         };
         /** SessionItem */
         SessionItem: {
@@ -873,6 +1288,55 @@ export interface components {
             /** User Id */
             user_id: string;
         };
+        /** ShipmentView */
+        ShipmentView: {
+            /** Carrier */
+            carrier: string;
+            /**
+             * Shipped At
+             * Format: date-time
+             */
+            shipped_at: string;
+            /** Tracking Code */
+            tracking_code: string | null;
+        };
+        /** ShippingProfileView */
+        ShippingProfileView: {
+            /** Destinations */
+            destinations: components["schemas"]["DestinationView"][];
+            /** Origin Country */
+            origin_country: string;
+            /** Profile Id */
+            profile_id: number;
+            /** Profile Type */
+            profile_type: string;
+            /** Title */
+            title: string | null;
+            /** Upgrade Count */
+            upgrade_count: number;
+        };
+        /** ShippingView */
+        ShippingView: {
+            /**
+             * Fetched At
+             * Format: date-time
+             */
+            fetched_at: string;
+            /** Production Partners */
+            production_partners: components["schemas"]["ProductionPartnerView"][];
+            /** Profiles */
+            profiles: components["schemas"]["ShippingProfileView"][];
+            /** Return Policies */
+            return_policies: components["schemas"]["ReturnPolicyView"][];
+            /**
+             * Shop Id
+             * Format: uuid
+             */
+            shop_id: string;
+            source: components["schemas"]["DataSource"];
+            /** Stale */
+            stale: boolean;
+        };
         /**
          * ShopCapability
          * @description What HTCO checks it may do with a connected shop, in the order the shop card shows them.
@@ -885,6 +1349,68 @@ export interface components {
             items: components["schemas"]["ShopView"][];
             /** Next Cursor */
             next_cursor: string | null;
+        };
+        /** ShopOverviewView */
+        ShopOverviewView: {
+            /**
+             * Fetched At
+             * Format: date-time
+             */
+            fetched_at: string;
+            profile: components["schemas"]["ShopProfileView"];
+            sales: components["schemas"]["SalesView"] | null;
+            /**
+             * Shop Id
+             * Format: uuid
+             */
+            shop_id: string;
+            source: components["schemas"]["DataSource"];
+            /** Stale */
+            stale: boolean;
+        };
+        /** ShopProfileView */
+        ShopProfileView: {
+            /** Accepts Custom Requests */
+            accepts_custom_requests: boolean;
+            /** Active Listing Count */
+            active_listing_count: number;
+            /** Banner Url */
+            banner_url: string | null;
+            /** Currency */
+            currency: string;
+            /** Digital Listing Count */
+            digital_listing_count: number;
+            /** Etsy Shop Id */
+            etsy_shop_id: number;
+            /** Favorer Count */
+            favorer_count: number;
+            /** Icon Url */
+            icon_url: string | null;
+            /** Is Vacation */
+            is_vacation: boolean;
+            /** Languages */
+            languages: string[];
+            /** Location Country */
+            location_country: string | null;
+            /** Name */
+            name: string;
+            /**
+             * Opened At
+             * Format: date-time
+             */
+            opened_at: string;
+            /** Review Average */
+            review_average: string | null;
+            /** Review Count */
+            review_count: number | null;
+            /** Ships From Country */
+            ships_from_country: string | null;
+            /** Sold Count */
+            sold_count: number;
+            /** Title */
+            title: string | null;
+            /** Url */
+            url: string | null;
         };
         /** ShopView */
         ShopView: {
@@ -912,6 +1438,13 @@ export interface components {
             /** Password */
             password: string;
         };
+        /** StarCountView */
+        StarCountView: {
+            /** Count */
+            count: number;
+            /** Stars */
+            stars: number;
+        };
         /** StepUpRequest */
         StepUpRequest: {
             /** Code */
@@ -922,6 +1455,16 @@ export interface components {
          * @enum {string}
          */
         TokenHealth: "ok" | "expiring" | "needs_reauth" | "disconnected";
+        /** TopListingView */
+        TopListingView: {
+            /** Listing Id */
+            listing_id: number;
+            revenue: components["schemas"]["MoneyView"];
+            /** Title */
+            title: string;
+            /** Units */
+            units: number;
+        };
         /** ValidationProblem */
         ValidationProblem: {
             /** Detail */
@@ -3187,6 +3730,517 @@ export interface operations {
                 };
             };
             /** @description Sign-in or the database is unavailable */
+            503: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    list_shop_listings: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                shop_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListingsView"];
+                };
+            };
+            /** @description Not signed in, or the access token was rejected */
+            401: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Signed in, but not a member of any organization */
+            403: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description No such shop for the caller (or the caller's role may not see it) */
+            404: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The shop is not connected (shop-not-connected), or the connection lacks the scope (etsy-scope-missing) */
+            409: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Invalid shop ID or query */
+            422: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"];
+                };
+            };
+            /** @description Unexpected error. Quote the request ID when reporting it */
+            500: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Etsy did not answer and nothing recent is cached (etsy-data-unavailable; see Retry-After), or live shop data is not set up (shop-data-unavailable) */
+            503: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    list_shop_orders: {
+        parameters: {
+            query?: {
+                limit?: number;
+                offset?: number;
+                state?: components["schemas"]["OrderFilter"] | null;
+            };
+            header?: never;
+            path: {
+                shop_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OrdersView"];
+                };
+            };
+            /** @description Not signed in, or the access token was rejected */
+            401: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Signed in, but not a member of any organization */
+            403: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description No such shop for the caller (or the caller's role may not see it) */
+            404: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The shop is not connected (shop-not-connected), or the connection lacks the scope (etsy-scope-missing) */
+            409: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Invalid shop ID or query */
+            422: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"];
+                };
+            };
+            /** @description Unexpected error. Quote the request ID when reporting it */
+            500: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Etsy did not answer and nothing recent is cached (etsy-data-unavailable; see Retry-After), or live shop data is not set up (shop-data-unavailable) */
+            503: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    get_shop_overview: {
+        parameters: {
+            query?: {
+                utc_offset_minutes?: number;
+            };
+            header?: never;
+            path: {
+                shop_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ShopOverviewView"];
+                };
+            };
+            /** @description Not signed in, or the access token was rejected */
+            401: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Signed in, but not a member of any organization */
+            403: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description No such shop for the caller (or the caller's role may not see it) */
+            404: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The shop is not connected (shop-not-connected), or the connection lacks the scope (etsy-scope-missing) */
+            409: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Invalid shop ID or query */
+            422: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"];
+                };
+            };
+            /** @description Unexpected error. Quote the request ID when reporting it */
+            500: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Etsy did not answer and nothing recent is cached (etsy-data-unavailable; see Retry-After), or live shop data is not set up (shop-data-unavailable) */
+            503: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    list_shop_reviews: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                shop_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReviewsView"];
+                };
+            };
+            /** @description Not signed in, or the access token was rejected */
+            401: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Signed in, but not a member of any organization */
+            403: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description No such shop for the caller (or the caller's role may not see it) */
+            404: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The shop is not connected (shop-not-connected), or the connection lacks the scope (etsy-scope-missing) */
+            409: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Invalid shop ID or query */
+            422: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"];
+                };
+            };
+            /** @description Unexpected error. Quote the request ID when reporting it */
+            500: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Etsy did not answer and nothing recent is cached (etsy-data-unavailable; see Retry-After), or live shop data is not set up (shop-data-unavailable) */
+            503: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    get_shop_shipping: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                shop_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ShippingView"];
+                };
+            };
+            /** @description Not signed in, or the access token was rejected */
+            401: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Signed in, but not a member of any organization */
+            403: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description No such shop for the caller (or the caller's role may not see it) */
+            404: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The shop is not connected (shop-not-connected), or the connection lacks the scope (etsy-scope-missing) */
+            409: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Invalid shop ID or query */
+            422: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"];
+                };
+            };
+            /** @description Unexpected error. Quote the request ID when reporting it */
+            500: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Etsy did not answer and nothing recent is cached (etsy-data-unavailable; see Retry-After), or live shop data is not set up (shop-data-unavailable) */
             503: {
                 headers: {
                     /** @description ID of this request, generated by the server. Quote it when reporting a problem. */

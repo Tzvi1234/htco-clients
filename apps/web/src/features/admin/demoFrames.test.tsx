@@ -36,10 +36,11 @@ afterEach(() => {
 });
 
 // Each designed-but-unbuilt screen of Customers, Finance and Admin, with a word of its sample
-// content that shows the demo's full screen is there (not the placeholder).
+// content that shows the demo's full screen is there (not the placeholder). Customers ›
+// Customers is a real screen now: its reviews are live, its customer panels Demo parts
+// (commerce/live.test.tsx).
 const SCREENS = [
   ["/customers/tickets", "Tickets", "Where is my order? #3152"],
-  ["/customers/customers", "Customers", "Active customers:"],
   ["/customers/mail", "Mail", "Your weekly sales summary"],
   ["/customers/marketing", "Marketing", "Active campaign"],
   ["/finance/overview", "Overview", "Revenue this month:"],
