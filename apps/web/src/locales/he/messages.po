@@ -2876,11 +2876,11 @@ msgstr "הזמנות נבדקו ב־Etsy"
 
 #: src/features/overview/OverviewPage.tsx
 msgid "Orders in the last 7 days"
-msgstr "הזמנות ב-7 הימים האחרונים"
+msgstr "הזמנות ב־7 הימים האחרונים"
 
 #: src/features/commerce/OrdersPage.tsx
 msgid "Orders per day in the last 7 days"
-msgstr "הזמנות ביום ב-7 הימים האחרונים"
+msgstr "הזמנות ביום ב־7 הימים האחרונים"
 
 #: src/features/commerce/OrdersPage.tsx
 msgid "Orders per day, last 7 days"
