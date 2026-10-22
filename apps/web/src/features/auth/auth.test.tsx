@@ -93,7 +93,7 @@ describe("signing in", () => {
     const { user, backend } = await open("/", { signedIn: true, role: "support" });
     backend.state.signedIn = false;
 
-    await user.click(screen.getByRole("button", { name: "Account and preferences" }));
+    await user.click(screen.getByRole("button", { name: "Account" }));
     await user.click(screen.getByRole("menuitem", { name: "Security" }));
 
     expect(await screen.findByRole("heading", { level: 1, name: "Sign in" })).toBeInTheDocument();
@@ -168,7 +168,7 @@ describe("signing out when the API is unavailable", () => {
       signOutFails: true,
     });
 
-    await user.click(screen.getByRole("button", { name: "Account and preferences" }));
+    await user.click(screen.getByRole("button", { name: "Account" }));
     await user.click(screen.getByRole("menuitem", { name: "Sign out" }));
 
     expect(await screen.findByRole("alert")).toHaveTextContent(
@@ -214,7 +214,7 @@ describe("security settings", () => {
   it("signs out from the account menu", async () => {
     const { user, backend } = await open("/", ready);
 
-    await user.click(screen.getByRole("button", { name: "Account and preferences" }));
+    await user.click(screen.getByRole("button", { name: "Account" }));
     await user.click(screen.getByRole("menuitem", { name: "Sign out" }));
 
     expect(await screen.findByRole("heading", { level: 1, name: "Sign in" })).toBeInTheDocument();

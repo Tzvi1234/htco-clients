@@ -1,6 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 
-import { checkpoint, openAccountMenu, openApp, pageTitle } from "./support.ts";
+import { checkpoint, openApp, pageTitle } from "./support.ts";
 
 /** Where the main navigation sits: the start side of the screen (wide screens only). */
 async function navigationSide(page: Page): Promise<"left" | "right"> {
@@ -12,30 +12,28 @@ async function navigationSide(page: Page): Promise<"left" | "right"> {
 
 const root = (page: Page) => page.locator("html");
 
-test("switching to Hebrew mirrors the app right to left, and English restores it (AC-3.3.1)", async ({
+test("switching to Hebrew in Settings mirrors the app right to left, and English restores it (AC-3.3.1)", async ({
   page,
 }) => {
   const wide = (page.viewportSize()?.width ?? 0) >= 640;
-  await openApp(page, "/", "signed-in");
-  await expect(pageTitle(page, "Home")).toBeVisible();
+  await openApp(page, "/settings", "signed-in");
+  await expect(pageTitle(page, "Settings")).toBeVisible();
   await expect(root(page)).toHaveAttribute("dir", "ltr");
   if (wide) expect(await navigationSide(page)).toBe("left");
 
-  await openAccountMenu(page);
-  await page.getByRole("menuitemradio", { name: "עברית" }).click();
+  await page.getByText("עברית", { exact: true }).click();
 
   await expect(root(page)).toHaveAttribute("lang", "he");
   await expect(root(page)).toHaveAttribute("dir", "rtl");
-  await expect(pageTitle(page, "בית")).toBeVisible();
+  await expect(pageTitle(page, "הגדרות")).toBeVisible();
   if (wide) expect(await navigationSide(page)).toBe("right");
-  await checkpoint(page, "overview-hebrew");
+  await checkpoint(page, "settings-hebrew");
 
-  await openAccountMenu(page, "חשבון והעדפות");
-  await page.getByRole("menuitemradio", { name: "English" }).click();
+  await page.getByText("English", { exact: true }).click();
 
   await expect(root(page)).toHaveAttribute("lang", "en");
   await expect(root(page)).toHaveAttribute("dir", "ltr");
-  await expect(pageTitle(page, "Home")).toBeVisible();
+  await expect(pageTitle(page, "Settings")).toBeVisible();
   if (wide) expect(await navigationSide(page)).toBe("left");
 });
 
@@ -71,30 +69,30 @@ test("the theme follows the system until the user picks one, which is remembered
   await expect(root(page)).toHaveAttribute("data-theme", "dark");
 
   // Back to the system.
-  await page.getByText("Match the system", { exact: true }).click();
+  await page
+    .getByRole("region", { name: "Appearance and language" })
+    .getByText("System", { exact: true })
+    .click();
   await expect(root(page)).not.toHaveAttribute("data-theme");
   await expect.poll(() => ground(page)).toBe(light);
 });
 
-test("a tweak changed in the app shows on the landing page, and back (one preference)", async ({
+test("the palette chosen in Settings shows on the landing page too (one preference)", async ({
   page,
 }) => {
-  await openApp(page, "/", "signed-in");
-  await expect(pageTitle(page, "Home")).toBeVisible();
-  await page.getByRole("button", { name: "Design tweaks" }).click();
-  await page.getByRole("radio", { name: "Design 4" }).click();
+  await openApp(page, "/settings", "signed-in");
+  await expect(pageTitle(page, "Settings")).toBeVisible();
+  await page.getByText("Cream", { exact: true }).click();
   await expect(root(page)).toHaveAttribute("data-pal", "d4");
 
   await openApp(page, "/welcome", "signed-out");
   await expect(pageTitle(page, "Your shop runs. You decide.")).toBeVisible();
   await expect(root(page)).toHaveAttribute("data-pal", "d4");
-  await checkpoint(page, "landing-design-4");
+  await checkpoint(page, "landing-cream");
 
-  await page.getByRole("button", { name: "Design tweaks" }).click();
-  await page.getByRole("radio", { name: "SBB" }).click();
-  await openApp(page, "/", "signed-in");
-  await expect(pageTitle(page, "Home")).toBeVisible();
-  await expect(root(page)).not.toHaveAttribute("data-pal", "d4");
+  await openApp(page, "/settings", "signed-in");
+  await page.getByText("Gray", { exact: true }).click();
+  await expect(root(page)).toHaveAttribute("data-pal", "sbb");
 });
 
 /**

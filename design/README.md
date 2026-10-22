@@ -5,27 +5,25 @@
 | **Status** | Version 3, "Design 1C" ([client ADR-0008](../docs/adr/0008-design-1c.md)); replaces Relay (ADR-0007) |
 | **Source** | The owner's prototype "HTCO · Design 1C", copied 1:1; this repository's [`tokens/`](tokens/README.md) (DTCG 2025.10), this brand book and [`COMPONENT_SPEC.md`](COMPONENT_SPEC.md) |
 | **Brand assets** | [`../assets/brand/`](../assets/brand/) |
-| **Contrast check** | `pnpm check`: 205 token pairs in each of 114 modes (palette × theme × tweaks), in `packages/design-tokens` |
+| **Contrast check** | `pnpm check`: 218 token pairs in each of 114 modes (palette × theme × tweaks) and in the navigation's fixed glass over the plain ground (4 more), in `packages/design-tokens` |
 
 HTCO is the operating system for a marketplace business: verified orders, fulfillment and money, plus an AI workforce that acts under policy and asks before anything risky. The promise is **autonomy you can audit**: "Your shop runs. You decide."
 
 ## The idea
 
-Calm panels floating on a gray ground. Ink for what is current, one accent for what matters, light type for titles and numbers, round pills for every control. The owner tunes the look himself with the tweaks; every combination stays readable.
+Calm panels floating on a gray ground. Ink for what is current, one accent for what matters, light type for titles and numbers, round pills for every control. Orange, the logo's colour, is the third colour beside gray, black and white: emphasis, what needs the owner, key numbers and selection, never decoration. The navigation and the top bar are frosted glass.
 
-## Palettes and the tweaks
+## The personal settings (round 3)
 
-Two palettes, each with a light and a dark theme, and three tweak levels on top. All of it is one preference for every HTCO interface (the web app, the landing page, the phone layout, later the native apps), remembered per origin and applied as attributes on `<html>` before the first paint.
+Three settings, set in Settings only ([ADR-0009](../docs/adr/0009-clarity-round-3.md)). They are one preference for every HTCO interface (the web app, the landing page, the phone layout, later the native apps), remembered per origin and applied as attributes on `<html>` before the first paint.
 
-| Tweak | Attribute | Levels |
+| Setting | Where | Choices |
 |---|---|---|
-| Theme | `data-theme` | System (no attribute) · Light · Dark |
-| Palette and ground | `data-pal` | **SBB** gray and orange (default) · **Design 4** cream, lilac, orchid, lemon · **Plain ground** (SBB without the bloom behind glass) |
-| 1 · Element vs ground contrast | `data-t1` | Normal · Different · Very different (SBB and plain) |
-| 2 · Frosted glass | `data-t2` | Off · Glass · Strong glass, with the designed bloom ground (not on plain) |
-| 3 · Element borders | `data-t3` | Normal · Different · Very different (SBB and plain) |
+| Theme | `data-theme` | **System** (no attribute; follows the device live, the default) · Light · Dark |
+| Palette | `data-pal` | **Gray** (`sbb`, gray, black and orange, the default) · **Cream** (`d4`, a warm cream ground with the same orange) |
+| Language | `lang`, `dir` | עברית · English |
 
-In Design 4, contrast and borders come from the palette; their rows rest in the panel.
+The earlier tweaks (contrast, frosted glass, borders) are no longer choices: their token modes stay generated and checked, but the app sets none of them. Glass is fixed on for the navigation and the top bar (`data-glass`); the device's "reduce transparency" makes it solid (`data-solid`).
 
 ## Colour
 
@@ -71,7 +69,7 @@ The owner's logo from the prototype: block **H** and **T** cut by the C's circle
 
 ## Layout and shape
 
-- **Frame (from 640 px):** the sidebar floats 8 px from the edges (264 px, radius 22); the top bar sits on the ground (72 px: crumbs, the 24 px title, then language, approvals, search and tweaks); screens are panels in a grid with 8 px gaps under it.
+- **Frame (from 640 px):** the sidebar floats 8 px from the edges (264 px, radius 22); the top bar sits on the ground (72 px: crumbs, the 24 px title, then approvals and search, on frosted glass); screens are panels in a grid with 8 px gaps under it.
 - **Sidebar, top to bottom:** the logo and the collapse button; the shop card; **Quick actions** (Ctrl K); Home, then **Workspace** (Office, Work, Commerce, Customers, Finance) and **System** (Admin), each a 40 px circle icon and a name; the current area opens its tabs on a connector rail with the current tab as an ink pill with the accent dot; the owner's card. Below 1360 px it collapses to a 72 px rail (the user's choice is remembered), and an area's tabs open in the 208 px flyout beside it.
 - **Phones (under 640 px):** the top bar, the screen, and a floating tab bar (Home, Office, Work, Commerce, More); More opens every area in a sheet.
 - **Shapes:** panels 22, cards and menus 16, pills fully round; circle buttons 40 px with a hairline; buttons 32 px (28, 40); inputs 48 px pills on sign-in.
@@ -87,7 +85,9 @@ One curve, `cubic-bezier(.2,.7,.2,1)` (`motion.easing.standard`), and four times
 | An area's tabs | Grid rows open from 0 to their height; the chevron turns |
 | Flyout | Slides 12 px in from the inline start and fades |
 | Screens | Cross-fade with a 6 px rise (View Transitions) |
-| Menus, palette, tweaks panel | Fade with a short drop |
+| Menus, palette | Fade with a short drop |
+| Navigation groups, the flyout, the phone sheet | Open in 300 ms, close in 200 ms on the spring-like curve, as transitions that turn around mid-way |
+| Screen to screen | The old screen settles back, the new one arrives from a soft blur along the navigation's direction |
 | Toast | Fades up at the bottom centre, gone after 1.8 s |
 | Every control | Hover changes its outline or fill; press scales to 95–98% |
 

@@ -1,26 +1,72 @@
-/* Motion for the front door (Design 1C). The global reduced-motion rule in styles.css switches
-   every animation here off. */
+/* The front door's motion (round 3, scroll-craft). Every effect is a CSS animation; the ones
+   tied to the scroll use scroll-driven timelines, so they run off the main thread and never
+   need a scroll listener. Without them (older browsers) and under reduced motion (the global
+   rule in styles.css removes every animation) the page stands still in its final composition:
+   everything is visible, nothing pins. */
 
-/* Panels and list items rise into place, one after the other. */
-.welcome .w-rise {
-  animation: welcome-rise 560ms var(--motion-easing-enter) both;
+/* Under the device's "reduce transparency" the bar is solid in every colour. */
+:root[data-solid] .welcome .w-bar > header {
+  background-color: var(--bg-sidebar);
 }
 
-@keyframes welcome-rise {
+:root[data-solid] .welcome .w-bar > header[data-over="ink"] {
+  background-color: var(--w-ink);
+}
+
+:root[data-solid] .welcome .w-bar > header[data-over="orange"] {
+  background-color: var(--bg-ground);
+}
+
+/* The bar: frosted glass over the ground. Over the ink section it turns to dark glass, and over
+   the orange one to a nearly solid ground, so its words keep their contrast (AA): on ink the colours
+   swap to the inverse pair, whose contrast the tokens guarantee. The wrapper keeps the page's own colours to swap from. */
+.welcome .w-bar {
+  --w-ink: var(--inverse-bg);
+  --w-paper: var(--inverse-text);
+  --w-paper-muted: var(--inverse-text-muted);
+  --w-line: var(--inverse-border);
+  --w-text: var(--text-primary);
+}
+
+.welcome .w-bar > header {
+  transition:
+    background-color var(--motion-duration-base) var(--motion-easing-standard),
+    border-color var(--motion-duration-base) var(--motion-easing-standard);
+}
+
+.welcome .w-bar > header[data-over="ink"] {
+  --text-primary: var(--w-paper);
+  --text-secondary: var(--w-paper-muted);
+  --logo-ht: var(--w-paper);
+  --logo-dot: var(--w-paper);
+  --inverse-bg: var(--w-paper);
+  --inverse-bg-hover: var(--w-paper-muted);
+  --inverse-text: var(--w-ink);
+  --action-primary-bg: var(--w-paper);
+  --action-primary-bg-hover: var(--w-paper-muted);
+  --action-primary-fg: var(--w-ink);
+  --border-strong: var(--w-line);
+  --border-sidebar: var(--w-line);
+  --bg-hover: color-mix(in srgb, var(--w-paper) 12%, transparent);
+  background-color: color-mix(in srgb, var(--w-ink) 82%, transparent);
+}
+
+.welcome .w-bar > header[data-over="orange"] {
+  /* The logo's orange would vanish on orange glass, so here the bar keeps its ground, nearly
+     solid, and the logo its own colours. */
+  background-color: color-mix(in srgb, var(--bg-ground) 94%, transparent);
+}
+
+/* Arrival: the hero's words rise in once, one after another. */
+.welcome .w-in {
+  animation: welcome-in 640ms var(--motion-easing-out) both;
+}
+
+@keyframes welcome-in {
   from {
     opacity: 0;
-    translate: 0 14px;
-  }
-}
-
-/* The render on show floats a little. */
-.welcome .w-float {
-  animation: welcome-float 7s ease-in-out infinite;
-}
-
-@keyframes welcome-float {
-  50% {
-    translate: 0 -8px;
+    translate: 0 16px;
+    filter: blur(4px);
   }
 }
 
@@ -39,26 +85,277 @@
   }
 }
 
-/* Cards lift on hover. */
-.welcome .w-lift {
-  transition:
-    translate var(--motion-duration-base) var(--motion-easing-standard),
-    border-color var(--motion-duration-base) var(--motion-easing-standard);
+/* Standing still, the planned office wraps onto as many rows as it needs. */
+.welcome .w-track {
+  flex-wrap: wrap;
 }
 
-.welcome .w-lift:hover {
-  translate: 0 -3px;
-  border-color: var(--border-hover);
+/* Standing still, the decision shows its outcome: the orange Approve and "Approved by you"
+   (the request stays in the text for assistive technology). With motion, the request comes
+   first and the scroll decides it. */
+.welcome .w-ask {
+  opacity: 0;
 }
 
-/* The dotted progress fills dot by dot. */
-.welcome .w-dot {
-  animation: welcome-dot 260ms var(--motion-easing-enter) both;
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .welcome .w-ask {
+      opacity: 1;
+    }
+
+    /* The hero: four planes part at different speeds over the first screen of scroll (the
+       office plan far back moves least, the parcel in front most), while the words stay at the
+       page's own speed. On arrival the planes settle in, back to front. */
+    .welcome .w-sun,
+    .welcome .w-back,
+    .welcome .w-subject,
+    .welcome .w-front {
+      animation-timeline: auto, scroll(root);
+      animation-range:
+        normal,
+        0 100vh;
+      animation-fill-mode: both;
+    }
+
+    .welcome .w-sun {
+      animation-name: welcome-scene-in, welcome-sun;
+      animation-duration: 900ms, auto;
+      animation-timing-function: var(--motion-easing-out), linear;
+    }
+
+    .welcome .w-back {
+      animation-name: welcome-scene-in, welcome-back;
+      animation-duration: 1000ms, auto;
+      animation-delay: 80ms, 0s;
+      animation-timing-function: var(--motion-easing-out), linear;
+    }
+
+    .welcome .w-subject {
+      animation-name: welcome-scene-in, welcome-subject;
+      animation-duration: 1000ms, auto;
+      animation-delay: 200ms, 0s;
+      animation-timing-function: var(--motion-easing-out), linear;
+    }
+
+    .welcome .w-front {
+      animation-name: welcome-scene-in, welcome-front;
+      animation-duration: 1000ms, auto;
+      animation-delay: 320ms, 0s;
+      animation-timing-function: var(--motion-easing-out), linear;
+    }
+
+    /* What works today: each line wipes in from the reading side as it arrives. */
+    .welcome .w-wipe {
+      animation: welcome-wipe linear both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 32%;
+    }
+
+    :root[dir="rtl"] .welcome .w-wipe {
+      animation-name: welcome-wipe-rtl;
+    }
+
+    /* The peak: the section is nearly three screens tall and its frame holds on screen while the
+       planned office passes sideways (toward the reading start), then the decision lands. */
+    .welcome .w-pan {
+      height: 280vh;
+      view-timeline: --welcome-pan block;
+    }
+
+    .welcome .w-pan-frame {
+      position: sticky;
+      top: 80px;
+      height: calc(100dvh - 88px);
+      container-type: inline-size;
+    }
+
+    .welcome .w-track {
+      flex-wrap: nowrap;
+      width: max-content;
+      animation: welcome-pan linear both;
+      animation-timeline: --welcome-pan;
+      animation-range: contain 0% contain 55%;
+    }
+
+    /* The decision: the orange sweeps across Approve, and the request becomes the answer. */
+    .welcome .w-fill {
+      animation: welcome-fill linear both;
+      animation-timeline: --welcome-pan;
+      animation-range: contain 66% contain 82%;
+    }
+
+    :root[dir="rtl"] .welcome .w-fill {
+      animation-name: welcome-fill-rtl;
+    }
+
+    .welcome .w-ask {
+      animation: welcome-swap-out linear both;
+      animation-timeline: --welcome-pan;
+      animation-range: contain 80% contain 86%;
+    }
+
+    .welcome .w-done {
+      animation: welcome-swap-in linear both;
+      animation-timeline: --welcome-pan;
+      animation-range: contain 83% contain 90%;
+    }
+
+    .welcome .w-decision {
+      animation: welcome-decide linear both;
+      animation-timeline: --welcome-pan;
+      animation-range: contain 40% contain 62%;
+    }
+
+    /* How it works: the rail fills with orange as the steps pass the middle of the screen. */
+    .welcome .w-rail {
+      view-timeline: --welcome-rail block;
+    }
+
+    .welcome .w-rail-fill {
+      animation: welcome-rail linear both;
+      animation-timeline: --welcome-rail;
+      animation-range: entry 40% exit 60%;
+    }
+
+    .welcome .w-step {
+      animation: welcome-step linear both;
+      animation-timeline: view();
+      animation-range: entry 15% cover 40%;
+    }
+
+    /* The close rises into place as one surface. */
+    .welcome .w-close {
+      animation: welcome-close linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 30%;
+    }
+  }
 }
 
-@keyframes welcome-dot {
+@keyframes welcome-scene-in {
   from {
     opacity: 0;
-    scale: 0.2;
+    filter: blur(6px);
+  }
+}
+
+@keyframes welcome-sun {
+  to {
+    translate: 0 -24px;
+    scale: 1.18;
+  }
+}
+
+@keyframes welcome-back {
+  to {
+    translate: 0 -48px;
+  }
+}
+
+@keyframes welcome-subject {
+  to {
+    translate: 0 -120px;
+  }
+}
+
+@keyframes welcome-front {
+  to {
+    translate: 0 -220px;
+    rotate: -6deg;
+  }
+}
+
+@keyframes welcome-wipe {
+  from {
+    opacity: 0;
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes welcome-wipe-rtl {
+  from {
+    opacity: 0;
+    clip-path: inset(0 0 0 100%);
+  }
+  to {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* The track travels its own width less the frame's, toward the reading start. */
+@keyframes welcome-pan {
+  to {
+    translate: calc((100cqw - 100%) * var(--htco-direction, 1)) 0;
+  }
+}
+
+@keyframes welcome-decide {
+  from {
+    scale: 0.94;
+    opacity: 0.6;
+  }
+}
+
+@keyframes welcome-fill {
+  from {
+    opacity: 1;
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes welcome-fill-rtl {
+  from {
+    opacity: 1;
+    clip-path: inset(0 0 0 100%);
+  }
+  to {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes welcome-swap-out {
+  to {
+    opacity: 0;
+    translate: 0 -6px;
+  }
+}
+
+@keyframes welcome-swap-in {
+  from {
+    opacity: 0;
+    translate: 0 6px;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes welcome-rail {
+  from {
+    scale: 1 0;
+  }
+}
+
+@keyframes welcome-step {
+  from {
+    opacity: 0.25;
+    translate: 0 12px;
+  }
+}
+
+@keyframes welcome-close {
+  from {
+    scale: 0.96;
+    translate: 0 24px;
   }
 }

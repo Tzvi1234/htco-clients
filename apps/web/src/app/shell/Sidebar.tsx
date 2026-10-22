@@ -1,6 +1,6 @@
 import { useLingui } from "@lingui/react/macro";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 
 import { AREAS, locate, type AreaId, type NavArea, type NavTab } from "./nav.ts";
 import { useShell } from "./ShellState.tsx";
@@ -28,6 +28,7 @@ export function TabLink({
   tab,
   current,
   connector = true,
+  glide = false,
   onNavigate,
 }: {
   area: AreaId;
@@ -35,6 +36,8 @@ export function TabLink({
   current: boolean;
   /** The line joining it to its category's rail (not in the flyout). */
   connector?: boolean;
+  /** The current pill glides to the next tab of its area on a screen change (styles.css). */
+  glide?: boolean;
   onNavigate?: () => void;
 }) {
   const labels = useNavLabels();
@@ -43,10 +46,11 @@ export function TabLink({
       to={tab.to}
       activeOptions={{ exact: true, includeSearch: false }}
       aria-current={current ? "page" : undefined}
+      data-vt={current && glide ? "nav-current" : undefined}
       {...(onNavigate === undefined ? {} : { onClick: onNavigate })}
       className={cx(
         "relative flex w-full items-center gap-2 rounded-pill px-3 text-start whitespace-nowrap no-underline outline-none",
-        "transition-[background-color,color,scale] duration-[var(--motion-duration-fast)] ease-standard active:scale-[0.98]",
+        "transition-[background-color,color,scale] duration-[var(--motion-duration-fast)] ease-standard active:scale-[0.97]",
         connector
           ? "h-[34px] text-body-sm before:absolute before:-inset-s-5 before:top-1/2 before:h-px before:w-3.5 before:bg-line-strong"
           : "h-[38px] px-3.5 text-[13.5px]",
@@ -123,7 +127,7 @@ function Category({
           size={12}
           className={cx(
             LABEL,
-            "text-secondary transition-transform duration-[var(--motion-duration-slow)] ease-standard",
+            "text-secondary transition-transform duration-[var(--motion-duration-expand)] ease-spring",
             open && "rotate-180",
           )}
         />
@@ -171,23 +175,26 @@ function Category({
       >
         {body}
       </button>
+      {/* The tabs open and close with the spring-like motion of styles.css (.nav-collapse). */}
       <div
         id={listId}
         aria-hidden={!open || mini}
         inert={!open || mini}
-        className={cx(
-          "grid transition-[grid-template-rows] duration-[var(--motion-duration-expand)] ease-standard group-data-[mini]/sb:hidden",
-          open ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
-        )}
+        data-open={open || undefined}
+        className="nav-collapse group-data-[mini]/sb:hidden"
       >
-        <div className="overflow-hidden">
+        <div>
           <ul
             aria-label={t`${name} tabs`}
             className="relative m-0 ms-6 list-none py-1 pe-1 pb-2 ps-5 before:absolute before:inset-s-0 before:top-0 before:bottom-3 before:w-px before:bg-line-strong"
           >
-            {area.tabs.map((tab) => (
-              <li key={tab.id}>
-                <TabLink area={area.id} tab={tab} current={active && currentTab === tab.id} />
+            {area.tabs.map((tab, index) => (
+              <li
+                key={tab.id}
+                className="nav-collapse-item"
+                style={{ "--i": index } as CSSProperties}
+              >
+                <TabLink area={area.id} tab={tab} current={active && currentTab === tab.id} glide />
               </li>
             ))}
           </ul>
@@ -240,10 +247,11 @@ export function Sidebar() {
   return (
     <aside
       data-mini={mini || undefined}
+      data-glass=""
       aria-label={t`Sidebar`}
       className={cx(
-        "group/sb glass relative my-2 ms-2 flex min-h-0 shrink-0 flex-col overflow-hidden rounded-panel border border-sidebar-line bg-sidebar shadow-sidebar",
-        "transition-[width] duration-[var(--motion-duration-slow)] ease-standard",
+        "group/sb relative my-2 ms-2 flex min-h-0 shrink-0 flex-col overflow-hidden rounded-panel border border-sidebar-line bg-sidebar shadow-sidebar",
+        "transition-[width] duration-[var(--motion-duration-expand)] ease-spring",
         mini ? "w-[72px]" : "w-[264px]",
         intro && "animate-sidebar-in",
       )}
@@ -289,7 +297,7 @@ export function Sidebar() {
         <kbd
           className={cx(
             LABEL,
-            "ms-auto inline-flex h-[18px] items-center rounded-[6px] border border-line-strong px-[5px] font-latin text-[11px] text-muted",
+            "ms-auto inline-flex h-5 items-center rounded-[6px] border border-line-strong px-[5px] font-latin text-caption text-muted",
           )}
         >
           Ctrl K
@@ -303,7 +311,7 @@ export function Sidebar() {
           <div key={group}>
             {group === "main" ? null : (
               <>
-                <p className="m-0 px-2.5 pt-3.5 pb-1.5 text-[11px] font-light whitespace-nowrap text-muted group-data-[mini]/sb:hidden">
+                <p className="m-0 px-2.5 pt-3.5 pb-1.5 text-caption font-light whitespace-nowrap text-muted group-data-[mini]/sb:hidden">
                   {labels.group(group)}
                 </p>
                 <div

@@ -7,11 +7,8 @@ import { useShell } from "./ShellState.tsx";
 import { CIRCLE } from "./Sidebar.tsx";
 import { useNavLabels } from "./useNavLabels.ts";
 import { UserMenu } from "./UserMenu.tsx";
-import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
 import { cx } from "../../shared/lib/cx.ts";
-import { TweaksButton } from "../../shared/theme/TweaksPanel.tsx";
 import { BellIcon, CrumbIcon, SearchIcon } from "../../shared/ui/icons.tsx";
-import { Segmented } from "../../shared/ui/Segmented.tsx";
 
 const ACTION = cx(
   CIRCLE,
@@ -48,30 +45,44 @@ function Crumbs() {
 
 /**
  * The top bar on the ground (Design 1C `.tbar`): the crumbs and the page's title (placed here by
- * the page's PageHeader), then the language, approvals, search and the design tweaks. Phones
- * keep the title, search, tweaks and the account, in an iOS-style header: it stays on top over the
- * ground, and once the page scrolls the large title shrinks to an inline one, the crumbs fold away
- * and a hairline appears under it.
+ * the page's PageHeader), then approvals and search. The language, theme and palette live in
+ * Settings (round 3). It is frosted glass over the ground: where the screen scrolls under it
+ * (phones, and screens that scroll as one page) it stays on top and, once the page has scrolled,
+ * a hairline appears under it. Phones keep the title, search and the account in an iOS-style
+ * header whose large title shrinks to an inline one on scroll while the crumbs fold away.
  */
-export function TopBar({ titleSlot, phone }: { titleSlot: Ref<HTMLDivElement>; phone: boolean }) {
+export function TopBar({
+  titleSlot,
+  phone,
+  pageScroll = false,
+}: {
+  titleSlot: Ref<HTMLDivElement>;
+  phone: boolean;
+  /** The screen scrolls as one page under the bar (wide screens; phones always do). */
+  pageScroll?: boolean;
+}) {
   const { t } = useLingui();
-  const { locale, setLocale } = useLocale();
   const { setPaletteOpen } = useShell();
-  const scrolled = useScrolled(phone);
+  const sticky = phone || pageScroll;
+  const scrolled = useScrolled(sticky);
   return (
     <header
-      data-scrolled={phone && scrolled ? "" : undefined}
+      data-scrolled={sticky && scrolled ? "" : undefined}
+      data-glass=""
       className={cx(
         "flex shrink-0 items-center justify-between gap-4",
+        // The glass is the ground's own colour, so at rest the bar sits on the ground unseen.
+        "bg-[color-mix(in_srgb,var(--bg-ground)_78%,transparent)]",
+        // Under the device's "reduce transparency" the bar is solid (data-solid on <html>).
+        "[:root[data-solid]_&]:bg-ground",
+        "border-b border-transparent transition-[border-color,padding] duration-[var(--motion-duration-base)] ease-standard data-[scrolled]:border-line",
         phone
           ? cx(
-              "sticky top-0 z-20 min-h-[60px] border-b border-transparent ps-4 pe-3 pt-[max(8px,env(safe-area-inset-top))] pb-2",
-              "bg-[color-mix(in_srgb,var(--bg-ground)_84%,transparent)] backdrop-blur-xl backdrop-saturate-150",
-              "transition-[border-color,padding] duration-[var(--motion-duration-base)] ease-standard",
-              "data-[scrolled]:border-line data-[scrolled]:pb-1.5",
+              "sticky top-0 z-20 min-h-[60px] ps-4 pe-3 pt-[max(8px,env(safe-area-inset-top))] pb-2",
+              "data-[scrolled]:pb-1.5",
               "[&_h1]:transition-[font-size] [&_h1]:duration-[var(--motion-duration-base)] data-[scrolled]:[&_h1]:text-title-sm data-[scrolled]:[&_h1]:font-normal",
             )
-          : "relative h-[72px] ps-6 pe-4",
+          : cx("h-[72px] ps-6 pe-4", pageScroll ? "sticky top-0 z-20" : "relative"),
       )}
     >
       <div className="flex min-w-0 flex-col gap-0.5">
@@ -93,26 +104,14 @@ export function TopBar({ titleSlot, phone }: { titleSlot: Ref<HTMLDivElement>; p
       </div>
       <div className="flex shrink-0 items-center gap-1.5">
         {phone ? null : (
-          <>
-            <Segmented
-              label={t`Language`}
-              value={locale}
-              onChange={setLocale}
-              options={[
-                { id: "he", label: "עברית", lang: "he" },
-                { id: "en", label: "English", lang: "en" },
-              ]}
-            />
-            <span className="w-1.5" />
-            <Link
-              to="/work/approvals"
-              aria-label={t`Pending approvals`}
-              title={t`Pending approvals`}
-              className={ACTION}
-            >
-              <BellIcon />
-            </Link>
-          </>
+          <Link
+            to="/work/approvals"
+            aria-label={t`Pending approvals`}
+            title={t`Pending approvals`}
+            className={ACTION}
+          >
+            <BellIcon />
+          </Link>
         )}
         <button
           type="button"
@@ -125,7 +124,6 @@ export function TopBar({ titleSlot, phone }: { titleSlot: Ref<HTMLDivElement>; p
         >
           <SearchIcon />
         </button>
-        <TweaksButton />
         {phone ? <UserMenu compact /> : null}
       </div>
     </header>

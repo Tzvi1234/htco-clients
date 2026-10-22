@@ -1,5 +1,5 @@
 import { createMemoryHistory } from "@tanstack/react-router";
-import { act, fireEvent, render, screen, within } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
@@ -34,49 +34,41 @@ describe("the landing page (Design 1C)", () => {
     expect(within(apps).getAllByText("In development")).toHaveLength(2);
   });
 
-  it("shares the tweaks with the app: one stored preference", async () => {
-    const { user, storage } = await open();
-    await user.click(screen.getByRole("button", { name: "Design tweaks" }));
-    await user.click(await screen.findByRole("radio", { name: "Design 4" }));
+  it("follows the palette chosen in the app: one stored preference, no controls of its own", async () => {
+    const { storage } = await open();
+    expect(screen.queryByRole("button", { name: "Design tweaks" })).not.toBeInTheDocument();
+
+    storage.setItem("htco.palette", "d4");
+    window.dispatchEvent(new StorageEvent("storage", { key: "htco.palette", newValue: "d4" }));
     expect(await vi.waitFor(() => document.documentElement.dataset["pal"])).toBe("d4");
-    expect(storage.getItem("htco.palette")).toBe("d4");
   });
 
-  it("steps through the renders", async () => {
+  it("keeps the language switch, which a visitor has no Settings for", async () => {
     const { user } = await open();
-    const carousel = screen.getByRole("region", { name: "HT-Commerce renders" });
-    expect(within(carousel).getByText("1/5")).toBeInTheDocument();
-    await user.click(within(carousel).getByRole("button", { name: "Next render" }));
-    expect(within(carousel).getByText("2/5")).toBeInTheDocument();
-    await user.click(within(carousel).getByRole("button", { name: "Previous render" }));
-    await user.click(within(carousel).getByRole("button", { name: "Previous render" }));
-    expect(within(carousel).getByText("5/5")).toBeInTheDocument();
+    await user.click(screen.getByRole("radio", { name: "עברית" }));
+    expect(
+      await screen.findByRole("heading", { level: 1, name: "החנות רצה. ההחלטה שלך." }),
+    ).toBeInTheDocument();
   });
 
-  it("keeps still while focus is inside, even when the pointer leaves", async () => {
+  it("shows the approval example waiting for the owner, honestly labelled as an example", async () => {
     await open();
-    vi.useFakeTimers({ toFake: ["setInterval", "clearInterval"] });
-    try {
-      const carousel = screen.getByRole("region", { name: "HT-Commerce renders" });
-      act(() => {
-        within(carousel).getByRole("button", { name: "Next render" }).focus();
-      });
-      fireEvent.mouseEnter(carousel);
-      fireEvent.mouseLeave(carousel);
-      act(() => {
-        vi.advanceTimersByTime(9000);
-      });
-      expect(within(carousel).getByText("1/5")).toBeInTheDocument();
+    const planned = screen.getByRole("region", { name: "What is coming" });
+    const decision = within(planned).getByRole("article", {
+      name: "Pause the summer sale on four listings?",
+    });
+    expect(within(decision).getByText("An example of what will ask you")).toBeInTheDocument();
+    expect(within(decision).getByText("Needs you")).toBeInTheDocument();
+  });
 
-      act(() => {
-        within(carousel).getByRole("button", { name: "Next render" }).blur();
-      });
-      act(() => {
-        vi.advanceTimersByTime(4300);
-      });
-      expect(within(carousel).getByText("2/5")).toBeInTheDocument();
-    } finally {
-      vi.useRealTimers();
+  it("is one flowing page: its sections are not panels, and none scrolls on its own", async () => {
+    await open();
+    for (const name of ["What works today", "What is coming", "How it works", "Apps"]) {
+      const region = screen.getByRole("region", { name });
+      expect(region.className, name).not.toMatch(/overflow-(x-)?auto/);
+      expect(
+        region.querySelector("[class*='overflow-auto'], [class*='overflow-x-auto']"),
+      ).toBeNull();
     }
   });
 });

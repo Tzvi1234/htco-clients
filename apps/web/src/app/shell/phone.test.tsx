@@ -38,6 +38,14 @@ async function open(path = "/") {
   return userEvent.setup();
 }
 
+/** A pointer event at a given time (jsdom gives every event the current time). */
+function at(type: string, clientY: number, timeStamp: number) {
+  const event = new MouseEvent(type, { bubbles: true, clientY });
+  Object.defineProperty(event, "timeStamp", { value: timeStamp });
+  Object.defineProperty(event, "pointerId", { value: 1 });
+  return event;
+}
+
 describe("the phone shell (iOS-style, Design 1C)", () => {
   it("shrinks the large title into an inline one once the page scrolls", async () => {
     await open("/");
@@ -75,5 +83,52 @@ describe("the phone shell (iOS-style, Design 1C)", () => {
     await vi.waitFor(() => {
       expect(screen.queryByRole("dialog", { name: "All areas" })).not.toBeInTheDocument();
     });
+  });
+
+  it("closes the sheet on a quick flick after a pause, measuring only the last movement", async () => {
+    const user = await open("/settings");
+    const bar = screen.getByRole("navigation", { name: "Main" });
+    await user.click(within(bar).getByRole("button", { name: "More areas" }));
+    const sheet = await screen.findByRole("dialog", { name: "All areas" });
+    const grabber = sheet.parentElement?.querySelector('[aria-hidden="true"].sticky');
+    if (!(grabber instanceof HTMLElement)) throw new Error("No grabber");
+    grabber.setPointerCapture = () => undefined;
+    act(() => {
+      grabber.dispatchEvent(at("pointerdown", 100, 10_000));
+    });
+    // A long pause holding the sheet, then a 40 px flick in 20 ms: well under 96 px in all.
+    act(() => {
+      grabber.dispatchEvent(at("pointermove", 110, 11_000));
+    });
+    act(() => {
+      grabber.dispatchEvent(at("pointermove", 150, 11_020));
+    });
+    act(() => {
+      grabber.dispatchEvent(at("pointerup", 150, 11_030));
+    });
+    await vi.waitFor(() => {
+      expect(screen.queryByRole("dialog", { name: "All areas" })).not.toBeInTheDocument();
+    });
+  });
+
+  it("keeps the sheet open after a slow, short drag", async () => {
+    const user = await open("/settings");
+    const bar = screen.getByRole("navigation", { name: "Main" });
+    await user.click(within(bar).getByRole("button", { name: "More areas" }));
+    const sheet = await screen.findByRole("dialog", { name: "All areas" });
+    const grabber = sheet.parentElement?.querySelector('[aria-hidden="true"].sticky');
+    if (!(grabber instanceof HTMLElement)) throw new Error("No grabber");
+    grabber.setPointerCapture = () => undefined;
+    // 40 px over a second and a half: neither far enough nor a flick.
+    act(() => {
+      grabber.dispatchEvent(at("pointerdown", 100, 10_000));
+    });
+    act(() => {
+      grabber.dispatchEvent(at("pointermove", 140, 11_500));
+    });
+    act(() => {
+      grabber.dispatchEvent(at("pointerup", 140, 11_600));
+    });
+    expect(screen.getByRole("dialog", { name: "All areas" })).toBeInTheDocument();
   });
 });

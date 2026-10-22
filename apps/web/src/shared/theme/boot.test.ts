@@ -6,7 +6,9 @@ import { applyTweaks, readTweaks } from "./tweaks.ts";
 /** Runs the inline script index.html carries, as the browser does before the first paint. */
 function boot(): Record<string, string | undefined> {
   const root = document.documentElement;
-  for (const name of ["theme", "pal", "t1", "t2", "t3"]) root.removeAttribute(`data-${name}`);
+  for (const name of ["theme", "pal", "solid", "t1", "t2", "t3"]) {
+    root.removeAttribute(`data-${name}`);
+  }
   // eslint-disable-next-line @typescript-eslint/no-implied-eval, @typescript-eslint/no-unsafe-call -- runs index.html's inline script as the browser does
   new Function(TWEAKS_BOOT_SCRIPT)();
   return Object.fromEntries(Object.entries(root.dataset));
@@ -19,32 +21,37 @@ function app(): Record<string, string | undefined> {
   return Object.fromEntries(Object.entries(root.dataset));
 }
 
-describe("the tweaks boot script (before first paint, client ADR-0008)", () => {
+describe("the appearance boot script (before first paint, client ADR-0008)", () => {
   it("applies the defaults when nothing is remembered", () => {
-    expect(boot()).toEqual({ pal: "sbb", t1: "1", t2: "1", t3: "1" });
+    expect(boot()).toEqual({ pal: "sbb" });
+    expect(boot()).toEqual(app());
   });
 
   it("applies what this origin remembered, exactly as the app will", () => {
     localStorage.setItem("htco.theme", "dark");
     localStorage.setItem("htco.palette", "d4");
+
+    expect(boot()).toEqual({ theme: "dark", pal: "d4" });
+    expect(boot()).toEqual(app());
+  });
+
+  it("reads values an earlier version remembered as the app does, with no retired attribute", () => {
+    localStorage.setItem("htco.palette", "plain");
     localStorage.setItem("htco.contrast", "3");
     localStorage.setItem("htco.glass", "2");
     localStorage.setItem("htco.borders", "2");
 
-    expect(boot()).toEqual({ theme: "dark", pal: "d4", t1: "3", t2: "2", t3: "2" });
+    expect(boot()).toEqual({ pal: "sbb" });
     expect(boot()).toEqual(app());
   });
 
-  it("keeps frosted glass off when the device asks for less transparency, as the app does", () => {
-    localStorage.setItem("htco.glass", "3");
+  it("makes the glass solid when the device asks for less transparency, as the app does", () => {
     vi.stubGlobal("matchMedia", (query: string) => ({
       matches: query === "(prefers-reduced-transparency: reduce)",
     }));
     try {
-      expect(boot()).toMatchObject({ t2: "1" });
+      expect(boot()).toMatchObject({ solid: "" });
       expect(boot()).toEqual(app());
-      // The remembered choice is kept for when the device allows glass again.
-      expect(localStorage.getItem("htco.glass")).toBe("3");
     } finally {
       vi.unstubAllGlobals();
     }
@@ -53,7 +60,6 @@ describe("the tweaks boot script (before first paint, client ADR-0008)", () => {
   it("ignores values the app would ignore", () => {
     localStorage.setItem("htco.theme", "sepia");
     localStorage.setItem("htco.palette", "neon");
-    localStorage.setItem("htco.glass", "9");
 
     expect(boot()).toEqual(app());
   });
@@ -67,7 +73,7 @@ describe("the tweaks boot script (before first paint, client ADR-0008)", () => {
       },
     });
     try {
-      expect(boot()).toEqual({ pal: "sbb", t1: "1", t2: "1", t3: "1" });
+      expect(boot()).toEqual({ pal: "sbb" });
     } finally {
       if (original !== undefined) Object.defineProperty(window, "localStorage", original);
     }

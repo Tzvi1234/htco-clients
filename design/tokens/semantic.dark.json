@@ -360,6 +360,31 @@
         }
       }
     },
+    "tertiary": {
+      "$description": "Orange, the tertiary colour beside gray, black and white (round 3): primary emphasis, 'needs you', key numbers and selection; never decoration. The same orange in every palette.",
+      "fill": {
+        "$value": "{color.accent.fill}",
+        "$description": "Orange fills under ink text"
+      },
+      "on-fill": {
+        "$value": "{color.accent.on-fill}"
+      },
+      "mark": {
+        "$value": "{color.accent.mark}",
+        "$description": "Small orange marks: dots, the current item's mark"
+      },
+      "on-inverse": {
+        "$value": "{color.accent.on-inverse}"
+      },
+      "subtle": {
+        "$value": "{color.accent.subtle}",
+        "$description": "The orange wash behind a selection"
+      },
+      "text": {
+        "$value": "{color.accent.text}",
+        "$description": "Orange as text (key numbers, links that need you)"
+      }
+    },
     "success": {
       "subtle": {
         "$type": "color",
@@ -860,6 +885,42 @@
       },
       "5": {
         "$value": "{palette.saffron.400}"
+      }
+    },
+    "swatch": {
+      "$description": "Fixed sample colours for the appearance choices in Settings (each choice is drawn in its own colours, whatever is chosen now). Decoration only, never text; the same in every mode. Web only.",
+      "light-ground": {
+        "$value": "{palette.sbb.ground}"
+      },
+      "light-panel": {
+        "$value": "{palette.sbb.card}"
+      },
+      "light-ink": {
+        "$value": "{palette.sbb.ink}"
+      },
+      "dark-ground": {
+        "$value": "{palette.sbb-dark.ground}"
+      },
+      "dark-panel": {
+        "$value": "{palette.sbb-dark.raised}"
+      },
+      "dark-ink": {
+        "$value": "{palette.sbb-dark.ink}"
+      },
+      "gray-ground": {
+        "$value": "{palette.sbb.ground}"
+      },
+      "gray-panel": {
+        "$value": "{palette.sbb.card}"
+      },
+      "cream-ground": {
+        "$value": "{palette.d4.ground}"
+      },
+      "cream-panel": {
+        "$value": "{palette.d4.white}"
+      },
+      "orange": {
+        "$value": "{palette.sbb.accent}"
       }
     }
   },

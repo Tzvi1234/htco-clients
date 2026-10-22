@@ -120,3 +120,35 @@ export function locate(pathname: string): { area: NavArea; tab?: NavTab } | unde
   }
   return best === undefined ? undefined : { area: best.area, tab: best.tab };
 }
+
+/** Every place in the navigation, in its order: each area, then its tabs. */
+const NAV_ORDER: string[] = AREAS.flatMap((area) => [
+  `area:${area.id}`,
+  ...area.tabs.map((tab) => `${area.id}/${tab.id}`),
+]);
+
+function placeOf(pathname: string): number {
+  const located = locate(pathname);
+  if (located === undefined) return -1;
+  return NAV_ORDER.indexOf(
+    located.tab === undefined ? `area:${located.area.id}` : `${located.area.id}/${located.tab.id}`,
+  );
+}
+
+/**
+ * Which way a screen change travels: "forward" to a place later in the navigation, "back" to an
+ * earlier one, "fade" when either is outside it or both are the same place.
+ */
+export function navDirection(from: string | undefined, to: string): "forward" | "back" | "fade" {
+  if (from === undefined) return "fade";
+  const [a, b] = [placeOf(from), placeOf(to)];
+  if (a < 0 || b < 0 || a === b) return "fade";
+  return b > a ? "forward" : "back";
+}
+
+/** Whether two addresses are tabs of the same area (the current pill glides between them). */
+export function sameArea(from: string | undefined, to: string): boolean {
+  if (from === undefined) return false;
+  const [a, b] = [locate(from), locate(to)];
+  return a?.tab !== undefined && b?.tab !== undefined && a.area.id === b.area.id;
+}

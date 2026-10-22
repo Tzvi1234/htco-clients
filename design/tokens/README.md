@@ -29,7 +29,7 @@ A mode is a palette (`sbb`, `plain`, `d4`), a theme and three tweak levels (`pac
 
 ## Contrast guarantee
 
-Every text pair is at least 4.5:1 and every control boundary, focus ring and status dot at least 3:1, in every mode: 205 pairs (text and controls on every surface, labels on fills, coloured text on its tint, tags, presence flags) in each of 114 modes, listed in [`packages/design-tokens/src/contrast.ts`](../../packages/design-tokens/src/contrast.ts). Translucent glass surfaces are composited over each backdrop of their mode (the ground, or the bloom colours over both ends of its gradient) before measuring. CI recomputes them from these files on every pull request and fails on any regression, and `pnpm tokens` refuses to build while one fails.
+Every text pair is at least 4.5:1 and every control boundary, focus ring and status dot at least 3:1, in every mode: 218 pairs (text and controls on every surface, labels on fills, coloured text on its tint, tags, presence flags, orange as the tertiary colour) in each of 114 modes, and in the navigation's fixed glass (glass level 2 scoped to `[data-glass]`, over the plain ground, in both palettes and themes), listed in [`packages/design-tokens/src/contrast.ts`](../../packages/design-tokens/src/contrast.ts). Translucent glass surfaces are composited over each backdrop of their mode (the ground, or the bloom colours over both ends of its gradient) before measuring. CI recomputes them from these files on every pull request and fails on any regression, and `pnpm tokens` refuses to build while one fails.
 
 ## How tokens reach each platform
 
@@ -49,3 +49,10 @@ Unpublished on purpose: the palette ramps and raw brand colours (semantic tokens
 2. Run `pnpm tokens` and commit the regenerated files with the source change; `pnpm check` runs the contrast and drift tests.
 3. Update the live design system reference and the brand book if the meaning changed.
 4. A change to a brand colour needs the owner's approval and a new ADR.
+
+## Round 3 additions ([ADR-0009](../../docs/adr/0009-clarity-round-3.md))
+
+- `color.tertiary.*` (`fill`, `on-fill`, `mark`, `on-inverse`, `subtle`, `text`): orange, the tertiary colour beside gray, black and white, the same in both palettes. Design 4's overlay now keeps the logo's orange as its accent, attention and selection; lilac and lemon are retired from it.
+- `color.swatch.*`: fixed sample colours for the appearance choices in Settings (web only, never text).
+- `motion.easing.spring` (critically damped, for the navigation's open and close), `motion.easing.out` (a strong ease-out for what enters) and `motion.duration.screen` (240 ms).
+- The `nav-glass` cascade layer: the glass level 2 overlay scoped to `[data-glass]` while `<html>` has no `data-solid`.

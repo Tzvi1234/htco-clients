@@ -1,5 +1,5 @@
 {
-  "$description": "The Design 4 palette (html[data-pal=d4]), light.",
+  "$description": "The Design 4 palette (html[data-pal=d4]), light. Round 3: the cream ground keeps the logo's orange as its accent and attention (lilac and lemon retired), so both palettes share one orange.",
   "color": {
     "bg": {
       "ground": {
@@ -15,7 +15,8 @@
         "$value": "{palette.d4.hover}"
       },
       "selected": {
-        "$value": "{palette.d4.selected}"
+        "$value": "{color.accent.subtle}",
+        "$description": "Selection is the orange wash (round 3)"
       },
       "card": {
         "$value": "{palette.d4.white}"
@@ -142,28 +143,32 @@
     },
     "accent": {
       "fill": {
-        "$value": "{palette.d4.lilac-fill}"
+        "$value": "{palette.sbb.accent}",
+        "$description": "Accent fills with on-fill text (--accent-fill)"
       },
       "on-fill": {
-        "$value": "{palette.d4.ink}"
+        "$value": "{palette.sbb.ink}",
+        "$description": "(--on-accent)"
       },
       "mark": {
-        "$value": "{palette.d4.lilac}"
+        "$value": "{palette.sbb.accent}",
+        "$description": "Small accent marks: the current item's dot, the logo's CO (--accent)"
       },
       "on-inverse": {
-        "$value": "{palette.d4.lilac}"
+        "$value": "{palette.sbb.accent}",
+        "$description": "The accent dot on the inverse fill"
       },
       "subtle": {
         "$type": "color",
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.9255,
-            0.9059,
-            0.9725
+            1,
+            0.902,
+            0.8392
           ],
           "alpha": 1,
-          "hex": "#ece7f8"
+          "hex": "#ffe6d6"
         }
       },
       "text": {
@@ -171,33 +176,35 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.3804,
-            0.2588,
-            0.7804
+            0.6863,
+            0.251,
+            0
           ],
           "alpha": 1,
-          "hex": "#6142c7"
+          "hex": "#af4000"
         }
       }
     },
     "attention": {
       "fill": {
-        "$value": "{palette.d4.lemon}"
+        "$value": "{palette.sbb.accent}",
+        "$description": "Badges and counters that need the owner (--attn)"
       },
       "on-fill": {
-        "$value": "{palette.d4.ink}"
+        "$value": "{palette.sbb.ink}",
+        "$description": "(--on-attn)"
       },
       "subtle": {
         "$type": "color",
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.9843,
-            0.9647,
-            0.7608
+            1,
+            0.902,
+            0.8392
           ],
           "alpha": 1,
-          "hex": "#fbf6c2"
+          "hex": "#ffe6d6"
         }
       },
       "text": {
@@ -205,12 +212,12 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.3961,
-            0.3608,
-            0.0039
+            0.6863,
+            0.251,
+            0
           ],
           "alpha": 1,
-          "hex": "#655c01"
+          "hex": "#af4000"
         }
       },
       "dot": {
@@ -218,12 +225,12 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.5176,
-            0.4706,
-            0.0078
+            0.8784,
+            0.3176,
+            0
           ],
           "alpha": 1,
-          "hex": "#847802"
+          "hex": "#e05100"
         }
       }
     },
@@ -311,13 +318,16 @@
     },
     "logo": {
       "ht": {
-        "$value": "{palette.d4.ink}"
+        "$value": "{palette.sbb.ink}",
+        "$description": "The logo's HT (--logo-ht)"
       },
       "co": {
-        "$value": "{palette.d4.lilac}"
+        "$value": "{palette.sbb.accent}",
+        "$description": "The logo's CO (--logo-co)"
       },
       "dot": {
-        "$value": "{palette.d4.lemon}"
+        "$value": "{palette.sbb.ink}",
+        "$description": "The logo's dot (--logo-dot)"
       }
     },
     "bloom": {

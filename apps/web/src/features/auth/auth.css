@@ -1,48 +1,88 @@
-/* Motion for the sign-in screens (Design 1C). The global reduced-motion rule in styles.css
-   switches every animation here off. */
+/* Motion for the sign-in screens (Design 1C, polished in round 3). The global reduced-motion
+   rule in styles.css switches every animation here off, and the content is already in place. */
 
-/* The office render: it slides in from the outer edge and turns a little, then breathes. */
+/* The office render: it glides in from the outer edge out of a soft blur and settles into its
+   slight turn on a strong ease-out, then breathes very slowly. */
 .auth-art {
   translate: 0 -50%;
   rotate: -5deg;
   transform-origin: 30% 50%;
   animation:
-    auth-art-in 900ms var(--motion-easing-enter) both,
-    auth-art-float 9s ease-in-out 900ms infinite;
+    auth-art-in 1100ms var(--motion-easing-out) both,
+    auth-art-float 12s ease-in-out 1100ms infinite;
 }
 
 @keyframes auth-art-in {
   from {
     opacity: 0;
-    translate: 12% -46%;
+    translate: 10% -47%;
     rotate: -1deg;
+    scale: 0.96;
+    filter: blur(8px);
+  }
+  60% {
+    filter: blur(0);
   }
 }
 
 @keyframes auth-art-float {
   50% {
-    transform: translateY(-8px) rotate(0.6deg);
+    transform: translateY(-6px) rotate(0.4deg);
   }
 }
 
-/* The facts under the render rise one after the other. */
-.auth-fact {
-  animation: auth-rise 420ms var(--motion-easing-enter) both;
+/* The form's parts (the title, each field, the button, the line under it) rise one after the
+   other, 50 ms apart, so the eye reads the form top to bottom. */
+.auth-stagger > * {
+  animation: auth-rise 420ms var(--motion-easing-out) both;
+}
+
+.auth-stagger > :nth-child(2) {
+  animation-delay: 50ms;
+}
+
+.auth-stagger > :nth-child(3) {
+  animation-delay: 100ms;
+}
+
+.auth-stagger > :nth-child(4) {
+  animation-delay: 150ms;
+}
+
+.auth-stagger > :nth-child(n + 5) {
+  animation-delay: 200ms;
+}
+
+/* Inside a form the fields stagger too. */
+.auth-stagger > form > * {
+  animation: auth-rise 420ms var(--motion-easing-out) both;
+}
+
+.auth-stagger > form > :nth-child(2) {
+  animation-delay: 90ms;
+}
+
+.auth-stagger > form > :nth-child(3) {
+  animation-delay: 130ms;
+}
+
+.auth-stagger > form > :nth-child(n + 4) {
+  animation-delay: 170ms;
 }
 
 @keyframes auth-rise {
   from {
     opacity: 0;
-    translate: 0 8px;
+    translate: 0 10px;
+    filter: blur(2px);
   }
 }
 
-/* The sent-mail and done marks settle in on the system's enter curve (no overshoot). */
+/* The sent-mail and done marks settle in on the system's ease-out (no overshoot). */
 .auth-mark {
-  animation: auth-pop 420ms var(--motion-easing-enter) both;
+  animation: auth-pop 420ms var(--motion-easing-out) both;
 }
 
-/* Its keyframes were missing, so the mark never animated. */
 @keyframes auth-pop {
   from {
     opacity: 0;

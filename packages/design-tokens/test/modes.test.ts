@@ -81,3 +81,14 @@ describe("strong glass at contrast level 3", () => {
     );
   });
 });
+
+describe("the navigation's fixed glass", () => {
+  it("is the glass level 2 overlay scoped to [data-glass], off under reduced transparency", () => {
+    const layer = CSS_LAYERS.find(({ layer: name }) => name === "nav-glass");
+    expect(layer?.rules.map(({ when, scope, file }) => [when, scope, file("light")])).toEqual([
+      [":not([data-solid])", "[data-glass]", "modes/glass-2.light.json"],
+      ['[data-pal="d4"]:not([data-solid])', "[data-glass]", "modes/glass-2-d4.light.json"],
+    ]);
+    expect(CSS_LAYERS.at(-1)?.layer).toBe("nav-glass");
+  });
+});

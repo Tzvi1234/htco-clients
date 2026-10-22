@@ -1,38 +1,16 @@
 import { useLingui } from "@lingui/react/macro";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "@tanstack/react-router";
-import {
-  Button,
-  Header,
-  Menu,
-  MenuItem,
-  MenuSection,
-  MenuTrigger,
-  Popover,
-  Separator,
-  type Selection,
-} from "react-aria-components";
+import { Button, Menu, MenuItem, MenuTrigger, Popover, Separator } from "react-aria-components";
 
 import { useRoleLabel } from "../../features/team/TeamPage.tsx";
 import { meQuery, useApi } from "../../shared/api/api.tsx";
 import { useSignOut } from "../../shared/api/useSignOut.ts";
-import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
-import type { Locale } from "../../shared/i18n/locale.ts";
 import { cx } from "../../shared/lib/cx.ts";
-import { useTheme } from "../../shared/theme/ThemeProvider.tsx";
-import type { ThemePreference } from "../../shared/theme/theme.ts";
 import { ChevronIcon } from "../../shared/ui/icons.tsx";
 
 const ITEM =
-  "flex h-9 cursor-default items-center gap-2 rounded-[12px] px-3 text-body-sm outline-none transition-colors duration-[var(--motion-duration-fast)] data-[focused]:bg-panel data-[disabled]:text-muted " +
-  "before:inline-block before:w-4 before:text-accent-text data-[selected]:before:content-['✓']";
-const SECTION_HEADER = "px-3 pt-2 pb-1 text-caption font-light text-muted";
-
-function selected(keys: Selection): string | undefined {
-  if (keys === "all") return undefined;
-  const [first] = [...keys];
-  return typeof first === "string" ? first : undefined;
-}
+  "flex h-9 cursor-default items-center gap-2 rounded-[12px] px-3 text-body-sm outline-none transition-colors duration-[var(--motion-duration-fast)] data-[focused]:bg-panel data-[disabled]:text-muted";
 
 /**
  * The role the account card can show: the one role every workspace gives, or "several" when
@@ -58,12 +36,11 @@ function Avatar({ initial }: { initial: string }) {
 
 /**
  * The owner's card at the foot of the sidebar (Design 1C `.own`), or the avatar in the phone's
- * top bar: the account menu with language, theme, security and signing out (slice 3.5).
+ * top bar: the account menu with Settings (where the language, theme and palette live since
+ * round 3), security and signing out (slice 3.5).
  */
 export function UserMenu({ compact = false }: { compact?: boolean }) {
   const { t } = useLingui();
-  const { locale, setLocale } = useLocale();
-  const { theme, setTheme } = useTheme();
   const router = useRouter();
   const signOut = useSignOut();
   const me = useQuery(meQuery(useApi()));
@@ -84,7 +61,7 @@ export function UserMenu({ compact = false }: { compact?: boolean }) {
       ) : null}
       <MenuTrigger>
         <Button
-          aria-label={t`Account and preferences`}
+          aria-label={t`Account`}
           className={cx(
             "flex cursor-default items-center gap-3 rounded-[24px] text-start whitespace-nowrap text-primary outline-none",
             "transition-[background-color,scale] duration-[var(--motion-duration-fast)] ease-standard data-[hovered]:bg-hover data-[pressed]:scale-[0.98]",
@@ -119,44 +96,6 @@ export function UserMenu({ compact = false }: { compact?: boolean }) {
           className="w-[220px] rounded-card border border-line bg-menu p-2 text-primary shadow-popover outline-none backdrop-blur-[22px] data-[entering]:animate-pop-in"
         >
           <Menu className="outline-none">
-            <MenuSection
-              selectionMode="single"
-              selectedKeys={[locale]}
-              onSelectionChange={(keys) => {
-                const next = selected(keys);
-                if (next === "en" || next === "he") setLocale(next satisfies Locale);
-              }}
-            >
-              <Header className={SECTION_HEADER}>{t`Language`}</Header>
-              <MenuItem id="en" className={ITEM} textValue="English">
-                <span lang="en">English</span>
-              </MenuItem>
-              <MenuItem id="he" className={ITEM} textValue="עברית">
-                <span lang="he">עברית</span>
-              </MenuItem>
-            </MenuSection>
-            <Separator className="my-1 h-px bg-line" />
-            <MenuSection
-              selectionMode="single"
-              selectedKeys={[theme]}
-              onSelectionChange={(keys) => {
-                const next = selected(keys);
-                if (next === "system" || next === "light" || next === "dark")
-                  setTheme(next satisfies ThemePreference);
-              }}
-            >
-              <Header className={SECTION_HEADER}>{t`Theme`}</Header>
-              <MenuItem id="system" className={ITEM}>
-                {t`Match the system`}
-              </MenuItem>
-              <MenuItem id="light" className={ITEM}>
-                {t`Light`}
-              </MenuItem>
-              <MenuItem id="dark" className={ITEM}>
-                {t`Dark`}
-              </MenuItem>
-            </MenuSection>
-            <Separator className="my-1 h-px bg-line" />
             <MenuItem className={ITEM} onAction={() => void router.navigate({ to: "/settings" })}>
               {t`Settings`}
             </MenuItem>
@@ -166,6 +105,7 @@ export function UserMenu({ compact = false }: { compact?: boolean }) {
             >
               {t`Security`}
             </MenuItem>
+            <Separator className="my-1 h-px bg-line" />
             <MenuItem
               className={ITEM}
               onAction={() => {

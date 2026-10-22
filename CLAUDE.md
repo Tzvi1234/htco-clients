@@ -69,7 +69,7 @@ The web app exists (`apps/web`, slice 3.3 part 1). Each command is created by th
 1. No business rules in clients; the server decides.
 2. Generated API clients only; contract changes start in `htco-platform`.
 3. Tokens only; logical (start/end) layout; Hebrew and English for every string.
-4. Design 1C ([client ADR-0008](docs/adr/0008-design-1c.md)): panels on a gray ground, ink for what is current, one accent (orange, or lilac in Design 4); the palette, theme and tweaks are one shared preference (`data-pal`, `data-theme`, `data-t1`…`data-t3` on `<html>`).
+4. Design 1C ([client ADR-0008](docs/adr/0008-design-1c.md)): panels on a gray ground, ink for what is current, orange as the one accent and the tertiary colour in both palettes; the theme, palette (Gray or Cream) and language are the three personal settings, one shared preference set in Settings only (`data-theme`, `data-pal` on `<html>`; round 3, [ADR-0009](docs/adr/0009-clarity-round-3.md)). The navigation and the top bar are always frosted glass (`data-glass`).
 5. Every screen has loading, empty, error, stale, offline and no-permission states; never claim unconfirmed success.
 6. Web keeps no tokens in JavaScript; native apps keep tokens only in platform-secure storage.
 7. WCAG 2.2 AA; keyboard and screen-reader paths for every action.

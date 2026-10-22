@@ -20,8 +20,10 @@ import { ToastProvider } from "../../shared/ui/Toast.tsx";
  * The frame around every signed-in screen (Design 1C, client ADR-0008). From 640 px: the
  * floating sidebar (and its flyout when collapsed) beside a column of the top bar and the
  * screen. A screen is one panel by default; one whose route says `layout: "panels"` lays out
- * its own panels (DemoScreen and the Design 1C screens). Phones: the top bar, the screen, and
- * a floating tab bar.
+ * its own panels (DemoScreen and the Design 1C screens). By default a wide screen fills the
+ * window's height; one whose route says `scroll: "page"` scrolls as one page instead, under a
+ * sticky glass top bar beside a sticky sidebar, so none of its panels scrolls on its own
+ * (round 3). Phones: the top bar, the screen, and a floating tab bar.
  */
 export function AppShell() {
   return (
@@ -40,6 +42,11 @@ function Frame() {
   const panels = useMatches({
     select: (matches) => matches.some((match) => match.staticData.layout === "panels"),
   });
+  const pageScroll = useMatches({
+    select: (matches) => matches.some((match) => match.staticData.scroll === "page"),
+  });
+  // Phones always scroll the page; wide screens when the route asks.
+  const flowing = phone || pageScroll;
 
   const screen = (
     <TopBarSlotContext value={titleSlot}>
@@ -60,7 +67,7 @@ function Frame() {
   );
 
   return (
-    <div className={cx("flex", phone ? "min-h-dvh flex-col" : "h-dvh")}>
+    <div className={cx("flex", phone ? "min-h-dvh flex-col" : flowing ? "min-h-dvh" : "h-dvh")}>
       {/* Keyboard users skip the navigation; the link shows only while it has focus. */}
       <a
         href="#main"
@@ -74,13 +81,13 @@ function Frame() {
         <Trans>Skip to content</Trans>
       </a>
       {phone ? null : (
-        <div className="flex min-h-0">
+        <div className={cx("flex min-h-0", flowing && "sticky top-0 h-dvh self-start")}>
           <Sidebar />
           <Flyout />
         </div>
       )}
-      <div className={cx("flex min-w-0 grow flex-col", !phone && "h-dvh")}>
-        <TopBar titleSlot={setTitleSlot} phone={phone} />
+      <div className={cx("flex min-w-0 grow flex-col", !flowing && "h-dvh")}>
+        <TopBar titleSlot={setTitleSlot} phone={phone} pageScroll={pageScroll} />
         {online ? null : (
           <div className="px-2 pb-2">
             <Banner>
@@ -91,6 +98,8 @@ function Frame() {
         <main
           id="main"
           tabIndex={-1}
+          // Its own snapshot in screen-to-screen transitions (styles.css).
+          data-vt="screen"
           className={cx(
             "flex min-h-0 grow flex-col gap-2 px-2 outline-none",
             phone ? "pb-24" : "pb-2",

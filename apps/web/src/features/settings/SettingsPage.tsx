@@ -2,8 +2,8 @@ import { Trans, useLingui } from "@lingui/react/macro";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
-import { Button as AriaButton } from "react-aria-components";
 
+import { AppearanceChoices } from "./AppearanceChoices.tsx";
 import {
   integrationsQuery,
   meQuery,
@@ -12,78 +12,104 @@ import {
   shopsQuery,
   useApi,
 } from "../../shared/api/api.tsx";
-import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
-import { useTweaks } from "../../shared/theme/ThemeProvider.tsx";
-import { levelsApply, type Level, type Palette } from "../../shared/theme/tweaks.ts";
-import type { ThemePreference } from "../../shared/theme/theme.ts";
+import { cx } from "../../shared/lib/cx.ts";
 import { ArrowEndIcon } from "../../shared/ui/icons.tsx";
 import { PageHeader } from "../../shared/ui/PageHeader.tsx";
 import { Panel, PanelBody, PanelHeader } from "../../shared/ui/Panel.tsx";
-import { LevelDots, Segmented } from "../../shared/ui/Segmented.tsx";
-import { cx } from "../../shared/lib/cx.ts";
 import {
   Avatar,
   DemoPart,
   DemoTag,
   ListRow,
-  PillSelect,
   PillValue,
-  Screen,
   Sep,
   ShieldGlyph,
-  Stack,
   Status,
   Toggle,
 } from "../../shared/ui/kit/index.ts";
 
+/** Sections enter one after another, 40 ms apart; nothing moves under reduced motion. */
+const ENTER =
+  "[&>*]:motion-safe:animate-enter [&>*:nth-child(2)]:[animation-delay:40ms] [&>*:nth-child(3)]:[animation-delay:80ms]";
+
 /**
- * Settings (FR-ADM-01), the Design 1C screen (`P.settings`): the interface language, the design
- * tweaks (one preference with the top bar's tweaks panel), access and security, and the planned
- * business settings, notifications and connections as demos.
+ * Settings (FR-ADM-01), redesigned in round 3 for calm: one page that scrolls as a whole (no
+ * panel scrolls on its own), in three clear groups.
+ *
+ * 1. Appearance and language: the three personal settings (theme, palette, language), on this
+ *    device and shared with the landing page. They are the only personalisation; the top bar
+ *    no longer carries any.
+ * 2. Access and connections: Members & access and Security (each a page of its own), and the
+ *    real Etsy connection beside the planned suppliers, alerts and files.
+ * 3. Coming later: the business details and notifications, dimmed and tagged as demos.
  */
 export function SettingsPage() {
   const { t } = useLingui();
   return (
     <>
       <PageHeader title={t`Settings`} />
-      <Screen layout="lc3">
-        <Stack className="lg:grid-rows-[minmax(0,1.15fr)_minmax(0,1fr)]">
-          <GeneralPanel />
-          <AccessPanel />
-        </Stack>
+      <div className={cx("flex flex-col gap-2", ENTER)}>
         <AppearancePanel />
-        <Stack>
-          <NotificationsPanel />
+        <div className="grid gap-2 md:grid-cols-2">
+          <AccessPanel />
           <ConnectionsPanel />
-        </Stack>
-      </Screen>
+        </div>
+        <LaterSection />
+      </div>
     </>
   );
 }
 
-function GeneralPanel() {
+/** The three personal settings, in one panel at the top. */
+function AppearancePanel() {
   const { t } = useLingui();
-  const { locale, setLocale } = useLocale();
   return (
-    <Panel label={t`General`}>
-      <PanelHeader title={<Trans>General</Trans>} />
-      <PanelBody className="gap-4">
-        <PillSelect
-          label={t`Interface language`}
-          value={locale}
-          onChange={setLocale}
-          options={[
-            { id: "he", label: "עברית", lang: "he", textValue: "עברית" },
-            { id: "en", label: "English", lang: "en", textValue: "English" },
-          ]}
-        />
-        <DemoPart contentClassName="flex flex-col gap-4" tag="edge">
-          <PillValue label={t`Business name`} value={<span className="ltr">HT Commerce</span>} />
-          <PillValue label={t`Time zone`} value={<span className="ltr">Asia/Jerusalem</span>} />
-          <PillValue label={t`Currency`} value={<span className="ltr">USD $</span>} />
-        </DemoPart>
+    <Panel label={t`Appearance and language`}>
+      <PanelHeader
+        title={<Trans>Appearance and language</Trans>}
+        meta={<Trans>On this device</Trans>}
+      />
+      <PanelBody className="pt-1">
+        <AppearanceChoices />
       </PanelBody>
     </Panel>
+  );
+}
+
+/** The planned settings, together and clearly apart from the real ones. */
+function LaterSection() {
+  const { t } = useLingui();
+  return (
+    <section aria-labelledby="settings-later" className="flex flex-col gap-3 pt-6">
+      {/* A section heading on the ground, on the panels' own text line (their 24 px gutter). */}
+      <div className="flex items-baseline gap-2.5 px-6">
+        <h2 id="settings-later" className="m-0 text-title-sm font-light text-primary">
+          <Trans>Coming later</Trans>
+        </h2>
+        <p className="m-0 text-caption text-secondary">
+          <Trans>Planned settings, shown as demos.</Trans>
+        </p>
+      </div>
+      <div className="grid gap-2 md:grid-cols-2">
+        <Panel label={t`Business details`}>
+          <PanelHeader
+            title={<Trans>Business details</Trans>}
+            actions={<DemoTag className="me-4" />}
+          />
+          <PanelBody className="pt-0">
+            <DemoPart contentClassName="flex flex-col gap-4" tag={false}>
+              <PillValue
+                label={t`Business name`}
+                value={<span className="ltr">HT Commerce</span>}
+              />
+              <PillValue label={t`Time zone`} value={<span className="ltr">Asia/Jerusalem</span>} />
+              <PillValue label={t`Currency`} value={<span className="ltr">USD $</span>} />
+            </DemoPart>
+          </PanelBody>
+        </Panel>
+        <NotificationsPanel />
+      </div>
+    </section>
   );
 }
 
@@ -174,131 +200,6 @@ function AccessPanel() {
   );
 }
 
-/** A setting row in the demo's list language: title and caption, the control at the end. */
-function SettingRow({
-  title,
-  caption,
-  disabled = false,
-  wide = false,
-  children,
-}: {
-  title: string;
-  caption: string;
-  disabled?: boolean;
-  wide?: boolean;
-  children: ReactNode;
-}) {
-  return (
-    <div
-      className={cx(
-        "flex gap-3 py-4 transition-opacity duration-[var(--motion-duration-fast)] [&+&]:border-t [&+&]:border-line",
-        wide ? "flex-col" : "items-center justify-between",
-        disabled && "opacity-45",
-      )}
-    >
-      <div className="min-w-0">
-        <div className="text-body">{title}</div>
-        <div className="text-caption text-secondary">{caption}</div>
-      </div>
-      {children}
-    </div>
-  );
-}
-
-/**
- * The design tweaks as a settings panel: the same preference as the top bar's tweaks panel, so
- * a change in either shows in both.
- */
-function AppearancePanel() {
-  const { t } = useLingui();
-  const { tweaks, setTweak, resetTweaks } = useTweaks();
-  const levels: Record<Level, string> = { 1: t`Normal`, 2: t`Different`, 3: t`Very different` };
-  const levelOptions = ([1, 2, 3] as const).map((level) => ({
-    id: String(level) as `${Level}`,
-    label: levels[level],
-    content: <LevelDots level={level} />,
-  }));
-  const palettes: Record<Palette, { short: string; caption: string }> = {
-    sbb: { short: "SBB", caption: t`Gray and orange` },
-    d4: { short: t`Design 4`, caption: t`Cream, lilac, orchid and lemon` },
-    plain: { short: t`Plain ground`, caption: t`Gray, with no blooms behind the glass` },
-  };
-  const themes: Record<ThemePreference, string> = {
-    system: t`Match the system`,
-    light: t`Light`,
-    dark: t`Dark`,
-  };
-  const fixed = !levelsApply(tweaks.palette);
-  const level = (name: "contrast" | "glass" | "borders", title: string, disabled = false) => (
-    <SettingRow title={title} caption={levels[tweaks[name]]} disabled={disabled}>
-      <Segmented
-        size="sm"
-        label={title}
-        value={String(tweaks[name]) as `${Level}`}
-        onChange={(value) => {
-          setTweak(name, Number(value) as Level);
-        }}
-        options={levelOptions}
-        isDisabled={disabled}
-      />
-    </SettingRow>
-  );
-  return (
-    <Panel label={t`Appearance`}>
-      <PanelHeader
-        title={<Trans>Appearance</Trans>}
-        meta={<Trans>On this device</Trans>}
-        actions={
-          <AriaButton
-            onPress={resetTweaks}
-            className="-my-1 me-4 cursor-default rounded-pill px-1.5 py-1 text-caption text-muted underline underline-offset-[3px] outline-none data-[hovered]:text-primary data-[focus-visible]:outline-2 data-[focus-visible]:outline-focus"
-          >
-            {t`Reset`}
-          </AriaButton>
-        }
-      />
-      <PanelBody className="pt-0">
-        <SettingRow title={t`Theme`} caption={t`Light, dark, or as the device is set`} wide>
-          <Segmented
-            label={t`Theme`}
-            value={tweaks.theme}
-            onChange={(value) => {
-              setTweak("theme", value);
-            }}
-            options={(["system", "light", "dark"] as const).map((id) => ({
-              id,
-              label: themes[id],
-            }))}
-            className="h-10 w-full [&>*]:h-8 [&>*]:flex-1"
-          />
-        </SettingRow>
-        <SettingRow title={t`Palette and ground`} caption={palettes[tweaks.palette].caption} wide>
-          <Segmented
-            label={t`Palette and ground`}
-            value={tweaks.palette}
-            onChange={(value) => {
-              setTweak("palette", value);
-            }}
-            options={(["sbb", "d4", "plain"] as const).map((id) => ({
-              id,
-              label: palettes[id].short,
-            }))}
-            className="h-10 w-full [&>*]:h-8 [&>*]:flex-1"
-          />
-        </SettingRow>
-        {level("contrast", t`Element vs. ground contrast`, fixed)}
-        {level("glass", t`Frosted glass`)}
-        {level("borders", t`Element borders`, fixed)}
-        {fixed ? (
-          <p className="m-0 animate-enter pt-1 text-caption font-light text-muted">
-            {t`With the Design 4 palette, contrast and borders come from the palette; glass still applies.`}
-          </p>
-        ) : null}
-      </PanelBody>
-    </Panel>
-  );
-}
-
 /** Alerts by Telegram and email: planned (Phase 5), so a demo. */
 function NotificationsPanel() {
   const { t } = useLingui();
@@ -308,7 +209,7 @@ function NotificationsPanel() {
     [t`Daily summary`, t`Every morning at 08:00`, false],
   ] as const;
   return (
-    <Panel label={t`Notifications`} className="max-sm:hidden">
+    <Panel label={t`Notifications`}>
       <PanelHeader title={<Trans>Notifications</Trans>} actions={<DemoTag className="me-4" />} />
       <PanelBody className="pt-0">
         <DemoPart tag={false}>

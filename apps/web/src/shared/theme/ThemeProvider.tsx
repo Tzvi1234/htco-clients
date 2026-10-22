@@ -11,7 +11,6 @@ import {
 import type { ThemePreference } from "./theme.ts";
 import {
   applyTweaks,
-  DEFAULT_TWEAKS,
   readTweaks,
   REDUCED_TRANSPARENCY_QUERY,
   TWEAK_STORAGE_KEYS,
@@ -20,12 +19,11 @@ import {
   type Tweaks,
 } from "./tweaks.ts";
 import type { SettingsStorage } from "../lib/storage.ts";
+import { useMediaQuery } from "../lib/useMediaQuery.ts";
 
 interface TweaksState {
   tweaks: Tweaks;
   setTweak: <Name extends TweakName>(name: Name, value: Tweaks[Name]) => void;
-  /** Back to the defaults, keeping the theme (it has its own control in Settings). */
-  resetTweaks: () => void;
 }
 
 const TweaksContext = createContext<TweaksState | null>(null);
@@ -40,7 +38,7 @@ interface TweaksProviderProps {
 const STORAGE_KEYS = new Set(Object.values(TWEAK_STORAGE_KEYS));
 
 /**
- * The design tweaks and the theme, one preference for every interface on this origin
+ * The appearance (theme and palette), one preference for every interface on this origin
  * (client ADR-0008): applied to the document root, remembered, and followed when another tab of
  * the app or the landing page changes them.
  */
@@ -75,17 +73,6 @@ export function TweaksProvider({
     [root, storage],
   );
 
-  const resetTweaks = useCallback(() => {
-    setTweaks((current) => {
-      const next = { ...DEFAULT_TWEAKS, theme: current.theme };
-      for (const name of ["palette", "contrast", "glass", "borders"] as const) {
-        writeTweak(storage, name, next[name]);
-      }
-      applyTweaks(next, root);
-      return next;
-    });
-  }, [root, storage]);
-
   // Another tab on this origin (the app or the landing page) changed a tweak.
   useEffect(() => {
     const onStorage = (event: StorageEvent) => {
@@ -97,7 +84,7 @@ export function TweaksProvider({
     };
   }, [storage, update]);
 
-  // The device's "reduce transparency" changed while the app is open: glass follows at once.
+  // The device's "reduce transparency" changed while the app is open: the glass follows at once.
   useEffect(() => {
     if (typeof window.matchMedia !== "function") return undefined;
     const list = window.matchMedia(REDUCED_TRANSPARENCY_QUERY);
@@ -110,7 +97,7 @@ export function TweaksProvider({
     };
   }, [root, tweaks]);
 
-  const state = useMemo(() => ({ tweaks, setTweak, resetTweaks }), [tweaks, setTweak, resetTweaks]);
+  const state = useMemo(() => ({ tweaks, setTweak }), [tweaks, setTweak]);
   return <TweaksContext value={state}>{children}</TweaksContext>;
 }
 
@@ -130,4 +117,11 @@ export function useTheme(): { theme: ThemePreference; setTheme: (theme: ThemePre
     [setTweak],
   );
   return { theme: tweaks.theme, setTheme };
+}
+
+export const DARK_SCHEME_QUERY = "(prefers-color-scheme: dark)";
+
+/** The device's own theme now, following it live (what "System" shows while it is chosen). */
+export function useSystemTheme(): "light" | "dark" {
+  return useMediaQuery(DARK_SCHEME_QUERY) ? "dark" : "light";
 }
