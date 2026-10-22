@@ -262,10 +262,23 @@ export function SubTabs<K extends string>({
       setMark({ start, width: tab.offsetWidth });
     };
     measure();
-    if (typeof ResizeObserver === "undefined") return;
+    // The capsule follows its tab's own size too: a web font that arrives late widens the label
+    // while the list keeps its width (a stretched list on phones).
+    let live = true;
+    // Test environments may have no font loading at all.
+    if ("fonts" in document)
+      void document.fonts.ready.then(() => {
+        if (live) measure();
+      });
+    if (typeof ResizeObserver === "undefined")
+      return () => {
+        live = false;
+      };
     const observer = new ResizeObserver(measure);
     observer.observe(element);
+    for (const tab of element.children) observer.observe(tab);
     return () => {
+      live = false;
       observer.disconnect();
     };
   }, [index, rtl, tabs.length, locale]);
