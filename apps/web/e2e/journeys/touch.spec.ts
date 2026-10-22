@@ -50,7 +50,6 @@ test("every control on a touch screen has a 44 px target that covers no other (r
           top = Math.min(top, box.top + px(layer.top));
           bottom = Math.max(bottom, box.bottom - px(layer.bottom));
         }
-        const size = { width: right - left, height: bottom - top };
         // A layer is cut off where a scrolling ancestor clips it; taps there never reach it.
         for (let node = element.parentElement; node !== null; node = node.parentElement) {
           const style = getComputedStyle(node);
@@ -68,11 +67,21 @@ test("every control on a touch screen has a 44 px target that covers no other (r
           top: Math.max(box.top, top),
           bottom: Math.min(box.bottom, bottom),
         };
+        // The target that can really be tapped, after clipping. A control that is itself partly
+        // scrolled out of its container is measured when it is scrolled into view, not here.
+        const whole =
+          own.left === box.left &&
+          own.right === box.right &&
+          own.top === box.top &&
+          own.bottom === box.bottom;
+        const size = whole ? { width: right - left, height: bottom - top } : undefined;
         return { element, box: own, size, left, right, top, bottom };
       });
-      const small = targets
-        .filter((t) => t.size.width < 43.5 || t.size.height < 43.5)
-        .map((t) => `${name(t.element)} (${String(t.size.width)}×${String(t.size.height)})`);
+      const small = targets.flatMap(({ element, size }) =>
+        size !== undefined && (size.width < 43.5 || size.height < 43.5)
+          ? [`${name(element)} (${String(size.width)}×${String(size.height)})`]
+          : [],
+      );
       // A target never covers another control, or a tap meant for it lands on its neighbour.
       // (The floating tab bar lies over the scrolling page by design; it is left out.)
       const floating = (element: Element) => {
