@@ -18,7 +18,7 @@ if (container === null) throw new Error("index.html has no #root element");
 const storage = deviceStorage();
 
 // Development only: `?demo` (signed in), `?demo=shops` (signed in, with shops in each connection
-// state), `?demo=mfa` (the authenticator code step), `?demo=no-workspace` or `?demo=signed-out` runs the app on the in-memory API used by the tests, to review
+// state), `?demo=mfa` (the authenticator code step), `?demo=history` (orders all older than 30 days), `?demo=no-workspace` or `?demo=signed-out` runs the app on the in-memory API used by the tests, to review
 // screens without a local API. Connecting a shop asks for the code 123456 and comes straight back
 // to the Etsy callback. Production builds drop this branch.
 const demo = import.meta.env.DEV ? new URLSearchParams(window.location.search).get("demo") : null;
@@ -37,7 +37,9 @@ const api =
           enrolled: true,
           assurance: "aal2",
           authorizationUrl: `/integrations/etsy/callback?code=demo-code&state=demo-state&demo=${demo}`,
-          ...(demo === "shops" ? demoShops() : {}),
+          ...(demo === "shops" || demo === "history" ? demoShops() : {}),
+          // `?demo=history`: every order is older than 30 days (the owner's live shop).
+          ...(demo === "history" ? { liveTrouble: "history" as const } : {}),
         }).client;
       })();
 

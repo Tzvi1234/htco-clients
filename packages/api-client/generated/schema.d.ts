@@ -524,9 +524,11 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * The shop's orders of the last 30 days, live from the marketplace
-         * @description Newest first. Buyer display names and tracking numbers only for Owner, Admin,
-         *     Operations and Support; never cached by the browser.
+         * The shop's orders of a period, live from the marketplace
+         * @description Newest first, every state (completed and shipped included). `period`: `30d` (the
+         *     default), `90d`, `12m` or `all`; up to `cap` orders a period (500, 1,000, 2,000, 2,000).
+         *     Buyer display names and tracking numbers only for Owner, Admin, Operations and Support;
+         *     never cached by the browser.
          */
         get: operations["list_shop_orders"];
         put?: never;
@@ -598,6 +600,29 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/shops/{shop_id}/stats": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The shop's statistics since it opened, live from the marketplace
+         * @description Every role that sees the shop: Etsy's counts (opened, total sales, reviews,
+         *     favourites, listings) and the aggregates of the order history read (up to 2,000 orders;
+         *     `partial` says the cap was hit), with months at `utc_offset_minutes` from UTC. No buyer
+         *     data.
+         */
+        get: operations["get_shop_stats"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/shops/etsy/connect": {
         parameters: {
             query?: never;
@@ -631,6 +656,30 @@ export interface components {
             password: string;
             /** Refresh Token */
             refresh_token: string;
+        };
+        /** AllTimeSalesView */
+        AllTimeSalesView: {
+            average_order_value: components["schemas"]["MoneyView"] | null;
+            best_month: components["schemas"]["MonthlySalesView"] | null;
+            /** Countries */
+            countries: components["schemas"]["CountryOrdersView"][];
+            /** Currency */
+            currency: string;
+            /** First Order At */
+            first_order_at: string | null;
+            /** Monthly */
+            monthly: components["schemas"]["MonthlySalesView"][];
+            /** Orders */
+            orders: number;
+            /** Partial */
+            partial: boolean;
+            /** Receipts Read */
+            receipts_read: number;
+            revenue: components["schemas"]["MoneyView"];
+            /** Top Products */
+            top_products: components["schemas"]["TopListingView"][];
+            /** Units */
+            units: number;
         };
         /** AssuranceView */
         AssuranceView: {
@@ -680,6 +729,13 @@ export interface components {
             /** Reconnected */
             reconnected: boolean;
             shop: components["schemas"]["ShopView"];
+        };
+        /** CountryOrdersView */
+        CountryOrdersView: {
+            /** Country */
+            country: string;
+            /** Orders */
+            orders: number;
         };
         /** DailySalesView */
         DailySalesView: {
@@ -989,6 +1045,18 @@ export interface components {
             /** Currency */
             currency: string;
         };
+        /** MonthlySalesView */
+        MonthlySalesView: {
+            /**
+             * Month
+             * Format: date
+             */
+            month: string;
+            /** Orders */
+            orders: number;
+            /** Revenue */
+            revenue: string;
+        };
         /** NotReadyProblem */
         NotReadyProblem: {
             /** Checks */
@@ -1042,6 +1110,13 @@ export interface components {
             unit_price: components["schemas"]["MoneyView"];
         };
         /**
+         * OrderPeriod
+         * @description The Orders screen's periods. The longer ones read Etsy page by page, one page after the
+         *     other, up to a cap (`RECEIPT_CAPS`).
+         * @enum {string}
+         */
+        OrderPeriod: "30d" | "90d" | "12m" | "all";
+        /**
          * OrderState
          * @enum {string}
          */
@@ -1050,6 +1125,8 @@ export interface components {
         OrdersView: {
             /** Buyer Details */
             buyer_details: boolean;
+            /** Cap */
+            cap: number;
             counts: components["schemas"]["OrderCountsView"];
             /**
              * Fetched At
@@ -1060,6 +1137,7 @@ export interface components {
             items: components["schemas"]["OrderView"][];
             /** Partial */
             partial: boolean;
+            period: components["schemas"]["OrderPeriod"];
             /**
              * Shop Id
              * Format: uuid
@@ -1411,6 +1489,24 @@ export interface components {
             title: string | null;
             /** Url */
             url: string | null;
+        };
+        /** ShopStatsView */
+        ShopStatsView: {
+            /**
+             * Fetched At
+             * Format: date-time
+             */
+            fetched_at: string;
+            profile: components["schemas"]["ShopProfileView"];
+            sales: components["schemas"]["AllTimeSalesView"] | null;
+            /**
+             * Shop Id
+             * Format: uuid
+             */
+            shop_id: string;
+            source: components["schemas"]["DataSource"];
+            /** Stale */
+            stale: boolean;
         };
         /** ShopView */
         ShopView: {
@@ -3848,6 +3944,7 @@ export interface operations {
             query?: {
                 limit?: number;
                 offset?: number;
+                period?: components["schemas"]["OrderPeriod"];
                 state?: components["schemas"]["OrderFilter"] | null;
             };
             header?: never;
@@ -4172,6 +4269,109 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ShippingView"];
+                };
+            };
+            /** @description Not signed in, or the access token was rejected */
+            401: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Signed in, but not a member of any organization */
+            403: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description No such shop for the caller (or the caller's role may not see it) */
+            404: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The shop is not connected (shop-not-connected), or the connection lacks the scope (etsy-scope-missing) */
+            409: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Invalid shop ID or query */
+            422: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"];
+                };
+            };
+            /** @description Unexpected error. Quote the request ID when reporting it */
+            500: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Etsy did not answer and nothing recent is cached (etsy-data-unavailable; see Retry-After), or live shop data is not set up (shop-data-unavailable) */
+            503: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    get_shop_stats: {
+        parameters: {
+            query?: {
+                utc_offset_minutes?: number;
+            };
+            header?: never;
+            path: {
+                shop_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ShopStatsView"];
                 };
             };
             /** @description Not signed in, or the access token was rejected */

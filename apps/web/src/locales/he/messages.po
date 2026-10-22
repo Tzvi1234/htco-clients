@@ -11,6 +11,11 @@ msgstr ""
 msgid "(you)"
 msgstr "(את/ה)"
 
+#. placeholder {0}: best.orders
+#: src/features/shops/ShopStats.tsx
+msgid "{0, plural, one {# order} other {# orders}}"
+msgstr "{0, plural, one {הזמנה אחת} two {# הזמנות} other {# הזמנות}}"
+
 #. placeholder {0}: sales.overdue
 #: src/features/overview/OverviewPage.tsx
 msgid "{0, plural, one {One order is late to ship. Start there.} other {# orders are late to ship. Start there.}}"
@@ -20,6 +25,11 @@ msgstr "{0, plural, one {הזמנה אחת מאחרת במשלוח. כדאי ל�
 #: src/features/overview/OverviewPage.tsx
 msgid "{0, plural, one {One order waits to ship; none is late.} other {# orders wait to ship; none is late.}}"
 msgstr "{0, plural, one {הזמנה אחת ממתינה למשלוח, ואף אחת לא מאחרת.} other {# הזמנות ממתינות למשלוח, ואף אחת לא מאחרת.}}"
+
+#. placeholder {0}: count(profile.digital_listing_count)
+#: src/features/shops/ShopStats.tsx
+msgid "{0} digital"
+msgstr "{0} דיגיטליים"
 
 #. placeholder {0}: disconnects.done
 #: src/features/shops/ShopsPage.tsx
@@ -105,6 +115,10 @@ msgstr "{range} ימים"
 msgid "{shopCount} shops"
 msgstr "{shopCount} חנויות"
 
+#: src/features/commerce/OrdersPage.tsx
+msgid "{sold} sales on Etsy since the shop opened, all before this period."
+msgstr "{sold} מכירות ב־Etsy מאז שהחנות נפתחה, כולן לפני התקופה הזו."
+
 #: src/features/commerce/ProductsPage.tsx
 msgid "{soldOut, plural, one {One listing is sold out. Restock it on Etsy so it keeps selling.} other {# listings are sold out. Restock them on Etsy so they keep selling.}}"
 msgstr "{soldOut, plural, one {ליסטינג אחד אזל מהמלאי. חדש את המלאי ב־Etsy כדי שימשיך להימכר.} other {# ליסטינגים אזלו מהמלאי. חדש את המלאי ב־Etsy כדי שימשיכו להימכר.}}"
@@ -116,6 +130,16 @@ msgstr "{value} מתוך 5 כוכבים"
 #: src/features/office/ChatPage.tsx
 msgid "#3152 (Emma R.) and #3160 (Liam K.) — a print delay at the supplier. I suggest a 15% partial refund on #3152, it is 4 days late."
 msgstr "#3152 של Emma R. ו־#3160 של Liam K. — עיכוב בהדפסה אצל הספק. ממליצה על החזר חלקי של 15% ל־#3152, היא באיחור של 4 ימים."
+
+#. placeholder {0}: Number(profile.review_average).toFixed(1)
+#. placeholder {1}: count(profile.review_count)
+#: src/features/shops/ShopStats.tsx
+msgid "<0>{sold}</0> sales on Etsy, rated <1>{0}</1> in <2>{1}</2> reviews."
+msgstr "<0>{sold}</0> מכירות ב־Etsy, דירוג <1>{0}</1> ב־<2>{1}</2> ביקורות."
+
+#: src/features/shops/ShopStats.tsx
+msgid "<0>{sold}</0> sales on Etsy."
+msgstr "<0>{sold}</0> מכירות ב־Etsy."
 
 #: src/features/office/AiOpsPage.tsx
 msgid "$12.40 of $50.00 spent"
@@ -137,6 +161,10 @@ msgstr "מכשיר אחד"
 #: src/features/team/TeamPage.tsx
 msgid "1 shop"
 msgstr "חנות אחת"
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "12 months"
+msgstr "12 חודשים"
 
 #: src/features/office/AiOpsPage.tsx
 msgid "15 employees"
@@ -190,6 +218,10 @@ msgstr "3 משימות"
 msgid "3 running · 1 waiting for you · 1 failed"
 msgstr "3 עובדים · 1 ממתין לך · 1 נכשל"
 
+#: src/features/commerce/OrdersPage.tsx
+msgid "30 days"
+msgstr "30 יום"
+
 #: src/features/admin/AdminDemos.tsx
 msgid "30-day uptime"
 msgstr "זמינות 30 יום"
@@ -210,6 +242,7 @@ msgstr "4 הדמיות למפת כוכבים"
 msgid "7 departments · 3 service"
 msgstr "7 מחלקות · 3 מחלקות שירות"
 
+#: src/features/commerce/OrdersPage.tsx
 #: src/features/team/TeamPage.tsx
 msgid "90 days"
 msgstr "90 יום"
@@ -388,6 +421,14 @@ msgstr "כל החנויות"
 msgid "All states"
 msgstr "כל הסטטוסים"
 
+#: src/features/commerce/OrdersPage.tsx
+msgid "all time"
+msgstr "בכל הזמנים"
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "All time"
+msgstr "כל הזמן"
+
 #: src/features/office/EngineeringPage.tsx
 #: src/features/office/TeamRoomPage.tsx
 #: src/shared/demo/office.ts
@@ -565,6 +606,7 @@ msgid "Autonomy:"
 msgstr "אוטונומיה:"
 
 #: src/features/commerce/OrdersPage.tsx
+#: src/features/shops/ShopStats.tsx
 msgid "Average order"
 msgstr "ממוצע להזמנה"
 
@@ -607,6 +649,16 @@ msgstr "חזרה לכניסה"
 msgid "Balances"
 msgstr "יתרות"
 
+#. placeholder {0}: count(sales.receipts_read)
+#. placeholder {1}: date(sales.first_order_at)
+#: src/features/shops/ShopStats.tsx
+msgid "Based on the latest {0} orders, since {1}. Total sales is Etsy's own count; revenue, averages and months come from these orders."
+msgstr "על סמך {0} ההזמנות האחרונות, מאז {1}. סך המכירות הוא הספירה של Etsy עצמה; ההכנסות, הממוצעים והחודשים מחושבים מההזמנות האלה."
+
+#: src/features/shops/ShopStats.tsx
+msgid "Best month"
+msgstr "החודש הטוב ביותר"
+
 #: src/features/shops/Capabilities.tsx
 #: src/shared/ui/kit/status.tsx
 msgid "Blocked"
@@ -636,9 +688,17 @@ msgstr "שם העסק"
 msgid "Buyer addresses"
 msgstr "כתובות קונים"
 
+#: src/features/shops/ShopStats.tsx
+msgid "by revenue"
+msgstr "לפי הכנסות"
+
 #: src/features/finance/FinanceDemos.tsx
 msgid "By shop"
 msgstr "חלוקה לפי חנות"
+
+#: src/features/shops/ShopStats.tsx
+msgid "by units sold"
+msgstr "לפי יחידות שנמכרו"
 
 #: src/features/office/AiOpsPage.tsx
 msgid "Calls"
@@ -1014,6 +1074,10 @@ msgstr "לא ניתן היה לבדוק הפעם. כדאי לבדוק שוב מ�
 #: src/features/customers/CustomersDemos.tsx
 msgid "Country"
 msgstr "מדינה"
+
+#: src/features/shops/ShopStats.tsx
+msgid "country only"
+msgstr "מדינה בלבד"
 
 #: src/features/settings/AppearanceChoices.tsx
 msgid "Cream"
@@ -1395,6 +1459,10 @@ msgstr "Etsy לא מאפשרת לאפליקציות לבטל את הגישה ש�
 msgid "Etsy fees"
 msgstr "עמלות Etsy"
 
+#: src/features/shops/ShopStats.tsx
+msgid "Etsy gave no destination countries for these orders."
+msgstr "Etsy לא מסרה מדינות יעד להזמנות האלה."
+
 #: src/features/shops/Capabilities.tsx
 msgid "Etsy hides buyer addresses for this shop. Your fulfillment partner gets them from Etsy; HTCO does not need them."
 msgstr "Etsy מסתירה את כתובות הקונים בחנות הזו. שותף המשלוחים מקבל אותן מ־Etsy, ו־HTCO לא צריכה אותן."
@@ -1430,6 +1498,10 @@ msgstr "Etsy:"
 #: src/features/office/TeamRoomPage.tsx
 msgid "etsy.order_intake flagged 2 late orders"
 msgstr "etsy.order_intake סימן 2 הזמנות באיחור"
+
+#: src/features/shops/ShopStats.tsx
+msgid "Etsy's count"
+msgstr "הספירה של Etsy"
 
 #: src/features/shops/connectEtsy.tsx
 msgid "Etsy's sign-in address looked wrong, so it was not opened. Try again shortly."
@@ -1516,6 +1588,7 @@ msgstr "מועדפים"
 
 #: src/features/commerce/ProductsPage.tsx
 #: src/features/shops/ShopCard.tsx
+#: src/features/shops/ShopStats.tsx
 msgid "Favourites"
 msgstr "מועדפים"
 
@@ -1695,6 +1768,10 @@ msgstr "ברוטו"
 #: src/features/finance/FinanceDemos.tsx
 msgid "Gross profit"
 msgstr "רווח גולמי"
+
+#: src/features/shops/ShopStats.tsx
+msgid "gross, before Etsy's fees"
+msgstr "ברוטו, לפני עמלות Etsy"
 
 #: src/features/finance/FinanceDemos.tsx
 msgid "Growth"
@@ -1930,12 +2007,20 @@ msgid "Languages"
 msgstr "שפות"
 
 #: src/features/commerce/OrdersPage.tsx
+msgid "Last 12 months"
+msgstr "12 החודשים האחרונים"
+
+#: src/features/commerce/OrdersPage.tsx
 msgid "Last 30 days"
 msgstr "30 הימים האחרונים"
 
 #: src/features/admin/AdminDemos.tsx
 msgid "Last 30 runs"
 msgstr "30 ריצות אחרונות"
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "Last 90 days"
+msgstr "90 הימים האחרונים"
 
 #. placeholder {0}: seen.format(new Date(session.last_seen_at))
 #: src/features/security/SecurityPage.tsx
@@ -2044,6 +2129,7 @@ msgid "Listing:"
 msgstr "מוצר"
 
 #: src/features/shops/Capabilities.tsx
+#: src/features/shops/ShopStats.tsx
 msgid "Listings"
 msgstr "מוצרים"
 
@@ -2100,6 +2186,10 @@ msgstr "טוען פרופילי משלוח"
 #: src/features/shops/ShopsPage.tsx
 msgid "Loading shops"
 msgstr "טוענים חנויות"
+
+#: src/features/shops/ShopStats.tsx
+msgid "Loading statistics"
+msgstr "טוען סטטיסטיקה"
 
 #: src/features/shops/ShopCard.tsx
 msgid "Loading the shop's numbers"
@@ -2340,6 +2430,11 @@ msgstr "משימה חדשה"
 msgid "New this month"
 msgstr "חדשים החודש"
 
+#. placeholder {0}: count(all.data.items.length)
+#: src/features/commerce/OrdersPage.tsx
+msgid "newest {0} orders, before Etsy's fees"
+msgstr "{0} ההזמנות האחרונות, לפני עמלות Etsy"
+
 #: src/features/customers/CustomersPage.tsx
 msgid "Newest first"
 msgstr "החדשות קודם"
@@ -2397,13 +2492,31 @@ msgstr "אף חיבור לא צריך אותך. חנות מנותקת נשארת
 msgid "No listing matches this view."
 msgstr "אין ליסטינג שמתאים לתצוגה הזו."
 
+#: src/features/shops/ShopStats.tsx
+msgid "No month with sales yet."
+msgstr "עדיין אין חודש עם מכירות."
+
+#. placeholder {0}: periods[period].within
 #: src/features/commerce/OrdersPage.tsx
-msgid "No orders in the last 30 days."
-msgstr "אין הזמנות ב־30 הימים האחרונים."
+msgid "No orders in {0}: the shop's orders are older. Choose a longer period to see them."
+msgstr "אין הזמנות {0}: הזמנות החנות ישנות יותר. בחרו תקופה ארוכה יותר כדי לראות אותן."
+
+#. placeholder {0}: periods[period].within
+#: src/features/commerce/OrdersPage.tsx
+msgid "No orders in {0}."
+msgstr "אין הזמנות {0}."
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "No orders in {within}"
+msgstr "אין הזמנות {within}"
 
 #: src/features/commerce/OrdersPage.tsx
 msgid "No orders match this filter."
 msgstr "אין הזמנות שמתאימות לסינון הזה."
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "No orders yet."
+msgstr "עדיין אין הזמנות."
 
 #: src/features/commerce/ShippingPage.tsx
 msgid "No return policy on Etsy."
@@ -2652,6 +2765,14 @@ msgstr "רק הבעלים של סביבת העבודה יכולים לנתק ח�
 msgid "Only the workspace owner or an admin can re-check a shop."
 msgstr "רק הבעלים או מנהלים של סביבת העבודה יכולים לבדוק חנות מחדש."
 
+#: src/features/shops/ShopStats.tsx
+msgid "Open for {months, plural, one {# month} other {# months}}, since {since}:"
+msgstr "פתוחה {months, plural, one {חודש אחד} two {חודשיים} other {# חודשים}}, מאז {since}:"
+
+#: src/features/shops/ShopStats.tsx
+msgid "Open for {years, plural, one {# year} other {# years}}, since {since}:"
+msgstr "פתוחה {years, plural, one {שנה אחת} two {שנתיים} other {# שנים}}, מאז {since}:"
+
 #: src/features/office/EngineeringPage.tsx
 msgid "Open incident"
 msgstr "תקלה פתוחה"
@@ -2768,6 +2889,15 @@ msgstr "הזמנות ליום ב־7 הימים האחרונים: {0}"
 msgid "Orders per day, last 7 days"
 msgstr "הזמנות ליום, 7 הימים האחרונים"
 
+#: src/features/shops/ShopStats.tsx
+msgid "Orders per month, last 12 months"
+msgstr "הזמנות בחודש, 12 החודשים האחרונים"
+
+#. placeholder {0}: recent.map((m) => String(m.orders)).join(", ")
+#: src/features/shops/ShopStats.tsx
+msgid "Orders per month, last 12 months: {0}"
+msgstr "הזמנות בחודש, 12 החודשים האחרונים: {0}"
+
 #: src/features/commerce/ShippingPage.tsx
 msgid "Orders to ship"
 msgstr "הזמנות למשלוח"
@@ -2784,6 +2914,11 @@ msgstr "הזמנות, 7 הימים האחרונים"
 #: src/features/shops/ShopCard.tsx
 msgid "Orders, revenue and rating appear here while the shop is connected."
 msgstr "הזמנות, הכנסות ודירוג יופיעו כאן כל עוד החנות מחוברת."
+
+#. placeholder {0}: count(sales.orders)
+#: src/features/shops/ShopStats.tsx
+msgid "over {0} orders"
+msgstr "על פני {0} הזמנות"
 
 #: src/features/admin/AdminDemos.tsx
 msgid "Overall"
@@ -2923,6 +3058,10 @@ msgstr "מי עובד בסביבת העבודה, ולמה יש לו גישה"
 #: src/features/office/AiOpsPage.tsx
 msgid "Per call"
 msgstr "ממוצע לקריאה"
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "Period"
+msgstr "תקופה"
 
 #: src/features/commerce/OrdersPage.tsx
 msgid "Placed"
@@ -3327,6 +3466,7 @@ msgstr "החזרות ושותפים"
 #: src/features/commerce/OrdersPage.tsx
 #: src/features/finance/FinanceDemos.tsx
 #: src/features/overview/OverviewPage.tsx
+#: src/features/shops/ShopStats.tsx
 msgid "Revenue"
 msgstr "הכנסה"
 
@@ -3337,6 +3477,12 @@ msgstr "הכנסה החודש:"
 #: src/features/shops/ShopCard.tsx
 msgid "Revenue today"
 msgstr "הכנסה היום"
+
+#. placeholder {0}: count(sales.receipts_read)
+#. placeholder {1}: date(sales.first_order_at)
+#: src/features/shops/ShopStats.tsx
+msgid "Revenue, averages and months come from all {0} orders since {1}. Total sales is Etsy's own count of items sold."
+msgstr "ההכנסות, הממוצעים והחודשים מחושבים מכל {0} ההזמנות מאז {1}. סך המכירות הוא הספירה של Etsy עצמה לפריטים שנמכרו."
 
 #: src/features/work/demoScreens.tsx
 msgid "Reversible"
@@ -3674,6 +3820,7 @@ msgstr "שון"
 
 #: src/features/commerce/ShopChips.tsx
 #: src/features/finance/FinanceDemos.tsx
+#: src/features/shops/ShopStats.tsx
 msgid "Shop"
 msgstr "חנות"
 
@@ -3700,6 +3847,10 @@ msgstr "נתוני החנויות"
 #: src/features/overview/OverviewPage.tsx
 msgid "Shop settings"
 msgstr "הגדרות חנות"
+
+#: src/features/shops/ShopStats.tsx
+msgid "Shop statistics"
+msgstr "סטטיסטיקת החנות"
 
 #: src/features/overview/OverviewPage.tsx
 #: src/features/shops/ShopCard.tsx
@@ -3736,6 +3887,10 @@ msgstr "חנויות"
 #: src/app/shell/ShopSwitcher.tsx
 msgid "Shops: {name}"
 msgstr "חנויות: {name}"
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "Show all time"
+msgstr "הצג את כל הזמן"
 
 #: src/features/commerce/ProductsPage.tsx
 msgid "Show every listing"
@@ -3784,9 +3939,10 @@ msgid "Showing {0} of {1} listings."
 msgstr "מוצגים {0} מתוך {1} מוצרים."
 
 #. placeholder {0}: count(all.data.items.length)
+#. placeholder {1}: periods[period].within
 #: src/features/commerce/OrdersPage.tsx
-msgid "Showing the newest {0} orders of the last 30 days."
-msgstr "מוצגות {0} ההזמנות החדשות ביותר מ־30 הימים האחרונים."
+msgid "Showing the newest {0} orders of {1}."
+msgstr "מוצגות {0} ההזמנות החדשות ביותר {1}."
 
 #: src/app/shell/Sidebar.tsx
 msgid "Sidebar"
@@ -3831,6 +3987,10 @@ msgstr "הכניסה מבקשת קוד מאפליקציית האימות, כך �
 msgid "Signs you out first"
 msgstr "מנתק אתכם קודם"
 
+#: src/features/shops/ShopStats.tsx
+msgid "Since the shop opened"
+msgstr "מאז שהחנות נפתחה"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "Sixteen AI employees in seven departments, working under your policies."
 msgstr "שישה־עשר עובדי AI בשבע מחלקות, שעובדים לפי המדיניות שלך."
@@ -3842,6 +4002,10 @@ msgstr "דילוג לתוכן"
 #: src/features/finance/FinanceDemos.tsx
 msgid "Software"
 msgstr "תוכנה"
+
+#: src/features/shops/ShopStats.tsx
+msgid "sold"
+msgstr "נמכרו"
 
 #: src/features/commerce/ProductsPage.tsx
 msgid "Sold out"
@@ -3894,6 +4058,14 @@ msgstr "יציב"
 #: src/features/office/FloorPage.tsx
 msgid "Stable performance"
 msgstr "ביצוע יציב"
+
+#: src/features/shops/ShopsPage.tsx
+msgid "Statistics"
+msgstr "סטטיסטיקה"
+
+#: src/features/shops/ShopStats.tsx
+msgid "Statistics appear here once a shop is connected."
+msgstr "הסטטיסטיקה תופיע כאן אחרי שתחובר חנות."
 
 #: src/features/admin/AdminDemos.tsx
 #: src/features/commerce/demoScreens.tsx
@@ -4061,6 +4233,11 @@ msgstr "משרד ה־AI"
 msgid "The app shows a new code every 30 seconds"
 msgstr "האפליקציה מציגה קוד חדש כל 30 שניות"
 
+#. placeholder {0}: count(active)
+#: src/features/shops/ShopStats.tsx
+msgid "The best of <0>{0}</0> months with sales."
+msgstr "הטוב מבין <0>{0}</0> חודשים עם מכירות."
+
 #: src/features/shops/shopActions.tsx
 msgid "The check did not finish. Try again shortly."
 msgstr "הבדיקה לא הסתיימה. אפשר לנסות שוב בעוד רגע."
@@ -4089,6 +4266,18 @@ msgstr "האימייל או הסיסמה שגויים."
 #: src/features/settings/AppearanceChoices.tsx
 msgid "The ground behind your panels."
 msgstr "הרקע שמאחורי הלוחות."
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "the last 12 months"
+msgstr "ב־12 החודשים האחרונים"
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "the last 30 days"
+msgstr "ב־30 הימים האחרונים"
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "the last 90 days"
+msgstr "ב־90 הימים האחרונים"
 
 #: src/features/auth/ForgotPasswordPage.tsx
 msgid "The link works once. Check the spam folder if it does not arrive."
@@ -4146,6 +4335,10 @@ msgstr "הליסטינגים הפעילים של החנות, בזמן אמת מ�
 #: src/features/overview/OverviewPage.tsx
 msgid "The shop's numbers are not available right now."
 msgstr "נתוני החנות אינם זמינים כרגע."
+
+#: src/features/shops/ShopStats.tsx
+msgid "The shop's orders could not be read from Etsy right now, so only Etsy's own counts show."
+msgstr "לא ניתן לקרוא כרגע את הזמנות החנות מ־Etsy, ולכן מוצגות רק הספירות של Etsy עצמה."
 
 #: src/features/commerce/OrdersPage.tsx
 msgid "The shop's orders, live from Etsy."
@@ -4382,10 +4575,18 @@ msgstr "קריאת כלי · ראיה"
 msgid "Top listings"
 msgstr "ליסטינגים מובילים"
 
+#: src/features/shops/ShopStats.tsx
+msgid "Top products"
+msgstr "המוצרים המובילים"
+
 #: src/features/commerce/OrdersPage.tsx
 #: src/features/customers/CustomersDemos.tsx
 msgid "Total"
 msgstr "סה״כ"
+
+#: src/features/shops/ShopStats.tsx
+msgid "Total sales"
+msgstr "סך המכירות"
 
 #: src/features/commerce/OrdersPage.tsx
 msgid "Total shown"
@@ -4679,6 +4880,10 @@ msgstr "איפה ההזמנה שלי?"
 #: src/features/customers/CustomersDemos.tsx
 msgid "Where is my order? #3152"
 msgstr "איפה ההזמנה שלי? #3152"
+
+#: src/features/shops/ShopStats.tsx
+msgid "Where orders go"
+msgstr "לאן ההזמנות נשלחות"
 
 #: src/features/office/ChatPage.tsx
 msgid "Which ones are late? Can we do something for the customers?"

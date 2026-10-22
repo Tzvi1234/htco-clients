@@ -30,6 +30,10 @@ export type ShopReviews = components["schemas"]["ReviewsView"];
 export type ShopShipping = components["schemas"]["ShippingView"];
 export type MoneyView = components["schemas"]["MoneyView"];
 export type OrderFilter = NonNullable<ShopOrder["state"]> | "overdue";
+/** The Orders screen's periods: 30 days (the default), 90 days, 12 months, all time. */
+export type OrderPeriod = ShopOrders["period"];
+export type ShopStats = components["schemas"]["ShopStatsView"];
+export type AllTimeSales = NonNullable<ShopStats["sales"]>;
 
 /** Etsy is read at most every few minutes through the API's cache; the screens follow along. */
 const REFRESH_MS = 120_000;
@@ -37,11 +41,12 @@ const REFRESH_MS = 120_000;
 export const liveKeys = {
   all: ["live"] as const,
   overview: (shopId: string) => ["live", shopId, "overview"] as const,
-  orders: (shopId: string, state: OrderFilter | undefined) =>
-    ["live", shopId, "orders", state ?? "all"] as const,
+  orders: (shopId: string, state: OrderFilter | undefined, period: OrderPeriod = "30d") =>
+    ["live", shopId, "orders", period, state ?? "all"] as const,
   listings: (shopId: string) => ["live", shopId, "listings"] as const,
   reviews: (shopId: string) => ["live", shopId, "reviews"] as const,
   shipping: (shopId: string) => ["live", shopId, "shipping"] as const,
+  stats: (shopId: string) => ["live", shopId, "stats"] as const,
 };
 
 /** Not connected, missing a scope or not there: asking again soon does not help. */
@@ -70,12 +75,18 @@ export function overviewQuery(api: ApiClient, shopId: string) {
   });
 }
 
-export function ordersQuery(api: ApiClient, shopId: string, state?: OrderFilter) {
+export function ordersQuery(
+  api: ApiClient,
+  shopId: string,
+  state?: OrderFilter,
+  period: OrderPeriod = "30d",
+) {
   return queryOptions({
-    queryKey: liveKeys.orders(shopId, state),
+    queryKey: liveKeys.orders(shopId, state, period),
     queryFn: async (): Promise<ShopOrders> => {
-      // Every page (the API answers 100 at a time; the window holds at most 500), so the
-      // Orders filters and the Shipping queue see every order the counts speak of (Codex, #35).
+      // Every page (the API answers 100 at a time; a period holds at most its cap, 500 to
+      // 2,000), so the Orders filters and the Shipping queue see every order the counts speak of
+      // (Codex, #35). The API reads Etsy through its cache: one Etsy load serves all the pages.
       let first: ShopOrders | undefined;
       const items: ShopOrder[] = [];
       do {
@@ -83,6 +94,7 @@ export function ordersQuery(api: ApiClient, shopId: string, state?: OrderFilter)
           params: {
             path: { shop_id: shopId },
             query: {
+              period,
               limit: 100,
               offset: items.length,
               ...(state === undefined ? {} : { state }),
@@ -97,6 +109,23 @@ export function ordersQuery(api: ApiClient, shopId: string, state?: OrderFilter)
       return { ...first, items };
     },
     refetchInterval: REFRESH_MS,
+    retry,
+  });
+}
+
+/** The shop's statistics since it opened (Shops › Statistics): aggregates only, no buyer data. */
+export function statsQuery(api: ApiClient, shopId: string) {
+  return queryOptions({
+    queryKey: liveKeys.stats(shopId),
+    queryFn: async (): Promise<ShopStats> => {
+      const { data, error, response } = await api.GET("/v1/shops/{shop_id}/stats", {
+        params: { path: { shop_id: shopId }, query: { utc_offset_minutes: utcOffsetMinutes() } },
+      });
+      if (data === undefined) throw apiError(response, error);
+      return data;
+    },
+    // The API keeps the statistics for hours; asking every few minutes is plenty.
+    refetchInterval: REFRESH_MS * 5,
     retry,
   });
 }

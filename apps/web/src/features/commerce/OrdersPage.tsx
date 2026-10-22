@@ -18,6 +18,7 @@ import {
   useMoney,
   useShortDate,
   type OrderFilter,
+  type OrderPeriod,
   type ShopOrder,
 } from "./live.tsx";
 import { ShopChips } from "./ShopChips.tsx";
@@ -28,6 +29,7 @@ import { Button, buttonStyle } from "../../shared/ui/Button.tsx";
 import { ArrowEndIcon } from "../../shared/ui/icons.tsx";
 import { PageHeader } from "../../shared/ui/PageHeader.tsx";
 import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
+import { Segmented } from "../../shared/ui/Segmented.tsx";
 import {
   Chip,
   DataTable,
@@ -111,8 +113,27 @@ function FilterTab({
   );
 }
 
+const PERIODS: readonly OrderPeriod[] = ["30d", "90d", "12m", "all"];
+
+/** Each period's name on its switch, as a heading, and inside a sentence ("of the last 90 days"). */
+function usePeriods(): Record<OrderPeriod, { option: string; title: string; within: string }> {
+  const { t } = useLingui();
+  return {
+    "30d": { option: t`30 days`, title: t`Last 30 days`, within: t`the last 30 days` },
+    "90d": { option: t`90 days`, title: t`Last 90 days`, within: t`the last 90 days` },
+    "12m": { option: t`12 months`, title: t`Last 12 months`, within: t`the last 12 months` },
+    all: { option: t`All time`, title: t`All time`, within: t`all time` },
+  };
+}
+
+/** A sale: paid and neither cancelled nor refunded (as the API counts revenue). */
+function isSale(order: ShopOrder): boolean {
+  return order.state === "paid" || order.state === "shipped";
+}
+
 /**
- * Commerce › Orders, live from Etsy: the shop's orders of the last 30 days with their state,
+ * Commerce › Orders, live from Etsy: the shop's orders of a period (30 days by default, up to all
+ * time) with their state,
  * items, totals, ship-by dates and shipments. A read-through view until Phase 5 ingests orders
  * into HTCO's own store (the same screen then reads the store). Buyer names and tracking numbers
  * appear only for roles that may see buyer contacts; the server decides.
@@ -156,6 +177,8 @@ function Orders({ shopId, chips }: { shopId: string; chips: ReactNode }) {
   const phone = useMediaQuery(PHONE_QUERY);
   // One page at a time: 25 rows on wide screens, 20 on phones (fewer things, not smaller).
   const step = phone ? 20 : 25;
+  const periods = usePeriods();
+  const [period, setPeriod] = useState<OrderPeriod>("30d");
   const [filter, setFilter] = useState<OrderFilter | "all">("all");
   const [shown, setShown] = useState(step);
   const [open, setOpen] = useState<ShopOrder | null>(null);
@@ -163,7 +186,11 @@ function Orders({ shopId, chips }: { shopId: string; chips: ReactNode }) {
     setFilter(f);
     setShown(step);
   };
-  const all = useQuery(ordersQuery(api, shopId));
+  const pickPeriod = (p: OrderPeriod) => {
+    setPeriod(p);
+    setShown(step);
+  };
+  const all = useQuery(ordersQuery(api, shopId, undefined, period));
   const overview = useQuery(overviewQuery(api, shopId));
   const listings = useQuery(listingsQuery(api, shopId));
   const photos = new Map(
@@ -260,22 +287,60 @@ function Orders({ shopId, chips }: { shopId: string; chips: ReactNode }) {
   ];
 
   const late = counts?.overdue ?? 0;
-  const awaiting = overview.data?.sales?.awaiting_shipment ?? counts?.paid ?? 0;
-  const revenue30 = (overview.data?.sales?.daily ?? []).reduce((n, d) => n + Number(d.revenue), 0);
+  const awaiting =
+    (period === "30d" ? overview.data?.sales?.awaiting_shipment : undefined) ?? counts?.paid ?? 0;
+  // Revenue of the period: the overview's 30 days, or the sales listed for a longer period.
+  const revenue =
+    period === "30d"
+      ? overview.data?.sales == null
+        ? undefined
+        : {
+            amount: String(overview.data.sales.daily.reduce((n, d) => n + Number(d.revenue), 0)),
+            currency: overview.data.sales.currency,
+          }
+      : all.data === undefined
+        ? undefined
+        : {
+            amount: String(
+              all.data.items.filter(isSale).reduce((n, o) => n + Number(o.total.amount), 0),
+            ),
+            currency,
+          };
+  // Etsy's own count of the shop's sales since it opened: an empty period of a shop that sold
+  // says where its orders are instead of showing an empty table.
+  const soldEver = overview.data?.profile.sold_count ?? 0;
+  const periodSwitch = (
+    <Segmented
+      label={t`Period`}
+      value={period}
+      onChange={pickPeriod}
+      options={PERIODS.map((p) => ({
+        id: p,
+        label: periods[p].option,
+      }))}
+    />
+  );
 
   return (
     <>
       <Focus
-        title={<Trans>Last 30 days</Trans>}
+        title={periods[period].title}
         meta={
           all.data === undefined ? undefined : (
             <LiveNote fetchedAt={all.data.fetched_at} stale={all.data.stale} />
           )
         }
-        end={chips}
+        end={
+          <div className="flex flex-wrap items-center gap-2">
+            {periodSwitch}
+            {chips}
+          </div>
+        }
         lead={
           all.data === undefined ? (
             <Trans>The shop's orders, live from Etsy.</Trans>
+          ) : all.data.total === 0 && period !== "all" && soldEver > 0 ? (
+            t`No orders in ${periods[period].within}: the shop's orders are older. Choose a longer period to see them.`
           ) : late > 0 ? (
             <Plural
               value={late}
@@ -308,18 +373,17 @@ function Orders({ shopId, chips }: { shopId: string; chips: ReactNode }) {
               value={<N>{all.data === undefined ? "—" : count(late)}</N>}
               tone={late > 0 ? "tertiary" : undefined}
             />
-            {overview.data?.sales == null ? null : (
+            {revenue === undefined ? null : (
               <Figure
                 label={<Trans>Revenue</Trans>}
-                value={
-                  <N>
-                    {money(
-                      { amount: String(revenue30), currency: overview.data.sales.currency },
-                      { whole: true },
-                    )}
-                  </N>
+                value={<N>{money(revenue, { whole: true })}</N>}
+                note={
+                  // A period cut at the API's cap: the sum covers the orders read, and says so
+                  // (Codex, #38).
+                  period !== "30d" && all.data?.partial === true
+                    ? t`newest ${count(all.data.items.length)} orders, before Etsy's fees`
+                    : t`paid orders, before Etsy's fees`
                 }
-                note={<Trans>paid orders, before Etsy's fees</Trans>}
               />
             )}
           </Figures>
@@ -416,10 +480,21 @@ function Orders({ shopId, chips }: { shopId: string; chips: ReactNode }) {
           <LiveProblem error={all.error} onRetry={() => void all.refetch()} />
         ) : all.data === undefined ? (
           <LiveSkeleton rows={9} label={t`Loading orders`} />
+        ) : orders.length === 0 && all.data.total === 0 && period !== "all" && soldEver > 0 ? (
+          <EmptyPeriod
+            within={periods[period].within}
+            sold={count(soldEver)}
+            onAllTime={() => {
+              pickPeriod("all");
+              choose("all");
+            }}
+          />
         ) : orders.length === 0 ? (
           <p className="m-0 px-6 py-16 text-center text-body-sm text-secondary">
             {all.data.total === 0
-              ? t`No orders in the last 30 days.`
+              ? period === "all"
+                ? t`No orders yet.`
+                : t`No orders in ${periods[period].within}.`
               : t`No orders match this filter.`}
           </p>
         ) : (
@@ -462,7 +537,7 @@ function Orders({ shopId, chips }: { shopId: string; chips: ReactNode }) {
               ) : null}
               {all.data.partial || all.data.total > all.data.items.length ? (
                 <p className="m-0 text-caption text-muted">
-                  {t`Showing the newest ${count(all.data.items.length)} orders of the last 30 days.`}
+                  {t`Showing the newest ${count(all.data.items.length)} orders of ${periods[period].within}.`}
                 </p>
               ) : null}
             </div>
@@ -479,6 +554,35 @@ function Orders({ shopId, chips }: { shopId: string; chips: ReactNode }) {
         />
       )}
     </>
+  );
+}
+
+/**
+ * A period without orders in a shop that has sold: what happened (the orders are older) and the
+ * one press that shows them. Never a bare empty table (the owner's report, 2026-10-22).
+ */
+function EmptyPeriod({
+  within,
+  sold,
+  onAllTime,
+}: {
+  within: string;
+  sold: string;
+  onAllTime: () => void;
+}) {
+  const { t } = useLingui();
+  return (
+    <div className="flex flex-col items-center gap-3 px-6 py-14 text-center">
+      <p className="m-0 font-display text-title font-light text-balance">
+        {t`No orders in ${within}`}
+      </p>
+      <p className="m-0 max-w-[52ch] text-body-sm text-pretty text-secondary">
+        {t`${sold} sales on Etsy since the shop opened, all before this period.`}
+      </p>
+      <Button variant="primary" size="lg" onPress={onAllTime}>
+        <Trans>Show all time</Trans>
+      </Button>
+    </div>
   );
 }
 

@@ -1,7 +1,8 @@
 import type { components } from "@htco/api-client";
 
 // Invented Etsy data for the in-memory API (`?demo`, tests): a small candle-and-home shop with
-// a month of orders, its listings, reviews and shipping. Every name, number and text is made up;
+// a month of orders and five years of older ones, its listings, reviews, shipping and
+// statistics. Every name, number and text is made up;
 // buyer names are first name and initial, as the API sends them.
 
 type Overview = components["schemas"]["ShopOverviewView"];
@@ -11,6 +12,13 @@ type Listings = components["schemas"]["ListingsView"];
 type Listing = components["schemas"]["ListingView"];
 type Reviews = components["schemas"]["ReviewsView"];
 type Shipping = components["schemas"]["ShippingView"];
+type Stats = components["schemas"]["ShopStatsView"];
+export type FakePeriod = "30d" | "90d" | "12m" | "all";
+
+/** Orders read per period at most, as the API caps them. */
+const CAPS: Record<FakePeriod, number> = { "30d": 500, "90d": 1000, "12m": 2000, all: 2000 };
+const OPENED = "2021-03-14T09:00:00Z";
+const COUNTRIES = ["US", "US", "GB", "DE", "US", "IL", "CA", "US", "AU", "FR", "US", "NL"];
 
 const HOUR = 3_600_000;
 const DAY = 24 * HOUR;
@@ -273,17 +281,64 @@ function orders(now: number, seed: number, busy: boolean): Order[] {
   return found;
 }
 
-/** What the API answers for a connected shop. `contact`: the role sees buyer details. */
+/**
+ * Older orders, from a month back to when the shop opened: nearly all shipped (completed), a few
+ * cancelled or refunded. Each with the destination country the statistics count.
+ */
+function history(now: number, seed: number): Order[] {
+  const recent = orders(now, seed, false);
+  const opened = Date.parse(OPENED);
+  const count = 150 - seed * 20;
+  const span = now - 31 * DAY - opened;
+  return Array.from({ length: count }, (_, k) => {
+    // More orders in later years: the gaps shrink towards today.
+    const share = 1 - ((k + 1) / (count + 1)) ** 0.7;
+    const created = opened + span * share + ((k * 7919) % 11) * HOUR;
+    const template = recent[(k * 7) % recent.length] ?? recent[0];
+    if (template === undefined) throw new Error("no orders to copy");
+    const state: Order["state"] = k % 23 === 5 ? "canceled" : k % 31 === 9 ? "refunded" : "shipped";
+    return {
+      ...template,
+      order_id: 3_300_000_000 - k * 211,
+      state,
+      created_at: new Date(created).toISOString(),
+      updated_at: new Date(created + 2 * DAY).toISOString(),
+      ship_by: template.ship_by === null ? null : new Date(created + 3 * DAY).toISOString(),
+      overdue: false,
+      shipments: template.items.every((i) => i.is_digital)
+        ? []
+        : [
+            {
+              carrier: CARRIERS[k % CARRIERS.length] ?? "usps",
+              shipped_at: new Date(created + 1.5 * DAY).toISOString(),
+              tracking_code: `9400 1118 98${String(10_000_000 + k * 6113)}`,
+            },
+          ],
+      buyer: BUYERS[(k + 3) % BUYERS.length] ?? null,
+    };
+  });
+}
+
+/**
+ * What the API answers for a connected shop. `contact`: the role sees buyer details. `recent`:
+ * false is a shop whose orders are all older than 30 days (the owner's live shop, 2026-10).
+ */
 export function fakeShopData(
   shopId: string,
   name: string,
   now: number,
   contact: boolean,
   busy = false,
+  recent = true,
 ) {
   // Each demo shop its own numbers.
   const seed = Array.from(shopId).reduce((n, c) => n + c.charCodeAt(0), 0) % 4;
-  const all = orders(now, seed, busy).map((o) =>
+  const month = recent ? orders(now, seed, busy) : [];
+  const older = history(now, seed);
+  const everything = [...month, ...older];
+  // The 30-day window answers the month's orders as before (the demo month runs a little long).
+  const monthIds = new Set(month.map((o) => o.order_id));
+  const all = everything.map((o) =>
     contact
       ? o
       : { ...o, buyer: null, shipments: o.shipments.map((s) => ({ ...s, tracking_code: null })) },
@@ -293,8 +348,13 @@ export function fakeShopData(
   const offset = -new Date(now).getTimezoneOffset() * 60_000;
   const dayOf = (iso: string) => Math.floor((Date.parse(iso) + offset) / DAY);
   const today = dayOf(new Date(now).toISOString());
+  // The overview's sales: the last 30 days (and one more for time zones), as the API reads them.
   const sales = all.filter(
-    (o) => o.state !== "unpaid" && o.state !== "canceled" && o.state !== "refunded",
+    (o) =>
+      o.state !== "unpaid" &&
+      o.state !== "canceled" &&
+      o.state !== "refunded" &&
+      now - Date.parse(o.created_at) < 31 * DAY,
   );
   const period = (days: number) => {
     const span = sales.filter((o) => today - dayOf(o.created_at) < days);
@@ -340,7 +400,7 @@ export function fakeShopData(
       favorer_count: 1_204 - seed * 287,
       review_average: ["4.9", "4.7", "4.8", "5.0"][seed] ?? "4.9",
       review_count: 318 - seed * 71,
-      opened_at: "2021-03-14T09:00:00Z",
+      opened_at: OPENED,
       ships_from_country: "IL",
       location_country: "IL",
       languages: ["en-US"],
@@ -366,15 +426,36 @@ export function fakeShopData(
       partial: false,
     },
   };
-  const count = (state: string) => all.filter((o) => o.state === state).length;
-  const ordersFor = (state: string | null, limit: number, offsetN: number): Orders => {
-    const matching = all.filter((o) =>
+  const startOf = (period: FakePeriod): number => {
+    if (period === "all") return Date.parse(OPENED);
+    if (period === "12m") {
+      const start = new Date(now);
+      start.setUTCFullYear(start.getUTCFullYear() - 1);
+      return start.getTime();
+    }
+    return now - (period === "90d" ? 90 : 30) * DAY;
+  };
+  const ordersFor = (
+    state: string | null,
+    limit: number,
+    offsetN: number,
+    period: FakePeriod = "30d",
+  ): Orders => {
+    const start = startOf(period);
+    const inPeriod = all
+      .filter((o) =>
+        period === "30d" ? monthIds.has(o.order_id) : Date.parse(o.created_at) >= start,
+      )
+      .slice(0, CAPS[period]);
+    const count = (s: string) => inPeriod.filter((o) => o.state === s).length;
+    const matching = inPeriod.filter((o) =>
       state === null ? true : state === "overdue" ? o.overdue : o.state === state,
     );
     return {
       ...fresh,
       shop_id: shopId,
-      window_start: new Date(now - 31 * DAY).toISOString(),
+      period,
+      window_start: new Date(start).toISOString(),
       items: matching.slice(offsetN, offsetN + limit),
       total: matching.length,
       counts: {
@@ -383,10 +464,96 @@ export function fakeShopData(
         shipped: count("shipped"),
         canceled: count("canceled"),
         refunded: count("refunded"),
-        overdue: all.filter((o) => o.overdue).length,
+        overdue: inPeriod.filter((o) => o.overdue).length,
       },
       buyer_details: contact,
       partial: false,
+      cap: CAPS[period],
+    };
+  };
+  // The statistics: aggregates of the orders read (the newest `cap`), as the API makes them
+  // (no buyer data).
+  const country = new Map(
+    everything.map((o, k) => [o.order_id, COUNTRIES[k % COUNTRIES.length] ?? "US"] as const),
+  );
+  const stats = (cap = CAPS.all): Stats => {
+    const read = all.slice(0, cap);
+    const sold = read.filter(
+      (o) => o.state !== "unpaid" && o.state !== "canceled" && o.state !== "refunded",
+    );
+    const monthOf = (iso: string) => {
+      const d = new Date(Date.parse(iso) + offset);
+      return `${String(d.getUTCFullYear())}-${String(d.getUTCMonth() + 1).padStart(2, "0")}-01`;
+    };
+    const months: string[] = [];
+    const firstSale = sold.at(-1);
+    if (firstSale !== undefined) {
+      const cursor = new Date(`${monthOf(firstSale.created_at)}T00:00:00Z`);
+      const last = monthOf(new Date(now).toISOString());
+      for (;;) {
+        const key = cursor.toISOString().slice(0, 10);
+        months.push(key);
+        if (key >= last) break;
+        cursor.setUTCMonth(cursor.getUTCMonth() + 1);
+      }
+    }
+    const monthly = months.map((month) => {
+      const span = sold.filter((o) => monthOf(o.created_at) === month);
+      return {
+        month,
+        orders: span.length,
+        revenue: span.reduce((n, o) => n + Number(o.total.amount), 0).toFixed(2),
+      };
+    });
+    const revenue = sold.reduce((n, o) => n + Number(o.total.amount), 0);
+    const tallies = new Map<number, { title: string; units: number; revenue: number }>();
+    for (const o of sold)
+      for (const item of o.items) {
+        if (item.listing_id === null) continue;
+        const t = tallies.get(item.listing_id) ?? { title: item.title, units: 0, revenue: 0 };
+        t.units += item.quantity;
+        t.revenue += Number(item.unit_price.amount) * item.quantity;
+        tallies.set(item.listing_id, t);
+      }
+    const byCountry = new Map<string, number>();
+    for (const o of sold) {
+      const code = country.get(o.order_id) ?? "US";
+      byCountry.set(code, (byCountry.get(code) ?? 0) + 1);
+    }
+    const best = monthly
+      .filter((m) => m.orders > 0)
+      .reduce<(typeof monthly)[number] | null>(
+        (top, m) => (top === null || Number(m.revenue) > Number(top.revenue) ? m : top),
+        null,
+      );
+    return {
+      ...fresh,
+      shop_id: shopId,
+      profile: overview.profile,
+      sales: {
+        currency: "USD",
+        orders: sold.length,
+        units: sold.reduce((n, o) => n + o.units, 0),
+        revenue: usd(revenue),
+        average_order_value: sold.length === 0 ? null : usd(revenue / sold.length),
+        monthly,
+        best_month: best,
+        top_products: [...tallies.entries()]
+          .sort((a, b) => b[1].units - a[1].units || b[1].revenue - a[1].revenue)
+          .slice(0, 5)
+          .map(([listing_id, t]) => ({
+            listing_id,
+            title: t.title,
+            units: t.units,
+            revenue: usd(t.revenue),
+          })),
+        countries: [...byCountry.entries()]
+          .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+          .map(([code, n]) => ({ country: code, orders: n })),
+        first_order_at: read.at(-1)?.created_at ?? null,
+        receipts_read: read.length,
+        partial: false,
+      },
     };
   };
   const listings: Listings = {
@@ -491,5 +658,5 @@ export function fakeShopData(
       { partner_id: 4001, name: "Studio Kiln Co-op", location: "Haifa, Israel" },
     ],
   };
-  return { overview, ordersFor, listings, reviews, shipping };
+  return { overview, ordersFor, listings, reviews, shipping, stats };
 }
