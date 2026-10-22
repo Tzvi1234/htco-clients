@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { AREAS, areaOf, locate } from "./nav.ts";
+import { AREAS, areaOf, locate, navDirection, sameArea } from "./nav.ts";
 
 describe("the navigation model (Design 1C, client ADR-0008)", () => {
   it("has the demo's seven areas in order, grouped home, workspace and system", () => {
@@ -79,5 +79,26 @@ describe("locate", () => {
 describe("areaOf", () => {
   it("finds an area by its id", () => {
     expect(areaOf("work").tabs[1]?.id).toBe("approvals");
+  });
+});
+
+describe("screen-to-screen direction (round 3)", () => {
+  it("travels forward to a later place in the navigation and back to an earlier one", () => {
+    expect(navDirection("/", "/shops")).toBe("forward");
+    expect(navDirection("/settings", "/settings/team")).toBe("back");
+    expect(navDirection("/shops", "/")).toBe("back");
+  });
+
+  it("only fades when either end is outside the navigation, or on the first load", () => {
+    expect(navDirection(undefined, "/shops")).toBe("fade");
+    expect(navDirection("/nowhere", "/shops")).toBe("fade");
+    expect(navDirection("/shops", "/shops")).toBe("fade");
+  });
+
+  it("knows two tabs of one area, where the current pill glides", () => {
+    expect(sameArea("/settings/team", "/settings")).toBe(true);
+    expect(sameArea("/shops", "/settings")).toBe(false);
+    expect(sameArea("/", "/shops")).toBe(false);
+    expect(sameArea(undefined, "/shops")).toBe(false);
   });
 });
