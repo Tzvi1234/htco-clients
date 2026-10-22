@@ -317,7 +317,6 @@ function Orders({ shopId, chips }: { shopId: string; chips: ReactNode }) {
       options={PERIODS.map((p) => ({
         id: p,
         label: periods[p].option,
-        content: periods[p].option,
       }))}
     />
   );
