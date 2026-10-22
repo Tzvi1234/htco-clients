@@ -102,7 +102,8 @@ test("the palette chosen in Settings shows on the landing page too (one preferen
 async function focusRing(page: Page) {
   return page.evaluate(() => {
     const active = document.activeElement;
-    if (active === null) return null;
+    // Past the last control the focus leaves the page (the body holds it): not a control.
+    if (active === null || active === document.body) return null;
     const element =
       active instanceof HTMLInputElement
         ? (active.closest("[data-focus-visible]") ?? active)
