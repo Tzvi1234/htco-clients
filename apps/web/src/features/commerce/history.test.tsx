@@ -80,8 +80,10 @@ describe("Orders: a period to choose", () => {
 
     const focus = await panel("All time");
     expect(within(focus).getByText(/before Etsy's fees/)).toBeInTheDocument();
+    // The month's orders and the older, completed ones: far more than the 46 of 30 days.
     const orders = await panel("Orders");
-    expect(await within(orders).findByText("#3300000000")).toBeInTheDocument();
+    const more = await within(orders).findByRole("button", { name: /^Show more \(\d+ left\)$/ });
+    expect(Number(/\((\d+) left\)/.exec(more.textContent)?.[1])).toBeGreaterThan(150);
     expect(asked(backend, "orders").some((u) => u.searchParams.get("period") === "all")).toBe(true);
   });
 
