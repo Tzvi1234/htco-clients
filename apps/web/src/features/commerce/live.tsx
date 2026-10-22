@@ -74,14 +74,27 @@ export function ordersQuery(api: ApiClient, shopId: string, state?: OrderFilter)
   return queryOptions({
     queryKey: liveKeys.orders(shopId, state),
     queryFn: async (): Promise<ShopOrders> => {
-      const { data, error, response } = await api.GET("/v1/shops/{shop_id}/orders", {
-        params: {
-          path: { shop_id: shopId },
-          query: { limit: 100, ...(state === undefined ? {} : { state }) },
-        },
-      });
-      if (data === undefined) throw apiError(response, error);
-      return data;
+      // Every page (the API answers 100 at a time; the window holds at most 500), so the
+      // Orders filters and the Shipping queue see every order the counts speak of (Codex, #35).
+      let first: ShopOrders | undefined;
+      const items: ShopOrder[] = [];
+      do {
+        const { data, error, response } = await api.GET("/v1/shops/{shop_id}/orders", {
+          params: {
+            path: { shop_id: shopId },
+            query: {
+              limit: 100,
+              offset: items.length,
+              ...(state === undefined ? {} : { state }),
+            },
+          },
+        });
+        if (data === undefined) throw apiError(response, error);
+        first ??= data;
+        items.push(...data.items);
+        if (data.items.length === 0) break;
+      } while (items.length < first.total);
+      return { ...first, items };
     },
     refetchInterval: REFRESH_MS,
     retry,
@@ -360,8 +373,11 @@ export function ListingPhoto({
   size: number;
   className?: string;
 }) {
-  const [failed, setFailed] = useState(false);
-  const [loaded, setLoaded] = useState(false);
+  // Kept per source: a photo that failed must not hide the next listing's (Codex, #35).
+  const [failedSrc, setFailedSrc] = useState<string | null>(null);
+  const [loadedSrc, setLoadedSrc] = useState<string | null>(null);
+  const failed = src !== null && src !== undefined && failedSrc === src;
+  const loaded = src !== null && src !== undefined && loadedSrc === src;
   // A fixed square box: nothing moves when the photo arrives; it pulses until then.
   const style = { width: size, height: size };
   if (src === null || src === undefined || failed)
@@ -392,10 +408,10 @@ export function ListingPhoto({
         className,
       )}
       onLoad={() => {
-        setLoaded(true);
+        setLoadedSrc(src);
       }}
       onError={() => {
-        setFailed(true);
+        setFailedSrc(src);
       }}
     />
   );

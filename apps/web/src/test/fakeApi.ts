@@ -72,6 +72,8 @@ export interface FakeState {
    * "hang" never answers.
    */
   liveTrouble?: "unavailable" | "stale" | "quiet" | "hang" | undefined;
+  /** True: the shops are busy, 160 orders in 30 days (more than one page of 100). */
+  liveBusy?: boolean;
 }
 
 const PROBLEMS = "https://ht-co.app/problems/";
@@ -515,7 +517,7 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
     if (trouble === "hang") return new Promise<Response>(() => undefined);
     if (trouble === "unavailable") return problem(503, "etsy-data-unavailable");
     const contact = state.role === "owner" || state.role === "admin" || state.role === "support";
-    const data = fakeShopData(shopId, shop.name, Date.now(), contact);
+    const data = fakeShopData(shopId, shop.name, Date.now(), contact, state.liveBusy === true);
     const mark = <T extends { stale: boolean; fetched_at: string }>(body: T): T =>
       trouble === "stale"
         ? { ...body, stale: true, fetched_at: new Date(Date.now() - 40 * 60_000).toISOString() }

@@ -201,9 +201,9 @@ function listing(p: Product, now: number): Listing {
 }
 
 /** A month of orders, newest first: a few today, one late, cancelled and refunded ones. */
-function orders(now: number, seed: number): Order[] {
+function orders(now: number, seed: number, busy: boolean): Order[] {
   const found: Order[] = [];
-  const count = 46 - seed * 7;
+  const count = busy ? 160 : 46 - seed * 7;
   for (let k = 0; k < count; k++) {
     // Denser in the last days: 4 today, then about one and a half a day.
     const age = k < 4 - (seed % 3) ? (k + 1) * 1.7 * HOUR : (4 + (k - 4) * 0.62) * DAY * 1.1;
@@ -274,10 +274,16 @@ function orders(now: number, seed: number): Order[] {
 }
 
 /** What the API answers for a connected shop. `contact`: the role sees buyer details. */
-export function fakeShopData(shopId: string, name: string, now: number, contact: boolean) {
+export function fakeShopData(
+  shopId: string,
+  name: string,
+  now: number,
+  contact: boolean,
+  busy = false,
+) {
   // Each demo shop its own numbers.
   const seed = Array.from(shopId).reduce((n, c) => n + c.charCodeAt(0), 0) % 4;
-  const all = orders(now, seed).map((o) =>
+  const all = orders(now, seed, busy).map((o) =>
     contact
       ? o
       : { ...o, buyer: null, shipments: o.shipments.map((s) => ({ ...s, tracking_code: null })) },

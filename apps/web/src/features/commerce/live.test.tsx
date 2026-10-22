@@ -3,7 +3,11 @@ import { fireEvent, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
+import { QueryClient } from "@tanstack/react-query";
+
+import { ListingPhoto } from "./live.tsx";
 import { App } from "../../app/App.tsx";
+import { forgetSession } from "../../shared/api/api.tsx";
 import { PHONE_QUERY } from "../../shared/lib/useMediaQuery.ts";
 import { memoryStorage } from "../../shared/lib/storage.ts";
 import { demoShops, fakeBackend, fakeIntegration, type FakeState } from "../../test/fakeApi.ts";
@@ -283,5 +287,42 @@ describe("Shops and Home with live numbers", () => {
     const revenue = within(numbers).getAllByRole("listitem").at(0) ?? document.body;
     expect(within(revenue).getByText("Revenue")).toBeInTheDocument();
     expect(await within(revenue).findByText(/^\$\d/)).toBeInTheDocument();
+  });
+});
+
+describe("Codex review of #35", () => {
+  it("reads every page of a busy shop's orders, so counts and lists agree", async () => {
+    const { user } = await open("/commerce/orders", { liveBusy: true });
+    const orders = await panel("Orders");
+
+    await user.click(within(orders).getByRole("button", { name: "Show more (135 left)" }));
+
+    const table = within(orders).getByRole("table", { name: "Orders" });
+    expect(within(table).getAllByRole("row")).toHaveLength(51);
+  });
+
+  it("forgets the live shop data with the session", () => {
+    const client = new QueryClient();
+    client.setQueryData(["auth", "me"], { user: "a" });
+    client.setQueryData(["live", "shop", "orders", "all"], { items: ["order"] });
+    client.setQueryData(["other"], 1);
+
+    forgetSession(client);
+
+    expect(client.getQueryData(["auth", "me"])).toBeUndefined();
+    expect(client.getQueryData(["live", "shop", "orders", "all"])).toBeUndefined();
+    expect(client.getQueryData(["other"])).toBe(1);
+  });
+
+  it("gives a new photo its own chance after the previous one failed", () => {
+    const { container, rerender } = render(<ListingPhoto src="data:,a" title="Mug" size={40} />);
+    const first = container.querySelector("img");
+    if (first === null) throw new Error("no photo");
+    fireEvent.error(first);
+    expect(container.querySelector("img")).toBeNull();
+
+    rerender(<ListingPhoto src="data:,b" title="Mug" size={40} />);
+
+    expect(container.querySelector("img")).toHaveAttribute("src", "data:,b");
   });
 });

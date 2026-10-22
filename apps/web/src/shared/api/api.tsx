@@ -1,5 +1,5 @@
 import { createApiClient, type ApiClient, type components } from "@htco/api-client";
-import { queryOptions } from "@tanstack/react-query";
+import { queryOptions, type QueryClient } from "@tanstack/react-query";
 import { createContext, use, type ReactNode } from "react";
 
 export type SessionView = components["schemas"]["SessionView"];
@@ -47,6 +47,15 @@ export const authKeys = {
   mfa: ["auth", "mfa"] as const,
   sessions: ["auth", "sessions"] as const,
 };
+
+/**
+ * Forget what belongs to the session that ended: who is signed in, and the shops' live data,
+ * whose orders carry buyer details filtered for that user's role (Codex review of #35).
+ */
+export function forgetSession(client: QueryClient): void {
+  client.removeQueries({ queryKey: ["auth"] });
+  client.removeQueries({ queryKey: ["live"] });
+}
 
 /** Who is signed in on this browser; `null` when nobody is. */
 export function sessionQuery(api: ApiClient) {
