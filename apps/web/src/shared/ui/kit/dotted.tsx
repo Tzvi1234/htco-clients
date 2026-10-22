@@ -3,9 +3,10 @@ import type { ReactNode } from "react";
 import { TrendGlyph } from "./glyphs.tsx";
 import { cx } from "../../lib/cx.ts";
 
-// The demo's dotted charts: the matrix (`matrix()`), dot columns (`dotcols()`) and dotted
-// progress (`.dbar`). The dots are decorative; a label, the value pill or the words beside them
-// carry the meaning. They grow in as they appear (not under reduced motion, see kit.css).
+// The demo's dotted art, kept for the Demo screens only: the matrix (`matrix()`) and the dotted
+// strip (`.dbar`, an uptime bar's days). Real data uses the charts in `./charts/` (bars, a line,
+// horizontal bars). The dots are decorative; the words beside them carry the meaning. They grow
+// in as they appear (not under reduced motion, see kit.css).
 
 const GROW = "motion-safe:animate-[htco-dot-in_420ms_var(--motion-easing-enter)_both]";
 
@@ -144,84 +145,6 @@ export function Matrix({
         <span className="ltr tabular">{value}</span>
         <span className="text-muted">%</span> – {caption}
       </div>
-    </div>
-  );
-}
-
-/**
- * Dot columns: one column of dots per value, filled to its height and darker towards the top;
- * the `highlight` column in the accent, optional labels under them. Columns rise in one by one.
- */
-export function DotColumns({
-  values,
-  rows = 12,
-  highlight = -1,
-  pitch = 10,
-  gap = 14,
-  labels,
-  label,
-}: {
-  values: readonly number[];
-  rows?: number;
-  highlight?: number;
-  pitch?: number;
-  gap?: number;
-  labels?: readonly string[];
-  /** What the chart says, for screen readers; without it the chart is decorative. */
-  label?: string;
-}) {
-  const max = Math.max(1, ...values);
-  const w = values.length * gap;
-  const h = rows * pitch;
-  return (
-    <div
-      role={label === undefined ? undefined : "img"}
-      aria-label={label}
-      aria-hidden={label === undefined ? true : undefined}
-      className="flex max-w-full flex-col items-center"
-    >
-      <svg
-        aria-hidden="true"
-        width={w}
-        height={h}
-        viewBox={`0 0 ${String(w)} ${String(h)}`}
-        className="ltr max-w-full"
-      >
-        {values.map((value, i) => {
-          const n = Math.round((value / max) * rows);
-          const x = i * gap + gap / 2;
-          return Array.from({ length: rows }, (_, j) => {
-            const y = h - j * pitch - pitch / 2;
-            const key = `${String(i)}-${String(j)}`;
-            return j < n ? (
-              <circle
-                key={key}
-                cx={x}
-                cy={y}
-                r={2.6}
-                fill={i === highlight ? "var(--accent-mark)" : "var(--text-primary)"}
-                opacity={i === highlight ? 1 : (0.25 + 0.6 * (j / rows)).toFixed(2)}
-                className={cx("origin-center [transform-box:fill-box]", GROW)}
-                style={{ animationDelay: `${String(i * 30 + j * 12)}ms` }}
-              />
-            ) : (
-              <circle key={key} cx={x} cy={y} r={0.8} fill="var(--border-hover)" />
-            );
-          });
-        })}
-      </svg>
-      {labels === undefined ? null : (
-        <div
-          aria-hidden="true"
-          dir="ltr"
-          className="mt-2 grid text-center text-[11px] text-muted"
-          style={{ gridTemplateColumns: `repeat(${String(values.length)}, ${String(gap)}px)` }}
-        >
-          {labels.map((text, index) => (
-            <span key={index}>{text}</span>
-          ))}
-        </div>
-      )}
     </div>
   );
 }

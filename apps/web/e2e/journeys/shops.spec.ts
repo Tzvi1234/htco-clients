@@ -53,3 +53,40 @@ for (const [locale, scheme] of [
     await checkpoint(page, `shop-cards-${locale}-${scheme}`);
   });
 }
+
+for (const locale of ["en", "he"] as const) {
+  test(`the statistics' charts run time in the language's direction (${locale})`, async ({
+    page,
+  }) => {
+    await page.addInitScript((value) => {
+      localStorage.setItem("htco.locale", value);
+    }, locale);
+    await openApp(page, "/shops", "shops");
+    await page.getByRole("tab", { name: locale === "he" ? "סטטיסטיקה" : "Statistics" }).click();
+    // The orders per month: in the focus's side column on wide screens, above the revenue on
+    // phones. The newest month (the highlighted bar) sits at the end of the reading direction's
+    // start: the right in English, the left in Hebrew.
+    const chart = page
+      .locator(
+        "[role='img'][aria-label^='Orders per month'], [role='img'][aria-label^='הזמנות בחודש']",
+      )
+      .locator("visible=true")
+      .first();
+    await expect(chart).toBeVisible();
+    const bars = chart.locator("[data-bar]");
+    await expect(bars).toHaveCount(12);
+    const oldest = await bars.first().boundingBox();
+    const newest = await bars.last().boundingBox();
+    if (oldest === null || newest === null) throw new Error("the bars have no box");
+    if (locale === "he") expect(newest.x).toBeLessThan(oldest.x);
+    else expect(newest.x).toBeGreaterThan(oldest.x);
+    await expect(bars.last()).toHaveAttribute("data-highlight", "");
+    // The revenue line follows the same direction.
+    const points = page.locator("[data-point]");
+    const first = await points.first().boundingBox();
+    const last = await points.last().boundingBox();
+    if (first === null || last === null) throw new Error("the points have no box");
+    if (locale === "he") expect(last.x).toBeLessThan(first.x);
+    else expect(last.x).toBeGreaterThan(first.x);
+  });
+}

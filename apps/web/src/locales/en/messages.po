@@ -1058,7 +1058,6 @@ msgstr "Copied"
 msgid "Copy link"
 msgstr "Copy link"
 
-#: src/features/commerce/ShippingPage.tsx
 #: src/features/office/FloorPage.tsx
 msgid "Cost"
 msgstr "Cost"
@@ -2010,6 +2009,10 @@ msgstr "Languages"
 msgid "Last 12 months"
 msgstr "Last 12 months"
 
+#: src/features/shops/ShopStats.tsx
+msgid "last 12 months, before Etsy's fees"
+msgstr "last 12 months, before Etsy's fees"
+
 #: src/features/commerce/OrdersPage.tsx
 msgid "Last 30 days"
 msgstr "Last 30 days"
@@ -2737,10 +2740,6 @@ msgstr "On"
 msgid "On budget"
 msgstr "On budget"
 
-#: src/features/commerce/ShippingPage.tsx
-msgid "On target"
-msgstr "On target"
-
 #: src/features/settings/SettingsPage.tsx
 msgid "On this device"
 msgstr "On this device"
@@ -2875,15 +2874,13 @@ msgstr "Orders and shipping"
 msgid "orders checked in Etsy"
 msgstr "orders checked in Etsy"
 
-#. placeholder {0}: week.map((d) => String(d.orders)).join(", ")
 #: src/features/overview/OverviewPage.tsx
-msgid "Orders in the last 7 days: {0}"
-msgstr "Orders in the last 7 days: {0}"
+msgid "Orders in the last 7 days"
+msgstr "Orders in the last 7 days"
 
-#. placeholder {0}: week.map((d) => String(d.orders)).join(", ")
 #: src/features/commerce/OrdersPage.tsx
-msgid "Orders per day in the last 7 days: {0}"
-msgstr "Orders per day in the last 7 days: {0}"
+msgid "Orders per day in the last 7 days"
+msgstr "Orders per day in the last 7 days"
 
 #: src/features/commerce/OrdersPage.tsx
 msgid "Orders per day, last 7 days"
@@ -2892,11 +2889,6 @@ msgstr "Orders per day, last 7 days"
 #: src/features/shops/ShopStats.tsx
 msgid "Orders per month, last 12 months"
 msgstr "Orders per month, last 12 months"
-
-#. placeholder {0}: recent.map((m) => String(m.orders)).join(", ")
-#: src/features/shops/ShopStats.tsx
-msgid "Orders per month, last 12 months: {0}"
-msgstr "Orders per month, last 12 months: {0}"
 
 #: src/features/commerce/ShippingPage.tsx
 msgid "Orders to ship"
@@ -3470,6 +3462,14 @@ msgstr "Returns and partners"
 msgid "Revenue"
 msgstr "Revenue"
 
+#: src/features/shops/ShopStats.tsx
+msgid "Revenue per month"
+msgstr "Revenue per month"
+
+#: src/features/shops/ShopStats.tsx
+msgid "Revenue per month, last 12 months"
+msgstr "Revenue per month, last 12 months"
+
 #: src/features/finance/FinanceDemos.tsx
 msgid "Revenue this month:"
 msgstr "Revenue this month:"
@@ -4032,7 +4032,6 @@ msgstr "Soon"
 msgid "source:"
 msgstr "source:"
 
-#: src/features/commerce/ShippingPage.tsx
 #: src/features/office/EngineeringPage.tsx
 #: src/features/office/FloorPage.tsx
 msgid "Speed"
@@ -4591,6 +4590,10 @@ msgstr "Total sales"
 #: src/features/commerce/OrdersPage.tsx
 msgid "Total shown"
 msgstr "Total shown"
+
+#: src/features/commerce/ShippingPage.tsx
+msgid "Tracked"
+msgstr "Tracked"
 
 #: src/features/commerce/ShippingPage.tsx
 msgid "Tracking"

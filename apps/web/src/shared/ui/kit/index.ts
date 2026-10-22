@@ -4,7 +4,8 @@ import "./kit.css";
 
 export * from "./avatar.tsx";
 export * from "./bi.ts";
-export * from "./charts.tsx";
+export * from "./charts/index.ts";
+export * from "./dotted.tsx";
 export * from "./demo.tsx";
 export * from "./form.tsx";
 export * from "./glyphs.tsx";

@@ -1058,7 +1058,6 @@ msgstr "הועתק"
 msgid "Copy link"
 msgstr "העתקת הקישור"
 
-#: src/features/commerce/ShippingPage.tsx
 #: src/features/office/FloorPage.tsx
 msgid "Cost"
 msgstr "עלות"
@@ -2010,6 +2009,10 @@ msgstr "שפות"
 msgid "Last 12 months"
 msgstr "12 החודשים האחרונים"
 
+#: src/features/shops/ShopStats.tsx
+msgid "last 12 months, before Etsy's fees"
+msgstr "12 החודשים האחרונים, לפני העמלות של Etsy"
+
 #: src/features/commerce/OrdersPage.tsx
 msgid "Last 30 days"
 msgstr "30 הימים האחרונים"
@@ -2737,10 +2740,6 @@ msgstr "פעיל"
 msgid "On budget"
 msgstr "בתוך התקציב"
 
-#: src/features/commerce/ShippingPage.tsx
-msgid "On target"
-msgstr "בתוך היעד"
-
 #: src/features/settings/SettingsPage.tsx
 msgid "On this device"
 msgstr "במכשיר הזה"
@@ -2875,15 +2874,13 @@ msgstr "הזמנות ומשלוחים"
 msgid "orders checked in Etsy"
 msgstr "הזמנות נבדקו ב־Etsy"
 
-#. placeholder {0}: week.map((d) => String(d.orders)).join(", ")
 #: src/features/overview/OverviewPage.tsx
-msgid "Orders in the last 7 days: {0}"
-msgstr "הזמנות ב־7 הימים האחרונים: {0}"
+msgid "Orders in the last 7 days"
+msgstr "הזמנות ב־7 הימים האחרונים"
 
-#. placeholder {0}: week.map((d) => String(d.orders)).join(", ")
 #: src/features/commerce/OrdersPage.tsx
-msgid "Orders per day in the last 7 days: {0}"
-msgstr "הזמנות ליום ב־7 הימים האחרונים: {0}"
+msgid "Orders per day in the last 7 days"
+msgstr "הזמנות ביום ב־7 הימים האחרונים"
 
 #: src/features/commerce/OrdersPage.tsx
 msgid "Orders per day, last 7 days"
@@ -2892,11 +2889,6 @@ msgstr "הזמנות ליום, 7 הימים האחרונים"
 #: src/features/shops/ShopStats.tsx
 msgid "Orders per month, last 12 months"
 msgstr "הזמנות בחודש, 12 החודשים האחרונים"
-
-#. placeholder {0}: recent.map((m) => String(m.orders)).join(", ")
-#: src/features/shops/ShopStats.tsx
-msgid "Orders per month, last 12 months: {0}"
-msgstr "הזמנות בחודש, 12 החודשים האחרונים: {0}"
 
 #: src/features/commerce/ShippingPage.tsx
 msgid "Orders to ship"
@@ -3470,6 +3462,14 @@ msgstr "החזרות ושותפים"
 msgid "Revenue"
 msgstr "הכנסה"
 
+#: src/features/shops/ShopStats.tsx
+msgid "Revenue per month"
+msgstr "הכנסות בחודש"
+
+#: src/features/shops/ShopStats.tsx
+msgid "Revenue per month, last 12 months"
+msgstr "הכנסות בחודש, 12 החודשים האחרונים"
+
 #: src/features/finance/FinanceDemos.tsx
 msgid "Revenue this month:"
 msgstr "הכנסה החודש:"
@@ -4032,7 +4032,6 @@ msgstr "בקרוב"
 msgid "source:"
 msgstr "מקור:"
 
-#: src/features/commerce/ShippingPage.tsx
 #: src/features/office/EngineeringPage.tsx
 #: src/features/office/FloorPage.tsx
 msgid "Speed"
@@ -4591,6 +4590,10 @@ msgstr "סך המכירות"
 #: src/features/commerce/OrdersPage.tsx
 msgid "Total shown"
 msgstr "סה״כ בתצוגה"
+
+#: src/features/commerce/ShippingPage.tsx
+msgid "Tracked"
+msgstr "עם מעקב"
 
 #: src/features/commerce/ShippingPage.tsx
 msgid "Tracking"

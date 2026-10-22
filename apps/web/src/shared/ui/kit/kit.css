@@ -46,6 +46,42 @@
   }
 }
 
+/* The charts (kit/charts): bars rise from the baseline, horizontal bars grow from the start. */
+@keyframes htco-bar-in {
+  from {
+    scale: 1 0;
+  }
+}
+
+@keyframes htco-hbar-in {
+  from {
+    scale: 0 1;
+  }
+}
+
+/* A bar that is not the highlighted one: a lighter wash of the tertiary orange on the panel. The
+   value is always written beside it, so the wash needs no contrast of its own. */
+.k-bar-soft {
+  background-color: color-mix(in srgb, var(--tertiary-mark) 42%, var(--bg-panel));
+}
+
+.k-bar {
+  transform-origin: bottom;
+}
+
+[data-fill] {
+  transform-origin: left;
+}
+
+[dir="rtl"] [data-fill] {
+  transform-origin: right;
+}
+
+/* The soft area under a line chart. */
+.k-area {
+  fill: color-mix(in srgb, var(--tertiary-mark) 16%, transparent);
+}
+
 @keyframes htco-row-in {
   from {
     opacity: 0;
