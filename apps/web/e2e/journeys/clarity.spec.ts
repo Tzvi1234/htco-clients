@@ -61,7 +61,13 @@ test("the navigation opens and closes without motion under reduced motion", asyn
     return {
       duration: Math.max(...style.transitionDuration.split(",").map((part) => parseFloat(part))),
       delay: item === null ? 0 : parseFloat(getComputedStyle(item).transitionDelay),
-      animations: document.getAnimations().length,
+      // Anything in the sidebar that still moves for longer than the 1 ms the rule leaves.
+      animations: document.getAnimations().filter((animation) => {
+        const effect = animation.effect;
+        const target = effect instanceof KeyframeEffect ? effect.target : null;
+        const duration = Number(effect?.getComputedTiming().duration ?? 0);
+        return target !== null && list.closest("aside")?.contains(target) === true && duration > 1;
+      }).length,
     };
   });
   // The global rule leaves at most 1 ms, and no stagger delay.
