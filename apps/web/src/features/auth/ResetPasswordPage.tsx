@@ -7,7 +7,7 @@ import { AUTH_SUBMIT, AuthLayout, FormAlert } from "./AuthLayout.tsx";
 import { PasswordField } from "./fields.tsx";
 import { CodeBoxes } from "../../shared/ui/kit/index.ts";
 import { passwordProblem, tokensOf, type LinkTokens } from "./linkTokens.ts";
-import { ApiError, apiError, useApi } from "../../shared/api/api.tsx";
+import { ApiError, apiError, forgetSession, useApi } from "../../shared/api/api.tsx";
 import { Button } from "../../shared/ui/Button.tsx";
 
 /**
@@ -53,7 +53,7 @@ export function ResetPasswordPage() {
       return data;
     },
     onSuccess: async () => {
-      queryClient.removeQueries({ queryKey: ["auth"] });
+      forgetSession(queryClient);
       await router.navigate({ to: "/" });
     },
     onError: (error) => {

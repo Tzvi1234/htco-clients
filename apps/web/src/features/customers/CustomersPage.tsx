@@ -85,7 +85,11 @@ function Reviews() {
         : undefined;
   return (
     <Strip title={<Trans>Reviews</Trans>} meta={meta} label={t`Reviews`}>
-      {reviews.isError ? (
+      {live.isError ? (
+        <div className="col-span-full">
+          <LiveProblem compact error={new Error("shops")} onRetry={live.refetch} />
+        </div>
+      ) : reviews.isError ? (
         <div className="col-span-full">
           <LiveProblem compact error={reviews.error} onRetry={() => void reviews.refetch()} />
         </div>

@@ -72,6 +72,8 @@ export interface FakeState {
    * "hang" never answers.
    */
   liveTrouble?: "unavailable" | "stale" | "quiet" | "hang" | undefined;
+  /** Workspaces whose shop list answers 500. */
+  shopsFailFor?: string[];
   /** True: the shops are busy, 160 orders in 30 days (more than one page of 100). */
   liveBusy?: boolean;
 }
@@ -452,6 +454,8 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
         const start = Number(url.searchParams.get("cursor") ?? "0");
         const end = start + Number(url.searchParams.get("limit") ?? "50");
         const organizationId = url.searchParams.get("organization_id") ?? org;
+        if (state.shopsFailFor?.includes(organizationId) === true)
+          return problem(500, "internal-error");
         return json(200, {
           items: state.shops.slice(start, end).map((shop) => ({
             ...shop,

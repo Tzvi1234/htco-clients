@@ -161,10 +161,15 @@ export function useLiveShops(): LiveShops {
   return useQueries({
     queries: organizations.map((organizationId) => shopsQuery(api, organizationId)),
     combine: (results) => {
-      const pending = me.data === undefined || results.some((r) => r.isPending && !r.isError);
-      const failed = me.isError || (results.length > 0 && results.every((r) => r.isError));
+      // The way the sidebar's shop card counts them: shops as soon as one workspace has some;
+      // none only when every workspace answered; an error when one could not be read and no
+      // shop is known (never "connect a shop" over a failed list; Codex review of #35).
+      const known = results.flatMap((r) => r.data ?? []);
+      const done = me.data !== undefined && results.every((r) => r.isSuccess);
+      const failed =
+        known.length === 0 && (me.isError || results.some((r) => r.isError && !r.isFetching));
       return {
-        shops: pending || failed ? undefined : results.flatMap((r) => r.data ?? []),
+        shops: known.length > 0 || done ? known : undefined,
         isError: failed,
         refetch: () => {
           void me.refetch();

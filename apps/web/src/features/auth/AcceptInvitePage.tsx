@@ -6,7 +6,7 @@ import { useEffect, useState, type SyntheticEvent } from "react";
 import { AUTH_SUBMIT, AuthLayout, FormAlert } from "./AuthLayout.tsx";
 import { PasswordField } from "./fields.tsx";
 import { passwordProblem, tokensOf, type LinkTokens } from "./linkTokens.ts";
-import { ApiError, apiError, useApi } from "../../shared/api/api.tsx";
+import { ApiError, apiError, forgetSession, useApi } from "../../shared/api/api.tsx";
 import { Button } from "../../shared/ui/Button.tsx";
 
 /**
@@ -47,7 +47,7 @@ export function AcceptInvitePage() {
       return data;
     },
     onSuccess: async () => {
-      queryClient.removeQueries({ queryKey: ["auth"] });
+      forgetSession(queryClient);
       await router.navigate({ to: "/" });
     },
   });

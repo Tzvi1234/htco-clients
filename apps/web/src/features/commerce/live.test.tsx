@@ -325,4 +325,28 @@ describe("Codex review of #35", () => {
 
     expect(container.querySelector("img")).toHaveAttribute("src", "data:,b");
   });
+
+  it("says a workspace's shops could not be read instead of offering to connect one", async () => {
+    const other = "c0000000-0000-7000-8000-000000000009";
+    await open("/commerce/orders", {
+      shops: [],
+      integrations: [],
+      otherOrgs: [other],
+      shopsFailFor: [other],
+    });
+
+    const orders = await panel("Orders");
+    expect(within(orders).getByRole("alert")).toHaveTextContent("could not be loaded");
+    expect(screen.queryByRole("link", { name: "Connect a shop" })).not.toBeInTheDocument();
+  });
+
+  it("says on Customers when the shops could not be read, with a retry", async () => {
+    await open("/customers/customers", {
+      shopsFailFor: ["a0000000-0000-7000-8000-000000000000"],
+    });
+
+    const reviews = await panel("Reviews");
+    const alert = await within(reviews).findByRole("alert", undefined, { timeout: 4000 });
+    expect(within(alert).getByRole("button", { name: "Try again" })).toBeInTheDocument();
+  });
 });
