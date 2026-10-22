@@ -203,7 +203,8 @@ describe("Products, live from Etsy", () => {
     expect(photo).toHaveAttribute("loading", "lazy");
     expect(photo).toHaveAttribute("referrerpolicy", "no-referrer");
 
-    fireEvent.error(photo as HTMLImageElement);
+    if (photo === null) throw new Error("no photo");
+    fireEvent.error(photo);
 
     expect(mug.querySelector("img")).toBeNull();
     expect(within(mug).getByText("S")).toBeInTheDocument();
