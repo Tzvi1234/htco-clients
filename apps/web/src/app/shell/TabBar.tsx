@@ -86,7 +86,7 @@ export function TabBar() {
               )}
             >
               <area.icon size={20} />
-              <span className="max-w-full truncate px-1">{labels.area(area)}</span>
+              <span className="max-w-full truncate tracking-[-0.01em]">{labels.area(area)}</span>
             </Link>
           );
         })}
