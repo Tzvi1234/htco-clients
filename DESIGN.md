@@ -131,7 +131,8 @@ gutters inside them, label-over-value pairs, round outline buttons in panel head
 progress and matrix charts. Hebrew and English are equals; the whole layout mirrors.
 
 The design breathes rather than decorates: LED-like pulses on live things, panels that enter one
-after another, a cross-fade between screens, and frosted glass only as a tweak the owner chooses.
+after another, screens that settle back and arrive along the navigation's direction, and the
+navigation and top bar on frosted glass, opening and closing on one spring-like curve (round 3).
 
 **Key Characteristics:**
 
@@ -217,8 +218,9 @@ Inside panels: a 56 px header (title, quiet meta, actions at the end), 24 px gut
 
 Tonal layering first: ground, panel, raised, card. Panels carry no shadow at rest
 (`elevation.panel: none`); the sidebar has a soft lift and a top highlight; menus, the palette
-and the DEMO pill use the popover shadow (`0 18px 40px -22px rgba(0,0,0,.35)`). With frosted
-glass on (tweak 2), panels turn translucent with a backdrop blur over the designed bloom ground.
+and the DEMO pill use the popover shadow (`0 18px 40px -22px rgba(0,0,0,.35)`). The sidebar,
+flyout, phone tab bar and top bar are frosted glass (`data-glass`), solid under the device's
+"reduce transparency"; panels stay solid.
 
 **The Flat Panels Rule.** Depth comes from tone; a shadow means something floats above the
 page (sidebar, menu, dialog, pill).
@@ -249,7 +251,7 @@ explicit value) — Tailwind's own radius scale is removed.
 
 ### Cards / Containers
 
-- **Panel:** `panel` fill, 22 px, hairline edge, no shadow, glass under tweak 2.
+- **Panel:** `panel` fill, 22 px, hairline edge, no shadow, solid.
 - **Card / tile:** `raised` fill, 16 px, 16–24 px padding; KPI tiles hold label over number.
 
 ### Inputs / Fields
@@ -261,8 +263,8 @@ explicit value) — Tailwind's own radius scale is removed.
 
 - **Sidebar categories:** 48 px rows with a 40 px icon disc; the current area's disc is ink;
   tabs hang from a hairline connector; the current tab is an ink pill with an orange dot.
-- **Top bar:** crumbs (12 px) over the light title; language segment, approvals, search and
-  tweaks as 40 px circles.
+- **Top bar:** crumbs (12 px) over the light title; approvals and search as 40 px circles, on
+  frosted glass; personalisation lives in Settings (theme, palette, language).
 - **Phone tab bar:** a floating glass capsule; the current tab is an ink pill.
 
 ### Demo frame (signature)

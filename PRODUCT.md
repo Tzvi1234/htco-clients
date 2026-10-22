@@ -35,7 +35,7 @@ against policies, shown only from recorded activity: never a fake "running" stat
 
 - The web app (`apps/web`) is the first client; Android and Windows follow the same design.
 - `dash.ht-co.app` serves the app and the landing page `/welcome`; both share one preference for
-  language, theme and the design tweaks.
+  language, theme and palette (set in Settings).
 - Built today: sign-in with two-step codes, password reset, invitations, shops (Etsy connection,
   reconnect, capabilities, disconnect), members and access, settings, security. Every other tab
   of the design exists as a dimmed **Demo** screen until its slice is built.
@@ -53,9 +53,8 @@ against policies, shown only from recorded activity: never a fake "running" stat
 
 ## Brand Commitments
 
-- **Design 1C** is the owner's own design (client ADR-0008), copied 1:1: its palettes (SBB gray
-  and orange, Design 4 cream and lilac, Plain ground), the tweaks (contrast, frosted glass,
-  borders, palette, theme), Outfit and Heebo, radii, shell and layouts. Changes refine; they do
+- **Design 1C** is the owner's own design (client ADR-0008), copied 1:1: its palettes (Gray and
+  Cream, both with the logo's orange since round 3), the theme, Outfit and Heebo, radii, shell and layouts. Changes refine; they do
   not redesign.
 - The logo is the owner's Design 1C logo (`assets/brand/`), never redrawn or recoloured outside
   the `logo.*` tokens.

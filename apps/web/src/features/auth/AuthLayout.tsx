@@ -3,11 +3,9 @@ import "./auth.css";
 import type { ReactNode } from "react";
 
 import office from "../../assets/hero/hero11.webp";
-import officeD4 from "../../assets/hero/hero5.webp";
 import parcel from "../../assets/hero/hero10.webp";
 import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
 import { cx } from "../../shared/lib/cx.ts";
-import { useTweaks } from "../../shared/theme/ThemeProvider.tsx";
 import { Logo } from "../../shared/ui/Logo.tsx";
 import { Segmented } from "../../shared/ui/Segmented.tsx";
 
@@ -90,8 +88,8 @@ export function AuthLayout({
  * like the wide screen's panel (fewer things, not smaller ones: no caption and no facts).
  */
 function PhoneArt({ art }: { art: "office" | "parcel" }) {
-  const { tweaks } = useTweaks();
-  const src = art === "parcel" ? parcel : tweaks.palette === "d4" ? officeD4 : office;
+  // The same render in both palettes: since round 3 both carry the logo's orange.
+  const src = art === "parcel" ? parcel : office;
   return (
     <div
       aria-hidden="true"
@@ -157,8 +155,8 @@ function StepDots({ step }: { step: 1 | 2 }) {
  */
 function AuthArt({ art }: { art: "office" | "parcel" }) {
   const { t } = useLingui();
-  const { tweaks } = useTweaks();
-  const src = art === "parcel" ? parcel : tweaks.palette === "d4" ? officeD4 : office;
+  // The same render in both palettes: since round 3 both carry the logo's orange.
+  const src = art === "parcel" ? parcel : office;
   return (
     <aside
       aria-label={art === "office" ? t`Your office` : undefined}
