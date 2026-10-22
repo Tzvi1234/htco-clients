@@ -72,7 +72,7 @@ export function TopListings({
         items.map((listing) => (
           <StripCard
             key={listing.listing_id}
-            topStart={<N>{money(listing.price)}</N>}
+            topStart={<N>{money(listing.price, { whole: true })}</N>}
             topEnd={
               <>
                 <N>{count(listing.views)}</N> {t`views`}
