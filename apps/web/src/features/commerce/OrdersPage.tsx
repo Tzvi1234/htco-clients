@@ -340,6 +340,8 @@ function Orders({ shopId, chips }: { shopId: string; chips: ReactNode }) {
         lead={
           all.data === undefined ? (
             <Trans>The shop's orders, live from Etsy.</Trans>
+          ) : all.data.total === 0 && period !== "all" && soldEver > 0 ? (
+            t`No orders in ${periods[period].within}: the shop's orders are older. Choose a longer period to see them.`
           ) : late > 0 ? (
             <Plural
               value={late}

@@ -117,7 +117,7 @@ msgstr "{shopCount} חנויות"
 
 #: src/features/commerce/OrdersPage.tsx
 msgid "{sold} sales on Etsy since the shop opened, all before this period."
-msgstr "{sold} מכירות ב-Etsy מאז שהחנות נפתחה, כולן לפני התקופה הזו."
+msgstr "{sold} מכירות ב־Etsy מאז שהחנות נפתחה, כולן לפני התקופה הזו."
 
 #: src/features/commerce/ProductsPage.tsx
 msgid "{soldOut, plural, one {One listing is sold out. Restock it on Etsy so it keeps selling.} other {# listings are sold out. Restock them on Etsy so they keep selling.}}"
@@ -135,11 +135,11 @@ msgstr "#3152 של Emma R. ו־#3160 של Liam K. — עיכוב בהדפסה א
 #. placeholder {1}: count(profile.review_count)
 #: src/features/shops/ShopStats.tsx
 msgid "<0>{sold}</0> sales on Etsy, rated <1>{0}</1> in <2>{1}</2> reviews."
-msgstr "<0>{sold}</0> מכירות ב-Etsy, דירוג <1>{0}</1> ב-<2>{1}</2> ביקורות."
+msgstr "<0>{sold}</0> מכירות ב־Etsy, דירוג <1>{0}</1> ב־<2>{1}</2> ביקורות."
 
 #: src/features/shops/ShopStats.tsx
 msgid "<0>{sold}</0> sales on Etsy."
-msgstr "<0>{sold}</0> מכירות ב-Etsy."
+msgstr "<0>{sold}</0> מכירות ב־Etsy."
 
 #: src/features/office/AiOpsPage.tsx
 msgid "$12.40 of $50.00 spent"
@@ -1771,7 +1771,7 @@ msgstr "רווח גולמי"
 
 #: src/features/shops/ShopStats.tsx
 msgid "gross, before Etsy's fees"
-msgstr "ברוטו, לפני העמלות של Etsy"
+msgstr "ברוטו, לפני עמלות Etsy"
 
 #: src/features/finance/FinanceDemos.tsx
 msgid "Growth"
@@ -2490,6 +2490,11 @@ msgstr "אין ליסטינג שמתאים לתצוגה הזו."
 #: src/features/shops/ShopStats.tsx
 msgid "No month with sales yet."
 msgstr "עדיין אין חודש עם מכירות."
+
+#. placeholder {0}: periods[period].within
+#: src/features/commerce/OrdersPage.tsx
+msgid "No orders in {0}: the shop's orders are older. Choose a longer period to see them."
+msgstr "אין הזמנות {0}: הזמנות החנות ישנות יותר. בחרו תקופה ארוכה יותר כדי לראות אותן."
 
 #. placeholder {0}: periods[period].within
 #: src/features/commerce/OrdersPage.tsx
@@ -4259,15 +4264,15 @@ msgstr "הרקע שמאחורי הלוחות."
 
 #: src/features/commerce/OrdersPage.tsx
 msgid "the last 12 months"
-msgstr "ב-12 החודשים האחרונים"
+msgstr "ב־12 החודשים האחרונים"
 
 #: src/features/commerce/OrdersPage.tsx
 msgid "the last 30 days"
-msgstr "ב-30 הימים האחרונים"
+msgstr "ב־30 הימים האחרונים"
 
 #: src/features/commerce/OrdersPage.tsx
 msgid "the last 90 days"
-msgstr "ב-90 הימים האחרונים"
+msgstr "ב־90 הימים האחרונים"
 
 #: src/features/auth/ForgotPasswordPage.tsx
 msgid "The link works once. Check the spam folder if it does not arrive."
@@ -4328,7 +4333,7 @@ msgstr "נתוני החנות אינם זמינים כרגע."
 
 #: src/features/shops/ShopStats.tsx
 msgid "The shop's orders could not be read from Etsy right now, so only Etsy's own counts show."
-msgstr "לא ניתן לקרוא כרגע את הזמנות החנות מ-Etsy, ולכן מוצגות רק הספירות של Etsy עצמה."
+msgstr "לא ניתן לקרוא כרגע את הזמנות החנות מ־Etsy, ולכן מוצגות רק הספירות של Etsy עצמה."
 
 #: src/features/commerce/OrdersPage.tsx
 msgid "The shop's orders, live from Etsy."

@@ -2493,6 +2493,11 @@ msgstr "No month with sales yet."
 
 #. placeholder {0}: periods[period].within
 #: src/features/commerce/OrdersPage.tsx
+msgid "No orders in {0}: the shop's orders are older. Choose a longer period to see them."
+msgstr "No orders in {0}: the shop's orders are older. Choose a longer period to see them."
+
+#. placeholder {0}: periods[period].within
+#: src/features/commerce/OrdersPage.tsx
 msgid "No orders in {0}."
 msgstr "No orders in {0}."
 

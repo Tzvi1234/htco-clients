@@ -122,7 +122,7 @@ function ShopFigures({ shop, picker }: { shop: LiveShop; picker: ReactNode }) {
           </p>
         </Panel>
       ) : data.sales.orders === 0 ? null : (
-        <FlowRow layout="thirds" className="items-stretch">
+        <FlowRow layout="thirds" className="items-stretch lg:grid-cols-3">
           <BestMonth sales={data.sales} />
           <TopProducts sales={data.sales} />
           <Countries sales={data.sales} />
@@ -214,7 +214,7 @@ function Hero({ shop, stats, picker }: { shop: LiveShop; stats: Stats; picker: R
         </Figures>
       }
       footer={
-        sales === null || sales.first_order_at === null ? undefined : (
+        sales?.first_order_at == null ? undefined : (
           <p className="m-0 text-caption text-muted">
             {sales.partial
               ? t`Based on the latest ${count(sales.receipts_read)} orders, since ${date(sales.first_order_at)}. Total sales is Etsy's own count; revenue, averages and months come from these orders.`
