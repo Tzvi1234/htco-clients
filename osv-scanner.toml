@@ -5,3 +5,8 @@
 id = "GHSA-vfj7-8cjw-p6xm"
 ignoreUntil = 2026-12-31T00:00:00Z
 reason = "braces 3.0.3 (stack exhaustion on deeply nested glob patterns; no fixed release yet) is reached only through @lingui/cli, a development tool that expands our own catalog patterns, never untrusted input. Not in the web bundle. Upgrade when a fixed braces or micromatch is published."
+
+[[IgnoredVulns]]
+id = "GHSA-p458-7748-mcp3"
+ignoreUntil = 2026-10-29T00:00:00Z
+reason = "Vitest 5.0.3 dev servers misapply server.fs.deny (fixed in 5.0.5). They run only in local and CI test runs (Browser Mode for stories), never in the web app. 5.0.5 was published 2026-10-15 14:29 UTC and passes the seven-day minimumReleaseAge on 2026-10-22 14:29 UTC; upgrade vitest, @vitest/browser and @vitest/browser-playwright then."
