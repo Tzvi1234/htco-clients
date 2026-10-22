@@ -119,4 +119,12 @@ test("every control on a touch screen has a 44 px target that covers no other (r
   expect(menu.small, "account menu").toEqual([]);
   expect(menu.overlaps, "account menu").toEqual([]);
   await page.keyboard.press("Escape");
+
+  await openApp(page, "/settings", "shops");
+  await page.getByRole("button", { name: /Interface language/ }).click();
+  await expect(page.getByRole("listbox")).toBeVisible();
+  const list = await measure(page);
+  expect(list.small, "language list").toEqual([]);
+  expect(list.overlaps, "language list").toEqual([]);
+  await page.keyboard.press("Escape");
 });
