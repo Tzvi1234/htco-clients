@@ -151,8 +151,9 @@ numbers at the end. Wayfinding: crumbs, the current tab inked, the title in the 
 
 - `prefers-contrast: more` — secondary and muted text move toward the ink (82 %) and hairlines
   become strong lines, in every palette and theme.
-- `prefers-reduced-transparency: reduce` — frosted glass turns solid even when the tweak asks
-  for it.
+- `prefers-reduced-transparency: reduce` — frosted glass is applied as off (`applyTweaks` and the
+  boot script), so every surface is solid with the contrast it was solved for; the remembered
+  tweak is kept.
 - `forced-colors: active` — controls keep a `ButtonText` edge and the focus ring uses
   `Highlight`.
 

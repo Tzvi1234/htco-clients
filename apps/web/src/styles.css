@@ -548,19 +548,13 @@
 
 /* The device's own preferences (round 2, "user preference respect"). More contrast: secondary
    and muted text move toward the ink and hairlines become strong lines, in every palette and
-   theme. Less transparency: frosted glass turns solid even when the tweak asks for it. Forced
+   theme. Less transparency: frosted glass is applied as off (tweaks.ts, boot.ts). Forced
    colours: controls keep a visible edge and the focus ring uses the system's highlight. */
 @media (prefers-contrast: more) {
   :root {
     --text-secondary: color-mix(in srgb, var(--text-primary) 82%, transparent);
     --text-muted: color-mix(in srgb, var(--text-primary) 82%, transparent);
     --border-subtle: var(--border-strong);
-  }
-}
-
-@media (prefers-reduced-transparency: reduce) {
-  :root {
-    --glass-backdrop: none;
   }
 }
 
