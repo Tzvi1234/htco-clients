@@ -5,7 +5,7 @@ import { useState, type SyntheticEvent } from "react";
 
 import { AUTH_LINK, AUTH_SUBMIT, AuthLayout, FormAlert } from "./AuthLayout.tsx";
 import { AuthField, PasswordField } from "./fields.tsx";
-import { ApiError, apiError, safeRedirect, useApi } from "../../shared/api/api.tsx";
+import { apiError, ApiError, forgetSession, safeRedirect, useApi } from "../../shared/api/api.tsx";
 import { Button } from "../../shared/ui/Button.tsx";
 
 /** Email and password, checked by the API (the browser never talks to Supabase, ADR-0006). */
@@ -28,7 +28,7 @@ export function SignInPage() {
     },
     onSuccess: async () => {
       // The route guards read these from the cache: drop them so they ask the API again.
-      queryClient.removeQueries({ queryKey: ["auth"] });
+      forgetSession(queryClient);
       await router.navigate({ href: safeRedirect(search.redirect) });
     },
   });

@@ -7,14 +7,18 @@ import { TWEAKS_BOOT_SCRIPT } from "../theme/boot.ts";
 import { refuseFraming } from "./framing.ts";
 
 describe("the Content Security Policy (AC-3.8.2)", () => {
-  it("allows only this origin, plus data: images for the authenticator QR code", () => {
+  it("allows only this origin, plus data: images (QR code) and Etsy's listing photos", () => {
     expect(CONTENT_SECURITY_POLICY).toContain("default-src 'self'");
     expect(CONTENT_SECURITY_POLICY).toContain("script-src 'self'");
-    expect(CONTENT_SECURITY_POLICY).toContain("img-src 'self' data:");
+    expect(CONTENT_SECURITY_POLICY).toContain("img-src 'self' data: https://i.etsystatic.com;");
     expect(CONTENT_SECURITY_POLICY).toContain("object-src 'none'");
     expect(CONTENT_SECURITY_POLICY).not.toContain("unsafe-inline");
     expect(CONTENT_SECURITY_POLICY).not.toContain("unsafe-eval");
-    expect(CONTENT_SECURITY_POLICY).not.toMatch(/https?:/);
+    // The one other host: Etsy's image CDN, for images only (no scripts, styles or connections).
+    expect(CONTENT_SECURITY_POLICY.match(/https?:\/\/[^\s;]+/g)).toEqual([
+      "https://i.etsystatic.com",
+    ]);
+    expect(CONTENT_SECURITY_POLICY).toContain("connect-src 'self';");
   });
 
   it("is written into the built page's head, before any script", () => {

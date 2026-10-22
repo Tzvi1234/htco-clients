@@ -6,6 +6,13 @@ import { Link } from "@tanstack/react-router";
 import { useEffect, useState, type KeyboardEvent, type ReactNode } from "react";
 
 import { HERO_NAMES, HEROES } from "./heroes.ts";
+import {
+  LiveNote,
+  overviewQuery,
+  useCount,
+  useMoney,
+  type ShopOverview,
+} from "../commerce/live.tsx";
 import { shopCardState } from "../../app/shell/ShopSwitcher.tsx";
 import { meQuery, sessionQuery, shopsQuery, useApi, type ShopView } from "../../shared/api/api.tsx";
 import { RiskChip } from "../../shared/demo/AgentBits.tsx";
@@ -52,8 +59,10 @@ import {
 /**
  * Home (Design 1C `P.home`): what needs the owner, today with the hero carousel and its key
  * numbers, the shops, getting started and the office pulse. Real: the greeting and date, the
- * shops and their count, and getting started. Approvals, the numbers from orders and the office
- * keep the demo's design with its sample data, dimmed and labelled "Demo", until they are built.
+ * shops and their count, getting started, and the first shop's revenue and orders today, live
+ * from Etsy.
+ * Approvals, tickets, incidents and the office keep the demo's design with its sample data,
+ * dimmed and labelled "Demo", until they are built.
  */
 export function OverviewPage() {
   const { t } = useLingui();
@@ -162,6 +171,7 @@ function Today() {
   }[greetingFor(now.getHours())];
   const date = [two(now.getDate()), two(now.getMonth() + 1), String(now.getFullYear())].join(".");
   const count = shops.data?.length;
+  const live = useFirstShopOverview(shops.data);
   return (
     <Panel className="home-today">
       <PanelHeader
@@ -193,28 +203,13 @@ function Today() {
           )
         }
       />
-      <DemoPart tag="edge">
-        <Kpis label={t`Key numbers`}>
-          <Kpi
-            label={t`Revenue`}
-            value={<N>$1,284</N>}
-            trend="up"
-            delta={
-              <>
-                <N>+12%</N> {t`vs yesterday`}
-              </>
-            }
-          />
-          <Kpi
-            label={t`Orders`}
-            value={<N>37</N>}
-            trend="up"
-            delta={
-              <>
-                <N>+5</N> {t`vs yesterday`}
-              </>
-            }
-          />
+      <Kpis label={t`Key numbers`}>
+        <TodayKpis live={live} />
+        <DemoPart
+          tag="edge"
+          className="col-span-2 border-s border-line max-sm:shrink-0 max-sm:basis-[84%]"
+          contentClassName="grid grid-cols-2"
+        >
           <Kpi label={t`Open tickets`} value={<N>4</N>} delta={t`2 with Dana`} />
           <Kpi
             label={t`Incidents`}
@@ -226,9 +221,94 @@ function Today() {
               </>
             }
           />
-        </Kpis>
-      </DemoPart>
+        </DemoPart>
+      </Kpis>
     </Panel>
+  );
+}
+
+interface FirstShopLive {
+  /** The shop asked; undefined when there is none (or the shops are loading). */
+  shopId: string | undefined;
+  overview: ShopOverview | undefined;
+  error: Error | null;
+}
+
+/** The first active shop's live overview (the one Home's numbers are about). */
+function useFirstShopOverview(shops: ShopView[] | undefined): FirstShopLive {
+  const api = useApi();
+  const shop = shops?.find((s) => s.status === "active") ?? shops?.[0];
+  const overview = useQuery({ ...overviewQuery(api, shop?.id ?? ""), enabled: shop !== undefined });
+  return { shopId: shop?.id, overview: overview.data, error: overview.error };
+}
+
+/** Revenue and orders today against yesterday, live from Etsy. */
+function TodayKpis({ live }: { live: FirstShopLive }) {
+  const { t } = useLingui();
+  const money = useMoney();
+  const count = useCount();
+  const sales = live.overview?.sales ?? null;
+  const today = sales?.daily.at(-1);
+  const yesterday = sales?.daily.at(-2);
+  const missing =
+    live.overview === undefined
+      ? live.error === null && live.shopId !== undefined
+        ? "…"
+        : "—"
+      : "—";
+  const revenueDelta =
+    today === undefined || yesterday === undefined
+      ? undefined
+      : Number(today.revenue) - Number(yesterday.revenue);
+  const ordersDelta =
+    today === undefined || yesterday === undefined ? undefined : today.orders - yesterday.orders;
+  const signed = (n: number, text: string) => (n > 0 ? `+${text}` : n < 0 ? `−${text}` : text);
+  return (
+    <>
+      <Kpi
+        label={t`Revenue`}
+        value={<N>{sales === null ? missing : money(sales.today.revenue, { whole: true })}</N>}
+        {...(revenueDelta === undefined || sales === null
+          ? {}
+          : {
+              ...(revenueDelta === 0 ? {} : { trend: revenueDelta > 0 ? "up" : "down" }),
+              delta: (
+                <>
+                  <N>
+                    {signed(
+                      revenueDelta,
+                      money(
+                        { amount: String(Math.abs(revenueDelta)), currency: sales.currency },
+                        { whole: true },
+                      ),
+                    )}
+                  </N>{" "}
+                  {t`vs yesterday`}
+                </>
+              ),
+            })}
+      />
+      <Kpi
+        label={t`Orders`}
+        value={<N>{sales === null ? missing : count(sales.today.orders)}</N>}
+        {...(ordersDelta === undefined
+          ? live.overview === undefined
+            ? {}
+            : {
+                delta: (
+                  <LiveNote fetchedAt={live.overview.fetched_at} stale={live.overview.stale} />
+                ),
+              }
+          : {
+              ...(ordersDelta === 0 ? {} : { trend: ordersDelta > 0 ? "up" : "down" }),
+              delta: (
+                <>
+                  <N>{signed(ordersDelta, count(Math.abs(ordersDelta)))}</N> {t`vs yesterday`}
+                </>
+              ),
+            })}
+      />
+    </>
   );
 }
 
@@ -428,6 +508,12 @@ function ShopCard({
   settings: ReactNode;
 }) {
   const { t } = useLingui();
+  const api = useApi();
+  const money = useMoney();
+  const number = useCount();
+  const overview = useQuery(overviewQuery(api, shop.id));
+  const sales = overview.data?.sales ?? null;
+  const week = sales?.daily.slice(-7) ?? [];
   const shopCount = String(count);
   const marketplace = shop.marketplace === "etsy" ? "Etsy" : shop.marketplace;
   return (
@@ -446,29 +532,57 @@ function ShopCard({
             />
           </div>
         </IdBlock>
-        <DemoPart className="flex flex-col gap-4">
-          <div>
-            <DotColumns values={[5, 7, 6, 9, 8, 11, 12]} rows={5} pitch={9} gap={16} />
-          </div>
+        <div className="flex flex-col gap-4">
+          {overview.isError ? (
+            <p className="m-0 text-center text-caption text-secondary">
+              {t`The shop's numbers are not available right now.`}
+            </p>
+          ) : (
+            <div className="flex justify-center" aria-busy={overview.data === undefined}>
+              {overview.data !== undefined && week.length === 0 ? (
+                <p className="m-0 text-caption text-secondary">
+                  {t`Sales are not available for this shop.`}
+                </p>
+              ) : week.length === 0 ? (
+                <span className="h-[45px] w-40 rounded-pill bg-hover motion-safe:animate-pulse" />
+              ) : (
+                <DotColumns
+                  values={week.map((d) => d.orders)}
+                  rows={5}
+                  pitch={9}
+                  gap={16}
+                  highlight={week.length - 1}
+                  label={t`Orders in the last 7 days: ${week.map((d) => String(d.orders)).join(", ")}`}
+                />
+              )}
+            </div>
+          )}
           <KV2
             items={[
               [
                 t`Orders today:`,
                 <Pill wide key="orders">
                   <Dot tone="ink" />
-                  <N>23</N>
+                  <N>{sales === null ? "—" : number(sales.today.orders)}</N>
                 </Pill>,
               ],
               [
                 t`Revenue today:`,
                 <Pill wide key="revenue">
                   <Dot tone="success" />
-                  <N>$842</N>
+                  <N>{sales === null ? "—" : money(sales.today.revenue, { whole: true })}</N>
                 </Pill>,
               ],
             ]}
           />
-        </DemoPart>
+          {overview.data === undefined ? null : (
+            <LiveNote
+              fetchedAt={overview.data.fetched_at}
+              stale={overview.data.stale}
+              className="self-center"
+            />
+          )}
+        </div>
       </PanelBody>
     </Panel>
   );

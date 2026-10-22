@@ -7,11 +7,12 @@ import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
 import { cx } from "../../shared/lib/cx.ts";
 import { Ltr } from "../../shared/ui/Ltr.tsx";
 import { Capabilities, type Recheck } from "./Capabilities.tsx";
+import { LiveNote, useCount, useMoney, type ShopOverview } from "../commerce/live.tsx";
+import { ApiError } from "../../shared/api/api.tsx";
 import { ago, daysLeft } from "./time.ts";
 import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
 import {
   CircleButton,
-  DemoPart,
   Dot,
   IdBlock,
   KV2,
@@ -69,11 +70,82 @@ function Detail({
   );
 }
 
+/** The shop's live numbers from Etsy, as the card shows them. */
+export interface ShopLive {
+  overview: ShopOverview | undefined;
+  error: Error | null;
+}
+
+/** Orders and revenue today, favourites and rating, live from Etsy, with their freshness. */
+function LiveTiles({ live }: { live: ShopLive }) {
+  const { t } = useLingui();
+  const money = useMoney();
+  const count = useCount();
+  const overview = live.overview;
+  const grid = "grid grid-cols-4 gap-2 max-sm:grid-cols-2 max-sm:[&>*:nth-child(n+3)]:hidden";
+  if (overview === undefined && live.error === null)
+    return (
+      <div aria-busy="true" className={grid}>
+        <span role="status" className="sr-only">
+          <Trans>Loading the shop's numbers</Trans>
+        </span>
+        {[0, 1, 2, 3].map((n) => (
+          <span
+            key={n}
+            aria-hidden="true"
+            className="h-[86px] rounded-card bg-hover motion-safe:animate-pulse"
+          />
+        ))}
+      </div>
+    );
+  if (overview === undefined) {
+    const type = live.error instanceof ApiError ? live.error.type : undefined;
+    return (
+      <p className="m-0 rounded-card border border-dashed border-line-strong px-4 py-3 text-center text-caption text-secondary">
+        {type === "shop-not-connected"
+          ? t`Orders, revenue and rating appear here while the shop is connected.`
+          : t`Etsy is not answering right now; the shop's numbers will be back shortly.`}
+      </p>
+    );
+  }
+  const sales = overview.sales;
+  const rating = overview.profile.review_average;
+  const reviews = overview.profile.review_count;
+  return (
+    <div className="flex flex-col gap-2">
+      <div className={grid}>
+        <Tile
+          label={<Trans>Orders today</Trans>}
+          value={<N>{sales === null ? "—" : count(sales.today.orders)}</N>}
+        />
+        <Tile
+          label={<Trans>Revenue today</Trans>}
+          value={<N>{sales === null ? "—" : money(sales.today.revenue, { whole: true })}</N>}
+        />
+        <Tile
+          label={<Trans>Favourites</Trans>}
+          value={<N>{count(overview.profile.favorer_count)}</N>}
+        />
+        <Tile
+          label={<Trans>Rating</Trans>}
+          value={<N>{rating === null ? "—" : Number(rating).toFixed(1)}</N>}
+          {...(reviews === null ? {} : { sub: t`${count(reviews)} reviews` })}
+        />
+      </div>
+      <LiveNote
+        fetchedAt={overview.fetched_at}
+        stale={overview.stale}
+        className="self-center lg:-mb-2"
+      />
+    </div>
+  );
+}
+
 /**
  * A shop and its Etsy connection (slice 4.6), in the Design 1C shop panel: the shop's name as
- * the large identifier, the parcel, the planned sales tiles (Demo until orders sync, phase 5),
- * then the real connection: health in plain words, the granted access, status and last sync.
- * Never a token.
+ * the large identifier, the parcel, the shop's numbers live from Etsy (orders and revenue today,
+ * favourites, rating, with their freshness), then the connection: health in plain words, the
+ * granted access, status and last sync. Never a token.
  */
 export function ShopCard({
   shop,
@@ -84,8 +156,11 @@ export function ShopCard({
   recheck,
   disconnect,
   detailsLoading = false,
+  live,
 }: {
   shop: ShopView;
+  /** The shop's live numbers; undefined when not asked (a disconnected shop). */
+  live?: ShopLive | undefined;
   /** The connection details are still on their way: their rows show as placeholders. */
   detailsLoading?: boolean;
   /** Undefined for roles that may not see connection details. */
@@ -162,14 +237,14 @@ export function ShopCard({
               <Trans>Etsy</Trans>
             ) : (
               <>
-                <Trans>Etsy shop</Trans> <Ltr>{integration.etsy_shop_id}</Ltr>
+                <Trans>Etsy shop ID</Trans> · <Ltr>{integration.etsy_shop_id}</Ltr>
               </>
             )}
           </p>
         </IdBlock>
         {/* One art height for every card, so cards side by side keep their rows level whether or
             not one of them shows Reconnect; the leftover space collects under the last row. */}
-        <div className="flex h-36 shrink-0 items-center justify-center max-sm:h-24 lg:h-[clamp(72px,calc(100dvh-820px),160px)]">
+        <div className="flex h-36 shrink-0 items-center justify-center max-sm:h-24 lg:h-[clamp(64px,calc(100dvh-860px),160px)]">
           <img
             src={parcel}
             alt=""
@@ -180,14 +255,7 @@ export function ShopCard({
             )}
           />
         </div>
-        <DemoPart tag="edge">
-          <div className="grid grid-cols-4 gap-2 max-sm:grid-cols-2 max-sm:[&>*:nth-child(n+3)]:hidden">
-            <Tile label={<Trans>Orders today</Trans>} value={<N>23</N>} />
-            <Tile label={<Trans>Revenue today</Trans>} value={<N>$842</N>} />
-            <Tile label={<Trans>Favourites</Trans>} value={<N>1,204</N>} />
-            <Tile label={<Trans>Rating</Trans>} value={<N>4.9</N>} />
-          </div>
-        </DemoPart>
+        {live === undefined || asleep ? null : <LiveTiles live={live} />}
         {detailsLoading ? (
           <div className="flex flex-col gap-3">
             <span role="status" className="sr-only">

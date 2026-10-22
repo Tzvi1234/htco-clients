@@ -7,7 +7,7 @@ import { Button as AriaButton } from "react-aria-components";
 
 import { AUTH_LINK, AUTH_SUBMIT, AuthLayout, FormAlert } from "./AuthLayout.tsx";
 import { CodeBoxes } from "../../shared/ui/kit/index.ts";
-import { ApiError, apiError, mfaQuery, useApi } from "../../shared/api/api.tsx";
+import { ApiError, apiError, forgetSession, mfaQuery, useApi } from "../../shared/api/api.tsx";
 import { useSignOut } from "../../shared/api/useSignOut.ts";
 import { Button } from "../../shared/ui/Button.tsx";
 import { Ltr } from "../../shared/ui/Ltr.tsx";
@@ -58,7 +58,7 @@ function useFinish() {
   const router = useRouter();
   return async () => {
     // The route guards read these from the cache: drop them so they ask the API again.
-    queryClient.removeQueries({ queryKey: ["auth"] });
+    forgetSession(queryClient);
     await router.navigate({ href: "/" });
   };
 }

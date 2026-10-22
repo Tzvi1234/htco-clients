@@ -4,7 +4,7 @@ import { RouterProvider, type RouterHistory } from "@tanstack/react-router";
 import { useState } from "react";
 
 import { createAppRouter } from "./router.tsx";
-import { ApiError, ApiProvider, createApiClient } from "../shared/api/api.tsx";
+import { ApiError, ApiProvider, createApiClient, forgetSession } from "../shared/api/api.tsx";
 import { LocaleProvider } from "../shared/i18n/LocaleProvider.tsx";
 import { IntroProvider } from "../shared/motion/intro.tsx";
 import type { Locale } from "../shared/i18n/locale.ts";
@@ -34,7 +34,7 @@ export function App({ locale, theme, storage, history, api: given }: AppProps) {
       queryCache: new QueryCache({
         onError: (error) => {
           if (error instanceof ApiError && error.status === 401) {
-            client.removeQueries({ queryKey: ["auth"] });
+            forgetSession(client);
             void appRouter.navigate({ to: "/sign-in" });
           }
         },

@@ -43,13 +43,11 @@ afterEach(() => {
 const content = () => screen.getByTestId("demo-content");
 
 // Every demo screen this change draws, with its title and one panel that must be on it.
+// Orders, Products and Shipping are real screens now, live from Etsy (live.test.tsx).
 const SCREENS = [
   ["/work/tasks", "Tasks", "Completed today"],
   ["/work/approvals", "Approvals", "Pending decisions"],
   ["/work/activity", "Activity", "Activity log"],
-  ["/commerce/orders", "Orders", "Filters"],
-  ["/commerce/products", "Products", "Catalog"],
-  ["/commerce/shipping", "Shipping", "Active shipments"],
   ["/commerce/suppliers", "Suppliers", "Unit cost by product"],
 ] as const;
 
@@ -85,37 +83,32 @@ describe("the Work and Commerce demo screens (redesign)", () => {
     expect(backend.requests.length).toBe(before);
   });
 
-  it("names the orders table and keeps order numbers in their own direction", async () => {
-    await open("/commerce/orders", "he");
-    const table = within(content()).getByRole("table", { name: "הזמנות", hidden: true });
-    expect(within(table).getByText("#3152")).toHaveClass("ltr");
+  it("names the suppliers table and keeps supplier names in their own direction", async () => {
+    await open("/commerce/suppliers", "he");
+    const table = within(content()).getByRole("table", { name: "ספקים", hidden: true });
+    expect(within(table).getByText("Printful")).toHaveClass("ltr");
   });
 
   it("shows the demo screens on phones", async () => {
     phone();
-    await open("/commerce/orders");
+    await open("/commerce/suppliers");
     expect(screen.queryByRole("complementary", { name: "Sidebar" })).not.toBeInTheDocument();
     expect(screen.getByText("DEMO")).toBeInTheDocument();
     expect(
-      within(content()).getByRole("table", { name: "Orders", hidden: true }),
+      within(content()).getByRole("table", { name: "Suppliers", hidden: true }),
     ).toBeInTheDocument();
   });
 });
 
 describe("Shops in the Design 1C panels", () => {
-  it("marks the planned sales tiles and top listings as Demo, hidden from screen readers", async () => {
+  it("shows the shop's sales tiles live from Etsy, readable and without a Demo mark", async () => {
     await open("/shops", "en", true);
     const card = await screen.findByRole("article", { name: "Willow & Wick" });
-    const part = card.querySelector("[data-demo-part]");
-    expect(part).not.toBeNull();
-    expect(within(part as HTMLElement).getByText("Demo")).toBeInTheDocument();
-    expect(
-      within(part as HTMLElement)
-        .getByText("Revenue today")
-        .closest("[aria-hidden]"),
-    ).not.toBeNull();
-    expect(screen.queryByRole("heading", { name: "Top listings" })).not.toBeInTheDocument();
-    expect(screen.getAllByText("Demo").length).toBeGreaterThanOrEqual(5);
+    expect(await within(card).findByText("Revenue today")).toBeInTheDocument();
+    expect(card.querySelector("[data-demo-part]")).toBeNull();
+    expect(within(card).getByText("Revenue today").closest("[aria-hidden]")).toBeNull();
+    expect(within(card).getByText(/Live from Etsy/)).toBeInTheDocument();
+    expect(screen.queryByText("Demo")).not.toBeInTheDocument();
   });
 
   it("offers the Owner to connect another shop beside the shops", async () => {

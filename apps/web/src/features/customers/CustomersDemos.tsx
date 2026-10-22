@@ -12,7 +12,6 @@ import {
   MoreIcon,
   SearchIcon,
 } from "../../shared/ui/icons.tsx";
-import { useZoomLabels } from "../admin/AdminDemos.tsx";
 import {
   Avatar,
   CircleButton,
@@ -35,12 +34,8 @@ import {
   Stack,
   Status,
   StatusGlyph,
-  Strip,
-  StripCard,
-  Zoom,
   useStatusLabels,
   type AgentStatus,
-  type DotTone,
 } from "../../shared/ui/kit/index.ts";
 
 const L = ({ children }: { children: ReactNode }) => <span className="ltr">{children}</span>;
@@ -266,111 +261,81 @@ export function TicketsDemo({ title }: { title: string }) {
   );
 }
 
-/** Customers › Customers (`P.customers`): health, every customer, and segments. */
-export function CustomersDemo({ title }: { title: string }) {
+const CUSTOMERS = ["Emma R.", "Liam K.", "Sofia M.", "Noah B.", "Olivia P.", "Ava T."];
+const COUNTRIES = ["US", "UK", "DE", "US", "CA", "AU"];
+const ORDER_COUNTS = [3, 2, 1, 4, 2, 1];
+const TOTALS = [156, 88, 42, 214, 96, 24];
+
+/** The customers' health as the demo draws it (a customer store arrives with Phase 5). */
+export function CustomerHealthPanel() {
   const { t } = useLingui();
-  const zoom = useZoomLabels();
-  const customers = ["Emma R.", "Liam K.", "Sofia M.", "Noah B.", "Olivia P.", "Ava T."];
-  const countries = ["US", "UK", "DE", "US", "CA", "AU"];
-  const orders = [3, 2, 1, 4, 2, 1];
-  const totals = [156, 88, 42, 214, 96, 24];
-  const segments: [string, string, DotTone][] = [
-    [t`Returning`, "31%", "success"],
-    [t`New`, "112", "info"],
-    ["VIP", "24", "attention"],
-    [t`US`, "58%", "ink"],
-    [t`UK`, "14%", "ink"],
-    [t`DE`, "9%", "ink"],
-    [t`CA`, "7%", "ink"],
-    [t`AU`, "5%", "ink"],
-  ];
   return (
-    <DemoFrame title={title} layout="l2s">
-      <Panel>
-        <PanelHeader title={<Trans>Customers</Trans>} />
-        <PanelBody className="justify-between gap-6">
-          <IdBlock label={t`Active customers:`} value={<L>1,486</L>} />
-          <KV
-            items={[
-              [t`New this month`, <L key="a">112</L>],
-              [t`Returning`, <L key="b">31%</L>],
-              [t`Avg. value`, <L key="c">$52</L>],
-              [t`Open tickets`, <L key="d">4</L>],
-            ]}
-          />
-          <Matrix
-            k={4}
-            top={t`Loyalty`}
-            start={t`Frequency`}
-            end={t`Value`}
-            bottom={t`Recency`}
-            value="74"
-            caption={t`Healthy`}
-          />
-        </PanelBody>
-      </Panel>
-      <Panel>
-        <PanelHeader
-          title={<Trans>All customers</Trans>}
-          meta={<L>6</L>}
-          actions={
-            <span className="flex h-10 w-[220px] items-center gap-2 rounded-pill border border-line-strong px-3.5 text-body-sm text-muted max-md:hidden">
-              <SearchIcon size={14} />
-              {t`Search customer`}
-            </span>
-          }
+    <Panel className="h-full w-full">
+      <PanelHeader title={<Trans>Customers</Trans>} />
+      <PanelBody className="justify-between gap-6">
+        <IdBlock label={t`Active customers:`} value={<L>1,486</L>} />
+        <KV
+          items={[
+            [t`New this month`, <L key="a">112</L>],
+            [t`Returning`, <L key="b">31%</L>],
+            [t`Avg. value`, <L key="c">$52</L>],
+            [t`Open tickets`, <L key="d">4</L>],
+          ]}
         />
-        <DataTable
-          label={t`All customers`}
-          ends={[2, 3]}
-          phoneHidden={[1, 4, 5]}
-          head={[t`Customer`, t`Country`, t`Orders`, t`Total`, t`Last order`, t`Shop`, t`Ticket`]}
-          rows={customers.map((name, i) => ({
-            key: name,
-            cells: [
-              <L key="n">{name}</L>,
-              <L key="c">{countries[i]}</L>,
-              <L key="o">{orders[i]}</L>,
-              <L key="t">${totals[i]}</L>,
-              <L key="l">#{3152 + i * 4}</L>,
-              <L key="s">{i % 2 === 1 ? "HTZ Home" : "HTZ Prints"}</L>,
-              i === 0 ? (
-                <Status key="k" live status="waityou" label={<L>TK-88</L>} />
-              ) : (
-                <span key="k" className="text-muted">
-                  —
-                </span>
-              ),
-            ],
-          }))}
+        <Matrix
+          k={4}
+          top={t`Loyalty`}
+          start={t`Frequency`}
+          end={t`Value`}
+          bottom={t`Recency`}
+          value="74"
+          caption={t`Healthy`}
         />
-      </Panel>
-      <Strip
-        title={<Trans>Segments</Trans>}
-        meta={<L>8</L>}
-        zoom={<Zoom labels={zoom} page={0} />}
-        actions={<CircleButton label={t`Search`} icon={<SearchIcon />} />}
-      >
-        {segments.map(([name, value, tone], i) => (
-          <StripCard
-            key={name}
-            topStart={name}
-            topEnd={<L>S-0{i + 1}</L>}
-            selected={i === 2}
-            line={
-              <span className="inline-flex items-center gap-1.5">
-                <Dot tone={tone} />
-                {t`Active`}
+      </PanelBody>
+    </Panel>
+  );
+}
+
+/** Every customer as the demo draws it. */
+export function AllCustomersPanel() {
+  const { t } = useLingui();
+  return (
+    <Panel className="h-full w-full">
+      <PanelHeader
+        title={<Trans>All customers</Trans>}
+        meta={<L>6</L>}
+        actions={
+          <span className="flex h-10 w-[220px] items-center gap-2 rounded-pill border border-line-strong px-3.5 text-body-sm text-muted max-md:hidden">
+            <SearchIcon size={14} />
+            {t`Search customer`}
+          </span>
+        }
+      />
+      <DataTable
+        label={t`All customers`}
+        ends={[2, 3]}
+        phoneHidden={[1, 4, 5]}
+        head={[t`Customer`, t`Country`, t`Orders`, t`Total`, t`Last order`, t`Shop`, t`Ticket`]}
+        rows={CUSTOMERS.map((name, i) => ({
+          key: name,
+          cells: [
+            <L key="n">{name}</L>,
+            <L key="c">{COUNTRIES[i]}</L>,
+            <L key="o">{ORDER_COUNTS[i]}</L>,
+            <L key="t">${TOTALS[i]}</L>,
+            <L key="l">#{3152 + i * 4}</L>,
+            <L key="s">{i % 2 === 1 ? "HTZ Home" : "HTZ Prints"}</L>,
+            i === 0 ? (
+              <Status key="k" live status="waityou" label={<L>TK-88</L>} />
+            ) : (
+              <span key="k" className="text-muted">
+                —
               </span>
-            }
-          >
-            <div className="font-display text-display-sm leading-[1.2] font-light">
-              <L>{value}</L>
-            </div>
-          </StripCard>
-        ))}
-      </Strip>
-    </DemoFrame>
+            ),
+          ],
+        }))}
+      />
+    </Panel>
   );
 }
 

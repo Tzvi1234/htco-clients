@@ -405,7 +405,7 @@ function tabName(id: string): string {
 }
 
 describe("the demo label", () => {
-  it.each(["/office/chat", "/work/tasks", "/commerce/orders", "/finance/ledger"])(
+  it.each(["/office/chat", "/work/tasks", "/commerce/suppliers", "/finance/ledger"])(
     "%s carries the large DEMO pill in the top bar, centred there, never inside the screen",
     async (path) => {
       await open(path);

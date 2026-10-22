@@ -1,5 +1,7 @@
 import { createApiClient, type ApiClient, type components } from "@htco/api-client";
 
+import { fakeShopData } from "./fakeShopData.ts";
+
 type IntegrationView = components["schemas"]["IntegrationView"];
 type CapabilityView = components["schemas"]["CapabilityView"];
 
@@ -64,6 +66,16 @@ export interface FakeState {
   disconnects: string[];
   /** True: a re-check answers 429 capability-check-too-soon (Retry-After 30). */
   recheckTooSoon: boolean;
+  /**
+   * The shops' live Etsy data (`GET /v1/shops/{id}/overview|orders|…`): "unavailable" answers
+   * 503 etsy-data-unavailable, "stale" marks the data stale, "quiet" is a shop without orders,
+   * "hang" never answers.
+   */
+  liveTrouble?: "unavailable" | "stale" | "quiet" | "hang" | "partial" | "no-sales" | undefined;
+  /** Workspaces whose shop list answers 500. */
+  shopsFailFor?: string[];
+  /** True: the shops are busy, 160 orders in 30 days (more than one page of 100). */
+  liveBusy?: boolean;
 }
 
 const PROBLEMS = "https://ht-co.app/problems/";
@@ -382,6 +394,11 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
       return json(200, disconnected);
     }
 
+    const live = /^GET \/v1\/shops\/([^/]+)\/(overview|orders|listings|reviews|shipping)$/.exec(
+      route,
+    );
+    if (live !== null) return liveData(live[1] ?? "", live[2] ?? "", url);
+
     switch (route) {
       case "GET /v1/auth/session":
         return json(200, { user_id: user, assurance: state.assurance });
@@ -437,6 +454,8 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
         const start = Number(url.searchParams.get("cursor") ?? "0");
         const end = start + Number(url.searchParams.get("limit") ?? "50");
         const organizationId = url.searchParams.get("organization_id") ?? org;
+        if (state.shopsFailFor?.includes(organizationId) === true)
+          return problem(500, "internal-error");
         return json(200, {
           items: state.shops.slice(start, end).map((shop) => ({
             ...shop,
@@ -489,6 +508,62 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
         return problem(404, "not-found");
       }
     }
+  }
+
+  /** A connected shop's invented Etsy data, as the API answers it. */
+  function liveData(shopId: string, view: string, url: URL): Response | Promise<Response> {
+    const shop = state.shops.find((s) => s.id === shopId);
+    if (shop === undefined) return problem(404, "not-found");
+    const integration = state.integrations.find((i) => i.shop_id === shopId);
+    if (integration !== undefined && integration.status !== "connected")
+      return problem(409, "shop-not-connected");
+    const trouble = state.liveTrouble;
+    if (trouble === "hang") return new Promise<Response>(() => undefined);
+    if (trouble === "unavailable") return problem(503, "etsy-data-unavailable");
+    const contact = state.role === "owner" || state.role === "admin" || state.role === "support";
+    const data = fakeShopData(shopId, shop.name, Date.now(), contact, state.liveBusy === true);
+    const mark = <T extends { stale: boolean; fetched_at: string }>(body: T): T =>
+      trouble === "stale"
+        ? { ...body, stale: true, fetched_at: new Date(Date.now() - 40 * 60_000).toISOString() }
+        : body;
+    if (view === "overview") {
+      const overview = mark(data.overview);
+      if (trouble === "quiet" && overview.sales !== null) {
+        const none = { orders: 0, units: 0, revenue: { amount: "0.00", currency: "USD" } };
+        return json(200, {
+          ...overview,
+          sales: {
+            ...overview.sales,
+            today: none,
+            last_7_days: none,
+            last_30_days: none,
+            daily: overview.sales.daily.map((d) => ({ ...d, orders: 0, revenue: "0.00" })),
+            awaiting_shipment: 0,
+            overdue: 0,
+            top_listings: [],
+          },
+        });
+      }
+      return json(200, trouble === "no-sales" ? { ...overview, sales: null } : overview);
+    }
+    if (view === "orders") {
+      const page = data.ordersFor(
+        url.searchParams.get("state"),
+        Number(url.searchParams.get("limit") ?? "50"),
+        Number(url.searchParams.get("offset") ?? "0"),
+      );
+      if (trouble === "quiet")
+        return json(200, {
+          ...page,
+          items: [],
+          total: 0,
+          counts: { unpaid: 0, paid: 0, shipped: 0, canceled: 0, refunded: 0, overdue: 0 },
+        });
+      return json(200, mark(trouble === "partial" ? { ...page, partial: true } : page));
+    }
+    if (view === "listings") return json(200, mark(data.listings));
+    if (view === "reviews") return json(200, mark(data.reviews));
+    return json(200, mark(data.shipping));
   }
 
   return {

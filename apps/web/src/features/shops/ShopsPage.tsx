@@ -1,5 +1,5 @@
 import { Trans, useLingui } from "@lingui/react/macro";
-import { useQuery } from "@tanstack/react-query";
+import { useQueries, useQuery } from "@tanstack/react-query";
 import { useRouterState } from "@tanstack/react-router";
 import { useState, type ReactNode } from "react";
 
@@ -8,6 +8,7 @@ import { ShopCard, needsReconnect, useReconnectLabel } from "./ShopCard.tsx";
 import { useDisconnects, useRechecks } from "./shopActions.tsx";
 import { useNow } from "./time.ts";
 import { TopListings } from "./TopListings.tsx";
+import { overviewQuery } from "../commerce/live.tsx";
 import parcel from "../../assets/commerce/parcel.webp";
 import { FormAlert } from "../auth/AuthLayout.tsx";
 import { integrationsQuery, meQuery, shopsQuery, useApi } from "../../shared/api/api.tsx";
@@ -28,8 +29,8 @@ import {
 
 /**
  * The organization's shops (Commerce / Shops) in the Design 1C shop panels: one panel per shop
- * with its real Etsy connection, the Owner's panel to connect another, and the planned top
- * listings strip (Demo until listings sync).
+ * with its live numbers from Etsy and its real connection, the Owner's panel to connect another,
+ * and the shop's top listings, live from Etsy.
  */
 export function ShopsPage() {
   const api = useApi();
@@ -97,6 +98,20 @@ function Shops({
   // Relative times ("Checked 3 minutes ago") move on while the page stays open (Codex, #31).
   const clock = useNow(30_000);
   const disconnects = useDisconnects(organizationId);
+  // Each shop's live numbers; a shop known to be disconnected is not asked (no Etsy call).
+  const known = new Map((integrations.data ?? []).map((i) => [i.shop_id, i.status]));
+  const asked = (shops.data ?? []).filter((shop) => known.get(shop.id) !== "disconnected");
+  const live = useQueries({
+    queries: asked.map((shop) => overviewQuery(api, shop.id)),
+    combine: (results) =>
+      new Map(
+        asked.map((shop, i) => [
+          shop.id,
+          { overview: results[i]?.data, error: results[i]?.error ?? null },
+        ]),
+      ),
+  });
+  const firstLive = asked.find((shop) => known.get(shop.id) !== "needs_reauth")?.id;
 
   if (shops.isError)
     return (
@@ -130,7 +145,7 @@ function Shops({
         {[0, 1].map((n) => (
           <ShopPanelSkeleton key={n} />
         ))}
-        <TopListings />
+        <TopListings loading />
       </Screen>
     );
 
@@ -204,6 +219,7 @@ function Shops({
                 key={shop.id}
                 shop={shop}
                 integration={integration}
+                live={live.get(shop.id)}
                 detailsLoading={seesConnections && integrations.isPending}
                 now={Math.max(integrations.dataUpdatedAt, clock)}
                 {...(seesConnections
@@ -265,7 +281,7 @@ function Shops({
           })}
           {etsy === undefined ? null : <ConnectPanel etsy={etsy} />}
         </div>
-        <TopListings />
+        <TopListings shopId={firstLive} />
       </Screen>
       {disconnects.dialogs}
     </>
