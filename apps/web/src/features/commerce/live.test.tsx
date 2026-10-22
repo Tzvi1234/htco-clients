@@ -349,4 +349,25 @@ describe("Codex review of #35", () => {
     const alert = await within(reviews).findByRole("alert", undefined, { timeout: 4000 });
     expect(within(alert).getByRole("button", { name: "Try again" })).toBeInTheDocument();
   });
+
+  it("lists every return policy, not one as if it were the shop's only", async () => {
+    await open("/commerce/shipping");
+    const policies = await panel("Returns and partners");
+
+    expect(await within(policies).findByText("Return policy 2")).toBeInTheDocument();
+    expect(within(policies).getByText("Within 14 days")).toBeInTheDocument();
+  });
+
+  it("says when the shipping queue comes from an incomplete read", async () => {
+    await open("/commerce/shipping", { liveTrouble: "partial" });
+
+    const queue = await panel("Orders to ship");
+    expect(within(queue).getByRole("status")).toHaveTextContent("more orders than one read covers");
+  });
+
+  it("says on Home's shop card when sales are not available, instead of loading forever", async () => {
+    await open("/", { liveTrouble: "no-sales" });
+
+    expect(await screen.findByText("Sales are not available for this shop.")).toBeInTheDocument();
+  });
 });

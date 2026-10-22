@@ -539,7 +539,11 @@ function ShopCard({
             </p>
           ) : (
             <div className="flex justify-center" aria-busy={overview.data === undefined}>
-              {week.length === 0 ? (
+              {overview.data !== undefined && week.length === 0 ? (
+                <p className="m-0 text-caption text-secondary">
+                  {t`Sales are not available for this shop.`}
+                </p>
+              ) : week.length === 0 ? (
                 <span className="h-[45px] w-40 rounded-pill bg-hover motion-safe:animate-pulse" />
               ) : (
                 <DotColumns

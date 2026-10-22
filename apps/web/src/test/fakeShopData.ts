@@ -480,6 +480,12 @@ export function fakeShopData(
     ],
     return_policies: [
       { policy_id: 3001, accepts_returns: true, accepts_exchanges: true, return_deadline_days: 30 },
+      {
+        policy_id: 3002,
+        accepts_returns: true,
+        accepts_exchanges: false,
+        return_deadline_days: 14,
+      },
     ],
     production_partners: [
       { partner_id: 4001, name: "Studio Kiln Co-op", location: "Haifa, Israel" },

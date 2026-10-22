@@ -2355,6 +2355,10 @@ msgstr "אין הזמנות ב־30 הימים האחרונים."
 msgid "No orders match this filter."
 msgstr "אין הזמנות שמתאימות לסינון הזה."
 
+#: src/features/commerce/ShippingPage.tsx
+msgid "No return policy on Etsy."
+msgstr "אין מדיניות החזרות ב־Etsy."
+
 #: src/features/customers/CustomersPage.tsx
 msgid "No reviews yet."
 msgstr "עדיין אין ביקורות."
@@ -3179,6 +3183,11 @@ msgstr "טיפול בהזמנות באיחור #3152, #3160"
 msgid "Response time"
 msgstr "זמן תגובה"
 
+#. placeholder {0}: String(i + 1)
+#: src/features/commerce/ShippingPage.tsx
+msgid "Return policy {0}"
+msgstr "מדיניות החזרות {0}"
+
 #: src/features/customers/CustomersDemos.tsx
 msgid "Returning"
 msgstr "חוזרים"
@@ -3290,6 +3299,10 @@ msgstr "ריצות היום"
 #: src/features/customers/CustomersDemos.tsx
 msgid "Sales"
 msgstr "מכירות"
+
+#: src/features/overview/OverviewPage.tsx
+msgid "Sales are not available for this shop."
+msgstr "נתוני המכירות אינם זמינים לחנות הזו."
 
 #: src/features/customers/CustomersDemos.tsx
 msgid "Sales up 12% this week"
@@ -4030,6 +4043,11 @@ msgstr "המסך הזה הוא חלק מהעיצוב החדש ונמצא בבנ�
 #: src/features/security/SecurityPage.tsx
 msgid "This session"
 msgstr "החיבור הזה"
+
+#. placeholder {0}: count(orders.data.items.length)
+#: src/features/commerce/ShippingPage.tsx
+msgid "This shop has more orders than one read covers: the newest {0} are listed; the counts cover them all."
+msgstr "לחנות יותר הזמנות ממה שקריאה אחת מכסה: מוצגות {0} החדשות ביותר; הספירות כוללות את כולן."
 
 #: src/features/commerce/ProductsPage.tsx
 #: src/features/shops/TopListings.tsx

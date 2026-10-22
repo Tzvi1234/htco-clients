@@ -164,7 +164,7 @@ function Shipping({ shopId, chips }: { shopId: string; chips: ReactNode }) {
         <div className="flex min-h-0 grow flex-col justify-between gap-6 overflow-auto px-6 pb-6">
           <IdBlock
             label={<Trans>Awaiting shipment:</Trans>}
-            value={<N>{orders.data === undefined ? "—" : count(toShip.length)}</N>}
+            value={<N>{orders.data === undefined ? "—" : count(orders.data.counts.paid)}</N>}
           />
           {chips}
           <KV
@@ -216,16 +216,23 @@ function Shipping({ shopId, chips }: { shopId: string; chips: ReactNode }) {
             <Trans>Nothing to ship and nothing shipped in the last 30 days.</Trans>
           </p>
         ) : (
-          <DataTable
-            label={t`Orders to ship`}
-            head={columns.map((c) => c.header)}
-            phoneHidden={[1, 2, 5]}
-            wideOnly={[2]}
-            rows={rows.map((o) => ({
-              key: String(o.order_id),
-              cells: columns.map((c) => c.cell(o)),
-            }))}
-          />
+          <>
+            {orders.data.partial || orders.data.total > orders.data.items.length ? (
+              <p role="status" className="m-0 px-6 pb-2 text-caption text-secondary">
+                {t`This shop has more orders than one read covers: the newest ${count(orders.data.items.length)} are listed; the counts cover them all.`}
+              </p>
+            ) : null}
+            <DataTable
+              label={t`Orders to ship`}
+              head={columns.map((c) => c.header)}
+              phoneHidden={[1, 2, 5]}
+              wideOnly={[2]}
+              rows={rows.map((o) => ({
+                key: String(o.order_id),
+                cells: columns.map((c) => c.cell(o)),
+              }))}
+            />
+          </>
         )}
       </Panel>
       <Stack>
@@ -315,41 +322,38 @@ function Profiles({ shipping }: { shipping: ShopShipping }) {
 
 function Policies({ shipping }: { shipping: ShopShipping }) {
   const { t } = useLingui();
-  const [policy] = shipping.return_policies;
+  const returns = (policy: ShopShipping["return_policies"][number]) =>
+    policy.accepts_returns
+      ? policy.return_deadline_days === null
+        ? t`Accepted`
+        : t`Within ${String(policy.return_deadline_days)} days`
+      : t`Not accepted`;
   return (
     <div className="flex min-h-0 grow flex-col gap-4 overflow-auto px-6 pb-6">
-      <KV
-        items={[
-          [
-            <Trans>Returns</Trans>,
-            policy === undefined ? (
-              <span key="r" className="text-muted">
-                —
-              </span>
-            ) : policy.accepts_returns ? (
-              policy.return_deadline_days === null ? (
-                t`Accepted`
-              ) : (
-                t`Within ${String(policy.return_deadline_days)} days`
-              )
-            ) : (
-              t`Not accepted`
-            ),
-          ],
-          [
-            <Trans>Exchanges</Trans>,
-            policy === undefined ? (
-              <span key="e" className="text-muted">
-                —
-              </span>
-            ) : policy.accepts_exchanges ? (
-              t`Accepted`
-            ) : (
-              t`Not accepted`
-            ),
-          ],
-        ]}
-      />
+      {/* Every policy the shop has (listings each use one): none is shown as the shop's only
+          one (Codex review of #35). */}
+      {shipping.return_policies.length === 0 ? (
+        <p className="m-0 text-caption text-secondary">
+          <Trans>No return policy on Etsy.</Trans>
+        </p>
+      ) : (
+        shipping.return_policies.map((policy, i) => (
+          <div key={policy.policy_id}>
+            {shipping.return_policies.length > 1 ? (
+              <SectionLabel>{t`Return policy ${String(i + 1)}`}</SectionLabel>
+            ) : null}
+            <KV
+              items={[
+                [<Trans key="r">Returns</Trans>, returns(policy)],
+                [
+                  <Trans key="e">Exchanges</Trans>,
+                  policy.accepts_exchanges ? t`Accepted` : t`Not accepted`,
+                ],
+              ]}
+            />
+          </div>
+        ))
+      )}
       <div>
         <SectionLabel>
           <Trans>Production partners</Trans>

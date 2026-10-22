@@ -71,7 +71,7 @@ export interface FakeState {
    * 503 etsy-data-unavailable, "stale" marks the data stale, "quiet" is a shop without orders,
    * "hang" never answers.
    */
-  liveTrouble?: "unavailable" | "stale" | "quiet" | "hang" | undefined;
+  liveTrouble?: "unavailable" | "stale" | "quiet" | "hang" | "partial" | "no-sales" | undefined;
   /** Workspaces whose shop list answers 500. */
   shopsFailFor?: string[];
   /** True: the shops are busy, 160 orders in 30 days (more than one page of 100). */
@@ -544,7 +544,7 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
           },
         });
       }
-      return json(200, overview);
+      return json(200, trouble === "no-sales" ? { ...overview, sales: null } : overview);
     }
     if (view === "orders") {
       const page = data.ordersFor(
@@ -559,7 +559,7 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
           total: 0,
           counts: { unpaid: 0, paid: 0, shipped: 0, canceled: 0, refunded: 0, overdue: 0 },
         });
-      return json(200, mark(page));
+      return json(200, mark(trouble === "partial" ? { ...page, partial: true } : page));
     }
     if (view === "listings") return json(200, mark(data.listings));
     if (view === "reviews") return json(200, mark(data.reviews));

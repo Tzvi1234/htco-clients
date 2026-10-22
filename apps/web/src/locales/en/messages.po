@@ -2355,6 +2355,10 @@ msgstr "No orders in the last 30 days."
 msgid "No orders match this filter."
 msgstr "No orders match this filter."
 
+#: src/features/commerce/ShippingPage.tsx
+msgid "No return policy on Etsy."
+msgstr "No return policy on Etsy."
+
 #: src/features/customers/CustomersPage.tsx
 msgid "No reviews yet."
 msgstr "No reviews yet."
@@ -3179,6 +3183,11 @@ msgstr "Resolve late orders #3152, #3160"
 msgid "Response time"
 msgstr "Response time"
 
+#. placeholder {0}: String(i + 1)
+#: src/features/commerce/ShippingPage.tsx
+msgid "Return policy {0}"
+msgstr "Return policy {0}"
+
 #: src/features/customers/CustomersDemos.tsx
 msgid "Returning"
 msgstr "Returning"
@@ -3290,6 +3299,10 @@ msgstr "Runs today"
 #: src/features/customers/CustomersDemos.tsx
 msgid "Sales"
 msgstr "Sales"
+
+#: src/features/overview/OverviewPage.tsx
+msgid "Sales are not available for this shop."
+msgstr "Sales are not available for this shop."
 
 #: src/features/customers/CustomersDemos.tsx
 msgid "Sales up 12% this week"
@@ -4030,6 +4043,11 @@ msgstr "This screen is part of the new design and is being built. Nothing on it 
 #: src/features/security/SecurityPage.tsx
 msgid "This session"
 msgstr "This session"
+
+#. placeholder {0}: count(orders.data.items.length)
+#: src/features/commerce/ShippingPage.tsx
+msgid "This shop has more orders than one read covers: the newest {0} are listed; the counts cover them all."
+msgstr "This shop has more orders than one read covers: the newest {0} are listed; the counts cover them all."
 
 #: src/features/commerce/ProductsPage.tsx
 #: src/features/shops/TopListings.tsx
