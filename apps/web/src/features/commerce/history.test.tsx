@@ -182,6 +182,9 @@ describe("Shops › Statistics: the shop since it opened", () => {
 
     const focus = await panel("Since the shop opened");
     expect(await within(focus).findByText(/Based on the latest 120 orders/)).toBeInTheDocument();
+    // Every figure comes from those orders, not from the whole history (Codex, #38).
+    const over = within(focus).getByText(/^over \d+ orders$/).textContent;
+    expect(Number(/\d+/.exec(over)?.[0])).toBeLessThanOrEqual(120);
   });
 
   it("asks nothing for statistics until the tab is opened", async () => {

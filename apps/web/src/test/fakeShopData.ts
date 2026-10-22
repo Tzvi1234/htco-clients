@@ -471,60 +471,61 @@ export function fakeShopData(
       cap: CAPS[period],
     };
   };
-  // The statistics: aggregates of every order read, as the API makes them (no buyer data).
+  // The statistics: aggregates of the orders read (the newest `cap`), as the API makes them
+  // (no buyer data).
   const country = new Map(
     everything.map((o, k) => [o.order_id, COUNTRIES[k % COUNTRIES.length] ?? "US"] as const),
   );
-  const sold = all.filter(
-    (o) => o.state !== "unpaid" && o.state !== "canceled" && o.state !== "refunded",
-  );
-  const monthOf = (iso: string) => {
-    const d = new Date(Date.parse(iso) + offset);
-    return `${String(d.getUTCFullYear())}-${String(d.getUTCMonth() + 1).padStart(2, "0")}-01`;
-  };
-  const months: string[] = [];
-  const firstSale = sold.at(-1);
-  if (firstSale !== undefined) {
-    const cursor = new Date(`${monthOf(firstSale.created_at)}T00:00:00Z`);
-    const last = monthOf(new Date(now).toISOString());
-    for (;;) {
-      const key = cursor.toISOString().slice(0, 10);
-      months.push(key);
-      if (key >= last) break;
-      cursor.setUTCMonth(cursor.getUTCMonth() + 1);
-    }
-  }
-  const monthly = months.map((month) => {
-    const span = sold.filter((o) => monthOf(o.created_at) === month);
-    return {
-      month,
-      orders: span.length,
-      revenue: span.reduce((n, o) => n + Number(o.total.amount), 0).toFixed(2),
-    };
-  });
-  const revenue = sold.reduce((n, o) => n + Number(o.total.amount), 0);
-  const tallies = new Map<number, { title: string; units: number; revenue: number }>();
-  for (const o of sold)
-    for (const item of o.items) {
-      if (item.listing_id === null) continue;
-      const t = tallies.get(item.listing_id) ?? { title: item.title, units: 0, revenue: 0 };
-      t.units += item.quantity;
-      t.revenue += Number(item.unit_price.amount) * item.quantity;
-      tallies.set(item.listing_id, t);
-    }
-  const byCountry = new Map<string, number>();
-  for (const o of sold) {
-    const code = country.get(o.order_id) ?? "US";
-    byCountry.set(code, (byCountry.get(code) ?? 0) + 1);
-  }
-  const best = monthly
-    .filter((m) => m.orders > 0)
-    .reduce<(typeof monthly)[number] | null>(
-      (top, m) => (top === null || Number(m.revenue) > Number(top.revenue) ? m : top),
-      null,
-    );
   const stats = (cap = CAPS.all): Stats => {
     const read = all.slice(0, cap);
+    const sold = read.filter(
+      (o) => o.state !== "unpaid" && o.state !== "canceled" && o.state !== "refunded",
+    );
+    const monthOf = (iso: string) => {
+      const d = new Date(Date.parse(iso) + offset);
+      return `${String(d.getUTCFullYear())}-${String(d.getUTCMonth() + 1).padStart(2, "0")}-01`;
+    };
+    const months: string[] = [];
+    const firstSale = sold.at(-1);
+    if (firstSale !== undefined) {
+      const cursor = new Date(`${monthOf(firstSale.created_at)}T00:00:00Z`);
+      const last = monthOf(new Date(now).toISOString());
+      for (;;) {
+        const key = cursor.toISOString().slice(0, 10);
+        months.push(key);
+        if (key >= last) break;
+        cursor.setUTCMonth(cursor.getUTCMonth() + 1);
+      }
+    }
+    const monthly = months.map((month) => {
+      const span = sold.filter((o) => monthOf(o.created_at) === month);
+      return {
+        month,
+        orders: span.length,
+        revenue: span.reduce((n, o) => n + Number(o.total.amount), 0).toFixed(2),
+      };
+    });
+    const revenue = sold.reduce((n, o) => n + Number(o.total.amount), 0);
+    const tallies = new Map<number, { title: string; units: number; revenue: number }>();
+    for (const o of sold)
+      for (const item of o.items) {
+        if (item.listing_id === null) continue;
+        const t = tallies.get(item.listing_id) ?? { title: item.title, units: 0, revenue: 0 };
+        t.units += item.quantity;
+        t.revenue += Number(item.unit_price.amount) * item.quantity;
+        tallies.set(item.listing_id, t);
+      }
+    const byCountry = new Map<string, number>();
+    for (const o of sold) {
+      const code = country.get(o.order_id) ?? "US";
+      byCountry.set(code, (byCountry.get(code) ?? 0) + 1);
+    }
+    const best = monthly
+      .filter((m) => m.orders > 0)
+      .reduce<(typeof monthly)[number] | null>(
+        (top, m) => (top === null || Number(m.revenue) > Number(top.revenue) ? m : top),
+        null,
+      );
     return {
       ...fresh,
       shop_id: shopId,
@@ -549,7 +550,7 @@ export function fakeShopData(
         countries: [...byCountry.entries()]
           .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
           .map(([code, n]) => ({ country: code, orders: n })),
-        first_order_at: all.at(-1)?.created_at ?? null,
+        first_order_at: read.at(-1)?.created_at ?? null,
         receipts_read: read.length,
         partial: false,
       },
