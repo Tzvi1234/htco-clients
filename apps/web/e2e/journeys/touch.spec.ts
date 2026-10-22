@@ -111,20 +111,12 @@ test("every control on a touch screen has a 44 px target that covers no other (r
     expect(overlaps, path).toEqual([]);
   }
 
-  // Popups stack their rows: the account menu (with the language and theme choices) and a
-  // pill select's list.
-  await page.getByRole("button", { name: "Account and preferences" }).click();
+  // Popups stack their rows: the account menu. (The language pill select it once measured
+  // here became the Settings cards in round 3, measured with the page above.)
+  await page.getByRole("button", { name: "Account" }).click();
   await expect(page.getByRole("menu")).toBeVisible();
   const menu = await measure(page);
   expect(menu.small, "account menu").toEqual([]);
   expect(menu.overlaps, "account menu").toEqual([]);
-  await page.keyboard.press("Escape");
-
-  await openApp(page, "/settings", "shops");
-  await page.getByRole("button", { name: /Interface language/ }).click();
-  await expect(page.getByRole("listbox")).toBeVisible();
-  const list = await measure(page);
-  expect(list.small, "language list").toEqual([]);
-  expect(list.overlaps, "language list").toEqual([]);
   await page.keyboard.press("Escape");
 });

@@ -46,6 +46,6 @@ export async function checkpoint(page: Page, name: string): Promise<void> {
 }
 
 /** Opens the account menu (sidebar on wide screens, tab bar on phones). */
-export async function openAccountMenu(page: Page, label = "Account and preferences") {
+export async function openAccountMenu(page: Page, label = "Account") {
   await page.getByRole("button", { name: label }).click();
 }

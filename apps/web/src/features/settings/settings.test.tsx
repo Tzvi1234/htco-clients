@@ -1,15 +1,15 @@
 import { createMemoryHistory } from "@tanstack/react-router";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it } from "vitest";
+import { act } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { App } from "../../app/App.tsx";
 import { memoryStorage } from "../../shared/lib/storage.ts";
 import { demoShops, fakeBackend, type FakeState } from "../../test/fakeApi.ts";
 
-async function open(state: Partial<FakeState> = {}) {
+async function open(state: Partial<FakeState> = {}, storage = memoryStorage()) {
   const backend = fakeBackend({ signedIn: true, enrolled: true, assurance: "aal2", ...state });
-  const storage = memoryStorage();
   render(
     <App
       locale="en"
@@ -25,38 +25,113 @@ async function open(state: Partial<FakeState> = {}) {
 
 const root = document.documentElement;
 
-describe("Settings (FR-ADM-01)", () => {
-  it("changes the interface language", async () => {
-    const { user, storage } = await open();
-    const general = screen.getByRole("region", { name: "General" });
+afterEach(() => {
+  vi.unstubAllGlobals();
+});
 
-    await user.click(within(general).getByRole("button", { name: /Interface language/ }));
-    await user.click(await screen.findByRole("option", { name: "עברית" }));
+/** The three personal settings, at the top of the page. */
+const appearance = () => screen.getByRole("region", { name: "Appearance and language" });
+const group = (name: string) => within(appearance()).getByRole("radiogroup", { name });
+
+describe("Settings (FR-ADM-01, round 3)", () => {
+  it("offers exactly three personal settings: theme, palette and language", async () => {
+    await open();
+    expect(
+      within(appearance())
+        .getAllByRole("radiogroup")
+        .map((radios) =>
+          radios.getAttribute("aria-labelledby") === null ? "" : radios.textContent,
+        ),
+    ).toHaveLength(3);
+    expect(within(group("Theme")).getAllByRole("radio")).toHaveLength(3);
+    expect(within(group("Palette")).getAllByRole("radio")).toHaveLength(2);
+    expect(within(group("Language")).getAllByRole("radio")).toHaveLength(2);
+  });
+
+  it("changes the interface language, and remembers it", async () => {
+    const { user, storage } = await open();
+
+    await user.click(within(group("Language")).getByRole("radio", { name: /^עברית/ }));
 
     expect([root.lang, root.dir]).toEqual(["he", "rtl"]);
     expect(storage.getItem("htco.locale")).toBe("he");
   });
 
-  it("sets the design tweaks shared with the top bar's panel", async () => {
+  it("follows the system theme by default, live, until Light or Dark is chosen", async () => {
+    const listeners = new Set<() => void>();
+    let dark = false;
+    vi.stubGlobal("matchMedia", (query: string) => ({
+      get matches() {
+        return query === "(prefers-color-scheme: dark)" && dark;
+      },
+      media: query,
+      addEventListener: (_: string, listener: () => void) => listeners.add(listener),
+      removeEventListener: (_: string, listener: () => void) => listeners.delete(listener),
+    }));
     const { user, storage } = await open();
-    const appearance = screen.getByRole("region", { name: "Appearance" });
+    const theme = group("Theme");
+    const system = within(theme).getByRole("radio", { name: /^System/ });
 
-    await user.click(
-      within(within(appearance).getByRole("radiogroup", { name: "Frosted glass" })).getByRole(
-        "radio",
-        { name: "Very different" },
-      ),
-    );
-    expect(root.dataset["t2"]).toBe("3");
-    expect(storage.getItem("htco.glass")).toBe("3");
+    expect(system).toBeChecked();
+    expect(root.hasAttribute("data-theme")).toBe(false);
+    expect(system.closest("label")).toHaveTextContent("Now light");
+    act(() => {
+      dark = true;
+      for (const listener of listeners) listener();
+    });
+    expect(system.closest("label")).toHaveTextContent("Now dark");
 
-    await user.click(screen.getByRole("button", { name: "Design tweaks" }));
-    const panel = await screen.findByRole("dialog", { name: "Design tweaks" });
-    expect(
-      within(within(panel).getByRole("radiogroup", { name: "Frosted glass" })).getByRole("radio", {
-        name: "Very different",
-      }),
-    ).toBeChecked();
+    await user.click(within(theme).getByRole("radio", { name: "Light" }));
+    expect(root.dataset["theme"]).toBe("light");
+    expect(storage.getItem("htco.theme")).toBe("light");
+
+    await user.click(within(theme).getByRole("radio", { name: "Dark" }));
+    expect(root.dataset["theme"]).toBe("dark");
+
+    await user.click(system);
+    expect(root.hasAttribute("data-theme")).toBe(false);
+    expect(storage.getItem("htco.theme")).toBe("system");
+  });
+
+  it("switches between the gray palette and the cream one, and remembers it", async () => {
+    const { user, storage } = await open();
+    const palette = group("Palette");
+    expect(within(palette).getByRole("radio", { name: /^Gray/ })).toBeChecked();
+
+    await user.click(within(palette).getByRole("radio", { name: /^Cream/ }));
+
+    expect(root.dataset["pal"]).toBe("d4");
+    expect(storage.getItem("htco.palette")).toBe("d4");
+  });
+
+  it("migrates what an earlier version remembered: plain becomes gray, the tweaks are gone", async () => {
+    const storage = memoryStorage();
+    storage.setItem("htco.palette", "plain");
+    storage.setItem("htco.contrast", "3");
+    storage.setItem("htco.glass", "3");
+    storage.setItem("htco.borders", "2");
+    storage.setItem("htco.locale", "en");
+    await open({}, storage);
+
+    expect(within(group("Palette")).getByRole("radio", { name: /^Gray/ })).toBeChecked();
+    expect(storage.getItem("htco.palette")).toBe("sbb");
+    for (const key of ["htco.contrast", "htco.glass", "htco.borders"]) {
+      expect(storage.getItem(key), key).toBeNull();
+    }
+    expect([
+      root.dataset["pal"],
+      root.dataset["t1"],
+      root.dataset["t2"],
+      root.dataset["t3"],
+    ]).toEqual(["sbb", undefined, undefined, undefined]);
+  });
+
+  it("scrolls as one page: no panel scrolls on its own", async () => {
+    await open();
+    expect(document.querySelector("main [data-screen-scroll]")).toBeNull();
+    // The page asks the shell to scroll it whole (the panels then grow with their content).
+    const sidebarColumn = screen.getByRole("complementary", { name: "Sidebar" }).parentElement;
+    expect(sidebarColumn).toHaveClass("sticky");
   });
 
   it("shows the real Etsy shops and marks the planned settings as demos", async () => {

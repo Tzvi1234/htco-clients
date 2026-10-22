@@ -208,16 +208,20 @@ describe("the top bar", () => {
     expect(within(banner).getByRole("heading", { level: 1, name: "Security" })).toBeInTheDocument();
   });
 
-  it("switches the language from its segmented control", async () => {
-    const { user } = await open();
-    const language = screen.getByRole("radiogroup", { name: "Language" });
+  it("carries no personalisation: the language and the design tweaks live in Settings (round 3)", async () => {
+    await open();
+    const banner = screen.getByRole("banner");
 
-    await user.click(within(language).getByRole("radio", { name: "עברית" }));
+    expect(within(banner).queryByRole("radiogroup")).not.toBeInTheDocument();
+    expect(within(banner).queryByRole("radio")).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Design tweaks" })).not.toBeInTheDocument();
+    expect(within(banner).getByRole("button", { name: "Search" })).toBeInTheDocument();
+  });
 
-    expect([root.lang, root.dir]).toEqual(["he", "rtl"]);
-    expect(
-      within(screen.getByRole("radiogroup", { name: "שפה" })).getByRole("radio", { name: "עברית" }),
-    ).toBeChecked();
+  it("is frosted glass, like the navigation", async () => {
+    await open();
+    expect(screen.getByRole("banner")).toHaveAttribute("data-glass");
+    expect(screen.getByRole("complementary", { name: "Sidebar" })).toHaveAttribute("data-glass");
   });
 
   it("opens quick actions from search", async () => {
@@ -235,93 +239,7 @@ describe("the top bar", () => {
   });
 });
 
-describe("the tweaks panel (client ADR-0008)", () => {
-  it("changes a tweak at once, remembers it, and counts it on the button", async () => {
-    const { user, storage } = await open();
-
-    await user.click(screen.getByRole("button", { name: "Design tweaks" }));
-    const panel = await screen.findByRole("dialog", { name: "Design tweaks" });
-    await user.click(
-      within(within(panel).getByRole("radiogroup", { name: "Frosted glass" })).getByRole("radio", {
-        name: "Very different",
-      }),
-    );
-
-    expect(root.dataset["t2"]).toBe("3");
-    expect(storage.getItem("htco.glass")).toBe("3");
-    await user.keyboard("{Escape}");
-    expect(
-      within(screen.getByRole("button", { name: "Design tweaks" })).getByText("1"),
-    ).toBeInTheDocument();
-  });
-
-  it("offers three palettes, and rests contrast and borders under Design 4", async () => {
-    const { user } = await open();
-    await user.click(screen.getByRole("button", { name: "Design tweaks" }));
-    const panel = await screen.findByRole("dialog", { name: "Design tweaks" });
-    const palette = within(panel).getByRole("radiogroup", { name: "Palette and ground" });
-
-    expect(
-      within(palette)
-        .getAllByRole("radio")
-        .map((radio) => radio.textContent),
-    ).toEqual(["SBB", "Design 4", "Plain ground"]);
-    await user.click(within(palette).getByRole("radio", { name: "Design 4" }));
-
-    expect(root.dataset["pal"]).toBe("d4");
-    for (const name of ["Element vs. ground contrast", "Element borders"]) {
-      for (const radio of within(within(panel).getByRole("radiogroup", { name })).getAllByRole(
-        "radio",
-      )) {
-        expect(radio).toBeDisabled();
-      }
-    }
-    expect(
-      within(panel).getByText(/contrast and borders come from the palette/),
-    ).toBeInTheDocument();
-  });
-
-  it("sets the theme, which the settings page shows too", async () => {
-    const { user, storage } = await open("/settings");
-    await user.click(screen.getByRole("button", { name: "Design tweaks" }));
-    const panel = await screen.findByRole("dialog", { name: "Design tweaks" });
-
-    await user.click(
-      within(within(panel).getByRole("radiogroup", { name: "Theme" })).getByRole("radio", {
-        name: "Dark",
-      }),
-    );
-
-    expect(root.dataset["theme"]).toBe("dark");
-    expect(storage.getItem("htco.theme")).toBe("dark");
-    await user.keyboard("{Escape}");
-    expect(screen.getByRole("radio", { name: "Dark" })).toBeChecked();
-  });
-
-  it("resets the tweaks but keeps the theme", async () => {
-    const storage = memoryStorage();
-    storage.setItem("htco.palette", "plain");
-    storage.setItem("htco.borders", "3");
-    const { user } = await open("/", { storage });
-    expect(root.dataset["pal"]).toBe("plain");
-
-    await user.click(screen.getByRole("button", { name: "Design tweaks" }));
-    const panel = await screen.findByRole("dialog", { name: "Design tweaks" });
-    await user.click(
-      within(within(panel).getByRole("radiogroup", { name: "Theme" })).getByRole("radio", {
-        name: "Dark",
-      }),
-    );
-    await user.click(within(panel).getByRole("button", { name: "Reset" }));
-
-    expect(Object.fromEntries(Object.entries(root.dataset))).toMatchObject({
-      pal: "sbb",
-      t3: "1",
-      theme: "dark",
-    });
-    expect(storage.getItem("htco.borders")).toBe("1");
-  });
-
+describe("the appearance preference (client ADR-0008)", () => {
   it("follows a change made in another tab of this origin (the landing page)", async () => {
     const { storage } = await open();
     storage.setItem("htco.palette", "d4");
@@ -360,7 +278,7 @@ describe("phones", () => {
   it("keep the account menu in the top bar", async () => {
     matching(PHONE_QUERY);
     const { user } = await open();
-    await user.click(screen.getByRole("button", { name: "Account and preferences" }));
+    await user.click(screen.getByRole("button", { name: "Account" }));
     expect(await screen.findByRole("menuitem", { name: "Sign out" })).toBeInTheDocument();
   });
 });

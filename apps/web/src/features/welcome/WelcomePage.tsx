@@ -4,58 +4,52 @@ import { useEffect, useState, type ReactNode } from "react";
 
 import "./welcome.css";
 import hero0 from "../../assets/hero/hero0.webp";
-import hero1 from "../../assets/hero/hero1.webp";
 import hero10 from "../../assets/hero/hero10.webp";
 import hero11 from "../../assets/hero/hero11.webp";
 import hero2 from "../../assets/hero/hero2.webp";
 import hero3 from "../../assets/hero/hero3.webp";
-import hero4 from "../../assets/hero/hero4.webp";
-import hero5 from "../../assets/hero/hero5.webp";
-import hero6 from "../../assets/hero/hero6.webp";
-import hero7 from "../../assets/hero/hero7.webp";
-import hero8 from "../../assets/hero/hero8.webp";
-import hero9 from "../../assets/hero/hero9.webp";
 import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
 import { cx } from "../../shared/lib/cx.ts";
-import { REDUCED_MOTION_QUERY, useMediaQuery } from "../../shared/lib/useMediaQuery.ts";
-import { useTweaks } from "../../shared/theme/ThemeProvider.tsx";
-import { ArrowEndIcon, ArrowStartIcon } from "../../shared/ui/icons.tsx";
-import { Ltr } from "../../shared/ui/Ltr.tsx";
+import { ArrowEndIcon } from "../../shared/ui/icons.tsx";
 import { Logo } from "../../shared/ui/Logo.tsx";
 import { Segmented } from "../../shared/ui/Segmented.tsx";
 
-const PANEL =
-  "glass relative flex min-w-0 flex-col overflow-hidden rounded-panel border border-edge bg-panel shadow-panel";
 const PILL_PRIMARY =
-  "inline-flex h-12 items-center justify-center gap-2 rounded-pill border border-action-primary bg-action-primary px-6 text-body-sm text-action-primary-fg no-underline transition-[background-color,scale] duration-[var(--motion-duration-fast)] ease-standard hover:bg-action-primary-hover active:scale-[0.98]";
+  "inline-flex h-12 items-center justify-center gap-2 rounded-pill bg-action-primary px-6 text-body-sm text-action-primary-fg no-underline outline-none transition-[background-color,scale] duration-[var(--motion-duration-fast)] ease-standard hover:bg-action-primary-hover active:scale-[0.97]";
 const PILL_SECONDARY =
-  "inline-flex h-12 items-center justify-center gap-2 rounded-pill border border-line-strong px-6 text-body-sm text-primary no-underline transition-[background-color,border-color,scale] duration-[var(--motion-duration-fast)] ease-standard hover:border-line-hover-strong hover:bg-hover active:scale-[0.98]";
-
-/** The hero carousel: the same five renders in each palette. */
-const HEROES = {
-  sbb: [hero0, hero1, hero2, hero3, hero4],
-  d4: [hero5, hero6, hero7, hero8, hero9],
-};
+  "inline-flex h-12 items-center justify-center gap-2 rounded-pill border border-line-strong px-6 text-body-sm text-primary no-underline outline-none transition-[background-color,border-color,scale] duration-[var(--motion-duration-fast)] ease-standard hover:border-line-hover-strong hover:bg-hover active:scale-[0.97]";
 
 /**
- * The public front door (web first, platform ADR-0016) in the Design 1C language: panels on the
- * ground, light type, ink pills and the renders. It says plainly what works today (the web app)
- * and what is planned, and it carries the same tweaks panel as the app: one stored preference.
+ * The public front door (web first, platform ADR-0016), redesigned in round 3 as one flowing
+ * composition instead of a grid of boxes (welcome.css has the scroll choreography). The page
+ * reads as five movements on one ground, each in its own colour:
+ *
+ * 1. The hero, on the ground: the promise beside a layered scene (the office plan far back,
+ *    the logo's orange sun, the robot carrying an order, the parcel in front), whose planes
+ *    part at different speeds as the page scrolls.
+ * 2. What works today, on the ground: four plain lines that wipe in as they arrive.
+ * 3. What is coming, on ink: the peak. The page holds while the planned office slides past
+ *    sideways, and ends on the signature: an approval that waits for the owner in orange and is
+ *    decided by the scroll itself ("You decide").
+ * 4. How it works: three steps on a rail that fills with orange as you read.
+ * 5. The close, on orange: open the web app, and which apps follow.
+ *
+ * Under reduced motion, or where the browser has no scroll-driven animations, the same content
+ * stands still in its final composition (nothing pins, nothing is hidden). It shares the
+ * language, theme and palette with the app: one stored preference.
  */
 export function WelcomePage() {
   return (
-    <div className="welcome mx-auto flex min-h-dvh max-w-[1440px] flex-col gap-2 p-2">
+    <div className="welcome min-h-dvh">
       <TopBar />
-      <main className="flex flex-col gap-2">
+      <main>
         <Hero />
         <Today />
         <Planned />
         <HowItWorks />
         <Apps />
       </main>
-      <footer
-        className={cx(PANEL, "flex-row flex-wrap items-center justify-between gap-3 px-6 py-5")}
-      >
+      <footer className="mx-auto flex max-w-[1440px] flex-wrap items-center justify-between gap-3 px-6 py-8 sm:px-10">
         <Logo height={18} />
         <p className="m-0 text-caption font-light text-muted">
           <Trans>HT-Commerce by H.T.Z Studios</Trans>
@@ -71,76 +65,118 @@ export function WelcomePage() {
   );
 }
 
+/** The frosted glass bar: the logo, the sections, the language and the way in. */
 function TopBar() {
   const { t } = useLingui();
   const { locale, setLocale } = useLocale();
+  const over = useToneUnderBar();
   return (
-    <header
-      className={cx(PANEL, "sticky top-2 z-20 h-[72px] flex-row items-center gap-6 ps-6 pe-3")}
-    >
-      <Logo height={22} animated />
-      <nav aria-label={t`Sections`} className="hidden gap-1 lg:flex">
-        {[
-          { href: "#today", label: t`What works today` },
-          { href: "#planned", label: t`What is coming` },
-          { href: "#how", label: t`How it works` },
-          { href: "#apps", label: t`Apps` },
-        ].map((item) => (
-          <a
-            key={item.href}
-            href={item.href}
-            className="inline-flex h-9 items-center rounded-pill px-3.5 text-body-sm text-secondary no-underline transition-colors hover:bg-hover hover:text-primary"
-          >
-            {item.label}
-          </a>
-        ))}
-      </nav>
-      <span className="grow" />
-      <div className="flex items-center gap-1.5">
-        <Segmented
-          label={t`Language`}
-          value={locale}
-          onChange={setLocale}
-          className="max-sm:hidden"
-          options={[
-            { id: "he", label: "עברית", lang: "he" },
-            { id: "en", label: "English", lang: "en" },
-          ]}
-        />
-
-        <Link to="/sign-in" className={cx(PILL_PRIMARY, "h-10 px-5 max-sm:hidden")}>
-          <Trans>Open the web app</Trans>
-        </Link>
-        {/* Phones: the short word, so the bar keeps one line. */}
-        <Link to="/sign-in" className={cx(PILL_PRIMARY, "h-10 px-5 sm:hidden")}>
-          <Trans>Sign in</Trans>
-        </Link>
-      </div>
-    </header>
+    <div className="w-bar sticky top-0 z-30 px-2 pt-2">
+      <header
+        data-glass=""
+        data-over={over}
+        className="mx-auto flex h-16 max-w-[1440px] items-center gap-6 rounded-pill border border-sidebar-line bg-sidebar ps-6 pe-2 shadow-sidebar"
+      >
+        <Logo height={22} animated />
+        <nav aria-label={t`Sections`} className="hidden gap-1 lg:flex">
+          {[
+            { href: "#today", label: t`What works today` },
+            { href: "#planned", label: t`What is coming` },
+            { href: "#how", label: t`How it works` },
+            { href: "#apps", label: t`Apps` },
+          ].map((item) => (
+            <a
+              key={item.href}
+              href={item.href}
+              className="inline-flex h-9 items-center rounded-pill px-3.5 text-body-sm text-secondary no-underline transition-colors duration-[var(--motion-duration-fast)] hover:bg-hover hover:text-primary"
+            >
+              {item.label}
+            </a>
+          ))}
+        </nav>
+        <span className="grow" />
+        <div className="flex items-center gap-1.5">
+          <Segmented
+            label={t`Language`}
+            value={locale}
+            onChange={setLocale}
+            className="max-sm:hidden"
+            options={[
+              { id: "he", label: "עברית", lang: "he" },
+              { id: "en", label: "English", lang: "en" },
+            ]}
+          />
+          <Link to="/sign-in" className={cx(PILL_PRIMARY, "h-12 px-5 max-sm:hidden")}>
+            <Trans>Open the web app</Trans>
+          </Link>
+          {/* Phones: the short word, so the bar keeps one line. */}
+          <Link to="/sign-in" className={cx(PILL_PRIMARY, "h-12 px-5 sm:hidden")}>
+            <Trans>Sign in</Trans>
+          </Link>
+        </div>
+      </header>
+    </div>
   );
 }
 
-/** The headline panel and the renders carousel beside it (stacked on phones). */
+/** The line under the middle of the bar: where its glass reads what passes beneath it. */
+const BAR_LINE = 40;
+
+/**
+ * The colour of the section under the bar ("ink" or "orange"), so its glass can turn with it
+ * (welcome.css, "The bar"): sections say their colour with data-tone. Read on scroll, at most
+ * once a frame.
+ */
+function useToneUnderBar(): string | undefined {
+  const [tone, setTone] = useState<string | undefined>(undefined);
+  useEffect(() => {
+    let frame = 0;
+    const read = () => {
+      frame = 0;
+      const under = [...document.querySelectorAll<HTMLElement>(".welcome [data-tone]")].find(
+        (section) => {
+          const box = section.getBoundingClientRect();
+          return box.top <= BAR_LINE && box.bottom >= BAR_LINE;
+        },
+      );
+      setTone(under?.dataset["tone"]);
+    };
+    const schedule = () => {
+      if (frame === 0) frame = window.requestAnimationFrame(read);
+    };
+    read();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    return () => {
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      if (frame !== 0) window.cancelAnimationFrame(frame);
+    };
+  }, []);
+  return tone;
+}
+
+/** The promise, and the layered scene beside it (above it on phones). */
 function Hero() {
   return (
-    <section className="grid gap-2 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
-      <div className={cx(PANEL, "w-rise justify-between gap-10 p-6 sm:p-10")}>
-        <p className="m-0 flex items-center gap-2 text-caption font-light text-muted">
-          <span aria-hidden="true" className="w-led size-1.5 rounded-pill bg-success" />
-          <Trans>The web app is open today</Trans>
+    <section
+      aria-labelledby="welcome-title"
+      className="w-hero relative mx-auto grid max-w-[1440px] items-center gap-6 px-6 pt-10 pb-16 sm:px-10 lg:min-h-[calc(100dvh-72px)] lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:pt-4"
+    >
+      <div className="relative z-20 flex flex-col gap-8 max-lg:order-2">
+        <h1
+          id="welcome-title"
+          className="w-in m-0 text-display leading-[1.02] font-light tracking-[-0.02em] text-balance sm:text-hero xl:text-[84px]"
+        >
+          <Trans>Your shop runs. You decide.</Trans>
+        </h1>
+        <p className="w-in m-0 max-w-[44ch] text-title-sm leading-[1.55] font-light text-secondary [animation-delay:80ms]">
+          <Trans>
+            HT-Commerce is the operating system for your Etsy business: your shops, your team and,
+            step by step, an AI office that asks you before anything risky.
+          </Trans>
         </p>
-        <div className="flex flex-col gap-5">
-          <h1 className="m-0 text-[44px] leading-[1.05] font-light tracking-[-0.02em] sm:text-[64px]">
-            <Trans>Your shop runs. You decide.</Trans>
-          </h1>
-          <p className="m-0 max-w-[46ch] text-title-sm leading-[1.55] font-light text-secondary">
-            <Trans>
-              HT-Commerce is the operating system for your Etsy business: your shops, your team and,
-              step by step, an AI office that asks you before anything risky.
-            </Trans>
-          </p>
-        </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="w-in flex flex-wrap items-center gap-2 [animation-delay:160ms]">
           <Link to="/sign-in" className={PILL_PRIMARY}>
             <Trans>Open the web app</Trans>
             <ArrowEndIcon size={14} />
@@ -149,234 +185,224 @@ function Hero() {
             <Trans>What works today</Trans>
           </a>
         </div>
+        <p className="w-in m-0 flex items-center gap-2 text-caption text-secondary [animation-delay:240ms]">
+          <span aria-hidden="true" className="w-led size-2 rounded-pill bg-success" />
+          <Trans>The web app is open today</Trans>
+        </p>
       </div>
-      <Carousel />
-    </section>
-  );
-}
-
-function Carousel() {
-  const { t } = useLingui();
-  const { tweaks } = useTweaks();
-  const reduced = useMediaQuery(REDUCED_MOTION_QUERY);
-  const images = tweaks.palette === "d4" ? HEROES.d4 : HEROES.sbb;
-  const names = [
-    t`Your AI office, in miniature`,
-    t`A desk for every specialist`,
-    t`Your products`,
-    t`Orders on their way`,
-    t`Your shop`,
-  ];
-  const [index, setIndex] = useState(0);
-  // Hover and focus pause the rotation independently: either one keeps it still.
-  const [hovered, setHovered] = useState(false);
-  const [focused, setFocused] = useState(false);
-  const paused = hovered || focused;
-  useEffect(() => {
-    if (reduced || paused) return;
-    const timer = window.setInterval(() => {
-      setIndex((now) => (now + 1) % images.length);
-    }, 4200);
-    return () => {
-      window.clearInterval(timer);
-    };
-  }, [reduced, paused, images.length]);
-  const step = (by: number) => {
-    setIndex((now) => (now + by + images.length) % images.length);
-  };
-  return (
-    <section
-      aria-roledescription={t`carousel`}
-      aria-label={t`HT-Commerce renders`}
-      className={cx(PANEL, "w-rise min-h-[420px] [animation-delay:80ms] lg:min-h-[560px]")}
-      onMouseEnter={() => {
-        setHovered(true);
-      }}
-      onMouseLeave={() => {
-        setHovered(false);
-      }}
-      onFocus={() => {
-        setFocused(true);
-      }}
-      onBlur={(event) => {
-        // Moving between the carousel controls keeps the focus inside.
-        if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false);
-      }}
-    >
-      <header className="relative z-10 flex h-14 shrink-0 items-center justify-between gap-3 ps-6 pe-4">
-        <h2 className="m-0 truncate text-body-sm font-normal">{names[index]}</h2>
-        <span className="inline-flex h-6 items-center gap-1.5 rounded-pill border border-line-strong px-2.5 text-[11px] text-secondary">
-          <b className="font-medium text-primary">
-            <Ltr mono={false}>{`${String(index + 1)}/${String(images.length)}`}</Ltr>
-          </b>
-        </span>
-      </header>
-      <div className="relative grow" aria-live={paused || reduced ? "polite" : "off"}>
-        {images.map((src, at) => (
-          <img
-            key={src}
-            src={src}
-            alt={at === index ? (names[at] ?? "") : ""}
-            aria-hidden={at === index ? undefined : true}
-            draggable={false}
-            className={cx(
-              "absolute inset-0 m-auto h-[86%] max-h-[440px] w-[86%] object-contain transition-[opacity,scale,translate] duration-[700ms] ease-standard select-none",
-              at === index ? "w-float opacity-100" : "scale-95 opacity-0",
-            )}
-          />
-        ))}
-        <button
-          type="button"
-          aria-label={t`Previous render`}
-          onClick={() => {
-            step(-1);
-          }}
-          className="absolute inset-s-4 top-1/2 grid size-10 -translate-y-1/2 place-items-center rounded-pill border border-line-strong text-primary transition-[border-color,background-color,scale] hover:border-line-hover-strong hover:bg-hover active:scale-95"
-        >
-          <ArrowStartIcon size={16} />
-        </button>
-        <button
-          type="button"
-          aria-label={t`Next render`}
-          onClick={() => {
-            step(1);
-          }}
-          className="absolute inset-e-4 top-1/2 grid size-10 -translate-y-1/2 place-items-center rounded-pill border border-line-strong text-primary transition-[border-color,background-color,scale] hover:border-line-hover-strong hover:bg-hover active:scale-95"
-        >
-          <ArrowEndIcon size={16} />
-        </button>
-      </div>
-      {/* The dots follow the reading direction, like the arrows above them. Each has a 24 px tall
-          target; on a touch screen they only show the position and the arrows move. */}
-      <div className="flex justify-center gap-1.5 pb-5">
-        {images.map((src, at) => (
-          <button
-            key={src}
-            type="button"
-            aria-label={t`Show render ${String(at + 1)}`}
-            aria-current={at === index ? "true" : undefined}
-            data-hit="own"
-            onClick={() => {
-              setIndex(at);
-            }}
-            className={cx(
-              "relative h-1.5 rounded-pill transition-[width,background-color] duration-[var(--motion-duration-slow)] ease-standard after:absolute after:-inset-x-[3px] after:-inset-y-[9px] after:content-[''] pointer-coarse:pointer-events-none",
-              at === index ? "w-5 bg-inverse" : "w-1.5 bg-faint hover:bg-icon-muted",
-            )}
-          />
-        ))}
+      {/* The scene: four planes that part as the page scrolls (welcome.css, "The hero"). */}
+      <div
+        aria-hidden="true"
+        dir="ltr"
+        className="relative h-[340px] max-lg:order-1 sm:h-[460px] lg:h-[min(72vh,660px)]"
+      >
+        <span className="w-sun absolute top-[30%] inset-e-[34%] aspect-square w-[46%] rounded-pill bg-tertiary" />
+        <img
+          src={hero11}
+          alt=""
+          draggable={false}
+          className="w-back pointer-events-none absolute top-[2%] inset-e-[-10%] w-[96%] max-w-none select-none"
+        />
+        <img
+          src={hero3}
+          alt=""
+          draggable={false}
+          className="w-subject pointer-events-none absolute inset-e-[22%] bottom-[2%] w-[46%] max-w-none select-none"
+        />
+        <img
+          src={hero10}
+          alt=""
+          draggable={false}
+          className="w-front pointer-events-none absolute inset-e-[2%] bottom-[-4%] w-[30%] max-w-none select-none"
+        />
       </div>
     </section>
   );
 }
 
-/** What a signed-in user can do in the web app today: a KPI-style strip (the demo's `.kpis`). */
+/** What a signed-in user can do in the web app today: four lines, no boxes. */
 function Today() {
   const { t } = useLingui();
   const items = [
     { label: t`Sign-in`, value: t`Two-step`, detail: t`Password and authenticator app` },
     { label: t`Etsy shops`, value: t`Connect`, detail: t`Connect and reconnect your shops` },
     { label: t`Team`, value: t`Invite`, detail: t`Members, roles and invitation links` },
-    { label: t`Languages`, value: "2", detail: t`Hebrew and English, right to left` },
+    { label: t`Languages`, value: t`Hebrew and English`, detail: t`Right to left and back` },
   ];
   return (
-    <section id="today" aria-labelledby="today-title" className={cx(PANEL, "w-rise scroll-mt-24")}>
-      <header className="flex h-14 items-center gap-2.5 ps-6 pe-4">
-        <h2 id="today-title" className="m-0 text-body-sm font-normal">
-          <Trans>What works today</Trans>
-        </h2>
-        <span className="text-caption font-light text-muted">
-          <Trans>in the web app</Trans>
-        </span>
-      </header>
-      {/* On phones the strip scrolls sideways, so it takes keyboard focus to scroll it. */}
-      <ul
-        tabIndex={0}
-        aria-labelledby="today-title"
-        className="m-0 flex list-none snap-x outline-offset-[-2px] overflow-x-auto border-t border-line p-0 [scrollbar-width:none] md:grid md:grid-cols-4"
-      >
-        {items.map((item, index) => (
-          <li
-            key={item.label}
-            className={cx(
-              "w-rise flex min-w-[200px] shrink-0 snap-start flex-col items-center gap-0.5 px-6 pt-4 pb-5 text-center",
-              index > 0 && "border-s border-line",
-            )}
-            style={{ animationDelay: `${String(120 + index * 70)}ms` }}
+    <section
+      id="today"
+      aria-labelledby="today-title"
+      className="mx-auto max-w-[1440px] scroll-mt-24 px-6 py-20 sm:px-10 lg:py-28"
+    >
+      <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+        <div className="flex flex-col gap-3 lg:sticky lg:top-28 lg:self-start">
+          <h2
+            id="today-title"
+            className="m-0 text-display-sm leading-[1.1] font-light tracking-[-0.01em] sm:text-display"
           >
-            <span className="flex items-center gap-1.5 text-caption font-light text-muted">
-              <span aria-hidden="true" className="w-led size-1.5 rounded-pill bg-success" />
-              {item.label}
-            </span>
-            <span className="text-number-lg leading-[1.3] font-light tracking-[-0.01em]">
-              {item.value}
-            </span>
-            <span className="text-caption text-secondary">{item.detail}</span>
-          </li>
-        ))}
-      </ul>
+            <Trans>What works today</Trans>
+          </h2>
+          <p className="m-0 max-w-[32ch] text-body text-secondary">
+            <Trans>In the web app, for you and your team, from the first sign-in.</Trans>
+          </p>
+        </div>
+        <ul className="m-0 flex list-none flex-col p-0">
+          {items.map((item) => (
+            <li
+              key={item.label}
+              className="w-wipe grid gap-1 border-t border-line-strong py-6 last:border-b sm:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)] sm:items-baseline sm:gap-6"
+            >
+              <span className="flex flex-col gap-1">
+                <span className="flex items-center gap-2 text-caption text-secondary">
+                  <span aria-hidden="true" className="size-1.5 rounded-pill bg-success" />
+                  {item.label}
+                </span>
+                <span className="text-display-sm leading-[1.15] font-light tracking-[-0.01em] sm:text-number-lg">
+                  {item.value}
+                </span>
+              </span>
+              <span className="text-body text-secondary">{item.detail}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
     </section>
   );
 }
 
-/** The planned office, honestly labelled: renders and one line each, with "Coming". */
+/**
+ * The peak, on ink: the page holds while the planned office passes sideways, and the last
+ * stop is an approval the scroll itself decides (welcome.css, "The peak").
+ */
 function Planned() {
   const { t } = useLingui();
-  const { tweaks } = useTweaks();
-  const d4 = tweaks.palette === "d4";
   const cards = [
     {
-      image: hero11,
+      image: hero0,
       title: t`The AI office`,
       body: t`Sixteen AI employees in seven departments, working under your policies.`,
     },
     {
-      image: hero10,
+      image: hero3,
       title: t`Orders and shipping`,
       body: t`Every order checked against the marketplace, with tracking that keeps up.`,
     },
     {
-      image: d4 ? hero7 : hero2,
+      image: hero2,
       title: t`Listings and products`,
       body: t`Titles, photos and claims audited, fixed as drafts you approve.`,
     },
   ];
   return (
-    <section
-      id="planned"
-      aria-labelledby="planned-title"
-      // Phones scroll the cards sideways: focusable, so the keyboard can scroll them too.
-      tabIndex={0}
-      className="-mx-2 flex snap-x scroll-px-2 gap-2 overflow-x-auto px-2 [scrollbar-width:none] md:mx-0 md:grid md:grid-cols-3 md:overflow-visible md:px-0"
-    >
-      <h2 id="planned-title" className="sr-only">
-        <Trans>What is coming</Trans>
-      </h2>
-      {cards.map((card, index) => (
-        <article
-          key={card.title}
-          className={cx(PANEL, "w-rise w-lift group shrink-0 snap-start max-md:w-[82%]")}
-          style={{ animationDelay: `${String(index * 80)}ms` }}
-        >
-          <header className="flex h-14 items-center justify-between gap-3 ps-6 pe-4">
-            <h3 className="m-0 text-body-sm font-normal">{card.title}</h3>
-            <span className="inline-flex h-6 items-center gap-1.5 rounded-pill border border-line-strong px-2.5 text-caption text-secondary">
-              <span aria-hidden="true" className="size-1.5 rounded-pill bg-accent-mark" />
-              <Trans>Coming</Trans>
-            </span>
-          </header>
-          <div className="relative h-[220px] overflow-hidden" aria-hidden="true">
-            <img
-              src={card.image}
-              alt=""
-              draggable={false}
-              className="absolute inset-0 m-auto h-[88%] w-[88%] object-contain transition-[scale,rotate] duration-[600ms] ease-standard select-none group-hover:scale-[1.04] group-hover:-rotate-1"
-            />
+    <section id="planned" aria-labelledby="planned-title" className="w-pan scroll-mt-20 px-2">
+      <div
+        data-tone="ink"
+        className="w-pan-frame overflow-hidden rounded-panel bg-inverse text-on-inverse"
+      >
+        <div className="mx-auto flex h-full max-w-[1440px] flex-col justify-center gap-10 py-16 sm:py-20">
+          <div className="flex flex-col gap-3 px-6 sm:px-10">
+            <h2
+              id="planned-title"
+              className="m-0 text-display-sm leading-[1.1] font-light tracking-[-0.01em] sm:text-display"
+            >
+              <Trans>What is coming</Trans>
+            </h2>
+            <p className="m-0 max-w-[46ch] text-body text-on-inverse-muted">
+              <Trans>
+                The office that works for you, built step by step. It asks before anything risky.
+              </Trans>
+            </p>
           </div>
-          <p className="m-0 px-6 pb-6 text-body-sm text-secondary">{card.body}</p>
-        </article>
-      ))}
+          <div className="w-track flex gap-4 px-6 sm:px-10">
+            {cards.map((card) => (
+              <article
+                key={card.title}
+                className="flex w-[min(78vw,380px)] shrink-0 flex-col gap-4 rounded-card border border-inverse-border p-6"
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <h3 className="m-0 text-title-sm font-normal">{card.title}</h3>
+                  <span className="inline-flex h-6 items-center gap-1.5 rounded-pill border border-inverse-border px-2.5 text-caption text-on-inverse-muted">
+                    <span aria-hidden="true" className="size-1.5 rounded-pill bg-tertiary-mark" />
+                    <Trans>Coming</Trans>
+                  </span>
+                </div>
+                <div className="relative h-[200px]" aria-hidden="true">
+                  <img
+                    src={card.image}
+                    alt=""
+                    draggable={false}
+                    className="absolute inset-0 m-auto h-full w-full object-contain select-none"
+                  />
+                </div>
+                <p className="m-0 text-body-sm text-on-inverse-muted">{card.body}</p>
+              </article>
+            ))}
+            <Decision />
+          </div>
+        </div>
+      </div>
     </section>
+  );
+}
+
+/**
+ * The signature: an example approval at the end of the passing office. It waits for the owner
+ * in orange; as the scroll reaches it, the orange fills the button and the request becomes
+ * "Approved by you". Under reduced motion it shows both states, side by side in time: the
+ * request and, under it, what approving does.
+ */
+function Decision() {
+  return (
+    <article
+      aria-labelledby="decision-title"
+      className="w-decision flex w-[min(84vw,440px)] shrink-0 flex-col gap-5 rounded-card bg-on-inverse p-6 text-primary"
+    >
+      <div className="flex items-center gap-3">
+        <span
+          aria-hidden="true"
+          className="grid size-10 shrink-0 place-items-center rounded-pill bg-inverse text-body-sm text-on-inverse"
+        >
+          M
+        </span>
+        <span className="min-w-0">
+          <span className="block text-body">
+            <Trans>Maya · General Manager</Trans>
+          </span>
+          <span className="block text-caption text-secondary">
+            <Trans>An example of what will ask you</Trans>
+          </span>
+        </span>
+      </div>
+      <h3 id="decision-title" className="m-0 text-title font-light">
+        <Trans>Pause the summer sale on four listings?</Trans>
+      </h3>
+      <p className="m-0 text-body-sm text-secondary">
+        <Trans>Stock is low on all four. Nothing changes until you say so.</Trans>
+      </p>
+      <div className="relative flex items-center justify-between gap-3">
+        <span className="w-decision-state relative inline-flex h-7 items-center">
+          <span className="w-ask inline-flex items-center gap-2 text-caption text-tertiary-text">
+            <span aria-hidden="true" className="size-2 rounded-pill bg-tertiary-mark" />
+            <Trans>Needs you</Trans>
+          </span>
+          <span className="w-done absolute inset-0 inline-flex items-center gap-2 text-caption whitespace-nowrap">
+            <span aria-hidden="true" className="size-2 rounded-pill bg-success" />
+            <Trans>Approved by you</Trans>
+          </span>
+        </span>
+        <span
+          aria-hidden="true"
+          className="relative inline-flex h-10 items-center overflow-hidden rounded-pill bg-inverse px-5 text-body-sm text-on-inverse"
+        >
+          <Trans>Approve</Trans>
+          {/* The same word in the same place, on orange: the sweep reveals it over the ink. */}
+          <span className="w-fill absolute inset-0 inline-flex items-center bg-tertiary px-5 text-on-tertiary">
+            <Trans>Approve</Trans>
+          </span>
+        </span>
+      </div>
+    </article>
   );
 }
 
@@ -397,119 +423,127 @@ function HowItWorks() {
     },
   ];
   return (
-    <section id="how" aria-labelledby="how-title" className={cx(PANEL, "w-rise scroll-mt-24")}>
-      <header className="flex h-14 items-center gap-2.5 ps-6 pe-4">
-        <h2 id="how-title" className="m-0 text-body-sm font-normal">
-          <Trans>How it works</Trans>
-        </h2>
-      </header>
-      <ol className="m-0 grid list-none gap-0 border-t border-line p-0 md:grid-cols-3">
-        {steps.map((step, index) => (
-          <li
-            key={step.title}
-            className={cx(
-              "w-rise relative flex flex-col gap-2 px-6 pt-5 pb-6",
-              index > 0 && "max-md:border-t md:border-s border-line",
-            )}
-            style={{ animationDelay: `${String(index * 90)}ms` }}
-          >
-            <span className="text-number-lg leading-none font-light text-muted tabular">
-              <Ltr mono={false}>{`0${String(index + 1)}`}</Ltr>
-            </span>
-            <h3 className="m-0 text-title-sm font-normal">{step.title}</h3>
-            <p className="m-0 text-body-sm text-secondary">{step.body}</p>
-            <span aria-hidden="true" className="mt-2 flex gap-1" dir="ltr">
-              {Array.from({ length: 12 }, (_, dot) => (
-                <i
-                  key={dot}
-                  className={cx(
-                    "w-dot size-1.5 rounded-pill",
-                    dot < (index + 1) * 4 ? "bg-inverse" : "bg-faint",
-                  )}
-                  style={{ animationDelay: `${String(300 + index * 200 + dot * 40)}ms` }}
-                />
-              ))}
-            </span>
-          </li>
-        ))}
-      </ol>
-    </section>
-  );
-}
-
-function Apps() {
-  return (
     <section
-      id="apps"
-      aria-labelledby="apps-title"
-      className="grid scroll-mt-24 gap-2 md:grid-cols-3"
+      id="how"
+      aria-labelledby="how-title"
+      className="mx-auto max-w-[1440px] scroll-mt-24 px-6 py-20 sm:px-10 lg:py-28"
     >
-      <h2 id="apps-title" className="sr-only">
-        <Trans>Apps</Trans>
-      </h2>
-      <AppCard
-        name={<Trans>Web</Trans>}
-        status={<Trans>Ready today</Trans>}
-        ready
-        detail={<Trans>Any browser, nothing to install.</Trans>}
-      >
-        <Link to="/sign-in" className={cx(PILL_PRIMARY, "w-full")}>
-          <Trans>Open the web app</Trans>
-          <ArrowEndIcon size={14} />
-        </Link>
-      </AppCard>
-      <AppCard
-        name={<Trans>Windows</Trans>}
-        status={<Trans>Coming</Trans>}
-        detail={<Trans>A native desktop app with the same features.</Trans>}
-      />
-      <AppCard
-        name={<Trans>Android</Trans>}
-        status={<Trans>Coming</Trans>}
-        detail={<Trans>An app for your phone with the same features.</Trans>}
-      />
-    </section>
-  );
-}
-
-function AppCard({
-  name,
-  status,
-  ready = false,
-  detail,
-  children,
-}: {
-  name: ReactNode;
-  status: ReactNode;
-  ready?: boolean;
-  detail: ReactNode;
-  children?: ReactNode;
-}) {
-  return (
-    <article className={cx(PANEL, "w-rise w-lift gap-4 p-6")}>
-      <div className="flex items-center justify-between gap-3">
-        <h3 className="m-0 text-[32px] leading-tight font-light tracking-[-0.01em]">{name}</h3>
-        <span
-          className={cx(
-            "inline-flex h-6 items-center gap-1.5 rounded-pill px-2.5 text-caption",
-            ready ? "bg-inverse text-on-inverse" : "border border-line-strong text-secondary",
-          )}
-        >
+      <div className="grid gap-10 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+        <ol className="w-rail relative m-0 flex list-none flex-col gap-12 p-0 ps-14 max-lg:order-2">
+          {/* The rail: a hairline that fills with orange as the steps are read. */}
           <span
             aria-hidden="true"
-            className={cx("size-1.5 rounded-pill", ready ? "w-led bg-success" : "bg-accent-mark")}
-          />
+            className="absolute inset-y-2 inset-s-[19px] w-px overflow-hidden bg-line-strong"
+          >
+            <span className="w-rail-fill absolute inset-0 origin-top bg-tertiary" />
+          </span>
+          {steps.map((step, index) => (
+            <li key={step.title} className="w-step relative flex flex-col gap-2">
+              <span
+                aria-hidden="true"
+                className="absolute -inset-s-14 top-0 grid size-10 place-items-center rounded-pill border border-line-strong bg-ground text-body-sm tabular"
+              >
+                {index + 1}
+              </span>
+              <h3 className="m-0 text-title-lg leading-[1.2] font-light sm:text-display-sm">
+                {step.title}
+              </h3>
+              <p className="m-0 max-w-[48ch] text-body text-secondary">{step.body}</p>
+            </li>
+          ))}
+        </ol>
+        <div className="flex flex-col gap-3 lg:sticky lg:top-28 lg:self-start">
+          <h2
+            id="how-title"
+            className="m-0 text-display-sm leading-[1.1] font-light tracking-[-0.01em] sm:text-display"
+          >
+            <Trans>How it works</Trans>
+          </h2>
+          <p className="m-0 max-w-[32ch] text-body text-secondary">
+            <Trans>Three steps, a few minutes each.</Trans>
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/** The close, on orange: the way in, and which apps follow. */
+function Apps() {
+  const { t } = useLingui();
+  return (
+    <section id="apps" aria-label={t`Apps`} className="scroll-mt-20 px-2">
+      <div
+        data-tone="orange"
+        className="w-close overflow-hidden rounded-panel bg-tertiary text-on-tertiary"
+      >
+        <div className="mx-auto flex max-w-[1440px] flex-col gap-12 px-6 py-16 sm:px-10 sm:py-24">
+          <div className="flex flex-col gap-6">
+            <h2
+              id="apps-title"
+              className="m-0 max-w-[14ch] text-display leading-[1.02] font-light tracking-[-0.02em] sm:text-hero"
+            >
+              <Trans>Your office opens in the browser.</Trans>
+            </h2>
+            <div>
+              <Link
+                to="/sign-in"
+                className="inline-flex h-14 items-center gap-2 rounded-pill bg-inverse px-7 text-body text-on-inverse no-underline outline-none transition-[background-color,scale] duration-[var(--motion-duration-fast)] ease-standard hover:bg-inverse-hover active:scale-[0.97]"
+              >
+                <Trans>Open the web app</Trans>
+                <ArrowEndIcon size={16} />
+              </Link>
+            </div>
+          </div>
+          <ul className="m-0 grid list-none gap-0 p-0 sm:grid-cols-3">
+            <AppLine
+              name={<Trans>Web</Trans>}
+              detail={<Trans>Any browser, nothing to install.</Trans>}
+              status={<Trans>Ready today</Trans>}
+              ready
+            />
+            <AppLine
+              name={<Trans>Windows</Trans>}
+              detail={<Trans>A native desktop app with the same features.</Trans>}
+              status={<Trans>In development</Trans>}
+            />
+            <AppLine
+              name={<Trans>Android</Trans>}
+              detail={<Trans>An app for your phone with the same features.</Trans>}
+              status={<Trans>In development</Trans>}
+            />
+          </ul>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function AppLine({
+  name,
+  detail,
+  status,
+  ready = false,
+}: {
+  name: ReactNode;
+  detail: ReactNode;
+  status: ReactNode;
+  ready?: boolean;
+}) {
+  return (
+    <li className="flex flex-col gap-2 border-t border-on-tertiary/25 py-5 sm:pe-6">
+      <span className="flex flex-col items-start gap-2">
+        <span className="text-display-sm leading-tight font-light">{name}</span>
+        <span
+          className={cx(
+            "inline-flex h-6 items-center rounded-pill px-2.5 text-caption",
+            ready ? "bg-inverse text-on-inverse" : "border border-on-tertiary/40",
+          )}
+        >
           {status}
         </span>
-      </div>
-      <p className="m-0 text-body-sm text-secondary">{detail}</p>
-      <div className="mt-auto">
-        {children ?? (
-          <span className="inline-flex h-12 w-full items-center justify-center rounded-pill border border-dashed border-line-strong text-body-sm text-muted">
-            <Trans>In development</Trans>
-          </span>
-        )}
-      </div>
-    </article>
+      </span>
+      <span className="text-body-sm">{detail}</span>
+    </li>
   );
 }

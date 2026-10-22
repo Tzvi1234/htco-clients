@@ -66,21 +66,30 @@ describe("the app shell", () => {
     expect(screen.getByRole("heading", { level: 1, name: "בית" })).toBeInTheDocument();
   });
 
-  it("switches to Hebrew and back from the account menu (AC-3.3.1)", async () => {
-    const { user, storage } = await renderApp();
+  it("switches to Hebrew and back in Settings, where the language lives (AC-3.3.1)", async () => {
+    const { user, storage } = await renderApp({ path: "/settings" });
 
-    await user.click(screen.getByRole("button", { name: "Account and preferences" }));
-    await user.click(screen.getByRole("menuitemradio", { name: "עברית" }));
+    await user.click(screen.getByRole("radio", { name: /^עברית/ }));
 
     expect([root.lang, root.dir]).toEqual(["he", "rtl"]);
-    expect(screen.getByRole("heading", { level: 1, name: "בית" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 1, name: "הגדרות" })).toBeInTheDocument();
     expect(storage.getItem("htco.locale")).toBe("he");
 
-    await user.click(screen.getByRole("button", { name: "חשבון והעדפות" }));
-    await user.click(screen.getByRole("menuitemradio", { name: "English" }));
+    await user.click(screen.getByRole("radio", { name: /^English/ }));
 
     expect([root.lang, root.dir]).toEqual(["en", "ltr"]);
-    expect(screen.getByRole("heading", { level: 1, name: "Home" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 1, name: "Settings" })).toBeInTheDocument();
+  });
+
+  it("keeps personalisation out of the account menu: it leads to Settings", async () => {
+    const { user, history } = await renderApp();
+
+    await user.click(screen.getByRole("button", { name: "Account" }));
+    expect(screen.queryByRole("menuitemradio")).not.toBeInTheDocument();
+    await user.click(screen.getByRole("menuitem", { name: "Settings" }));
+
+    expect(await screen.findByRole("heading", { level: 1, name: "Settings" })).toBeInTheDocument();
+    expect(history.location.pathname).toBe("/settings");
   });
 
   it("follows the system theme until the user picks one, then remembers it (AC-3.3.3)", async () => {
@@ -92,7 +101,7 @@ describe("the app shell", () => {
     expect(root.dataset["theme"]).toBe("dark");
     expect(storage.getItem("htco.theme")).toBe("dark");
 
-    await user.click(screen.getByRole("radio", { name: "Match the system" }));
+    await user.click(screen.getByRole("radio", { name: /^System/ }));
 
     expect(root.hasAttribute("data-theme")).toBe(false);
   });
