@@ -12,14 +12,27 @@ import { CloseIcon, MoreIcon } from "../../shared/ui/icons.tsx";
 const ON_BAR: AreaId[] = ["home", "office", "work", "commerce"];
 
 const ITEM = cx(
-  "flex h-full min-w-0 flex-1 cursor-default flex-col items-center justify-center gap-0.5 rounded-[22px] text-[11px] leading-[14px] no-underline outline-none",
+  "flex h-full min-w-0 flex-1 cursor-default flex-col items-center justify-center gap-0.5 rounded-[22px] text-caption leading-[14px] no-underline outline-none",
   "transition-[background-color,color,scale] duration-[var(--motion-duration-fast)] ease-standard active:scale-95",
 );
 
+/** A flick faster than this (px per ms) closes the sheet whatever the distance (Emil, Sonner). */
+const FLICK_VELOCITY = 0.5;
+/** A slow drag closes the sheet once it has travelled this far. */
+const DRAG_DISTANCE = 96;
+
+interface Drag {
+  from: number;
+  at: number;
+  by: number;
+}
+
 /**
- * Phones: an iOS-style floating tab bar in the Design 1C language (the sidebar's panel, the
- * current area on the inverse pill). Four areas sit on the bar; "More" opens every area and
- * its tabs in a sheet.
+ * Phones: an iOS-style floating tab bar on frosted glass in the Design 1C language (the
+ * sidebar's panel, the current area on the inverse pill, which glides to the next one with the
+ * navigation's spring-like curve). Four areas sit on the bar; "More" opens every area and its
+ * tabs in a sheet that rises from the bottom and leaves the same way: by its close button, a
+ * tap outside, Escape, or a drag down on its grabber (a quick flick is enough).
  */
 export function TabBar() {
   const { t } = useLingui();
@@ -31,7 +44,7 @@ export function TabBar() {
   const elsewhere = current !== undefined && !ON_BAR.includes(current);
   // The ink pill slides to the current item (the "More" slot for areas off the bar).
   const slot = current === undefined ? -1 : elsewhere ? ON_BAR.length : ON_BAR.indexOf(current);
-  const [drag, setDrag] = useState<{ from: number; by: number } | null>(null);
+  const [drag, setDrag] = useState<Drag | null>(null);
 
   return (
     <>
@@ -42,12 +55,13 @@ export function TabBar() {
       />
       <nav
         aria-label={t`Main`}
-        className="glass fixed inset-x-3 bottom-3 z-20 isolate flex h-16 gap-1 rounded-[28px] border border-sidebar-line bg-sidebar p-1.5 shadow-sidebar pb-[max(6px,env(safe-area-inset-bottom))]"
+        data-glass=""
+        className="fixed inset-x-3 bottom-3 z-20 isolate flex h-16 gap-1 rounded-[28px] border border-sidebar-line bg-sidebar p-1.5 shadow-sidebar pb-[max(6px,env(safe-area-inset-bottom))]"
       >
         {slot < 0 ? null : (
           <span
             aria-hidden="true"
-            className="absolute top-1.5 bottom-1.5 rounded-[22px] bg-inverse transition-[inset-inline-start] duration-[var(--motion-duration-slow)] ease-standard"
+            className="absolute top-1.5 bottom-1.5 rounded-[22px] bg-inverse transition-[inset-inline-start] duration-[var(--motion-duration-expand)] ease-spring"
             style={{
               width: "calc((100% - 28px) / 5)",
               insetInlineStart: `calc(6px + ${String(slot)} * ((100% - 28px) / 5 + 4px))`,
@@ -78,6 +92,7 @@ export function TabBar() {
         })}
         <Button
           aria-label={t`More areas`}
+          aria-expanded={more}
           onPress={() => {
             setMore(true);
           }}
@@ -95,30 +110,42 @@ export function TabBar() {
         isOpen={more}
         onOpenChange={setMore}
         isDismissable
-        className="fixed inset-0 z-50 flex items-end bg-[color-mix(in_srgb,var(--bg-ground)_60%,transparent)] data-[entering]:animate-enter"
+        className="nav-sheet-overlay fixed inset-0 z-50 flex items-end bg-[color-mix(in_srgb,var(--bg-ground)_60%,transparent)]"
       >
         <Modal
+          data-glass=""
           className={cx(
-            "glass max-h-[85dvh] w-full overflow-auto overscroll-contain rounded-t-panel border border-edge bg-menu px-4 pb-8 shadow-popover outline-none data-[entering]:animate-[htco-sheet-in_var(--motion-duration-slow)_var(--motion-easing-standard)_both]",
+            "nav-sheet max-h-[85dvh] w-full overflow-auto overscroll-contain rounded-t-panel border border-edge bg-menu px-4 pb-8 shadow-popover outline-none",
             drag === null &&
-              "transition-transform duration-[var(--motion-duration-base)] ease-standard",
+              "transition-transform duration-[var(--motion-duration-base)] ease-spring",
           )}
           style={drag === null ? {} : { transform: `translateY(${String(drag.by)}px)` }}
         >
-          {/* iOS sheet grabber: drag it down to close the sheet. */}
+          {/* iOS sheet grabber: drag it down to close the sheet; dragging up meets friction. */}
           <div
             aria-hidden="true"
             className="sticky top-0 z-10 -mx-4 flex touch-none justify-center bg-menu pt-2 pb-3"
             onPointerDown={(event) => {
+              // One finger at a time: a second touch does not restart the drag.
+              if (drag !== null) return;
               event.currentTarget.setPointerCapture(event.pointerId);
-              setDrag({ from: event.clientY, by: 0 });
+              setDrag({ from: event.clientY, at: event.timeStamp, by: 0 });
             }}
             onPointerMove={(event) => {
-              if (drag !== null)
-                setDrag({ from: drag.from, by: Math.max(0, event.clientY - drag.from) });
+              if (drag === null) return;
+              const delta = event.clientY - drag.from;
+              // Down follows the finger; up is damped, so the sheet never hits a wall.
+              const by = delta >= 0 ? delta : -Math.sqrt(-delta) * 2;
+              setDrag({ ...drag, by });
             }}
-            onPointerUp={() => {
-              if (drag !== null && drag.by > 80) setMore(false);
+            onPointerUp={(event) => {
+              if (drag !== null) {
+                const elapsed = Math.max(1, event.timeStamp - drag.at);
+                const velocity = drag.by / elapsed;
+                if (drag.by > DRAG_DISTANCE || (drag.by > 8 && velocity > FLICK_VELOCITY)) {
+                  setMore(false);
+                }
+              }
               setDrag(null);
             }}
             onPointerCancel={() => {
@@ -137,7 +164,7 @@ export function TabBar() {
                 onPress={() => {
                   setMore(false);
                 }}
-                className="grid size-10 cursor-default place-items-center rounded-pill border border-line-strong outline-none data-[pressed]:scale-95"
+                className="grid size-10 cursor-default place-items-center rounded-pill border border-line-strong outline-none transition-[scale] duration-[var(--motion-duration-fast)] ease-standard data-[pressed]:scale-95"
               >
                 <CloseIcon size={14} />
               </Button>
@@ -149,7 +176,7 @@ export function TabBar() {
                   onClick={() => {
                     setMore(false);
                   }}
-                  className="flex items-center gap-3 rounded-[24px] p-1 text-body text-primary no-underline outline-none hover:bg-hover"
+                  className="flex items-center gap-3 rounded-[24px] p-1 text-body text-primary no-underline outline-none transition-[background-color,scale] duration-[var(--motion-duration-fast)] ease-standard hover:bg-hover active:scale-[0.98]"
                 >
                   <span
                     className={cx(

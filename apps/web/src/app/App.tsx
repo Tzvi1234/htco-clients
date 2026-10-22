@@ -12,7 +12,7 @@ import type { SettingsStorage } from "../shared/lib/storage.ts";
 import { SettingsStorageContext } from "../shared/lib/storageContext.ts";
 import { TweaksProvider } from "../shared/theme/ThemeProvider.tsx";
 import type { ThemePreference } from "../shared/theme/theme.ts";
-import { readTweaks } from "../shared/theme/tweaks.ts";
+import { migrateAppearance, readTweaks } from "../shared/theme/tweaks.ts";
 
 export interface AppProps {
   locale: Locale;
@@ -26,8 +26,12 @@ export interface AppProps {
 /** Providers and routes; `main.tsx` passes the device settings, tests pass their own. */
 export function App({ locale, theme, storage, history, api: given }: AppProps) {
   const [api] = useState(() => given ?? createApiClient());
-  // The theme and the design tweaks are one preference on this origin (client ADR-0008).
-  const [tweaks] = useState(() => ({ ...readTweaks(storage), theme }));
+  // The theme and the palette are one preference on this origin (client ADR-0008); values an
+  // earlier version remembered are migrated first (round 3, ADR-0009).
+  const [tweaks] = useState(() => {
+    migrateAppearance(storage);
+    return { ...readTweaks(storage), theme };
+  });
   const [{ queryClient, router }] = useState(() => {
     const client: QueryClient = new QueryClient({
       // A session that ended on the server (revoked elsewhere, expired): back to sign-in.

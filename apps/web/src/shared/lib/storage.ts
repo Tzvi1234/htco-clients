@@ -1,7 +1,8 @@
 // Per-device settings (language, theme). Storage can be missing or blocked (private windows,
 // strict privacy settings), so every access is guarded and a failure means "no setting".
 
-export type SettingsStorage = Pick<Storage, "getItem" | "setItem">;
+export type SettingsStorage = Pick<Storage, "getItem" | "setItem"> &
+  Partial<Pick<Storage, "removeItem">>;
 
 export function readSetting(storage: SettingsStorage | undefined, key: string): string | null {
   try {
@@ -23,6 +24,15 @@ export function writeSetting(
   }
 }
 
+/** Forgets a setting (a retired one); a storage that cannot forget keeps it, unread. */
+export function forgetSetting(storage: SettingsStorage | undefined, key: string): void {
+  try {
+    storage?.removeItem?.(key);
+  } catch {
+    // Not forgotten on this device; nothing reads it any more.
+  }
+}
+
 /** The browser's localStorage, or undefined where it cannot be reached. */
 export function deviceStorage(): SettingsStorage | undefined {
   try {
@@ -39,6 +49,9 @@ export function memoryStorage(): SettingsStorage {
     getItem: (key) => values.get(key) ?? null,
     setItem: (key, value) => {
       values.set(key, value);
+    },
+    removeItem: (key) => {
+      values.delete(key);
     },
   };
 }

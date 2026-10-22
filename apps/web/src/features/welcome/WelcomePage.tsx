@@ -19,7 +19,6 @@ import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
 import { cx } from "../../shared/lib/cx.ts";
 import { REDUCED_MOTION_QUERY, useMediaQuery } from "../../shared/lib/useMediaQuery.ts";
 import { useTweaks } from "../../shared/theme/ThemeProvider.tsx";
-import { TweaksButton } from "../../shared/theme/TweaksPanel.tsx";
 import { ArrowEndIcon, ArrowStartIcon } from "../../shared/ui/icons.tsx";
 import { Ltr } from "../../shared/ui/Ltr.tsx";
 import { Logo } from "../../shared/ui/Logo.tsx";
@@ -108,7 +107,7 @@ function TopBar() {
             { id: "en", label: "English", lang: "en" },
           ]}
         />
-        <TweaksButton />
+
         <Link to="/sign-in" className={cx(PILL_PRIMARY, "h-10 px-5 max-sm:hidden")}>
           <Trans>Open the web app</Trans>
         </Link>

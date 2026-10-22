@@ -14,10 +14,16 @@ export function isPublished(token: Token): boolean {
   return !(group === "color" && subgroup === "brand");
 }
 
-/** Web-only effects (frosted glass, the designed ground behind it) stay out of native outputs. */
+/**
+ * Web-only effects (frosted glass, the designed ground behind it) and the Settings swatches stay
+ * out of native outputs.
+ */
 export function isNative(token: Token): boolean {
   if (!isPublished(token)) return false;
-  return token.path[0] !== "glass" && !(token.path[0] === "color" && token.path[1] === "bloom");
+  const [group, subgroup] = token.path;
+  return (
+    group !== "glass" && !(group === "color" && (subgroup === "bloom" || subgroup === "swatch"))
+  );
 }
 
 /** Semantic colours and elevation change with the theme; everything else is the same in both. */

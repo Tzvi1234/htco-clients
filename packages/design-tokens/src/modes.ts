@@ -89,9 +89,13 @@ export const NAV_GLASS_SCOPE = "[data-glass]";
 
 /** The modes the scoped nav glass is checked in: each palette and theme, glass 2, no bloom. */
 export const NAV_GLASS_MODES: Mode[] = (["sbb", "d4"] as const).flatMap((palette) =>
-  (["light", "dark"] as const).map(
-    (theme): Mode => ({ palette, theme, contrast: 1, glass: 2, borders: 1 }),
-  ),
+  (["light", "dark"] as const).map((theme): Mode => ({
+    palette,
+    theme,
+    contrast: 1,
+    glass: 2,
+    borders: 1,
+  })),
 );
 
 export const CSS_LAYERS: { layer: string; rules: CssRule[] }[] = [

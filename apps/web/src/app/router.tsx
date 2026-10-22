@@ -12,7 +12,7 @@ import {
 import { NotFound, RouteError } from "./RouteStates.tsx";
 import { AppShell } from "./shell/AppShell.tsx";
 import { DemoRoute, loadDemoScreens } from "./shell/DemoRoute.tsx";
-import { AREAS } from "./shell/nav.ts";
+import { AREAS, navDirection, sameArea } from "./shell/nav.ts";
 import { AcceptInvitePage } from "../features/auth/AcceptInvitePage.tsx";
 import { ForgotPasswordPage } from "../features/auth/ForgotPasswordPage.tsx";
 import { ResetPasswordPage } from "../features/auth/ResetPasswordPage.tsx";
@@ -211,7 +211,7 @@ const routeTree = rootRoute.addChildren([
       createRoute({
         getParentRoute: () => appRoute,
         path: "/settings",
-        staticData: { layout: "panels" },
+        staticData: { layout: "panels", scroll: "page" },
         component: SettingsPage,
       }),
       createRoute({
@@ -245,6 +245,21 @@ export function viewTransitions(): boolean {
   return !window.matchMedia(REDUCED_MOTION_QUERY).matches;
 }
 
+/**
+ * The View Transition of a screen change (styles.css, "Screen to screen"): its type says which
+ * way it travels in the navigation. Asked on every change, so turning on reduced motion while
+ * the app is open stops it at once; a change of search or hash alone does not animate.
+ */
+export function screenTransition(info: {
+  fromLocation?: { pathname: string };
+  toLocation: { pathname: string };
+  pathChanged: boolean;
+}): string[] | false {
+  if (!info.pathChanged || !viewTransitions()) return false;
+  const [from, to] = [info.fromLocation?.pathname, info.toLocation.pathname];
+  return [navDirection(from, to), ...(sameArea(from, to) ? ["same-area"] : [])];
+}
+
 export function createAppRouter(context: RouterContext, history?: RouterHistory) {
   return createRouter({
     routeTree,
@@ -252,8 +267,9 @@ export function createAppRouter(context: RouterContext, history?: RouterHistory)
     ...(history === undefined ? {} : { history }),
     defaultErrorComponent: RouteError,
     defaultPreload: "intent",
-    // Screens change with a short cross-fade (styles.css); never under reduced motion.
-    defaultViewTransition: viewTransitions(),
+    // Screens change with a short, direction-aware transition (styles.css); never under
+    // reduced motion.
+    defaultViewTransition: { types: screenTransition },
   });
 }
 
@@ -264,6 +280,8 @@ declare module "@tanstack/react-router" {
   interface StaticDataRouteOption {
     /** "panels": the screen lays out its own Design 1C panels; otherwise the shell gives it one. */
     layout?: "panels";
+    /** "page": on wide screens the screen scrolls as one page, never inside a panel (round 3). */
+    scroll?: "page";
   }
   interface HistoryState {
     /** Set by the Etsy callback for the Shops page's confirmation, in that workspace. */

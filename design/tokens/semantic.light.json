@@ -877,6 +877,42 @@
       "5": {
         "$value": "{palette.saffron.700}"
       }
+    },
+    "swatch": {
+      "$description": "Fixed sample colours for the appearance choices in Settings (each choice is drawn in its own colours, whatever is chosen now). Decoration only, never text; the same in every mode. Web only.",
+      "light-ground": {
+        "$value": "{palette.sbb.ground}"
+      },
+      "light-panel": {
+        "$value": "{palette.sbb.card}"
+      },
+      "light-ink": {
+        "$value": "{palette.sbb.ink}"
+      },
+      "dark-ground": {
+        "$value": "{palette.sbb-dark.ground}"
+      },
+      "dark-panel": {
+        "$value": "{palette.sbb-dark.raised}"
+      },
+      "dark-ink": {
+        "$value": "{palette.sbb-dark.ink}"
+      },
+      "gray-ground": {
+        "$value": "{palette.sbb.ground}"
+      },
+      "gray-panel": {
+        "$value": "{palette.sbb.card}"
+      },
+      "cream-ground": {
+        "$value": "{palette.d4.ground}"
+      },
+      "cream-panel": {
+        "$value": "{palette.d4.white}"
+      },
+      "orange": {
+        "$value": "{palette.sbb.accent}"
+      }
     }
   },
   "elevation": {
