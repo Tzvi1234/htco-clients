@@ -2477,6 +2477,10 @@ msgstr "Noam"
 msgid "None"
 msgstr "None"
 
+#: src/features/commerce/ProductsPage.tsx
+msgid "None of the listings read is sold out; the catalog is larger than one read."
+msgstr "None of the listings read is sold out; the catalog is larger than one read."
+
 #: src/features/commerce/ShippingPage.tsx
 msgid "Not accepted"
 msgstr "Not accepted"
@@ -2545,6 +2549,10 @@ msgstr "October newsletter"
 #: src/features/office/AiOpsPage.tsx
 msgid "of"
 msgstr "of"
+
+#: src/features/commerce/ProductsPage.tsx
+msgid "of the {read} read"
+msgstr "of the {read} read"
 
 #: src/features/customers/CustomersPage.tsx
 msgid "of the newest reviews"

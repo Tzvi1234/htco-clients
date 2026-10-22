@@ -332,6 +332,34 @@ describe("Each screen's one primary action (clarity round 3)", () => {
     expect(within(catalog).getByRole("button", { name: /soy candle/ })).toBeInTheDocument();
   });
 
+  it("shows the sold-out listings whatever section was chosen (Codex, #37)", async () => {
+    const { user } = await open("/commerce/products");
+    const catalog = await panel("Catalog");
+    await user.click(within(catalog).getByRole("button", { name: "Mugs" }));
+    const focus = await panel("Your catalog");
+
+    await user.click(within(focus).getByRole("button", { name: "Show the sold-out listings" }));
+
+    expect(within(catalog).getByRole("button", { name: /Linen napkins/ })).toBeInTheDocument();
+    expect(within(catalog).getByRole("button", { name: "All" })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+  });
+
+  it("does not call a truncated catalog fully in stock (Codex, #37)", async () => {
+    await open("/commerce/products", { liveTrouble: "truncated" });
+    const focus = await panel("Your catalog");
+
+    expect(within(focus).queryByText("Every active listing is in stock.")).toBeNull();
+    expect(
+      within(focus).getByText(
+        "None of the listings read is sold out; the catalog is larger than one read.",
+      ),
+    ).toBeInTheDocument();
+    expect(within(focus).getAllByText(/^of the \d+ read$/)).toHaveLength(3);
+  });
+
   it("opens Etsy's sold orders from the Shipping focus, writing nothing", async () => {
     const { backend } = await open("/commerce/shipping");
     const focus = await panel("What waits to ship");
@@ -358,6 +386,19 @@ describe("Each screen's one primary action (clarity round 3)", () => {
     const paths = [...(stars[0]?.querySelectorAll("path") ?? [])];
     expect(paths.filter((p) => p.classList.contains("fill-tertiary"))).toHaveLength(3);
     expect(paths.filter((p) => p.classList.contains("fill-none"))).toHaveLength(2);
+  });
+
+  it("starts another shop with every review, and keeps the way back (Codex, #37)", async () => {
+    const { user } = await open("/customers/customers", demoShops());
+    const focus = await panel("What buyers say");
+    await user.click(within(focus).getByRole("button", { name: "Read the low ratings" }));
+    expect(within(focus).getByRole("button", { name: "Show every review" })).toBeInTheDocument();
+
+    await user.click(within(focus).getByRole("button", { name: "Linen Lane Studio" }));
+
+    const reviews = await panel("Reviews");
+    expect(await within(reviews).findAllByRole("img", { name: /of 5 stars/ })).not.toHaveLength(1);
+    expect(within(reviews).getByText("Newest first")).toBeInTheDocument();
   });
 });
 

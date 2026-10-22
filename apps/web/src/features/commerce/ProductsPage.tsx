@@ -112,6 +112,9 @@ function Products({ shopId, chips }: { shopId: string; chips: ReactNode }) {
   const views = all.reduce((n, l) => n + l.views, 0);
   const favourites = all.reduce((n, l) => n + l.favorer_count, 0);
   const known = listings.data !== undefined;
+  // A catalog larger than one read: the sums cover the listings read, and say so (Codex, #37).
+  const partial = listings.data?.truncated === true;
+  const read = count(all.length);
   const choose = (id: number) => {
     setChosen(id);
     // On a phone the details sit under the catalog: bring them into view.
@@ -138,6 +141,10 @@ function Products({ shopId, chips }: { shopId: string; chips: ReactNode }) {
               one="One listing is sold out. Restock it on Etsy so it keeps selling."
               other="# listings are sold out. Restock them on Etsy so they keep selling."
             />
+          ) : partial ? (
+            <Trans>
+              None of the listings read is sold out; the catalog is larger than one read.
+            </Trans>
           ) : (
             <Trans>Every active listing is in stock.</Trans>
           )
@@ -152,11 +159,17 @@ function Products({ shopId, chips }: { shopId: string; chips: ReactNode }) {
               label={<Trans>Sold out</Trans>}
               value={<N>{known ? count(soldOut) : "—"}</N>}
               tone={soldOut > 0 ? "tertiary" : undefined}
+              {...(partial ? { note: t`of the ${read} read` } : {})}
             />
-            <Figure label={<Trans>Views</Trans>} value={<N>{known ? count(views) : "—"}</N>} />
+            <Figure
+              label={<Trans>Views</Trans>}
+              value={<N>{known ? count(views) : "—"}</N>}
+              {...(partial ? { note: t`of the ${read} read` } : {})}
+            />
             <Figure
               label={<Trans>Favourites</Trans>}
               value={<N>{known ? count(favourites) : "—"}</N>}
+              {...(partial ? { note: t`of the ${read} read` } : {})}
             />
           </Figures>
         }
@@ -167,6 +180,8 @@ function Products({ shopId, chips }: { shopId: string; chips: ReactNode }) {
               size="lg"
               onPress={() => {
                 setSoldOutOnly((on) => !on);
+                // Catalog-wide: a chosen section would hide the sold-out ones (Codex, #37).
+                setSection("all");
                 setShown(PAGE);
               }}
             >

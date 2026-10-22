@@ -2477,6 +2477,10 @@ msgstr "נועם"
 msgid "None"
 msgstr "אין"
 
+#: src/features/commerce/ProductsPage.tsx
+msgid "None of the listings read is sold out; the catalog is larger than one read."
+msgstr "אף אחד מהליסטינגים שנקראו לא אזל; הקטלוג גדול ממה שנקרא בפעם אחת."
+
 #: src/features/commerce/ShippingPage.tsx
 msgid "Not accepted"
 msgstr "לא מתקבלות"
@@ -2545,6 +2549,10 @@ msgstr "ניוזלטר אוקטובר"
 #: src/features/office/AiOpsPage.tsx
 msgid "of"
 msgstr "מתוך"
+
+#: src/features/commerce/ProductsPage.tsx
+msgid "of the {read} read"
+msgstr "מתוך {read} שנקראו"
 
 #: src/features/customers/CustomersPage.tsx
 msgid "of the newest reviews"

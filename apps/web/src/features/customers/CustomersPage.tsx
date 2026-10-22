@@ -51,8 +51,10 @@ export function CustomersPage() {
   const count = useCount();
   const tabs = useId();
   const [tab, setTab] = useState<"reviews" | "customers">("reviews");
-  const [lowOnly, setLowOnly] = useState(false);
   const shopId = live.shop?.id;
+  // The shop whose low ratings are shown: another shop starts with every review (Codex, #37).
+  const [lowFor, setLowFor] = useState<string | null>(null);
+  const lowOnly = shopId !== undefined && lowFor === shopId;
   const reviews = useQuery({ ...reviewsQuery(api, shopId ?? ""), enabled: shopId !== undefined });
   const data = reviews.data;
   const low = (data?.items ?? []).filter((r) => r.rating <= LOW).length;
@@ -123,12 +125,12 @@ export function CustomersPage() {
             </Figures>
           }
           actions={
-            low > 0 ? (
+            low > 0 || lowOnly ? (
               <Button
                 variant={lowOnly ? "secondary" : "primary"}
                 size="lg"
                 onPress={() => {
-                  setLowOnly((on) => !on);
+                  setLowFor(lowOnly ? null : (shopId ?? null));
                   setTab("reviews");
                 }}
               >
