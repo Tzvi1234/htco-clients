@@ -23,7 +23,6 @@ import {
 } from "../../shared/demo/office.ts";
 import { cx } from "../../shared/lib/cx.ts";
 import { REDUCED_MOTION_QUERY, useMediaQuery } from "../../shared/lib/useMediaQuery.ts";
-import { useTweaks } from "../../shared/theme/ThemeProvider.tsx";
 import { GearIcon, GridIcon, SearchIcon } from "../../shared/ui/icons.tsx";
 import { useToast } from "../../shared/ui/Toast.tsx";
 import { Panel, PanelBody, PanelHeader } from "../../shared/ui/Panel.tsx";
@@ -95,8 +94,9 @@ export function FloorPage() {
 function LiveMap({ modes }: { modes: ReactNode }) {
   const { t, i18n } = useLingui();
   const still = useMediaQuery(REDUCED_MOTION_QUERY);
-  const { tweaks } = useTweaks();
-  const palette = tweaks.palette === "d4" ? "d4" : "sbb";
+  // The orange scene in every palette: Cream carries the logo's orange since round 3, so the
+  // lilac scene no longer matches it.
+  const palette = "sbb" as const;
   const script = useMemo(() => new OfficeScript(), []);
   const [playing, setPlaying] = useState(!still);
   const [speed, setSpeed] = useState<1 | 2>(1);
@@ -161,8 +161,7 @@ function LiveMap({ modes }: { modes: ReactNode }) {
       created?.dispose();
       scene.current = null;
     };
-    // The scene is built once per mount; palette and language changes are applied below.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // The scene is built once per mount; language changes are applied below.
   }, [script]);
 
   useEffect(() => {

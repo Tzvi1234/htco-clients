@@ -64,7 +64,8 @@ describe("Orders, live from Etsy", () => {
     expect(within(table).getAllByRole("row").length).toBeGreaterThan(10);
     expect(within(table).getByText("#3412880100")).toBeInTheDocument();
     expect(within(table).getAllByText("Emma R.").length).toBeGreaterThan(0);
-    expect(within(orders).getByText(/Live from Etsy/)).toBeInTheDocument();
+    // The freshness line sits in the screen's focus panel, above the table (clarity round 3).
+    expect(within(await panel("Last 30 days")).getByText(/Live from Etsy/)).toBeInTheDocument();
     expect(screen.queryByTestId("demo-content")).not.toBeInTheDocument();
     expect(screen.queryByText("DEMO")).not.toBeInTheDocument();
   });
@@ -104,7 +105,9 @@ describe("Orders, live from Etsy", () => {
     await open("/commerce/orders", { liveTrouble: "stale" });
 
     expect(
-      await within(await panel("Orders")).findByText(/Etsy is not answering · showing data from/),
+      await within(await panel("Last 30 days")).findByText(
+        /Etsy is not answering · showing data from/,
+      ),
     ).toBeInTheDocument();
   });
 
@@ -227,11 +230,13 @@ describe("Products, live from Etsy", () => {
 
 describe("Shipping, live from Etsy", () => {
   it("shows what waits to ship, the shipping profiles and the return policy", async () => {
-    await open("/commerce/shipping");
+    const { user } = await open("/commerce/shipping");
 
     expect(
       await within(await panel("Orders to ship")).findByRole("table", { name: "Orders to ship" }),
     ).toBeInTheDocument();
+    // Profiles, returns and partners have their own sub-tab (clarity round 3).
+    await user.click(screen.getByRole("tab", { name: "Profiles and returns" }));
     expect(
       await within(await panel("Shipping profiles")).findByText("Standard from Israel"),
     ).toBeInTheDocument();
@@ -242,14 +247,16 @@ describe("Shipping, live from Etsy", () => {
 });
 
 describe("Customers: reviews, live from Etsy", () => {
-  it("shows the newest reviews beside the demo customer panels", async () => {
-    await open("/customers/customers");
+  it("shows the newest reviews, and the demo customer panels in their own tab", async () => {
+    const { user } = await open("/customers/customers");
 
     const reviews = await panel("Reviews");
     expect(
       await within(reviews).findByText(/Smells like a walk in the forest/),
     ).toBeInTheDocument();
     expect(within(reviews).getAllByRole("img", { name: "5 of 5 stars" }).length).toBeGreaterThan(0);
+    // The customer health and list are Demo, under the Customers sub-tab (clarity round 3).
+    await user.click(screen.getByRole("tab", { name: /Customers/ }));
     expect(screen.getAllByText("Demo — coming soon").length).toBeGreaterThan(0);
   });
 });
@@ -273,8 +280,10 @@ describe("Shops and Home with live numbers", () => {
     expect(asked).not.toContain("/api/v1/shops/d0000000-0000-7000-8000-000000000004/overview");
   });
 
-  it("shows top listings from Etsy under the shops", async () => {
-    await open("/shops", demoShops());
+  it("shows top listings from Etsy in their own tab beside the shops", async () => {
+    const { user } = await open("/shops", demoShops());
+    await screen.findByRole("article", { name: "Willow & Wick" });
+    await user.click(screen.getByRole("tab", { name: "Top listings" }));
 
     const listing = await screen.findByText(/Night sky print/, undefined, { timeout: 4000 });
     expect(listing.closest("section")).toHaveTextContent("Top listings");
@@ -287,6 +296,134 @@ describe("Shops and Home with live numbers", () => {
     const revenue = within(numbers).getAllByRole("listitem").at(0) ?? document.body;
     expect(within(revenue).getByText("Revenue")).toBeInTheDocument();
     expect(await within(revenue).findByText(/^\$\d/)).toBeInTheDocument();
+  });
+});
+
+describe("Each screen's one primary action (clarity round 3)", () => {
+  it("shows the late orders from the Orders focus, and marks them", async () => {
+    const { user } = await open("/commerce/orders");
+    const focus = await panel("Last 30 days");
+
+    await user.click(within(focus).getByRole("button", { name: "Show the late orders" }));
+
+    const table = within(await panel("Orders")).getByRole("table", { name: "Orders" });
+    const rows = within(table).getAllByRole("row").slice(1);
+    expect(rows).toHaveLength(1);
+    expect(rows[0]).toHaveClass("k-row-late");
+    // The filter that is on now is the Late one; the action leaves the focus.
+    const filters = await panel("Filters");
+    expect(within(filters).getByRole("button", { name: /^Late/ })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+    expect(within(focus).queryByRole("button", { name: "Show the late orders" })).toBeNull();
+  });
+
+  it("shows the sold-out listings from the Products focus, and back", async () => {
+    const { user } = await open("/commerce/products");
+    const focus = await panel("Your catalog");
+
+    await user.click(within(focus).getByRole("button", { name: "Show the sold-out listings" }));
+
+    const catalog = await panel("Catalog");
+    expect(within(catalog).getByRole("button", { name: /Linen napkins/ })).toBeInTheDocument();
+    expect(within(catalog).queryByRole("button", { name: /soy candle/ })).toBeNull();
+    await user.click(within(focus).getByRole("button", { name: "Show every listing" }));
+    expect(within(catalog).getByRole("button", { name: /soy candle/ })).toBeInTheDocument();
+  });
+
+  it("shows the sold-out listings whatever section was chosen (Codex, #37)", async () => {
+    const { user } = await open("/commerce/products");
+    const catalog = await panel("Catalog");
+    await user.click(within(catalog).getByRole("button", { name: "Mugs" }));
+    const focus = await panel("Your catalog");
+
+    await user.click(within(focus).getByRole("button", { name: "Show the sold-out listings" }));
+
+    expect(within(catalog).getByRole("button", { name: /Linen napkins/ })).toBeInTheDocument();
+    expect(within(catalog).getByRole("button", { name: "All" })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+  });
+
+  it("does not call a truncated catalog fully in stock (Codex, #37)", async () => {
+    await open("/commerce/products", { liveTrouble: "truncated" });
+    const focus = await panel("Your catalog");
+
+    expect(within(focus).queryByText("Every active listing is in stock.")).toBeNull();
+    expect(
+      within(focus).getByText(
+        "None of the listings read is sold out; the catalog is larger than one read.",
+      ),
+    ).toBeInTheDocument();
+    expect(within(focus).getAllByText(/^of the \d+ read$/)).toHaveLength(3);
+  });
+
+  it("opens Etsy's sold orders from the Shipping focus, writing nothing", async () => {
+    const { backend } = await open("/commerce/shipping");
+    const focus = await panel("What waits to ship");
+
+    const link = within(focus).getByRole("link", { name: "Ship on Etsy" });
+    expect(link).toHaveAttribute("href", "https://www.etsy.com/your/orders/sold");
+    expect(link).toHaveAttribute("rel", "noopener noreferrer");
+    expect(backend.requests.every((r) => r.method === "GET")).toBe(true);
+  });
+
+  it("reads the low ratings first on Customers, with drawn stars", async () => {
+    const { user } = await open("/customers/customers");
+    const focus = await panel("What buyers say");
+
+    await user.click(within(focus).getByRole("button", { name: "Read the low ratings" }));
+
+    const reviews = await panel("Reviews");
+    const stars = within(reviews).getAllByRole("img", { name: /of 5 stars/ });
+    expect(stars).toHaveLength(1);
+    expect(stars[0]).toHaveAccessibleName("3 of 5 stars");
+    // Stars are drawn (an SVG each), not a text glyph a font may leave out.
+    expect(stars[0]?.querySelectorAll("svg")).toHaveLength(5);
+    // As many filled (the tertiary orange) as the rating, the rest only outlined.
+    const paths = [...(stars[0]?.querySelectorAll("path") ?? [])];
+    expect(paths.filter((p) => p.classList.contains("fill-tertiary"))).toHaveLength(3);
+    expect(paths.filter((p) => p.classList.contains("fill-none"))).toHaveLength(2);
+  });
+
+  it("says how many shops today's orders cover when one could not be read (Codex, #37)", async () => {
+    await open("/shops", demoShops());
+    await screen.findByRole("article", { name: "Willow & Wick" });
+    await settled();
+    const figures = within(await panel("Your shops")).getByRole("list", { name: "Shop numbers" });
+
+    // Paper Fox needs reconnecting, so its numbers are not read; the disconnected shop is not asked.
+    expect(within(figures).getByText("from 2 of 3 shops")).toBeInTheDocument();
+  });
+
+  it("takes the review shares from the server's distribution (Codex, #37)", async () => {
+    await open("/customers/customers");
+    const focus = await panel("What buyers say");
+
+    const figures = within(focus).getByRole("list", { name: "Review numbers" });
+    // 88 five-star and 4 at three stars or fewer of the newest 100 (the fake's distribution).
+    expect(within(figures).getByText("88%")).toBeInTheDocument();
+    expect(within(figures).getByText("4")).toBeInTheDocument();
+    expect(within(figures).getAllByText("of the newest 100")).toHaveLength(2);
+    // The sentence counts what can be read here: one low review among the texts sent.
+    expect(
+      within(focus).getByText("One recent review has three stars or fewer. Read it first."),
+    ).toBeInTheDocument();
+  });
+
+  it("starts another shop with every review, and keeps the way back (Codex, #37)", async () => {
+    const { user } = await open("/customers/customers", demoShops());
+    const focus = await panel("What buyers say");
+    await user.click(within(focus).getByRole("button", { name: "Read the low ratings" }));
+    expect(within(focus).getByRole("button", { name: "Show every review" })).toBeInTheDocument();
+
+    await user.click(within(focus).getByRole("button", { name: "Linen Lane Studio" }));
+
+    const reviews = await panel("Reviews");
+    expect(await within(reviews).findAllByRole("img", { name: /of 5 stars/ })).not.toHaveLength(1);
+    expect(within(reviews).getByText("Newest first")).toBeInTheDocument();
   });
 });
 
@@ -351,7 +488,8 @@ describe("Codex review of #35", () => {
   });
 
   it("lists every return policy, not one as if it were the shop's only", async () => {
-    await open("/commerce/shipping");
+    const { user } = await open("/commerce/shipping");
+    await user.click(await screen.findByRole("tab", { name: "Profiles and returns" }));
     const policies = await panel("Returns and partners");
 
     expect(await within(policies).findByText("Return policy 2")).toBeInTheDocument();

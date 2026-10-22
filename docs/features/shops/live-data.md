@@ -10,12 +10,12 @@
 
 | Screen | Real, live from Etsy | Still Demo |
 |---|---|---|
-| Shops | Each connected shop's orders and revenue today, favourites, rating and review count, with "Live from Etsy · updated …"; the top listings strip (photo, price, views) | — |
-| Home | Revenue and orders today against yesterday; the shop card's 7-day orders and today's numbers | What needs you, open tickets, incidents, the office pulse |
-| Orders | Filters with server counts (paid, late, shipped, awaiting payment, cancelled, refunded), totals, orders per day, the order table (25 per page, "show more"); phones get order rows and a sheet with items and shipment | — (search, export and bulk actions are not offered) |
-| Products | Catalog with sections, photo, price, stock, views, favourites; the chosen listing's details, tags, units sold in 30 days, link to Etsy | Production cost and supplier (Phase 13), the product studio card (Phase 12) |
-| Shipping | Orders to ship and shipped, awaiting / shipped / late counts, ships-from country, shipping profiles, return policy, production partners | Tracking sync and delivery performance (Phase 6) |
-| Customers | The newest reviews with stars, the shop's average and count (replacing the demo's segments) | Customer health and the customer list (a customer store comes with Phase 5) |
+| Shops | On top: the shops in three groups that add up (working, need you, disconnected) and today's orders across them. Each shop's orders and revenue today, favourites, rating and review count, with "Live from Etsy · updated …"; the top listings (photo, price, views) in their own sub-tab | — |
+| Home | On top: revenue and orders today against yesterday, awaiting shipment and late, and the next step (ship what waits, or open the orders); the shop's 7-day orders | What needs you (Today tab); the office pulse, open tickets and incidents (Office tab) |
+| Orders | On top: orders, awaiting shipment, late and revenue for the 30 days, orders per day, and "Show the late orders" when one is late; filters with server counts (paid, late, shipped, awaiting payment, cancelled, refunded), totals, orders per day, the order table (25 per page, "show more"); phones get order rows and a sheet with items and shipment | — (search, export and bulk actions are not offered) |
+| Products | On top: active listings, sold out, views and favourites, and "Show the sold-out listings"; catalog with sections (24 at a time, "show more"), photo, price, stock, views, favourites; the chosen listing's details, tags, units sold in 30 days, link to Etsy | Production cost and supplier (Phase 13), the product studio card (Phase 12) |
+| Shipping | On top: awaiting, late, shipped in 30 days, ships-from, and "Ship on Etsy" (a link to Etsy's sold orders; HTCO writes nothing). Sub-tabs: orders to ship and shipped; awaiting / shipped / late counts, ships-from country shipping profiles, return policies and production partners | Tracking sync and delivery performance (Phase 6), in the Tracking sub-tab |
+| Customers | On top: the shop's average and count, the five-star share and the low ratings (three stars or fewer) of the newest reviews, with "Read the low ratings"; the reviews with drawn stars, 12 at a time | Customer health and the customer list, in the Customers sub-tab (a customer store comes with Phase 5) |
 
 The Orders, Products, Shipping and Customers tabs are `built` (no Soon tag, no DEMO pill). Suppliers stays a demo frame.
 

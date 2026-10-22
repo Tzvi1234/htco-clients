@@ -46,17 +46,17 @@ Seven areas in the owner's order and wording, defined once in `apps/web/src/app/
 
 | Area (he) | Tab | Address | Screen |
 |---|---|---|---|
-| Home (בית) | — | `/` | Built: greeting, shops, getting started, revenue and orders today live from Etsy, the shop card's 7-day orders; approvals, tickets, incidents and the office pulse as demos |
+| Home (בית) | — | `/` | Built: the focus (greeting, today's numbers live from Etsy, the next step), then sub-tabs Today (what needs you as a demo, the shop and getting started) and Office (pulse, tickets, incidents as demos) |
 | Office (המשרד) | Floor · Chat · Team room · AI ops · Engineering | `/office/floor` · `/office/chat` · `/office/team` · `/office/aiops` · `/office/eng` | Soon (the demo's full screens in the demo frame; the floor is the living 3D office) |
 | Work (עבודה) | Tasks · Approvals · Activity | `/work/tasks` · `/work/approvals` · `/work/activity` | Soon (the demo's full screens in the demo frame) |
-| Commerce (מסחר) | Shops | `/shops` (also `/commerce/shops`; the Etsy return `/integrations/etsy/callback` belongs here) | Built: shops and their connection, connecting with the step-up code; sales tiles and top listings live from Etsy |
+| Commerce (מסחר) | Shops | `/shops` (also `/commerce/shops`; the Etsy return `/integrations/etsy/callback` belongs here) | Built: the focus (shops by state, connect another), sub-tabs Shops (their connection, numbers live from Etsy) and Top listings |
 | | Orders · Products · Shipping | `/commerce/orders` · `/commerce/products` · `/commerce/shipping` | Built, live from Etsy (read-through until Phase 5 ingests orders); production cost, supplier, tracking sync and delivery performance as Demo parts |
 | | Suppliers | `/commerce/suppliers` | Soon (the demo's full screen in the demo frame) |
 | Customers (לקוחות) | Customers | `/customers/customers` | Built: the shop's reviews live from Etsy; customer health and list as Demo parts (a customer store arrives with Phase 5) |
 | | Tickets · Mail · Marketing | `/customers/tickets` · `/customers/mail` · `/customers/marketing` | Soon (the demo's full screens in the demo frame) |
 | Finance (כספים) | Overview · Ledger | `/finance/overview` · `/finance/ledger` | Soon (the demo's full screens in the demo frame) |
 | Admin (ניהול) | Health · Automations | `/admin/health` · `/admin/automations` | Soon (the demo's full screens in the demo frame) |
-| | Members & access | `/settings/team` (also `/admin/members`) | Built: members, inviting with the one-time link, role changes, shop access, removal; AI employees and the approval policy as demos |
+| | Members & access | `/settings/team` (also `/admin/members`) | Built: the focus (members, invited, Owners and Admins, invite), sub-tabs People (members, inviting with the one-time link, role changes, shop access, removal), AI employees and Policy (demos) |
 | | Settings | `/settings`, with Security at `/settings/security` (also `/admin/settings`) | Built: interface language, the design tweaks, access and security, Etsy connections; business settings, notifications and other connections as demos. Security: the second factor and signed-in devices; recovery as a demo |
 
 An area's own address (`/office`, `/work`, …) opens its first tab. The sidebar groups Home, then Workspace (Office to Finance), then System (Admin); on phones the tab bar carries Home, Office, Work and Commerce, and More opens every area.

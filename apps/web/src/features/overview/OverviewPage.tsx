@@ -1,11 +1,11 @@
 import "./home.css";
 
-import { Trans, useLingui } from "@lingui/react/macro";
+import { Plural, Trans, useLingui } from "@lingui/react/macro";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import { useEffect, useState, type KeyboardEvent, type ReactNode } from "react";
+import { useEffect, useId, useState, type ReactNode } from "react";
 
-import { HERO_NAMES, HEROES } from "./heroes.ts";
+import { HEROES } from "./heroes.ts";
 import {
   LiveNote,
   overviewQuery,
@@ -16,126 +16,89 @@ import {
 import { shopCardState } from "../../app/shell/ShopSwitcher.tsx";
 import { meQuery, sessionQuery, shopsQuery, useApi, type ShopView } from "../../shared/api/api.tsx";
 import { RiskChip } from "../../shared/demo/AgentBits.tsx";
-import { AGENTS, APPROVALS, agent, badge, type AgentId } from "../../shared/demo/office.ts";
+import { AGENTS, APPROVALS, agent, badge } from "../../shared/demo/office.ts";
 import { cx } from "../../shared/lib/cx.ts";
-import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
-import { directionOf } from "../../shared/i18n/locale.ts";
-import { useTweaks } from "../../shared/theme/ThemeProvider.tsx";
-import { ArrowEndIcon, GearIcon, GridIcon, MoreIcon, SearchIcon } from "../../shared/ui/icons.tsx";
+import { ArrowEndIcon, GearIcon } from "../../shared/ui/icons.tsx";
 import { PageHeader } from "../../shared/ui/PageHeader.tsx";
 import { Button, buttonStyle } from "../../shared/ui/Button.tsx";
-import { Panel, PanelBody, PanelHeader } from "../../shared/ui/Panel.tsx";
+import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
 import {
+  Aside,
   Avatar,
-  BackGlyph,
   CheckGlyph,
-  CircleButton,
   DemoPart,
+  DemoTag,
   Dot,
   DotBar,
   DotColumns,
+  Figure,
+  Figures,
+  Flow,
+  FlowBody,
+  FlowRow,
+  Focus,
   IdBlock,
-  InkDisc,
-  KV2,
-  Kpi,
-  Kpis,
   N,
-  NextGlyph,
-  Pill,
-  PlusGlyph,
-  Screen,
-  Stack,
   Status,
   StatusGlyph,
-  useMinutes,
-  Strip,
   StripCard,
-  StripCards,
-  Zoom,
+  SubTabs,
+  TabPanel,
   circleStyle,
   initialOf,
+  useMinutes,
 } from "../../shared/ui/kit/index.ts";
 
 /**
- * Home (Design 1C `P.home`): what needs the owner, today with the hero carousel and its key
- * numbers, the shops, getting started and the office pulse. Real: the greeting and date, the
- * shops and their count, getting started, and the first shop's revenue and orders today, live
- * from Etsy.
- * Approvals, tickets, incidents and the office keep the demo's design with its sample data,
- * dimmed and labelled "Demo", until they are built.
+ * Home (Design 1C `P.home`, clarity round 3): one focus on top, today, with the greeting, the
+ * first shop's numbers live from Etsy and the one thing to do next; under it what waits for the
+ * owner beside the shop and getting started. The office's pulse, tickets and incidents moved to
+ * their own sub-tab (Demo until they are built).
  */
 export function OverviewPage() {
   const { t } = useLingui();
+  const tabs = useId();
+  const [tab, setTab] = useState<"today" | "office">("today");
   return (
     <>
       <PageHeader title={t`Home`} />
-      <Screen layout="l3s" className="home-grid">
-        <NeedsYou />
+      <Flow>
         <Today />
-        <Stack className="home-side">
-          <ShopsCard />
-          <GettingStarted />
-        </Stack>
-        <OfficePulse />
-      </Screen>
+        <SubTabs
+          label={t`Home views`}
+          idBase={tabs}
+          value={tab}
+          onChange={setTab}
+          tabs={[
+            { id: "today", label: t`Today` },
+            { id: "office", label: t`Office`, demo: <DemoTag /> },
+          ]}
+        />
+        <TabPanel idBase={tabs} tab={tab}>
+          {tab === "today" ? (
+            <FlowRow layout="main-side">
+              <NeedsYou />
+              <Aside>
+                {/* The shop and getting started share one panel: one region beside the approvals. */}
+                <Panel
+                  as="div"
+                  className="[&>section+section]:border-t [&>section+section]:border-line"
+                >
+                  <ShopsCard />
+                  <GettingStarted />
+                </Panel>
+              </Aside>
+            </FlowRow>
+          ) : (
+            <OfficeTab />
+          )}
+        </TabPanel>
+      </Flow>
     </>
   );
 }
 
-/* ---------------------------------------------------------------- what needs you (demo) */
-
-function NeedsYou() {
-  const { t } = useLingui();
-  const minutes = useMinutes();
-  return (
-    <Panel className="home-needs">
-      <PanelHeader
-        title={t`What needs you`}
-        actions={
-          <Link
-            to="/work/approvals"
-            aria-label={t`All approvals`}
-            title={t`All approvals`}
-            className={circleStyle()}
-          >
-            <ArrowEndIcon size={16} />
-          </Link>
-        }
-      />
-      <DemoPart className="flex min-h-0 grow flex-col px-6 pb-6">
-        <div className="flex min-h-0 grow flex-col">
-          <IdBlock label={t`Waiting for you:`} value={<N>{APPROVALS.length}</N>} />
-          <ul className="k-scroll m-0 mt-1 min-h-0 grow list-none p-0">
-            {APPROVALS.map((item) => {
-              const by = agent(item.by);
-              return (
-                <li key={item.id} className="k-ap">
-                  <div className="k-who">
-                    <Avatar initial={initialOf(t(by.name))} size="xs" />
-                    <span>
-                      {t(by.name)} · {t(by.role)} ·{" "}
-                      <span className="tabular">{minutes(item.minutes)}</span>
-                    </span>
-                  </div>
-                  <div className="k-what">{t(item.what)}</div>
-                  <div className="k-act">
-                    <RiskChip risk={item.risk} />
-                    <div className="flex gap-1.5">
-                      <Button>{t`Reject`}</Button>
-                      <Button variant="primary">{t`Approve`}</Button>
-                    </div>
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      </DemoPart>
-    </Panel>
-  );
-}
-
-/* ---------------------------------------------------------------- today: greeting and hero */
+/* ---------------------------------------------------------------- today: the focus */
 
 function greetingFor(hour: number): "morning" | "afternoon" | "evening" | "night" {
   if (hour >= 5 && hour < 12) return "morning";
@@ -172,60 +135,112 @@ function Today() {
   const date = [two(now.getDate()), two(now.getMonth() + 1), String(now.getFullYear())].join(".");
   const count = shops.data?.length;
   const live = useFirstShopOverview(shops.data);
+  const sales = live.overview?.sales ?? null;
+  // The orange office render in every palette: Cream carries the logo's orange too (round 3).
+  const art = HEROES.sbb[0];
+
   return (
-    <Panel className="home-today">
-      <PanelHeader
-        title={greeting}
-        meta={
-          <>
-            {t`Today`} · <N>{date}</N>
-          </>
-        }
-        actions={
-          <Link
-            to="/settings"
-            aria-label={t`Settings`}
-            title={t`Settings`}
-            className={circleStyle()}
-          >
-            <MoreIcon size={16} />
-          </Link>
-        }
-      />
-      <Hero
-        footer={
-          count === undefined ? null : count === 0 ? (
-            t`No shop connected yet`
-          ) : (
-            <>
-              <N>{count}</N> {count === 1 ? t`shop connected` : t`shops connected`} · HT Commerce
-            </>
-          )
-        }
-      />
-      <Kpis label={t`Key numbers`}>
-        <TodayKpis live={live} />
-        <DemoPart
-          tag="edge"
-          className="col-span-2 border-s border-line max-sm:shrink-0 max-sm:basis-[84%]"
-          contentClassName="grid grid-cols-2"
-        >
-          <Kpi label={t`Open tickets`} value={<N>4</N>} delta={t`2 with Dana`} />
-          <Kpi
-            label={t`Incidents`}
-            value={<N>1</N>}
-            delta={
+    <Focus
+      title={greeting}
+      meta={
+        <>
+          {t`Today`} · <N>{date}</N>
+        </>
+      }
+      lead={<TodayLead shops={count} sales={sales} />}
+      figures={
+        count === 0 ? undefined : (
+          <Figures label={t`Key numbers`}>
+            <TodayFigures live={live} />
+          </Figures>
+        )
+      }
+      actions={<TodayAction shops={count} sales={sales} />}
+      aside={
+        <img
+          src={art}
+          alt=""
+          draggable={false}
+          className="home-art h-[200px] w-auto object-contain select-none"
+        />
+      }
+      footer={
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-caption text-muted">
+          <span>
+            {count === undefined ? null : count === 0 ? (
+              t`No shop connected yet`
+            ) : (
               <>
-                <StatusGlyph status="failed" />
-                <N>tracking.sync</N>
+                <N>{count}</N> {count === 1 ? t`shop connected` : t`shops connected`} · HT Commerce
               </>
-            }
-          />
-        </DemoPart>
-      </Kpis>
-    </Panel>
+            )}
+          </span>
+          {live.overview === undefined ? null : (
+            <LiveNote fetchedAt={live.overview.fetched_at} stale={live.overview.stale} />
+          )}
+        </div>
+      }
+    />
   );
 }
+
+/** One sentence of what matters now, from the live numbers. */
+function TodayLead({ shops, sales }: { shops: number | undefined; sales: SalesNow }) {
+  if (shops === 0)
+    return (
+      <Trans>
+        Connect your Etsy shop and today’s orders, revenue and what waits to ship appear here.
+      </Trans>
+    );
+  if (sales === null) return <Trans>Today’s numbers from your shop, live from Etsy.</Trans>;
+  if (sales.overdue > 0)
+    return (
+      <Plural
+        value={sales.overdue}
+        one="One order is late to ship. Start there."
+        other="# orders are late to ship. Start there."
+      />
+    );
+  if (sales.awaiting_shipment > 0)
+    return (
+      <Plural
+        value={sales.awaiting_shipment}
+        one="One order waits to ship; none is late."
+        other="# orders wait to ship; none is late."
+      />
+    );
+  return <Trans>Everything is shipped. Nothing waits for you in the shop.</Trans>;
+}
+
+/** The one thing to do next: connect a shop, ship what waits, or look at the orders. */
+function TodayAction({ shops, sales }: { shops: number | undefined; sales: SalesNow }) {
+  const primary = buttonStyle({ variant: "primary", size: "lg" });
+  const secondary = buttonStyle({ size: "lg" });
+  if (shops === undefined) return null;
+  if (shops === 0)
+    return (
+      <Link to="/shops" className={primary}>
+        <Trans>Connect a shop</Trans>
+        <ArrowEndIcon size={14} />
+      </Link>
+    );
+  const waiting = (sales?.awaiting_shipment ?? 0) > 0;
+  return (
+    <>
+      <Link to={waiting ? "/commerce/shipping" : "/commerce/orders"} className={primary}>
+        {waiting ? <Trans>Open what waits to ship</Trans> : <Trans>Open orders</Trans>}
+        <ArrowEndIcon size={14} />
+      </Link>
+      {waiting ? (
+        <Link to="/commerce/orders" className={secondary}>
+          <Trans>All orders</Trans>
+        </Link>
+      ) : null}
+    </>
+  );
+}
+
+type SalesNow = ShopOverview["sales"];
 
 interface FirstShopLive {
   /** The shop asked; undefined when there is none (or the shops are loading). */
@@ -242,8 +257,8 @@ function useFirstShopOverview(shops: ShopView[] | undefined): FirstShopLive {
   return { shopId: shop?.id, overview: overview.data, error: overview.error };
 }
 
-/** Revenue and orders today against yesterday, live from Etsy. */
-function TodayKpis({ live }: { live: FirstShopLive }) {
+/** Revenue and orders today against yesterday, and what waits to ship, live from Etsy. */
+function TodayFigures({ live }: { live: FirstShopLive }) {
   const { t } = useLingui();
   const money = useMoney();
   const count = useCount();
@@ -251,11 +266,7 @@ function TodayKpis({ live }: { live: FirstShopLive }) {
   const today = sales?.daily.at(-1);
   const yesterday = sales?.daily.at(-2);
   const missing =
-    live.overview === undefined
-      ? live.error === null && live.shopId !== undefined
-        ? "…"
-        : "—"
-      : "—";
+    live.overview === undefined && live.error === null && live.shopId !== undefined ? "…" : "—";
   const revenueDelta =
     today === undefined || yesterday === undefined
       ? undefined
@@ -263,16 +274,18 @@ function TodayKpis({ live }: { live: FirstShopLive }) {
   const ordersDelta =
     today === undefined || yesterday === undefined ? undefined : today.orders - yesterday.orders;
   const signed = (n: number, text: string) => (n > 0 ? `+${text}` : n < 0 ? `−${text}` : text);
+  const trend = (n: number | undefined) =>
+    n === undefined || n === 0 ? undefined : n > 0 ? "up" : "down";
   return (
     <>
-      <Kpi
+      <Figure
         label={t`Revenue`}
         value={<N>{sales === null ? missing : money(sales.today.revenue, { whole: true })}</N>}
+        trend={trend(revenueDelta)}
         {...(revenueDelta === undefined || sales === null
           ? {}
           : {
-              ...(revenueDelta === 0 ? {} : { trend: revenueDelta > 0 ? "up" : "down" }),
-              delta: (
+              note: (
                 <>
                   <N>
                     {signed(
@@ -288,136 +301,95 @@ function TodayKpis({ live }: { live: FirstShopLive }) {
               ),
             })}
       />
-      <Kpi
+      <Figure
         label={t`Orders`}
         value={<N>{sales === null ? missing : count(sales.today.orders)}</N>}
+        trend={trend(ordersDelta)}
         {...(ordersDelta === undefined
-          ? live.overview === undefined
-            ? {}
-            : {
-                delta: (
-                  <LiveNote fetchedAt={live.overview.fetched_at} stale={live.overview.stale} />
-                ),
-              }
+          ? {}
           : {
-              ...(ordersDelta === 0 ? {} : { trend: ordersDelta > 0 ? "up" : "down" }),
-              delta: (
+              note: (
                 <>
                   <N>{signed(ordersDelta, count(Math.abs(ordersDelta)))}</N> {t`vs yesterday`}
                 </>
               ),
             })}
       />
+      <Figure
+        label={t`Awaiting shipment`}
+        value={<N>{sales === null ? missing : count(sales.awaiting_shipment)}</N>}
+        tone={(sales?.awaiting_shipment ?? 0) > 0 ? "tertiary" : undefined}
+      />
+      <Figure
+        label={t`Late`}
+        value={<N>{sales === null ? missing : count(sales.overdue)}</N>}
+        tone={(sales?.overdue ?? 0) > 0 ? "tertiary" : undefined}
+        {...(sales === null ? {} : { note: t`past the ship-by date` })}
+      />
     </>
   );
 }
 
-function Hero({ footer }: { footer: ReactNode }) {
+/* ---------------------------------------------------------------- what needs you (demo) */
+
+function NeedsYou() {
   const { t } = useLingui();
-  const { tweaks } = useTweaks();
-  const set = tweaks.palette === "d4" ? HEROES.d4 : HEROES.sbb;
-  const { locale } = useLocale();
-  const [index, setIndex] = useState(0);
-  const step = (by: number) => {
-    setIndex((current) => (current + by + set.length) % set.length);
-  };
-  // The dots are tabs (WAI-ARIA tabs): one tab stop, the arrow keys move along the reading
-  // direction (the right arrow goes back in Hebrew), Home and End jump to the ends.
-  const keys = (event: KeyboardEvent<HTMLDivElement>) => {
-    const forward = directionOf(locale) === "rtl" ? "ArrowLeft" : "ArrowRight";
-    const back = forward === "ArrowLeft" ? "ArrowRight" : "ArrowLeft";
-    const last = set.length - 1;
-    const next =
-      event.key === forward
-        ? (index + 1) % set.length
-        : event.key === back
-          ? (index + last) % set.length
-          : event.key === "Home"
-            ? 0
-            : event.key === "End"
-              ? last
-              : undefined;
-    if (next === undefined) return;
-    event.preventDefault();
-    setIndex(next);
-    const tab = event.currentTarget.children.item(next);
-    if (tab instanceof HTMLElement) tab.focus();
-  };
-  const name = t(HERO_NAMES[index] ?? HERO_NAMES[0]);
+  const minutes = useMinutes();
   return (
-    <div
-      className="k-stage flex-col home-stage"
-      role="group"
-      aria-roledescription={t`carousel`}
-      aria-label={t`Hero concepts`}
-    >
-      <div className="relative flex size-full items-center justify-center">
-        {set.map((src, i) => (
-          <img
-            key={src}
-            src={src}
-            alt={i === index ? name : ""}
-            aria-hidden={i === index ? undefined : true}
-            draggable={false}
-            className={cx("home-hero-img", i === index && "home-hero-on")}
-          />
-        ))}
-      </div>
-      <span className="home-hero-ix" aria-live="polite">
-        <b>
-          <N>
-            {index + 1}/{set.length}
-          </N>
-        </b>
-        {name}
-      </span>
-      <div className="k-dim home-hero-foot">
-        <div
-          className="home-hero-dots"
-          role="tablist"
-          aria-label={t`Choose a concept`}
-          onKeyDown={keys}
-        >
-          {set.map((src, i) => (
-            <button
-              key={src}
-              type="button"
-              role="tab"
-              aria-selected={i === index}
-              tabIndex={i === index ? 0 : -1}
-              aria-label={t(HERO_NAMES[i] ?? HERO_NAMES[0])}
-              data-hit="own"
-              className={i === index ? "home-dot-on" : undefined}
-              onClick={() => {
-                setIndex(i);
-              }}
-            />
-          ))}
-        </div>
-        <span>{footer}</span>
-      </div>
-      <CircleButton
-        className="k-side k-s"
-        label={t`Previous concept`}
-        icon={<BackGlyph />}
-        onClick={() => {
-          step(-1);
-        }}
+    <Panel className="home-needs">
+      <PanelHeader
+        title={t`What needs you`}
+        meta={
+          <>
+            <N>{APPROVALS.length}</N> {t`waiting for you`}
+          </>
+        }
+        actions={
+          <Link
+            to="/work/approvals"
+            aria-label={t`All approvals`}
+            title={t`All approvals`}
+            className={circleStyle()}
+          >
+            <ArrowEndIcon size={16} />
+          </Link>
+        }
       />
-      <CircleButton
-        className="k-side k-e"
-        label={t`Next concept`}
-        icon={<NextGlyph />}
-        onClick={() => {
-          step(1);
-        }}
-      />
-      <DemoPart className="home-orders-disc" tag={false}>
-        <InkDisc label={t`Today’s orders`}>
-          <PlusGlyph size={14} />
-        </InkDisc>
+      <DemoPart className="px-6 pb-4 max-sm:px-4" tag="edge">
+        <ul className="m-0 list-none p-0">
+          {APPROVALS.slice(0, 3).map((item) => {
+            const by = agent(item.by);
+            return (
+              <li key={item.id} className="k-ap">
+                <div className="k-who flex items-center gap-2">
+                  <Avatar initial={initialOf(t(by.name))} size="xs" />
+                  <span>
+                    {t(by.name)} · {t(by.role)} ·{" "}
+                    <span className="tabular">{minutes(item.minutes)}</span>
+                  </span>
+                </div>
+                <div className="k-what">{t(item.what)}</div>
+                <div className="k-act">
+                  <RiskChip risk={item.risk} />
+                  <div className="flex gap-1.5">
+                    <Button variant="ghost">{t`Reject`}</Button>
+                    <Button>{t`Approve`}</Button>
+                  </div>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
       </DemoPart>
-    </div>
+      <div className="flex justify-center px-6 pb-5">
+        <Link
+          to="/work/approvals"
+          className="rounded-[4px] py-1 text-caption text-primary underline underline-offset-[3px]"
+        >
+          {t`See all approvals`}
+        </Link>
+      </div>
+    </Panel>
   );
 }
 
@@ -466,9 +438,9 @@ function ShopsCard() {
 
   if (shops.isError)
     return (
-      <Panel className="home-shop">
+      <section className="home-shop">
         <PanelHeader title={t`Shops`} actions={settings} />
-        <PanelBody className="items-center justify-center gap-3 text-center">
+        <FlowBody className="items-center gap-3 text-center">
           <p className="m-0 text-body-sm text-secondary">{t`Shops could not be loaded`}</p>
           <Button
             onPress={() => {
@@ -477,24 +449,27 @@ function ShopsCard() {
           >
             {t`Try again`}
           </Button>
-        </PanelBody>
-      </Panel>
+        </FlowBody>
+      </section>
     );
 
   if (shops.data === undefined)
     return (
-      <Panel className="home-shop" label={t`Loading shops`}>
+      <section className="home-shop" aria-label={t`Loading shops`}>
         <PanelHeader title={t`Shops`} actions={settings} />
-        <PanelBody className="items-center justify-center gap-4" aria-busy="true">
-          <span className="h-3 w-16 animate-pulse rounded-pill bg-raised" />
-          <span className="h-9 w-40 animate-pulse rounded-pill bg-raised" />
-          <span className="h-8 w-full animate-pulse rounded-pill bg-raised" />
-        </PanelBody>
-      </Panel>
+        <FlowBody>
+          <div className="flex flex-col items-center gap-4" aria-busy="true">
+            <span className="h-3 w-16 animate-pulse rounded-pill bg-raised" />
+            <span className="h-9 w-40 animate-pulse rounded-pill bg-raised" />
+            <span className="h-8 w-full animate-pulse rounded-pill bg-raised" />
+          </div>
+        </FlowBody>
+      </section>
     );
 
   const [first] = shops.data;
-  if (first === undefined) return <ConnectShop />;
+  // No shop: the focus above offers to connect one; this column keeps getting started only.
+  if (first === undefined) return null;
   return <ShopCard shop={first} count={shops.data.length} settings={settings} />;
 }
 
@@ -509,21 +484,19 @@ function ShopCard({
 }) {
   const { t } = useLingui();
   const api = useApi();
-  const money = useMoney();
-  const number = useCount();
   const overview = useQuery(overviewQuery(api, shop.id));
   const sales = overview.data?.sales ?? null;
   const week = sales?.daily.slice(-7) ?? [];
   const shopCount = String(count);
   const marketplace = shop.marketplace === "etsy" ? "Etsy" : shop.marketplace;
   return (
-    <Panel className="home-shop">
+    <section className="home-shop">
       <PanelHeader
         title={<N>{marketplace}</N>}
         meta={count > 1 ? t`${shopCount} shops` : undefined}
         actions={settings}
       />
-      <PanelBody className="justify-between">
+      <FlowBody className="gap-4">
         <IdBlock label={t`Shop:`} value={<N>{shop.name}</N>}>
           <div className="mt-1 flex justify-center">
             <Status
@@ -532,20 +505,20 @@ function ShopCard({
             />
           </div>
         </IdBlock>
-        <div className="flex flex-col gap-4">
-          {overview.isError ? (
-            <p className="m-0 text-center text-caption text-secondary">
-              {t`The shop's numbers are not available right now.`}
-            </p>
-          ) : (
-            <div className="flex justify-center" aria-busy={overview.data === undefined}>
-              {overview.data !== undefined && week.length === 0 ? (
-                <p className="m-0 text-caption text-secondary">
-                  {t`Sales are not available for this shop.`}
-                </p>
-              ) : week.length === 0 ? (
-                <span className="h-[45px] w-40 rounded-pill bg-hover motion-safe:animate-pulse" />
-              ) : (
+        {overview.isError ? (
+          <p className="m-0 text-center text-caption text-secondary">
+            {t`The shop's numbers are not available right now.`}
+          </p>
+        ) : (
+          <div className="flex flex-col items-center gap-2" aria-busy={overview.data === undefined}>
+            {overview.data !== undefined && week.length === 0 ? (
+              <p className="m-0 text-caption text-secondary">
+                {t`Sales are not available for this shop.`}
+              </p>
+            ) : week.length === 0 ? (
+              <span className="h-[45px] w-40 rounded-pill bg-hover motion-safe:animate-pulse" />
+            ) : (
+              <>
                 <DotColumns
                   values={week.map((d) => d.orders)}
                   rows={5}
@@ -554,59 +527,13 @@ function ShopCard({
                   highlight={week.length - 1}
                   label={t`Orders in the last 7 days: ${week.map((d) => String(d.orders)).join(", ")}`}
                 />
-              )}
-            </div>
-          )}
-          <KV2
-            items={[
-              [
-                t`Orders today:`,
-                <Pill wide key="orders">
-                  <Dot tone="ink" />
-                  <N>{sales === null ? "—" : number(sales.today.orders)}</N>
-                </Pill>,
-              ],
-              [
-                t`Revenue today:`,
-                <Pill wide key="revenue">
-                  <Dot tone="success" />
-                  <N>{sales === null ? "—" : money(sales.today.revenue, { whole: true })}</N>
-                </Pill>,
-              ],
-            ]}
-          />
-          {overview.data === undefined ? null : (
-            <LiveNote
-              fetchedAt={overview.data.fetched_at}
-              stale={overview.data.stale}
-              className="self-center"
-            />
-          )}
-        </div>
-      </PanelBody>
-    </Panel>
-  );
-}
-
-function ConnectShop() {
-  const { t } = useLingui();
-  return (
-    <Panel className="home-shop">
-      <PanelHeader title={<N>Etsy</N>} />
-      <PanelBody className="justify-between gap-4">
-        <IdBlock label={t`Shops connected:`} value={<N>0</N>}>
-          <p className="m-0 mt-2 text-body-sm font-light text-secondary">
-            <Trans>
-              Connect your Etsy shop and orders, tracking and listings start flowing in.
-            </Trans>
-          </p>
-        </IdBlock>
-        <Link to="/shops" className={cx(buttonStyle({ variant: "primary", size: "lg" }), "w-full")}>
-          {t`Connect a shop`}
-          <ArrowEndIcon size={14} />
-        </Link>
-      </PanelBody>
-    </Panel>
+                <span className="text-caption font-light text-muted">{t`Orders, last 7 days`}</span>
+              </>
+            )}
+          </div>
+        )}
+      </FlowBody>
+    </section>
   );
 }
 
@@ -640,27 +567,15 @@ function GettingStarted() {
   const doneCount = String(done);
   const totalCount = String(total);
   const current = steps.findIndex((step) => !step.done);
+  // Done is done: the checklist leaves Home once every step is.
+  if (done === total) return null;
   return (
-    <Panel className="home-start">
-      <PanelHeader
-        title={t`Getting started`}
-        meta={t`${doneCount} of ${totalCount} done`}
-        actions={
-          <Link
-            to="/settings"
-            aria-label={t`Settings`}
-            title={t`Settings`}
-            className={circleStyle()}
-          >
-            <GearIcon size={16} />
-          </Link>
-        }
-      />
-      <PanelBody className="justify-between gap-3">
-        <IdBlock label={t`Steps done:`} value={<N>{`${doneCount}/${totalCount}`}</N>} />
+    <section className="home-start">
+      <PanelHeader title={t`Getting started`} meta={t`${doneCount} of ${totalCount} done`} />
+      <FlowBody className="gap-3">
         <ol className="m-0 flex list-none flex-col p-0">
           {steps.map((step, index) => (
-            <li key={step.to} className="flex h-9 items-center gap-2.5 text-body-sm">
+            <li key={step.to} className="flex h-10 items-center gap-2.5 text-body-sm">
               {step.done ? (
                 <span className="k-ck k-on" aria-hidden="true">
                   <CheckGlyph size={10} />
@@ -693,68 +608,69 @@ function GettingStarted() {
           accent={0}
           label={t`${doneCount} of ${totalCount} done`}
         />
-      </PanelBody>
-    </Panel>
+      </FlowBody>
+    </section>
   );
 }
 
-/* ---------------------------------------------------------------- office pulse (demo) */
+/* ---------------------------------------------------------------- the office (demo) */
 
-const PULSE: readonly AgentId[] = ["maya", "nika", "alex", "noa", "eitan", "amir", "shon", "lia"];
-
-function OfficePulse() {
+/** The office's pulse, tickets and incidents: designed, not built, so all of it is Demo. */
+function OfficeTab() {
   const { t } = useLingui();
-  const [page, setPage] = useState<0 | 1>(0);
-  const list = page === 0 ? PULSE : AGENTS.slice(8).map((a) => a.id);
   return (
-    <Strip
-      className="home-pulse"
-      title={t`Office pulse`}
-      meta={t`3 running · 1 waiting for you · 1 failed`}
-      zoom={<Zoom page={page} onPage={setPage} labels={{ less: t`Fewer`, more: t`More` }} />}
-      actions={
-        <>
-          <CircleButton label={t`Find agent`} icon={<SearchIcon />} />
-          <Link
-            to="/office/floor"
-            aria-label={t`Office floor`}
-            title={t`Office floor`}
-            className={circleStyle()}
-          >
-            <GridIcon size={16} />
-          </Link>
-          <Link
-            to="/settings"
-            aria-label={t`Settings`}
-            title={t`Settings`}
-            className={cx(circleStyle(), "max-sm:hidden")}
-          >
-            <GearIcon size={16} />
-          </Link>
-        </>
-      }
-      cards={false}
-    >
-      <DemoPart tag="edge" className="flex min-h-0 grow flex-col">
-        <StripCards>
-          {list.map((id, i) => {
-            const a = agent(id);
-            return (
+    <>
+      <Panel className="home-office">
+        <PanelHeader
+          title={t`Office pulse`}
+          meta={t`3 running · 1 waiting for you · 1 failed`}
+          actions={
+            <Link
+              to="/office/floor"
+              aria-label={t`Office floor`}
+              title={t`Office floor`}
+              className={circleStyle()}
+            >
+              <ArrowEndIcon size={16} />
+            </Link>
+          }
+        />
+        <DemoPart tag="edge" className="px-2 pb-2">
+          <div className="grid grid-cols-8 gap-2 max-xl:grid-cols-6 max-md:grid-cols-4 max-sm:grid-cols-2">
+            {AGENTS.map((a) => (
               <StripCard
-                key={id}
-                selected={i === 0 && page === 0}
-                style={{ animationDelay: `${String(i * 30)}ms` }}
-                className="motion-safe:animate-enter"
+                key={a.id}
                 topStart={t(a.name)}
                 topEnd={<N>{badge(a)}</N>}
                 line={<Status status={a.status} live />}
               >
                 <Avatar initial={initialOf(t(a.name))} />
               </StripCard>
-            );
-          })}
-        </StripCards>
-      </DemoPart>
-    </Strip>
+            ))}
+          </div>
+        </DemoPart>
+      </Panel>
+      <FlowRow layout="halves">
+        <Panel>
+          <PanelHeader title={t`Open tickets`} />
+          <DemoPart tag="edge" className="px-6 pb-6">
+            <IdBlock label={t`Open tickets:`} value={<N>4</N>}>
+              <p className="m-0 mt-1 text-caption text-secondary">{t`2 with Dana`}</p>
+            </IdBlock>
+          </DemoPart>
+        </Panel>
+        <Panel>
+          <PanelHeader title={t`Incidents`} />
+          <DemoPart tag="edge" className="px-6 pb-6">
+            <IdBlock label={t`Open incidents:`} value={<N>1</N>}>
+              <p className="m-0 mt-1 inline-flex items-center gap-1.5 text-caption text-secondary">
+                <StatusGlyph status="failed" />
+                <N>tracking.sync</N>
+              </p>
+            </IdBlock>
+          </DemoPart>
+        </Panel>
+      </FlowRow>
+    </>
   );
 }

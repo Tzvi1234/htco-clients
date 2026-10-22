@@ -174,38 +174,38 @@ const routeTree = rootRoute.addChildren([
       createRoute({
         getParentRoute: () => appRoute,
         path: "/",
-        staticData: { layout: "panels" },
+        staticData: { layout: "panels", scroll: "page" },
         component: OverviewPage,
       }),
       createRoute({
         getParentRoute: () => appRoute,
         path: "/shops",
-        staticData: { layout: "panels" },
+        staticData: { layout: "panels", scroll: "page" },
         component: ShopsPage,
       }),
       // The shop's live data from Etsy (platform: dashboard data, slice 4.6).
       createRoute({
         getParentRoute: () => appRoute,
         path: "/commerce/orders",
-        staticData: { layout: "panels" },
+        staticData: { layout: "panels", scroll: "page" },
         component: OrdersPage,
       }),
       createRoute({
         getParentRoute: () => appRoute,
         path: "/commerce/products",
-        staticData: { layout: "panels" },
+        staticData: { layout: "panels", scroll: "page" },
         component: ProductsPage,
       }),
       createRoute({
         getParentRoute: () => appRoute,
         path: "/commerce/shipping",
-        staticData: { layout: "panels" },
+        staticData: { layout: "panels", scroll: "page" },
         component: ShippingPage,
       }),
       createRoute({
         getParentRoute: () => appRoute,
         path: "/customers/customers",
-        staticData: { layout: "panels" },
+        staticData: { layout: "panels", scroll: "page" },
         component: CustomersPage,
       }),
       createRoute({
@@ -217,13 +217,13 @@ const routeTree = rootRoute.addChildren([
       createRoute({
         getParentRoute: () => appRoute,
         path: "/settings/security",
-        staticData: { layout: "panels" },
+        staticData: { layout: "panels", scroll: "page" },
         component: SecurityPage,
       }),
       createRoute({
         getParentRoute: () => appRoute,
         path: "/settings/team",
-        staticData: { layout: "panels" },
+        staticData: { layout: "panels", scroll: "page" },
         component: TeamPage,
       }),
       // Etsy sends the owner back here; it needs the session cookie, so it is signed in.

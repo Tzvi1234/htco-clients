@@ -71,7 +71,8 @@ export interface FakeState {
    * 503 etsy-data-unavailable, "stale" marks the data stale, "quiet" is a shop without orders,
    * "hang" never answers.
    */
-  liveTrouble?: "unavailable" | "stale" | "quiet" | "hang" | "partial" | "no-sales" | undefined;
+  liveTrouble?:
+    "unavailable" | "stale" | "quiet" | "hang" | "partial" | "no-sales" | "truncated" | undefined;
   /** Workspaces whose shop list answers 500. */
   shopsFailFor?: string[];
   /** True: the shops are busy, 160 orders in 30 days (more than one page of 100). */
@@ -561,7 +562,21 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
         });
       return json(200, mark(trouble === "partial" ? { ...page, partial: true } : page));
     }
-    if (view === "listings") return json(200, mark(data.listings));
+    if (view === "listings")
+      return json(
+        200,
+        mark(
+          trouble === "truncated"
+            ? {
+                ...data.listings,
+                // A larger catalog than one read; the sold-out listing is not among those read.
+                items: data.listings.items.filter((l) => l.quantity > 0 || l.is_digital),
+                total_count: data.listings.total_count + 300,
+                truncated: true,
+              }
+            : data.listings,
+        ),
+      );
     if (view === "reviews") return json(200, mark(data.reviews));
     return json(200, mark(data.shipping));
   }

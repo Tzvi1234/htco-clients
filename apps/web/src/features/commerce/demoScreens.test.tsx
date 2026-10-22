@@ -111,11 +111,13 @@ describe("Shops in the Design 1C panels", () => {
     expect(screen.queryByText("Demo")).not.toBeInTheDocument();
   });
 
-  it("offers the Owner to connect another shop beside the shops", async () => {
+  it("offers the Owner to connect another shop above the shops", async () => {
     await open("/shops", "en", true);
     await screen.findByRole("article", { name: "Willow & Wick" });
-    expect(screen.getByRole("heading", { name: "Connect a shop" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Connect Etsy shop" })).toBeEnabled();
+    // The shops' focus panel carries the one primary action (clarity round 3).
+    const focus = screen.getByRole("heading", { level: 2, name: "Your shops" }).closest("section");
+    if (focus === null) throw new Error("No focus panel");
+    expect(within(focus).getByRole("button", { name: "Connect Etsy shop" })).toBeEnabled();
   });
 
   it("asks for the step-up code in six boxes, digits only", async () => {

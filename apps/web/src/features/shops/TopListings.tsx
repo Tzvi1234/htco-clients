@@ -5,11 +5,13 @@ import { Link } from "@tanstack/react-router";
 import { ListingPhoto, LiveNote, listingsQuery, useCount, useMoney } from "../commerce/live.tsx";
 import { useApi } from "../../shared/api/api.tsx";
 import { ArrowEndIcon } from "../../shared/ui/icons.tsx";
-import { N, Strip, StripCard, circleStyle } from "../../shared/ui/kit/index.ts";
+import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
+import { N, StripCard, circleStyle } from "../../shared/ui/kit/index.ts";
 
 /**
- * The "Top listings" strip under the shop panels: the shop's active listings live from Etsy,
- * most viewed first, with photo, price and views. `shopId` undefined: no connected shop yet.
+ * The "Top listings" tab of Shops: the shop's active listings live from Etsy, most viewed first,
+ * with photo, price and views, in rows that wrap (never a sideways scroller). `shopId`
+ * undefined: no connected shop yet.
  */
 export function TopListings({
   shopId,
@@ -37,62 +39,64 @@ export function TopListings({
           ? t`This shop has no active listings.`
           : undefined;
   return (
-    <Strip
-      className="min-h-0 lg:col-span-full max-sm:hidden"
-      title={<Trans>Top listings</Trans>}
-      meta={
-        listings.data === undefined ? undefined : (
-          <LiveNote fetchedAt={listings.data.fetched_at} stale={listings.data.stale} />
-        )
-      }
-      actions={
-        <Link
-          to="/commerce/products"
-          aria-label={t`All products`}
-          title={t`All products`}
-          className={circleStyle()}
-        >
-          <ArrowEndIcon size={16} />
-        </Link>
-      }
-    >
-      {message !== undefined ? (
-        <p className="m-0 col-span-full self-center text-center text-body-sm text-secondary">
-          {message}
-        </p>
-      ) : listings.data === undefined ? (
-        Array.from({ length: 8 }, (_, i) => (
-          <span
-            key={i}
-            aria-hidden="true"
-            className="h-full min-h-28 rounded-card bg-hover motion-safe:animate-pulse"
-          />
-        ))
-      ) : (
-        items.map((listing) => (
-          <StripCard
-            key={listing.listing_id}
-            topStart={<N>{money(listing.price, { whole: true })}</N>}
-            topEnd={
-              <>
-                <N>{count(listing.views)}</N> {t`views`}
-              </>
-            }
-            task={
-              <span dir="auto" className="block truncate text-primary">
-                {listing.title}
-              </span>
-            }
+    <Panel>
+      <PanelHeader
+        title={<Trans>Top listings</Trans>}
+        meta={
+          listings.data === undefined ? undefined : (
+            <LiveNote fetchedAt={listings.data.fetched_at} stale={listings.data.stale} />
+          )
+        }
+        actions={
+          <Link
+            to="/commerce/products"
+            aria-label={t`All products`}
+            title={t`All products`}
+            className={circleStyle()}
           >
-            <ListingPhoto
-              src={listing.thumbnail_url}
-              alt={listing.image_alt}
-              title={listing.title}
-              size={56}
+            <ArrowEndIcon size={16} />
+          </Link>
+        }
+      />
+      <div className="grid grid-cols-8 gap-2 px-2 pb-2 max-xl:grid-cols-6 max-md:grid-cols-4 max-sm:grid-cols-2">
+        {message !== undefined ? (
+          <p className="col-span-full m-0 py-8 text-center text-body-sm text-secondary">
+            {message}
+          </p>
+        ) : listings.data === undefined ? (
+          Array.from({ length: 8 }, (_, i) => (
+            <span
+              key={i}
+              aria-hidden="true"
+              className="h-36 rounded-card bg-hover motion-safe:animate-pulse"
             />
-          </StripCard>
-        ))
-      )}
-    </Strip>
+          ))
+        ) : (
+          items.map((listing) => (
+            <StripCard
+              key={listing.listing_id}
+              topStart={<N>{money(listing.price, { whole: true })}</N>}
+              topEnd={
+                <>
+                  <N>{count(listing.views)}</N> {t`views`}
+                </>
+              }
+              task={
+                <span dir="auto" className="block truncate text-primary">
+                  {listing.title}
+                </span>
+              }
+            >
+              <ListingPhoto
+                src={listing.thumbnail_url}
+                alt={listing.image_alt}
+                title={listing.title}
+                size={56}
+              />
+            </StripCard>
+          ))
+        )}
+      </div>
+    </Panel>
   );
 }

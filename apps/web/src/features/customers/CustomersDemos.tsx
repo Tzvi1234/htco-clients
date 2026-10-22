@@ -314,8 +314,8 @@ export function AllCustomersPanel() {
       <DataTable
         label={t`All customers`}
         ends={[2, 3]}
-        phoneHidden={[1, 4, 5]}
-        head={[t`Customer`, t`Country`, t`Orders`, t`Total`, t`Last order`, t`Shop`, t`Ticket`]}
+        phoneHidden={[1, 4]}
+        head={[t`Customer`, t`Country`, t`Orders`, t`Total`, t`Last order`, t`Ticket`]}
         rows={CUSTOMERS.map((name, i) => ({
           key: name,
           cells: [
@@ -324,7 +324,6 @@ export function AllCustomersPanel() {
             <L key="o">{ORDER_COUNTS[i]}</L>,
             <L key="t">${TOTALS[i]}</L>,
             <L key="l">#{3152 + i * 4}</L>,
-            <L key="s">{i % 2 === 1 ? "HTZ Home" : "HTZ Prints"}</L>,
             i === 0 ? (
               <Status key="k" live status="waityou" label={<L>TK-88</L>} />
             ) : (

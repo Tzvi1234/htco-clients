@@ -11,14 +11,22 @@ msgstr ""
 msgid "(you)"
 msgstr "(you)"
 
+#. placeholder {0}: sales.overdue
+#: src/features/overview/OverviewPage.tsx
+msgid "{0, plural, one {One order is late to ship. Start there.} other {# orders are late to ship. Start there.}}"
+msgstr "{0, plural, one {One order is late to ship. Start there.} other {# orders are late to ship. Start there.}}"
+
+#. placeholder {0}: sales.awaiting_shipment
+#: src/features/overview/OverviewPage.tsx
+msgid "{0, plural, one {One order waits to ship; none is late.} other {# orders wait to ship; none is late.}}"
+msgstr "{0, plural, one {One order waits to ship; none is late.} other {# orders wait to ship; none is late.}}"
+
 #. placeholder {0}: disconnects.done
 #: src/features/shops/ShopsPage.tsx
 msgid "{0} is disconnected."
 msgstr "{0} is disconnected."
 
-#. placeholder {0}: count(data.count)
 #. placeholder {0}: count(reviews)
-#: src/features/customers/CustomersPage.tsx
 #: src/features/shops/ShopCard.tsx
 msgid "{0} reviews"
 msgstr "{0} reviews"
@@ -26,6 +34,15 @@ msgstr "{0} reviews"
 #: src/features/office/TeamRoomPage.tsx
 msgid "{amir} is typing…"
 msgstr "{amir} is typing…"
+
+#: src/features/shops/ShopsPage.tsx
+msgid "{attention, plural, one {One shop needs you: reconnect it so its data keeps flowing.} other {# shops need you: reconnect them so their data keeps flowing.}}"
+msgstr "{attention, plural, one {One shop needs you: reconnect it so its data keeps flowing.} other {# shops need you: reconnect them so their data keeps flowing.}}"
+
+#: src/features/commerce/OrdersPage.tsx
+#: src/features/commerce/ShippingPage.tsx
+msgid "{awaiting, plural, one {One order waits to ship; none is late.} other {# orders wait to ship; none is late.}}"
+msgstr "{awaiting, plural, one {One order waits to ship; none is late.} other {# orders wait to ship; none is late.}}"
 
 #: src/features/settings/SettingsPage.tsx
 msgid "{connected} of {count} connected"
@@ -52,6 +69,26 @@ msgstr "{devices} devices"
 msgid "{doneCount} of {totalCount} done"
 msgstr "{doneCount} of {totalCount} done"
 
+#: src/features/team/TeamPage.tsx
+msgid "{invited, plural, one {One invitation is not accepted yet. Send the link again if it expired.} other {# invitations are not accepted yet. Send the link again if one expired.}}"
+msgstr "{invited, plural, one {One invitation is not accepted yet. Send the link again if it expired.} other {# invitations are not accepted yet. Send the link again if one expired.}}"
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "{late, plural, one {One order is past its ship-by date. Look at it first.} other {# orders are past their ship-by date. Look at them first.}}"
+msgstr "{late, plural, one {One order is past its ship-by date. Look at it first.} other {# orders are past their ship-by date. Look at them first.}}"
+
+#: src/features/commerce/ShippingPage.tsx
+msgid "{late, plural, one {One order is past its ship-by date. Ship it on Etsy first.} other {# orders are past their ship-by date. Ship them on Etsy first.}}"
+msgstr "{late, plural, one {One order is past its ship-by date. Ship it on Etsy first.} other {# orders are past their ship-by date. Ship them on Etsy first.}}"
+
+#: src/features/customers/CustomersPage.tsx
+msgid "{low} of the newest {newest} ratings have three stars or fewer; none of them is among the reviews shown here."
+msgstr "{low} of the newest {newest} ratings have three stars or fewer; none of them is among the reviews shown here."
+
+#: src/features/customers/CustomersPage.tsx
+msgid "{lowShown, plural, one {One recent review has three stars or fewer. Read it first.} other {# recent reviews have three stars or fewer. Read them first.}}"
+msgstr "{lowShown, plural, one {One recent review has three stars or fewer. Read it first.} other {# recent reviews have three stars or fewer. Read them first.}}"
+
 #: src/features/office/ChatPage.tsx
 msgid "{maya} is typing…"
 msgstr "{maya} is typing…"
@@ -67,6 +104,10 @@ msgstr "{range} days"
 #: src/features/overview/OverviewPage.tsx
 msgid "{shopCount} shops"
 msgstr "{shopCount} shops"
+
+#: src/features/commerce/ProductsPage.tsx
+msgid "{soldOut, plural, one {One listing is sold out. Restock it on Etsy so it keeps selling.} other {# listings are sold out. Restock them on Etsy so they keep selling.}}"
+msgstr "{soldOut, plural, one {One listing is sold out. Restock it on Etsy so it keeps selling.} other {# listings are sold out. Restock them on Etsy so they keep selling.}}"
 
 #: src/features/customers/CustomersPage.tsx
 msgid "{value} of 5 stars"
@@ -206,6 +247,10 @@ msgstr "Access to {shopName}"
 msgid "Account"
 msgstr "Account"
 
+#: src/features/shops/ShopsPage.tsx
+msgid "across the shops"
+msgstr "across the shops"
+
 #: src/features/commerce/demoScreens.tsx
 #: src/features/team/TeamPage.tsx
 msgid "Active"
@@ -219,6 +264,10 @@ msgstr "Active campaign"
 msgid "Active customers:"
 msgstr "Active customers:"
 
+#: src/features/commerce/ProductsPage.tsx
+msgid "Active listings"
+msgstr "Active listings"
+
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
 msgid "Activity"
@@ -228,9 +277,9 @@ msgstr "Activity"
 msgid "Activity log"
 msgstr "Activity log"
 
-#: src/features/shops/ShopsPage.tsx
-msgid "Add another Etsy shop to this workspace. You confirm with your authenticator code, then approve the access on Etsy."
-msgstr "Add another Etsy shop to this workspace. You confirm with your authenticator code, then approve the access on Etsy."
+#: src/features/security/SecurityPage.tsx
+msgid "Add an authenticator app: without it, a stolen password is enough to get in."
+msgstr "Add an authenticator app: without it, a stolen password is enough to get in."
 
 #: src/features/team/TeamPage.tsx
 msgid "Admin"
@@ -321,6 +370,10 @@ msgstr "All employees"
 msgid "All of yesterday’s tickets closed."
 msgstr "All of yesterday’s tickets closed."
 
+#: src/features/overview/OverviewPage.tsx
+msgid "All orders"
+msgstr "All orders"
+
 #: src/features/shops/TopListings.tsx
 msgid "All products"
 msgstr "All products"
@@ -330,6 +383,10 @@ msgstr "All products"
 #: src/features/team/TeamPage.tsx
 msgid "All shops"
 msgstr "All shops"
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "All states"
+msgstr "All states"
 
 #: src/features/office/EngineeringPage.tsx
 #: src/features/office/TeamRoomPage.tsx
@@ -511,6 +568,10 @@ msgstr "Autonomy:"
 msgid "Average order"
 msgstr "Average order"
 
+#: src/features/customers/CustomersPage.tsx
+msgid "Average rating"
+msgstr "Average rating"
+
 #: src/features/customers/CustomersDemos.tsx
 msgid "Avg. value"
 msgstr "Avg. value"
@@ -524,12 +585,10 @@ msgid "Awaiting refund approval"
 msgstr "Awaiting refund approval"
 
 #: src/features/commerce/OrdersPage.tsx
+#: src/features/commerce/ShippingPage.tsx
+#: src/features/overview/OverviewPage.tsx
 msgid "Awaiting shipment"
 msgstr "Awaiting shipment"
-
-#: src/features/commerce/ShippingPage.tsx
-msgid "Awaiting shipment:"
-msgstr "Awaiting shipment:"
 
 #: src/features/team/TeamPage.tsx
 msgid "Back to inviting"
@@ -607,10 +666,6 @@ msgstr "Cannot scan? Type this key into the app:"
 msgid "Capacity"
 msgstr "Capacity"
 
-#: src/features/overview/OverviewPage.tsx
-msgid "carousel"
-msgstr "carousel"
-
 #: src/features/office/EngineeringPage.tsx
 msgid "Carrier token rotation"
 msgstr "Carrier token rotation"
@@ -630,6 +685,10 @@ msgstr "Catalog"
 #: src/shared/demo/office.ts
 msgid "Catalog & Pricing Architect"
 msgstr "Catalog & Pricing Architect"
+
+#: src/features/commerce/ProductsPage.tsx
+msgid "Catalog numbers"
+msgstr "Catalog numbers"
 
 #: src/features/finance/FinanceDemos.tsx
 msgid "Category"
@@ -711,9 +770,9 @@ msgstr "Checked moments ago. Try again in {0} seconds."
 msgid "Checking your account"
 msgstr "Checking your account"
 
-#: src/features/overview/OverviewPage.tsx
-msgid "Choose a concept"
-msgstr "Choose a concept"
+#: src/features/commerce/ProductsPage.tsx
+msgid "Choose a listing to see its details."
+msgstr "Choose a listing to see its details."
 
 #: src/features/auth/AcceptInvitePage.tsx
 #: src/features/auth/ResetPasswordPage.tsx
@@ -817,7 +876,6 @@ msgstr "Connect"
 
 #: src/features/commerce/live.tsx
 #: src/features/overview/OverviewPage.tsx
-#: src/features/shops/ShopsPage.tsx
 msgid "Connect a shop"
 msgstr "Connect a shop"
 
@@ -850,8 +908,8 @@ msgid "Connect your Etsy shop and its shipments appear here, live."
 msgstr "Connect your Etsy shop and its shipments appear here, live."
 
 #: src/features/overview/OverviewPage.tsx
-msgid "Connect your Etsy shop and orders, tracking and listings start flowing in."
-msgstr "Connect your Etsy shop and orders, tracking and listings start flowing in."
+msgid "Connect your Etsy shop and today’s orders, revenue and what waits to ship appear here."
+msgstr "Connect your Etsy shop and today’s orders, revenue and what waits to ship appear here."
 
 #: src/features/overview/OverviewPage.tsx
 msgid "Connect your first shop"
@@ -945,6 +1003,10 @@ msgstr "Copy link"
 msgid "Cost"
 msgstr "Cost"
 
+#: src/features/commerce/ProductsPage.tsx
+msgid "Cost and supplier"
+msgstr "Cost and supplier"
+
 #: src/features/shops/Capabilities.tsx
 msgid "Could not be checked this time. Re-check later."
 msgstr "Could not be checked this time. Re-check later."
@@ -1005,6 +1067,10 @@ msgstr "Customers"
 msgctxt "navigation"
 msgid "Customers"
 msgstr "Customers"
+
+#: src/features/customers/CustomersPage.tsx
+msgid "Customers views"
+msgstr "Customers views"
 
 #: src/features/office/AiOpsPage.tsx
 msgid "Daily AI spend, 1 to 15 October"
@@ -1169,6 +1235,7 @@ msgid "Disconnect a shop"
 msgstr "Disconnect a shop"
 
 #: src/features/shops/ShopCard.tsx
+#: src/features/shops/ShopsPage.tsx
 msgid "Disconnected"
 msgstr "Disconnected"
 
@@ -1281,6 +1348,10 @@ msgid "Etsy"
 msgstr "Etsy"
 
 #: src/features/shops/ShopsPage.tsx
+msgid "Etsy · read only"
+msgstr "Etsy · read only"
+
+#: src/features/shops/ShopsPage.tsx
 msgid "Etsy access:"
 msgstr "Etsy access:"
 
@@ -1376,6 +1447,10 @@ msgstr "Events today:"
 msgid "Every 30 min"
 msgstr "Every 30 min"
 
+#: src/features/commerce/ProductsPage.tsx
+msgid "Every active listing is in stock."
+msgstr "Every active listing is in stock."
+
 #: src/features/settings/SettingsPage.tsx
 msgid "Every morning at 08:00"
 msgstr "Every morning at 08:00"
@@ -1383,6 +1458,18 @@ msgstr "Every morning at 08:00"
 #: src/features/welcome/WelcomePage.tsx
 msgid "Every order checked against the marketplace, with tracking that keeps up."
 msgstr "Every order checked against the marketplace, with tracking that keeps up."
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "Every paid order is shipped."
+msgstr "Every paid order is shipped."
+
+#: src/features/team/TeamPage.tsx
+msgid "Everyone invited has joined."
+msgstr "Everyone invited has joined."
+
+#: src/features/overview/OverviewPage.tsx
+msgid "Everything is shipped. Nothing waits for you in the shop."
+msgstr "Everything is shipped. Nothing waits for you in the shop."
 
 #: src/features/office/ChatPage.tsx
 #: src/features/work/demoScreens.tsx
@@ -1438,7 +1525,6 @@ msgstr "Fees"
 
 #: src/features/commerce/demoScreens.tsx
 #: src/features/office/FloorPage.tsx
-#: src/features/overview/OverviewPage.tsx
 #: src/features/work/demoScreens.tsx
 msgid "Fewer"
 msgstr "Fewer"
@@ -1485,13 +1571,16 @@ msgid "Financial health"
 msgstr "Financial health"
 
 #: src/features/office/FloorPage.tsx
-#: src/features/overview/OverviewPage.tsx
 msgid "Find agent"
 msgstr "Find agent"
 
 #: src/features/shops/EtsyCallbackPage.tsx
 msgid "Finish connecting in the web app where you are signed in."
 msgstr "Finish connecting in the web app where you are signed in."
+
+#: src/features/customers/CustomersPage.tsx
+msgid "Five stars"
+msgstr "Five stars"
 
 #: src/app/shell/useNavLabels.ts
 #: src/features/office/FloorPage.tsx
@@ -1538,6 +1627,10 @@ msgstr "Fri"
 #: src/features/commerce/ShippingPage.tsx
 msgid "from"
 msgstr "from"
+
+#: src/features/shops/ShopsPage.tsx
+msgid "from {covered} of {asking} shops"
+msgstr "from {covered} of {asking} shops"
 
 #: src/shared/demo/office.ts
 msgid "Fulfillment Inspector"
@@ -1629,10 +1722,6 @@ msgstr "Hebrew and English"
 msgid "Hello, the summary is attached. Lia (Owner Assistant) already filed it and flagged 2 points to review."
 msgstr "Hello, the summary is attached. Lia (Owner Assistant) already filed it and flagged 2 points to review."
 
-#: src/features/overview/OverviewPage.tsx
-msgid "Hero concepts"
-msgstr "Hero concepts"
-
 #: src/features/customers/CustomersDemos.tsx
 msgid "Hi Emma, your print is ready and ships today. To make up for the delay we will refund 15% — as soon as Tzvi approves."
 msgstr "Hi Emma, your print is ready and ships today. To make up for the delay we will refund 15% — as soon as Tzvi approves."
@@ -1665,6 +1754,10 @@ msgstr "Home"
 msgctxt "navigation"
 msgid "Home"
 msgstr "Home"
+
+#: src/features/overview/OverviewPage.tsx
+msgid "Home views"
+msgstr "Home views"
 
 #: src/features/shops/ShopsPage.tsx
 msgid "How connecting works"
@@ -1876,6 +1969,7 @@ msgstr "Last used:"
 
 #: src/features/commerce/OrdersPage.tsx
 #: src/features/commerce/ShippingPage.tsx
+#: src/features/overview/OverviewPage.tsx
 msgid "Late"
 msgstr "Late"
 
@@ -2060,10 +2154,6 @@ msgstr "Marketing"
 msgid "Marketing & Growth"
 msgstr "Marketing & Growth"
 
-#: src/features/shops/ShopsPage.tsx
-msgid "Marketplace:"
-msgstr "Marketplace:"
-
 #: src/features/office/ChatPage.tsx
 #: src/features/office/TeamRoomPage.tsx
 #: src/shared/demo/office.ts
@@ -2118,6 +2208,10 @@ msgctxt "navigation"
 msgid "Members & access"
 msgstr "Members & access"
 
+#: src/features/team/TeamPage.tsx
+msgid "Members views"
+msgstr "Members views"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "Members, roles and invitation links"
 msgstr "Members, roles and invitation links"
@@ -2129,10 +2223,6 @@ msgstr "Message {name}"
 #: src/features/office/ChatPage.tsx
 msgid "Message {name}…"
 msgstr "Message {name}…"
-
-#: src/features/security/SecurityPage.tsx
-msgid "Method"
-msgstr "Method"
 
 #: src/features/overview/heroes.ts
 msgid "Miniature AI office"
@@ -2172,7 +2262,6 @@ msgstr "Monthly saving"
 #: src/features/office/ChatPage.tsx
 #: src/features/office/EngineeringPage.tsx
 #: src/features/office/FloorPage.tsx
-#: src/features/overview/OverviewPage.tsx
 #: src/features/work/demoScreens.tsx
 msgid "More"
 msgstr "More"
@@ -2189,6 +2278,10 @@ msgstr "Mug arrived cracked"
 #: src/features/team/TeamPage.tsx
 msgid "Name"
 msgstr "Name"
+
+#: src/features/shops/ShopsPage.tsx
+msgid "Need you"
+msgstr "Need you"
 
 #: src/features/team/TeamPage.tsx
 msgid "Needs approval"
@@ -2247,9 +2340,9 @@ msgstr "New task"
 msgid "New this month"
 msgstr "New this month"
 
-#: src/features/overview/OverviewPage.tsx
-msgid "Next concept"
-msgstr "Next concept"
+#: src/features/customers/CustomersPage.tsx
+msgid "Newest first"
+msgstr "Newest first"
 
 #: src/features/office/FloorPage.tsx
 msgid "Next department"
@@ -2296,6 +2389,14 @@ msgstr "No active task"
 msgid "No authenticator app yet."
 msgstr "No authenticator app yet."
 
+#: src/features/shops/ShopsPage.tsx
+msgid "No connection needs you. A disconnected shop stays paused until you connect it again."
+msgstr "No connection needs you. A disconnected shop stays paused until you connect it again."
+
+#: src/features/commerce/ProductsPage.tsx
+msgid "No listing matches this view."
+msgstr "No listing matches this view."
+
 #: src/features/commerce/OrdersPage.tsx
 msgid "No orders in the last 30 days."
 msgstr "No orders in the last 30 days."
@@ -2312,6 +2413,10 @@ msgstr "No return policy on Etsy."
 msgid "No reviews yet."
 msgstr "No reviews yet."
 
+#: src/features/customers/CustomersPage.tsx
+msgid "No reviews yet. They appear here as buyers leave them on Etsy."
+msgstr "No reviews yet. They appear here as buyers leave them on Etsy."
+
 #: src/features/commerce/ShippingPage.tsx
 msgid "No shipping profiles on Etsy."
 msgstr "No shipping profiles on Etsy."
@@ -2323,6 +2428,10 @@ msgstr "No shop connected"
 #: src/features/overview/OverviewPage.tsx
 msgid "No shop connected yet"
 msgstr "No shop connected yet"
+
+#: src/features/commerce/live.tsx
+msgid "No shop is connected yet."
+msgstr "No shop is connected yet."
 
 #: src/features/team/TeamPage.tsx
 msgid "No shops"
@@ -2376,6 +2485,10 @@ msgstr "Noam"
 msgid "None"
 msgstr "None"
 
+#: src/features/commerce/ProductsPage.tsx
+msgid "None of the listings read is sold out; the catalog is larger than one read."
+msgstr "None of the listings read is sold out; the catalog is larger than one read."
+
 #: src/features/commerce/ShippingPage.tsx
 msgid "Not accepted"
 msgstr "Not accepted"
@@ -2412,6 +2525,10 @@ msgstr "Nothing matches."
 msgid "Nothing to ship and nothing shipped in the last 30 days."
 msgstr "Nothing to ship and nothing shipped in the last 30 days."
 
+#: src/features/commerce/ShippingPage.tsx
+msgid "Nothing waits to ship."
+msgstr "Nothing waits to ship."
+
 #: src/features/settings/SettingsPage.tsx
 msgid "Notifications"
 msgstr "Notifications"
@@ -2441,11 +2558,23 @@ msgstr "October newsletter"
 msgid "of"
 msgstr "of"
 
+#: src/features/commerce/ProductsPage.tsx
+msgid "of the {read} read"
+msgstr "of the {read} read"
+
+#: src/features/customers/CustomersPage.tsx
+msgid "of the newest {newest}"
+msgstr "of the newest {newest}"
+
 #: src/features/security/SecurityPage.tsx
 #: src/features/settings/SettingsPage.tsx
 #: src/features/team/TeamPage.tsx
 msgid "Off"
 msgstr "Off"
+
+#: src/features/overview/OverviewPage.tsx
+msgid "Office"
+msgstr "Office"
 
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
@@ -2531,6 +2660,10 @@ msgstr "Open incident"
 msgid "Open incidents"
 msgstr "Open incidents"
 
+#: src/features/overview/OverviewPage.tsx
+msgid "Open incidents:"
+msgstr "Open incidents:"
+
 #: src/features/finance/FinanceDemos.tsx
 msgid "Open invoices"
 msgstr "Open invoices"
@@ -2538,6 +2671,10 @@ msgstr "Open invoices"
 #: src/features/commerce/ProductsPage.tsx
 msgid "Open on Etsy"
 msgstr "Open on Etsy"
+
+#: src/features/overview/OverviewPage.tsx
+msgid "Open orders"
+msgstr "Open orders"
 
 #: src/features/commerce/demoScreens.tsx
 msgid "Open quote"
@@ -2559,6 +2696,15 @@ msgstr "Open the web app"
 #: src/features/overview/OverviewPage.tsx
 msgid "Open tickets"
 msgstr "Open tickets"
+
+#: src/features/overview/OverviewPage.tsx
+msgid "Open tickets:"
+msgstr "Open tickets:"
+
+#: src/features/commerce/OrdersPage.tsx
+#: src/features/overview/OverviewPage.tsx
+msgid "Open what waits to ship"
+msgstr "Open what waits to ship"
 
 #: src/features/office/EngineeringPage.tsx
 msgid "Opened"
@@ -2583,6 +2729,10 @@ msgstr "Order {0}"
 #: src/shared/demo/office.ts
 msgid "Order Assurance"
 msgstr "Order Assurance"
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "Order numbers"
+msgstr "Order numbers"
 
 #: src/features/commerce/OrdersPage.tsx
 #: src/features/customers/CustomersDemos.tsx
@@ -2615,20 +2765,21 @@ msgid "Orders per day in the last 7 days: {0}"
 msgstr "Orders per day in the last 7 days: {0}"
 
 #: src/features/commerce/OrdersPage.tsx
-msgid "Orders shown:"
-msgstr "Orders shown:"
+msgid "Orders per day, last 7 days"
+msgstr "Orders per day, last 7 days"
 
 #: src/features/commerce/ShippingPage.tsx
 msgid "Orders to ship"
 msgstr "Orders to ship"
 
 #: src/features/shops/ShopCard.tsx
+#: src/features/shops/ShopsPage.tsx
 msgid "Orders today"
 msgstr "Orders today"
 
 #: src/features/overview/OverviewPage.tsx
-msgid "Orders today:"
-msgstr "Orders today:"
+msgid "Orders, last 7 days"
+msgstr "Orders, last 7 days"
 
 #: src/features/shops/ShopCard.tsx
 msgid "Orders, revenue and rating appear here while the shop is connected."
@@ -2667,7 +2818,7 @@ msgstr "Owner Assistant"
 msgid "Owner:"
 msgstr "Owner:"
 
-#: src/features/security/SecurityPage.tsx
+#: src/features/team/TeamPage.tsx
 msgid "Owners and Admins"
 msgstr "Owners and Admins"
 
@@ -2690,6 +2841,10 @@ msgstr "Page not found"
 #: src/features/commerce/OrdersPage.tsx
 msgid "Paid"
 msgstr "Paid"
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "paid orders, before Etsy's fees"
+msgstr "paid orders, before Etsy's fees"
 
 #: src/features/settings/AppearanceChoices.tsx
 msgid "Palette"
@@ -2725,6 +2880,10 @@ msgstr "Password and authenticator app"
 msgid "Password only"
 msgstr "Password only"
 
+#: src/features/overview/OverviewPage.tsx
+msgid "past the ship-by date"
+msgstr "past the ship-by date"
+
 #: src/features/office/FloorPage.tsx
 msgid "Pause"
 msgstr "Pause"
@@ -2752,6 +2911,14 @@ msgstr "Pending decisions"
 #: src/features/work/demoScreens.tsx
 msgid "Pending:"
 msgstr "Pending:"
+
+#: src/features/team/TeamPage.tsx
+msgid "People"
+msgstr "People"
+
+#: src/features/team/TeamPage.tsx
+msgid "People who work in the workspace, and what they may reach"
+msgstr "People who work in the workspace, and what they may reach"
 
 #: src/features/office/AiOpsPage.tsx
 msgid "Per call"
@@ -2786,10 +2953,6 @@ msgstr "Policy version:"
 #: src/features/overview/OverviewPage.tsx
 msgid "Preview"
 msgstr "Preview"
-
-#: src/features/overview/OverviewPage.tsx
-msgid "Previous concept"
-msgstr "Previous concept"
 
 #: src/features/office/FloorPage.tsx
 msgid "Previous department"
@@ -2858,6 +3021,10 @@ msgstr "Products"
 msgctxt "navigation"
 msgid "Products"
 msgstr "Products"
+
+#: src/features/commerce/ShippingPage.tsx
+msgid "Profiles and returns"
+msgstr "Profiles and returns"
 
 #: src/shared/demo/office.ts
 msgid "Publish 4 new images to the star map listing"
@@ -2962,6 +3129,10 @@ msgstr "Read orders"
 msgid "Read shop"
 msgstr "Read shop"
 
+#: src/features/customers/CustomersPage.tsx
+msgid "Read the low ratings"
+msgstr "Read the low ratings"
+
 #: src/features/office/TeamRoomPage.tsx
 msgid "Read-only"
 msgstr "Read-only"
@@ -2974,6 +3145,10 @@ msgstr "Ready today"
 msgid "Recency"
 msgstr "Recency"
 
+#: src/features/customers/CustomersPage.tsx
+msgid "Recent reviews are all four or five stars."
+msgstr "Recent reviews are all four or five stars."
+
 #: src/features/admin/AdminDemos.tsx
 msgid "Recent runs"
 msgstr "Recent runs"
@@ -2982,9 +3157,18 @@ msgstr "Recent runs"
 msgid "Reconnect"
 msgstr "Reconnect"
 
+#. placeholder {0}: firstAttention.name
+#: src/features/shops/ShopsPage.tsx
+msgid "Reconnect {0} first"
+msgstr "Reconnect {0} first"
+
 #: src/features/shops/ShopCard.tsx
 msgid "Reconnect {name}"
 msgstr "Reconnect {name}"
+
+#: src/features/shops/ShopsPage.tsx
+msgid "reconnect soon"
+msgstr "reconnect soon"
 
 #: src/features/shops/ShopCard.tsx
 msgid "Reconnect soon"
@@ -3104,8 +3288,8 @@ msgid "Requested by"
 msgstr "Requested by"
 
 #: src/features/security/SecurityPage.tsx
-msgid "Required for"
-msgstr "Required for"
+msgid "Required for Owners and Admins"
+msgstr "Required for Owners and Admins"
 
 #: src/features/office/FloorPage.tsx
 msgid "Reset view"
@@ -3140,6 +3324,7 @@ msgstr "Returns"
 msgid "Returns and partners"
 msgstr "Returns and partners"
 
+#: src/features/commerce/OrdersPage.tsx
 #: src/features/finance/FinanceDemos.tsx
 #: src/features/overview/OverviewPage.tsx
 msgid "Revenue"
@@ -3153,10 +3338,6 @@ msgstr "Revenue this month:"
 msgid "Revenue today"
 msgstr "Revenue today"
 
-#: src/features/overview/OverviewPage.tsx
-msgid "Revenue today:"
-msgstr "Revenue today:"
-
 #: src/features/work/demoScreens.tsx
 msgid "Reversible"
 msgstr "Reversible"
@@ -3164,6 +3345,10 @@ msgstr "Reversible"
 #: src/features/work/demoScreens.tsx
 msgid "Reversible:"
 msgstr "Reversible:"
+
+#: src/features/customers/CustomersPage.tsx
+msgid "Review numbers"
+msgstr "Review numbers"
 
 #: src/features/overview/OverviewPage.tsx
 msgid "Review security"
@@ -3324,6 +3509,18 @@ msgstr "Secure your account"
 msgid "Security"
 msgstr "Security"
 
+#: src/features/security/SecurityPage.tsx
+msgid "Security numbers"
+msgstr "Security numbers"
+
+#: src/features/overview/OverviewPage.tsx
+msgid "See all approvals"
+msgstr "See all approvals"
+
+#: src/features/team/TeamPage.tsx
+msgid "see every shop"
+msgstr "see every shop"
+
 #: src/features/customers/CustomersDemos.tsx
 #: src/features/office/ChatPage.tsx
 msgid "Send"
@@ -3386,7 +3583,6 @@ msgstr "Set your password"
 #: src/features/customers/CustomersDemos.tsx
 #: src/features/finance/FinanceDemos.tsx
 #: src/features/office/FloorPage.tsx
-#: src/features/overview/OverviewPage.tsx
 #: src/features/settings/SettingsPage.tsx
 msgid "Settings"
 msgstr "Settings"
@@ -3422,14 +3618,14 @@ msgstr "Ship by"
 msgid "ship by {0}"
 msgstr "ship by {0}"
 
+#: src/features/commerce/ShippingPage.tsx
+msgid "Ship on Etsy"
+msgstr "Ship on Etsy"
+
 #: src/features/commerce/OrdersPage.tsx
 #: src/features/commerce/ShippingPage.tsx
 msgid "Shipment"
 msgstr "Shipment"
-
-#: src/features/commerce/ShippingPage.tsx
-msgid "Shipments"
-msgstr "Shipments"
 
 #: src/features/commerce/OrdersPage.tsx
 msgid "Shipped"
@@ -3453,8 +3649,16 @@ msgid "Shipping address update"
 msgstr "Shipping address update"
 
 #: src/features/commerce/ShippingPage.tsx
+msgid "Shipping numbers"
+msgstr "Shipping numbers"
+
+#: src/features/commerce/ShippingPage.tsx
 msgid "Shipping profiles"
 msgstr "Shipping profiles"
+
+#: src/features/commerce/ShippingPage.tsx
+msgid "Shipping views"
+msgstr "Shipping views"
 
 #: src/features/commerce/ShippingPage.tsx
 msgid "Ships from"
@@ -3469,7 +3673,6 @@ msgid "Shon"
 msgstr "Shon"
 
 #: src/features/commerce/ShopChips.tsx
-#: src/features/customers/CustomersDemos.tsx
 #: src/features/finance/FinanceDemos.tsx
 msgid "Shop"
 msgstr "Shop"
@@ -3489,6 +3692,10 @@ msgstr "Shop details"
 #: src/features/overview/heroes.ts
 msgid "Shop kiosk"
 msgstr "Shop kiosk"
+
+#: src/features/shops/ShopsPage.tsx
+msgid "Shop numbers"
+msgstr "Shop numbers"
 
 #: src/features/overview/OverviewPage.tsx
 msgid "Shop settings"
@@ -3513,15 +3720,14 @@ msgstr "Shops"
 msgid "shops connected"
 msgstr "shops connected"
 
-#: src/features/commerce/live.tsx
-#: src/features/overview/OverviewPage.tsx
-msgid "Shops connected:"
-msgstr "Shops connected:"
-
 #: src/features/overview/OverviewPage.tsx
 #: src/features/shops/ShopsPage.tsx
 msgid "Shops could not be loaded"
 msgstr "Shops could not be loaded"
+
+#: src/features/shops/ShopsPage.tsx
+msgid "Shops views"
+msgstr "Shops views"
 
 #: src/features/shops/ShopsPage.tsx
 msgid "Shops:"
@@ -3531,6 +3737,14 @@ msgstr "Shops:"
 msgid "Shops: {name}"
 msgstr "Shops: {name}"
 
+#: src/features/commerce/ProductsPage.tsx
+msgid "Show every listing"
+msgstr "Show every listing"
+
+#: src/features/customers/CustomersPage.tsx
+msgid "Show every review"
+msgstr "Show every review"
+
 #: src/features/admin/AdminDemos.tsx
 msgid "Show less"
 msgstr "Show less"
@@ -3539,8 +3753,11 @@ msgstr "Show less"
 msgid "Show more"
 msgstr "Show more"
 
+#. placeholder {0}: count(items.length - shown)
 #. placeholder {0}: count(orders.length - shown)
 #: src/features/commerce/OrdersPage.tsx
+#: src/features/commerce/ProductsPage.tsx
+#: src/features/customers/CustomersPage.tsx
 msgid "Show more ({0} left)"
 msgstr "Show more ({0} left)"
 
@@ -3548,9 +3765,17 @@ msgstr "Show more ({0} left)"
 msgid "Show password"
 msgstr "Show password"
 
+#: src/features/commerce/OrdersPage.tsx
+msgid "Show the late orders"
+msgstr "Show the late orders"
+
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Show the QR code"
 msgstr "Show the QR code"
+
+#: src/features/commerce/ProductsPage.tsx
+msgid "Show the sold-out listings"
+msgstr "Show the sold-out listings"
 
 #. placeholder {0}: count(listings.data.items.length)
 #. placeholder {1}: count(listings.data.total_count)
@@ -3597,6 +3822,10 @@ msgstr "Sign-in is unavailable right now. Try again shortly."
 #: src/features/security/SecurityPage.tsx
 msgid "Signed-in devices"
 msgstr "Signed-in devices"
+
+#: src/features/security/SecurityPage.tsx
+msgid "Signing in asks for a code from your authenticator app, so a password alone is not enough."
+msgstr "Signing in asks for a code from your authenticator app, so a password alone is not enough."
 
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Signs you out first"
@@ -3702,10 +3931,6 @@ msgstr "Step 2 of 2"
 msgid "Step 2 of 2 · Security"
 msgstr "Step 2 of 2 · Security"
 
-#: src/features/overview/OverviewPage.tsx
-msgid "Steps done:"
-msgstr "Steps done:"
-
 #: src/features/welcome/WelcomePage.tsx
 msgid "Stock is low on all four. Nothing changes until you say so."
 msgstr "Stock is low on all four. Nothing changes until you say so."
@@ -3794,6 +4019,10 @@ msgstr "Tasks"
 #: src/features/welcome/WelcomePage.tsx
 msgid "Team"
 msgstr "Team"
+
+#: src/features/team/TeamPage.tsx
+msgid "Team numbers"
+msgstr "Team numbers"
 
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
@@ -3910,9 +4139,21 @@ msgstr "The shop was not connected"
 msgid "The shop was not disconnected. Try again shortly."
 msgstr "The shop was not disconnected. Try again shortly."
 
+#: src/features/commerce/ProductsPage.tsx
+msgid "The shop's active listings, live from Etsy."
+msgstr "The shop's active listings, live from Etsy."
+
 #: src/features/overview/OverviewPage.tsx
 msgid "The shop's numbers are not available right now."
 msgstr "The shop's numbers are not available right now."
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "The shop's orders, live from Etsy."
+msgstr "The shop's orders, live from Etsy."
+
+#: src/features/customers/CustomersPage.tsx
+msgid "The shop's reviews on Etsy, newest first."
+msgstr "The shop's reviews on Etsy, newest first."
 
 #: src/features/shops/ShopsPage.tsx
 msgid "The term 'Etsy' is a trademark of Etsy, Inc. This application uses the Etsy API but is not endorsed or certified by Etsy, Inc."
@@ -3937,6 +4178,10 @@ msgstr "The workspace owner connects shops."
 #: src/features/settings/AppearanceChoices.tsx
 msgid "Theme"
 msgstr "Theme"
+
+#: src/features/team/TeamPage.tsx
+msgid "They join as members with the living office"
+msgstr "They join as members with the living office"
 
 #: src/features/shops/EtsyCallbackPage.tsx
 msgid "This connection link has expired or was already used. Start again from Shops."
@@ -4042,6 +4287,10 @@ msgstr "This week"
 msgid "Thread closed"
 msgstr "Thread closed"
 
+#: src/features/customers/CustomersPage.tsx
+msgid "Three stars or fewer"
+msgstr "Three stars or fewer"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "Three steps, a few minutes each."
 msgstr "Three steps, a few minutes each."
@@ -4079,6 +4328,10 @@ msgstr "Timeline"
 msgid "Titles, photos and claims audited, fixed as drafts you approve."
 msgstr "Titles, photos and claims audited, fixed as drafts you approve."
 
+#: src/features/commerce/ShippingPage.tsx
+msgid "To ship"
+msgstr "To ship"
+
 #: src/features/office/TeamRoomPage.tsx
 msgid "To tasks"
 msgstr "To tasks"
@@ -4096,9 +4349,13 @@ msgstr "Today"
 msgid "Today in numbers"
 msgstr "Today in numbers"
 
+#: src/features/shops/ShopCard.tsx
+msgid "Today in this shop"
+msgstr "Today in this shop"
+
 #: src/features/overview/OverviewPage.tsx
-msgid "Today’s orders"
-msgstr "Today’s orders"
+msgid "Today’s numbers from your shop, live from Etsy."
+msgstr "Today’s numbers from your shop, live from Etsy."
 
 #: src/features/office/floor3d/engine.ts
 msgid "Token expired"
@@ -4120,6 +4377,7 @@ msgstr "Too many attempts. Wait 15 minutes and try again."
 msgid "Tool call · evidence"
 msgstr "Tool call · evidence"
 
+#: src/features/shops/ShopsPage.tsx
 #: src/features/shops/TopListings.tsx
 msgid "Top listings"
 msgstr "Top listings"
@@ -4134,8 +4392,16 @@ msgid "Total shown"
 msgstr "Total shown"
 
 #: src/features/commerce/ShippingPage.tsx
+msgid "Tracking"
+msgstr "Tracking"
+
+#: src/features/commerce/ShippingPage.tsx
 msgid "Tracking sync"
 msgstr "Tracking sync"
+
+#: src/features/commerce/ShippingPage.tsx
+msgid "Tracking sync and on-time delivery arrive with fulfilment. Until then, tracking numbers are read from Etsy with each order, and nothing is synced from here."
+msgstr "Tracking sync and on-time delivery arrive with fulfilment. Until then, tracking numbers are read from Etsy with each order, and nothing is synced from here."
 
 #: src/shared/demo/office.ts
 msgid "Tracking sync is down"
@@ -4192,6 +4458,10 @@ msgstr "Two-step"
 msgid "Two-step code"
 msgstr "Two-step code"
 
+#: src/features/security/SecurityPage.tsx
+msgid "Two-step sign-in"
+msgstr "Two-step sign-in"
+
 #: src/features/settings/SettingsPage.tsx
 msgid "Two-step sign-in off"
 msgstr "Two-step sign-in off"
@@ -4200,7 +4470,6 @@ msgstr "Two-step sign-in off"
 msgid "Two-step sign-in on"
 msgstr "Two-step sign-in on"
 
-#: src/features/security/SecurityPage.tsx
 #: src/features/team/TeamPage.tsx
 msgid "Two-step sign-in:"
 msgstr "Two-step sign-in:"
@@ -4302,6 +4571,10 @@ msgstr "Waiting (external)"
 msgid "Waiting / blocked"
 msgstr "Waiting / blocked"
 
+#: src/features/commerce/ShippingPage.tsx
+msgid "Waiting first, by ship-by date; then recently shipped"
+msgstr "Waiting first, by ship-by date; then recently shipped"
+
 #: src/shared/demo/office.ts
 msgid "Waiting for Gelato quote"
 msgstr "Waiting for Gelato quote"
@@ -4309,6 +4582,10 @@ msgstr "Waiting for Gelato quote"
 #: src/shared/demo/office.ts
 msgid "Waiting for trend data"
 msgstr "Waiting for trend data"
+
+#: src/features/overview/OverviewPage.tsx
+msgid "waiting for you"
+msgstr "waiting for you"
 
 #: src/features/office/FloorPage.tsx
 #: src/shared/ui/kit/status.tsx
@@ -4318,10 +4595,6 @@ msgstr "Waiting for you"
 #: src/features/office/floor3d/engine.ts
 msgid "Waiting for you · refund #3152"
 msgstr "Waiting for you · refund #3152"
-
-#: src/features/overview/OverviewPage.tsx
-msgid "Waiting for you:"
-msgstr "Waiting for you:"
 
 #: src/features/office/data.ts
 msgid "Waiting on the Gelato quote."
@@ -4363,6 +4636,10 @@ msgstr "Weekly summary lands Friday."
 msgid "Welcome back"
 msgstr "Welcome back"
 
+#: src/features/customers/CustomersPage.tsx
+msgid "What buyers say"
+msgstr "What buyers say"
+
 #: src/features/office/floor3d/engine.ts
 msgid "What do I tell Emma?"
 msgstr "What do I tell Emma?"
@@ -4378,6 +4655,14 @@ msgstr "What is coming"
 #: src/features/overview/OverviewPage.tsx
 msgid "What needs you"
 msgstr "What needs you"
+
+#: src/features/commerce/ShippingPage.tsx
+msgid "What waits to ship"
+msgstr "What waits to ship"
+
+#: src/features/commerce/ShippingPage.tsx
+msgid "What waits to ship and what shipped, live from Etsy."
+msgstr "What waits to ship and what shipped, live from Etsy."
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "What works today"
@@ -4416,6 +4701,10 @@ msgstr "Within policy"
 msgctxt "navigation"
 msgid "Work"
 msgstr "Work"
+
+#: src/features/shops/ShopsPage.tsx
+msgid "Working"
+msgstr "Working"
 
 #: src/features/shops/Capabilities.tsx
 msgid "Works"
@@ -4476,6 +4765,10 @@ msgid "You were invited to HT-Commerce. Choose a password to finish."
 msgstr "You were invited to HT-Commerce. Choose a password to finish."
 
 #: src/features/team/TeamPage.tsx
+msgid "You work alone so far. Invite someone and choose what they may do."
+msgstr "You work alone so far. Invite someone and choose what they may do."
+
+#: src/features/team/TeamPage.tsx
 msgid "You're invited to HT-Commerce: {link}"
 msgstr "You're invited to HT-Commerce: {link}"
 
@@ -4487,6 +4780,10 @@ msgstr "Your account"
 msgid "Your account works, but no workspace has added it. Ask the workspace owner to invite you, then sign in again."
 msgstr "Your account works, but no workspace has added it. Ask the workspace owner to invite you, then sign in again."
 
+#: src/features/commerce/ProductsPage.tsx
+msgid "Your catalog"
+msgstr "Your catalog"
+
 #: src/features/shops/ShopsPage.tsx
 msgid "Your Etsy shop is connected."
 msgstr "Your Etsy shop is connected."
@@ -4494,6 +4791,10 @@ msgstr "Your Etsy shop is connected."
 #: src/features/shops/ShopsPage.tsx
 msgid "Your Etsy shop is reconnected."
 msgstr "Your Etsy shop is reconnected."
+
+#: src/features/shops/ShopsPage.tsx
+msgid "Your Etsy shops and their numbers today, live from Etsy."
+msgstr "Your Etsy shops and their numbers today, live from Etsy."
 
 #: src/features/auth/AuthLayout.tsx
 msgid "Your office"
@@ -4512,8 +4813,17 @@ msgid "Your shop runs. You decide."
 msgstr "Your shop runs. You decide."
 
 #: src/app/shell/ShopSwitcher.tsx
+#: src/features/shops/ShopsPage.tsx
 msgid "Your shops"
 msgstr "Your shops"
+
+#: src/features/shops/ShopsPage.tsx
+msgid "Your shops are connected. Nothing needs you here."
+msgstr "Your shops are connected. Nothing needs you here."
+
+#: src/features/team/TeamPage.tsx
+msgid "Your team"
+msgstr "Your team"
 
 #: src/features/customers/CustomersDemos.tsx
 msgid "Your weekly sales summary"

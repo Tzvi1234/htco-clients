@@ -217,20 +217,23 @@ describe("the planned parts of Members & access", () => {
   it("shows the AI employees and the policy as demos that do nothing", async () => {
     const { user } = await open("/settings/team", owner);
 
+    // Each planned part has its own sub-tab (clarity round 3).
+    await user.click(await screen.findByRole("tab", { name: /AI employees/ }));
     const employees = await screen.findByRole("region", { name: "AI employees" });
     expect(within(employees).getAllByText("Demo").length).toBeGreaterThan(0);
     expect(within(employees).getByText("Maya")).toBeInTheDocument();
     expect(employees.querySelector("[inert]")).not.toBeNull();
-    const policy = screen.getByRole("region", { name: "Policy" });
-    expect(within(policy).getAllByText("Demo").length).toBeGreaterThan(0);
-    expect(policy.querySelector("[inert]")).not.toBeNull();
-
     await user.click(within(employees).getByText("Maya"));
     // The toast says it (each demo part also carries the words for screen readers).
     const toast = document.querySelector("[aria-live='polite'][aria-atomic='true']");
     await vi.waitFor(() => {
       expect(toast).toHaveTextContent("Demo — coming soon");
     });
+
+    await user.click(screen.getByRole("tab", { name: /Policy/ }));
+    const policy = screen.getByRole("region", { name: "Policy" });
+    expect(within(policy).getAllByText("Demo").length).toBeGreaterThan(0);
+    expect(policy.querySelector("[inert]")).not.toBeNull();
   });
 });
 
