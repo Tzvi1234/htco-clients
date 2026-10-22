@@ -5,11 +5,11 @@ import { useId, useState, type ReactNode } from "react";
 
 import { useConnectEtsy, type ConnectEtsy } from "./connectEtsy.tsx";
 import { ShopCard, needsReconnect, useReconnectLabel } from "./ShopCard.tsx";
-import { useDisconnects, useRechecks } from "./shopActions.tsx";
+import { useDisconnects, useRechecks, useRemovals } from "./shopActions.tsx";
 import { useNow } from "./time.ts";
 import { ShopStats } from "./ShopStats.tsx";
 import { TopListings } from "./TopListings.tsx";
-import { overviewQuery } from "../commerce/live.tsx";
+import { ReconnectNotice, overviewQuery } from "../commerce/live.tsx";
 import parcel from "../../assets/commerce/parcel.webp";
 import { FormAlert } from "../auth/AuthLayout.tsx";
 import { integrationsQuery, meQuery, shopsQuery, useApi } from "../../shared/api/api.tsx";
@@ -106,6 +106,7 @@ function Shops({
   // Relative times ("Checked 3 minutes ago") move on while the page stays open (Codex, #31).
   const clock = useNow(30_000);
   const disconnects = useDisconnects(organizationId);
+  const removals = useRemovals(organizationId);
   // Each shop's live numbers; a shop known to be disconnected is not asked (no Etsy call).
   const known = new Map((integrations.data ?? []).map((i) => [i.shop_id, i.status]));
   const asked = (shops.data ?? []).filter((shop) => known.get(shop.id) !== "disconnected");
@@ -120,6 +121,7 @@ function Shops({
       ),
   });
   const firstLive = asked.find((shop) => known.get(shop.id) !== "needs_reauth")?.id;
+  const reconnecting = asked.some((shop) => known.get(shop.id) === "needs_reauth");
   const tabs = useId();
   const [tab, setTab] = useState<"shops" | "listings" | "stats">("shops");
 
@@ -198,6 +200,21 @@ function Shops({
     );
   if (disconnects.message !== undefined)
     notices.push(<FormAlert key="disconnect-failed" message={disconnects.message} />);
+  if (removals.done !== undefined)
+    notices.push(
+      <p
+        key="removed"
+        role="status"
+        className="m-0 inline-flex h-10 items-center gap-2 rounded-pill bg-inverse ps-3 pe-5 text-body-sm text-on-inverse motion-safe:animate-pop-in"
+      >
+        <span className="flex size-6 items-center justify-center rounded-pill bg-accent text-on-accent">
+          <CheckGlyph size={12} />
+        </span>
+        {t`${removals.done} and its data were removed.`}
+      </p>,
+    );
+  if (removals.message !== undefined)
+    notices.push(<FormAlert key="remove-failed" message={removals.message} />);
   if (integrations.isError)
     notices.push(
       <div key="details" className="flex flex-wrap items-center gap-3">
@@ -332,7 +349,12 @@ function Shops({
         ]}
       />
       <TabPanel idBase={tabs} tab={tab}>
-        {tab === "listings" ? (
+        {tab !== "shops" && firstLive === undefined && reconnecting ? (
+          // Every shop's connection must be renewed: say so, never "connect a shop".
+          <Panel>
+            <ReconnectNotice />
+          </Panel>
+        ) : tab === "listings" ? (
           <TopListings shopId={firstLive} />
         ) : tab === "stats" ? (
           <ShopStats
@@ -389,6 +411,24 @@ function Shops({
                         ),
                       }
                     : {})}
+                  {...(etsy === undefined
+                    ? {}
+                    : {
+                        remove: (
+                          <Button
+                            variant="ghost"
+                            aria-label={t`Remove ${shop.name}`}
+                            isPending={removals.pendingShop === shop.id}
+                            onPress={() => {
+                              removals.ask(shop);
+                            }}
+                          >
+                            <span className="text-danger-text">
+                              <Trans>Remove shop</Trans>
+                            </span>
+                          </Button>
+                        ),
+                      })}
                   {...(etsy !== undefined && needsReconnect(integration)
                     ? {
                         reconnect: (
@@ -412,6 +452,7 @@ function Shops({
         )}
       </TabPanel>
       {disconnects.dialogs}
+      {removals.dialogs}
     </>
   );
 }

@@ -8,6 +8,7 @@ import {
   ListingPhoto,
   LiveNote,
   LiveProblem,
+  ShopReconnectBanner,
   LiveSkeleton,
   NoShopYet,
   listingsQuery,
@@ -146,6 +147,7 @@ export function OrdersPage() {
     <>
       <PageHeader title={t`Orders`} />
       <Flow>
+        {live.shop === undefined ? null : <ShopReconnectBanner shop={live.shop} />}
         {live.shop !== undefined ? (
           <Orders key={live.shop.id} shopId={live.shop.id} chips={<ShopChips live={live} />} />
         ) : (

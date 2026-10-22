@@ -152,6 +152,7 @@ export function ShopCard({
   onRefresh,
   recheck,
   disconnect,
+  remove,
   detailsLoading = false,
   live,
 }: {
@@ -171,6 +172,8 @@ export function ShopCard({
   recheck?: Recheck;
   /** The Owner's disconnect button (slice 4.7). */
   disconnect?: ReactNode;
+  /** The Owner's "Remove shop", in the card's quiet danger zone at the bottom. */
+  remove?: ReactNode;
 }) {
   const { t } = useLingui();
   const { locale } = useLocale();
@@ -351,6 +354,14 @@ export function ShopCard({
                 recheck={recheck}
               />
             )}
+          </div>
+        )}
+        {remove === undefined ? null : (
+          <div className="mt-auto flex flex-wrap items-center justify-between gap-2 border-t border-line pt-3">
+            <span className="text-caption font-light text-muted">
+              <Trans>Deletes the shop and all its data in HTCO</Trans>
+            </span>
+            {remove}
           </div>
         )}
       </div>

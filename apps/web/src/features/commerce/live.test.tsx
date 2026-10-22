@@ -8,6 +8,7 @@ import { QueryClient } from "@tanstack/react-query";
 import { ListingPhoto } from "./live.tsx";
 import { App } from "../../app/App.tsx";
 import { forgetSession } from "../../shared/api/api.tsx";
+import { browser } from "../../shared/lib/browser.ts";
 import { PHONE_QUERY } from "../../shared/lib/useMediaQuery.ts";
 import { memoryStorage } from "../../shared/lib/storage.ts";
 import { demoShops, fakeBackend, fakeIntegration, type FakeState } from "../../test/fakeApi.ts";
@@ -119,8 +120,16 @@ describe("Orders, live from Etsy", () => {
     ).toBeInTheDocument();
   });
 
-  it("asks to reconnect a shop that needs it", async () => {
+  it("asks to reconnect a shop that needs it, with the way to do it in the panel", async () => {
     await open("/commerce/orders", { integrations: [fakeIntegration(WILLOW, "needs_reauth")] });
+
+    const alert = await within(await panel("Orders")).findByRole("alert");
+    expect(alert).toHaveTextContent("This shop needs reconnecting");
+    expect(within(alert).getByRole("button", { name: "Reconnect" })).toBeEnabled();
+  });
+
+  it("still points a disconnected shop to Shops", async () => {
+    await open("/commerce/orders", { integrations: [fakeIntegration(WILLOW, "disconnected")] });
 
     const alert = await within(await panel("Orders")).findByRole("alert");
     expect(alert).toHaveTextContent("not connected");
@@ -507,5 +516,71 @@ describe("Codex review of #35", () => {
     await open("/", { liveTrouble: "no-sales" });
 
     expect(await screen.findByText("Sales are not available for this shop.")).toBeInTheDocument();
+  });
+});
+
+describe("a shop whose connection must be renewed (the Etsy app key was replaced)", () => {
+  const reauth: Partial<FakeState> = { integrations: [fakeIntegration(WILLOW, "needs_reauth")] };
+  const banner = async () =>
+    (await screen.findAllByRole("alert")).find((el) =>
+      el.textContent.includes("This shop needs reconnecting · Willow & Wick"),
+    );
+
+  it.each([
+    ["Home", "/"],
+    ["Orders", "/commerce/orders"],
+    ["Products", "/commerce/products"],
+    ["Shipping", "/commerce/shipping"],
+    ["Customers", "/customers/customers"],
+  ])("%s shows the banner with Reconnect, never an empty screen", async (_, path) => {
+    await open(path, reauth);
+
+    await vi.waitFor(async () => {
+      expect(await banner()).toBeDefined();
+    });
+    const found = await banner();
+    if (found === undefined) throw new Error("no banner");
+    expect(within(found).getByRole("button", { name: "Reconnect" })).toBeEnabled();
+  });
+
+  it("Reconnect runs the Etsy connect flow: the code first, then Etsy", async () => {
+    const assign = vi.spyOn(browser, "assign").mockImplementation(() => undefined);
+    const { user, backend } = await open("/commerce/orders", reauth);
+
+    await vi.waitFor(async () => {
+      expect(await banner()).toBeDefined();
+    });
+    const found = await banner();
+    if (found === undefined) throw new Error("no banner");
+    await user.click(within(found).getByRole("button", { name: "Reconnect" }));
+    const code = await screen.findByRole("dialog", { name: "Confirm it is you" });
+    await user.type(within(code).getByLabelText("Code from the app"), "123456");
+    await user.click(within(code).getByRole("button", { name: "Confirm" }));
+
+    await vi.waitFor(() => {
+      expect(assign).toHaveBeenCalledWith(backend.state.authorizationUrl);
+    });
+  });
+
+  it("tells a member who is not the Owner who can reconnect", async () => {
+    await open("/commerce/orders", { ...reauth, role: "support" });
+
+    const alert = await within(await panel("Orders")).findByRole("alert");
+    expect(alert).toHaveTextContent("The workspace owner can reconnect it.");
+    expect(within(alert).queryByRole("button", { name: "Reconnect" })).not.toBeInTheDocument();
+  });
+
+  it("shows no banner while the connection works", async () => {
+    await open("/commerce/orders");
+    await settled();
+
+    expect(screen.queryByText(/This shop needs reconnecting/)).not.toBeInTheDocument();
+  });
+
+  it("speaks Hebrew", async () => {
+    await open("/commerce/orders", reauth, "he");
+
+    expect((await screen.findAllByText(/החיבור לחנות צריך חידוש/)).length).toBeGreaterThan(0);
+    expect((await screen.findAllByRole("button", { name: "חבר מחדש" })).length).toBeGreaterThan(0);
   });
 });

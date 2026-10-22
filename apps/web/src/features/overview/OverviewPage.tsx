@@ -8,13 +8,21 @@ import { useEffect, useId, useState, type ReactNode } from "react";
 import { HEROES } from "./heroes.ts";
 import {
   LiveNote,
+  ShopReconnectBanner,
   overviewQuery,
   useCount,
   useMoney,
   type ShopOverview,
 } from "../commerce/live.tsx";
 import { shopCardState } from "../../app/shell/ShopSwitcher.tsx";
-import { meQuery, sessionQuery, shopsQuery, useApi, type ShopView } from "../../shared/api/api.tsx";
+import {
+  meQuery,
+  needsReconnecting,
+  sessionQuery,
+  shopsQuery,
+  useApi,
+  type ShopView,
+} from "../../shared/api/api.tsx";
 import { RiskChip } from "../../shared/demo/AgentBits.tsx";
 import { AGENTS, APPROVALS, agent, badge } from "../../shared/demo/office.ts";
 import { cx } from "../../shared/lib/cx.ts";
@@ -63,6 +71,7 @@ export function OverviewPage() {
     <>
       <PageHeader title={t`Home`} />
       <Flow>
+        <HomeReconnect />
         <Today />
         <SubTabs
           label={t`Home views`}
@@ -400,6 +409,13 @@ function NeedsYou() {
  * known once one workspace has shops or every workspace has answered; an error only when a
  * list could not be read and no shop is known.
  */
+/** The shop Home's numbers are about, when its connection must be renewed. */
+function HomeReconnect() {
+  const shops = useShops();
+  const shop = shops.data?.find((s) => s.status === "active") ?? shops.data?.[0];
+  return shop === undefined ? null : <ShopReconnectBanner shop={shop} />;
+}
+
 function useShops(): { data: ShopView[] | undefined; isError: boolean; refetch: () => void } {
   const api = useApi();
   const me = useQuery(meQuery(api));
@@ -507,7 +523,9 @@ function ShopCard({
         </IdBlock>
         {overview.isError ? (
           <p className="m-0 text-center text-caption text-secondary">
-            {t`The shop's numbers are not available right now.`}
+            {needsReconnecting(overview.error)
+              ? t`This shop needs reconnecting`
+              : t`The shop's numbers are not available right now.`}
           </p>
         ) : (
           <div className="flex flex-col items-center gap-2" aria-busy={overview.data === undefined}>

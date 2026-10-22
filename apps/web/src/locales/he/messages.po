@@ -27,6 +27,11 @@ msgstr "{0, plural, one {הזמנה אחת מאחרת במשלוח. כדאי ל�
 msgid "{0, plural, one {One order waits to ship; none is late.} other {# orders wait to ship; none is late.}}"
 msgstr "{0, plural, one {הזמנה אחת ממתינה למשלוח, ואף אחת לא מאחרת.} other {# הזמנות ממתינות למשלוח, ואף אחת לא מאחרת.}}"
 
+#. placeholder {0}: removals.done
+#: src/features/shops/ShopsPage.tsx
+msgid "{0} and its data were removed."
+msgstr "{0} והנתונים שלה הוסרו."
+
 #. placeholder {0}: count(profile.digital_listing_count)
 #: src/features/shops/ShopStats.tsx
 msgid "{0} digital"
@@ -1243,6 +1248,10 @@ msgstr "ערך החלטה"
 msgid "Decision value 92%, within policy"
 msgstr "ערך החלטה 92%, בתוך המדיניות"
 
+#: src/features/shops/ShopCard.tsx
+msgid "Deletes the shop and all its data in HTCO"
+msgstr "מוחק את החנות ואת כל הנתונים שלה ב־HTCO"
+
 #: src/shared/ui/kit/status.tsx
 msgid "Delivered"
 msgstr "נמסר"
@@ -1329,6 +1338,10 @@ msgstr "ניתוק חנות"
 msgid "Disconnected"
 msgstr "מנותקת"
 
+#: src/features/shops/shopActions.tsx
+msgid "Disconnecting is unavailable on the server right now. Try again in a few minutes."
+msgstr "ניתוק אינו זמין בשרת כרגע. נסו שוב בעוד כמה דקות."
+
 #: src/features/security/SecurityPage.tsx
 msgid "Don’t recognise a device? Sign it out here. Only that device is signed out; this one stays signed in."
 msgstr "לא מזהים מכשיר? אפשר לנתק אותו כאן. רק המכשיר ההוא יתנתק, והמכשיר הנוכחי יישאר מחובר."
@@ -1406,6 +1419,10 @@ msgstr "כדי לנתק את החנות, יש להזין את הקוד בן 6 ה
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "Enter the 6-digit code from your authenticator app to finish."
 msgstr "כדי לסיים, הזינו את הקוד בן 6 הספרות מאפליקציית האימות."
+
+#: src/features/shops/shopActions.tsx
+msgid "Enter the 6-digit code from your authenticator app to remove the shop and its data."
+msgstr "הזינו את הקוד בן 6 הספרות מאפליקציית האימות כדי להסיר את החנות ואת הנתונים שלה."
 
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Enter the 6-digit code the app shows."
@@ -1504,6 +1521,14 @@ msgstr "Etsy לא עונה ואין עותק עדכני להציג. נסו שו�
 #: src/features/shops/ShopCard.tsx
 msgid "Etsy is not answering right now; the shop's numbers will be back shortly."
 msgstr "Etsy לא עונה כרגע; נתוני החנות יחזרו בקרוב."
+
+#: src/features/commerce/live.tsx
+msgid "Etsy no longer accepts the shop's connection. Reconnect it to see its data."
+msgstr "Etsy כבר לא מקבלת את החיבור של החנות. חברו אותה מחדש כדי לראות את הנתונים שלה."
+
+#: src/features/commerce/live.tsx
+msgid "Etsy no longer accepts the shop's connection. The workspace owner can reconnect it."
+msgstr "Etsy כבר לא מקבלת את החיבור של החנות. בעלי סביבת העבודה יכולים לחבר אותה מחדש."
 
 #: src/features/shops/Capabilities.tsx
 msgid "Etsy refused this. Reconnect the shop; if it stays blocked, Etsy has limited the app."
@@ -1883,8 +1908,16 @@ msgid "HT-Commerce is the operating system for your Etsy business: your shops, y
 msgstr "HT-Commerce היא מערכת ההפעלה של העסק שלך ב־Etsy: החנויות, הצוות, ובהדרגה גם משרד AI ששואל אותך לפני כל דבר מסוכן."
 
 #: src/features/shops/shopActions.tsx
+msgid "HTCO could not be reached. Check your connection."
+msgstr "אין קשר ל־HTCO. בדקו את החיבור לאינטרנט."
+
+#: src/features/shops/shopActions.tsx
 msgid "HTCO deletes its access to this shop at once and stops syncing. The shop's data in HTCO is deleted after 30 days unless you reconnect."
 msgstr "HTCO מוחקת מיד את הגישה שלה לחנות ומפסיקה לסנכרן. נתוני החנות ב־HTCO יימחקו אחרי 30 יום, אלא אם החנות תחובר מחדש."
+
+#: src/features/shops/shopActions.tsx
+msgid "HTCO disconnects the shop and deletes everything it stored about it at once: its orders and their history, buyers, refunds, statistics and connection. This cannot be undone."
+msgstr "HTCO מנתקת את החנות ומוחקת מיד את כל מה שנשמר עליה: ההזמנות וההיסטוריה שלהן, הקונים, ההחזרים, הסטטיסטיקה והחיבור. אי אפשר לבטל את הפעולה."
 
 #: src/features/shops/Capabilities.tsx
 #: src/features/shops/EtsyCallbackPage.tsx
@@ -2668,6 +2701,10 @@ msgstr "עדיין לא סונכרנה"
 msgid "Not syncing. Connect it again to resume."
 msgstr "לא מסתנכרנת. יש לחבר אותה שוב כדי להמשיך."
 
+#: src/features/shops/shopActions.tsx
+msgid "Nothing changes in your Etsy shop."
+msgstr "שום דבר לא משתנה בחנות שלכם ב־Etsy."
+
 #: src/app/shell/CommandMenu.tsx
 msgid "Nothing matches."
 msgstr "לא נמצאה התאמה."
@@ -2794,6 +2831,10 @@ msgstr "רק הבעלים של סביבת העבודה יכולים לחבר ח�
 #: src/features/shops/shopActions.tsx
 msgid "Only the workspace owner can disconnect a shop."
 msgstr "רק הבעלים של סביבת העבודה יכולים לנתק חנות."
+
+#: src/features/shops/shopActions.tsx
+msgid "Only the workspace owner can remove a shop."
+msgstr "רק בעלי סביבת העבודה יכולים להסיר חנות."
 
 #: src/features/shops/shopActions.tsx
 msgid "Only the workspace owner or an admin can re-check a shop."
@@ -3329,9 +3370,10 @@ msgstr "כל הביקורות האחרונות קיבלו ארבעה או חמי
 msgid "Recent runs"
 msgstr "ריצות אחרונות"
 
+#: src/features/commerce/live.tsx
 #: src/features/shops/ShopsPage.tsx
 msgid "Reconnect"
-msgstr "חיבור מחדש"
+msgstr "חבר מחדש"
 
 #. placeholder {0}: firstAttention.name
 #: src/features/shops/ShopsPage.tsx
@@ -3449,17 +3491,39 @@ msgstr "נותר"
 msgid "Remove"
 msgstr "הסרה"
 
+#. placeholder {0}: shop.name
+#: src/features/shops/ShopsPage.tsx
+msgid "Remove {0}"
+msgstr "הסרת {0}"
+
 #: src/features/team/TeamPage.tsx
 msgid "Remove {name} from this workspace? Their access ends at once."
 msgstr "להסיר את {name} מסביבת העבודה? הגישה מסתיימת מיד."
+
+#: src/features/shops/shopActions.tsx
+msgid "Remove {name}?"
+msgstr "להסיר את {name}?"
+
+#: src/features/shops/shopActions.tsx
+msgid "Remove a shop"
+msgstr "הסרת חנות"
 
 #: src/features/team/TeamPage.tsx
 msgid "Remove from workspace"
 msgstr "הסרה מסביבת העבודה"
 
+#: src/features/shops/shopActions.tsx
+#: src/features/shops/ShopsPage.tsx
+msgid "Remove shop"
+msgstr "הסר חנות"
+
 #: src/features/team/TeamPage.tsx
 msgid "Remove yourself from this workspace? You lose access at once."
 msgstr "להסיר את עצמך מסביבת העבודה? הגישה שלך מסתיימת מיד."
+
+#: src/features/shops/shopActions.tsx
+msgid "Removing shops is unavailable on the server right now. Try again in a few minutes."
+msgstr "הסרת חנויות אינה זמינה בשרת כרגע. נסו שוב בעוד כמה דקות."
 
 #: src/features/auth/AcceptInvitePage.tsx
 #: src/features/auth/ResetPasswordPage.tsx
@@ -3775,6 +3839,10 @@ msgstr "קודם צריך להגדיר כניסה דו-שלבית בעמוד ה�
 #: src/features/shops/shopActions.tsx
 msgid "Set up two-factor sign-in in Security first, then disconnect the shop."
 msgstr "קודם צריך להגדיר כניסה דו-שלבית בעמוד האבטחה, ואז לנתק את החנות."
+
+#: src/features/shops/shopActions.tsx
+msgid "Set up two-factor sign-in in Security first, then remove the shop."
+msgstr "קודם הגדירו כניסה דו-שלבית במסך האבטחה, ואז הסירו את החנות."
 
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Set up your authenticator app"
@@ -4391,6 +4459,10 @@ msgstr "החנות לא חוברה"
 msgid "The shop was not disconnected. Try again shortly."
 msgstr "החנות לא נותקה. אפשר לנסות שוב בעוד רגע."
 
+#: src/features/shops/shopActions.tsx
+msgid "The shop was not removed. Try again shortly."
+msgstr "החנות לא הוסרה. נסו שוב בעוד רגע."
+
 #: src/features/commerce/ProductsPage.tsx
 msgid "The shop's active listings, live from Etsy."
 msgstr "הליסטינגים הפעילים של החנות, בזמן אמת מ־Etsy."
@@ -4422,6 +4494,10 @@ msgstr "אפליקציית הווב פתוחה כבר היום"
 #: src/features/settings/AppearanceChoices.tsx
 msgid "The whole app, and the direction it reads in."
 msgstr "כל האפליקציה, וכיוון הקריאה שלה."
+
+#: src/features/commerce/live.tsx
+msgid "The workspace owner can reconnect it."
+msgstr "בעלי סביבת העבודה יכולים לחבר אותה מחדש."
 
 #: src/features/auth/AcceptInvitePage.tsx
 msgid "The workspace owner can send a new invitation from Members & access."
@@ -4519,6 +4595,10 @@ msgstr "לחנות יותר הזמנות ממה שקריאה אחת מכסה: מ
 msgid "This shop has no active listings."
 msgstr "לחנות הזו אין מוצרים פעילים."
 
+#: src/features/shops/shopActions.tsx
+msgid "This shop is no longer here. Refresh the page."
+msgstr "החנות הזו כבר לא כאן. רעננו את הדף."
+
 #: src/features/commerce/live.tsx
 msgid "This shop is not available to you."
 msgstr "החנות הזו אינה זמינה לך."
@@ -4530,6 +4610,15 @@ msgstr "החנות הזו לא מחוברת ל־Etsy כרגע. חברו אותה
 #: src/features/shops/shopActions.tsx
 msgid "This shop is not connected. Reconnect it first."
 msgstr "החנות לא מחוברת. קודם יש לחבר אותה מחדש."
+
+#: src/features/commerce/live.tsx
+#: src/features/overview/OverviewPage.tsx
+msgid "This shop needs reconnecting"
+msgstr "החיבור לחנות צריך חידוש"
+
+#: src/features/shops/shopActions.tsx
+msgid "This shop needs reconnecting: Etsy no longer accepts its connection. Press Reconnect."
+msgstr "החיבור לחנות צריך חידוש: Etsy כבר לא מקבלת אותו. לחצו על חבר מחדש."
 
 #: src/features/shops/EtsyCallbackPage.tsx
 msgid "This takes a few seconds. Keep this page open."
@@ -4745,6 +4834,10 @@ msgstr "אימות דו־שלבי:"
 #: src/features/team/TeamPage.tsx
 msgid "Type"
 msgstr "סוג"
+
+#: src/features/shops/shopActions.tsx
+msgid "Type the shop's name to confirm"
+msgstr "הקלידו את שם החנות כדי לאשר"
 
 #: src/features/office/ChatPage.tsx
 msgid "Tzvi"

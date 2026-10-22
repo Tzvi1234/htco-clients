@@ -6,6 +6,7 @@ import { AllCustomersPanel, CustomerHealthPanel } from "./CustomersDemos.tsx";
 import {
   LiveNote,
   LiveProblem,
+  ShopReconnectBanner,
   reviewsQuery,
   useCount,
   useLiveShop,
@@ -72,6 +73,7 @@ export function CustomersPage() {
     <>
       <PageHeader title={t`Customers`} />
       <Flow>
+        {live.shop === undefined ? null : <ShopReconnectBanner shop={live.shop} />}
         <Focus
           title={<Trans>What buyers say</Trans>}
           meta={

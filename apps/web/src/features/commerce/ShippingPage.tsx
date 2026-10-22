@@ -7,6 +7,7 @@ import {
   ListingPhoto,
   LiveNote,
   LiveProblem,
+  ShopReconnectBanner,
   LiveSkeleton,
   NoShopYet,
   listingsQuery,
@@ -60,6 +61,7 @@ export function ShippingPage() {
     <>
       <PageHeader title={t`Shipping`} />
       <Flow>
+        {live.shop === undefined ? null : <ShopReconnectBanner shop={live.shop} />}
         {live.shop !== undefined ? (
           <Shipping key={live.shop.id} shopId={live.shop.id} chips={<ShopChips live={live} />} />
         ) : (
