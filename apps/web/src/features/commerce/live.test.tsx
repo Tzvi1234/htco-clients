@@ -388,6 +388,27 @@ describe("Each screen's one primary action (clarity round 3)", () => {
     expect(paths.filter((p) => p.classList.contains("fill-none"))).toHaveLength(2);
   });
 
+  it("says how many shops today's orders cover when one could not be read (Codex, #37)", async () => {
+    await open("/shops", demoShops());
+    await screen.findByRole("article", { name: "Willow & Wick" });
+    await settled();
+    const figures = within(await panel("Your shops")).getByRole("list", { name: "Shop numbers" });
+
+    // Paper Fox needs reconnecting, so its numbers are not read; the disconnected shop is not asked.
+    expect(within(figures).getByText("from 2 of 3 shops")).toBeInTheDocument();
+  });
+
+  it("takes the review shares from the server's distribution (Codex, #37)", async () => {
+    await open("/customers/customers");
+    const focus = await panel("What buyers say");
+
+    const figures = within(focus).getByRole("list", { name: "Review numbers" });
+    // 88 five-star and 4 at three stars or fewer of the newest 100 (the fake's distribution).
+    expect(within(figures).getByText("88%")).toBeInTheDocument();
+    expect(within(figures).getByText("4")).toBeInTheDocument();
+    expect(within(figures).getAllByText("of the newest 100")).toHaveLength(2);
+  });
+
   it("starts another shop with every review, and keeps the way back (Codex, #37)", async () => {
     const { user } = await open("/customers/customers", demoShops());
     const focus = await panel("What buyers say");

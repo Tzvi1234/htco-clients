@@ -1624,6 +1624,10 @@ msgstr "Fri"
 msgid "from"
 msgstr "from"
 
+#: src/features/shops/ShopsPage.tsx
+msgid "from {covered} of {asking} shops"
+msgstr "from {covered} of {asking} shops"
+
 #: src/shared/demo/office.ts
 msgid "Fulfillment Inspector"
 msgstr "Fulfillment Inspector"
@@ -2555,8 +2559,8 @@ msgid "of the {read} read"
 msgstr "of the {read} read"
 
 #: src/features/customers/CustomersPage.tsx
-msgid "of the newest reviews"
-msgstr "of the newest reviews"
+msgid "of the newest {newest}"
+msgstr "of the newest {newest}"
 
 #: src/features/security/SecurityPage.tsx
 #: src/features/settings/SettingsPage.tsx

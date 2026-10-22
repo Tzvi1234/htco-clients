@@ -223,10 +223,16 @@ function Shops({
   const asleepCount = tally("disconnected");
   const detailsKnown = seesConnections && integrations.data !== undefined;
   const firstAttention = list.find((shop) => group(shop) === "attention");
-  const todays = [...live.values()].flatMap((l) =>
+  // Today's orders across the shops: a total only once every shop asked has answered; when one
+  // could not be read, the figure says how many it covers (Codex, #37).
+  const answers = [...live.values()];
+  const todays = answers.flatMap((l) =>
     l.overview?.sales == null ? [] : [l.overview.sales.today.orders],
   );
   const ordersToday = todays.reduce((n, o) => n + o, 0);
+  const waiting = answers.some((l) => l.overview === undefined && l.error === null);
+  const covered = String(todays.length);
+  const asking = String(answers.length);
 
   return (
     <>
@@ -267,8 +273,14 @@ function Shops({
             ) : null}
             <Figure
               label={<Trans>Orders today</Trans>}
-              value={<N>{todays.length === 0 ? "—" : String(ordersToday)}</N>}
-              note={<Trans>across the shops</Trans>}
+              value={<N>{waiting ? "…" : todays.length === 0 ? "—" : String(ordersToday)}</N>}
+              note={
+                !waiting && todays.length > 0 && todays.length < answers.length ? (
+                  t`from ${covered} of ${asking} shops`
+                ) : (
+                  <Trans>across the shops</Trans>
+                )
+              }
             />
           </Figures>
         }

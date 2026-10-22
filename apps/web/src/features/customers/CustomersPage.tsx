@@ -57,12 +57,16 @@ export function CustomersPage() {
   const lowOnly = shopId !== undefined && lowFor === shopId;
   const reviews = useQuery({ ...reviewsQuery(api, shopId ?? ""), enabled: shopId !== undefined });
   const data = reviews.data;
-  const low = (data?.items ?? []).filter((r) => r.rating <= LOW).length;
-  const five = (data?.items ?? []).filter((r) => r.rating === 5).length;
-  const share =
-    data === undefined || data.items.length === 0
-      ? "—"
-      : `${String(Math.round((five / data.items.length) * 100))}%`;
+  // The shares come from the server's distribution of the newest reviews (its sample), not from
+  // the few review texts it sends (Codex, #37); the filter works on those texts.
+  const stars = (n: (s: number) => boolean) =>
+    (data?.distribution ?? []).filter((d) => n(d.stars)).reduce((sum, d) => sum + d.count, 0);
+  const sample = data?.sample_size ?? 0;
+  const low = stars((s) => s <= LOW);
+  const five = stars((s) => s === 5);
+  const lowShown = (data?.items ?? []).filter((r) => r.rating <= LOW).length;
+  const share = sample === 0 ? "—" : `${String(Math.round((five / sample) * 100))}%`;
+  const newest = count(sample);
 
   return (
     <>
@@ -115,17 +119,18 @@ export function CustomersPage() {
               <Figure
                 label={<Trans>Five stars</Trans>}
                 value={<N>{share}</N>}
-                note={<Trans>of the newest reviews</Trans>}
+                note={t`of the newest ${newest}`}
               />
               <Figure
                 label={<Trans>Three stars or fewer</Trans>}
                 value={<N>{data === undefined ? "—" : count(low)}</N>}
                 tone={low > 0 ? "tertiary" : undefined}
+                note={t`of the newest ${newest}`}
               />
             </Figures>
           }
           actions={
-            low > 0 || lowOnly ? (
+            lowShown > 0 || lowOnly ? (
               <Button
                 variant={lowOnly ? "secondary" : "primary"}
                 size="lg"
