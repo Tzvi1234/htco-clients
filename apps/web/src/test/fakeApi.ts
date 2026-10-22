@@ -1,6 +1,6 @@
 import { createApiClient, type ApiClient, type components } from "@htco/api-client";
 
-import { fakeShopData } from "./fakeShopData.ts";
+import { fakeShopData, type FakePeriod } from "./fakeShopData.ts";
 
 type IntegrationView = components["schemas"]["IntegrationView"];
 type CapabilityView = components["schemas"]["CapabilityView"];
@@ -69,10 +69,19 @@ export interface FakeState {
   /**
    * The shops' live Etsy data (`GET /v1/shops/{id}/overview|orders|…`): "unavailable" answers
    * 503 etsy-data-unavailable, "stale" marks the data stale, "quiet" is a shop without orders,
-   * "hang" never answers.
+   * "hang" never answers, "history" is a shop whose orders are all older than 30 days (the
+   * owner's live shop), "partial" says a read was cut at its cap.
    */
   liveTrouble?:
-    "unavailable" | "stale" | "quiet" | "hang" | "partial" | "no-sales" | "truncated" | undefined;
+    | "unavailable"
+    | "stale"
+    | "quiet"
+    | "hang"
+    | "partial"
+    | "no-sales"
+    | "truncated"
+    | "history"
+    | undefined;
   /** Workspaces whose shop list answers 500. */
   shopsFailFor?: string[];
   /** True: the shops are busy, 160 orders in 30 days (more than one page of 100). */
@@ -395,9 +404,8 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
       return json(200, disconnected);
     }
 
-    const live = /^GET \/v1\/shops\/([^/]+)\/(overview|orders|listings|reviews|shipping)$/.exec(
-      route,
-    );
+    const live =
+      /^GET \/v1\/shops\/([^/]+)\/(overview|orders|listings|reviews|shipping|stats)$/.exec(route);
     if (live !== null) return liveData(live[1] ?? "", live[2] ?? "", url);
 
     switch (route) {
@@ -522,7 +530,14 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
     if (trouble === "hang") return new Promise<Response>(() => undefined);
     if (trouble === "unavailable") return problem(503, "etsy-data-unavailable");
     const contact = state.role === "owner" || state.role === "admin" || state.role === "support";
-    const data = fakeShopData(shopId, shop.name, Date.now(), contact, state.liveBusy === true);
+    const data = fakeShopData(
+      shopId,
+      shop.name,
+      Date.now(),
+      contact,
+      state.liveBusy === true,
+      trouble !== "history",
+    );
     const mark = <T extends { stale: boolean; fetched_at: string }>(body: T): T =>
       trouble === "stale"
         ? { ...body, stale: true, fetched_at: new Date(Date.now() - 40 * 60_000).toISOString() }
@@ -533,6 +548,7 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
         const none = { orders: 0, units: 0, revenue: { amount: "0.00", currency: "USD" } };
         return json(200, {
           ...overview,
+          profile: { ...overview.profile, sold_count: 0 },
           sales: {
             ...overview.sales,
             today: none,
@@ -548,10 +564,13 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
       return json(200, trouble === "no-sales" ? { ...overview, sales: null } : overview);
     }
     if (view === "orders") {
+      const period = url.searchParams.get("period") ?? "30d";
+      if (!["30d", "90d", "12m", "all"].includes(period)) return problem(422, "validation-error");
       const page = data.ordersFor(
         url.searchParams.get("state"),
         Number(url.searchParams.get("limit") ?? "50"),
         Number(url.searchParams.get("offset") ?? "0"),
+        period as FakePeriod,
       );
       if (trouble === "quiet")
         return json(200, {
@@ -578,6 +597,35 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
         ),
       );
     if (view === "reviews") return json(200, mark(data.reviews));
+    if (view === "stats") {
+      if (trouble === "quiet")
+        return json(200, {
+          ...data.stats(),
+          profile: { ...data.overview.profile, sold_count: 0 },
+          sales: {
+            ...data.stats().sales,
+            orders: 0,
+            units: 0,
+            revenue: { amount: "0.00", currency: "USD" },
+            average_order_value: null,
+            monthly: [],
+            best_month: null,
+            top_products: [],
+            countries: [],
+            first_order_at: null,
+            receipts_read: 0,
+          },
+        });
+      const stats = data.stats(trouble === "partial" ? 120 : undefined);
+      return json(
+        200,
+        mark(
+          trouble === "partial" && stats.sales !== null
+            ? { ...stats, sales: { ...stats.sales, partial: true } }
+            : stats,
+        ),
+      );
+    }
     return json(200, mark(data.shipping));
   }
 
