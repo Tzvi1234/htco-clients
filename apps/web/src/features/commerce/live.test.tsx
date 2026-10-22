@@ -1,5 +1,5 @@
 import { createMemoryHistory } from "@tanstack/react-router";
-import { render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
@@ -190,6 +190,23 @@ describe("Products, live from Etsy", () => {
       "rel",
       "noopener noreferrer",
     );
+  });
+
+  it("shows each listing's real photo, lazily, and a letter tile when it cannot load", async () => {
+    await open("/commerce/products");
+    const catalog = await panel("Catalog");
+    const mug = within(catalog).getByRole("button", { name: /Stoneware mug with your name/ });
+    const photo = mug.querySelector("img");
+
+    expect(photo).not.toBeNull();
+    expect(photo?.getAttribute("src")).toMatch(/^data:image\/svg\+xml/);
+    expect(photo).toHaveAttribute("loading", "lazy");
+    expect(photo).toHaveAttribute("referrerpolicy", "no-referrer");
+
+    fireEvent.error(photo as HTMLImageElement);
+
+    expect(mug.querySelector("img")).toBeNull();
+    expect(within(mug).getByText("S")).toBeInTheDocument();
   });
 
   it("filters by section", async () => {

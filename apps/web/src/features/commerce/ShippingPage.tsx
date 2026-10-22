@@ -4,10 +4,12 @@ import type { ReactNode } from "react";
 
 import { ORDER_STATE_GLYPH, shownState, useOrderStates } from "./OrdersPage.tsx";
 import {
+  ListingPhoto,
   LiveNote,
   LiveProblem,
   LiveSkeleton,
   NoShopYet,
+  listingsQuery,
   ordersQuery,
   overviewQuery,
   shippingQuery,
@@ -85,6 +87,10 @@ function Shipping({ shopId, chips }: { shopId: string; chips: ReactNode }) {
   const orders = useQuery(ordersQuery(api, shopId));
   const overview = useQuery(overviewQuery(api, shopId));
   const shipping = useQuery(shippingQuery(api, shopId));
+  const listings = useQuery(listingsQuery(api, shopId));
+  const photos = new Map(
+    (listings.data?.items ?? []).map((l) => [l.listing_id, l.thumbnail_url] as const),
+  );
   const all = orders.data?.items ?? [];
   const toShip = all.filter((o) => o.state === "paid");
   const shipped = all.filter((o) => o.state === "shipped" && o.shipments.length > 0);
@@ -100,11 +106,23 @@ function Shipping({ shopId, chips }: { shopId: string; chips: ReactNode }) {
     },
     {
       header: t`Items`,
-      cell: (o) => (
-        <span dir="auto" className="block max-w-[220px] truncate">
-          {o.items[0]?.title ?? "—"}
-        </span>
-      ),
+      cell: (o) => {
+        const [first] = o.items;
+        if (first === undefined) return <span className="text-muted">—</span>;
+        return (
+          <span className="inline-flex min-w-0 items-center gap-2">
+            <ListingPhoto
+              src={first.listing_id === null ? null : photos.get(first.listing_id)}
+              title={first.title}
+              size={24}
+              className="rounded-[6px]"
+            />
+            <span dir="auto" className="block max-w-[200px] truncate">
+              {first.title}
+            </span>
+          </span>
+        );
+      },
     },
     {
       header: t`Status`,

@@ -27,7 +27,7 @@ Loading skeletons (`aria-busy`), no shop connected (a link to Shops), a shop wit
 
 - Buyer names and tracking numbers come only when the API sends them (Owner, Admin, Operations, Support); the client does not decide.
 - Money is formatted symbol first in the shop's currency (`$1,284.50`) and kept left-to-right in `N`; numbers stand apart from their Hebrew labels; English listing titles and reviews carry `dir="auto"`.
-- Listing photos load from Etsy's image host: the CSP allows `img-src https://i.etsystatic.com` and nothing else from outside; the referrer stays on this site, and a photo that cannot load falls back to the title's first letter.
+- Listing photos (`url_170x135` for strips and rows, `url_570xN` for cards and details) are hot-linked from Etsy's image host, lazy, in fixed squares that pulse until they arrive, never proxied or stored: the CSP allows `img-src https://i.etsystatic.com` and nothing else from outside; the referrer stays on this site, and a photo that cannot load falls back to the title's first letter.
 - Phase 5 swaps the orders source to HTCO's store; the answers keep their shape, so only the "Live from Etsy" label changes.
 
 ## Demo and tests

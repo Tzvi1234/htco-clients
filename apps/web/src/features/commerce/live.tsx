@@ -343,7 +343,8 @@ export function LiveSkeleton({ rows = 4, label }: { rows?: number; label: string
 /* ------------------------------------------------------------------ pictures */
 
 /**
- * A listing's photo from Etsy's image host; when it cannot load (blocked, gone), a calm tile
+ * A listing's photo, hot-linked from Etsy's image host (never proxied or stored): lazy, in a
+ * fixed square that pulses until it arrives; when it cannot load (blocked, gone), a calm tile
  * with the title's first letter takes its place.
  */
 export function ListingPhoto({
@@ -360,6 +361,8 @@ export function ListingPhoto({
   className?: string;
 }) {
   const [failed, setFailed] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+  // A fixed square box: nothing moves when the photo arrives; it pulses until then.
   const style = { width: size, height: size };
   if (src === null || src === undefined || failed)
     return (
@@ -383,7 +386,14 @@ export function ListingPhoto({
       referrerPolicy="no-referrer"
       draggable={false}
       style={style}
-      className={cx("shrink-0 rounded-card bg-raised object-cover", className)}
+      className={cx(
+        "shrink-0 rounded-card bg-hover object-cover",
+        !loaded && "motion-safe:animate-pulse",
+        className,
+      )}
+      onLoad={() => {
+        setLoaded(true);
+      }}
       onError={() => {
         setFailed(true);
       }}
