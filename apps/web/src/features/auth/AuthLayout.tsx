@@ -1,4 +1,4 @@
-import { Trans, useLingui } from "@lingui/react/macro";
+import { useLingui } from "@lingui/react/macro";
 import "./auth.css";
 import type { ReactNode } from "react";
 
@@ -8,8 +8,6 @@ import parcel from "../../assets/hero/hero10.webp";
 import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
 import { cx } from "../../shared/lib/cx.ts";
 import { useTweaks } from "../../shared/theme/ThemeProvider.tsx";
-import { Ltr } from "../../shared/ui/Ltr.tsx";
-import { DemoTag } from "../../shared/ui/kit/index.ts";
 import { Logo } from "../../shared/ui/Logo.tsx";
 import { Segmented } from "../../shared/ui/Segmented.tsx";
 
@@ -18,7 +16,9 @@ import { Segmented } from "../../shared/ui/Segmented.tsx";
  * The form panel sits on the physical left and the office render on the right in both languages
  * (the owner's choice), so the grid itself is left-to-right and each panel keeps the page's
  * direction inside. The render is a large crop that bleeds off the panel's outer edge, slightly
- * turned; phones show the form panel alone.
+ * turned, and nothing is laid over it (round 3: the demo's caption and office numbers are gone);
+ * phones show the form panel alone. Motion (auth.css): the render glides in from the outer edge
+ * out of a soft blur, and the form's parts rise one after another.
  */
 export function AuthLayout({
   eyebrow,
@@ -49,13 +49,17 @@ export function AuthLayout({
       className="grid min-h-dvh gap-2 p-2 md:h-dvh md:min-h-[700px] md:grid-cols-[minmax(400px,480px)_minmax(0,1fr)]"
     >
       <div dir={dir} className="contents">
-        <main className="glass relative flex min-h-[calc(100dvh-16px)] min-w-0 flex-col overflow-hidden rounded-panel border border-edge bg-panel shadow-panel md:min-h-0">
+        <main
+          // Its own snapshot when one sign-in step leads to the next (styles.css).
+          data-vt="screen"
+          className="relative flex min-h-[calc(100dvh-16px)] min-w-0 flex-col overflow-hidden rounded-panel border border-edge bg-panel shadow-panel md:min-h-0"
+        >
           <AuthTopBar />
           {step === 1 || alert ? <PhoneArt art={art} /> : null}
           <div className="flex grow flex-col justify-center px-6 pb-10 sm:px-12 sm:pb-12">
             <div
               role={alert ? "alert" : undefined}
-              className="mx-auto flex w-full max-w-[384px] animate-enter flex-col gap-6"
+              className="auth-stagger mx-auto flex w-full max-w-[384px] flex-col gap-6"
             >
               <header className="flex flex-col text-start">
                 {eyebrow === undefined ? null : (
@@ -138,7 +142,7 @@ function StepDots({ step }: { step: 1 | 2 }) {
           key={dot}
           aria-hidden="true"
           className={cx(
-            "h-1.5 rounded-pill transition-[width,background-color] duration-[var(--motion-duration-slow)] ease-standard",
+            "h-1.5 rounded-pill transition-[width,background-color] duration-[var(--motion-duration-expand)] ease-spring",
             dot === step ? "w-4 bg-inverse" : "w-1.5 bg-faint",
           )}
         />
@@ -147,40 +151,20 @@ function StepDots({ step }: { step: 1 | 2 }) {
   );
 }
 
-/** The right panel: "Your office" with its caption, the render bleeding off the outer edge, and the demo's office numbers under it. */
+/**
+ * The right panel: the office render alone, bleeding off the outer edge. It is a picture of the
+ * office to come, so no figures or captions sit on it (the owner's round 3 brief).
+ */
 function AuthArt({ art }: { art: "office" | "parcel" }) {
   const { t } = useLingui();
   const { tweaks } = useTweaks();
   const src = art === "parcel" ? parcel : tweaks.palette === "d4" ? officeD4 : office;
-  // The demo's four office numbers. The office is planned, not built, so before sign-in they
-  // are the demo's own figures: dimmed and labelled "Demo".
-  const kpis = [
-    { label: t`Running now`, value: "3" },
-    { label: t`Waiting for you`, value: "3" },
-    { label: t`Orders today`, value: "37" },
-    { label: t`Uptime`, value: "99.8%" },
-  ];
   return (
     <aside
       aria-label={art === "office" ? t`Your office` : undefined}
       aria-hidden={art === "office" ? undefined : true}
-      className="glass relative hidden min-h-0 min-w-0 flex-col overflow-hidden rounded-panel border border-edge bg-panel shadow-panel md:flex"
+      className="relative hidden min-h-0 min-w-0 flex-col overflow-hidden rounded-panel border border-edge bg-panel shadow-panel md:flex"
     >
-      {/* Separate isolated pieces, so the caption reads in order in both directions. */}
-      <header className="relative z-10 flex h-14 shrink-0 items-center gap-2.5 ps-6 pe-2">
-        {art === "office" ? (
-          <>
-            <h2 className="m-0 text-body-sm font-normal whitespace-nowrap">
-              <Trans>Your office</Trans>
-            </h2>
-            <p className="m-0 flex min-w-0 items-center gap-1.5 truncate text-caption font-light text-muted">
-              <bdi>{t`16 AI employees`}</bdi>
-              <span aria-hidden="true">·</span>
-              <bdi>{t`7 departments`}</bdi>
-            </p>
-          </>
-        ) : null}
-      </header>
       <div dir="ltr" className="relative min-h-0 grow" aria-hidden="true">
         {/* Left-to-right on purpose: the render always leaves through the screen's right edge. */}
         <img
@@ -189,34 +173,10 @@ function AuthArt({ art }: { art: "office" | "parcel" }) {
           draggable={false}
           className={cx(
             "auth-art pointer-events-none absolute max-w-none select-none",
-            art === "parcel"
-              ? "top-1/2 inset-e-[-6%] w-[78%]"
-              : "top-[54%] inset-e-[-22%] w-[116%]",
+            art === "parcel" ? "top-1/2 inset-e-[-6%] w-[78%]" : "top-1/2 inset-e-[-22%] w-[116%]",
           )}
         />
       </div>
-      {art === "office" ? (
-        <div className="relative z-10 shrink-0 border-t border-line">
-          <DemoTag className="absolute -top-2.5 inset-s-6 z-10" />
-          <dl className="m-0 grid grid-cols-4 opacity-55 saturate-50">
-            {kpis.map((kpi, index) => (
-              <div
-                key={kpi.label}
-                className={cx(
-                  "auth-fact flex flex-col-reverse items-center px-3 pt-4 pb-5 text-center",
-                  index > 0 && "border-s border-line",
-                )}
-                style={{ animationDelay: `${String(240 + index * 60)}ms` }}
-              >
-                <dd className="m-0 text-number-lg font-light tracking-[-0.01em] tabular">
-                  <Ltr mono={false}>{kpi.value}</Ltr>
-                </dd>
-                <dt className="truncate text-caption font-light text-muted">{kpi.label}</dt>
-              </div>
-            ))}
-          </dl>
-        </div>
-      ) : null}
     </aside>
   );
 }

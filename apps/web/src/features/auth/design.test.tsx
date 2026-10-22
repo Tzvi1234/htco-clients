@@ -52,11 +52,14 @@ describe("the sign-in screens (Design 1C)", () => {
     expect(password.compareDocumentPosition(link) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 
-  it("labels the office numbers before sign-in as a demo", async () => {
+  it("shows the office render clean, with no demo numbers or captions over it (round 3)", async () => {
     await open("/sign-in");
     const office = screen.getByRole("complementary", { name: "Your office" });
-    expect(within(office).getByText("Demo")).toBeInTheDocument();
-    expect(within(office).getByText("16 AI employees")).toBeInTheDocument();
+    expect(office.querySelector("img")).not.toBeNull();
+    expect(office).toHaveTextContent("");
+    expect(within(office).queryByText("Demo")).not.toBeInTheDocument();
+    expect(within(office).queryByText("16 AI employees")).not.toBeInTheDocument();
+    expect(office.querySelector("dl, h2")).toBeNull();
   });
 });
 

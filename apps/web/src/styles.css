@@ -344,9 +344,14 @@
   }
 }
 
-::view-transition-old(root),
+/* What stays (the navigation, the top bar) is the same in both pictures; the title in the top
+   bar and pages without a screen snapshot (sign-in, the landing page) cross-fade. */
+::view-transition-old(root) {
+  animation: htco-fade-out var(--motion-duration-fast) var(--motion-easing-exit) both;
+}
+
 ::view-transition-new(root) {
-  animation: none;
+  animation: htco-enter-fade var(--motion-duration-base) var(--motion-easing-out) both;
 }
 
 ::view-transition-old(screen) {
