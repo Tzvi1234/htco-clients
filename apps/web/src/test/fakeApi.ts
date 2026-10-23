@@ -96,6 +96,9 @@ export interface FakeState {
    * False or unset: read live from Etsy, as before the history is complete.
    */
   orderStore?: boolean;
+  /** The Orders screen's bulk actions (slice 5.7): each export's body, each re-sync's IDs. */
+  exports: unknown[];
+  resyncs: number[][];
 }
 
 const PROBLEMS = "https://ht-co.app/problems/";
@@ -267,6 +270,8 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
     disconnects: [],
     removals: [],
     recheckTooSoon: false,
+    exports: [],
+    resyncs: [],
     ...initial,
   };
   const requests: Request[] = [];
@@ -437,6 +442,44 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
       return new Response(null, { status: 204 });
     }
 
+    const bulk = /^POST \/v1\/shops\/([^/]+)\/orders\/(export|resync)$/.exec(route);
+    if (bulk !== null) {
+      const shop = state.shops.find((s) => s.id === bulk[1]);
+      if (shop === undefined) return problem(404, "not-found");
+      if (bulk[2] === "resync") {
+        if (!(state.role === "owner" || state.role === "admin"))
+          return problem(403, "orders-action-forbidden");
+        const ids = Array.isArray(body["order_ids"]) ? (body["order_ids"] as number[]) : [];
+        state.resyncs.push(ids);
+        return json(202, { queued: new Set(ids).size });
+      }
+      state.exports.push(body);
+      const contact = state.role === "owner" || state.role === "admin" || state.role === "support";
+      const every = fakeShopData(shop.id, shop.name, Date.now(), contact).ordersFor(
+        null,
+        10_000,
+        0,
+        (body["period"] as FakePeriod | undefined) ?? "30d",
+      ).items;
+      const chosen = Array.isArray(body["order_ids"]) ? (body["order_ids"] as number[]) : [];
+      const rows = every.filter((o) => chosen.length === 0 || chosen.includes(o.order_id));
+      const head = contact ? "order,state,total,buyer_name" : "order,state,total";
+      const text = [
+        head,
+        ...rows.map((o) =>
+          [o.order_id, o.state, o.total.amount, ...(contact ? [o.buyer ?? ""] : [])].join(","),
+        ),
+      ].join("\r\n");
+      return new Response(text, {
+        status: 200,
+        headers: {
+          "content-type": "text/csv; charset=utf-8",
+          "content-disposition": 'attachment; filename="orders-30d.csv"',
+          "x-orders-exported": String(rows.length),
+          "cache-control": "no-store",
+        },
+      });
+    }
     const one = /^GET \/v1\/shops\/([^/]+)\/orders\/(\d+)$/.exec(route);
     if (one !== null) return orderDetail(one[1] ?? "", Number(one[2]));
     const live =

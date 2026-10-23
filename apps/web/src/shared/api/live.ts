@@ -121,6 +121,40 @@ export function orderQuery(api: ApiClient, shopId: string, orderId: number) {
   });
 }
 
+/** The Orders screen's export (slice 5.7): a CSV made by the server, audited there. */
+export async function exportOrders(
+  api: ApiClient,
+  shopId: string,
+  body: { period: OrderPeriod; state?: OrderFilter | undefined; order_ids?: number[] },
+): Promise<{ blob: Blob; filename: string; count: number }> {
+  const { data, error, response } = await api.POST("/v1/shops/{shop_id}/orders/export", {
+    params: { path: { shop_id: shopId } },
+    body: {
+      period: body.period,
+      ...(body.state === undefined ? {} : { state: body.state }),
+      order_ids: body.order_ids ?? [],
+    },
+    parseAs: "blob",
+  });
+  if (data === undefined) throw apiError(response, error);
+  const named = /filename="([^"]+)"/.exec(response.headers.get("content-disposition") ?? "");
+  return {
+    blob: data,
+    filename: named?.[1] ?? "orders.csv",
+    count: Number(response.headers.get("x-orders-exported") ?? "0"),
+  };
+}
+
+/** "Re-sync selected" (slice 5.7): one queued re-read from Etsy per order; how many queued. */
+export async function resyncOrders(api: ApiClient, shopId: string, ids: number[]): Promise<number> {
+  const { data, error, response } = await api.POST("/v1/shops/{shop_id}/orders/resync", {
+    params: { path: { shop_id: shopId } },
+    body: { order_ids: ids },
+  });
+  if (data === undefined) throw apiError(response, error);
+  return data.queued;
+}
+
 /** The shop's statistics since it opened (Shops › Statistics): aggregates only, no buyer data. */
 export function statsQuery(api: ApiClient, shopId: string) {
   return queryOptions({

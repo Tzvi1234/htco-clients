@@ -6,7 +6,7 @@ import { Dialog, Input, Modal, ModalOverlay, SearchField } from "react-aria-comp
 
 import { RefundChip, RefundDetails } from "./refunds.tsx";
 import { OrderTimeline } from "./timeline.tsx";
-import { useApi } from "../../shared/api/api.tsx";
+import { ApiError, useApi } from "../../shared/api/api.tsx";
 import { cx } from "../../shared/lib/cx.ts";
 import { PHONE_QUERY, useMediaQuery } from "../../shared/lib/useMediaQuery.ts";
 import { Banner } from "../../shared/ui/Banner.tsx";
@@ -35,9 +35,11 @@ import {
 } from "../../shared/ui/kit/index.ts";
 import { LiveProblem, ShopReconnectBanner, NoShopYet } from "../shops/index.ts";
 import {
+  exportOrders,
   listingsQuery,
   orderQuery,
   ordersQuery,
+  resyncOrders,
   overviewQuery,
   useLiveShop,
   type OrderFilter,
@@ -185,6 +187,16 @@ function Orders({
   const [shown, setShown] = useState(step);
   const [open, setOpen] = useState<ShopOrder | null>(null);
   const [search, setSearch] = useState("");
+  const [selected, setSelected] = useState<ReadonlySet<number>>(new Set());
+  const bulk = useBulk(shopId);
+  const toggle = (id: number) => {
+    setSelected((was) => {
+      const next = new Set(was);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
   const choose = (f: OrderFilter | "all") => {
     setFilter(f);
     setShown(step);
@@ -218,7 +230,33 @@ function Orders({
   const week = overview.data?.sales?.daily.slice(-7) ?? [];
   const weekdays = week.map((d) => String(Number(d.date.slice(8, 10))));
 
+  const shownIds = orders.slice(0, shown).map((o) => o.order_id);
+  const allShown = shownIds.length > 0 && shownIds.every((id) => selected.has(id));
   const columns: { header: ReactNode; cell: (o: ShopOrder) => ReactNode }[] = [
+    {
+      header: (
+        <input
+          type="checkbox"
+          className="size-4 accent-current"
+          checked={allShown}
+          aria-label={t`Select every order shown`}
+          onChange={() => {
+            setSelected(allShown ? new Set() : new Set(shownIds));
+          }}
+        />
+      ),
+      cell: (o) => (
+        <input
+          type="checkbox"
+          className="size-4 accent-current"
+          checked={selected.has(o.order_id)}
+          aria-label={t`Select order ${String(o.order_id)}`}
+          onChange={() => {
+            toggle(o.order_id);
+          }}
+        />
+      ),
+    },
     {
       header: t`Order`,
       cell: (o) => (
@@ -516,7 +554,43 @@ function Orders({
               </>
             )
           }
+          actions={
+            <div className="flex flex-wrap items-center gap-2">
+              <Button
+                isDisabled={bulk.busy || all.data === undefined}
+                onPress={() =>
+                  void bulk.exportCsv({
+                    period,
+                    state: filter === "all" ? undefined : filter,
+                    // The selection, or what the search narrowed the list to.
+                    order_ids:
+                      selected.size > 0
+                        ? [...selected]
+                        : search.trim() === ""
+                          ? []
+                          : orders.map((o) => o.order_id),
+                  })
+                }
+              >
+                {selected.size > 0 ? t`Export ${count(selected.size)} selected` : t`Export to CSV`}
+              </Button>
+              <Button
+                isDisabled={bulk.busy || selected.size === 0}
+                onPress={() => void bulk.resync([...selected])}
+              >
+                {t`Re-sync selected`}
+              </Button>
+            </div>
+          }
         />
+        {bulk.said === null ? null : (
+          <p
+            role={bulk.said.ok ? "status" : "alert"}
+            className="m-0 px-6 pb-3 text-body-sm text-secondary"
+          >
+            {bulk.said.text}
+          </p>
+        )}
         {all.isError ? (
           <LiveProblem error={all.error} onRetry={() => void all.refetch()} />
         ) : all.data === undefined ? (
@@ -560,7 +634,7 @@ function Orders({
                 flow
                 label={t`Orders`}
                 head={columns.map((c) => c.header)}
-                ends={[3]}
+                ends={[4]}
                 rows={orders.slice(0, shown).map((o) => ({
                   key: String(o.order_id),
                   ...(o.overdue ? { className: "k-row-late" } : {}),
@@ -600,6 +674,62 @@ function Orders({
       )}
     </>
   );
+}
+
+/** The Orders screen's bulk actions (slice 5.7): the server makes the CSV and queues re-reads. */
+function useBulk(shopId: string) {
+  const { t } = useLingui();
+  const api = useApi();
+  const count = useCount();
+  const [busy, setBusy] = useState(false);
+  const [said, setSaid] = useState<{ ok: boolean; text: string } | null>(null);
+  const failed = (error: unknown): string => {
+    const type = error instanceof ApiError ? error.type : undefined;
+    return type === "orders-action-forbidden"
+      ? t`Your role may see these orders but not re-sync them.`
+      : type === "resync-rate-limited"
+        ? t`These orders were re-synced moments ago. Try again in a minute.`
+        : type === "orders-bulk-unavailable"
+          ? t`This is not available on this server yet.`
+          : t`That did not work. Try again shortly.`;
+  };
+  return {
+    busy,
+    said,
+    exportCsv: async (body: Parameters<typeof exportOrders>[2]) => {
+      setBusy(true);
+      setSaid(null);
+      try {
+        const file = await exportOrders(api, shopId, body);
+        const url = URL.createObjectURL(file.blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = file.filename;
+        link.click();
+        URL.revokeObjectURL(url);
+        setSaid({ ok: true, text: t`Exported ${count(file.count)} orders.` });
+      } catch (error) {
+        setSaid({ ok: false, text: failed(error) });
+      } finally {
+        setBusy(false);
+      }
+    },
+    resync: async (ids: number[]) => {
+      setBusy(true);
+      setSaid(null);
+      try {
+        const queued = await resyncOrders(api, shopId, ids);
+        setSaid({
+          ok: true,
+          text: t`${count(queued)} orders queued to be read again from Etsy.`,
+        });
+      } catch (error) {
+        setSaid({ ok: false, text: failed(error) });
+      } finally {
+        setBusy(false);
+      }
+    },
+  };
 }
 
 /**
