@@ -690,7 +690,7 @@ html:not(:active-view-transition-type(same-area)) [data-vt="nav-current"] {
     letter-spacing: normal;
   }
 
-  :root:lang(he) :is(.text-caption, .text-\[11px\], .text-\[12px\]).font-light {
+  :root:lang(he) :is(.text-caption, .text-\[12px\]).font-light {
     font-weight: 350;
   }
 

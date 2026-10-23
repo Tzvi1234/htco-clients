@@ -89,7 +89,7 @@ export function CommandMenu() {
                 placeholder={t`Search screens and actions…`}
                 className="h-full grow bg-transparent text-[15px] text-primary outline-none placeholder:text-muted [&::-webkit-search-cancel-button]:hidden"
               />
-              <kbd className="inline-flex h-[18px] items-center rounded-control border border-line-strong px-[5px] font-latin text-[11px] text-muted">
+              <kbd className="inline-flex h-[18px] items-center rounded-control border border-line-strong px-[5px] font-latin text-caption text-muted">
                 Esc
               </kbd>
             </SearchField>
@@ -106,7 +106,7 @@ export function CommandMenu() {
             >
               {(section) => (
                 <MenuSection id={section.id}>
-                  <Header className="px-4 pt-2 pb-1 text-[11px] font-light text-muted">
+                  <Header className="px-4 pt-2 pb-1 text-caption font-light text-muted">
                     {section.name}
                   </Header>
                   <Collection items={section.items}>
