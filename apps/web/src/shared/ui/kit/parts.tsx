@@ -9,7 +9,6 @@ import {
 } from "react";
 import { SwitchButton, SwitchField } from "react-aria-components";
 
-import { TrendGlyph } from "./glyphs.tsx";
 import { cx } from "../../lib/cx.ts";
 import { REDUCED_MOTION_QUERY } from "../../lib/useMediaQuery.ts";
 
@@ -528,51 +527,6 @@ export function ListRow({
         )}
       </div>
       {end}
-    </div>
-  );
-}
-
-/** The four numbers under a hero (`.kpis`); phones scroll them sideways. */
-export function Kpis({ children, label }: { children: ReactNode; label?: string }) {
-  return (
-    <div
-      role="list"
-      aria-label={label}
-      // Phones scroll the numbers sideways: the region takes focus so keys can scroll it.
-      tabIndex={0}
-      className="grid grid-cols-4 border-t border-line outline-none focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus max-sm:flex max-sm:snap-x max-sm:snap-mandatory max-sm:overflow-x-auto max-sm:[scrollbar-width:none]"
-    >
-      {children}
-    </div>
-  );
-}
-
-export function Kpi({
-  label,
-  value,
-  delta,
-  trend,
-}: {
-  label: ReactNode;
-  value: ReactNode;
-  delta?: ReactNode;
-  trend?: "up" | "down";
-}) {
-  return (
-    <div
-      role="listitem"
-      className="min-w-0 px-6 pt-4 pb-5 text-center max-lg:px-2.5 max-sm:shrink-0 max-sm:basis-[42%] max-sm:snap-start [&+&]:border-s [&+&]:border-line"
-    >
-      <div className="text-caption font-light text-muted">{label}</div>
-      <div className="font-display text-number-lg leading-[1.3] font-light tracking-[-0.01em]">
-        {value}
-      </div>
-      {delta === undefined ? null : (
-        <div className="inline-flex items-center gap-1 text-caption whitespace-nowrap text-secondary">
-          {trend === undefined ? null : <TrendGlyph up={trend === "up"} />}
-          {delta}
-        </div>
-      )}
     </div>
   );
 }

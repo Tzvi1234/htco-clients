@@ -23,7 +23,7 @@ apps/web/src/
   features/           overview, shops, settings
   shared/i18n/        locale (pure), i18n (Lingui catalogs), LocaleProvider (Lingui + React Aria + <html lang dir>)
   shared/theme/       theme (pure), ThemeProvider (<html data-theme>)
-  shared/ui/          Button, IconButton, StatusDot, Ltr, EmptyState, ErrorState, Banner, Logo, PageHeader
+  shared/ui/          Button, Ltr, EmptyState, ErrorState, Banner, Logo, PageHeader
   shared/lib/         storage (guarded localStorage), useOnline, cx
   locales/{en,he}/    messages.po
 ```
@@ -47,7 +47,7 @@ apps/web/src/
                       Toast (ToastProvider, useToast), icons (the prototype's glyphs), Logo
   shared/ui/kit/      the screen kit, one module per family, imported from kit/index.ts:
                       layout (Screen grids l3 … lc3s, Stack), parts (CircleButton, InkDisc, Pill, Chip,
-                      Dot, IdBlock, KV, KV2, SectionLabel, Chip (tone, size), TEXT_LINK, Card, Tile, CountUp, Toggle, ListRow, Kpis,
+                      Dot, IdBlock, KV, KV2, SectionLabel, Chip (tone, size), TEXT_LINK, Card, Tile, CountUp, Toggle, ListRow,
                       Typing, N), status (StatusGlyph, Status, the nine statuses), avatar (Avatar, Who,
                       Avatars), charts/ (BarChart, LineChart, HBarList,
                       ProgressBar), dotted (Matrix, DotBar: Demo screens only), table (DataTable), strip (Strip,
