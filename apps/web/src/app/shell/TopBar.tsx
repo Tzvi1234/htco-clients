@@ -78,11 +78,11 @@ export function TopBar({
         "border-b border-transparent transition-[border-color,padding] duration-[var(--motion-duration-base)] ease-standard data-[scrolled]:border-line",
         phone
           ? cx(
-              "sticky top-0 z-20 min-h-[60px] ps-4 pe-3 pt-[max(8px,env(safe-area-inset-top))] pb-2",
+              "sticky top-0 z-sticky min-h-[60px] ps-4 pe-3 pt-[max(8px,env(safe-area-inset-top))] pb-2",
               "data-[scrolled]:pb-1.5",
               "[&_h1]:transition-[font-size] [&_h1]:duration-[var(--motion-duration-base)] data-[scrolled]:[&_h1]:text-title-sm data-[scrolled]:[&_h1]:font-normal",
             )
-          : cx("h-[72px] ps-6 pe-4", pageScroll ? "sticky top-0 z-20" : "relative"),
+          : cx("h-[72px] ps-6 pe-4", pageScroll ? "sticky top-0 z-sticky" : "relative"),
       )}
     >
       <div className="flex min-w-0 flex-col gap-0.5">

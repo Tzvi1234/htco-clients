@@ -52,7 +52,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         aria-atomic="true"
         data-shown={toast.shown || undefined}
         className={cx(
-          "pointer-events-none fixed inset-s-1/2 bottom-24 z-60 flex h-10 -translate-x-1/2 items-center gap-2 rounded-pill bg-inverse px-5 text-body-sm text-on-inverse sm:bottom-6 rtl:translate-x-1/2",
+          "pointer-events-none fixed inset-s-1/2 bottom-24 z-toast flex h-10 -translate-x-1/2 items-center gap-2 rounded-pill bg-inverse px-5 text-body-sm text-on-inverse sm:bottom-6 rtl:translate-x-1/2",
           "opacity-0 transition-[opacity,translate] duration-[var(--motion-duration-base)] ease-standard",
           "data-[shown]:opacity-100",
           !toast.shown && "translate-y-2",

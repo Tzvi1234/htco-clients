@@ -352,7 +352,7 @@ function ConfirmRemove({
       onOpenChange={(open) => {
         if (!open) close();
       }}
-      className="fixed inset-0 z-50 flex items-start justify-center bg-[color-mix(in_srgb,var(--bg-ground)_60%,transparent)] px-4 pt-[14vh] data-[entering]:animate-enter"
+      className="fixed inset-0 z-overlay flex items-start justify-center bg-[color-mix(in_srgb,var(--bg-ground)_60%,transparent)] px-4 pt-[14vh] data-[entering]:animate-enter"
     >
       <Modal className="glass w-full max-w-[460px] rounded-panel border border-edge bg-menu p-6 shadow-popover outline-none data-[entering]:animate-pop-in">
         <Dialog role="alertdialog" className="outline-none">
@@ -430,7 +430,7 @@ function ConfirmDisconnect({
       onOpenChange={(open) => {
         if (!open) onCancel();
       }}
-      className="fixed inset-0 z-50 flex items-start justify-center bg-[color-mix(in_srgb,var(--bg-ground)_60%,transparent)] px-4 pt-[14vh] data-[entering]:animate-enter"
+      className="fixed inset-0 z-overlay flex items-start justify-center bg-[color-mix(in_srgb,var(--bg-ground)_60%,transparent)] px-4 pt-[14vh] data-[entering]:animate-enter"
     >
       <Modal className="glass w-full max-w-[440px] rounded-panel border border-edge bg-menu p-6 shadow-popover outline-none data-[entering]:animate-pop-in">
         <Dialog role="alertdialog" className="flex flex-col gap-6 outline-none">

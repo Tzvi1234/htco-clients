@@ -1,6 +1,6 @@
 // ESLint for every TypeScript file in the repository: the strictest type-aware rule sets of
 // typescript-eslint, React hooks rules for the web app, logical (RTL-safe) CSS utilities, radius
-// role tokens, and the web app's feature boundaries.
+// role tokens, layer role tokens, and the web app's feature boundaries.
 import js from "@eslint/js";
 import { defineConfig, globalIgnores } from "eslint/config";
 import reactHooks from "eslint-plugin-react-hooks";
@@ -9,6 +9,7 @@ import tseslint from "typescript-eslint";
 
 import { featureBoundaries } from "./scripts/eslint-feature-boundaries.ts";
 import { logicalProperties } from "./scripts/eslint-logical-properties.ts";
+import { tokenLayers } from "./scripts/eslint-token-layers.ts";
 import { tokenRadii } from "./scripts/eslint-token-radii.ts";
 
 export default defineConfig(
@@ -39,6 +40,7 @@ export default defineConfig(
         rules: {
           "feature-boundaries": featureBoundaries,
           "logical-properties": logicalProperties,
+          "token-layers": tokenLayers,
           "token-radii": tokenRadii,
         },
       },
@@ -46,6 +48,7 @@ export default defineConfig(
     rules: {
       "htco/feature-boundaries": "error",
       "htco/logical-properties": "error",
+      "htco/token-layers": "error",
       "htco/token-radii": "error",
     },
   },

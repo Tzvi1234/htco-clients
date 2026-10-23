@@ -221,6 +221,25 @@
   --animate-art-in: htco-art-in 520ms var(--motion-easing-enter) both;
 }
 
+/* Stacking layers by role (the `layer` tokens, design/tokens/base.json), lowest first. Tailwind's
+   numeric z-index utilities are refused by scripts/eslint-token-layers.ts; a tie-break inside one
+   component may still use z-[1] to z-[9]. */
+@utility z-raised {
+  z-index: var(--layer-raised);
+}
+@utility z-sticky {
+  z-index: var(--layer-sticky);
+}
+@utility z-popover {
+  z-index: var(--layer-popover);
+}
+@utility z-overlay {
+  z-index: var(--layer-overlay);
+}
+@utility z-toast {
+  z-index: var(--layer-toast);
+}
+
 /* Motion (design/README.md, "Motion"): opacity and short travel, one curve, never on scroll. */
 @keyframes htco-enter {
   from {

@@ -29,7 +29,7 @@ function DemoPill() {
     <div
       role="note"
       className={cx(
-        "pointer-events-none z-20 flex justify-center",
+        "pointer-events-none z-sticky flex justify-center",
         header === null
           ? "mb-2"
           : "absolute inset-x-0 top-1/2 -translate-y-1/2 max-sm:top-full max-sm:translate-y-1",
