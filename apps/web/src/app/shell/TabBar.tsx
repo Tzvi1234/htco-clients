@@ -12,7 +12,7 @@ import { CloseIcon, MoreIcon } from "../../shared/ui/icons.tsx";
 const ON_BAR: AreaId[] = ["home", "office", "work", "commerce"];
 
 const ITEM = cx(
-  "flex h-full min-w-0 flex-1 cursor-default flex-col items-center justify-center gap-0.5 rounded-[22px] text-caption leading-[14px] no-underline outline-none",
+  "flex h-full min-w-0 flex-1 cursor-default flex-col items-center justify-center gap-0.5 rounded-panel text-caption leading-[14px] no-underline outline-none",
   "transition-[background-color,color,scale] duration-[var(--motion-duration-fast)] ease-standard active:scale-95",
 );
 
@@ -67,7 +67,7 @@ export function TabBar() {
         {slot < 0 ? null : (
           <span
             aria-hidden="true"
-            className="absolute top-1.5 bottom-1.5 rounded-[22px] bg-tertiary-subtle transition-[inset-inline-start] duration-[var(--motion-duration-expand)] ease-spring"
+            className="absolute top-1.5 bottom-1.5 rounded-panel bg-tertiary-subtle transition-[inset-inline-start] duration-[var(--motion-duration-expand)] ease-spring"
             style={{
               width: "calc((100% - 28px) / 5)",
               insetInlineStart: `calc(6px + ${String(slot)} * ((100% - 28px) / 5 + 4px))`,

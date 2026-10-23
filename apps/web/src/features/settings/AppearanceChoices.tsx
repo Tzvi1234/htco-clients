@@ -120,9 +120,9 @@ function Setting<K extends string>({
 function Window({ ground, panel, ink }: { ground: string; panel: string; ink: string }) {
   return (
     <span className="absolute inset-0 flex gap-1.5 p-2" style={{ backgroundColor: ground }}>
-      <span className="w-1/4 rounded-[6px]" style={{ backgroundColor: panel }} />
+      <span className="w-1/4 rounded-control" style={{ backgroundColor: panel }} />
       <span
-        className="flex flex-1 flex-col gap-1.5 rounded-[6px] p-2"
+        className="flex flex-1 flex-col gap-1.5 rounded-control p-2"
         style={{ backgroundColor: panel }}
       >
         <span className="h-1.5 w-2/3 rounded-pill" style={{ backgroundColor: ink }} />

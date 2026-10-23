@@ -178,10 +178,13 @@
   --text-hero: var(--font-size-hero);
   --text-hero--line-height: var(--font-line-height-hero);
 
-  /* Radii by role (design/README.md, "Shape"): panels 22, cards 16, pills round. */
+  /* Radii by role (design/README.md, "Shape"; DESIGN.md `rounded`): panels 22, cards 16, menu
+     items 12, controls 6, tags 4, pills round. Literal radii with a role are refused by
+     scripts/eslint-token-radii.ts. */
   --radius-*: initial;
   --radius-tag: var(--radius-xs);
   --radius-control: var(--radius-sm);
+  --radius-menu-item: var(--radius-lg);
   --radius-button: var(--radius-full);
   --radius-card: var(--radius-xl);
   --radius-panel: var(--radius-xxl);

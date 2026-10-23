@@ -166,7 +166,7 @@ export function PillSelect<K extends string>({
               key={option.id}
               id={option.id}
               textValue={option.textValue}
-              className="flex h-9 cursor-default items-center gap-2 rounded-[12px] px-3 text-body-sm outline-none data-[focused]:bg-panel data-[selected]:bg-panel"
+              className="flex h-9 cursor-default items-center gap-2 rounded-menu-item px-3 text-body-sm outline-none data-[focused]:bg-panel data-[selected]:bg-panel"
             >
               {({ isSelected }) => (
                 <>

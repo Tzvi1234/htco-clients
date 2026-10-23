@@ -303,7 +303,7 @@ export function Sidebar() {
         <kbd
           className={cx(
             LABEL,
-            "ms-auto inline-flex h-5 items-center rounded-[6px] border border-line-strong px-[5px] font-latin text-caption text-muted",
+            "ms-auto inline-flex h-5 items-center rounded-control border border-line-strong px-[5px] font-latin text-caption text-muted",
           )}
         >
           Ctrl K

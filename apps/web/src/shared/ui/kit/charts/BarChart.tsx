@@ -90,7 +90,7 @@ export function BarChart({
                   ) : null}
                   <span
                     className={cx(
-                      "k-bar block w-full rounded-t-[4px] motion-safe:animate-[htco-bar-in_520ms_var(--motion-easing-enter)_both]",
+                      "k-bar block w-full rounded-t-tag motion-safe:animate-[htco-bar-in_520ms_var(--motion-easing-enter)_both]",
                       value === 0 ? "h-0.5 rounded-[1px] bg-line-strong" : "h-full",
                       value !== 0 && (on ? "bg-tertiary" : "k-bar-soft"),
                     )}
@@ -184,7 +184,7 @@ export function ChartTip({
       data-tip
       className={cx(
         "pointer-events-none absolute bottom-full z-10 flex flex-col items-center rounded-[8px] bg-inverse px-2.5 py-1.5 text-center text-caption whitespace-nowrap text-on-inverse shadow-sm",
-        "opacity-0 transition-opacity duration-150 group-hover:opacity-100",
+        "opacity-0 transition-opacity duration-[var(--motion-duration-fast)] group-hover:opacity-100",
         at === "start"
           ? "inset-s-0"
           : at === "end"

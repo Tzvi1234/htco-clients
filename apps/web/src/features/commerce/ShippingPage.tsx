@@ -122,7 +122,7 @@ function Shipping({ shopId, chips }: { shopId: string; chips: ReactNode }) {
               src={first.listing_id === null ? null : photos.get(first.listing_id)}
               title={first.title}
               size={24}
-              className="rounded-[6px]"
+              className="rounded-control"
             />
             <span dir="auto" className="block max-w-[200px] truncate">
               {first.title}

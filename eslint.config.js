@@ -7,6 +7,7 @@ import globals from "globals";
 import tseslint from "typescript-eslint";
 
 import { logicalProperties } from "./scripts/eslint-logical-properties.ts";
+import { tokenRadii } from "./scripts/eslint-token-radii.ts";
 
 export default defineConfig(
   globalIgnores([
@@ -31,8 +32,10 @@ export default defineConfig(
     files: ["apps/web/**/*.{ts,tsx}"],
     extends: [reactHooks.configs.flat["recommended-latest"]],
     languageOptions: { globals: globals.browser },
-    plugins: { htco: { rules: { "logical-properties": logicalProperties } } },
-    rules: { "htco/logical-properties": "error" },
+    plugins: {
+      htco: { rules: { "logical-properties": logicalProperties, "token-radii": tokenRadii } },
+    },
+    rules: { "htco/logical-properties": "error", "htco/token-radii": "error" },
   },
   {
     files: ["**/*.{js,mjs,cjs}"],

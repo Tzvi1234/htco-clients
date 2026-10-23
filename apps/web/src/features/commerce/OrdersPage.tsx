@@ -227,7 +227,7 @@ function Orders({ shopId, chips }: { shopId: string; chips: ReactNode }) {
             setOpen(o);
           }}
           aria-label={t`Open order ${String(o.order_id)}`}
-          className="-mx-1 rounded-[4px] px-1 underline decoration-line-strong underline-offset-[3px] outline-none hover:decoration-current focus-visible:outline-2 focus-visible:outline-focus"
+          className="-mx-1 rounded-tag px-1 underline decoration-line-strong underline-offset-[3px] outline-none hover:decoration-current focus-visible:outline-2 focus-visible:outline-focus"
         >
           <N>{`#${String(o.order_id)}`}</N>
         </button>
@@ -249,7 +249,7 @@ function Orders({ shopId, chips }: { shopId: string; chips: ReactNode }) {
               src={first.listing_id === null ? null : photos.get(first.listing_id)}
               title={first.title}
               size={24}
-              className="rounded-[6px]"
+              className="rounded-control"
             />
             <span dir="auto" className="max-w-[180px] truncate">
               {first.title}

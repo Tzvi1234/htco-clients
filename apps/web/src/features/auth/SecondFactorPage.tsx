@@ -144,7 +144,7 @@ function SetUp() {
             <img
               src={enroll.data.qr_code}
               alt={t`QR code for your authenticator app`}
-              className="size-[132px] shrink-0 rounded-[12px] bg-art-paper p-2"
+              className="size-[132px] shrink-0 rounded-menu-item bg-art-paper p-2"
             />
             <div className="flex min-w-0 flex-col gap-1.5">
               <p className="m-0 text-body-sm">

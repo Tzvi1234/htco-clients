@@ -393,7 +393,7 @@ function NeedsYou() {
       <div className="flex justify-center px-6 pb-5">
         <Link
           to="/work/approvals"
-          className="rounded-[4px] py-1 text-caption text-primary underline underline-offset-[3px]"
+          className="rounded-tag py-1 text-caption text-primary underline underline-offset-[3px]"
         >
           {t`See all approvals`}
         </Link>
@@ -612,7 +612,7 @@ function GettingStarted() {
               ) : (
                 <Link
                   to={step.to}
-                  className="-my-1 inline-block rounded-[4px] py-1 text-caption text-primary underline underline-offset-[3px]"
+                  className="-my-1 inline-block rounded-tag py-1 text-caption text-primary underline underline-offset-[3px]"
                 >
                   {step.soon === true ? t`Soon` : step.action}
                 </Link>

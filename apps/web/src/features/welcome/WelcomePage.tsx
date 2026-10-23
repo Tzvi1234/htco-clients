@@ -56,7 +56,7 @@ export function WelcomePage() {
         </p>
         <Link
           to="/sign-in"
-          className="-my-1 inline-block rounded-[4px] py-1 text-caption text-primary underline underline-offset-[3px]"
+          className="-my-1 inline-block rounded-tag py-1 text-caption text-primary underline underline-offset-[3px]"
         >
           <Trans>Sign in</Trans>
         </Link>
