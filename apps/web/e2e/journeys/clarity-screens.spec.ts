@@ -7,6 +7,8 @@ import { seriousViolations } from "../axe.ts";
 // The clarity redesign (round 3, docs/design/round3-clarity.md): the screens with real features
 // scroll as one page. No panel scrolls on its own, and no table is wider than its panel, at
 // 1440×900 and at 375×812, in English and in Hebrew, on every sub-tab, with the demo's data.
+// Each view has exactly one focus panel (Settings, by its part A design, has none), and axe
+// finds nothing serious in the light and dark themes of both palettes (Gray and Cream).
 
 const SCREENS = [
   ["Home", "/"],
@@ -17,6 +19,17 @@ const SCREENS = [
   ["Customers", "/customers/customers"],
   ["Members & access", "/settings/team"],
   ["Security", "/settings/security"],
+  ["Settings", "/settings"],
+] as const;
+
+/** Screens without a focus panel, by design. */
+const NO_FOCUS = new Set<string>(["Settings"]);
+
+/** The appearance modes axe also checks, after the default light Gray. */
+const MODES = [
+  ["dark", "sbb"],
+  ["light", "d4"],
+  ["dark", "d4"],
 ] as const;
 
 /** Every element inside the screen that scrolls up and down on its own, or a table too wide. */
@@ -42,6 +55,8 @@ async function innerScrollers(page: Page): Promise<string[]> {
 for (const locale of ["en", "he"] as const) {
   for (const [title, path] of SCREENS) {
     test(`${title} scrolls as one page, no panel on its own (${locale})`, async ({ page }) => {
+      // Three more appearance modes reload the screen for axe.
+      test.slow();
       await page.addInitScript((value) => {
         localStorage.setItem("htco.locale", value);
       }, locale);
@@ -59,11 +74,35 @@ for (const locale of ["en", "he"] as const) {
           await page.waitForLoadState("networkidle");
         }
         expect(await innerScrollers(page), `${path}, view ${String(index)}`).toEqual([]);
+        await expect(
+          page.locator("#main .k-focus"),
+          `one focus panel on ${path}, view ${String(index)}`,
+        ).toHaveCount(NO_FOCUS.has(title) ? 0 : 1);
       }
       const results = await new AxeBuilder({ page })
         .exclude('[data-live-announcer] > [role="log"] > [role="img"]')
         .analyze();
       expect(seriousViolations(results), `axe on ${path}`).toEqual([]);
+
+      for (const [theme, palette] of MODES) {
+        await page.evaluate(
+          ([t, p]) => {
+            localStorage.setItem("htco.theme", t);
+            localStorage.setItem("htco.palette", p);
+          },
+          [theme, palette] as const,
+        );
+        await page.reload();
+        await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
+        await expect(page.locator("html")).toHaveAttribute("data-pal", palette);
+        await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+        await page.waitForLoadState("networkidle");
+        await expect(page.locator('[aria-busy="true"]')).toHaveCount(0);
+        const mode = await new AxeBuilder({ page })
+          .exclude('[data-live-announcer] > [role="log"] > [role="img"]')
+          .analyze();
+        expect(seriousViolations(mode), `axe on ${path}, ${theme} ${palette}`).toEqual([]);
+      }
     });
   }
 }

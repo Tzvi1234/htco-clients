@@ -69,7 +69,7 @@ function AppearancePanel() {
         title={<Trans>Appearance and language</Trans>}
         meta={<Trans>On this device</Trans>}
       />
-      <PanelBody className="pt-1">
+      <PanelBody scroll={false} className="pt-1">
         <AppearanceChoices />
       </PanelBody>
     </Panel>
@@ -96,7 +96,7 @@ function LaterSection() {
             title={<Trans>Business details</Trans>}
             actions={<DemoTag className="me-4" />}
           />
-          <PanelBody className="pt-0">
+          <PanelBody scroll={false} className="pt-0">
             <DemoPart contentClassName="flex flex-col gap-4" tag={false}>
               <PillValue
                 label={t`Business name`}
@@ -156,7 +156,7 @@ function AccessPanel() {
   return (
     <Panel label={t`Access and security`}>
       <PanelHeader title={<Trans>Access and security</Trans>} />
-      <PanelBody className="gap-1">
+      <PanelBody scroll={false} className="gap-1">
         {managesTeam ? (
           <LinkRow
             to="/settings/team"
@@ -211,7 +211,7 @@ function NotificationsPanel() {
   return (
     <Panel label={t`Notifications`}>
       <PanelHeader title={<Trans>Notifications</Trans>} actions={<DemoTag className="me-4" />} />
-      <PanelBody className="pt-0">
+      <PanelBody scroll={false} className="pt-0">
         <DemoPart tag={false}>
           {rows.map(([title, line, on]) => (
             <ListRow
@@ -264,7 +264,7 @@ function ConnectionsPanel() {
   return (
     <Panel label={t`Connections`}>
       <PanelHeader title={<Trans>Connections</Trans>} />
-      <PanelBody className="pt-0">
+      <PanelBody scroll={false} className="pt-0">
         <Link
           to="/shops"
           className="-mx-3 flex items-center gap-3 rounded-card px-3 py-3.5 text-primary no-underline outline-none transition-colors hover:bg-hover focus-visible:outline-2 focus-visible:outline-focus"

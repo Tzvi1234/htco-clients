@@ -176,8 +176,10 @@ function Hero({ shop, stats, picker }: { shop: LiveShop; stats: Stats; picker: R
     </>
   );
 
+  // The Shops page's focus stays the view's one focus; this is the tab's own summary.
   return (
     <Focus
+      plain
       title={<Trans>Since the shop opened</Trans>}
       meta={
         <>

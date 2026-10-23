@@ -100,3 +100,11 @@ Commands run on these screens: critique, audit, distill (the carousel, the repea
 - The sidebar's shop switcher and the screens' shop chips are two scope controls; one should drive the other.
 - The shop card's capabilities list is long on phones; a disclosure would shorten it.
 - Security's crumb says Settings while the title says Security (shell).
+
+## After the architecture audit (2026-10-23)
+
+The audit (`docs/reviews/2026-10-23-architecture-audit.md`, P2-6, P2-8, P2-9) found three gaps in the clarity rules, now closed:
+
+- **One focus per view on Shops.** Statistics showed two focus panels: the page's, and its own summary. The summary is now a `plain` Focus, with the same layout but without the orange wash. The no-shop view had no focus. Its focus now says "No shops yet", what will appear, and "Connect Etsy shop" (for anyone but the Owner, who connects shops). "How connecting works" follows as one row of three steps.
+- **Settings is guarded.** It is in `e2e/journeys/clarity-screens.spec.ts`. Its panel bodies pass `scroll={false}`, so they can never scroll on their own. The spec also counts the focus panels on every view: one, or none on Settings.
+- **Axe in every appearance.** The same spec runs axe again in Gray dark, Cream light and Cream dark, after the default Gray light.

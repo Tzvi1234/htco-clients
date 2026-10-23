@@ -75,6 +75,8 @@ export function FlowBody({ children, className }: { children: ReactNode; classNa
  * The focus panel at the top of a screen: its title (light, larger than a panel title), a quiet
  * meta beside it, one sentence of what matters now, the key figures, and the primary action.
  * `aside` takes the art or a small chart at the end; `end` sits at the header's end (the shop).
+ * A view has one focus: a sub-tab's own summary under the page's focus is `plain` (the same
+ * layout, without the focus wash).
  */
 export function Focus({
   title,
@@ -87,6 +89,7 @@ export function Focus({
   footer,
   label,
   titleId,
+  plain = false,
   className,
 }: {
   title: ReactNode;
@@ -100,12 +103,14 @@ export function Focus({
   /** The panel's name when the title is not plain text. */
   label?: string;
   titleId?: string;
+  /** A summary in the focus layout that is not the view's focus (no orange wash). */
+  plain?: boolean;
   className?: string;
 }) {
   return (
     <Panel
       {...(label === undefined ? {} : { label })}
-      className={cx("k-focus shrink-0", className)}
+      className={cx(!plain && "k-focus", "shrink-0", className)}
     >
       <div className="flex gap-6 p-6 max-sm:flex-col max-sm:gap-5 max-sm:p-5">
         <div className="flex min-w-0 grow flex-col gap-5">
