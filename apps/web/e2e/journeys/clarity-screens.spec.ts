@@ -55,7 +55,7 @@ async function innerScrollers(page: Page): Promise<string[]> {
 for (const locale of ["en", "he"] as const) {
   for (const [title, path] of SCREENS) {
     test(`${title} scrolls as one page, no panel on its own (${locale})`, async ({ page }) => {
-      // Three more appearance modes reload the screen for axe.
+      // Three more appearance modes reload the screen and walk its views again for axe.
       test.slow();
       await page.addInitScript((value) => {
         localStorage.setItem("htco.locale", value);
@@ -65,43 +65,46 @@ for (const locale of ["en", "he"] as const) {
       await page.waitForLoadState("networkidle");
       await expect(page.locator('[aria-busy="true"]')).toHaveCount(0);
 
-      // The first view, then every sub-tab of the screen (each is its own page of panels).
+      // The first view, then every sub-tab of the screen (each is its own page of panels), in
+      // the default light Gray and then in each other appearance mode (Codex review of #57: a
+      // reload resets the sub-tab, so every mode walks the views again).
       const tabs = page.locator("#main [role='tablist'] [role='tab']");
-      const count = await tabs.count();
-      for (let index = 0; index <= count; index += 1) {
-        if (index > 0) {
-          await tabs.nth(index - 1).click();
+      for (const mode of [undefined, ...MODES]) {
+        const where = mode === undefined ? path : `${path}, ${mode[0]} ${mode[1]}`;
+        if (mode !== undefined) {
+          const [theme, palette] = mode;
+          await page.evaluate(
+            ([t, p]) => {
+              localStorage.setItem("htco.theme", t);
+              localStorage.setItem("htco.palette", p);
+            },
+            [theme, palette] as const,
+          );
+          await page.reload();
+          await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
+          await expect(page.locator("html")).toHaveAttribute("data-pal", palette);
+          await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
           await page.waitForLoadState("networkidle");
+          await expect(page.locator('[aria-busy="true"]')).toHaveCount(0);
         }
-        expect(await innerScrollers(page), `${path}, view ${String(index)}`).toEqual([]);
-        await expect(
-          page.locator("#main .k-focus"),
-          `one focus panel on ${path}, view ${String(index)}`,
-        ).toHaveCount(NO_FOCUS.has(title) ? 0 : 1);
-      }
-      const results = await new AxeBuilder({ page })
-        .exclude('[data-live-announcer] > [role="log"] > [role="img"]')
-        .analyze();
-      expect(seriousViolations(results), `axe on ${path}`).toEqual([]);
-
-      for (const [theme, palette] of MODES) {
-        await page.evaluate(
-          ([t, p]) => {
-            localStorage.setItem("htco.theme", t);
-            localStorage.setItem("htco.palette", p);
-          },
-          [theme, palette] as const,
-        );
-        await page.reload();
-        await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
-        await expect(page.locator("html")).toHaveAttribute("data-pal", palette);
-        await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-        await page.waitForLoadState("networkidle");
-        await expect(page.locator('[aria-busy="true"]')).toHaveCount(0);
-        const mode = await new AxeBuilder({ page })
-          .exclude('[data-live-announcer] > [role="log"] > [role="img"]')
-          .analyze();
-        expect(seriousViolations(mode), `axe on ${path}, ${theme} ${palette}`).toEqual([]);
+        const count = await tabs.count();
+        for (let index = 0; index <= count; index += 1) {
+          if (index > 0) {
+            await tabs.nth(index - 1).click();
+            await page.waitForLoadState("networkidle");
+          }
+          const view = `${where}, view ${String(index)}`;
+          if (mode === undefined) {
+            expect(await innerScrollers(page), view).toEqual([]);
+            await expect(page.locator("#main .k-focus"), `one focus panel on ${view}`).toHaveCount(
+              NO_FOCUS.has(title) ? 0 : 1,
+            );
+          }
+          const results = await new AxeBuilder({ page })
+            .exclude('[data-live-announcer] > [role="log"] > [role="img"]')
+            .analyze();
+          expect(seriousViolations(results), `axe on ${view}`).toEqual([]);
+        }
       }
     });
   }
