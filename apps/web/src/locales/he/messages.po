@@ -966,8 +966,8 @@ msgstr "אומת בקוד"
 msgid "Connect"
 msgstr "חיבור"
 
-#: src/features/commerce/live.tsx
 #: src/features/overview/OverviewPage.tsx
+#: src/features/shops/reconnect.tsx
 msgid "Connect a shop"
 msgstr "חיבור חנות"
 
@@ -1510,11 +1510,11 @@ msgstr "Etsy לא מסרה מדינות יעד להזמנות האלה."
 msgid "Etsy hides buyer addresses for this shop. Your fulfillment partner gets them from Etsy; HTCO does not need them."
 msgstr "Etsy מסתירה את כתובות הקונים בחנות הזו. שותף המשלוחים מקבל אותן מ־Etsy, ו־HTCO לא צריכה אותן."
 
-#: src/features/commerce/live.tsx
+#: src/shared/ui/kit/live.tsx
 msgid "Etsy is not answering · showing data from {time}"
 msgstr "Etsy לא עונה · מוצגים נתונים מ־{time}"
 
-#: src/features/commerce/live.tsx
+#: src/features/shops/reconnect.tsx
 msgid "Etsy is not answering and there is no recent copy to show. Try again in a minute."
 msgstr "Etsy לא עונה ואין עותק עדכני להציג. נסו שוב בעוד דקה."
 
@@ -1522,11 +1522,11 @@ msgstr "Etsy לא עונה ואין עותק עדכני להציג. נסו שו�
 msgid "Etsy is not answering right now; the shop's numbers will be back shortly."
 msgstr "Etsy לא עונה כרגע; נתוני החנות יחזרו בקרוב."
 
-#: src/features/commerce/live.tsx
+#: src/features/shops/reconnect.tsx
 msgid "Etsy no longer accepts the shop's connection. Reconnect it to see its data."
 msgstr "Etsy כבר לא מקבלת את החיבור של החנות. חברו אותה מחדש כדי לראות את הנתונים שלה."
 
-#: src/features/commerce/live.tsx
+#: src/features/shops/reconnect.tsx
 msgid "Etsy no longer accepts the shop's connection. The workspace owner can reconnect it."
 msgstr "Etsy כבר לא מקבלת את החיבור של החנות. בעלי סביבת העבודה יכולים לחבר אותה מחדש."
 
@@ -2217,11 +2217,11 @@ msgstr "חי"
 msgid "Live activity"
 msgstr "פעילות חיה"
 
-#: src/features/commerce/live.tsx
+#: src/shared/ui/kit/live.tsx
 msgid "Live from Etsy"
 msgstr "בזמן אמת מ־Etsy"
 
-#: src/features/commerce/live.tsx
+#: src/features/shops/reconnect.tsx
 msgid "Live shop data could not be loaded. Try again shortly."
 msgstr "לא ניתן לטעון את נתוני החנות. נסו שוב בקרוב."
 
@@ -2581,7 +2581,7 @@ msgstr "אין הזמנות שמתאימות לסינון הזה."
 msgid "No orders yet."
 msgstr "עדיין אין הזמנות."
 
-#: src/features/commerce/refunds.tsx
+#: src/shared/i18n/format.ts
 msgid "No reason given"
 msgstr "לא צוינה סיבה"
 
@@ -2613,7 +2613,7 @@ msgstr "אין חנות מחוברת"
 msgid "No shop connected yet"
 msgstr "עדיין לא חוברה חנות"
 
-#: src/features/commerce/live.tsx
+#: src/features/shops/reconnect.tsx
 msgid "No shop is connected yet."
 msgstr "עדיין לא חוברה חנות."
 
@@ -2881,7 +2881,7 @@ msgstr "פתיחת ההזמנות"
 msgid "Open quote"
 msgstr "הצעה פתוחה"
 
-#: src/features/commerce/live.tsx
+#: src/features/shops/reconnect.tsx
 msgid "Open Shops"
 msgstr "פתיחת חנויות"
 
@@ -3370,7 +3370,7 @@ msgstr "כל הביקורות האחרונות קיבלו ארבעה או חמי
 msgid "Recent runs"
 msgstr "ריצות אחרונות"
 
-#: src/features/commerce/live.tsx
+#: src/features/shops/reconnect.tsx
 #: src/features/shops/ShopsPage.tsx
 msgid "Reconnect"
 msgstr "חבר מחדש"
@@ -3950,9 +3950,9 @@ msgstr "שולח היום"
 msgid "Shon"
 msgstr "שון"
 
-#: src/features/commerce/ShopChips.tsx
 #: src/features/finance/FinanceDemos.tsx
 #: src/features/shops/ShopStats.tsx
+#: src/shared/ui/kit/live.tsx
 msgid "Shop"
 msgstr "חנות"
 
@@ -4032,11 +4032,11 @@ msgstr "הצגת כל הליסטינגים"
 msgid "Show every review"
 msgstr "הצגת כל הביקורות"
 
-#: src/features/admin/AdminDemos.tsx
+#: src/shared/ui/kit/strip.tsx
 msgid "Show less"
 msgstr "פחות"
 
-#: src/features/admin/AdminDemos.tsx
+#: src/shared/ui/kit/strip.tsx
 msgid "Show more"
 msgstr "יותר"
 
@@ -4382,7 +4382,7 @@ msgstr "הקוד שגוי או שפג תוקפו."
 msgid "The confirmation lasts ten minutes."
 msgstr "האישור תקף לעשר דקות."
 
-#: src/features/commerce/live.tsx
+#: src/features/shops/reconnect.tsx
 msgid "The connection does not allow reading this. Reconnect the shop on Shops to grant it."
 msgstr "החיבור לא מאפשר לקרוא את זה. חברו מחדש את החנות במסך החנויות כדי לאשר."
 
@@ -4495,7 +4495,7 @@ msgstr "אפליקציית הווב פתוחה כבר היום"
 msgid "The whole app, and the direction it reads in."
 msgstr "כל האפליקציה, וכיוון הקריאה שלה."
 
-#: src/features/commerce/live.tsx
+#: src/features/shops/reconnect.tsx
 msgid "The workspace owner can reconnect it."
 msgstr "בעלי סביבת העבודה יכולים לחבר אותה מחדש."
 
@@ -4599,11 +4599,11 @@ msgstr "לחנות הזו אין מוצרים פעילים."
 msgid "This shop is no longer here. Refresh the page."
 msgstr "החנות הזו כבר לא כאן. רעננו את הדף."
 
-#: src/features/commerce/live.tsx
+#: src/features/shops/reconnect.tsx
 msgid "This shop is not available to you."
 msgstr "החנות הזו אינה זמינה לך."
 
-#: src/features/commerce/live.tsx
+#: src/features/shops/reconnect.tsx
 msgid "This shop is not connected to Etsy right now. Reconnect it on Shops to see its data."
 msgstr "החנות הזו לא מחוברת ל־Etsy כרגע. חברו אותה מחדש במסך החנויות כדי לראות את הנתונים."
 
@@ -4611,8 +4611,8 @@ msgstr "החנות הזו לא מחוברת ל־Etsy כרגע. חברו אותה
 msgid "This shop is not connected. Reconnect it first."
 msgstr "החנות לא מחוברת. קודם יש לחבר אותה מחדש."
 
-#: src/features/commerce/live.tsx
 #: src/features/overview/OverviewPage.tsx
+#: src/features/shops/reconnect.tsx
 msgid "This shop needs reconnecting"
 msgstr "החיבור לחנות צריך חידוש"
 
@@ -4793,8 +4793,8 @@ msgid "Trend:"
 msgstr "מגמה:"
 
 #: src/app/RouteStates.tsx
-#: src/features/commerce/live.tsx
 #: src/features/overview/OverviewPage.tsx
+#: src/features/shops/reconnect.tsx
 #: src/features/shops/ShopsPage.tsx
 msgid "Try again"
 msgstr "לנסות שוב"
@@ -4855,11 +4855,11 @@ msgstr "מכשיר לא מזוהה"
 msgid "Untitled profile"
 msgstr "פרופיל ללא שם"
 
-#: src/features/commerce/live.tsx
+#: src/shared/ui/kit/live.tsx
 msgid "updated {when}"
 msgstr "עודכן {when}"
 
-#: src/features/commerce/live.tsx
+#: src/shared/ui/kit/live.tsx
 msgid "updated just now"
 msgstr "עודכן זה עתה"
 

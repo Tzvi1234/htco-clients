@@ -4,13 +4,13 @@ import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
 import { describe, expect, it, vi } from "vitest";
 
-import type { ShopOrder } from "./live.tsx";
 import { RefundChip, RefundDetails } from "./refunds.tsx";
 import { App } from "../../app/App.tsx";
 import { LocaleProvider } from "../../shared/i18n/LocaleProvider.tsx";
 import type { Locale } from "../../shared/i18n/locale.ts";
 import { memoryStorage } from "../../shared/lib/storage.ts";
 import { fakeBackend, fakeIntegration, type FakeState } from "../../test/fakeApi.ts";
+import type { ShopOrder } from "../../shared/api/live.ts";
 
 // Refund and cancellation reasons (platform #57): each refund's reason as Etsy gave it, or "No
 // reason given", its amount, date and the seller's note on the order; a chip on the row; and on

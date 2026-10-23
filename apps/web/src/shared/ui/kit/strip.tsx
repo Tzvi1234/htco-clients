@@ -1,9 +1,16 @@
+import { useLingui } from "@lingui/react/macro";
 import type { CSSProperties, ReactNode } from "react";
 
 import { MinusGlyph, PlusGlyph } from "./glyphs.tsx";
 import { CircleButton } from "./parts.tsx";
 import { cx } from "../../lib/cx.ts";
 import { Panel } from "../Panel.tsx";
+
+/** The zoom's two labels, in the user's language. */
+export function useZoomLabels() {
+  const { t } = useLingui();
+  return { less: t`Show less`, more: t`Show more` };
+}
 
 /**
  * The strip's zoom (`zoom()`): two circle buttons around a track with a knob that moves between

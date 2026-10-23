@@ -5,13 +5,13 @@ import { describe, expect, it, vi } from "vitest";
 
 import { QueryClient } from "@tanstack/react-query";
 
-import { ListingPhoto } from "./live.tsx";
 import { App } from "../../app/App.tsx";
 import { forgetSession } from "../../shared/api/api.tsx";
 import { browser } from "../../shared/lib/browser.ts";
 import { PHONE_QUERY } from "../../shared/lib/useMediaQuery.ts";
 import { memoryStorage } from "../../shared/lib/storage.ts";
 import { demoShops, fakeBackend, fakeIntegration, type FakeState } from "../../test/fakeApi.ts";
+import { ListingPhoto } from "../../shared/ui/kit/index.ts";
 
 // The shop's live data from Etsy on the dashboard (platform: dashboard data, slice 4.6), on the
 // in-memory API with invented data.

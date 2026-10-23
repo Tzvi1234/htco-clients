@@ -6,9 +6,7 @@ import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
 import { cx } from "../../shared/lib/cx.ts";
 import { Ltr } from "../../shared/ui/Ltr.tsx";
 import { Capabilities, type Recheck } from "./Capabilities.tsx";
-import { LiveNote, useCount, useMoney, type ShopOverview } from "../commerce/live.tsx";
 import { ApiError } from "../../shared/api/api.tsx";
-import { ago, daysLeft } from "./time.ts";
 import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
 import {
   CircleButton,
@@ -23,7 +21,11 @@ import {
   StatusGlyph,
   type AgentStatus,
   type DotTone,
+  LiveNote,
 } from "../../shared/ui/kit/index.ts";
+import { useCount, useMoney } from "../../shared/i18n/format.ts";
+import type { ShopOverview } from "../../shared/api/live.ts";
+import { ago, daysLeft } from "../../shared/lib/time.ts";
 
 /** The connection's status as the demo's status glyph: the shape carries it, not the colour. */
 const STATUS_GLYPH: Record<IntegrationView["status"], AgentStatus> = {

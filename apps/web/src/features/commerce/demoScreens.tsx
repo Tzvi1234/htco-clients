@@ -2,7 +2,7 @@ import { Trans, useLingui } from "@lingui/react/macro";
 import type { ComponentType, ReactNode } from "react";
 
 import { useProductNames } from "./data.ts";
-import { useAgent } from "../work/agents.ts";
+import { useAgents } from "../../shared/demo/office.ts";
 import { cx } from "../../shared/lib/cx.ts";
 import { Button } from "../../shared/ui/Button.tsx";
 import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
@@ -132,7 +132,7 @@ function SuppliersDemo() {
   const { t } = useLingui();
   const text = useBi();
   const names = useProductNames();
-  const agent = useAgent();
+  const agent = useAgents().byId;
   const columns: Column<SupplierRow>[] = [
     { key: "name", header: t`Supplier`, cell: (s) => ltr(s.name) },
     { key: "products", header: t`Products`, cell: (s) => text(s.products), phone: false },

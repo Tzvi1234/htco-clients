@@ -4,26 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState, type ReactNode } from "react";
 import { Dialog, Modal, ModalOverlay } from "react-aria-components";
 
-import {
-  ListingPhoto,
-  LiveNote,
-  LiveProblem,
-  ShopReconnectBanner,
-  LiveSkeleton,
-  NoShopYet,
-  listingsQuery,
-  ordersQuery,
-  overviewQuery,
-  useCount,
-  useLiveShop,
-  useMoney,
-  useShortDate,
-  type OrderFilter,
-  type OrderPeriod,
-  type ShopOrder,
-} from "./live.tsx";
 import { RefundChip, RefundDetails } from "./refunds.tsx";
-import { ShopChips } from "./ShopChips.tsx";
 import { useApi } from "../../shared/api/api.tsx";
 import { cx } from "../../shared/lib/cx.ts";
 import { PHONE_QUERY, useMediaQuery } from "../../shared/lib/useMediaQuery.ts";
@@ -44,7 +25,22 @@ import {
   N,
   Status,
   type AgentStatus,
+  ListingPhoto,
+  LiveNote,
+  LiveSkeleton,
+  ShopChips,
 } from "../../shared/ui/kit/index.ts";
+import { LiveProblem, ShopReconnectBanner, NoShopYet } from "../shops/index.ts";
+import {
+  listingsQuery,
+  ordersQuery,
+  overviewQuery,
+  useLiveShop,
+  type OrderFilter,
+  type OrderPeriod,
+  type ShopOrder,
+} from "../../shared/api/live.ts";
+import { useCount, useMoney, useShortDate } from "../../shared/i18n/format.ts";
 
 /** How each state reads, and its glyph (the shape carries it, not the colour). */
 export function useOrderStates(): Record<OrderFilter, string> {

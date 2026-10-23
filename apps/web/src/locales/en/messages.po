@@ -966,8 +966,8 @@ msgstr "Confirmed with a code"
 msgid "Connect"
 msgstr "Connect"
 
-#: src/features/commerce/live.tsx
 #: src/features/overview/OverviewPage.tsx
+#: src/features/shops/reconnect.tsx
 msgid "Connect a shop"
 msgstr "Connect a shop"
 
@@ -1510,11 +1510,11 @@ msgstr "Etsy gave no destination countries for these orders."
 msgid "Etsy hides buyer addresses for this shop. Your fulfillment partner gets them from Etsy; HTCO does not need them."
 msgstr "Etsy hides buyer addresses for this shop. Your fulfillment partner gets them from Etsy; HTCO does not need them."
 
-#: src/features/commerce/live.tsx
+#: src/shared/ui/kit/live.tsx
 msgid "Etsy is not answering · showing data from {time}"
 msgstr "Etsy is not answering · showing data from {time}"
 
-#: src/features/commerce/live.tsx
+#: src/features/shops/reconnect.tsx
 msgid "Etsy is not answering and there is no recent copy to show. Try again in a minute."
 msgstr "Etsy is not answering and there is no recent copy to show. Try again in a minute."
 
@@ -1522,11 +1522,11 @@ msgstr "Etsy is not answering and there is no recent copy to show. Try again in 
 msgid "Etsy is not answering right now; the shop's numbers will be back shortly."
 msgstr "Etsy is not answering right now; the shop's numbers will be back shortly."
 
-#: src/features/commerce/live.tsx
+#: src/features/shops/reconnect.tsx
 msgid "Etsy no longer accepts the shop's connection. Reconnect it to see its data."
 msgstr "Etsy no longer accepts the shop's connection. Reconnect it to see its data."
 
-#: src/features/commerce/live.tsx
+#: src/features/shops/reconnect.tsx
 msgid "Etsy no longer accepts the shop's connection. The workspace owner can reconnect it."
 msgstr "Etsy no longer accepts the shop's connection. The workspace owner can reconnect it."
 
@@ -2217,11 +2217,11 @@ msgstr "Live"
 msgid "Live activity"
 msgstr "Live activity"
 
-#: src/features/commerce/live.tsx
+#: src/shared/ui/kit/live.tsx
 msgid "Live from Etsy"
 msgstr "Live from Etsy"
 
-#: src/features/commerce/live.tsx
+#: src/features/shops/reconnect.tsx
 msgid "Live shop data could not be loaded. Try again shortly."
 msgstr "Live shop data could not be loaded. Try again shortly."
 
@@ -2581,7 +2581,7 @@ msgstr "No orders match this filter."
 msgid "No orders yet."
 msgstr "No orders yet."
 
-#: src/features/commerce/refunds.tsx
+#: src/shared/i18n/format.ts
 msgid "No reason given"
 msgstr "No reason given"
 
@@ -2613,7 +2613,7 @@ msgstr "No shop connected"
 msgid "No shop connected yet"
 msgstr "No shop connected yet"
 
-#: src/features/commerce/live.tsx
+#: src/features/shops/reconnect.tsx
 msgid "No shop is connected yet."
 msgstr "No shop is connected yet."
 
@@ -2881,7 +2881,7 @@ msgstr "Open orders"
 msgid "Open quote"
 msgstr "Open quote"
 
-#: src/features/commerce/live.tsx
+#: src/features/shops/reconnect.tsx
 msgid "Open Shops"
 msgstr "Open Shops"
 
@@ -3370,7 +3370,7 @@ msgstr "Recent reviews are all four or five stars."
 msgid "Recent runs"
 msgstr "Recent runs"
 
-#: src/features/commerce/live.tsx
+#: src/features/shops/reconnect.tsx
 #: src/features/shops/ShopsPage.tsx
 msgid "Reconnect"
 msgstr "Reconnect"
@@ -3950,9 +3950,9 @@ msgstr "Ships today"
 msgid "Shon"
 msgstr "Shon"
 
-#: src/features/commerce/ShopChips.tsx
 #: src/features/finance/FinanceDemos.tsx
 #: src/features/shops/ShopStats.tsx
+#: src/shared/ui/kit/live.tsx
 msgid "Shop"
 msgstr "Shop"
 
@@ -4032,11 +4032,11 @@ msgstr "Show every listing"
 msgid "Show every review"
 msgstr "Show every review"
 
-#: src/features/admin/AdminDemos.tsx
+#: src/shared/ui/kit/strip.tsx
 msgid "Show less"
 msgstr "Show less"
 
-#: src/features/admin/AdminDemos.tsx
+#: src/shared/ui/kit/strip.tsx
 msgid "Show more"
 msgstr "Show more"
 
@@ -4382,7 +4382,7 @@ msgstr "The code is wrong or expired."
 msgid "The confirmation lasts ten minutes."
 msgstr "The confirmation lasts ten minutes."
 
-#: src/features/commerce/live.tsx
+#: src/features/shops/reconnect.tsx
 msgid "The connection does not allow reading this. Reconnect the shop on Shops to grant it."
 msgstr "The connection does not allow reading this. Reconnect the shop on Shops to grant it."
 
@@ -4495,7 +4495,7 @@ msgstr "The web app is open today"
 msgid "The whole app, and the direction it reads in."
 msgstr "The whole app, and the direction it reads in."
 
-#: src/features/commerce/live.tsx
+#: src/features/shops/reconnect.tsx
 msgid "The workspace owner can reconnect it."
 msgstr "The workspace owner can reconnect it."
 
@@ -4599,11 +4599,11 @@ msgstr "This shop has no active listings."
 msgid "This shop is no longer here. Refresh the page."
 msgstr "This shop is no longer here. Refresh the page."
 
-#: src/features/commerce/live.tsx
+#: src/features/shops/reconnect.tsx
 msgid "This shop is not available to you."
 msgstr "This shop is not available to you."
 
-#: src/features/commerce/live.tsx
+#: src/features/shops/reconnect.tsx
 msgid "This shop is not connected to Etsy right now. Reconnect it on Shops to see its data."
 msgstr "This shop is not connected to Etsy right now. Reconnect it on Shops to see its data."
 
@@ -4611,8 +4611,8 @@ msgstr "This shop is not connected to Etsy right now. Reconnect it on Shops to s
 msgid "This shop is not connected. Reconnect it first."
 msgstr "This shop is not connected. Reconnect it first."
 
-#: src/features/commerce/live.tsx
 #: src/features/overview/OverviewPage.tsx
+#: src/features/shops/reconnect.tsx
 msgid "This shop needs reconnecting"
 msgstr "This shop needs reconnecting"
 
@@ -4793,8 +4793,8 @@ msgid "Trend:"
 msgstr "Trend:"
 
 #: src/app/RouteStates.tsx
-#: src/features/commerce/live.tsx
 #: src/features/overview/OverviewPage.tsx
+#: src/features/shops/reconnect.tsx
 #: src/features/shops/ShopsPage.tsx
 msgid "Try again"
 msgstr "Try again"
@@ -4855,11 +4855,11 @@ msgstr "Unknown device"
 msgid "Untitled profile"
 msgstr "Untitled profile"
 
-#: src/features/commerce/live.tsx
+#: src/shared/ui/kit/live.tsx
 msgid "updated {when}"
 msgstr "updated {when}"
 
-#: src/features/commerce/live.tsx
+#: src/shared/ui/kit/live.tsx
 msgid "updated just now"
 msgstr "updated just now"
 

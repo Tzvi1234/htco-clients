@@ -4,9 +4,9 @@ import { useId } from "react";
 import type { CapabilityView, IntegrationView } from "../../shared/api/api.tsx";
 import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
 import { Button } from "../../shared/ui/Button.tsx";
-import { FormAlert } from "../auth/AuthLayout.tsx";
 import { StatusGlyph, type AgentStatus } from "../../shared/ui/kit/index.ts";
-import { ago } from "./time.ts";
+import { FormAlert } from "../../shared/ui/FormAlert.tsx";
+import { ago } from "../../shared/lib/time.ts";
 
 /** The state's glyph: the shape carries it (filled, square, dashed ring), not only the colour. */
 const STATE_GLYPH: Record<CapabilityView["state"], AgentStatus> = {

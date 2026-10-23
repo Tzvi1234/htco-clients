@@ -3,10 +3,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link, useRouter, useSearch } from "@tanstack/react-router";
 import { useState, type SyntheticEvent } from "react";
 
-import { AUTH_LINK, AUTH_SUBMIT, AuthLayout, FormAlert } from "./AuthLayout.tsx";
+import { AUTH_LINK, AUTH_SUBMIT, AuthLayout } from "./AuthLayout.tsx";
 import { AuthField, PasswordField } from "./fields.tsx";
 import { apiError, ApiError, forgetSession, safeRedirect, useApi } from "../../shared/api/api.tsx";
 import { Button } from "../../shared/ui/Button.tsx";
+import { FormAlert } from "../../shared/ui/FormAlert.tsx";
 
 /** Email and password, checked by the API (the browser never talks to Supabase, ADR-0006). */
 export function SignInPage() {
