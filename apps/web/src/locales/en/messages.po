@@ -325,6 +325,10 @@ msgstr "Active customers:"
 msgid "Active listings"
 msgstr "Active listings"
 
+#: src/features/admin/OperationsPage.tsx
+msgid "Activity"
+msgstr "Activity"
+
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
 msgid "Activity"
@@ -760,6 +764,7 @@ msgstr "Cancellation"
 msgid "Cancellation rate"
 msgstr "Cancellation rate"
 
+#: src/features/admin/OperationsPage.tsx
 #: src/features/commerce/OrdersPage.tsx
 #: src/features/commerce/refunds.tsx
 #: src/features/commerce/timeline.tsx
@@ -901,6 +906,10 @@ msgstr "Choose a new password"
 msgid "Choose the workspace whose members you want to see and invite."
 msgstr "Choose the workspace whose members you want to see and invite."
 
+#: src/features/admin/OperationsPage.tsx
+msgid "Choose the workspace whose queue and syncs you want to see."
+msgstr "Choose the workspace whose queue and syncs you want to see."
+
 #: src/features/office/FloorPage.tsx
 msgid "Claude · model"
 msgstr "Claude · model"
@@ -958,6 +967,10 @@ msgstr "Coming later"
 msgctxt "navigation"
 msgid "Commerce"
 msgstr "Commerce"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Compensated"
+msgstr "Compensated"
 
 #: src/features/work/demoScreens.tsx
 msgid "Completed today"
@@ -1266,6 +1279,10 @@ msgstr "Date"
 #: src/features/admin/OperationsPage.tsx
 msgid "Dead letters"
 msgstr "Dead letters"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Dead-lettered"
+msgstr "Dead-lettered"
 
 #: src/shared/demo/office.ts
 msgid "Debugger & Reliability Engineer"
@@ -1702,6 +1719,7 @@ msgstr "Export to CSV"
 msgid "Exported {0} orders."
 msgstr "Exported {0} orders."
 
+#: src/features/admin/OperationsPage.tsx
 #: src/shared/ui/kit/status.tsx
 msgid "Failed"
 msgstr "Failed"
@@ -1929,6 +1947,10 @@ msgstr "Health"
 msgctxt "navigation"
 msgid "Health"
 msgstr "Health"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Health views"
+msgstr "Health views"
 
 #: src/features/customers/CustomersDemos.tsx
 #: src/features/office/AiOpsPage.tsx
@@ -2589,6 +2611,7 @@ msgstr "Needs reconnecting"
 msgid "Needs reply:"
 msgstr "Needs reply:"
 
+#: src/features/admin/OperationsPage.tsx
 #: src/features/welcome/WelcomePage.tsx
 msgid "Needs you"
 msgstr "Needs you"
@@ -3080,6 +3103,10 @@ msgstr "Open the execution"
 msgid "Open the execution of {0}"
 msgstr "Open the execution of {0}"
 
+#: src/features/admin/OperationsPage.tsx
+msgid "Open the first dead letter"
+msgstr "Open the first dead letter"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "Open the web app"
 msgstr "Open the web app"
@@ -3320,6 +3347,10 @@ msgstr "Pause thread"
 #: src/features/office/FloorPage.tsx
 msgid "Paused"
 msgstr "Paused"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Pending"
+msgstr "Pending"
 
 #: src/app/shell/TopBar.tsx
 msgid "Pending approvals"
@@ -3810,6 +3841,10 @@ msgstr "Retries"
 #: src/features/admin/OperationsPage.tsx
 msgid "Retry"
 msgstr "Retry"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Retry scheduled"
+msgstr "Retry scheduled"
 
 #: src/features/admin/OperationsPage.tsx
 msgid "Retry the execution"
@@ -4552,6 +4587,7 @@ msgid "Stopping"
 msgstr "Stopping"
 
 #: src/features/admin/AdminDemos.tsx
+#: src/features/admin/OperationsPage.tsx
 msgid "Succeeded"
 msgstr "Succeeded"
 
@@ -4904,6 +4940,10 @@ msgstr "This Etsy account has no shop yet. Open a shop on Etsy, then connect it.
 #: src/features/shops/EtsyCallbackPage.tsx
 msgid "This Etsy shop is already connected to another workspace."
 msgstr "This Etsy shop is already connected to another workspace."
+
+#: src/features/admin/OperationsPage.tsx
+msgid "This execution is no longer dead-lettered."
+msgstr "This execution is no longer dead-lettered."
 
 #: src/features/auth/AcceptInvitePage.tsx
 msgid "This invitation link has expired or was already used. Ask for a new one."

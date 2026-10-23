@@ -1,9 +1,9 @@
 import { Plural, Trans, useLingui } from "@lingui/react/macro";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState, type ReactNode } from "react";
+import { useId, useState, type ReactNode } from "react";
 import { Dialog, Modal, ModalOverlay } from "react-aria-components";
 
-import { ApiError, useApi } from "../../shared/api/api.tsx";
+import { ApiError, meQuery, useApi } from "../../shared/api/api.tsx";
 import { useLiveShops } from "../../shared/api/live.ts";
 import {
   executionChainQuery,
@@ -30,7 +30,11 @@ import {
   LiveSkeleton,
   N,
   Status,
+  SubTabs,
+  TabPanel,
+  type AgentStatus,
 } from "../../shared/ui/kit/index.ts";
+import { WorkspacePicker, pickWorkspace } from "../../shared/ui/WorkspacePicker.tsx";
 
 /** A time as "4 minutes ago", in the user's language. */
 function useAgo(): (iso: string | null | undefined) => string {
@@ -40,8 +44,34 @@ function useAgo(): (iso: string | null | undefined) => string {
 }
 
 const Code = ({ children }: { children: string }) => (
-  <span className="ltr font-mono text-caption">{children}</span>
+  <span className="ltr font-mono text-caption whitespace-normal [overflow-wrap:anywhere]">
+    {children}
+  </span>
 );
+
+/** An execution's or an action's state: a glyph plus a word in the user's language. */
+function useStateWords(): (state: string) => { status: AgentStatus; label: string } | null {
+  const { t } = useLingui();
+  const words: Record<string, { status: AgentStatus; label: string }> = {
+    pending: { status: "queued", label: t`Pending` },
+    running: { status: "running", label: t`Running` },
+    waiting: { status: "waitext", label: t`Waiting` },
+    succeeded: { status: "delivered", label: t`Succeeded` },
+    failed: { status: "failed", label: t`Failed` },
+    retry_scheduled: { status: "queued", label: t`Retry scheduled` },
+    dead_lettered: { status: "failed", label: t`Dead-lettered` },
+    compensated: { status: "idle", label: t`Compensated` },
+    cancelled: { status: "offline", label: t`Cancelled` },
+  };
+  return (state) => words[state] ?? null;
+}
+
+function StateWord({ state }: { state: string }) {
+  const word = useStateWords()(state);
+  return word === null ? <Code>{state}</Code> : <Status status={word.status} label={word.label} />;
+}
+
+const FIRST_DEAD = "operations-first-dead-letter";
 
 /**
  * Admin › Health (platform slice 5.9): what the queue, the workers, the shops' syncs and the
@@ -54,25 +84,57 @@ const Code = ({ children }: { children: string }) => (
 export function OperationsPage() {
   const { t } = useLingui();
   const api = useApi();
-  const health = useQuery(operationsHealthQuery(api));
+  const me = useQuery(meQuery(api));
+  const ids = (me.data?.memberships ?? []).map((m) => m.organization_id);
+  const [chosen, setChosen] = useState<string | null>(null);
+  const organizationId = pickWorkspace(ids, chosen);
   return (
     <>
       <PageHeader title={t`Health`} />
       <Flow>
-        {health.isError ? (
-          <Panel>
-            <PanelHeader title={<Trans>Health</Trans>} />
-            <Problem error={health.error} onRetry={() => void health.refetch()} />
-          </Panel>
-        ) : health.data === undefined ? (
-          <Panel>
-            <PanelHeader title={<Trans>Health</Trans>} />
-            <LiveSkeleton rows={8} label={t`Loading the queue and sync health`} />
-          </Panel>
+        {ids.length > 1 ? (
+          <div className="shrink-0 motion-safe:animate-enter">
+            <WorkspacePicker ids={ids} value={chosen} onChange={setChosen} />
+          </div>
+        ) : null}
+        {organizationId === undefined ? (
+          ids.length > 1 ? (
+            <p className="m-0 px-4 text-body-sm text-secondary">
+              <Trans>Choose the workspace whose queue and syncs you want to see.</Trans>
+            </p>
+          ) : (
+            <Panel>
+              <PanelHeader title={<Trans>Health</Trans>} />
+              <LiveSkeleton rows={8} label={t`Loading the queue and sync health`} />
+            </Panel>
+          )
         ) : (
-          <Health health={health.data} />
+          <WorkspaceHealth key={organizationId} organizationId={organizationId} />
         )}
       </Flow>
+    </>
+  );
+}
+
+function WorkspaceHealth({ organizationId }: { organizationId: string }) {
+  const { t } = useLingui();
+  const api = useApi();
+  const health = useQuery(operationsHealthQuery(api, organizationId));
+  return (
+    <>
+      {health.isError ? (
+        <Panel>
+          <PanelHeader title={<Trans>Health</Trans>} />
+          <Problem error={health.error} onRetry={() => void health.refetch()} />
+        </Panel>
+      ) : health.data === undefined ? (
+        <Panel>
+          <PanelHeader title={<Trans>Health</Trans>} />
+          <LiveSkeleton rows={8} label={t`Loading the queue and sync health`} />
+        </Panel>
+      ) : (
+        <Health health={health.data} organizationId={organizationId} />
+      )}
     </>
   );
 }
@@ -98,8 +160,10 @@ function Problem({ error, onRetry }: { error: Error; onRetry: () => void }) {
   );
 }
 
-function Health({ health }: { health: OperationsHealth }) {
+function Health({ health, organizationId }: { health: OperationsHealth; organizationId: string }) {
   const { t } = useLingui();
+  const tabs = useId();
+  const [tab, setTab] = useState<"queue" | "activity">("queue");
   const count = useCount();
   const since = useAgo();
   const [opened, setOpened] = useState<string | null>(null);
@@ -114,6 +178,28 @@ function Health({ health }: { health: OperationsHealth }) {
     .reduce((n, j) => n + j.count, 0);
   const running = health.jobs.filter((j) => j.state === "running").reduce((n, j) => n + j.count, 0);
   const alive = health.workers.length - stopped.length;
+  const noWorker = health.workers.length > 0 && alive === 0;
+  // The lead names one thing; only its figure and its row are orange.
+  const lead = dead > 0 ? "dead" : noWorker ? "worker" : stale.length > 0 ? "stale" : "calm";
+  const behind = (s: (typeof stale)[number]) =>
+    s.last_succeeded_at === null ? 0 : Date.parse(s.last_succeeded_at);
+  const mostBehind = stale.reduce<(typeof stale)[number] | undefined>(
+    (worst, s) => (worst === undefined || behind(s) < behind(worst) ? s : worst),
+    undefined,
+  );
+  const firstDead = health.dead_letters[0];
+  const openFirstDead = () => {
+    if (firstDead === undefined) return;
+    if (firstDead.execution_id !== null) {
+      setOpened(firstDead.execution_id);
+      return;
+    }
+    setTab("queue");
+    setTimeout(() => {
+      const button = document.getElementById(FIRST_DEAD);
+      button?.focus();
+    }, 0);
+  };
 
   return (
     <>
@@ -131,7 +217,7 @@ function Health({ health }: { health: OperationsHealth }) {
               one="One job ran out of retries. Look at its error, then retry it."
               other="# jobs ran out of retries. Look at their errors, then retry them."
             />
-          ) : health.workers.length > 0 && alive === 0 ? (
+          ) : noWorker ? (
             <Trans>No worker is running: jobs wait until one starts.</Trans>
           ) : stale.length > 0 ? (
             <Plural
@@ -145,172 +231,215 @@ function Health({ health }: { health: OperationsHealth }) {
             </Trans>
           )
         }
+        actions={
+          firstDead === undefined ? undefined : (
+            <Button variant="primary" onPress={openFirstDead}>
+              <Trans>Open the first dead letter</Trans>
+            </Button>
+          )
+        }
         figures={
           <Figures label={t`Queue numbers`}>
             <Figure
               label={<Trans>Workers running</Trans>}
               value={<N>{`${count(alive)}/${count(health.workers.length)}`}</N>}
-              tone={stopped.length > 0 ? "tertiary" : undefined}
+              tone={lead === "worker" ? "tertiary" : undefined}
             />
             <Figure label={<Trans>Waiting</Trans>} value={<N>{count(waiting)}</N>} />
             <Figure label={<Trans>Running</Trans>} value={<N>{count(running)}</N>} />
             <Figure
               label={<Trans>Dead letters</Trans>}
               value={<N>{count(dead)}</N>}
-              tone={dead > 0 ? "tertiary" : undefined}
+              tone={lead === "dead" ? "tertiary" : undefined}
             />
             <Figure
               label={<Trans>Stale shops</Trans>}
               value={<N>{count(stale.length)}</N>}
-              tone={stale.length > 0 ? "tertiary" : undefined}
+              tone={lead === "stale" ? "tertiary" : undefined}
             />
           </Figures>
         }
       />
-      <DeadLetters letters={health.dead_letters} onOpen={setOpened} shopName={shopName} />
-      <Automations health={health} />
-      <Panel>
-        <PanelHeader title={<Trans>Workers</Trans>} />
-        {health.workers.length === 0 ? (
-          <Empty>{t`No worker has beaten in the last seven days.`}</Empty>
+      <SubTabs
+        label={t`Health views`}
+        idBase={tabs}
+        value={tab}
+        onChange={(next) => {
+          setTab(next);
+        }}
+        tabs={[
+          { id: "queue", label: <Trans>Needs you</Trans>, count: dead + stale.length },
+          { id: "activity", label: <Trans>Activity</Trans> },
+        ]}
+      />
+      <TabPanel idBase={tabs} tab={tab}>
+        {tab === "queue" ? (
+          <>
+            <DeadLetters
+              letters={health.dead_letters}
+              organizationId={organizationId}
+              onOpen={setOpened}
+              shopName={shopName}
+            />
+            <Panel>
+              <PanelHeader title={<Trans>Workers</Trans>} />
+              {health.workers.length === 0 ? (
+                <Empty>{t`No worker has beaten in the last seven days.`}</Empty>
+              ) : (
+                <DataTable
+                  flow
+                  label={t`Workers`}
+                  phoneHidden={[3]}
+                  head={[t`Worker`, t`Status`, t`Last beat`, t`Release`]}
+                  rows={health.workers.map((w) => ({
+                    key: w.worker_id,
+                    cells: [
+                      <Code key="w">{w.worker_id}</Code>,
+                      <Status
+                        key="s"
+                        live={w.alive}
+                        status={w.alive ? "running" : "offline"}
+                        label={w.alive ? t`Running` : w.stopping ? t`Stopping` : t`Stopped`}
+                      />,
+                      <time key="t" dateTime={w.last_beat_at}>
+                        {since(w.last_beat_at)}
+                      </time>,
+                      <Code key="r">{w.release ?? "—"}</Code>,
+                    ],
+                  }))}
+                />
+              )}
+            </Panel>
+            <Panel>
+              <PanelHeader title={<Trans>Shop syncs</Trans>} meta={<Trans>Twice a day</Trans>} />
+              {health.shops.length === 0 ? (
+                <Empty>{t`No reconciliation has run yet.`}</Empty>
+              ) : (
+                <DataTable
+                  flow
+                  label={t`Shop syncs`}
+                  phoneHidden={[1, 3]}
+                  head={[t`Shop`, t`Run`, t`Last success`, t`Drifts today`, t`Status`]}
+                  ends={[3]}
+                  rows={health.shops.map((s) => ({
+                    key: `${s.shop_id}-${s.kind}`,
+                    cells: [
+                      <span key="n" dir="auto">
+                        {shopName(s.shop_id)}
+                      </span>,
+                      s.kind === "sweep" ? t`Full sweep` : t`Reconcile`,
+                      <time key="t" dateTime={s.last_succeeded_at ?? undefined}>
+                        {since(s.last_succeeded_at)}
+                      </time>,
+                      <N key="d">{count(s.drifts_last_day)}</N>,
+                      s.stale && s === mostBehind && lead === "stale" ? (
+                        <Status key="s" status="waityou" label={t`Stale`} />
+                      ) : s.stale ? (
+                        <Status key="s" status="idle" label={t`Stale`} className="text-secondary" />
+                      ) : (
+                        <Status key="s" status="delivered" label={t`In sync`} />
+                      ),
+                    ],
+                  }))}
+                />
+              )}
+            </Panel>
+          </>
         ) : (
-          <DataTable
-            flow
-            label={t`Workers`}
-            phoneHidden={[3]}
-            head={[t`Worker`, t`Status`, t`Last beat`, t`Release`]}
-            rows={health.workers.map((w) => ({
-              key: w.worker_id,
-              cells: [
-                <Code key="w">{w.worker_id}</Code>,
-                <Status
-                  key="s"
-                  live={w.alive}
-                  status={w.alive ? "running" : "offline"}
-                  label={w.alive ? t`Running` : w.stopping ? t`Stopping` : t`Stopped`}
-                />,
-                <time key="t" dateTime={w.last_beat_at}>
-                  {since(w.last_beat_at)}
-                </time>,
-                <Code key="r">{w.release ?? "—"}</Code>,
-              ],
-            }))}
-          />
+          <>
+            <Automations health={health} />
+            <Panel>
+              <PanelHeader
+                title={<Trans>Webhook intake</Trans>}
+                meta={<Trans>Last 24 hours</Trans>}
+              />
+              {health.webhooks.length === 0 ? (
+                <Empty>{t`No Etsy notice has arrived yet.`}</Empty>
+              ) : (
+                <DataTable
+                  flow
+                  label={t`Webhook intake`}
+                  head={[t`Event`, t`Received`, t`Not processed yet`]}
+                  ends={[1, 2]}
+                  rows={health.webhooks.map((w) => ({
+                    key: `${w.source}-${w.event_type}`,
+                    cells: [
+                      <Code key="e">{w.event_type}</Code>,
+                      <N key="r">{count(w.received_last_day)}</N>,
+                      <N key="u">{count(w.unprocessed)}</N>,
+                    ],
+                  }))}
+                />
+              )}
+            </Panel>
+            <Panel>
+              <PanelHeader title={<Trans>Recent executions</Trans>} />
+              {health.executions.length === 0 ? (
+                <Empty>{t`No automation has run yet.`}</Empty>
+              ) : (
+                <DataTable
+                  flow
+                  label={t`Recent executions`}
+                  phoneHidden={[2, 3]}
+                  head={[t`Automation`, t`State`, t`Attempts`, t`Started`]}
+                  ends={[2]}
+                  rows={health.executions.map((e) => ({
+                    key: e.id,
+                    cells: [
+                      <button
+                        key="a"
+                        type="button"
+                        onClick={() => {
+                          setOpened(e.id);
+                        }}
+                        aria-label={t`Open the execution of ${e.automation_id}`}
+                        className="-mx-1 rounded-tag px-1 underline decoration-line-strong underline-offset-[3px] outline-none hover:decoration-current focus-visible:outline-2 focus-visible:outline-focus"
+                      >
+                        <Code>{e.automation_id}</Code>
+                      </button>,
+                      <StateWord key="s" state={e.state} />,
+                      <N key="n">{count(e.attempts)}</N>,
+                      <time key="t" dateTime={e.created_at}>
+                        {since(e.created_at)}
+                      </time>,
+                    ],
+                  }))}
+                />
+              )}
+            </Panel>
+            <Panel>
+              <PanelHeader title={<Trans>Outbox failures</Trans>} />
+              {health.outbox_failures.length === 0 ? (
+                <Empty>{t`Every message was delivered.`}</Empty>
+              ) : (
+                <DataTable
+                  flow
+                  label={t`Outbox failures`}
+                  phoneHidden={[2]}
+                  head={[t`Destination`, t`Status`, t`Attempts`, t`Last error`]}
+                  ends={[2]}
+                  rows={health.outbox_failures.map((o) => ({
+                    key: o.id,
+                    cells: [
+                      <Code key="d">{o.destination}</Code>,
+                      o.status === "dead" ? (
+                        <Status key="s" status="failed" label={t`Gave up`} />
+                      ) : (
+                        <Status key="s" status="queued" label={t`Retrying`} />
+                      ),
+                      <N key="n">{count(o.attempts)}</N>,
+                      <Code key="e">{o.last_error ?? "—"}</Code>,
+                    ],
+                  }))}
+                />
+              )}
+            </Panel>
+          </>
         )}
-      </Panel>
-      <Panel>
-        <PanelHeader title={<Trans>Shop syncs</Trans>} meta={<Trans>Twice a day</Trans>} />
-        {health.shops.length === 0 ? (
-          <Empty>{t`No reconciliation has run yet.`}</Empty>
-        ) : (
-          <DataTable
-            flow
-            label={t`Shop syncs`}
-            phoneHidden={[1, 3]}
-            head={[t`Shop`, t`Run`, t`Last success`, t`Drifts today`, t`Status`]}
-            ends={[3]}
-            rows={health.shops.map((s) => ({
-              key: `${s.shop_id}-${s.kind}`,
-              cells: [
-                <span key="n" dir="auto">
-                  {shopName(s.shop_id)}
-                </span>,
-                s.kind === "sweep" ? t`Full sweep` : t`Reconcile`,
-                <time key="t" dateTime={s.last_succeeded_at ?? undefined}>
-                  {since(s.last_succeeded_at)}
-                </time>,
-                <N key="d">{count(s.drifts_last_day)}</N>,
-                s.stale ? (
-                  <Status key="s" status="waityou" label={t`Stale`} />
-                ) : (
-                  <Status key="s" status="delivered" label={t`In sync`} />
-                ),
-              ],
-            }))}
-          />
-        )}
-      </Panel>
-      <Panel>
-        <PanelHeader title={<Trans>Webhook intake</Trans>} meta={<Trans>Last 24 hours</Trans>} />
-        {health.webhooks.length === 0 ? (
-          <Empty>{t`No Etsy notice has arrived yet.`}</Empty>
-        ) : (
-          <DataTable
-            flow
-            label={t`Webhook intake`}
-            head={[t`Event`, t`Received`, t`Not processed yet`]}
-            ends={[1, 2]}
-            rows={health.webhooks.map((w) => ({
-              key: `${w.source}-${w.event_type}`,
-              cells: [
-                <Code key="e">{w.event_type}</Code>,
-                <N key="r">{count(w.received_last_day)}</N>,
-                <N key="u">{count(w.unprocessed)}</N>,
-              ],
-            }))}
-          />
-        )}
-      </Panel>
-      <Panel>
-        <PanelHeader title={<Trans>Recent executions</Trans>} />
-        {health.executions.length === 0 ? (
-          <Empty>{t`No automation has run yet.`}</Empty>
-        ) : (
-          <DataTable
-            flow
-            label={t`Recent executions`}
-            phoneHidden={[2]}
-            head={[t`Automation`, t`State`, t`Attempts`, t`Started`]}
-            ends={[2]}
-            rows={health.executions.map((e) => ({
-              key: e.id,
-              cells: [
-                <button
-                  key="a"
-                  type="button"
-                  onClick={() => {
-                    setOpened(e.id);
-                  }}
-                  aria-label={t`Open the execution of ${e.automation_id}`}
-                  className="-mx-1 rounded-tag px-1 underline decoration-line-strong underline-offset-[3px] outline-none hover:decoration-current focus-visible:outline-2 focus-visible:outline-focus"
-                >
-                  <Code>{e.automation_id}</Code>
-                </button>,
-                <Code key="s">{e.state}</Code>,
-                <N key="n">{count(e.attempts)}</N>,
-                <time key="t" dateTime={e.created_at}>
-                  {since(e.created_at)}
-                </time>,
-              ],
-            }))}
-          />
-        )}
-      </Panel>
-      <Panel>
-        <PanelHeader title={<Trans>Outbox failures</Trans>} />
-        {health.outbox_failures.length === 0 ? (
-          <Empty>{t`Every message was delivered.`}</Empty>
-        ) : (
-          <DataTable
-            flow
-            label={t`Outbox failures`}
-            phoneHidden={[1]}
-            head={[t`Destination`, t`Status`, t`Attempts`, t`Last error`]}
-            ends={[2]}
-            rows={health.outbox_failures.map((o) => ({
-              key: o.id,
-              cells: [
-                <Code key="d">{o.destination}</Code>,
-                o.status === "dead" ? t`Gave up` : t`Retrying`,
-                <N key="n">{count(o.attempts)}</N>,
-                <Code key="e">{o.last_error ?? "—"}</Code>,
-              ],
-            }))}
-          />
-        )}
-      </Panel>
+      </TabPanel>
       {opened === null ? null : (
         <ExecutionSheet
+          organizationId={organizationId}
           executionId={opened}
           onClose={() => {
             setOpened(null);
@@ -328,10 +457,12 @@ function Empty({ children }: { children: ReactNode }) {
 /** Dead letters with their last error; a job is retried here, an execution in its sheet. */
 function DeadLetters({
   letters,
+  organizationId,
   onOpen,
   shopName,
 }: {
   letters: readonly DeadJob[];
+  organizationId: string;
   onOpen: (executionId: string) => void;
   shopName: (id: string | null) => string;
 }) {
@@ -346,13 +477,13 @@ function DeadLetters({
     setBusy(job.id);
     setSaid(null);
     try {
-      await retryDeadJob(api, job.id);
+      await retryDeadJob(api, organizationId, job.id);
       setSaid({
         id: job.id,
         ok: true,
         text: t`Queued again. It runs as soon as a worker is free.`,
       });
-      await client.invalidateQueries({ queryKey: operationsKeys.health });
+      await client.invalidateQueries({ queryKey: operationsKeys.health(organizationId) });
     } catch (error) {
       const type = error instanceof ApiError ? error.type : undefined;
       setSaid({
@@ -389,10 +520,10 @@ function DeadLetters({
         <DataTable
           flow
           label={t`Dead letters`}
-          phoneHidden={[1, 4]}
+          phoneHidden={[1, 2, 4]}
           head={[t`Job`, t`Shop`, t`Attempts`, t`Last error`, t`When`, ""]}
           ends={[2]}
-          rows={letters.map((job) => ({
+          rows={letters.map((job, index) => ({
             key: job.id,
             cells: [
               <Code key="k">{job.kind}</Code>,
@@ -407,6 +538,7 @@ function DeadLetters({
               job.execution_id === null ? (
                 <Button
                   key="r"
+                  id={index === 0 ? FIRST_DEAD : undefined}
                   size="sm"
                   isDisabled={busy !== null}
                   onPress={() => void retry(job)}
@@ -417,8 +549,9 @@ function DeadLetters({
               ) : (
                 <Button
                   key="o"
+                  id={index === 0 ? FIRST_DEAD : undefined}
                   size="sm"
-                  variant="ghost"
+                  variant="secondary"
                   onPress={() => {
                     onOpen(job.execution_id ?? "");
                   }}
@@ -456,7 +589,7 @@ function Automations({ health }: { health: OperationsHealth }) {
         <DataTable
           flow
           label={t`Automations`}
-          phoneHidden={[3, 4, 6]}
+          phoneHidden={[1, 3, 5, 6]}
           head={[t`Automation`, t`Runs`, t`Success`, t`Retries`, t`Dead letters`, t`p50`, t`p95`]}
           ends={[1, 2, 3, 4, 5, 6]}
           rows={health.automations.map((a) => ({
@@ -484,26 +617,45 @@ function Automations({ health }: { health: OperationsHealth }) {
 }
 
 /** One execution's chain (`GET /v1/executions/{id}`): its trigger, steps, actions and events. */
-function ExecutionSheet({ executionId, onClose }: { executionId: string; onClose: () => void }) {
+function ExecutionSheet({
+  organizationId,
+  executionId,
+  onClose,
+}: {
+  organizationId: string;
+  executionId: string;
+  onClose: () => void;
+}) {
   const { t } = useLingui();
   const api = useApi();
   const client = useQueryClient();
   const since = useAgo();
-  const chain = useQuery(executionChainQuery(api, executionId));
+  const chain = useQuery(executionChainQuery(api, organizationId, executionId));
   const [said, setSaid] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
   const retry = async (automationId: string) => {
+    // One request at a time: a double press sends one audited retry (Codex review of #60).
+    if (pending) return;
+    setPending(true);
     try {
-      await retryExecution(api, automationId, executionId);
+      await retryExecution(api, organizationId, automationId, executionId);
       setSaid(t`The execution goes back to its retry.`);
-      await client.invalidateQueries({ queryKey: operationsKeys.execution(executionId) });
-      await client.invalidateQueries({ queryKey: operationsKeys.health });
+      await client.invalidateQueries({
+        queryKey: operationsKeys.execution(organizationId, executionId),
+      });
+      await client.invalidateQueries({ queryKey: operationsKeys.health(organizationId) });
     } catch (error) {
       const status = error instanceof ApiError ? error.status : 0;
+      const type = error instanceof ApiError ? error.type : undefined;
       setSaid(
         status === 503
           ? t`Retrying executions is off on this server.`
-          : t`The execution could not be retried. Try again shortly.`,
+          : type === "execution-not-dead-lettered"
+            ? t`This execution is no longer dead-lettered.`
+            : t`The execution could not be retried. Try again shortly.`,
       );
+    } finally {
+      setPending(false);
     }
   };
   return (
@@ -526,7 +678,7 @@ function ExecutionSheet({ executionId, onClose }: { executionId: string; onClose
                   <Code>{chain.data.automation_id}</Code>
                 )
               }
-              meta={chain.data === undefined ? undefined : <Code>{chain.data.state}</Code>}
+              meta={chain.data === undefined ? undefined : <StateWord state={chain.data.state} />}
               actions={
                 <Button variant="ghost" onPress={onClose}>
                   <Trans>Close</Trans>
@@ -550,6 +702,7 @@ function ExecutionSheet({ executionId, onClose }: { executionId: string; onClose
                   {chain.data.state === "dead_lettered" ? (
                     <Button
                       variant="primary"
+                      isPending={pending}
                       onPress={() => void retry(chain.data.automation_id)}
                       className="self-start"
                     >
@@ -567,7 +720,7 @@ function ExecutionSheet({ executionId, onClose }: { executionId: string; onClose
                           <Code>{entry.name}</Code>
                           {entry.state === null ? null : (
                             <span className="text-caption text-muted">
-                              <Code>{entry.state}</Code>
+                              <StateWord state={entry.state} />
                             </span>
                           )}
                         </span>

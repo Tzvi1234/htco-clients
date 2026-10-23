@@ -325,6 +325,10 @@ msgstr "לקוחות פעילים:"
 msgid "Active listings"
 msgstr "ליסטינגים פעילים"
 
+#: src/features/admin/OperationsPage.tsx
+msgid "Activity"
+msgstr "פעילות"
+
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
 msgid "Activity"
@@ -760,6 +764,7 @@ msgstr "ביטול"
 msgid "Cancellation rate"
 msgstr "שיעור ביטולים"
 
+#: src/features/admin/OperationsPage.tsx
 #: src/features/commerce/OrdersPage.tsx
 #: src/features/commerce/refunds.tsx
 #: src/features/commerce/timeline.tsx
@@ -901,6 +906,10 @@ msgstr "בחירת סיסמה חדשה"
 msgid "Choose the workspace whose members you want to see and invite."
 msgstr "בחרו את סביבת העבודה שאת חבריה תרצו לראות ולהזמין."
 
+#: src/features/admin/OperationsPage.tsx
+msgid "Choose the workspace whose queue and syncs you want to see."
+msgstr "בחרו את סביבת העבודה שאת התור והסנכרונים שלה תרצו לראות."
+
 #: src/features/office/FloorPage.tsx
 msgid "Claude · model"
 msgstr "Claude · מודל"
@@ -958,6 +967,10 @@ msgstr "בהמשך"
 msgctxt "navigation"
 msgid "Commerce"
 msgstr "מסחר"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Compensated"
+msgstr "בוטל בפיצוי"
 
 #: src/features/work/demoScreens.tsx
 msgid "Completed today"
@@ -1266,6 +1279,10 @@ msgstr "תאריך"
 #: src/features/admin/OperationsPage.tsx
 msgid "Dead letters"
 msgstr "משימות שנכשלו"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Dead-lettered"
+msgstr "נכשל סופית"
 
 #: src/shared/demo/office.ts
 msgid "Debugger & Reliability Engineer"
@@ -1702,6 +1719,7 @@ msgstr "ייצוא ל־CSV"
 msgid "Exported {0} orders."
 msgstr "יוצאו {0} הזמנות."
 
+#: src/features/admin/OperationsPage.tsx
 #: src/shared/ui/kit/status.tsx
 msgid "Failed"
 msgstr "נכשל"
@@ -1929,6 +1947,10 @@ msgstr "בריאות מערכת"
 msgctxt "navigation"
 msgid "Health"
 msgstr "בריאות מערכת"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Health views"
+msgstr "תצוגות בריאות מערכת"
 
 #: src/features/customers/CustomersDemos.tsx
 #: src/features/office/AiOpsPage.tsx
@@ -2589,6 +2611,7 @@ msgstr "צריך לחבר מחדש"
 msgid "Needs reply:"
 msgstr "דורש תשובה:"
 
+#: src/features/admin/OperationsPage.tsx
 #: src/features/welcome/WelcomePage.tsx
 msgid "Needs you"
 msgstr "מחכה לך"
@@ -3080,6 +3103,10 @@ msgstr "פתיחת ההרצה"
 msgid "Open the execution of {0}"
 msgstr "פתיחת ההרצה של {0}"
 
+#: src/features/admin/OperationsPage.tsx
+msgid "Open the first dead letter"
+msgstr "פתיחת המשימה הראשונה שנכשלה"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "Open the web app"
 msgstr "לפתיחת אפליקציית הרשת"
@@ -3320,6 +3347,10 @@ msgstr "השהיית שיחה"
 #: src/features/office/FloorPage.tsx
 msgid "Paused"
 msgstr "מושהה"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Pending"
+msgstr "ממתין להתחלה"
 
 #: src/app/shell/TopBar.tsx
 msgid "Pending approvals"
@@ -3810,6 +3841,10 @@ msgstr "ניסיונות חוזרים"
 #: src/features/admin/OperationsPage.tsx
 msgid "Retry"
 msgstr "ניסיון חוזר"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Retry scheduled"
+msgstr "ניסיון חוזר מתוזמן"
 
 #: src/features/admin/OperationsPage.tsx
 msgid "Retry the execution"
@@ -4552,6 +4587,7 @@ msgid "Stopping"
 msgstr "נעצר עכשיו"
 
 #: src/features/admin/AdminDemos.tsx
+#: src/features/admin/OperationsPage.tsx
 msgid "Succeeded"
 msgstr "הצליח"
 
@@ -4904,6 +4940,10 @@ msgstr "לחשבון ה־Etsy הזה עדיין אין חנות. אפשר לפת
 #: src/features/shops/EtsyCallbackPage.tsx
 msgid "This Etsy shop is already connected to another workspace."
 msgstr "חנות ה־Etsy הזו כבר מחוברת לסביבת עבודה אחרת."
+
+#: src/features/admin/OperationsPage.tsx
+msgid "This execution is no longer dead-lettered."
+msgstr "ההרצה כבר לא במצב כשל."
 
 #: src/features/auth/AcceptInvitePage.tsx
 msgid "This invitation link has expired or was already used. Ask for a new one."
