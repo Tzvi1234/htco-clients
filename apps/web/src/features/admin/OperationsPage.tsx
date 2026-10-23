@@ -177,6 +177,7 @@ function Health({ health }: { health: OperationsHealth }) {
           <DataTable
             flow
             label={t`Workers`}
+            phoneHidden={[3]}
             head={[t`Worker`, t`Status`, t`Last beat`, t`Release`]}
             rows={health.workers.map((w) => ({
               key: w.worker_id,
@@ -205,6 +206,7 @@ function Health({ health }: { health: OperationsHealth }) {
           <DataTable
             flow
             label={t`Shop syncs`}
+            phoneHidden={[1, 3]}
             head={[t`Shop`, t`Run`, t`Last success`, t`Drifts today`, t`Status`]}
             ends={[3]}
             rows={health.shops.map((s) => ({
@@ -257,6 +259,7 @@ function Health({ health }: { health: OperationsHealth }) {
           <DataTable
             flow
             label={t`Recent executions`}
+            phoneHidden={[2]}
             head={[t`Automation`, t`State`, t`Attempts`, t`Started`]}
             ends={[2]}
             rows={health.executions.map((e) => ({
@@ -291,6 +294,7 @@ function Health({ health }: { health: OperationsHealth }) {
           <DataTable
             flow
             label={t`Outbox failures`}
+            phoneHidden={[1]}
             head={[t`Destination`, t`Status`, t`Attempts`, t`Last error`]}
             ends={[2]}
             rows={health.outbox_failures.map((o) => ({
@@ -385,6 +389,7 @@ function DeadLetters({
         <DataTable
           flow
           label={t`Dead letters`}
+          phoneHidden={[1, 4]}
           head={[t`Job`, t`Shop`, t`Attempts`, t`Last error`, t`When`, ""]}
           ends={[2]}
           rows={letters.map((job) => ({
@@ -451,6 +456,7 @@ function Automations({ health }: { health: OperationsHealth }) {
         <DataTable
           flow
           label={t`Automations`}
+          phoneHidden={[3, 4, 6]}
           head={[t`Automation`, t`Runs`, t`Success`, t`Retries`, t`Dead letters`, t`p50`, t`p95`]}
           ends={[1, 2, 3, 4, 5, 6]}
           rows={health.automations.map((a) => ({
