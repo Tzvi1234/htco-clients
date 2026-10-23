@@ -126,7 +126,7 @@ describe("Admin › Health (slice 5.9)", () => {
   it("he: speaks Hebrew, IDs and error codes stay LTR", async () => {
     await open({}, "he");
 
-    expect(screen.getByRole("heading", { level: 1, name: "בריאות" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 1, name: "בריאות מערכת" })).toBeInTheDocument();
     const code = await screen.findByText("MarketplaceUnavailableError");
     expect(code.closest(".ltr")).not.toBeNull();
     expect(document.documentElement.dir).toBe("rtl");
