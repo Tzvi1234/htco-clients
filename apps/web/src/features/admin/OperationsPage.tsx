@@ -538,7 +538,7 @@ function DeadLetters({
               job.execution_id === null ? (
                 <Button
                   key="r"
-                  id={index === 0 ? FIRST_DEAD : undefined}
+                  {...(index === 0 ? { id: FIRST_DEAD } : {})}
                   size="sm"
                   isDisabled={busy !== null}
                   onPress={() => void retry(job)}
@@ -549,7 +549,7 @@ function DeadLetters({
               ) : (
                 <Button
                   key="o"
-                  id={index === 0 ? FIRST_DEAD : undefined}
+                  {...(index === 0 ? { id: FIRST_DEAD } : {})}
                   size="sm"
                   variant="secondary"
                   onPress={() => {
