@@ -4,7 +4,6 @@ import type { ComponentType, ReactNode } from "react";
 import { APPROVALS, useAgent, type AgentId, type Risk } from "./agents.ts";
 import { cx } from "../../shared/lib/cx.ts";
 import { Button } from "../../shared/ui/Button.tsx";
-import { MoreIcon } from "../../shared/ui/icons.tsx";
 import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
 import {
   Avatar,
@@ -40,6 +39,7 @@ import {
   type AgentStatus,
   type Bi,
   type DotTone,
+  MoreGlyph,
 } from "../../shared/ui/kit/index.ts";
 
 const ltr = (text: ReactNode) => <span className="ltr">{text}</span>;
@@ -278,7 +278,7 @@ function ApprovalsDemo() {
         <PanelHeader
           title={<Trans>Pending decisions</Trans>}
           meta={ltr(3)}
-          actions={<CircleButton label={t`More`} icon={<MoreIcon size={16} />} />}
+          actions={<CircleButton label={t`More`} icon={<MoreGlyph size={16} />} />}
         />
         <div className="min-h-0 grow overflow-auto px-2 pb-2 [scrollbar-width:thin]">
           {APPROVALS.map((item, i) => {

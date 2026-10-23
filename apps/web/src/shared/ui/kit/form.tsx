@@ -17,7 +17,7 @@ import {
 } from "react-aria-components";
 
 import { cx } from "../../lib/cx.ts";
-import { ChevronIcon } from "../icons.tsx";
+import { ChevronGlyph } from "./glyphs.tsx";
 
 // The demo's form parts: the round field (`.fld` + `.inp`), choice chips (its `.tab` pills) and
 // the settings select (`.sec` over a wide pill with a chevron).
@@ -213,7 +213,7 @@ export function PillSelect<K extends string>({
         )}
       >
         <SelectValue className="truncate" />
-        <ChevronIcon
+        <ChevronGlyph
           size={10}
           className="shrink-0 transition-transform duration-[var(--motion-duration-base)] in-aria-expanded:rotate-180"
         />
@@ -255,7 +255,7 @@ export function PillValue({ label, value }: { label: string; value: ReactNode })
       <div className="mb-2 text-caption font-light text-muted">{label}</div>
       <span className="flex h-10 w-full items-center justify-between gap-2 rounded-pill border border-line-strong px-3.5 text-body-sm">
         <span className="truncate">{value}</span>
-        <ChevronIcon size={10} className="shrink-0" />
+        <ChevronGlyph size={10} className="shrink-0" />
       </span>
     </div>
   );

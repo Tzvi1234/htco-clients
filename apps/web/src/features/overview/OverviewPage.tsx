@@ -18,7 +18,6 @@ import {
 import { RiskChip } from "../../shared/demo/AgentBits.tsx";
 import { AGENTS, APPROVALS, agent, badge } from "../../shared/demo/office.ts";
 import { cx } from "../../shared/lib/cx.ts";
-import { ArrowEndIcon, GearIcon } from "../../shared/ui/icons.tsx";
 import { PageHeader } from "../../shared/ui/PageHeader.tsx";
 import { Button, buttonStyle } from "../../shared/ui/Button.tsx";
 import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
@@ -48,6 +47,8 @@ import {
   initialOf,
   useMinutes,
   LiveNote,
+  NextGlyph,
+  GearGlyph,
 } from "../../shared/ui/kit/index.ts";
 import { ShopReconnectBanner } from "../shops/index.ts";
 import { overviewQuery, type ShopOverview } from "../../shared/api/live.ts";
@@ -226,7 +227,7 @@ function TodayAction({ shops, sales }: { shops: number | undefined; sales: Sales
     return (
       <Link to="/shops" className={primary}>
         <Trans>Connect a shop</Trans>
-        <ArrowEndIcon size={14} />
+        <NextGlyph size={14} />
       </Link>
     );
   const waiting = (sales?.awaiting_shipment ?? 0) > 0;
@@ -234,7 +235,7 @@ function TodayAction({ shops, sales }: { shops: number | undefined; sales: Sales
     <>
       <Link to={waiting ? "/commerce/shipping" : "/commerce/orders"} className={primary}>
         {waiting ? <Trans>Open what waits to ship</Trans> : <Trans>Open orders</Trans>}
-        <ArrowEndIcon size={14} />
+        <NextGlyph size={14} />
       </Link>
       {waiting ? (
         <Link to="/commerce/orders" className={secondary}>
@@ -356,7 +357,7 @@ function NeedsYou() {
             title={t`All approvals`}
             className={circleStyle()}
           >
-            <ArrowEndIcon size={16} />
+            <NextGlyph size={16} />
           </Link>
         }
       />
@@ -444,7 +445,7 @@ function ShopsCard() {
       title={t`Shop settings`}
       className={circleStyle()}
     >
-      <GearIcon size={16} />
+      <GearGlyph size={16} />
     </Link>
   );
 
@@ -640,7 +641,7 @@ function OfficeTab() {
               title={t`Office floor`}
               className={circleStyle()}
             >
-              <ArrowEndIcon size={16} />
+              <NextGlyph size={16} />
             </Link>
           }
         />

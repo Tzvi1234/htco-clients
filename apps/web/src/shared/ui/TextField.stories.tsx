@@ -1,9 +1,9 @@
-import { EnvelopeSimpleIcon as Envelope, LockIcon as Lock } from "@phosphor-icons/react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, within } from "storybook/test";
 
 import { TextField, type TextFieldProps } from "./TextField.tsx";
 import { focusColour, transitionsEnded, useBi } from "../../test/stories.ts";
+import { LockGlyph, MailGlyph } from "./kit/index.ts";
 
 type Sample = Partial<Record<"label" | "description" | "errorMessage" | "placeholder", string>>;
 type SampleText = (say: ReturnType<typeof useBi>) => Sample;
@@ -51,7 +51,7 @@ export const LargeWithIcon: Story = {
     size: "lg",
     type: "email",
     ltr: true,
-    icon: Envelope,
+    icon: MailGlyph,
     text: (say) => ({ label: say("Email", "אימייל"), placeholder: "name@example.com" }),
   },
 };
@@ -60,7 +60,7 @@ export const Password: Story = {
   args: {
     size: "lg",
     type: "password",
-    icon: Lock,
+    icon: LockGlyph,
     defaultValue: "correct horse",
     text: (say) => ({ label: say("Password", "סיסמה") }),
   },

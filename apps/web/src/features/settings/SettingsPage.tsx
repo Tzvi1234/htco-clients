@@ -13,7 +13,6 @@ import {
   useApi,
 } from "../../shared/api/api.tsx";
 import { cx } from "../../shared/lib/cx.ts";
-import { ArrowEndIcon } from "../../shared/ui/icons.tsx";
 import { PageHeader } from "../../shared/ui/PageHeader.tsx";
 import { Panel, PanelBody, PanelHeader } from "../../shared/ui/Panel.tsx";
 import {
@@ -26,6 +25,7 @@ import {
   ShieldGlyph,
   Status,
   Toggle,
+  NextGlyph,
 } from "../../shared/ui/kit/index.ts";
 
 /** Sections enter one after another, 40 ms apart; nothing moves under reduced motion. */
@@ -135,7 +135,7 @@ function LinkRow({
         <span className="truncate text-body">{title}</span>
         <span className="truncate text-caption text-secondary">{line}</span>
       </span>
-      <ArrowEndIcon
+      <NextGlyph
         size={14}
         className="shrink-0 text-icon transition-transform duration-[var(--motion-duration-fast)] group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5"
       />

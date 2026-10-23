@@ -301,8 +301,9 @@ explicit value) — Tailwind's own radius scale is removed.
   to it, its label in `tertiary.text`. Filters and segmented choices stay ink.
 - **Focus panels:** a soft orange wash from the inline start (the title's side), dropped under
   more contrast and forced colours; the figure that needs the owner is orange and set at 400.
-- **Icons:** our line glyphs only; orange is at most the glyph colour, never an orange disc
-  behind an icon. See [round 4](docs/design/round4-brightness.md).
+- **Icons:** one set, our own glyphs (`apps/web/src/shared/ui/kit/glyphs.tsx`): solid shapes, with
+  strokes only for marks and arrows; no icon library. Orange is at most the glyph colour, never
+  an orange disc behind an icon. See [round 4](docs/design/round4-brightness.md).
 
 ### Demo frame (signature)
 

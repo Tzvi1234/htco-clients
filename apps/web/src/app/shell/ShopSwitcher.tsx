@@ -4,7 +4,7 @@ import { Link } from "@tanstack/react-router";
 
 import { meQuery, shopsQuery, useApi } from "../../shared/api/api.tsx";
 import { cx } from "../../shared/lib/cx.ts";
-import { ChevronIcon } from "../../shared/ui/icons.tsx";
+import { ChevronGlyph } from "../../shared/ui/kit/index.ts";
 
 interface WorkspaceShops {
   status: "pending" | "error" | "success";
@@ -66,7 +66,7 @@ export function ShopSwitcher() {
         <span className="block truncate text-body leading-tight">{name}</span>
         <span className="block truncate text-caption font-light text-muted">HT Commerce</span>
       </span>
-      <ChevronIcon size={12} className="shrink-0 text-secondary group-data-[mini]/sb:hidden" />
+      <ChevronGlyph size={12} className="shrink-0 text-secondary group-data-[mini]/sb:hidden" />
     </Link>
   );
 }

@@ -1,18 +1,18 @@
+import {
+  BagGlyph,
+  BoltGlyph,
+  ChatGlyph,
+  GridGlyph,
+  HomeGlyph,
+  PieGlyph,
+  PulseGlyph,
+  type Glyph,
+} from "../../shared/ui/kit/index.ts";
 // The app's navigation (Design 1C, client ADR-0008): seven areas, each with its tabs, in the
 // demo's order. A tab is `built` when a real screen answers its address; every other tab has a
 // route that renders a DemoScreen and shows a "Soon" tag in the navigation until its screen
 // lands. To build a screen: set `built: true` here and give its route a component in
 // router.tsx (docs/features/web-shell/design.md).
-import {
-  BagIcon,
-  BoltIcon,
-  ChatIcon,
-  GridIcon,
-  HomeIcon,
-  PieIcon,
-  PulseIcon,
-  type IconComponent,
-} from "../../shared/ui/icons.tsx";
 
 export type AreaId = "home" | "office" | "work" | "commerce" | "customers" | "finance" | "admin";
 
@@ -28,7 +28,7 @@ export interface NavTab {
 export interface NavArea {
   id: AreaId;
   group: "main" | "workspace" | "system";
-  icon: IconComponent;
+  icon: Glyph;
   /** Where the area opens: its first tab, or its own page. */
   to: string;
   tabs: readonly NavTab[];
@@ -38,25 +38,25 @@ const soon = (area: AreaId, ...ids: string[]): NavTab[] =>
   ids.map((id) => ({ id, to: `/${area}/${id}`, built: false }));
 
 export const AREAS: readonly NavArea[] = [
-  { id: "home", group: "main", icon: HomeIcon, to: "/", tabs: [] },
+  { id: "home", group: "main", icon: HomeGlyph, to: "/", tabs: [] },
   {
     id: "office",
     group: "workspace",
-    icon: GridIcon,
+    icon: GridGlyph,
     to: "/office/floor",
     tabs: soon("office", "floor", "chat", "team", "aiops", "eng"),
   },
   {
     id: "work",
     group: "workspace",
-    icon: BoltIcon,
+    icon: BoltGlyph,
     to: "/work/tasks",
     tabs: soon("work", "tasks", "approvals", "activity"),
   },
   {
     id: "commerce",
     group: "workspace",
-    icon: BagIcon,
+    icon: BagGlyph,
     to: "/shops",
     tabs: [
       { id: "shops", to: "/shops", built: true, also: ["/integrations/etsy/callback"] },
@@ -69,7 +69,7 @@ export const AREAS: readonly NavArea[] = [
   {
     id: "customers",
     group: "workspace",
-    icon: ChatIcon,
+    icon: ChatGlyph,
     to: "/customers/tickets",
     tabs: [
       ...soon("customers", "tickets"),
@@ -80,14 +80,14 @@ export const AREAS: readonly NavArea[] = [
   {
     id: "finance",
     group: "workspace",
-    icon: PieIcon,
+    icon: PieGlyph,
     to: "/finance/overview",
     tabs: soon("finance", "overview", "ledger"),
   },
   {
     id: "admin",
     group: "system",
-    icon: PulseIcon,
+    icon: PulseGlyph,
     to: "/admin/health",
     tabs: [
       ...soon("admin", "health", "automations"),

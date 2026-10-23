@@ -1,8 +1,8 @@
-import type { Icon } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
 
 import { cx } from "../lib/cx.ts";
 import { ObjectIcon, type Hue } from "./Tag.tsx";
+import type { Glyph } from "./kit/glyphs.tsx";
 
 interface StateCardProps {
   title: ReactNode;
@@ -10,7 +10,7 @@ interface StateCardProps {
   /** 1 when the state replaces the whole page (not found, failed screen); else 2 or 3. */
   headingLevel?: 1 | 2 | 3;
   /** The record type's icon and hue, shown large above the title. */
-  icon?: Icon;
+  icon?: Glyph;
   hue?: Hue;
   /** Faded placeholder rows that show the shape of what will appear here (never fake data). */
   preview?: boolean;

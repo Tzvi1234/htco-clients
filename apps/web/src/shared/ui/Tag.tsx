@@ -1,7 +1,7 @@
-import type { Icon } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
 
 import { cx } from "../lib/cx.ts";
+import type { Glyph } from "./kit/glyphs.tsx";
 
 export type Hue = "iris" | "saffron" | "coral" | "mint" | "sky" | "rose" | "slate";
 
@@ -54,12 +54,12 @@ const TILE = {
  * beside it names the record type.
  */
 export function ObjectIcon({
-  icon: Glyph,
+  icon: Shape,
   size = "sm",
 }: {
   /** Kept for the record type's identity in future views; icons themselves stay monochrome. */
   hue?: Hue;
-  icon: Icon;
+  icon: Glyph;
   size?: keyof typeof TILE;
 }) {
   return (
@@ -70,7 +70,7 @@ export function ObjectIcon({
         TILE[size].box,
       )}
     >
-      <Glyph size={TILE[size].glyph} weight="duotone" />
+      <Shape size={TILE[size].glyph} />
     </span>
   );
 }
