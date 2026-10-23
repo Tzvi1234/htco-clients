@@ -5,10 +5,11 @@ import { cx } from "../lib/cx.ts";
 export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
 export type ButtonSize = "sm" | "md" | "lg";
 
-// Design 1C (.btn): pills with a hairline; the primary is the inverse (ink) fill.
+// Design 1C (.btn): pills with a hairline; the primary is the inverse (ink) fill, its glyph in
+// orange (round 4; tertiary.on-inverse is checked at 4.5:1 on the ink).
 const VARIANTS: Record<ButtonVariant, string> = {
   primary:
-    "bg-action-primary text-action-primary-fg border-action-primary data-[hovered]:bg-action-primary-hover data-[pressed]:bg-action-primary-pressed",
+    "bg-action-primary text-action-primary-fg border-action-primary data-[hovered]:bg-action-primary-hover data-[pressed]:bg-action-primary-pressed [&_svg]:text-tertiary-on-inverse",
   secondary:
     "bg-transparent text-action-secondary-fg border-line-strong data-[hovered]:border-line-hover-strong data-[hovered]:bg-hover",
   ghost:
@@ -19,7 +20,7 @@ const VARIANTS: Record<ButtonVariant, string> = {
 // The same looks on plain elements (links), with CSS hover and active states.
 const LINK_VARIANTS: Record<ButtonVariant, string> = {
   primary:
-    "bg-action-primary text-action-primary-fg border-action-primary hover:bg-action-primary-hover active:bg-action-primary-pressed",
+    "bg-action-primary text-action-primary-fg border-action-primary hover:bg-action-primary-hover active:bg-action-primary-pressed [&_svg]:text-tertiary-on-inverse",
   secondary:
     "bg-transparent text-action-secondary-fg border-line-strong hover:border-line-hover-strong hover:bg-hover",
   ghost: "border-transparent bg-transparent text-secondary hover:bg-hover hover:text-primary",

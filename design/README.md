@@ -29,14 +29,14 @@ The earlier tweaks (contrast, frosted glass, borders) are no longer choices: the
 
 | Role | SBB light | SBB dark | Design 4 light | Design 4 dark | Token |
 |---|---|---|---|---|---|
-| Ground | `#ECECEB` | `#0E0E0F` | `#F3F4EE` | `#0F0E13` | `bg.ground` |
+| Ground | `#F5F5F3` | `#0E0E0F` | `#F3F4EE` | `#0F0E13` | `bg.ground` |
 | Panel | `#FFFFFF` | `#1B1B1D` | `#FFFFFF` | `#1C1B22` | `bg.panel` |
-| Raised (chips, bubbles, selected) | `#F5F5F4` | `#29292C` | `#F3F4EE` | `#29282F` | `bg.raised`, `bg.selected` (D4 `#D8CFEE`) |
+| Raised (chips, bubbles, selected) | `#F1F1EF` | `#29292C` | `#F3F4EE` | `#29282F` | `bg.raised`, `bg.selected` (D4 `#D8CFEE`) |
 | Sidebar | `#FFFFFF` | `#19191B` | `#FFFFFF` | `#1A191F` | `bg.sidebar` |
 | Ink (text, current item) | `#000000` | `#F7F7F7` | `#000000` | `#F7F8F2` | `text.primary`, `inverse.bg` |
 | Accent | orange `#FF7F36` | orange | lilac `#8C76D6` | lilac `#A996E8` | `accent.mark`, `accent.fill` |
 | Attention | orange | orange | lemon `#EDD803` | lemon | `attention.fill` |
-| Lines | `#E3E3E2`, `#D4D4D3` | `#2E2E31`, `#3E3E42` | `#E3E4DE`, `#CBCCC6` | `#2F2E36`, `#403F48` | `border.subtle`, `border.strong` |
+| Lines | `#E0E0DD`, `#D2D2CF` | `#2E2E31`, `#3E3E42` | `#E3E4DE`, `#CBCCC6` | `#2F2E36`, `#403F48` | `border.subtle`, `border.strong` |
 
 - **Text is always AA.** The prototype's `--mute`, `--soft`, the orange, lilac and lemon fail 4.5:1 as text on its panels. They keep their look where they are not text (`icon.faint`, `accent.mark`, `attention.fill`, the logo); text uses `text.secondary`, `text.muted`, `accent.text`, `attention.text`, which are solved per mode against every surface, glass included.
 - **The inverse fill** (`inverse.bg` with `inverse.text`) marks what is current: the active area circle, the current tab pill (with the accent dot, `accent.on-inverse`), the primary button, the chosen segment.

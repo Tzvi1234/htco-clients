@@ -5,20 +5,20 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Light">
-            <SolidColorBrush x:Key="HtcoBgGroundBrush" Color="#FFECECEB" />
+            <SolidColorBrush x:Key="HtcoBgGroundBrush" Color="#FFF5F5F3" />
             <SolidColorBrush x:Key="HtcoBgPanelBaseBrush" Color="#FFFFFFFF" />
             <SolidColorBrush x:Key="HtcoBgPanelBrush" Color="#FFFFFFFF" />
-            <SolidColorBrush x:Key="HtcoBgRaisedBrush" Color="#FFF5F5F4" />
+            <SolidColorBrush x:Key="HtcoBgRaisedBrush" Color="#FFF1F1EF" />
             <SolidColorBrush x:Key="HtcoBgSidebarBrush" Color="#FFFFFFFF" />
-            <SolidColorBrush x:Key="HtcoBgHoverBrush" Color="#FFF0F0EF" />
-            <SolidColorBrush x:Key="HtcoBgSelectedBrush" Color="#FFF5F5F4" />
-            <SolidColorBrush x:Key="HtcoBgMenuBrush" Color="#FFF5F5F4" />
+            <SolidColorBrush x:Key="HtcoBgHoverBrush" Color="#FFEEEEEC" />
+            <SolidColorBrush x:Key="HtcoBgSelectedBrush" Color="#FFF1F1EF" />
+            <SolidColorBrush x:Key="HtcoBgMenuBrush" Color="#FFF1F1EF" />
             <SolidColorBrush x:Key="HtcoBgCardBrush" Color="#FFFFFFFF" />
             <SolidColorBrush x:Key="HtcoBgTableHeadBrush" Color="#FFFFFFFF" />
-            <SolidColorBrush x:Key="HtcoBgAppBrush" Color="#FFECECEB" />
+            <SolidColorBrush x:Key="HtcoBgAppBrush" Color="#FFF5F5F3" />
             <SolidColorBrush x:Key="HtcoBgCanvasBrush" Color="#FFFFFFFF" />
-            <SolidColorBrush x:Key="HtcoBgSurfaceBrush" Color="#FFF5F5F4" />
-            <SolidColorBrush x:Key="HtcoBgSunkenBrush" Color="#FFECECEB" />
+            <SolidColorBrush x:Key="HtcoBgSurfaceBrush" Color="#FFF1F1EF" />
+            <SolidColorBrush x:Key="HtcoBgSunkenBrush" Color="#FFF5F5F3" />
             <SolidColorBrush x:Key="HtcoBgBrandBrush" Color="#FFFFE0CC" />
             <SolidColorBrush x:Key="HtcoTextPrimaryBrush" Color="#FF000000" />
             <SolidColorBrush x:Key="HtcoTextOnBrandBrush" Color="#FF000000" />
@@ -29,10 +29,10 @@
             <SolidColorBrush x:Key="HtcoIconDefaultBrush" Color="#FF575757" />
             <SolidColorBrush x:Key="HtcoIconFaintBrush" Color="#FF9A9A9A" />
             <SolidColorBrush x:Key="HtcoIconMutedBrush" Color="#FF808080" />
-            <SolidColorBrush x:Key="HtcoBorderSubtleBrush" Color="#FFE3E3E2" />
-            <SolidColorBrush x:Key="HtcoBorderStrongBrush" Color="#FFD4D4D3" />
-            <SolidColorBrush x:Key="HtcoBorderEdgeBrush" Color="#FFE3E3E2" />
-            <SolidColorBrush x:Key="HtcoBorderSidebarBrush" Color="#FFE3E3E2" />
+            <SolidColorBrush x:Key="HtcoBorderSubtleBrush" Color="#FFE0E0DD" />
+            <SolidColorBrush x:Key="HtcoBorderStrongBrush" Color="#FFD2D2CF" />
+            <SolidColorBrush x:Key="HtcoBorderEdgeBrush" Color="#FFE0E0DD" />
+            <SolidColorBrush x:Key="HtcoBorderSidebarBrush" Color="#FFE0E0DD" />
             <SolidColorBrush x:Key="HtcoBorderHoverBrush" Color="#FF9D9D9D" />
             <SolidColorBrush x:Key="HtcoBorderHoverStrongBrush" Color="#FF8A8A8A" />
             <SolidColorBrush x:Key="HtcoBorderFocusBrush" Color="#FF000000" />
@@ -46,8 +46,8 @@
             <SolidColorBrush x:Key="HtcoActionPrimaryBgHoverBrush" Color="#FF262626" />
             <SolidColorBrush x:Key="HtcoActionPrimaryBgPressedBrush" Color="#FF262626" />
             <SolidColorBrush x:Key="HtcoActionPrimaryFgBrush" Color="#FFFFFFFF" />
-            <SolidColorBrush x:Key="HtcoActionSecondaryBgBrush" Color="#FFF5F5F4" />
-            <SolidColorBrush x:Key="HtcoActionSecondaryBgHoverBrush" Color="#FFF0F0EF" />
+            <SolidColorBrush x:Key="HtcoActionSecondaryBgBrush" Color="#FFF1F1EF" />
+            <SolidColorBrush x:Key="HtcoActionSecondaryBgHoverBrush" Color="#FFEEEEEC" />
             <SolidColorBrush x:Key="HtcoActionSecondaryFgBrush" Color="#FF000000" />
             <SolidColorBrush x:Key="HtcoActionSecondaryBorderBrush" Color="#FF808080" />
             <SolidColorBrush x:Key="HtcoActionDangerBgBrush" Color="#FFC62828" />

@@ -1379,12 +1379,12 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.9255,
-            0.9255,
-            0.9216
+            0.9608,
+            0.9608,
+            0.9529
           ],
           "alpha": 1,
-          "hex": "#ececeb"
+          "hex": "#f5f5f3"
         }
       },
       "panel": {
@@ -1405,12 +1405,12 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.9608,
-            0.9608,
-            0.9569
+            0.9451,
+            0.9451,
+            0.9373
           ],
           "alpha": 1,
-          "hex": "#f5f5f4"
+          "hex": "#f1f1ef"
         }
       },
       "line": {
@@ -1418,12 +1418,12 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.8902,
-            0.8902,
-            0.8863
+            0.8784,
+            0.8784,
+            0.8667
           ],
           "alpha": 1,
-          "hex": "#e3e3e2"
+          "hex": "#e0e0dd"
         }
       },
       "line-2": {
@@ -1431,12 +1431,12 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.8314,
-            0.8314,
-            0.8275
+            0.8235,
+            0.8235,
+            0.8118
           ],
           "alpha": 1,
-          "hex": "#d4d4d3"
+          "hex": "#d2d2cf"
         }
       },
       "line-hover": {
@@ -1615,12 +1615,12 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.8902,
-            0.8902,
-            0.8863
+            0.8784,
+            0.8784,
+            0.8667
           ],
           "alpha": 1,
-          "hex": "#e3e3e2"
+          "hex": "#e0e0dd"
         }
       },
       "hover": {
@@ -1628,12 +1628,12 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.9412,
-            0.9412,
-            0.9373
+            0.9333,
+            0.9333,
+            0.9255
           ],
           "alpha": 1,
-          "hex": "#f0f0ef"
+          "hex": "#eeeeec"
         }
       },
       "card": {

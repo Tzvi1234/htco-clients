@@ -102,15 +102,17 @@ function Category({
   const name = labels.area(area);
   const circle = cx(
     CIRCLE,
+    // Round 4: the current area is the whole row as an orange-tinted pill with the glyph in
+    // orange; the other areas' discs are light, so the current one stands out.
     active
-      ? "border-inverse bg-inverse text-tertiary-on-inverse"
-      : "border-line-strong group-hover/cat:border-line-hover",
-    active && mini && "shadow-[0_0_0_3px_var(--bg-sidebar),0_0_0_4px_var(--border-strong)]",
+      ? "border-transparent text-tertiary-text"
+      : "border-line bg-card group-hover/cat:border-line-hover",
   );
   const head = cx(
     "group/cat relative flex h-12 w-full cursor-default items-center gap-3 rounded-[24px] ps-1 pe-2.5 text-start whitespace-nowrap no-underline text-primary outline-none",
-    "transition-[background-color,scale] duration-[var(--motion-duration-fast)] ease-standard hover:bg-hover active:scale-[0.99]",
+    "transition-[background-color,color,scale] duration-[var(--motion-duration-fast)] ease-standard active:scale-[0.99]",
     "group-data-[mini]/sb:justify-center group-data-[mini]/sb:p-0",
+    active ? "bg-tertiary-subtle" : "hover:bg-hover",
   );
   const body = (
     <>

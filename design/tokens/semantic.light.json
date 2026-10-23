@@ -1054,7 +1054,7 @@
               0,
               0
             ],
-            "alpha": 0.04,
+            "alpha": 0.05,
             "hex": "#000000"
           },
           "offsetX": {
@@ -1082,7 +1082,7 @@
               0,
               0
             ],
-            "alpha": 0.05,
+            "alpha": 0.08,
             "hex": "#000000"
           },
           "offsetX": {
@@ -1090,15 +1090,15 @@
             "unit": "px"
           },
           "offsetY": {
-            "value": 6,
+            "value": 8,
             "unit": "px"
           },
           "blur": {
-            "value": 16,
+            "value": 24,
             "unit": "px"
           },
           "spread": {
-            "value": -10,
+            "value": -14,
             "unit": "px"
           }
         }
