@@ -22,10 +22,12 @@ Paths below are relative to `apps/web/src` unless they start with another folder
 
 ## What holds
 
-- **RTL:** no physical classes or properties. ESLint `htco/logical-properties` and `scripts/css-logical-properties.ts` enforce this. The only physical CSS is in `floor.css` (lines 38, 58, 155, 190 and 210), where each use is commented as deliberate because the map is a picture.
+- **RTL:** no unpaired physical classes or properties. ESLint `htco/logical-properties` and `scripts/css-logical-properties.ts` enforce this.
+  - `floor.css` (lines 38, 58, 155, 190 and 210) is physical on purpose, commented, because the map is a picture.
+  - `kit.css:72-77` sets the chart fills' `transform-origin: left`, paired with a `[dir="rtl"]` rule. That is correct today, but the stylesheet check does not inspect `transform-origin`, so add it to `scripts/css-logical-properties.ts`.
 - **Hebrew catalog:** complete. `he` and `en` each have 1,225 msgids, with 0 empty and 0 fuzzy entries. Four Hebrew entries contain no Hebrew letters (Android, Etsy, "Etsy:", Windows), which is correct.
 - **Orange is the only emphasis colour.** No lilac, hue or brand class is used for emphasis on any screen.
-- **One focus panel.** Every real screen has exactly one `<Focus>` inside `<Flow>`. Settings has none, as its Part A design intends.
+- **One focus panel:** this holds on every real screen except two Shops views (see P2-9). Settings has none, as its Part A design intends.
 - **Status words:** the dots checked all have a word beside them (`live.tsx:298`, `ProductsPage:271` "Sold out", the Late columns on Orders and Shipping).
 - **Contrast at the token level:** `packages/design-tokens/src/contrast.ts:67-82` checks the round-4 pairs on `tertiary.subtle`, and `tertiary.on-inverse` at 4.5:1. That is 225 pairs × 114 modes, plus the nav glass (`test/contrast.test.ts:97-103`, `:142`).
 
@@ -37,12 +39,13 @@ Paths below are relative to `apps/web/src` unless they start with another folder
   - `CheckIcon` and `CheckGlyph`, and `CloseIcon` and `CloseGlyph`, have identical paths.
   - `ArrowEndIcon`/`NextGlyph`, `BellIcon`/`BellGlyph`, `SearchIcon`/`SearchGlyph`, `ChatIcon`/`ChatGlyph` and `BoltIcon`/`BoltGlyph` are the same icons in both sets.
 - `@phosphor-icons/react` (`apps/web/package.json:26`) is left over from Relay. Client ADR-0007, which chose it, is superseded, and round 4 says "icons stay ours". Yet Phosphor is still used:
-  - imported directly in `features/auth/SecondFactorPage.tsx:2` (`ShieldCheckIcon`);
-  - typed into the `icon` props of `shared/ui/Banner.tsx:1`, `EmptyState.tsx:1`, `TextField.tsx:1` and `Tag.tsx:1`.
+  - concrete icons imported in `features/auth/SecondFactorPage.tsx:2` (`ShieldCheckIcon`) and `shared/ui/Banner.tsx:1` (`CloudSlashIcon`);
+  - the icon types in `EmptyState.tsx`, `TextField.tsx` and `Tag.tsx`;
+  - the stories for EmptyState, IconButton, PageHeader, Tag and TextField.
 - **Fix:**
   - One icon module (the kit's glyphs).
   - The `icon` props take the house glyph type.
-  - `SecondFactorPage` uses `ShieldGlyph` (`glyphs.tsx:93`).
+  - `SecondFactorPage` uses `ShieldGlyph` (`glyphs.tsx:93`), and `Banner` and the stories use house glyphs.
   - Then drop Phosphor, with the owner's OK.
 
   This changes visuals, so it goes in a design-cleanup slice before Phase 6 adds screens.
@@ -136,7 +139,11 @@ Paths below are relative to `apps/web/src` unless they start with another folder
 
 - `shared/ui/Panel.tsx:68` `PanelBody` scrolls by default (`overflow-auto`), and `SettingsPage` uses it five times (`:72`, `:99`, `:159`, `:214` and `:267`).
 - Settings is missing from `SCREENS` in `e2e/journeys/clarity-screens.spec.ts:11-20`.
-- **Fix:** add `["Settings", "/settings"]` to `SCREENS`, and drop `overflow-auto` from the default. Verify in CI with the e2e baselines.
+- **Fix:**
+  - Add `["Settings", "/settings"]` to `SCREENS`.
+  - Keep `overflow-auto` as `PanelBody`'s default. Demo routes fill the viewport through `DemoFrame`/`Screen` and use `PanelBody` as their only scroller, so dropping it would clip them.
+  - Settings instead passes a non-scrolling body, or uses plain panels.
+  - Verify in CI with the e2e baselines.
 - `OrdersPage:684` scrolls inside a modal dialog, which is allowed.
 - Demo screens scroll inside panels in many places:
   - `CustomersDemos:145`, `:172` and `:365`;
@@ -145,12 +152,12 @@ Paths below are relative to `apps/web/src` unless they start with another folder
 
   This is allowed today, but it must go when those screens are built.
 
-### P2-7: the 3D office still uses the retired Cream (`d4`) colours
+### P2-7: dead Cream (`d4`) palette data in the 3D office
 
 - `floor3d/palette.ts:3` and `:174-188` use lilac `#8C76D6` as the accent and lemon `0xedd803` for "waiting for you". ADR-0009 §4 retired both, and the generated `d4` tokens now use orange (`--accent-fill: #ff7f36`).
 - The text is stale too: the comment at `styles.css` (~line 49, "lilac in Design 4") and the DESIGN.md front matter (`d4-lilac`, `d4-lemon`).
-- Office is a demo screen, so this breaks no rule on a real screen yet.
-- **Fix:** switch the `d4` values in `palette.ts` to orange. This changes visuals, so it goes in the next Office pass.
+- These colours are unreachable: `FloorPage.tsx:97-99` hard-codes `palette = "sbb"` (the orange scene) for every palette, so the screen already shows orange in Cream.
+- **Fix:** delete the `d4` palette data and its type member, and fix the two stale texts. There is no visual change.
 
 ### P2-8: contrast tests stop at the tokens
 
@@ -159,6 +166,17 @@ Paths below are relative to `apps/web/src` unless they start with another folder
   - `kit/thumb.tsx:37-77`: 12 light-only colours that also show in dark mode.
   - The text drawn on the 3D canvas (`scene.ts:369-465`).
 - **Fix:** run the screen spec in dark and Cream as well, and move the thumbnail colours to tokens.
+
+### P2-9: two Shops views break the one-focus rule
+
+- On the Statistics sub-tab, `ShopsPage.tsx:266` keeps its `<Focus>` mounted and also renders `ShopStats` (`:368-373`), whose root is a second `<Focus>` (`ShopStats.tsx:187`).
+- The no-shop branch returns without any `<Focus>`.
+- **Fix:**
+  - `ShopStats` renders a plain section inside the page's focus panel.
+  - The empty state gets the focus panel.
+  - Add a test that counts `<Focus>` elements per view.
+
+  This changes layout, so it goes in the next clarity pass.
 
 ### P3 findings
 
@@ -202,5 +220,6 @@ Paths below are relative to `apps/web/src` unless they start with another folder
 | Merge `shared/ui` into the kit, delete the dead parts (P2-4) | Same cleanup |
 | 11px moved to caption; off-scale radii and durations; z-index layer tokens (P2-1, P2-2, P2-3) | A token round, with new baselines |
 | Settings in the clarity spec; `PanelBody` without inner scroll; dark and Cream axe runs (P2-6, P2-8) | Next clarity pass |
-| Office palette in orange (P2-7) | Next Office pass |
+| Delete the dead `d4` Office palette (P2-7) | Any time |
+| Shops Statistics and empty views to one focus panel (P2-9) | Next clarity pass |
 | One feature-folder template (P3) | With the cleanup |
