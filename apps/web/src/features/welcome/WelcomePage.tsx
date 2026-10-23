@@ -69,7 +69,7 @@ function TopBar() {
   const { locale, setLocale } = useLocale();
   const over = useToneUnderBar();
   return (
-    <div className="w-bar sticky top-0 z-30 px-2 pt-2">
+    <div className="w-bar sticky top-0 z-popover px-2 pt-2">
       <header
         data-glass=""
         data-over={over}
@@ -161,7 +161,7 @@ function Hero() {
       aria-labelledby="welcome-title"
       className="w-hero relative mx-auto grid max-w-[1440px] items-center gap-6 px-6 pt-10 pb-16 sm:px-10 lg:min-h-[calc(100dvh-72px)] lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:pt-4"
     >
-      <div className="relative z-20 flex flex-col gap-8 max-lg:order-2">
+      <div className="relative z-sticky flex flex-col gap-8 max-lg:order-2">
         <h1
           id="welcome-title"
           className="w-in m-0 text-display leading-[1.02] font-light tracking-[-0.02em] text-balance sm:text-hero xl:text-[84px]"

@@ -629,7 +629,7 @@ function OrderSheet({
       onOpenChange={(isOpen) => {
         if (!isOpen) onClose();
       }}
-      className="fixed inset-0 z-50 flex items-end justify-center bg-[color-mix(in_srgb,var(--bg-ground)_60%,transparent)] sm:items-center"
+      className="fixed inset-0 z-overlay flex items-end justify-center bg-[color-mix(in_srgb,var(--bg-ground)_60%,transparent)] sm:items-center"
     >
       <Modal className="w-full sm:max-w-[560px] animate-[htco-sheet-in_var(--motion-duration-slow)_var(--motion-easing-enter)_both] p-2 pb-[max(8px,env(safe-area-inset-bottom))]">
         <Dialog className="outline-none" aria-label={t`Order ${String(order.order_id)}`}>

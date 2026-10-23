@@ -3122,6 +3122,39 @@
       }
     }
   },
+  "layer": {
+    "$description": "Stacking layers (z-index) by role, lowest first. Web utilities: z-raised, z-sticky, z-popover, z-overlay, z-toast; a local tie-break inside one component may use z-[1] to z-[9].",
+    "base": {
+      "$type": "number",
+      "$value": 0,
+      "$description": "The page itself"
+    },
+    "raised": {
+      "$type": "number",
+      "$value": 10,
+      "$description": "Above its neighbours inside a screen: a chart tooltip, the phone tab bar's pill, a sticky page header"
+    },
+    "sticky": {
+      "$type": "number",
+      "$value": 20,
+      "$description": "Bars that stay while the page scrolls: the top bar, the phone tab bar"
+    },
+    "popover": {
+      "$type": "number",
+      "$value": 30,
+      "$description": "Menus that open from a bar: the account menu"
+    },
+    "overlay": {
+      "$type": "number",
+      "$value": 50,
+      "$description": "Dialogs, sheets, the command menu and their backdrops"
+    },
+    "toast": {
+      "$type": "number",
+      "$value": 60,
+      "$description": "Toasts, above everything"
+    }
+  },
   "glass": {
     "$description": "Frosted glass (tweak 2); off by default. Web only.",
     "blur": {

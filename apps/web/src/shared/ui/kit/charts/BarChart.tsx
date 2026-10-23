@@ -183,7 +183,7 @@ export function ChartTip({
     <span
       data-tip
       className={cx(
-        "pointer-events-none absolute bottom-full z-10 flex flex-col items-center rounded-[8px] bg-inverse px-2.5 py-1.5 text-center text-caption whitespace-nowrap text-on-inverse shadow-sm",
+        "pointer-events-none absolute bottom-full z-raised flex flex-col items-center rounded-[8px] bg-inverse px-2.5 py-1.5 text-center text-caption whitespace-nowrap text-on-inverse shadow-sm",
         "opacity-0 transition-opacity duration-[var(--motion-duration-fast)] group-hover:opacity-100",
         at === "start"
           ? "inset-s-0"

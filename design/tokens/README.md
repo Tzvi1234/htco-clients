@@ -4,7 +4,7 @@ The single source of truth for colour, type, spacing, shape, motion and sizes on
 
 | File | Holds |
 |---|---|
-| [`base.json`](base.json) | Primitives: the brand colours, Design 1C's named colours for each palette and theme (`palette.sbb`, `palette.sbb-dark`, `palette.d4`, `palette.d4-dark`), the data-colour ramps, font families, type scale, spacing, radii, sizes, motion, glass, breakpoints |
+| [`base.json`](base.json) | Primitives: the brand colours, Design 1C's named colours for each palette and theme (`palette.sbb`, `palette.sbb-dark`, `palette.d4`, `palette.d4-dark`), the data-colour ramps, font families, type scale, spacing, radii, sizes, motion, glass, breakpoints, stacking layers (`layer`: base, raised, sticky, popover, overlay, toast; web utilities `z-raised`… refused as numbers by `htco/token-layers`) |
 | [`semantic.light.json`](semantic.light.json) | Semantic tokens of the default palette (SBB), light theme, as references into `base.json` |
 | [`semantic.dark.json`](semantic.dark.json) | The same semantic tokens, dark theme |
 | [`modes/`](modes/) | Overlays: the Design 4 palette (`palette-d4.*`) and the tweak levels (`contrast-2/3.*`, `borders-2/3.*`, `glass-2/3.*`, `glass-2/3-d4.*`), each light and dark, setting only the tokens they change |
@@ -41,7 +41,7 @@ Every text pair is at least 4.5:1 and every control boundary, focus ring and sta
 | Android | `HtcoTokens.kt` (package `app.htco.designsystem.tokens`) | `HtcoColors.Light` and `HtcoColors.Dark`, `HtcoSpacing`, `HtcoRadius`, `HtcoSize`, `HtcoBorderWidth`, `HtcoType` (sizes and line heights in sp, weights), `HtcoMotion` (milliseconds and easing); pixels become dp, 1rem is 16 | `bgCanvas`, `textPrimary`, `space4` |
 | Windows | `HtcoTokens.xaml` | A `ResourceDictionary` with `SolidColorBrush` resources in `Light` and `Dark` theme dictionaries, sizes as `x:Double`, radii as `CornerRadius`. The `HighContrast` dictionary, mapped to Windows system colours, is designed with the Windows app (Phase 17) | `HtcoBgCanvasBrush`, `HtcoSpace4`, `HtcoRadiusMd` |
 
-Unpublished on purpose: the palette ramps and raw brand colours (semantic tokens reference them) and the breakpoints. Font families stay on the web; Android and Windows load fonts as resources.
+Unpublished on purpose: the palette ramps and raw brand colours (semantic tokens reference them), the breakpoints and the layers. Font families stay on the web; Android and Windows load fonts as resources.
 
 ## Changing a token
 
