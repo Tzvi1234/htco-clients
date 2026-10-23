@@ -11,15 +11,28 @@ export const DEAD_EXECUTION_JOB = "0b000000-0000-7000-8000-0000000000d2";
 export const DEAD_EXECUTION = "0e000000-0000-7000-8000-0000000000e2";
 export const GOOD_EXECUTION = "0e000000-0000-7000-8000-0000000000e1";
 
+/**
+ * What the focus panel leads with: dead letters (the default), no worker running, a stale shop,
+ * or everything in order.
+ */
+export type FakeScene = "dead" | "noWorker" | "stale" | "calm";
+
 export interface FakeOperations {
+  scene: FakeScene;
   /** Dead jobs still dead (a retry removes one). */
   dead: string[];
   /** Executions sent back to their retry. */
   retriedExecutions: string[];
+  /** Set: an execution retry answers only once this promise settles (a slow connection). */
+  hold?: Promise<unknown>;
 }
 
-export function fakeOperations(): FakeOperations {
-  return { dead: [DEAD_JOB, DEAD_EXECUTION_JOB], retriedExecutions: [] };
+export function fakeOperations(scene: FakeScene = "dead"): FakeOperations {
+  return {
+    scene,
+    dead: scene === "dead" ? [DEAD_JOB, DEAD_EXECUTION_JOB] : [],
+    retriedExecutions: [],
+  };
 }
 
 const iso = (now: number, minutesAgo: number) => new Date(now - minutesAgo * 60_000).toISOString();
@@ -72,7 +85,7 @@ export function fakeHealth(
         started_at: iso(now, 300),
         last_beat_at: iso(now, 0.3),
         age_seconds: 18,
-        alive: true,
+        alive: ops.scene !== "noWorker",
         stopping: false,
         current_job_id: null,
       },
@@ -82,7 +95,7 @@ export function fakeHealth(
         started_at: iso(now, 900),
         last_beat_at: iso(now, 27),
         age_seconds: 1620,
-        alive: false,
+        alive: ops.scene === "calm",
         stopping: false,
         current_job_id: null,
       },
@@ -96,7 +109,7 @@ export function fakeHealth(
       last_error: i === 0 ? null : "ShopBusyError",
       drifts_last_day: i === 0 ? 1 : 0,
       drifts_total: i === 0 ? 3 : 0,
-      stale: i !== 0,
+      stale: i !== 0 && ops.scene !== "calm",
     })),
     webhooks: [
       { source: "etsy", event_type: "order.paid", received_last_day: 14, unprocessed: 0 },

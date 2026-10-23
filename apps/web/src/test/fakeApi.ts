@@ -492,10 +492,22 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
       });
     }
 
-    const admin = state.role === "owner" || state.role === "admin";
+    // The operations calls name their workspace: a member of several who names none gets 400.
+    const operational =
+      route === "GET /v1/operations/health" ||
+      /^POST \/v1\/operations\/dead-letters\/[^/]+\/retry$/.test(route) ||
+      /^GET \/v1\/executions\/[^/]+$/.test(route) ||
+      /^POST \/v1\/automations\/[^/]+\/executions\/[^/]+\/retry$/.test(route);
+    const named = url.searchParams.get("organization_id");
+    if (operational && named === null && state.otherOrgs.length > 0)
+      return problem(400, "organization-required");
+    const workspace = named ?? org;
+    const admin = workspace === org ? state.role === "owner" || state.role === "admin" : true;
     if (route === "GET /v1/operations/health") {
       if (!admin) return problem(403, "forbidden");
-      return json(200, fakeHealth(org, state.shops, state.operations));
+      // Another workspace of the user runs calmly: switching shows its own numbers.
+      const ops = workspace === org ? state.operations : fakeOperations("calm");
+      return json(200, fakeHealth(workspace, state.shops, ops));
     }
     const deadRetry = /^POST \/v1\/operations\/dead-letters\/([^/]+)\/retry$/.exec(route);
     if (deadRetry !== null) {
@@ -515,6 +527,9 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
     if (executionRetry !== null) {
       if (!admin) return problem(403, "forbidden");
       const id = executionRetry[2] ?? "";
+      if (state.operations.hold !== undefined) await state.operations.hold;
+      if (id !== DEAD_EXECUTION || state.operations.retriedExecutions.includes(id))
+        return problem(409, "execution-not-dead-lettered");
       state.operations.retriedExecutions.push(id);
       return json(200, {
         id,
