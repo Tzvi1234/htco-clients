@@ -78,12 +78,12 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.3922,
-            0.3922,
-            0.3922
+            0.3412,
+            0.3412,
+            0.3412
           ],
           "alpha": 1,
-          "hex": "#646464"
+          "hex": "#575757"
         }
       },
       "muted": {
@@ -278,11 +278,11 @@
           "colorSpace": "srgb",
           "components": [
             1,
-            0.902,
-            0.8392
+            0.8784,
+            0.8
           ],
           "alpha": 1,
-          "hex": "#ffe6d6"
+          "hex": "#ffe0cc"
         }
       },
       "text": {
@@ -314,11 +314,11 @@
           "colorSpace": "srgb",
           "components": [
             1,
-            0.902,
-            0.8392
+            0.8784,
+            0.8
           ],
           "alpha": 1,
-          "hex": "#ffe6d6"
+          "hex": "#ffe0cc"
         }
       },
       "ring": {
@@ -1045,8 +1045,65 @@
     },
     "panel": {
       "$type": "shadow",
-      "$value": [],
-      "$description": "Panels: none at the normal border level"
+      "$value": [
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0,
+              0,
+              0
+            ],
+            "alpha": 0.04,
+            "hex": "#000000"
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 1,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 2,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 0,
+            "unit": "px"
+          }
+        },
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0,
+              0,
+              0
+            ],
+            "alpha": 0.05,
+            "hex": "#000000"
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 6,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 16,
+            "unit": "px"
+          },
+          "spread": {
+            "value": -10,
+            "unit": "px"
+          }
+        }
+      ],
+      "$description": "Panels: a soft lift off the brighter ground (round 4), none in the dark theme"
     },
     "sidebar": {
       "$type": "shadow",

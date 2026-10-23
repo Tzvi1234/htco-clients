@@ -32,14 +32,14 @@ describe("loadTokens", () => {
     const tokens = await loadTokens("light");
     const panel = tokens.find((token) => token.path.join(".") === "color.bg.panel");
 
-    expect(panel).toMatchObject({ type: "color", value: { hex: "#e1e1e0" } });
+    expect(panel).toMatchObject({ type: "color", value: { hex: "#ffffff" } });
   });
 
   it("remembers when a semantic token names another one, and resolves it too", async () => {
     const tokens = await loadTokens("light");
     const canvas = tokens.find((token) => token.path.join(".") === "color.bg.canvas");
 
-    expect(canvas).toMatchObject({ alias: ["color", "bg", "panel"], value: { hex: "#e1e1e0" } });
+    expect(canvas).toMatchObject({ alias: ["color", "bg", "panel"], value: { hex: "#ffffff" } });
   });
 
   it("applies overlays in order, a later file winning", async () => {

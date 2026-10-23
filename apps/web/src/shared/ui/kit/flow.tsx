@@ -191,8 +191,9 @@ export function Figure({
       </span>
       <span
         className={cx(
-          "font-display text-number-lg leading-[1.25] font-light tracking-[-0.01em] whitespace-nowrap",
-          tone === "tertiary" && "text-tertiary-text",
+          "font-display text-number-lg leading-[1.25] tracking-[-0.01em] whitespace-nowrap",
+          // The figure that needs the owner is set heavier as well as in orange (round 4).
+          tone === "tertiary" ? "font-normal text-tertiary-text" : "font-light",
         )}
       >
         {value}
@@ -221,7 +222,7 @@ const panelId = (base: string, id: string) => `${base}-panel-${id}`;
 
 /**
  * Sub-tabs inside a screen (WAI-ARIA tabs, selection follows focus): pills on one line, the
- * chosen one under an ink capsule that glides to it (a transition, so a quick second press
+ * chosen one under an orange-tinted capsule that glides to it (a transition, so a quick second press
  * retargets it from where it is; nothing moves under reduced motion). The arrow keys move along
  * the reading direction, Home and End jump to the ends. Pair with `TabPanel`.
  */
@@ -310,7 +311,7 @@ export function SubTabs<K extends string>({
     document.getElementById(tabId(idBase, tab.id))?.focus();
   };
 
-  // The glide is drawn once it is measured; until then (and in tests) the chosen pill is ink.
+  // The glide is drawn once it is measured; until then (and in tests) the chosen pill is tinted.
   const measured = mark !== null;
   return (
     <div
@@ -326,7 +327,7 @@ export function SubTabs<K extends string>({
     >
       <span
         aria-hidden="true"
-        className="k-tabs-mark pointer-events-none absolute inset-y-1 rounded-pill bg-inverse"
+        className="k-tabs-mark pointer-events-none absolute inset-y-1 rounded-pill bg-tertiary-subtle"
         style={
           measured
             ? { insetInlineStart: `${String(mark.start)}px`, width: `${String(mark.width)}px` }
@@ -350,8 +351,8 @@ export function SubTabs<K extends string>({
             className={cx(
               "k-tab relative z-[1] inline-flex h-9 shrink-0 items-center gap-2 rounded-pill px-4 text-body-sm whitespace-nowrap outline-none",
               "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus",
-              on ? "text-on-inverse" : "text-primary hover:bg-hover",
-              on && !measured && "bg-inverse",
+              on ? "font-medium text-tertiary-text" : "text-primary hover:bg-hover",
+              on && !measured && "bg-tertiary-subtle",
             )}
           >
             {on ? (
@@ -360,10 +361,7 @@ export function SubTabs<K extends string>({
             {tab.label}
             {tab.count === undefined ? null : (
               <span
-                className={cx(
-                  "ltr text-caption tabular",
-                  on ? "text-on-inverse-muted" : "text-muted",
-                )}
+                className={cx("ltr text-caption tabular", on ? "text-tertiary-text" : "text-muted")}
               >
                 {tab.count}
               </span>

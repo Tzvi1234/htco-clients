@@ -5,7 +5,7 @@
 | **Status** | Version 3, "Design 1C" ([client ADR-0008](../docs/adr/0008-design-1c.md)); replaces Relay (ADR-0007) |
 | **Source** | The owner's prototype "HTCO · Design 1C", copied 1:1; this repository's [`tokens/`](tokens/README.md) (DTCG 2025.10), this brand book and [`COMPONENT_SPEC.md`](COMPONENT_SPEC.md) |
 | **Brand assets** | [`../assets/brand/`](../assets/brand/) |
-| **Contrast check** | `pnpm check`: 218 token pairs in each of 114 modes (palette × theme × tweaks) and in the navigation's fixed glass over the plain ground (4 more), in `packages/design-tokens` |
+| **Contrast check** | `pnpm check`: 225 token pairs in each of 114 modes (palette × theme × tweaks) and in the navigation's fixed glass over the plain ground (4 more), in `packages/design-tokens` |
 
 HTCO is the operating system for a marketplace business: verified orders, fulfillment and money, plus an AI workforce that acts under policy and asks before anything risky. The promise is **autonomy you can audit**: "Your shop runs. You decide."
 
@@ -29,14 +29,14 @@ The earlier tweaks (contrast, frosted glass, borders) are no longer choices: the
 
 | Role | SBB light | SBB dark | Design 4 light | Design 4 dark | Token |
 |---|---|---|---|---|---|
-| Ground | `#E5E5E5` | `#161616` | `#F3F4EE` | `#15141A` | `bg.ground` |
-| Panel | `#E1E1E0` | `#1E1E1E` | `#FFFFFF` | `#1E1D24` | `bg.panel` |
-| Raised (chips, bubbles, selected) | `#F0F0EF` | `#282828` | `#F3F4EE` | `#26252D` | `bg.raised`, `bg.selected` (D4 `#D8CFEE`) |
-| Sidebar | `#F3F3F2` | `#1C1C1C` | `#FFFFFF` | `#1C1B21` | `bg.sidebar` |
-| Ink (text, current item) | `#000000` | `#F2F2F2` | `#000000` | `#F3F4EE` | `text.primary`, `inverse.bg` |
+| Ground | `#ECECEB` | `#0E0E0F` | `#F3F4EE` | `#0F0E13` | `bg.ground` |
+| Panel | `#FFFFFF` | `#1B1B1D` | `#FFFFFF` | `#1C1B22` | `bg.panel` |
+| Raised (chips, bubbles, selected) | `#F5F5F4` | `#29292C` | `#F3F4EE` | `#29282F` | `bg.raised`, `bg.selected` (D4 `#D8CFEE`) |
+| Sidebar | `#FFFFFF` | `#19191B` | `#FFFFFF` | `#1A191F` | `bg.sidebar` |
+| Ink (text, current item) | `#000000` | `#F7F7F7` | `#000000` | `#F7F8F2` | `text.primary`, `inverse.bg` |
 | Accent | orange `#FF7F36` | orange | lilac `#8C76D6` | lilac `#A996E8` | `accent.mark`, `accent.fill` |
 | Attention | orange | orange | lemon `#EDD803` | lemon | `attention.fill` |
-| Lines | `#D3D3D3`, `#C9C9C9` | `#2C2C2C`, `#3A3A3A` | `#E3E4DE`, `#CBCCC6` | `#2D2C34`, `#3D3C45` | `border.subtle`, `border.strong` |
+| Lines | `#E3E3E2`, `#D4D4D3` | `#2E2E31`, `#3E3E42` | `#E3E4DE`, `#CBCCC6` | `#2F2E36`, `#403F48` | `border.subtle`, `border.strong` |
 
 - **Text is always AA.** The prototype's `--mute`, `--soft`, the orange, lilac and lemon fail 4.5:1 as text on its panels. They keep their look where they are not text (`icon.faint`, `accent.mark`, `attention.fill`, the logo); text uses `text.secondary`, `text.muted`, `accent.text`, `attention.text`, which are solved per mode against every surface, glass included.
 - **The inverse fill** (`inverse.bg` with `inverse.text`) marks what is current: the active area circle, the current tab pill (with the accent dot, `accent.on-inverse`), the primary button, the chosen segment.
@@ -70,7 +70,7 @@ The owner's logo from the prototype: block **H** and **T** cut by the C's circle
 ## Layout and shape
 
 - **Frame (from 640 px):** the sidebar floats 8 px from the edges (264 px, radius 22); the top bar sits on the ground (72 px: crumbs, the 24 px title, then approvals and search, on frosted glass); screens are panels in a grid with 8 px gaps under it.
-- **Sidebar, top to bottom:** the logo and the collapse button; the shop card; **Quick actions** (Ctrl K); Home, then **Workspace** (Office, Work, Commerce, Customers, Finance) and **System** (Admin), each a 40 px circle icon and a name; the current area opens its tabs on a connector rail with the current tab as an ink pill with the accent dot; the owner's card. Below 1360 px it collapses to a 72 px rail (the user's choice is remembered), and an area's tabs open in the 208 px flyout beside it.
+- **Sidebar, top to bottom:** the logo and the collapse button; the shop card; **Quick actions** (Ctrl K); Home, then **Workspace** (Office, Work, Commerce, Customers, Finance) and **System** (Admin), each a 40 px circle icon and a name; the current area opens its tabs on a connector rail with the current tab as an orange-tinted pill with the orange dot (round 4); the owner's card. Below 1360 px it collapses to a 72 px rail (the user's choice is remembered), and an area's tabs open in the 208 px flyout beside it.
 - **Phones (under 640 px):** the top bar, the screen, and a floating tab bar (Home, Office, Work, Commerce, More); More opens every area in a sheet.
 - **Shapes:** panels 22, cards and menus 16, pills fully round; circle buttons 40 px with a hairline; buttons 32 px (28, 40); inputs 48 px pills on sign-in.
 - **Not built yet:** every tab has its address. A tab without a screen renders `DemoScreen` ("Demo — coming soon") and shows a `SoonTag` wherever it is listed.

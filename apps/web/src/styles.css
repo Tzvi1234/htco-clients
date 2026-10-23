@@ -82,6 +82,7 @@
   --color-tertiary: var(--tertiary-fill);
   --color-on-tertiary: var(--tertiary-on-fill);
   --color-tertiary-mark: var(--tertiary-mark);
+  --color-tertiary-on-inverse: var(--tertiary-on-inverse);
   --color-tertiary-text: var(--tertiary-text);
   --color-tertiary-subtle: var(--tertiary-subtle);
   --color-attention-fill: var(--attention-fill);
@@ -318,7 +319,7 @@
    while the new one arrives from a soft blur, sliding in from the inline end when the
    destination comes later in the navigation and from the start when it comes earlier (the
    "forward" and "back" transition types, router.tsx). The navigation and the top bar stay
-   put, and the current tab's ink pill (data-vt="nav-current") glides from the old tab to the
+   put, and the current tab's orange-tinted pill (data-vt="nav-current") glides from the old tab to the
    new one. Under reduced motion the router skips the transition entirely. */
 @keyframes htco-screen-out {
   to {
@@ -731,6 +732,13 @@ html:not(:active-view-transition-type(same-area)) [data-vt="nav-current"] {
 
   :where(:focus-visible, [data-focus-visible]) {
     outline-color: Highlight;
+  }
+
+  /* The current tab and the chosen sub-tab lose their orange tint to the system colours; a
+     Highlight ring keeps them apart from the rest (round 4). */
+  :where([aria-current="page"], [role="tab"][aria-selected="true"]) {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
   }
 }
 

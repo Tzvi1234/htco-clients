@@ -29,7 +29,7 @@ A mode is a palette (`sbb`, `plain`, `d4`), a theme and three tweak levels (`pac
 
 ## Contrast guarantee
 
-Every text pair is at least 4.5:1 and every control boundary, focus ring and status dot at least 3:1, in every mode: 218 pairs (text and controls on every surface, labels on fills, coloured text on its tint, tags, presence flags, orange as the tertiary colour) in each of 114 modes, and in the navigation's fixed glass (glass level 2 scoped to `[data-glass]`, over the plain ground, in both palettes and themes), listed in [`packages/design-tokens/src/contrast.ts`](../../packages/design-tokens/src/contrast.ts). Translucent glass surfaces are composited over each backdrop of their mode (the ground, or the bloom colours over both ends of its gradient) before measuring. CI recomputes them from these files on every pull request and fails on any regression, and `pnpm tokens` refuses to build while one fails.
+Every text pair is at least 4.5:1 and every control boundary, focus ring and status dot at least 3:1, in every mode: 225 pairs (text and controls on every surface, labels on fills, coloured text on its tint, tags, presence flags, orange as the tertiary colour) in each of 114 modes, and in the navigation's fixed glass (glass level 2 scoped to `[data-glass]`, over the plain ground, in both palettes and themes), listed in [`packages/design-tokens/src/contrast.ts`](../../packages/design-tokens/src/contrast.ts). Translucent glass surfaces are composited over each backdrop of their mode (the ground, or the bloom colours over both ends of its gradient) before measuring. CI recomputes them from these files on every pull request and fails on any regression, and `pnpm tokens` refuses to build while one fails.
 
 ## How tokens reach each platform
 

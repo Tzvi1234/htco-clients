@@ -35,8 +35,8 @@ interface Drag {
 
 /**
  * Phones: an iOS-style floating tab bar on frosted glass in the Design 1C language (the
- * sidebar's panel, the current area on the inverse pill, which glides to the next one with the
- * navigation's spring-like curve). Four areas sit on the bar; "More" opens every area and its
+ * sidebar's panel, the current area on the inverse pill with its glyph and label in orange,
+ * which glides to the next one with the navigation's spring-like curve). Four areas sit on the bar; "More" opens every area and its
  * tabs in a sheet that rises from the bottom and leaves the same way: by its close button, a
  * tap outside, Escape, or a drag down on its grabber (a quick flick is enough).
  */
@@ -88,7 +88,7 @@ export function TabBar() {
               className={cx(
                 ITEM,
                 "relative",
-                active ? "text-on-inverse" : "text-secondary hover:bg-hover",
+                active ? "font-medium text-tertiary-on-inverse" : "text-secondary hover:bg-hover",
               )}
             >
               <area.icon size={20} />
@@ -105,7 +105,9 @@ export function TabBar() {
           className={cx(
             ITEM,
             "relative",
-            elsewhere ? "text-on-inverse" : "text-secondary data-[hovered]:bg-hover",
+            elsewhere
+              ? "font-medium text-tertiary-on-inverse"
+              : "text-secondary data-[hovered]:bg-hover",
           )}
         >
           <MoreIcon size={20} />
@@ -206,7 +208,7 @@ export function TabBar() {
                     className={cx(
                       "grid size-10 place-items-center rounded-pill border",
                       current === area.id
-                        ? "border-inverse bg-inverse text-on-inverse"
+                        ? "border-inverse bg-inverse text-tertiary-on-inverse"
                         : "border-line-strong",
                     )}
                   >
