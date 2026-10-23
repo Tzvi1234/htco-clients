@@ -77,12 +77,12 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.7686,
-            0.7686,
-            0.7686
+            0.8157,
+            0.8157,
+            0.8157
           ],
           "alpha": 1,
-          "hex": "#c4c4c4"
+          "hex": "#d0d0d0"
         }
       },
       "muted": {
@@ -90,12 +90,12 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.5843,
-            0.5843,
-            0.5843
+            0.6392,
+            0.6392,
+            0.6392
           ],
           "alpha": 1,
-          "hex": "#959595"
+          "hex": "#a3a3a3"
         }
       }
     },
@@ -272,12 +272,12 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.8392,
-            0.3059,
+            0.6588,
+            0.2392,
             0
           ],
           "alpha": 1,
-          "hex": "#d64e00"
+          "hex": "#a83d00"
         },
         "$description": "The accent dot on the inverse fill"
       },
@@ -286,12 +286,12 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.2275,
-            0.1412,
-            0.0863
+            0.2471,
+            0.149,
+            0.0902
           ],
           "alpha": 1,
-          "hex": "#3a2416"
+          "hex": "#3f2617"
         }
       },
       "text": {
@@ -322,12 +322,12 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.2275,
-            0.1412,
-            0.0863
+            0.2471,
+            0.149,
+            0.0902
           ],
           "alpha": 1,
-          "hex": "#3a2416"
+          "hex": "#3f2617"
         }
       },
       "ring": {

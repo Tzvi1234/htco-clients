@@ -52,7 +52,7 @@ export function Flyout() {
         className="my-2 ms-2 flex w-[208px] min-h-0 flex-col overflow-hidden rounded-panel border border-sidebar-line bg-sidebar px-2 pt-4 pb-3 shadow-sidebar"
       >
         <div className="mx-1 mb-2.5 flex items-center gap-2.5 border-b border-line px-1 pb-3.5">
-          <span className="grid size-10 shrink-0 place-items-center rounded-pill bg-inverse text-on-inverse">
+          <span className="grid size-10 shrink-0 place-items-center rounded-pill border border-line bg-card text-tertiary-text">
             <area.icon />
           </span>
           <div className="min-w-0">

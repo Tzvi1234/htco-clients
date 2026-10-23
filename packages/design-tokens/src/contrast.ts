@@ -68,7 +68,18 @@ const NAMED_PAIRS: ContrastPair[] = [
   ["tertiary.on-fill", "tertiary.fill", 4.5],
   ["tertiary.text", "tertiary.subtle", 4.5],
   ["text.primary", "tertiary.subtle", 4.5],
-  ["tertiary.on-inverse", "inverse.bg", 3],
+  // Round 4: the current area on the inverse fill (the phone tab bar's pill) shows its glyph
+  // and its label in orange, so the orange on the inverse fill is text, at least 4.5:1.
+  ["tertiary.on-inverse", "inverse.bg", 4.5],
+  ["tertiary.on-inverse", "inverse.bg-hover", 4.5],
+  // Round 4: the current tab is an orange-tinted pill and the focus panels carry a soft orange
+  // wash, so every text colour that can sit there is checked on the wash too.
+  ["text.secondary", "tertiary.subtle", 4.5],
+  ["text.muted", "tertiary.subtle", 4.5],
+  ["success.text", "tertiary.subtle", 4.5],
+  ["danger.text", "tertiary.subtle", 4.5],
+  ["icon.default", "tertiary.subtle", 3],
+  ["border.focus", "tertiary.subtle", 3],
   ["attention.on-fill", "attention.fill", 4.5],
   ["text.on-brand", "bg.brand", 4.5],
   ["action.primary.fg", "action.primary.bg", 4.5],

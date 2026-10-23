@@ -100,8 +100,8 @@ describe.each(["light", "dark"] as const)("the %s theme", (theme) => {
     expect(failures).toEqual([]);
   });
 
-  it("checks 218 pairs: text and controls on every surface, named pairs, tags, presence flags", () => {
-    expect(CONTRAST_PAIRS).toHaveLength(218);
+  it("checks 225 pairs: text and controls on every surface, named pairs, tags, presence flags", () => {
+    expect(CONTRAST_PAIRS).toHaveLength(225);
   });
 });
 

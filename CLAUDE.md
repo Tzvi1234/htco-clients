@@ -26,7 +26,7 @@ The owner writes in Hebrew. Answer in Hebrew in conversation. Everything committ
 | Product, plan, architecture, rules | `../htco-platform/docs/` (PRD, PLAN, SOFTWARE_DESIGN, ENGINEERING_RULES, TESTING_STRATEGY) |
 | Client architecture and stacks | [`docs/architecture/CLIENT_ARCHITECTURE.md`](docs/architecture/CLIENT_ARCHITECTURE.md) |
 | Brand book | [`design/README.md`](design/README.md) |
-| Design system summary and product context (Impeccable) | [`DESIGN.md`](DESIGN.md), [`PRODUCT.md`](PRODUCT.md); last audit [`docs/design/impeccable-audit.md`](docs/design/impeccable-audit.md), round 2 [`docs/design/round2-review.md`](docs/design/round2-review.md) |
+| Design system summary and product context (Impeccable) | [`DESIGN.md`](DESIGN.md), [`PRODUCT.md`](PRODUCT.md); last audit [`docs/design/impeccable-audit.md`](docs/design/impeccable-audit.md), round 2 [`docs/design/round2-review.md`](docs/design/round2-review.md), round 4 brightness [`docs/design/round4-brightness.md`](docs/design/round4-brightness.md) |
 | Tokens | [`design/tokens/`](design/tokens/README.md) |
 | Components | [`design/COMPONENT_SPEC.md`](design/COMPONENT_SPEC.md); live previews: https://claude.ai/artifact/Bgq6rDafP6qyXiJBCsq8nf |
 | Navigation, content, accessibility | [`docs/ux/`](docs/ux/) |

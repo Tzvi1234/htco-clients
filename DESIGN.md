@@ -1,30 +1,30 @@
 ---
 name: HTCO OS — Design 1C
-description: The owner's Design 1C for the HTCO web app — panels on a gray ground, ink for what is current, one accent.
+description: The owner's Design 1C for the HTCO web app — white panels on a bright gray ground, orange for what is current and what needs you.
 colors:
-  ground: "#e5e5e5"
-  panel: "#e1e1e0"
-  raised: "#f0f0ef"
-  sidebar: "#f3f3f2"
-  hover: "#e8e8e7"
+  ground: "#f5f5f3"
+  panel: "#ffffff"
+  raised: "#f1f1ef"
+  sidebar: "#ffffff"
+  hover: "#eeeeec"
   card: "#ffffff"
   ink: "#000000"
   ink-hover: "#262626"
   on-ink: "#ffffff"
-  text-secondary: "#646464"
-  line: "#d3d3d3"
-  line-strong: "#c9c9c9"
+  text-secondary: "#575757"
+  line: "#e0e0dd"
+  line-strong: "#d2d2cf"
   sbb-orange: "#ff7f36"
   orange-text: "#af4000"
-  orange-wash: "#ffe6d6"
+  orange-wash: "#ffe0cc"
   success-text: "#347216"
   d4-cream: "#f3f4ee"
   d4-lilac: "#8c76d6"
   d4-lilac-wash: "#d8cfee"
   d4-lemon: "#edd803"
-  dark-ground: "#161616"
-  dark-panel: "#1e1e1e"
-  dark-ink: "#f2f2f2"
+  dark-ground: "#0e0e0f"
+  dark-panel: "#1b1b1d"
+  dark-ink: "#f7f7f7"
 typography:
   hero:
     fontFamily: "Outfit Variable, Heebo Variable, system-ui, sans-serif"
@@ -286,11 +286,23 @@ explicit value) — Tailwind's own radius scale is removed.
 
 ### Navigation
 
-- **Sidebar categories:** 48 px rows with a 40 px icon disc; the current area's disc is ink;
-  tabs hang from a hairline connector; the current tab is an ink pill with an orange dot.
+- **Sidebar categories:** 48 px rows with a 40 px icon disc; the other areas' discs are
+  light (white with a hairline); the current area is the whole row as an orange-tinted pill,
+  its glyph and name in the orange text colour; tabs hang from a hairline
+  connector; the current tab is an orange-tinted pill (`tertiary.subtle`) with its label in
+  `tertiary.text` and the orange dot (round 4). The flyout follows the same rules.
 - **Top bar:** crumbs (12 px) over the light title; approvals and search as 40 px circles, on
   frosted glass; personalisation lives in Settings (theme, palette, language).
-- **Phone tab bar:** a floating glass capsule; the current tab is an ink pill.
+- **Phone tab bar:** a floating glass capsule; the current tab is an orange-tinted pill with
+  its glyph and label in orange.
+- **Primary buttons:** stay ink; their glyph is orange (`tertiary.on-inverse`, checked at 4.5:1
+  on the ink).
+- **Sub-tabs inside a screen:** the chosen one sits under an orange-tinted capsule that glides
+  to it, its label in `tertiary.text`. Filters and segmented choices stay ink.
+- **Focus panels:** a soft orange wash from the inline start (the title's side), dropped under
+  more contrast and forced colours; the figure that needs the owner is orange and set at 400.
+- **Icons:** our line glyphs only; orange is at most the glyph colour, never an orange disc
+  behind an icon. See [round 4](docs/design/round4-brightness.md).
 
 ### Demo frame (signature)
 

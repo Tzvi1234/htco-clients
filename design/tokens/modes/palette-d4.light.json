@@ -164,11 +164,11 @@
           "colorSpace": "srgb",
           "components": [
             1,
-            0.902,
-            0.8392
+            0.8784,
+            0.8
           ],
           "alpha": 1,
-          "hex": "#ffe6d6"
+          "hex": "#ffe0cc"
         }
       },
       "text": {
@@ -200,11 +200,11 @@
           "colorSpace": "srgb",
           "components": [
             1,
-            0.902,
-            0.8392
+            0.8784,
+            0.8
           ],
           "alpha": 1,
-          "hex": "#ffe6d6"
+          "hex": "#ffe0cc"
         }
       },
       "text": {

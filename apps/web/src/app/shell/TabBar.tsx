@@ -35,8 +35,8 @@ interface Drag {
 
 /**
  * Phones: an iOS-style floating tab bar on frosted glass in the Design 1C language (the
- * sidebar's panel, the current area on the inverse pill, which glides to the next one with the
- * navigation's spring-like curve). Four areas sit on the bar; "More" opens every area and its
+ * sidebar's panel, the current area on an orange-tinted pill with its glyph and label in
+ * orange, which glides to the next one with the navigation's spring-like curve). Four areas sit on the bar; "More" opens every area and its
  * tabs in a sheet that rises from the bottom and leaves the same way: by its close button, a
  * tap outside, Escape, or a drag down on its grabber (a quick flick is enough).
  */
@@ -67,13 +67,13 @@ export function TabBar() {
         {slot < 0 ? null : (
           <span
             aria-hidden="true"
-            className="absolute top-1.5 bottom-1.5 rounded-[22px] bg-inverse transition-[inset-inline-start] duration-[var(--motion-duration-expand)] ease-spring"
+            className="absolute top-1.5 bottom-1.5 rounded-[22px] bg-tertiary-subtle transition-[inset-inline-start] duration-[var(--motion-duration-expand)] ease-spring"
             style={{
               width: "calc((100% - 28px) / 5)",
               insetInlineStart: `calc(6px + ${String(slot)} * ((100% - 28px) / 5 + 4px))`,
             }}
           >
-            <span className="absolute top-2 inset-e-3 size-1.5 rounded-pill bg-accent-on-inverse" />
+            <span className="absolute top-2 inset-e-3 size-1.5 rounded-pill bg-tertiary" />
           </span>
         )}
         {ON_BAR.map((id) => {
@@ -88,7 +88,7 @@ export function TabBar() {
               className={cx(
                 ITEM,
                 "relative",
-                active ? "text-on-inverse" : "text-secondary hover:bg-hover",
+                active ? "font-medium text-tertiary-text" : "text-secondary hover:bg-hover",
               )}
             >
               <area.icon size={20} />
@@ -105,7 +105,7 @@ export function TabBar() {
           className={cx(
             ITEM,
             "relative",
-            elsewhere ? "text-on-inverse" : "text-secondary data-[hovered]:bg-hover",
+            elsewhere ? "font-medium text-tertiary-text" : "text-secondary data-[hovered]:bg-hover",
           )}
         >
           <MoreIcon size={20} />
@@ -206,8 +206,8 @@ export function TabBar() {
                     className={cx(
                       "grid size-10 place-items-center rounded-pill border",
                       current === area.id
-                        ? "border-inverse bg-inverse text-on-inverse"
-                        : "border-line-strong",
+                        ? "border-transparent bg-tertiary-subtle text-tertiary-text"
+                        : "border-line bg-card",
                     )}
                   >
                     <area.icon />

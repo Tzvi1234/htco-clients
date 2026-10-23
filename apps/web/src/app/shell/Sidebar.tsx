@@ -22,7 +22,10 @@ export const CIRCLE =
 const LABEL =
   "group-data-[mini]/sb:hidden animate-[htco-label-in_var(--motion-duration-base)_var(--motion-easing-standard)_both]";
 
-/** A sub-item (Design 1C `.si`): the current one is an inverse pill with the accent dot. */
+/**
+ * A sub-item (Design 1C `.si`): the current one is an orange-tinted pill, its label in the
+ * tertiary text colour beside the orange dot (round 4).
+ */
 export function TabLink({
   area,
   tab,
@@ -57,7 +60,9 @@ export function TabLink({
         // Stacked rows: on a touch screen each row is 44 px tall itself, as a touch layer
         // reaching past the row would cover the next one (styles.css, "Touch").
         "any-pointer-coarse:h-11",
-        current ? "bg-inverse text-on-inverse" : "text-secondary hover:bg-hover hover:text-primary",
+        current
+          ? "bg-tertiary-subtle font-medium text-tertiary-text"
+          : "text-secondary hover:bg-hover hover:text-primary",
       )}
     >
       <span className="truncate">{labels.tab(area, tab.id)}</span>
@@ -70,10 +75,7 @@ export function TabLink({
       {current ? (
         <span
           aria-hidden="true"
-          className={cx(
-            "size-1.5 shrink-0 rounded-pill bg-accent-on-inverse",
-            tab.built && "ms-auto",
-          )}
+          className={cx("size-1.5 shrink-0 rounded-pill bg-tertiary", tab.built && "ms-auto")}
         />
       ) : null}
     </Link>
@@ -100,15 +102,17 @@ function Category({
   const name = labels.area(area);
   const circle = cx(
     CIRCLE,
+    // Round 4: the current area is the whole row as an orange-tinted pill with the glyph in
+    // orange; the other areas' discs are light, so the current one stands out.
     active
-      ? "border-inverse bg-inverse text-on-inverse"
-      : "border-line-strong group-hover/cat:border-line-hover",
-    active && mini && "shadow-[0_0_0_3px_var(--bg-sidebar),0_0_0_4px_var(--border-strong)]",
+      ? "border-transparent text-tertiary-text"
+      : "border-line bg-card group-hover/cat:border-line-hover",
   );
   const head = cx(
     "group/cat relative flex h-12 w-full cursor-default items-center gap-3 rounded-[24px] ps-1 pe-2.5 text-start whitespace-nowrap no-underline text-primary outline-none",
-    "transition-[background-color,scale] duration-[var(--motion-duration-fast)] ease-standard hover:bg-hover active:scale-[0.99]",
+    "transition-[background-color,color,scale] duration-[var(--motion-duration-fast)] ease-standard active:scale-[0.99]",
     "group-data-[mini]/sb:justify-center group-data-[mini]/sb:p-0",
+    active ? "bg-tertiary-subtle" : "hover:bg-hover",
   );
   const body = (
     <>
@@ -121,7 +125,9 @@ function Category({
           />
         ) : null}
       </span>
-      <span className={cx(LABEL, "grow text-body", active && "font-medium")}>{name}</span>
+      <span className={cx(LABEL, "grow text-body", active && "font-medium text-tertiary-text")}>
+        {name}
+      </span>
       {area.tabs.length > 0 ? (
         <ChevronIcon
           size={12}
