@@ -48,6 +48,7 @@ import {
   initialOf,
   useMinutes,
   LiveNote,
+  TEXT_LINK,
 } from "../../shared/ui/kit/index.ts";
 import { ShopReconnectBanner } from "../shops/index.ts";
 import { overviewQuery, type ShopOverview } from "../../shared/api/live.ts";
@@ -387,10 +388,7 @@ function NeedsYou() {
         </ul>
       </DemoPart>
       <div className="flex justify-center px-6 pb-5">
-        <Link
-          to="/work/approvals"
-          className="rounded-tag py-1 text-caption text-primary underline underline-offset-[3px]"
-        >
+        <Link to="/work/approvals" className={TEXT_LINK}>
           {t`See all approvals`}
         </Link>
       </div>
@@ -606,10 +604,7 @@ function GettingStarted() {
               {step.done ? (
                 <span className="text-caption text-muted">{t`Done`}</span>
               ) : (
-                <Link
-                  to={step.to}
-                  className="-my-1 inline-block rounded-tag py-1 text-caption text-primary underline underline-offset-[3px]"
-                >
+                <Link to={step.to} className={cx(TEXT_LINK, "-my-1 inline-block")}>
                   {step.soon === true ? t`Soon` : step.action}
                 </Link>
               )}

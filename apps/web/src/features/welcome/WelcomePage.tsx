@@ -13,6 +13,7 @@ import { cx } from "../../shared/lib/cx.ts";
 import { ArrowEndIcon } from "../../shared/ui/icons.tsx";
 import { Logo } from "../../shared/ui/Logo.tsx";
 import { Segmented } from "../../shared/ui/Segmented.tsx";
+import { TEXT_LINK } from "../../shared/ui/kit/index.ts";
 
 const PILL_PRIMARY =
   "inline-flex h-12 items-center justify-center gap-2 rounded-pill bg-action-primary px-6 text-body-sm text-action-primary-fg no-underline outline-none transition-[background-color,scale] duration-[var(--motion-duration-fast)] ease-standard hover:bg-action-primary-hover active:scale-[0.97]";
@@ -54,10 +55,7 @@ export function WelcomePage() {
         <p className="m-0 text-caption font-light text-muted">
           <Trans>HT-Commerce by H.T.Z Studios</Trans>
         </p>
-        <Link
-          to="/sign-in"
-          className="-my-1 inline-block rounded-tag py-1 text-caption text-primary underline underline-offset-[3px]"
-        >
+        <Link to="/sign-in" className={cx(TEXT_LINK, "-my-1 inline-block")}>
           <Trans>Sign in</Trans>
         </Link>
       </footer>

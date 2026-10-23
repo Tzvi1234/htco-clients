@@ -36,6 +36,8 @@ import {
   LiveNote,
   LiveSkeleton,
   ShopChips,
+  Chip,
+  TEXT_LINK,
 } from "../../shared/ui/kit/index.ts";
 import { LiveProblem, ShopReconnectBanner, NoShopYet } from "../shops/index.ts";
 import {
@@ -254,10 +256,10 @@ function Products({ shopId, chips }: { shopId: string; chips: ReactNode }) {
                           )}
                         >
                           {l.quantity === 0 ? (
-                            <span className="inline-flex h-5 items-center gap-1 rounded-pill bg-tertiary-subtle px-2 text-tertiary-text">
+                            <Chip tone="tertiary" size="sm">
                               <Dot tone="attention" />
                               {t`Sold out`}
-                            </span>
+                            </Chip>
                           ) : (
                             <>
                               <N>{count(l.quantity)}</N> {t`in stock`}
@@ -396,12 +398,9 @@ function Details({ listing, sold }: { listing: ShopListing; sold: number | undef
           </SectionLabel>
           <ul className="m-0 flex list-none flex-wrap gap-1.5 p-0">
             {listing.tags.map((tag) => (
-              <li
-                key={tag}
-                className="inline-flex h-6 items-center rounded-pill bg-raised px-2.5 text-caption"
-              >
+              <Chip as="li" key={tag}>
                 <bdi>{tag}</bdi>
-              </li>
+              </Chip>
             ))}
           </ul>
         </div>
@@ -411,7 +410,7 @@ function Details({ listing, sold }: { listing: ShopListing; sold: number | undef
           href={listing.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="self-center text-caption text-primary underline underline-offset-[3px]"
+          className={cx(TEXT_LINK, "-my-1 self-center")}
         >
           <Trans>Open on Etsy</Trans>
         </a>
