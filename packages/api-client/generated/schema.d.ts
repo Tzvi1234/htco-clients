@@ -368,6 +368,60 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/incidents": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The organization's incidents the caller may view
+         * @description Newest first; a shop-scoped role sees its granted shops' incidents only.
+         */
+        get: operations["get_incidents"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/incidents/{incident_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** One incident with its history and evidence */
+        get: operations["get_incident"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/incidents/{incident_id}/transitions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Move an incident one step along its machine */
+        post: operations["move_incident"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/integrations/etsy/callback": {
         parameters: {
             query?: never;
@@ -401,6 +455,81 @@ export interface paths {
          * @description Who the caller is, how strongly they signed in, and their role in each organization.
          */
         get: operations["me"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/notifications": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** The caller's notifications in the organization */
+        get: operations["get_notifications"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/notifications/read": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Mark the caller's notifications read */
+        post: operations["read_notifications"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/operations/dead-letters/{job_id}/retry": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Send a dead-lettered job back to the queue (audited)
+         * @description Attempts start from zero and the job is due now; the audit records its kind and last
+         *     error.
+         */
+        post: operations["retry_dead_letter"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/operations/health": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Queue, execution and sync health
+         * @description The Owner and Admins: IDs, states, counts, times and error codes, never payloads.
+         */
+        get: operations["get_operations_health"];
         put?: never;
         post?: never;
         delete?: never;
@@ -940,6 +1069,25 @@ export interface components {
             /** Items */
             items: components["schemas"]["AutomationView"][];
         };
+        /** AutomationMetricsView */
+        AutomationMetricsView: {
+            /** Automation Id */
+            automation_id: string;
+            /** Dead Lettered */
+            dead_lettered: number;
+            /** Executions */
+            executions: number;
+            /** P50 Seconds */
+            p50_seconds: number | null;
+            /** P95 Seconds */
+            p95_seconds: number | null;
+            /** Retries */
+            retries: number;
+            /** Succeeded */
+            succeeded: number;
+            /** Success Rate */
+            success_rate: string | null;
+        };
         /** AutomationView */
         AutomationView: {
             /** Activation Phase */
@@ -1061,6 +1209,29 @@ export interface components {
          * @enum {string}
          */
         DataSource: "etsy_live" | "htco_store";
+        /** DeadJobView */
+        DeadJobView: {
+            /** Attempts */
+            attempts: number;
+            /** Execution Id */
+            execution_id: string | null;
+            /**
+             * Finished At
+             * Format: date-time
+             */
+            finished_at: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Kind */
+            kind: string;
+            /** Last Error */
+            last_error: string | null;
+            /** Shop Id */
+            shop_id: string | null;
+        };
         /** DestinationView */
         DestinationView: {
             additional_item: components["schemas"]["MoneyView"];
@@ -1102,6 +1273,20 @@ export interface components {
             /** State */
             state?: string | null;
         };
+        /** EvidenceView */
+        EvidenceView: {
+            /** Kind */
+            kind: string;
+            /**
+             * Observed At
+             * Format: date-time
+             */
+            observed_at: string;
+            /** Reference */
+            reference: string;
+            /** Source */
+            source: string;
+        };
         /** ExecutionChainView */
         ExecutionChainView: {
             /** Automation Id */
@@ -1128,6 +1313,34 @@ export interface components {
             items: components["schemas"]["ExecutionView"][];
             /** Next Cursor */
             next_cursor: string | null;
+        };
+        /** ExecutionRowView */
+        ExecutionRowView: {
+            /** Attempts */
+            attempts: number;
+            /** Automation Id */
+            automation_id: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Last Error */
+            last_error: string | null;
+            /** Shop Id */
+            shop_id: string | null;
+            /** State */
+            state: string;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
         };
         /** ExecutionView */
         ExecutionView: {
@@ -1201,11 +1414,120 @@ export interface components {
              */
             status: "ok";
         };
+        /** HistoryEntryView */
+        HistoryEntryView: {
+            /** Actor Id */
+            actor_id: string;
+            /** Actor Kind */
+            actor_kind: string;
+            /**
+             * At
+             * Format: date-time
+             */
+            at: string;
+            evidence: components["schemas"]["EvidenceView"] | null;
+            /** From State */
+            from_state: string | null;
+            /** Note */
+            note: string | null;
+            /** To State */
+            to_state: string;
+        };
         /**
          * HistoryState
          * @enum {string}
          */
         HistoryState: "syncing_history" | "complete";
+        /** InboxView */
+        InboxView: {
+            /** Items */
+            items: components["schemas"]["NotificationView"][];
+            /** Unread Count */
+            unread_count: number;
+        };
+        /** IncidentDetailView */
+        IncidentDetailView: {
+            /** Can Update */
+            can_update: boolean;
+            /** Cause */
+            cause: string;
+            /** Details */
+            details: {
+                [key: string]: unknown;
+            };
+            /**
+             * Detected At
+             * Format: date-time
+             */
+            detected_at: string;
+            /** History */
+            history: components["schemas"]["HistoryEntryView"][];
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Is Open */
+            is_open: boolean;
+            /** Next States */
+            next_states: string[];
+            /** Receipt Id */
+            receipt_id: number | null;
+            /** Resolved At */
+            resolved_at: string | null;
+            /** Severity */
+            severity: string;
+            /** Shop Id */
+            shop_id: string | null;
+            /** Source */
+            source: string;
+            /** State */
+            state: string;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+        };
+        /** IncidentListView */
+        IncidentListView: {
+            /** Items */
+            items: components["schemas"]["IncidentSummaryView"][];
+        };
+        /** IncidentSummaryView */
+        IncidentSummaryView: {
+            /** Cause */
+            cause: string;
+            /**
+             * Detected At
+             * Format: date-time
+             */
+            detected_at: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Is Open */
+            is_open: boolean;
+            /** Receipt Id */
+            receipt_id: number | null;
+            /** Resolved At */
+            resolved_at: string | null;
+            /** Severity */
+            severity: string;
+            /** Shop Id */
+            shop_id: string | null;
+            /** Source */
+            source: string;
+            /** State */
+            state: string;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+        };
         /**
          * IngestSource
          * @enum {string}
@@ -1291,6 +1613,15 @@ export interface components {
              */
             user_id: string;
         };
+        /** JobCountView */
+        JobCountView: {
+            /** Count */
+            count: number;
+            /** Kind */
+            kind: string;
+            /** State */
+            state: string;
+        };
         /**
          * ListingState
          * @enum {string}
@@ -1365,6 +1696,11 @@ export interface components {
             url: string | null;
             /** Views */
             views: number;
+        };
+        /** MarkReadRequest */
+        MarkReadRequest: {
+            /** Ids */
+            ids?: string[] | null;
         };
         /** Me */
         Me: {
@@ -1441,6 +1777,31 @@ export interface components {
             /** Revenue */
             revenue: string;
         };
+        /** NotificationView */
+        NotificationView: {
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Incident Id */
+            incident_id: string | null;
+            /** Kind */
+            kind: string;
+            /** Params */
+            params: {
+                [key: string]: string;
+            };
+            /** Read At */
+            read_at: string | null;
+            /** Shop Id */
+            shop_id: string | null;
+        };
         /** NotReadyProblem */
         NotReadyProblem: {
             /** Checks */
@@ -1457,6 +1818,35 @@ export interface components {
             title: string;
             /** Type */
             type: string;
+        };
+        /** OperationsHealthView */
+        OperationsHealthView: {
+            /** Automations */
+            automations: components["schemas"]["AutomationMetricsView"][];
+            /** Dead Letters */
+            dead_letters: components["schemas"]["DeadJobView"][];
+            /** Executions */
+            executions: components["schemas"]["ExecutionRowView"][];
+            /**
+             * Generated At
+             * Format: date-time
+             */
+            generated_at: string;
+            /** Jobs */
+            jobs: components["schemas"]["JobCountView"][];
+            /**
+             * Organization Id
+             * Format: uuid
+             */
+            organization_id: string;
+            /** Outbox Failures */
+            outbox_failures: components["schemas"]["OutboxFailureView"][];
+            /** Shops */
+            shops: components["schemas"]["ShopSyncView"][];
+            /** Webhooks */
+            webhooks: components["schemas"]["WebhookCountView"][];
+            /** Workers */
+            workers: components["schemas"]["WorkerView"][];
         };
         /** OrderCountsView */
         OrderCountsView: {
@@ -1625,6 +2015,26 @@ export interface components {
          * @enum {string}
          */
         OrderViewState: "unpaid" | "paid" | "shipped" | "canceled" | "refunded";
+        /** OutboxFailureView */
+        OutboxFailureView: {
+            /** Action Execution Id */
+            action_execution_id: string | null;
+            /** Attempts */
+            attempts: number;
+            /** Destination */
+            destination: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Last Error */
+            last_error: string | null;
+            /** Next Attempt At */
+            next_attempt_at: string | null;
+            /** Status */
+            status: string;
+        };
         /**
          * Problem
          * @description Problem details (RFC 9457) plus the request ID.
@@ -1707,6 +2117,31 @@ export interface components {
         ResyncOrdersView: {
             /** Queued */
             queued: number;
+        };
+        /** RetriedJobView */
+        RetriedJobView: {
+            /**
+             * Job Id
+             * Format: uuid
+             */
+            job_id: string;
+            /** State */
+            state: string;
+        };
+        /** RetryThroughExecutionProblem */
+        RetryThroughExecutionProblem: {
+            /** Detail */
+            detail: string;
+            /** Execution Id */
+            execution_id: string | null;
+            /** Request Id */
+            request_id: string | null;
+            /** Status */
+            status: number;
+            /** Title */
+            title: string;
+            /** Type */
+            type: string;
         };
         /** ReturnPolicyView */
         ReturnPolicyView: {
@@ -2013,6 +2448,30 @@ export interface components {
             stale: boolean;
             sync?: components["schemas"]["SyncView"] | null;
         };
+        /** ShopSyncView */
+        ShopSyncView: {
+            /** Drifts Last Day */
+            drifts_last_day: number;
+            /** Drifts Total */
+            drifts_total: number;
+            /** Kind */
+            kind: string;
+            /** Last Error */
+            last_error: string | null;
+            /** Last Started At */
+            last_started_at: string | null;
+            /** Last Succeeded At */
+            last_succeeded_at: string | null;
+            /** Resource */
+            resource: string;
+            /**
+             * Shop Id
+             * Format: uuid
+             */
+            shop_id: string;
+            /** Stale */
+            stale: boolean;
+        };
         /** ShopView */
         ShopView: {
             /**
@@ -2074,6 +2533,16 @@ export interface components {
             /** Units */
             units: number;
         };
+        /** TransitionRequest */
+        TransitionRequest: {
+            /** Note */
+            note?: string | null;
+            /**
+             * To State
+             * @enum {string}
+             */
+            to_state: "triaged" | "investigating" | "remediation_proposed" | "auto_remediating" | "approval_required" | "developer_required" | "verifying" | "escalated" | "resolved";
+        };
         /** TriggerBody */
         TriggerBody: {
             /** Organization Id */
@@ -2106,6 +2575,42 @@ export interface components {
             code: string;
             /** Factor Id */
             factor_id: string;
+        };
+        /** WebhookCountView */
+        WebhookCountView: {
+            /** Event Type */
+            event_type: string;
+            /** Received Last Day */
+            received_last_day: number;
+            /** Source */
+            source: string;
+            /** Unprocessed */
+            unprocessed: number;
+        };
+        /** WorkerView */
+        WorkerView: {
+            /** Age Seconds */
+            age_seconds: number;
+            /** Alive */
+            alive: boolean;
+            /** Current Job Id */
+            current_job_id: string | null;
+            /**
+             * Last Beat At
+             * Format: date-time
+             */
+            last_beat_at: string;
+            /** Release */
+            release: string | null;
+            /**
+             * Started At
+             * Format: date-time
+             */
+            started_at: string;
+            /** Stopping */
+            stopping: boolean;
+            /** Worker Id */
+            worker_id: string;
         };
     };
     responses: never;
@@ -3737,6 +4242,318 @@ export interface operations {
             };
         };
     };
+    get_incidents: {
+        parameters: {
+            query?: {
+                organization_id?: string | null;
+                state?: "open" | "all";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IncidentListView"];
+                };
+            };
+            /** @description The caller belongs to several organizations and named none */
+            400: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not signed in, or the access token was rejected */
+            401: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The role may not view incidents */
+            403: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Invalid ID or organization */
+            422: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"];
+                };
+            };
+            /** @description Unexpected error. Quote the request ID when reporting it */
+            500: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Incidents cannot be read on this server (incidents-unavailable) */
+            503: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    get_incident: {
+        parameters: {
+            query?: {
+                organization_id?: string | null;
+            };
+            header?: never;
+            path: {
+                incident_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IncidentDetailView"];
+                };
+            };
+            /** @description The caller belongs to several organizations and named none */
+            400: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not signed in, or the access token was rejected */
+            401: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Signed in, but not a member of any organization */
+            403: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description No such incident for the caller */
+            404: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Invalid ID or organization */
+            422: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"];
+                };
+            };
+            /** @description Unexpected error. Quote the request ID when reporting it */
+            500: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Incidents cannot be read on this server (incidents-unavailable) */
+            503: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    move_incident: {
+        parameters: {
+            query?: {
+                organization_id?: string | null;
+            };
+            header?: never;
+            path: {
+                incident_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TransitionRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IncidentDetailView"];
+                };
+            };
+            /** @description The caller belongs to several organizations and named none */
+            400: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not signed in, or the access token was rejected */
+            401: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The role may not update incidents */
+            403: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description No such incident for the caller */
+            404: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not allowed from its state (illegal-incident-step), resolution without evidence (evidence-required), or it changed meanwhile (incident-moved) */
+            409: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Invalid ID or organization */
+            422: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"];
+                };
+            };
+            /** @description Unexpected error. Quote the request ID when reporting it */
+            500: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Incidents cannot be read on this server (incidents-unavailable) */
+            503: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
     complete_etsy_connection: {
         parameters: {
             query?: never;
@@ -3905,6 +4722,393 @@ export interface operations {
                 };
             };
             /** @description Sign-in or the database is unavailable */
+            503: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    get_notifications: {
+        parameters: {
+            query?: {
+                organization_id?: string | null;
+                unread_only?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InboxView"];
+                };
+            };
+            /** @description The caller belongs to several organizations and named none */
+            400: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not signed in, or the access token was rejected */
+            401: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not a member of the organization */
+            403: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Invalid ID or organization */
+            422: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"];
+                };
+            };
+            /** @description Unexpected error. Quote the request ID when reporting it */
+            500: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Incidents cannot be read on this server (incidents-unavailable) */
+            503: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    read_notifications: {
+        parameters: {
+            query?: {
+                organization_id?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MarkReadRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The caller belongs to several organizations and named none */
+            400: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not signed in, or the access token was rejected */
+            401: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not a member of the organization */
+            403: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Invalid ID or organization */
+            422: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"];
+                };
+            };
+            /** @description Unexpected error. Quote the request ID when reporting it */
+            500: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Incidents cannot be read on this server (incidents-unavailable) */
+            503: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    retry_dead_letter: {
+        parameters: {
+            query?: {
+                organization_id?: string | null;
+            };
+            header?: never;
+            path: {
+                job_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RetriedJobView"];
+                };
+            };
+            /** @description The caller belongs to several organizations and named none */
+            400: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not signed in, or the access token was rejected */
+            401: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Only the Owner and Admins see the queue (forbidden) */
+            403: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description No such job in the organization */
+            404: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The job is not dead (job-not-dead), or it runs an execution: retry the execution (retry-through-execution, with `execution_id`) */
+            409: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["RetryThroughExecutionProblem"];
+                };
+            };
+            /** @description Invalid ID */
+            422: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"];
+                };
+            };
+            /** @description Unexpected error. Quote the request ID when reporting it */
+            500: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not available on this server (operations-unavailable) */
+            503: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    get_operations_health: {
+        parameters: {
+            query?: {
+                organization_id?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsHealthView"];
+                };
+            };
+            /** @description The caller belongs to several organizations and named none */
+            400: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not signed in, or the access token was rejected */
+            401: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Only the Owner and Admins see the queue (forbidden) */
+            403: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Invalid ID */
+            422: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"];
+                };
+            };
+            /** @description Unexpected error. Quote the request ID when reporting it */
+            500: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not available on this server (operations-unavailable) */
             503: {
                 headers: {
                     /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
@@ -5210,6 +6414,17 @@ export interface operations {
                     "text/csv": string;
                 };
             };
+            /** @description The body is not valid JSON */
+            400: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
             /** @description Not signed in, or the access token was rejected */
             401: {
                 headers: {
@@ -5313,6 +6528,17 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ResyncOrdersView"];
+                };
+            };
+            /** @description The body is not valid JSON */
+            400: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
                 };
             };
             /** @description Not signed in, or the access token was rejected */
