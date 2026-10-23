@@ -7,7 +7,7 @@ import { useRoleLabel } from "../../features/team/TeamPage.tsx";
 import { meQuery, useApi } from "../../shared/api/api.tsx";
 import { useSignOut } from "../../shared/api/useSignOut.ts";
 import { cx } from "../../shared/lib/cx.ts";
-import { ChevronIcon } from "../../shared/ui/icons.tsx";
+import { ChevronGlyph } from "../../shared/ui/kit/index.ts";
 
 const ITEM =
   "flex h-9 cursor-default items-center gap-2 rounded-menu-item px-3 text-body-sm outline-none transition-colors duration-[var(--motion-duration-fast)] data-[focused]:bg-panel data-[disabled]:text-muted";
@@ -83,7 +83,7 @@ export function UserMenu({ compact = false }: { compact?: boolean }) {
                       : roleLabel(role)}
                 </span>
               </span>
-              <ChevronIcon
+              <ChevronGlyph
                 size={12}
                 className="shrink-0 text-secondary group-data-[mini]/sb:hidden"
               />

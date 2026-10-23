@@ -7,7 +7,7 @@ import { AREAS, areaOf, locate, type AreaId } from "./nav.ts";
 import { TabLink } from "./Sidebar.tsx";
 import { useNavLabels } from "./useNavLabels.ts";
 import { cx } from "../../shared/lib/cx.ts";
-import { CloseIcon, MoreIcon } from "../../shared/ui/icons.tsx";
+import { CloseGlyph, MoreGlyph } from "../../shared/ui/kit/index.ts";
 
 const ON_BAR: AreaId[] = ["home", "office", "work", "commerce"];
 
@@ -108,7 +108,7 @@ export function TabBar() {
             elsewhere ? "font-medium text-tertiary-text" : "text-secondary data-[hovered]:bg-hover",
           )}
         >
-          <MoreIcon size={20} />
+          <MoreGlyph size={20} />
           <span>{t`More`}</span>
         </Button>
       </nav>
@@ -190,7 +190,7 @@ export function TabBar() {
                 }}
                 className="grid size-10 cursor-default place-items-center rounded-pill border border-line-strong outline-none transition-[scale] duration-[var(--motion-duration-fast)] ease-standard data-[pressed]:scale-95"
               >
-                <CloseIcon size={14} />
+                <CloseGlyph size={14} />
               </Button>
             </div>
             {AREAS.map((area) => (

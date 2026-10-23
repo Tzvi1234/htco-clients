@@ -9,7 +9,6 @@ import { useApi } from "../../shared/api/api.tsx";
 import { cx } from "../../shared/lib/cx.ts";
 import { PHONE_QUERY, useMediaQuery } from "../../shared/lib/useMediaQuery.ts";
 import { Button, buttonStyle } from "../../shared/ui/Button.tsx";
-import { ArrowEndIcon } from "../../shared/ui/icons.tsx";
 import { PageHeader } from "../../shared/ui/PageHeader.tsx";
 import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
 import { Segmented } from "../../shared/ui/Segmented.tsx";
@@ -30,6 +29,7 @@ import {
   LiveNote,
   LiveSkeleton,
   ShopChips,
+  NextGlyph,
 } from "../../shared/ui/kit/index.ts";
 import { LiveProblem, ShopReconnectBanner, NoShopYet } from "../shops/index.ts";
 import {
@@ -390,7 +390,7 @@ function Orders({ shopId, chips }: { shopId: string; chips: ReactNode }) {
               className={buttonStyle({ variant: "primary", size: "lg" })}
             >
               <Trans>Open what waits to ship</Trans>
-              <ArrowEndIcon size={14} />
+              <NextGlyph size={14} />
             </Link>
           ) : undefined
         }

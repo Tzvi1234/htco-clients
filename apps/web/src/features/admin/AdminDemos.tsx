@@ -2,7 +2,6 @@ import { Trans, useLingui } from "@lingui/react/macro";
 
 import { useAgents, type AgentId } from "../../shared/demo/office.ts";
 import { Panel, PanelBody, PanelHeader } from "../../shared/ui/Panel.tsx";
-import { ChatIcon, GearIcon } from "../../shared/ui/icons.tsx";
 import {
   CircleButton,
   DataTable,
@@ -26,6 +25,8 @@ import {
   useStatusLabels,
   type AgentStatus,
   useZoomLabels,
+  ChatGlyph,
+  GearGlyph,
 } from "../../shared/ui/kit/index.ts";
 
 const Code = ({ children, size = "text-body-sm" }: { children: string; size?: string }) => (
@@ -61,7 +62,7 @@ export function HealthDemo({ title }: { title: string }) {
       <Panel>
         <PanelHeader
           title={<Trans>Overall</Trans>}
-          actions={<CircleButton label={t`Settings`} icon={<GearIcon />} />}
+          actions={<CircleButton label={t`Settings`} icon={<GearGlyph />} />}
         />
         <PanelBody className="justify-between gap-6">
           <IdBlock label={t`30-day uptime:`} value={<L>99.82%</L>} />
@@ -201,7 +202,7 @@ export function AutomationsDemo({ title }: { title: string }) {
       <Panel>
         <PanelHeader
           title={<Trans>Automation details</Trans>}
-          actions={<CircleButton label={t`Chat with Amir`} icon={<ChatIcon />} />}
+          actions={<CircleButton label={t`Chat with Amir`} icon={<ChatGlyph />} />}
         />
         <PanelBody className="justify-between gap-5">
           <IdBlock label={t`Automation:`} value={<Code size="text-[26px]">tracking.sync</Code>} />

@@ -1,9 +1,9 @@
-import { BellIcon as Bell } from "@phosphor-icons/react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, within } from "storybook/test";
 
 import { IconButton } from "./IconButton.tsx";
 import { expectFocusRing, useBi } from "../../test/stories.ts";
+import { BellGlyph } from "./kit/index.ts";
 
 const meta = {
   title: "Components/IconButton",
@@ -15,7 +15,7 @@ const meta = {
       <IconButton
         {...args}
         aria-label={say("Notifications", "התראות")}
-        icon={<Bell aria-hidden="true" size={18} weight="duotone" />}
+        icon={<BellGlyph size={18} />}
       />
     );
   },

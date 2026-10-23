@@ -6,7 +6,6 @@ import { ORDER_STATE_GLYPH, shownState, useOrderStates } from "./OrdersPage.tsx"
 import { useApi } from "../../shared/api/api.tsx";
 import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
 import { buttonStyle } from "../../shared/ui/Button.tsx";
-import { ArrowEndIcon } from "../../shared/ui/icons.tsx";
 import { PageHeader } from "../../shared/ui/PageHeader.tsx";
 import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
 import {
@@ -31,6 +30,7 @@ import {
   LiveNote,
   LiveSkeleton,
   ShopChips,
+  NextGlyph,
 } from "../../shared/ui/kit/index.ts";
 import { LiveProblem, ShopReconnectBanner, NoShopYet } from "../shops/index.ts";
 import {
@@ -229,7 +229,7 @@ function Shipping({ shopId, chips }: { shopId: string; chips: ReactNode }) {
               className={buttonStyle({ variant: "primary", size: "lg" })}
             >
               <Trans>Ship on Etsy</Trans>
-              <ArrowEndIcon size={14} />
+              <NextGlyph size={14} />
             </a>
           ) : undefined
         }
