@@ -14,6 +14,7 @@ import { PageHeader } from "../../shared/ui/PageHeader.tsx";
 import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
 import { Segmented } from "../../shared/ui/Segmented.tsx";
 import {
+  FilterChips,
   Chip,
   DataTable,
   BarChart,
@@ -78,38 +79,6 @@ const FILTERS: readonly (OrderFilter | "all")[] = [
   "canceled",
   "refunded",
 ];
-
-/** `.fl .tab`: a filter capsule with its count; the chosen one is ink. */
-function FilterTab({
-  on,
-  count,
-  onPress,
-  children,
-}: {
-  on: boolean;
-  count: number;
-  onPress: () => void;
-  children: ReactNode;
-}) {
-  return (
-    <button
-      type="button"
-      aria-pressed={on}
-      onClick={onPress}
-      className={cx(
-        "inline-flex h-9 items-center gap-1.5 rounded-pill border px-3 text-caption whitespace-nowrap transition-colors outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus",
-        on
-          ? "border-inverse bg-inverse text-on-inverse"
-          : "border-line-strong hover:border-line-hover",
-      )}
-    >
-      {children}
-      <span className={cx("ltr text-caption tabular", on ? "text-on-inverse-muted" : "text-muted")}>
-        {count}
-      </span>
-    </button>
-  );
-}
 
 const PERIODS: readonly OrderPeriod[] = ["30d", "90d", "12m", "all"];
 
@@ -446,20 +415,16 @@ function Orders({ shopId, chips }: { shopId: string; chips: ReactNode }) {
       <Panel>
         <PanelHeader title={<Trans>Filters</Trans>} />
         <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4 px-6 pb-5 max-sm:px-4">
-          <div className="flex flex-wrap gap-1.5" role="group" aria-label={t`Status`}>
-            {FILTERS.map((f) => (
-              <FilterTab
-                key={f}
-                on={filter === f}
-                count={countOf(f)}
-                onPress={() => {
-                  choose(f);
-                }}
-              >
-                {f === "all" ? <Trans>All</Trans> : states[f]}
-              </FilterTab>
-            ))}
-          </div>
+          <FilterChips
+            label={t`Status`}
+            value={filter}
+            onChange={choose}
+            options={FILTERS.map((f) => ({
+              id: f,
+              label: f === "all" ? <Trans>All</Trans> : states[f],
+              count: countOf(f),
+            }))}
+          />
           <KV
             className="min-w-[240px] max-sm:hidden"
             items={[

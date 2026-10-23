@@ -51,7 +51,7 @@ apps/web/src/
                       Typing, N), status (StatusGlyph, Status, the nine statuses), avatar (Avatar, Who,
                       Avatars), charts/ (BarChart, LineChart, HBarList,
                       ProgressBar), dotted (Matrix, DotBar: Demo screens only), table (DataTable), strip (Strip,
-                      StripCards, StripCard, Zoom), thumb (ProductThumb), form (PillField, ChoiceChips,
+                      StripCards, StripCard, Zoom), thumb (ProductThumb), form (PillField, ChoiceChips, FilterChips,
                       PillSelect, CodeBoxes), demo (DemoFrame, DemoPart, DemoTag), glyphs, bi (sample
                       text in both languages), kit.css (live motion and the chat, row and stage patterns)
   shared/demo/        office.ts: the 16 employees, departments and machine rooms (the demo's roster)

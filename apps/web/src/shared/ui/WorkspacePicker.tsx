@@ -1,8 +1,6 @@
 import { useLingui } from "@lingui/react/macro";
-import { Label, RadioButton, RadioField, RadioGroup } from "react-aria-components";
 
-export const CHIP =
-  "flex h-8 cursor-default items-center rounded-pill border border-border-subtle px-3 text-body-sm font-medium outline-none transition-colors data-[focus-visible]:ring-2 data-[focus-visible]:ring-focus data-[hovered]:bg-hover data-[selected]:border-transparent data-[selected]:bg-inverse data-[selected]:text-on-inverse";
+import { ChoiceChips } from "./kit/form.tsx";
 
 /**
  * Which workspace a page works on, for a user in several. One workspace needs no question; with
@@ -19,24 +17,13 @@ export function WorkspacePicker({
 }) {
   const { t } = useLingui();
   return (
-    <RadioGroup
+    <ChoiceChips
+      label={t`Workspace`}
       value={value}
       onChange={onChange}
-      className="flex flex-col gap-2 rounded-card border border-border-subtle bg-surface p-4 shadow-1"
-    >
-      <Label className="text-body-sm font-medium text-secondary">{t`Workspace`}</Label>
-      <div className="flex flex-wrap gap-2">
-        {ids.map((id) => (
-          <RadioField key={id} value={id}>
-            <RadioButton className={CHIP}>
-              <span dir="ltr" className="font-mono">
-                {id.slice(0, 8)}
-              </span>
-            </RadioButton>
-          </RadioField>
-        ))}
-      </div>
-    </RadioGroup>
+      options={ids.map((id) => ({ id, label: id.slice(0, 8), ltr: true }))}
+      className="rounded-card border border-border-subtle bg-surface p-4 shadow-1"
+    />
   );
 }
 

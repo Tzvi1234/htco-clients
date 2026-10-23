@@ -118,6 +118,68 @@ export function ChoiceChips<K extends string>({
     </RadioGroup>
   );
 }
+/** A filter chip (the demo's `.fl .tab` capsule): a toggle button, ink when on. */
+export const FILTER_CHIP = cx(
+  "inline-flex h-9 max-w-full items-center gap-1.5 rounded-pill border px-3 text-caption whitespace-nowrap transition-colors outline-none",
+  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus",
+);
+
+/**
+ * What a list shows, as a row of filter chips (Orders' states, Products' sections, the shop a
+ * screen shows): each a toggle button (`aria-pressed`) in a named group, the chosen one ink, with
+ * an optional count after its name.
+ */
+export function FilterChips<K extends string | number>({
+  label,
+  value,
+  onChange,
+  options,
+  className,
+}: {
+  /** The group's accessible name ("Status", "Sections"). */
+  label: string;
+  value: K | undefined;
+  onChange: (value: K) => void;
+  options: readonly { id: K; label: ReactNode; count?: number }[];
+  className?: string;
+}) {
+  return (
+    <div role="group" aria-label={label} className={cx("flex flex-wrap gap-1.5", className)}>
+      {options.map((option) => {
+        const on = option.id === value;
+        return (
+          <button
+            key={String(option.id)}
+            type="button"
+            aria-pressed={on}
+            onClick={() => {
+              onChange(option.id);
+            }}
+            className={cx(
+              FILTER_CHIP,
+              on
+                ? "border-inverse bg-inverse text-on-inverse"
+                : "border-line-strong hover:border-line-hover",
+            )}
+          >
+            <bdi className="truncate">{option.label}</bdi>
+            {option.count === undefined ? null : (
+              <span
+                className={cx(
+                  "ltr text-caption tabular",
+                  on ? "text-on-inverse-muted" : "text-muted",
+                )}
+              >
+                {option.count}
+              </span>
+            )}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 /**
  * The demo's settings field (`.sec` over a wide 40 px pill with a chevron) as a real select: the
  * menu opens below it on the menu surface (`.menu`).
