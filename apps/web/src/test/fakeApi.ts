@@ -442,11 +442,11 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
       return new Response(null, { status: 204 });
     }
 
-    const bulk = /^POST \/v1\/shops\/([^/]+)\/orders\/(export|resync)$/.exec(route);
+    const bulk = /^POST \/v1\/shops\/([^/]+)\/order-(exports|resyncs)$/.exec(route);
     if (bulk !== null) {
       const shop = state.shops.find((s) => s.id === bulk[1]);
       if (shop === undefined) return problem(404, "not-found");
-      if (bulk[2] === "resync") {
+      if (bulk[2] === "resyncs") {
         if (!(state.role === "owner" || state.role === "admin"))
           return problem(403, "orders-action-forbidden");
         const ids = Array.isArray(body["order_ids"]) ? (body["order_ids"] as number[]) : [];

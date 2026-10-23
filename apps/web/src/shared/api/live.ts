@@ -127,7 +127,7 @@ export async function exportOrders(
   shopId: string,
   body: { period: OrderPeriod; state?: OrderFilter | undefined; order_ids?: number[] },
 ): Promise<{ blob: Blob; filename: string; count: number }> {
-  const { data, error, response } = await api.POST("/v1/shops/{shop_id}/orders/export", {
+  const { data, error, response } = await api.POST("/v1/shops/{shop_id}/order-exports", {
     params: { path: { shop_id: shopId } },
     body: {
       period: body.period,
@@ -147,7 +147,7 @@ export async function exportOrders(
 
 /** "Re-sync selected" (slice 5.7): one queued re-read from Etsy per order; how many queued. */
 export async function resyncOrders(api: ApiClient, shopId: string, ids: number[]): Promise<number> {
-  const { data, error, response } = await api.POST("/v1/shops/{shop_id}/orders/resync", {
+  const { data, error, response } = await api.POST("/v1/shops/{shop_id}/order-resyncs", {
     params: { path: { shop_id: shopId } },
     body: { order_ids: ids },
   });
