@@ -58,6 +58,11 @@ msgstr "{0} מתוך {1} הזמנות בוטלו"
 msgid "{0} of {1} orders refunded"
 msgstr "{0} מתוך {1} הזמנות הוחזרו"
 
+#. placeholder {0}: count(queued)
+#: src/features/commerce/OrdersPage.tsx
+msgid "{0} orders queued to be read again from Etsy."
+msgstr "{0} הזמנות נכנסו לתור לקריאה חוזרת מ־Etsy."
+
 #. placeholder {0}: count(reviews)
 #: src/features/shops/ShopCard.tsx
 msgid "{0} reviews"
@@ -1640,9 +1645,23 @@ msgstr "הוצאות החודש"
 msgid "Export"
 msgstr "ייצוא"
 
+#. placeholder {0}: count(selected.size)
+#: src/features/commerce/OrdersPage.tsx
+msgid "Export {0} selected"
+msgstr "ייצוא {0} שנבחרו"
+
 #: src/features/finance/FinanceDemos.tsx
 msgid "Export CSV"
 msgstr "ייצוא CSV"
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "Export to CSV"
+msgstr "ייצוא ל־CSV"
+
+#. placeholder {0}: count(file.count)
+#: src/features/commerce/OrdersPage.tsx
+msgid "Exported {0} orders."
+msgstr "יוצאו {0} הזמנות."
 
 #: src/shared/ui/kit/status.tsx
 msgid "Failed"
@@ -3371,6 +3390,10 @@ msgstr "בדיקה מחדש"
 msgid "Re-check what HTCO can do with {shopName}"
 msgstr "בדיקה מחדש של מה ש־HTCO יכולה לעשות עם {shopName}"
 
+#: src/features/commerce/OrdersPage.tsx
+msgid "Re-sync selected"
+msgstr "סנכרון מחדש של הנבחרות"
+
 #: src/features/customers/CustomersDemos.tsx
 msgid "Reach:"
 msgstr "היקף:"
@@ -3852,6 +3875,15 @@ msgstr "לכל האישורים"
 #: src/features/team/TeamPage.tsx
 msgid "see every shop"
 msgstr "רואים את כל החנויות"
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "Select every order shown"
+msgstr "בחירת כל ההזמנות המוצגות"
+
+#. placeholder {0}: String(o.order_id)
+#: src/features/commerce/OrdersPage.tsx
+msgid "Select order {0}"
+msgstr "בחירת הזמנה {0}"
 
 #: src/features/commerce/refunds.tsx
 msgid "Seller's note:"
@@ -4415,6 +4447,10 @@ msgstr "תודה!"
 msgid "That device is still signed in. Try again shortly."
 msgstr "המכשיר עדיין מחובר. נסו שוב בעוד רגע."
 
+#: src/features/commerce/OrdersPage.tsx
+msgid "That did not work. Try again shortly."
+msgstr "זה לא הצליח. נסו שוב בעוד רגע."
+
 #: src/features/office/FloorPage.tsx
 msgid "The 3D map could not load. Use the list view."
 msgstr "לא ניתן לטעון את המפה התלת־ממדית. אפשר להשתמש בתצוגת הרשימה."
@@ -4590,6 +4626,10 @@ msgstr "הבעלים של סביבת העבודה מחברים חנויות."
 msgid "Theme"
 msgstr "ערכת נושא"
 
+#: src/features/commerce/OrdersPage.tsx
+msgid "These orders were re-synced moments ago. Try again in a minute."
+msgstr "ההזמנות האלה סונכרנו מחדש לפני רגע. נסו שוב בעוד דקה."
+
 #: src/features/team/TeamPage.tsx
 msgid "They join as members with the living office"
 msgstr "הם יצטרפו כחברים עם המשרד החי"
@@ -4626,6 +4666,10 @@ msgstr "חנות ה־Etsy הזו כבר מחוברת לסביבת עבודה א�
 #: src/features/auth/AcceptInvitePage.tsx
 msgid "This invitation link has expired or was already used. Ask for a new one."
 msgstr "פג תוקף קישור ההזמנה או שכבר השתמשו בו. בקש/י קישור חדש."
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "This is not available on this server yet."
+msgstr "זה עוד לא זמין בשרת הזה."
 
 #: src/features/auth/AcceptInvitePage.tsx
 #: src/features/auth/ResetPasswordPage.tsx
@@ -5255,6 +5299,10 @@ msgstr "המשרד שלך נפתח בדפדפן."
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "Your other devices will be signed out."
 msgstr "המכשירים האחרים שלכם ינותקו מהחשבון."
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "Your role may see these orders but not re-sync them."
+msgstr "התפקיד שלך מאפשר לראות את ההזמנות אבל לא לסנכרן אותן מחדש."
 
 #: src/features/shops/shopActions.tsx
 msgid "Your session has ended. Sign in again, then disconnect the shop."

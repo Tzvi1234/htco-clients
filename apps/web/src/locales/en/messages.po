@@ -58,6 +58,11 @@ msgstr "{0} of {1} orders cancelled"
 msgid "{0} of {1} orders refunded"
 msgstr "{0} of {1} orders refunded"
 
+#. placeholder {0}: count(queued)
+#: src/features/commerce/OrdersPage.tsx
+msgid "{0} orders queued to be read again from Etsy."
+msgstr "{0} orders queued to be read again from Etsy."
+
 #. placeholder {0}: count(reviews)
 #: src/features/shops/ShopCard.tsx
 msgid "{0} reviews"
@@ -1640,9 +1645,23 @@ msgstr "Expenses (month)"
 msgid "Export"
 msgstr "Export"
 
+#. placeholder {0}: count(selected.size)
+#: src/features/commerce/OrdersPage.tsx
+msgid "Export {0} selected"
+msgstr "Export {0} selected"
+
 #: src/features/finance/FinanceDemos.tsx
 msgid "Export CSV"
 msgstr "Export CSV"
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "Export to CSV"
+msgstr "Export to CSV"
+
+#. placeholder {0}: count(file.count)
+#: src/features/commerce/OrdersPage.tsx
+msgid "Exported {0} orders."
+msgstr "Exported {0} orders."
 
 #: src/shared/ui/kit/status.tsx
 msgid "Failed"
@@ -3371,6 +3390,10 @@ msgstr "Re-check"
 msgid "Re-check what HTCO can do with {shopName}"
 msgstr "Re-check what HTCO can do with {shopName}"
 
+#: src/features/commerce/OrdersPage.tsx
+msgid "Re-sync selected"
+msgstr "Re-sync selected"
+
 #: src/features/customers/CustomersDemos.tsx
 msgid "Reach:"
 msgstr "Reach:"
@@ -3852,6 +3875,15 @@ msgstr "See all approvals"
 #: src/features/team/TeamPage.tsx
 msgid "see every shop"
 msgstr "see every shop"
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "Select every order shown"
+msgstr "Select every order shown"
+
+#. placeholder {0}: String(o.order_id)
+#: src/features/commerce/OrdersPage.tsx
+msgid "Select order {0}"
+msgstr "Select order {0}"
 
 #: src/features/commerce/refunds.tsx
 msgid "Seller's note:"
@@ -4415,6 +4447,10 @@ msgstr "Thanks!"
 msgid "That device is still signed in. Try again shortly."
 msgstr "That device is still signed in. Try again shortly."
 
+#: src/features/commerce/OrdersPage.tsx
+msgid "That did not work. Try again shortly."
+msgstr "That did not work. Try again shortly."
+
 #: src/features/office/FloorPage.tsx
 msgid "The 3D map could not load. Use the list view."
 msgstr "The 3D map could not load. Use the list view."
@@ -4590,6 +4626,10 @@ msgstr "The workspace owner connects shops."
 msgid "Theme"
 msgstr "Theme"
 
+#: src/features/commerce/OrdersPage.tsx
+msgid "These orders were re-synced moments ago. Try again in a minute."
+msgstr "These orders were re-synced moments ago. Try again in a minute."
+
 #: src/features/team/TeamPage.tsx
 msgid "They join as members with the living office"
 msgstr "They join as members with the living office"
@@ -4626,6 +4666,10 @@ msgstr "This Etsy shop is already connected to another workspace."
 #: src/features/auth/AcceptInvitePage.tsx
 msgid "This invitation link has expired or was already used. Ask for a new one."
 msgstr "This invitation link has expired or was already used. Ask for a new one."
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "This is not available on this server yet."
+msgstr "This is not available on this server yet."
 
 #: src/features/auth/AcceptInvitePage.tsx
 #: src/features/auth/ResetPasswordPage.tsx
@@ -5255,6 +5299,10 @@ msgstr "Your office opens in the browser."
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "Your other devices will be signed out."
 msgstr "Your other devices will be signed out."
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "Your role may see these orders but not re-sync them."
+msgstr "Your role may see these orders but not re-sync them."
 
 #: src/features/shops/shopActions.tsx
 msgid "Your session has ended. Sign in again, then disconnect the shop."
