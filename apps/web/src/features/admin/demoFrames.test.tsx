@@ -45,7 +45,6 @@ const SCREENS = [
   ["/customers/marketing", "Marketing", "Active campaign"],
   ["/finance/overview", "Overview", "Revenue this month:"],
   ["/finance/ledger", "Ledger", "Etsy balance:"],
-  ["/admin/health", "Health", "30-day uptime:"],
   ["/admin/automations", "Automations", "Automation details"],
 ] as const;
 

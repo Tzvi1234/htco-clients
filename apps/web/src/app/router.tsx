@@ -19,6 +19,7 @@ import { ResetPasswordPage } from "../features/auth/ResetPasswordPage.tsx";
 import { SecondFactorPage } from "../features/auth/SecondFactorPage.tsx";
 import { SignInPage } from "../features/auth/SignInPage.tsx";
 import { OrdersPage } from "../features/commerce/OrdersPage.tsx";
+import { OperationsPage } from "../features/admin/OperationsPage.tsx";
 import { ProductsPage } from "../features/commerce/ProductsPage.tsx";
 import { ShippingPage } from "../features/commerce/ShippingPage.tsx";
 import { CustomersPage } from "../features/customers/CustomersPage.tsx";
@@ -207,6 +208,13 @@ const routeTree = rootRoute.addChildren([
         path: "/customers/customers",
         staticData: { layout: "panels", scroll: "page" },
         component: CustomersPage,
+      }),
+      // Queue, execution and sync health (platform slice 5.9), for the Owner and Admins.
+      createRoute({
+        getParentRoute: () => appRoute,
+        path: "/admin/health",
+        staticData: { layout: "panels", scroll: "page" },
+        component: OperationsPage,
       }),
       createRoute({
         getParentRoute: () => appRoute,
