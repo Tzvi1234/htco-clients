@@ -52,9 +52,13 @@ import { ago, useNow } from "../../shared/lib/time.ts";
 
 /**
  * What the order sheet shows about an order's incidents: Phase 6 (slice 6.3) fills it with the
- * order-to-incident link. Until then nothing is rendered in its place.
+ * order-to-incident link. The order belongs to exactly one shop, so the slot gets that shop and
+ * its workspace. Until then nothing is rendered in its place.
  */
-export type OrderIncidentSlot = (order: ShopOrder) => ReactNode;
+export type OrderIncidentSlot = (
+  order: ShopOrder,
+  shop: { id: string; organizationId: string },
+) => ReactNode;
 
 /** How each state reads, and its glyph (the shape carries it, not the colour). */
 export function useOrderStates(): Record<OrderFilter, string> {
@@ -141,7 +145,15 @@ export function OrdersPage({ orderIncidents }: { orderIncidents?: OrderIncidentS
             key={live.shop.id}
             shopId={live.shop.id}
             chips={<ShopChips live={live} />}
-            {...(orderIncidents === undefined ? {} : { incidents: orderIncidents })}
+            {...(orderIncidents === undefined
+              ? {}
+              : {
+                  incidents: (order: ShopOrder) =>
+                    orderIncidents(order, {
+                      id: live.shop?.id ?? "",
+                      organizationId: live.shop?.organization_id ?? "",
+                    }),
+                })}
           />
         ) : (
           // No shop yet (or still loading): one panel says so; no empty filters beside it.
@@ -170,7 +182,7 @@ function Orders({
 }: {
   shopId: string;
   chips: ReactNode;
-  incidents?: OrderIncidentSlot;
+  incidents?: (order: ShopOrder) => ReactNode;
 }) {
   const { t } = useLingui();
   const api = useApi();
@@ -827,7 +839,7 @@ function OrderSheet({
   shopId: string;
   order: ShopOrder;
   photos: Map<number, string | null>;
-  incidents?: OrderIncidentSlot;
+  incidents?: (order: ShopOrder) => ReactNode;
   onClose: () => void;
 }) {
   const { t } = useLingui();

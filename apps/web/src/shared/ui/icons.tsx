@@ -85,6 +85,14 @@ export const BellIcon = glyph(
   "0 0 24 24",
   <path d="M12 2.5a6.5 6.5 0 016.5 6.5v3.8l1.7 2.6c.4.6 0 1.4-.8 1.4H4.6c-.8 0-1.2-.8-.8-1.4l1.7-2.6V9A6.5 6.5 0 0112 2.5zM9.5 18.5h5a2.5 2.5 0 01-5 0z" />,
 );
+/** Approvals: a check cut out of a disc (the bell is the notifications'). */
+export const ApprovalIcon = glyph(
+  "0 0 24 24",
+  <path
+    fillRule="evenodd"
+    d="M12 2.5a9.5 9.5 0 110 19 9.5 9.5 0 010-19zm4.3 6.4l-5.7 5.7-2.9-2.9-1.4 1.4 4.3 4.3 7.1-7.1z"
+  />,
+);
 export const SearchIcon = glyph(
   "0 0 24 24",
   <>
