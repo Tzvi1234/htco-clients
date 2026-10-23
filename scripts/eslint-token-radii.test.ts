@@ -62,6 +62,12 @@ describe("token-radii (DESIGN.md radius roles)", () => {
         ],
       },
       {
+        // Arbitrary variants with nested brackets (Codex review of #47).
+        code: 'const h = "[&>[data-active]+span]:rounded-[4px]";',
+        output: 'const h = "[&>[data-active]+span]:rounded-tag";',
+        errors: [error("[&>[data-active]+span]:rounded-[4px]", "rounded-tag")],
+      },
+      {
         // Other class syntax in the same list does not hide the radius.
         code: 'const g = "rounded-[4px] [&+&]:border-t";',
         output: 'const g = "rounded-tag [&+&]:border-t";',
