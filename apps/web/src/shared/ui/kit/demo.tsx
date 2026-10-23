@@ -141,7 +141,7 @@ export function DemoTag({ className }: { className?: string }) {
   return (
     <span
       className={cx(
-        "inline-flex h-5 shrink-0 items-center gap-1 rounded-pill border border-line-strong bg-raised px-2 text-[11px] leading-none font-normal text-secondary",
+        "inline-flex h-5 shrink-0 items-center gap-1 rounded-pill border border-line-strong bg-raised px-2 text-caption leading-none font-normal text-secondary",
         className,
       )}
     >
