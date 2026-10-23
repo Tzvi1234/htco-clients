@@ -90,6 +90,12 @@ export interface FakeState {
   statsFailFor?: string[];
   /** True: the shops are busy, 160 orders in 30 days (more than one page of 100). */
   liveBusy?: boolean;
+  /**
+   * True: orders, Home's sales and the statistics come from the stored order history (slice
+   * 5.6), synced four minutes ago (40 with "stale"); one order comes with its status timeline.
+   * False or unset: read live from Etsy, as before the history is complete.
+   */
+  orderStore?: boolean;
 }
 
 const PROBLEMS = "https://ht-co.app/problems/";
@@ -431,6 +437,8 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
       return new Response(null, { status: 204 });
     }
 
+    const one = /^GET \/v1\/shops\/([^/]+)\/orders\/(\d+)$/.exec(route);
+    if (one !== null) return orderDetail(one[1] ?? "", Number(one[2]));
     const live =
       /^GET \/v1\/shops\/([^/]+)\/(overview|orders|listings|reviews|shipping|stats)$/.exec(route);
     if (live !== null) return liveData(live[1] ?? "", live[2] ?? "", url);
@@ -546,6 +554,99 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
     }
   }
 
+  /** When the stored history last synced (slice 5.6), and the answer as the store gives it. */
+  function syncedAt(): string {
+    return new Date(Date.now() - (state.liveTrouble === "stale" ? 40 : 4) * 60_000).toISOString();
+  }
+  function fromStore<T extends { source: string; fetched_at: string; stale: boolean }>(
+    body: T,
+    stored: number,
+  ): T {
+    if (state.orderStore !== true) return body;
+    const at = syncedAt();
+    return {
+      ...body,
+      source: "htco_store",
+      fetched_at: at,
+      stale: state.liveTrouble === "stale",
+      sync: { state: "complete", orders_stored: stored, last_synced_at: at },
+      last_synced_at: at,
+    };
+  }
+
+  /** One order with its status timeline, as the stored history recorded it (invented). */
+  function orderDetail(shopId: string, orderId: number): Response {
+    const shop = state.shops.find((s) => s.id === shopId);
+    if (shop === undefined) return problem(404, "not-found");
+    const integration = state.integrations.find((i) => i.shop_id === shopId);
+    if (integration !== undefined && integration.status !== "connected")
+      return notConnected(integration);
+    const contact = state.role === "owner" || state.role === "admin" || state.role === "support";
+    const data = fakeShopData(shopId, shop.name, Date.now(), contact, state.liveBusy === true);
+    const every = data.ordersFor(null, 10_000, 0, "all");
+    const order = every.items.find((o) => o.order_id === orderId);
+    if (order === undefined) return problem(404, "not-found");
+    const stored = state.orderStore === true;
+    const at = syncedAt();
+    const step = (from: string | null, to: string, source: string, when: string) => ({
+      from_state: from,
+      to_state: to,
+      state:
+        to === "ingested" || to === "awaiting_shipment"
+          ? "paid"
+          : to === "delivered"
+            ? "shipped"
+            : to === "cancelled"
+              ? "canceled"
+              : to,
+      source,
+      observed_at: when,
+    });
+    const placed = order.created_at;
+    const timeline = !stored
+      ? []
+      : order.state === "unpaid"
+        ? [step(null, "unpaid", "webhook", placed)]
+        : [
+            step(null, "paid", "webhook", placed),
+            step("paid", "ingested", "webhook", placed),
+            ...(order.state === "canceled"
+              ? [step("ingested", "cancelled", "reconciliation", order.updated_at)]
+              : [step("ingested", "awaiting_shipment", "webhook", placed)]),
+            ...(order.state === "shipped" || order.state === "refunded"
+              ? [
+                  step(
+                    "awaiting_shipment",
+                    "shipped",
+                    "webhook",
+                    order.shipments[0]?.shipped_at ?? order.updated_at,
+                  ),
+                ]
+              : []),
+            ...(order.state === "refunded"
+              ? [
+                  step(
+                    "shipped",
+                    "refunded",
+                    "reconciliation",
+                    order.refunds[0]?.refunded_at ?? order.updated_at,
+                  ),
+                ]
+              : []),
+          ];
+    return json(200, {
+      source: stored ? "htco_store" : "etsy_live",
+      fetched_at: stored ? at : new Date(Date.now() - 90_000).toISOString(),
+      stale: false,
+      shop_id: shopId,
+      order,
+      timeline,
+      buyer_details: contact,
+      sync: stored ? { state: "complete", orders_stored: every.total, last_synced_at: at } : null,
+      last_synced_at: stored ? at : null,
+    });
+  }
+
   /** A connected shop's invented Etsy data, as the API answers it. */
   function liveData(shopId: string, view: string, url: URL): Response | Promise<Response> {
     const shop = state.shops.find((s) => s.id === shopId);
@@ -588,7 +689,17 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
           },
         });
       }
-      return json(200, trouble === "no-sales" ? { ...overview, sales: null } : overview);
+      const body = trouble === "no-sales" ? { ...overview, sales: null } : overview;
+      if (state.orderStore !== true || body.sales === null) return json(200, body);
+      // Home's sales from the stored history; the profile is still read live.
+      const at = syncedAt();
+      const stored = data.ordersFor(null, 10_000, 0, "all").total;
+      return json(200, {
+        ...body,
+        sales_source: "htco_store",
+        sync: { state: "complete", orders_stored: stored, last_synced_at: at },
+        last_synced_at: at,
+      });
     }
     if (view === "orders") {
       const period = url.searchParams.get("period") ?? "30d";
@@ -606,7 +717,11 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
           total: 0,
           counts: { unpaid: 0, paid: 0, shipped: 0, canceled: 0, refunded: 0, overdue: 0 },
         });
-      return json(200, mark(trouble === "partial" ? { ...page, partial: true } : page));
+      const stored = data.ordersFor(null, 10_000, 0, "all").total;
+      return json(
+        200,
+        fromStore(mark(trouble === "partial" ? { ...page, partial: true } : page), stored),
+      );
     }
     if (view === "listings")
       return json(
@@ -648,10 +763,13 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
       const stats = data.stats(trouble === "partial" ? 120 : undefined);
       return json(
         200,
-        mark(
-          trouble === "partial" && stats.sales !== null
-            ? { ...stats, sales: { ...stats.sales, partial: true } }
-            : stats,
+        fromStore(
+          mark(
+            trouble === "partial" && stats.sales !== null
+              ? { ...stats, sales: { ...stats.sales, partial: true } }
+              : stats,
+          ),
+          data.ordersFor(null, 10_000, 0, "all").total,
         ),
       );
     }

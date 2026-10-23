@@ -11,6 +11,11 @@ import { ApiError, apiError, meQuery, shopsQuery, useApi, type ShopView } from "
 export type ShopOverview = components["schemas"]["ShopOverviewView"];
 export type ShopOrders = components["schemas"]["OrdersView"];
 export type ShopOrder = components["schemas"]["OrderView"];
+/** One order with its status timeline from the stored history (slice 5.6). */
+export type ShopOrderDetail = components["schemas"]["OrderDetailView"];
+export type OrderStatusChange = components["schemas"]["OrderStatusChangeView"];
+/** The stored history's state: `syncing_history` while the backfill runs, then `complete`. */
+export type HistorySync = components["schemas"]["SyncView"];
 export type ShopListings = components["schemas"]["ListingsView"];
 export type ShopListing = components["schemas"]["ListingView"];
 export type ShopReviews = components["schemas"]["ReviewsView"];
@@ -30,6 +35,7 @@ export const liveKeys = {
   overview: (shopId: string) => ["live", shopId, "overview"] as const,
   orders: (shopId: string, state: OrderFilter | undefined, period: OrderPeriod = "30d") =>
     ["live", shopId, "orders", period, state ?? "all"] as const,
+  order: (shopId: string, orderId: number) => ["live", shopId, "order", orderId] as const,
   listings: (shopId: string) => ["live", shopId, "listings"] as const,
   reviews: (shopId: string) => ["live", shopId, "reviews"] as const,
   shipping: (shopId: string) => ["live", shopId, "shipping"] as const,
@@ -96,6 +102,21 @@ export function ordersQuery(
       return { ...first, items };
     },
     refetchInterval: REFRESH_MS,
+    retry,
+  });
+}
+
+/** One order with its status timeline (the order sheet); never cached by the browser. */
+export function orderQuery(api: ApiClient, shopId: string, orderId: number) {
+  return queryOptions({
+    queryKey: liveKeys.order(shopId, orderId),
+    queryFn: async (): Promise<ShopOrderDetail> => {
+      const { data, error, response } = await api.GET("/v1/shops/{shop_id}/orders/{order_id}", {
+        params: { path: { shop_id: shopId, order_id: orderId } },
+      });
+      if (data === undefined) throw apiError(response, error);
+      return data;
+    },
     retry,
   });
 }

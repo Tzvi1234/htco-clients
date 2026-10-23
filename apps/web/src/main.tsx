@@ -38,6 +38,8 @@ const api =
           assurance: "aal2",
           authorizationUrl: `/integrations/etsy/callback?code=demo-code&state=demo-state&demo=${demo}`,
           ...(demo === "shops" || demo === "history" ? demoShops() : {}),
+          // `?demo=shops`: the orders come from the stored history (slice 5.6).
+          ...(demo === "shops" ? { orderStore: true } : {}),
           // `?demo=history`: every order is older than 30 days (the owner's live shop).
           ...(demo === "history" ? { liveTrouble: "history" as const } : {}),
         }).client;

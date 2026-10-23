@@ -7,6 +7,10 @@ msgstr ""
 "X-Generator: @lingui/cli\n"
 "Language: he\n"
 
+#: src/features/commerce/timeline.tsx
+msgid " (current)"
+msgstr " (המצב הנוכחי)"
+
 #: src/features/team/TeamPage.tsx
 msgid "(you)"
 msgstr "(את/ה)"
@@ -637,6 +641,7 @@ msgid "Avg. value"
 msgstr "ערך ממוצע"
 
 #: src/features/commerce/OrdersPage.tsx
+#: src/features/commerce/timeline.tsx
 msgid "Awaiting payment"
 msgstr "ממתינה לתשלום"
 
@@ -746,6 +751,7 @@ msgstr "שיעור ביטולים"
 
 #: src/features/commerce/OrdersPage.tsx
 #: src/features/commerce/refunds.tsx
+#: src/features/commerce/timeline.tsx
 #: src/features/shops/ShopStats.tsx
 msgid "Cancelled"
 msgstr "בוטלה"
@@ -1090,6 +1096,10 @@ msgstr "הועתק"
 msgid "Copy link"
 msgstr "העתקת הקישור"
 
+#: src/shared/ui/kit/live.tsx
+msgid "copying the order history ({count} so far)"
+msgstr "מעתיקים את היסטוריית ההזמנות ({count} עד עכשיו)"
+
 #: src/features/office/FloorPage.tsx
 msgid "Cost"
 msgstr "עלות"
@@ -1179,6 +1189,10 @@ msgstr "ממוצע יומי"
 msgid "Daily cap"
 msgstr "מגבלה יומית"
 
+#: src/features/commerce/timeline.tsx
+msgid "Daily check"
+msgstr "בדיקה יומית"
+
 #: src/features/finance/FinanceDemos.tsx
 msgid "Daily revenue"
 msgstr "הכנסה יומית"
@@ -1252,6 +1266,7 @@ msgstr "ערך החלטה 92%, בתוך המדיניות"
 msgid "Deletes the shop and all its data in HTCO"
 msgstr "מוחק את החנות ואת כל הנתונים שלה ב־HTCO"
 
+#: src/features/commerce/timeline.tsx
 #: src/shared/ui/kit/status.tsx
 msgid "Delivered"
 msgstr "נמסר"
@@ -1530,6 +1545,10 @@ msgstr "Etsy כבר לא מקבלת את החיבור של החנות. חברו 
 msgid "Etsy no longer accepts the shop's connection. The workspace owner can reconnect it."
 msgstr "Etsy כבר לא מקבלת את החיבור של החנות. בעלי סביבת העבודה יכולים לחבר אותה מחדש."
 
+#: src/features/commerce/timeline.tsx
+msgid "Etsy notice"
+msgstr "הודעה מ־Etsy"
+
 #: src/features/shops/Capabilities.tsx
 msgid "Etsy refused this. Reconnect the shop; if it stays blocked, Etsy has limited the app."
 msgstr "Etsy סירבה. יש לחבר את החנות מחדש; אם זה נשאר חסום, Etsy הגבילה את האפליקציה."
@@ -1697,6 +1716,10 @@ msgstr "בריאות פיננסית"
 #: src/features/office/FloorPage.tsx
 msgid "Find agent"
 msgstr "חיפוש סוכן"
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "Find an order"
+msgstr "חיפוש הזמנה"
 
 #: src/features/shops/EtsyCallbackPage.tsx
 msgid "Finish connecting in the web app where you are signed in."
@@ -1869,6 +1892,14 @@ msgstr "גבוה"
 #: src/features/work/demoScreens.tsx
 msgid "High risk"
 msgstr "סיכון גבוה"
+
+#: src/features/commerce/timeline.tsx
+msgid "History"
+msgstr "היסטוריה"
+
+#: src/features/commerce/timeline.tsx
+msgid "History import"
+msgstr "ייבוא היסטוריה"
 
 #: src/features/customers/CustomersDemos.tsx
 msgid "Holiday towels"
@@ -2111,6 +2142,10 @@ msgstr "סנכרון אחרון"
 msgid "Last synced {0}"
 msgstr "סונכרנה לאחרונה {0}"
 
+#: src/shared/ui/kit/live.tsx
+msgid "Last synced at {time} · Etsy has not answered since"
+msgstr "סונכרן לאחרונה ב־{time} · Etsy לא עונה מאז"
+
 #: src/features/security/SecurityPage.tsx
 msgid "Last used:"
 msgstr "שימוש אחרון:"
@@ -2253,6 +2288,10 @@ msgstr "טוענים חנויות"
 #: src/features/shops/ShopStats.tsx
 msgid "Loading statistics"
 msgstr "טוען סטטיסטיקה"
+
+#: src/features/commerce/timeline.tsx
+msgid "Loading the order's history…"
+msgstr "טוענים את היסטוריית ההזמנה…"
 
 #: src/features/shops/ShopCard.tsx
 msgid "Loading the shop's numbers"
@@ -2558,6 +2597,11 @@ msgstr "אין ליסטינג שמתאים לתצוגה הזו."
 #: src/features/shops/ShopStats.tsx
 msgid "No month with sales yet."
 msgstr "עדיין אין חודש עם מכירות."
+
+#. placeholder {0}: search.trim()
+#: src/features/commerce/OrdersPage.tsx
+msgid "No order matches \"{0}\"."
+msgstr "אין הזמנה שמתאימה לחיפוש: {0}"
 
 #. placeholder {0}: periods[period].within
 #: src/features/commerce/OrdersPage.tsx
@@ -2931,6 +2975,14 @@ msgstr "הזמנה {0}"
 msgid "Order Assurance"
 msgstr "הבטחת הזמנות"
 
+#: src/features/commerce/timeline.tsx
+msgid "Order history"
+msgstr "היסטוריית ההזמנה"
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "Order number or SKU"
+msgstr "מספר הזמנה או SKU"
+
 #: src/features/commerce/OrdersPage.tsx
 msgid "Order numbers"
 msgstr "נתוני ההזמנות"
@@ -3047,6 +3099,7 @@ msgid "Page not found"
 msgstr "הדף לא נמצא"
 
 #: src/features/commerce/OrdersPage.tsx
+#: src/features/commerce/timeline.tsx
 msgid "Paid"
 msgstr "שולם"
 
@@ -3334,6 +3387,10 @@ msgstr "קריאה + טיוטה"
 msgid "Read listings"
 msgstr "קריאת מוצרים"
 
+#: src/features/commerce/timeline.tsx
+msgid "Read live from Etsy: the steps appear once HTCO has stored this order."
+msgstr "נקרא ישירות מ־Etsy: השלבים יופיעו אחרי ש־HTCO תשמור את ההזמנה."
+
 #: src/features/shops/ShopsPage.tsx
 msgid "Read only"
 msgstr "קריאה בלבד"
@@ -3404,6 +3461,10 @@ msgstr "יש לחבר מחדש היום"
 msgid "Recorded by"
 msgstr "נרשם ע״י"
 
+#: src/features/commerce/timeline.tsx
+msgid "Recorded in HTCO"
+msgstr "נרשמה ב־HTCO"
+
 #: src/features/security/SecurityPage.tsx
 msgid "Recovery"
 msgstr "שחזור"
@@ -3451,6 +3512,7 @@ msgstr "החזר ללא אישור"
 
 #: src/features/commerce/OrdersPage.tsx
 #: src/features/commerce/refunds.tsx
+#: src/features/commerce/timeline.tsx
 #: src/features/shops/ShopStats.tsx
 msgid "Refunded"
 msgstr "הוחזר כסף"
@@ -3906,6 +3968,7 @@ msgid "Shipment"
 msgstr "משלוח"
 
 #: src/features/commerce/OrdersPage.tsx
+#: src/features/commerce/timeline.tsx
 msgid "Shipped"
 msgstr "נשלח"
 
@@ -4277,6 +4340,10 @@ msgstr "תמיכה"
 msgid "Switch linen towels to Gelato (−$2.10 per unit)"
 msgstr "מעבר לספק Gelato למגבות מפשתן (−$2.10 ליחידה)"
 
+#: src/features/commerce/timeline.tsx
+msgid "Sync"
+msgstr "סנכרון"
+
 #: src/features/office/floor3d/engine.ts
 msgid "Sync fixed?"
 msgstr "הסנכרון תוקן?"
@@ -4284,6 +4351,10 @@ msgstr "הסנכרון תוקן?"
 #: src/features/admin/AdminDemos.tsx
 msgid "Sync tracking numbers from carriers"
 msgstr "סנכרון מספרי מעקב מחברות השילוח"
+
+#: src/shared/ui/kit/live.tsx
+msgid "Synced from Etsy"
+msgstr "מסונכרן מ־Etsy"
 
 #: src/features/settings/AppearanceChoices.tsx
 msgid "System"
@@ -4398,6 +4469,10 @@ msgstr "האימייל או הסיסמה שגויים."
 msgid "The ground behind your panels."
 msgstr "הרקע שמאחורי הלוחות."
 
+#: src/features/commerce/timeline.tsx
+msgid "The history could not be read."
+msgstr "לא הצלחנו לקרוא את ההיסטוריה."
+
 #: src/features/commerce/OrdersPage.tsx
 msgid "the last 12 months"
 msgstr "ב־12 החודשים האחרונים"
@@ -4425,6 +4500,10 @@ msgstr "המשרד מתעורר…"
 #: src/features/welcome/WelcomePage.tsx
 msgid "The office that works for you, built step by step. It asks before anything risky."
 msgstr "המשרד שעובד בשבילך, נבנה צעד אחר צעד. הוא שואל לפני כל דבר מסוכן."
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "The orders were last synced {when}. Etsy has not answered since, so newer orders may be missing."
+msgstr "ההזמנות סונכרנו לאחרונה {when}. Etsy לא עונה מאז, ולכן ייתכן שחסרות הזמנות חדשות."
 
 #: src/features/team/TeamPage.tsx
 msgid "The Owner's role, shops and membership cannot be changed."
@@ -4960,6 +5039,10 @@ msgstr "ממתינה לך · החזר #3152"
 #: src/features/office/data.ts
 msgid "Waiting on the Gelato quote."
 msgstr "ממתין להצעת מחיר מ־Gelato."
+
+#: src/features/commerce/timeline.tsx
+msgid "Waiting to ship"
+msgstr "ממתינה למשלוח"
 
 #: src/features/settings/AppearanceChoices.tsx
 msgid "Warm and soft"
