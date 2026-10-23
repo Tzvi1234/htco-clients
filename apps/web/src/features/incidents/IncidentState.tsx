@@ -102,10 +102,12 @@ export function IncidentState({ state, className }: { state: string; className?:
   );
 }
 
+// One emphasis colour: orange marks what needs him (high and critical; the word and the weight
+// tell them apart), everything else is quiet (Pixel's review of #48: no red beside orange).
 const SEVERITY_TONE: Partial<Record<string, DotTone>> = {
-  critical: "danger",
+  critical: "attention",
   high: "attention",
-  medium: "ink",
+  medium: "muted",
   low: "muted",
 };
 

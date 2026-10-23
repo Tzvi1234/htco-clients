@@ -43,6 +43,9 @@ function useInbox() {
         organizations,
         pending: organizations.length === 0 || results.some((result) => result.isPending),
         isError: results.some((result) => result.isError) && results.every((r) => !r.data),
+        // Some workspaces answered and some did not: the panel says so instead of leaving
+        // them out silently (review of #48).
+        partial: results.some((result) => result.isError) && results.some((r) => r.data),
         refetch: () => {
           for (const result of results) void result.refetch();
         },
@@ -199,8 +202,22 @@ export function NotificationBell({ className }: { className?: string }) {
   const refresh = () => {
     void client.invalidateQueries({ queryKey: ["incidents"] });
   };
+  const shown = inbox.items.slice(0, SHOWN);
+  const shownUnread = shown.filter((notice) => notice.read_at === null);
+  // Only what the panel shows is marked: never one that arrived after it rendered, nor one
+  // beyond the newest six (review of #48).
   const readAll = useMutation({
-    mutationFn: () => Promise.all(inbox.organizations.map((id) => markRead(api, id))),
+    mutationFn: (notices: readonly Notice[]) => {
+      const byWorkspace = new Map<string, string[]>();
+      for (const notice of notices)
+        byWorkspace.set(notice.organizationId, [
+          ...(byWorkspace.get(notice.organizationId) ?? []),
+          notice.id,
+        ]);
+      return Promise.all(
+        [...byWorkspace].map(([organizationId, ids]) => markRead(api, organizationId, ids)),
+      );
+    },
     onSettled: () => {
       refresh();
       // "Mark all read" leaves with the unread ones: focus stays in the panel, not on the page.
@@ -213,7 +230,7 @@ export function NotificationBell({ className }: { className?: string }) {
   });
 
   const name = inbox.unread > 0 ? t`Notifications, ${inbox.unread} unread` : t`Notifications`;
-  const shown = inbox.items.slice(0, SHOWN);
+  const allShown = inbox.unread <= shownUnread.length;
 
   return (
     <>
@@ -247,19 +264,37 @@ export function NotificationBell({ className }: { className?: string }) {
               <Heading slot="title" className="m-0 text-body-sm font-normal">
                 <Trans>Notifications</Trans>
               </Heading>
-              {inbox.unread > 0 ? (
+              {shownUnread.length > 0 ? (
                 <TextButton
                   variant="ghost"
                   size="sm"
                   isPending={readAll.isPending}
                   onPress={() => {
-                    readAll.mutate();
+                    readAll.mutate(shownUnread);
                   }}
                 >
-                  <Trans>Mark all read</Trans>
+                  {allShown ? <Trans>Mark all read</Trans> : <Trans>Mark these read</Trans>}
                 </TextButton>
               ) : null}
             </div>
+            {readAll.isError ? (
+              <p role="alert" className="m-0 px-4 pb-2 text-caption text-secondary">
+                <Trans>They could not be marked read. Try again.</Trans>
+              </p>
+            ) : null}
+            {inbox.partial ? (
+              <div
+                role="status"
+                className="flex items-center justify-between gap-3 px-4 pb-2 text-caption text-secondary"
+              >
+                <span>
+                  <Trans>Some workspaces' notifications did not load</Trans>
+                </span>
+                <TextButton variant="ghost" size="sm" onPress={inbox.refetch}>
+                  <Trans>Try again</Trans>
+                </TextButton>
+              </div>
+            ) : null}
             {inbox.isError ? (
               <div
                 role="alert"

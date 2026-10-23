@@ -171,6 +171,10 @@ msgstr "הכרטיסיות של {name}"
 msgid "{range} days"
 msgstr "{range} ימים"
 
+#: src/features/incidents/IncidentsPage.tsx
+msgid "{resolvedCount, plural, one {# resolved so far} other {# resolved so far}}"
+msgstr "{resolvedCount, plural, one {תקלה אחת נפתרה עד כה} other {# נפתרו עד כה}}"
+
 #: src/app/shell/NotificationBell.tsx
 msgid "{shop} needs reconnecting to Etsy"
 msgstr "צריך לחבר מחדש את {shop} ל־Etsy"
@@ -779,6 +783,10 @@ msgstr "ממתינות למשלוח"
 #: src/features/team/TeamPage.tsx
 msgid "Back to inviting"
 msgstr "חזרה להזמנה"
+
+#: src/features/incidents/IncidentsPage.tsx
+msgid "Back to list"
+msgstr "חזרה לרשימה"
 
 #: src/features/shops/EtsyCallbackPage.tsx
 msgid "Back to shops"
@@ -2595,6 +2603,10 @@ msgstr "מרווח"
 msgid "Mark all read"
 msgstr "סימון הכול כנקרא"
 
+#: src/app/shell/NotificationBell.tsx
+msgid "Mark these read"
+msgstr "סימון אלה כנקראו"
+
 #: src/features/finance/FinanceDemos.tsx
 #: src/features/office/floor3d/plan.ts
 #: src/shared/demo/office.ts
@@ -3256,6 +3268,10 @@ msgstr "תקלה פתוחה"
 #: src/features/incidents/IncidentsPage.tsx
 msgid "Open incidents"
 msgstr "תקלות פתוחות"
+
+#: src/features/incidents/IncidentsPage.tsx
+msgid "Open incidents by state"
+msgstr "תקלות פתוחות לפי מצב"
 
 #: src/features/overview/OverviewPage.tsx
 msgid "Open incidents:"
@@ -4021,6 +4037,10 @@ msgstr "נפתרה"
 msgid "Resolved incidents"
 msgstr "תקלות שנפתרו"
 
+#: src/features/incidents/IncidentsPage.tsx
+msgid "Resolved incidents closed themselves when the evidence arrived. Open one to see what closed it."
+msgstr "תקלות שנפתרו נסגרו מעצמן כשהגיעה הראיה. אפשר לפתוח אחת כדי לראות מה סגר אותה."
+
 #: src/features/admin/AdminDemos.tsx
 msgid "Response time"
 msgstr "זמן תגובה"
@@ -4627,6 +4647,10 @@ msgstr "אזל"
 msgid "Sold, 30 days"
 msgstr "נמכרו, 30 ימים"
 
+#: src/app/shell/NotificationBell.tsx
+msgid "Some workspaces' notifications did not load"
+msgstr "ההתראות של חלק מסביבות העבודה לא נטענו"
+
 #: src/app/RouteStates.tsx
 msgid "Something went wrong"
 msgstr "משהו השתבש"
@@ -5047,6 +5071,10 @@ msgstr "לא ניתן היה לטעון את התקלות האלה. כדאי ל�
 #: src/features/commerce/OrdersPage.tsx
 msgid "These orders were re-synced moments ago. Try again in a minute."
 msgstr "ההזמנות האלה סונכרנו מחדש לפני רגע. נסו שוב בעוד דקה."
+
+#: src/app/shell/NotificationBell.tsx
+msgid "They could not be marked read. Try again."
+msgstr "לא ניתן היה לסמן אותן כנקראו. אפשר לנסות שוב."
 
 #: src/features/team/TeamPage.tsx
 msgid "They join as members with the living office"

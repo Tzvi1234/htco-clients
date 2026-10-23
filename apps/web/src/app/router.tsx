@@ -192,7 +192,15 @@ const routeTree = rootRoute.addChildren([
         staticData: { layout: "panels", scroll: "page" },
         // The order sheet links to the order's incidents (slice 6.3).
         component: () => (
-          <OrdersPage orderIncidents={(order) => <OrderIncidents receiptId={order.order_id} />} />
+          <OrdersPage
+            orderIncidents={(order, shop) => (
+              <OrderIncidents
+                organizationId={shop.organizationId}
+                shopId={shop.id}
+                receiptId={order.order_id}
+              />
+            )}
+          />
         ),
       }),
       createRoute({

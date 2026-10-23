@@ -103,6 +103,12 @@ export interface FakeState {
   notifications: FakeNotification[];
   /** "fail": the notifications answer 503 incidents-unavailable. */
   notificationsTrouble?: "fail" | undefined;
+  /** Workspaces whose notifications answer 503 (the others answer as usual). */
+  notificationsFailFor?: string[] | undefined;
+  /** "fail": `POST /v1/notifications/read` answers 503. */
+  readTrouble?: "fail" | undefined;
+  /** The query strings of `GET /v1/incidents`, in order (which workspace, shop and order). */
+  incidentLists: string[];
   /** The bodies of `POST /v1/notifications/read`, in order. */
   reads: unknown[];
   /**
@@ -289,6 +295,7 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
     steps: [],
     notifications: [],
     reads: [],
+    incidentLists: [],
     exports: [],
     resyncs: [],
     ...initial,
@@ -638,9 +645,14 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
       next_states: incident.can_update && updates() ? incident.next_states : [],
     });
     if (route === "GET /v1/incidents") {
+      state.incidentLists.push(url.search);
       const all = url.searchParams.get("state") === "all";
+      const shop = url.searchParams.get("shop_id");
+      const receipt = url.searchParams.get("receipt_id");
       const items = state.incidents
         .filter((incident) => all || incident.is_open)
+        .filter((incident) => shop === null || incident.shop_id === shop)
+        .filter((incident) => receipt === null || String(incident.receipt_id) === receipt)
         .map((incident) => {
           const summary: Partial<FakeIncident> = { ...incident };
           delete summary.details;
@@ -649,7 +661,7 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
           delete summary.next_states;
           return summary;
         });
-      return json(200, { items });
+      return json(200, { items, next_cursor: null });
     }
     const one = /^GET \/v1\/incidents\/([^/]+)$/.exec(route);
     if (one !== null) {
@@ -694,6 +706,8 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
     }
     if (route === "GET /v1/notifications") {
       if (state.notificationsTrouble === "fail") return problem(503, "incidents-unavailable");
+      if (state.notificationsFailFor?.includes(url.searchParams.get("organization_id") ?? ""))
+        return problem(503, "incidents-unavailable");
       const unreadOnly = url.searchParams.get("unread_only") === "true";
       return json(200, {
         items: state.notifications.filter((n) => !unreadOnly || n.read_at === null),
@@ -701,6 +715,7 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
       });
     }
     if (route === "POST /v1/notifications/read") {
+      if (state.readTrouble === "fail") return problem(503, "incidents-unavailable");
       state.reads.push(body);
       const ids = Array.isArray(body["ids"]) ? (body["ids"] as unknown[]) : undefined;
       const at = new Date().toISOString();

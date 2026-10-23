@@ -22,7 +22,7 @@ import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
 import { cx } from "../../shared/lib/cx.ts";
 import { PHONE_QUERY, useMediaQuery } from "../../shared/lib/useMediaQuery.ts";
 import { Button } from "../../shared/ui/Button.tsx";
-import { ArrowEndIcon } from "../../shared/ui/icons.tsx";
+import { ArrowEndIcon, ArrowStartIcon } from "../../shared/ui/icons.tsx";
 import { PageHeader } from "../../shared/ui/PageHeader.tsx";
 import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
 import { WorkspacePicker, pickWorkspace } from "../../shared/ui/WorkspacePicker.tsx";
@@ -137,6 +137,14 @@ function Center({ organizationId }: { organizationId: string }) {
   // The detail takes focus when the user picks an incident, so keyboards and screen readers
   // (and phones, where it sits under the list) arrive at it.
   const focusDetailRef = useRef(false);
+  const listRef = useRef<HTMLDivElement>(null);
+  // Phones: the detail sits under the list; this takes him back to it (Pixel's review of #48).
+  const backToList = () => {
+    const list = listRef.current;
+    if (list === null) return;
+    list.focus({ preventScroll: true });
+    if (typeof list.scrollIntoView === "function") list.scrollIntoView({ block: "start" });
+  };
 
   const choose = (id: string) => {
     focusDetailRef.current = true;
@@ -191,10 +199,16 @@ function Center({ organizationId }: { organizationId: string }) {
     undefined,
   );
   const next = mostUrgent(openItems);
+  const resolvedCount = all.data?.filter((incident) => !incident.is_open).length;
 
   return (
     <>
       <Focus
+        meta={
+          tab !== "open" && resolvedCount !== undefined ? (
+            <Plural value={resolvedCount} one="# resolved so far" other="# resolved so far" />
+          ) : undefined
+        }
         title={
           open.isPending ? (
             <Trans>Incident center</Trans>
@@ -205,7 +219,12 @@ function Center({ organizationId }: { organizationId: string }) {
           )
         }
         lead={
-          open.isPending ? undefined : openItems.length === 0 ? (
+          open.isPending ? undefined : tab === "resolved" ? (
+            <Trans>
+              Resolved incidents closed themselves when the evidence arrived. Open one to see what
+              closed it.
+            </Trans>
+          ) : openItems.length === 0 ? (
             <Trans>
               Incidents open on their own when an order misses its shipping window or an automation
               gives up, and close themselves once the evidence arrives.
@@ -241,6 +260,7 @@ function Center({ organizationId }: { organizationId: string }) {
             </Figures>
           )
         }
+        aside={open.isPending ? undefined : <ByState items={openItems} />}
         actions={
           next === undefined ? undefined : (
             <Button
@@ -289,6 +309,7 @@ function Center({ organizationId }: { organizationId: string }) {
             <EmptyList tab={tab} />
           ) : (
             <IncidentList
+              listRef={listRef}
               tab={tab}
               items={items}
               selected={selected}
@@ -315,12 +336,37 @@ function Center({ organizationId }: { organizationId: string }) {
                 id={selected}
                 shopName={shopName}
                 focusOnLoadRef={focusDetailRef}
+                onBack={backToList}
               />
             )}
           </Aside>
         </FlowRow>
       </TabPanel>
     </>
+  );
+}
+
+/**
+ * The focus's inline end (desktop): where the open incidents stand, one line per state with its
+ * glyph, word and count. Nothing when none is open.
+ */
+function ByState({ items }: { items: readonly IncidentSummary[] }) {
+  const { t } = useLingui();
+  const counts = new Map<string, number>();
+  for (const incident of items) counts.set(incident.state, (counts.get(incident.state) ?? 0) + 1);
+  if (counts.size === 0) return null;
+  return (
+    <ul
+      aria-label={t`Open incidents by state`}
+      className="m-0 flex w-56 list-none flex-col gap-2 p-0"
+    >
+      {[...counts].map(([state, count]) => (
+        <li key={state} className="flex items-center justify-between gap-4 text-body-sm">
+          <IncidentState state={state} />
+          <N>{count}</N>
+        </li>
+      ))}
+    </ul>
   );
 }
 
@@ -369,6 +415,7 @@ function EmptyList({ tab }: { tab: Tab }) {
 }
 
 function IncidentList({
+  listRef,
   tab,
   items,
   selected,
@@ -376,6 +423,7 @@ function IncidentList({
   shopName,
   ageOf,
 }: {
+  listRef: RefObject<HTMLDivElement | null>;
   tab: Tab;
   items: readonly IncidentSummary[];
   selected: string | undefined;
@@ -394,7 +442,9 @@ function IncidentList({
         : t`All incidents`;
   return (
     <Panel>
-      <PanelHeader title={title} meta={<Trans>Newest first</Trans>} />
+      <div ref={listRef} tabIndex={-1} className="scroll-mt-28 outline-none" aria-label={title}>
+        <PanelHeader title={title} meta={<Trans>Newest first</Trans>} />
+      </div>
       <DataTable
         flow
         label={t`Incidents`}
@@ -475,12 +525,15 @@ function IncidentDetailPanel({
   id,
   shopName,
   focusOnLoadRef,
+  onBack,
 }: {
   organizationId: string;
   id: string;
   shopName: (id: string | null) => string | undefined;
   focusOnLoadRef: RefObject<boolean>;
+  onBack: () => void;
 }) {
+  const phone = useMediaQuery(PHONE_QUERY);
   const { t } = useLingui();
   const api = useApi();
   const client = useQueryClient();
@@ -560,6 +613,12 @@ function IncidentDetailPanel({
     <Panel labelledBy={heading}>
       <FlowBody className="gap-6 pt-6">
         <div className="flex flex-col gap-2">
+          {phone ? (
+            <Button variant="ghost" size="sm" className="self-start" onPress={onBack}>
+              <ArrowStartIcon size={14} />
+              <Trans>Back to list</Trans>
+            </Button>
+          ) : null}
           <h2
             id={heading}
             ref={headingRef}

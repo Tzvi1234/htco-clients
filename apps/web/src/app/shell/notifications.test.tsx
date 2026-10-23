@@ -170,14 +170,16 @@ describe("the notification bell", () => {
     expect(within(panel).getByRole("button", { name: "סימון הכול כנקרא" })).toBeInTheDocument();
   });
 
-  it("marks all read, for the workspace, without naming them", async () => {
+  it("marks all read: only the ones it shows, by ID, in their workspace", async () => {
     const { user, backend } = await open();
     await user.click(await bell("Notifications, 2 unread"));
     const panel = await screen.findByRole("dialog", { name: "Notifications" });
     await user.click(within(panel).getByRole("button", { name: "Mark all read" }));
 
     await vi.waitFor(() => {
-      expect(backend.state.reads).toEqual([{}]);
+      expect(backend.state.reads).toEqual([
+        { ids: ["f0000000-0000-7000-8000-000000000001", "f0000000-0000-7000-8000-000000000002"] },
+      ]);
     });
     const read = backend.requests.find((r) => r.url.includes("/v1/notifications/read"));
     expect(new URL(read?.url ?? "http://x").searchParams.get("organization_id")).toBe(ORG);
@@ -192,6 +194,60 @@ describe("the notification bell", () => {
       expect(screen.queryByRole("dialog", { name: "Notifications" })).toBeNull();
     });
     expect(await bell("Notifications")).toBeInTheDocument();
+  });
+
+  it("marks only the shown ones when more are unread, and says so on the button", async () => {
+    const notifications = Array.from({ length: 9 }, (_, index) =>
+      fakeNotification({
+        id: `f0000000-0000-7000-8000-0000000002${String(index).padStart(2, "0")}`,
+        kind: "alert_out_of_stock",
+        params: { listing_id: String(1600 + index) },
+        created_at: new Date(Date.now() - (index + 1) * 60_000).toISOString(),
+      }),
+    );
+    const { user, backend } = await open({ notifications });
+    await user.click(await bell("Notifications, 9 unread"));
+    const panel = await screen.findByRole("dialog", { name: "Notifications" });
+    expect(within(panel).queryByRole("button", { name: "Mark all read" })).toBeNull();
+    await user.click(within(panel).getByRole("button", { name: "Mark these read" }));
+    await vi.waitFor(() => {
+      expect(backend.state.reads).toEqual([{ ids: notifications.slice(0, 6).map((n) => n.id) }]);
+    });
+  });
+
+  it("says when Mark all read failed, and keeps the unread ones", async () => {
+    const { user, backend } = await open({ readTrouble: "fail" });
+    await user.click(await bell("Notifications, 2 unread"));
+    const panel = await screen.findByRole("dialog", { name: "Notifications" });
+    await user.click(within(panel).getByRole("button", { name: "Mark all read" }));
+    expect(
+      await within(panel).findByText("They could not be marked read. Try again.", undefined, {
+        timeout: 5000,
+      }),
+    ).toHaveAttribute("role", "alert");
+    expect(backend.state.reads).toEqual([]);
+    expect(within(panel).getByRole("button", { name: "Mark all read" })).toBeInTheDocument();
+    await user.keyboard("{Escape}");
+    expect(await bell("Notifications, 2 unread")).toBeInTheDocument();
+  });
+
+  it("says when one workspace's notifications did not load, instead of leaving them out", async () => {
+    const other = "a0000000-0000-7000-8000-0000000000aa";
+    const { user, backend } = await open({ otherOrgs: [other], notificationsFailFor: [other] });
+    await user.click(await bell(/^Notifications, \d+ unread/));
+    const panel = await screen.findByRole("dialog", { name: "Notifications" });
+    expect(
+      await within(panel).findByText("Some workspaces' notifications did not load", undefined, {
+        timeout: 5000,
+      }),
+    ).toBeVisible();
+    // What did load is still there.
+    expect(within(panel).getByText("New incident: Automation gave up")).toBeVisible();
+    backend.state.notificationsFailFor = undefined;
+    await user.click(within(panel).getByRole("button", { name: "Try again" }));
+    await vi.waitFor(() => {
+      expect(within(panel).queryByText("Some workspaces' notifications did not load")).toBeNull();
+    });
   });
 
   it("opens the incident a notification is about, and marks it read", async () => {

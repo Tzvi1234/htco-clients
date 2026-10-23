@@ -21,6 +21,8 @@ export const incidentKeys = {
   list: (organizationId: string, state: "open" | "all") =>
     ["incidents", organizationId, "list", state] as const,
   one: (organizationId: string, id: string) => ["incidents", organizationId, "one", id] as const,
+  order: (organizationId: string, shopId: string, receiptId: number) =>
+    ["incidents", organizationId, "order", shopId, receiptId] as const,
   inbox: (organizationId: string) => ["incidents", organizationId, "inbox"] as const,
 };
 
@@ -36,6 +38,41 @@ export function incidentsQuery(api: ApiClient, organizationId: string, state: "o
     queryFn: async (): Promise<IncidentSummary[]> => {
       const { data, error, response } = await api.GET("/v1/incidents", {
         params: { query: { organization_id: organizationId, state } },
+      });
+      if (data === undefined) throw apiError(response, error);
+      return data.items;
+    },
+    refetchInterval: REFRESH_MS,
+    retry,
+  });
+}
+
+/** More than enough for one order; an order with more is a problem of its own. */
+const ORDER_INCIDENTS_LIMIT = 20;
+
+/**
+ * One order's incidents, open and resolved: the API filters by shop and receipt in its own
+ * workspace, so the order sheet never loads the whole history (review of #48).
+ */
+export function orderIncidentsQuery(
+  api: ApiClient,
+  organizationId: string,
+  shopId: string,
+  receiptId: number,
+) {
+  return queryOptions({
+    queryKey: incidentKeys.order(organizationId, shopId, receiptId),
+    queryFn: async (): Promise<IncidentSummary[]> => {
+      const { data, error, response } = await api.GET("/v1/incidents", {
+        params: {
+          query: {
+            organization_id: organizationId,
+            state: "all",
+            shop_id: shopId,
+            receipt_id: receiptId,
+            limit: ORDER_INCIDENTS_LIMIT,
+          },
+        },
       });
       if (data === undefined) throw apiError(response, error);
       return data.items;

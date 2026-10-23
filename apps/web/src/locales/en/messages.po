@@ -171,6 +171,10 @@ msgstr "{name} tabs"
 msgid "{range} days"
 msgstr "{range} days"
 
+#: src/features/incidents/IncidentsPage.tsx
+msgid "{resolvedCount, plural, one {# resolved so far} other {# resolved so far}}"
+msgstr "{resolvedCount, plural, one {# resolved so far} other {# resolved so far}}"
+
 #: src/app/shell/NotificationBell.tsx
 msgid "{shop} needs reconnecting to Etsy"
 msgstr "{shop} needs reconnecting to Etsy"
@@ -779,6 +783,10 @@ msgstr "Awaiting shipment"
 #: src/features/team/TeamPage.tsx
 msgid "Back to inviting"
 msgstr "Back to inviting"
+
+#: src/features/incidents/IncidentsPage.tsx
+msgid "Back to list"
+msgstr "Back to list"
 
 #: src/features/shops/EtsyCallbackPage.tsx
 msgid "Back to shops"
@@ -2595,6 +2603,10 @@ msgstr "Margin"
 msgid "Mark all read"
 msgstr "Mark all read"
 
+#: src/app/shell/NotificationBell.tsx
+msgid "Mark these read"
+msgstr "Mark these read"
+
 #: src/features/finance/FinanceDemos.tsx
 #: src/features/office/floor3d/plan.ts
 #: src/shared/demo/office.ts
@@ -3256,6 +3268,10 @@ msgstr "Open incident"
 #: src/features/incidents/IncidentsPage.tsx
 msgid "Open incidents"
 msgstr "Open incidents"
+
+#: src/features/incidents/IncidentsPage.tsx
+msgid "Open incidents by state"
+msgstr "Open incidents by state"
 
 #: src/features/overview/OverviewPage.tsx
 msgid "Open incidents:"
@@ -4021,6 +4037,10 @@ msgstr "Resolved"
 msgid "Resolved incidents"
 msgstr "Resolved incidents"
 
+#: src/features/incidents/IncidentsPage.tsx
+msgid "Resolved incidents closed themselves when the evidence arrived. Open one to see what closed it."
+msgstr "Resolved incidents closed themselves when the evidence arrived. Open one to see what closed it."
+
 #: src/features/admin/AdminDemos.tsx
 msgid "Response time"
 msgstr "Response time"
@@ -4627,6 +4647,10 @@ msgstr "Sold out"
 msgid "Sold, 30 days"
 msgstr "Sold, 30 days"
 
+#: src/app/shell/NotificationBell.tsx
+msgid "Some workspaces' notifications did not load"
+msgstr "Some workspaces' notifications did not load"
+
 #: src/app/RouteStates.tsx
 msgid "Something went wrong"
 msgstr "Something went wrong"
@@ -5047,6 +5071,10 @@ msgstr "These incidents could not be loaded. Try again shortly."
 #: src/features/commerce/OrdersPage.tsx
 msgid "These orders were re-synced moments ago. Try again in a minute."
 msgstr "These orders were re-synced moments ago. Try again in a minute."
+
+#: src/app/shell/NotificationBell.tsx
+msgid "They could not be marked read. Try again."
+msgstr "They could not be marked read. Try again."
 
 #: src/features/team/TeamPage.tsx
 msgid "They join as members with the living office"

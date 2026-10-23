@@ -6,6 +6,7 @@ import { describe, expect, it, vi } from "vitest";
 import { INCIDENT_STATES, IncidentState } from "./IncidentState.tsx";
 import { App } from "../../app/App.tsx";
 import { LocaleProvider } from "../../shared/i18n/LocaleProvider.tsx";
+import { PHONE_QUERY } from "../../shared/lib/useMediaQuery.ts";
 import { memoryStorage } from "../../shared/lib/storage.ts";
 import { fakeBackend, fakeIntegration, type FakeState } from "../../test/fakeApi.ts";
 import { demoIncidents } from "../../test/fakeIncidents.ts";
@@ -170,6 +171,42 @@ describe("the incident center", () => {
       "High or critical2",
     ]);
     expect(within(panel).getByText(/close themselves once the evidence arrives/)).toBeVisible();
+  });
+
+  it("shows where the open incidents stand, by state, at the focus's end", async () => {
+    await open("/incidents");
+    await settled();
+    const byState = screen.getByRole("list", { name: "Open incidents by state" });
+    const lines = within(byState).getAllByRole("listitem");
+    expect(lines.reduce((sum, line) => sum + Number(/\d+$/.exec(line.textContent)?.[0]), 0)).toBe(
+      3,
+    );
+  });
+
+  it("speaks of the resolved ones on the Resolved tab", async () => {
+    const { user } = await open("/incidents");
+    await table();
+    await user.click(screen.getByRole("tab", { name: "Resolved" }));
+    await table();
+    expect(await screen.findByText("1 resolved so far")).toBeVisible();
+    expect(screen.getByText(/Resolved incidents closed themselves/)).toBeVisible();
+  });
+
+  it("takes him back to the list from the detail on a phone", async () => {
+    vi.stubGlobal("matchMedia", (query: string) => ({
+      matches: query === PHONE_QUERY,
+      media: query,
+      addEventListener: () => undefined,
+      removeEventListener: () => undefined,
+    }));
+    try {
+      const { user } = await open(`/incidents/${DEAD}`);
+      const panel = await detail("Automation gave up");
+      await user.click(within(panel).getByRole("button", { name: "Back to list" }));
+      expect(document.activeElement).toHaveAccessibleName("Open incidents");
+    } finally {
+      vi.unstubAllGlobals();
+    }
   });
 
   it("opens the most urgent incident from the focus", async () => {
