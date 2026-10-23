@@ -116,7 +116,7 @@ describe("Orders on the stored history (slice 5.7)", () => {
     const { user } = await open();
     const table = await screen.findByRole("table", { name: "Orders" });
     const [first] = within(table).getAllByRole("button", { name: /^Open order/ });
-    const id = first?.textContent?.replace("#", "") ?? "";
+    const id = first?.textContent.replace("#", "") ?? "";
 
     await user.click(screen.getByRole("searchbox", { name: "Find an order" }));
     await user.keyboard(`#${id}`);

@@ -11,19 +11,31 @@ import { ago, useNow } from "../../lib/time.ts";
 
 /* ------------------------------------------------------------------ freshness */
 
+/** Where an answer comes from: the API's `source` and, for orders, its stored history. */
+export interface Provenance {
+  /** `etsy_live` or `htco_store` (the API types it as a string). */
+  source?: string;
+  sync?: { state: "syncing_history" | "complete"; orders_stored: number } | null;
+}
+
 /**
- * "Live from Etsy · updated 2 minutes ago", or, when Etsy did not answer and an older copy
- * stands in, "Etsy is not answering · showing data from 10:42".
+ * The freshness line. Read live: "Live from Etsy · updated 2 minutes ago". From the stored order
+ * history (slice 5.6): "Synced from Etsy · 4 minutes ago". While the history is still being
+ * copied: "Live from Etsy · copying the order history (1,240 so far)". When Etsy did not answer
+ * and an older copy stands in: "Etsy is not answering · showing data from 10:42" (live) or
+ * "Last synced at 10:42 · Etsy has not answered since" (stored).
  */
 export function LiveNote({
   fetchedAt,
   stale,
+  source = "etsy_live",
+  sync,
   className,
 }: {
   fetchedAt: string;
   stale: boolean;
   className?: string;
-}) {
+} & Provenance) {
   const { t } = useLingui();
   const { locale } = useLocale();
   const now = useNow(30_000);
@@ -32,6 +44,9 @@ export function LiveNote({
   const time = new Intl.DateTimeFormat(locale, { hour: "2-digit", minute: "2-digit" }).format(
     new Date(fetchedAt),
   );
+  const stored = source === "htco_store";
+  const copying = !stored && sync?.state === "syncing_history";
+  const count = new Intl.NumberFormat(locale).format(sync?.orders_stored ?? 0);
   return (
     <p
       role={stale ? "status" : undefined}
@@ -44,13 +59,18 @@ export function LiveNote({
       <Dot tone={stale ? "attention" : "success"} />
       <span className="truncate">
         {stale ? (
-          <>{t`Etsy is not answering · showing data from ${time}`}</>
+          stored ? (
+            <>{t`Last synced at ${time} · Etsy has not answered since`}</>
+          ) : (
+            <>{t`Etsy is not answering · showing data from ${time}`}</>
+          )
         ) : (
           <>
-            {t`Live from Etsy`} ·{" "}
+            {stored ? t`Synced from Etsy` : t`Live from Etsy`} ·{" "}
             <time dateTime={fetchedAt}>
               {age < 120_000 ? t`updated just now` : t`updated ${when}`}
             </time>
+            {copying ? <> · {t`copying the order history (${count} so far)`}</> : null}
           </>
         )}
       </span>

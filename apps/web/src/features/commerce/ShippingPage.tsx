@@ -170,7 +170,12 @@ function Shipping({ shopId, chips }: { shopId: string; chips: ReactNode }) {
         title={<Trans>What waits to ship</Trans>}
         meta={
           orders.data === undefined ? undefined : (
-            <LiveNote fetchedAt={orders.data.fetched_at} stale={orders.data.stale} />
+            <LiveNote
+              fetchedAt={orders.data.fetched_at}
+              stale={orders.data.stale}
+              source={orders.data.source}
+              sync={orders.data.sync ?? null}
+            />
           )
         }
         end={chips}

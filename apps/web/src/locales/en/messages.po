@@ -7,6 +7,10 @@ msgstr ""
 "X-Generator: @lingui/cli\n"
 "Language: en\n"
 
+#: src/features/commerce/timeline.tsx
+msgid " (current)"
+msgstr " (current)"
+
 #: src/features/team/TeamPage.tsx
 msgid "(you)"
 msgstr "(you)"
@@ -637,6 +641,7 @@ msgid "Avg. value"
 msgstr "Avg. value"
 
 #: src/features/commerce/OrdersPage.tsx
+#: src/features/commerce/timeline.tsx
 msgid "Awaiting payment"
 msgstr "Awaiting payment"
 
@@ -746,6 +751,7 @@ msgstr "Cancellation rate"
 
 #: src/features/commerce/OrdersPage.tsx
 #: src/features/commerce/refunds.tsx
+#: src/features/commerce/timeline.tsx
 #: src/features/shops/ShopStats.tsx
 msgid "Cancelled"
 msgstr "Cancelled"
@@ -1090,6 +1096,10 @@ msgstr "Copied"
 msgid "Copy link"
 msgstr "Copy link"
 
+#: src/shared/ui/kit/live.tsx
+msgid "copying the order history ({count} so far)"
+msgstr "copying the order history ({count} so far)"
+
 #: src/features/office/FloorPage.tsx
 msgid "Cost"
 msgstr "Cost"
@@ -1179,6 +1189,10 @@ msgstr "Daily avg."
 msgid "Daily cap"
 msgstr "Daily cap"
 
+#: src/features/commerce/timeline.tsx
+msgid "Daily check"
+msgstr "Daily check"
+
 #: src/features/finance/FinanceDemos.tsx
 msgid "Daily revenue"
 msgstr "Daily revenue"
@@ -1252,6 +1266,7 @@ msgstr "Decision value 92%, within policy"
 msgid "Deletes the shop and all its data in HTCO"
 msgstr "Deletes the shop and all its data in HTCO"
 
+#: src/features/commerce/timeline.tsx
 #: src/shared/ui/kit/status.tsx
 msgid "Delivered"
 msgstr "Delivered"
@@ -1530,6 +1545,10 @@ msgstr "Etsy no longer accepts the shop's connection. Reconnect it to see its da
 msgid "Etsy no longer accepts the shop's connection. The workspace owner can reconnect it."
 msgstr "Etsy no longer accepts the shop's connection. The workspace owner can reconnect it."
 
+#: src/features/commerce/timeline.tsx
+msgid "Etsy notice"
+msgstr "Etsy notice"
+
 #: src/features/shops/Capabilities.tsx
 msgid "Etsy refused this. Reconnect the shop; if it stays blocked, Etsy has limited the app."
 msgstr "Etsy refused this. Reconnect the shop; if it stays blocked, Etsy has limited the app."
@@ -1697,6 +1716,10 @@ msgstr "Financial health"
 #: src/features/office/FloorPage.tsx
 msgid "Find agent"
 msgstr "Find agent"
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "Find an order"
+msgstr "Find an order"
 
 #: src/features/shops/EtsyCallbackPage.tsx
 msgid "Finish connecting in the web app where you are signed in."
@@ -1869,6 +1892,14 @@ msgstr "High"
 #: src/features/work/demoScreens.tsx
 msgid "High risk"
 msgstr "High risk"
+
+#: src/features/commerce/timeline.tsx
+msgid "History"
+msgstr "History"
+
+#: src/features/commerce/timeline.tsx
+msgid "History import"
+msgstr "History import"
 
 #: src/features/customers/CustomersDemos.tsx
 msgid "Holiday towels"
@@ -2111,6 +2142,10 @@ msgstr "Last sync:"
 msgid "Last synced {0}"
 msgstr "Last synced {0}"
 
+#: src/shared/ui/kit/live.tsx
+msgid "Last synced at {time} · Etsy has not answered since"
+msgstr "Last synced at {time} · Etsy has not answered since"
+
 #: src/features/security/SecurityPage.tsx
 msgid "Last used:"
 msgstr "Last used:"
@@ -2253,6 +2288,10 @@ msgstr "Loading shops"
 #: src/features/shops/ShopStats.tsx
 msgid "Loading statistics"
 msgstr "Loading statistics"
+
+#: src/features/commerce/timeline.tsx
+msgid "Loading the order's history…"
+msgstr "Loading the order's history…"
 
 #: src/features/shops/ShopCard.tsx
 msgid "Loading the shop's numbers"
@@ -2558,6 +2597,11 @@ msgstr "No listing matches this view."
 #: src/features/shops/ShopStats.tsx
 msgid "No month with sales yet."
 msgstr "No month with sales yet."
+
+#. placeholder {0}: search.trim()
+#: src/features/commerce/OrdersPage.tsx
+msgid "No order matches \"{0}\"."
+msgstr "No order matches \"{0}\"."
 
 #. placeholder {0}: periods[period].within
 #: src/features/commerce/OrdersPage.tsx
@@ -2931,6 +2975,14 @@ msgstr "Order {0}"
 msgid "Order Assurance"
 msgstr "Order Assurance"
 
+#: src/features/commerce/timeline.tsx
+msgid "Order history"
+msgstr "Order history"
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "Order number or SKU"
+msgstr "Order number or SKU"
+
 #: src/features/commerce/OrdersPage.tsx
 msgid "Order numbers"
 msgstr "Order numbers"
@@ -3047,6 +3099,7 @@ msgid "Page not found"
 msgstr "Page not found"
 
 #: src/features/commerce/OrdersPage.tsx
+#: src/features/commerce/timeline.tsx
 msgid "Paid"
 msgstr "Paid"
 
@@ -3334,6 +3387,10 @@ msgstr "Read + draft"
 msgid "Read listings"
 msgstr "Read listings"
 
+#: src/features/commerce/timeline.tsx
+msgid "Read live from Etsy: the steps appear once HTCO has stored this order."
+msgstr "Read live from Etsy: the steps appear once HTCO has stored this order."
+
 #: src/features/shops/ShopsPage.tsx
 msgid "Read only"
 msgstr "Read only"
@@ -3404,6 +3461,10 @@ msgstr "Reconnect today"
 msgid "Recorded by"
 msgstr "Recorded by"
 
+#: src/features/commerce/timeline.tsx
+msgid "Recorded in HTCO"
+msgstr "Recorded in HTCO"
+
 #: src/features/security/SecurityPage.tsx
 msgid "Recovery"
 msgstr "Recovery"
@@ -3451,6 +3512,7 @@ msgstr "Refund without approval"
 
 #: src/features/commerce/OrdersPage.tsx
 #: src/features/commerce/refunds.tsx
+#: src/features/commerce/timeline.tsx
 #: src/features/shops/ShopStats.tsx
 msgid "Refunded"
 msgstr "Refunded"
@@ -3906,6 +3968,7 @@ msgid "Shipment"
 msgstr "Shipment"
 
 #: src/features/commerce/OrdersPage.tsx
+#: src/features/commerce/timeline.tsx
 msgid "Shipped"
 msgstr "Shipped"
 
@@ -4277,6 +4340,10 @@ msgstr "Support"
 msgid "Switch linen towels to Gelato (−$2.10 per unit)"
 msgstr "Switch linen towels to Gelato (−$2.10 per unit)"
 
+#: src/features/commerce/timeline.tsx
+msgid "Sync"
+msgstr "Sync"
+
 #: src/features/office/floor3d/engine.ts
 msgid "Sync fixed?"
 msgstr "Sync fixed?"
@@ -4284,6 +4351,10 @@ msgstr "Sync fixed?"
 #: src/features/admin/AdminDemos.tsx
 msgid "Sync tracking numbers from carriers"
 msgstr "Sync tracking numbers from carriers"
+
+#: src/shared/ui/kit/live.tsx
+msgid "Synced from Etsy"
+msgstr "Synced from Etsy"
 
 #: src/features/settings/AppearanceChoices.tsx
 msgid "System"
@@ -4398,6 +4469,10 @@ msgstr "The email or the password is wrong."
 msgid "The ground behind your panels."
 msgstr "The ground behind your panels."
 
+#: src/features/commerce/timeline.tsx
+msgid "The history could not be read."
+msgstr "The history could not be read."
+
 #: src/features/commerce/OrdersPage.tsx
 msgid "the last 12 months"
 msgstr "the last 12 months"
@@ -4425,6 +4500,10 @@ msgstr "The office is waking up…"
 #: src/features/welcome/WelcomePage.tsx
 msgid "The office that works for you, built step by step. It asks before anything risky."
 msgstr "The office that works for you, built step by step. It asks before anything risky."
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "The orders were last synced {when}. Etsy has not answered since, so newer orders may be missing."
+msgstr "The orders were last synced {when}. Etsy has not answered since, so newer orders may be missing."
 
 #: src/features/team/TeamPage.tsx
 msgid "The Owner's role, shops and membership cannot be changed."
@@ -4960,6 +5039,10 @@ msgstr "Waiting for you · refund #3152"
 #: src/features/office/data.ts
 msgid "Waiting on the Gelato quote."
 msgstr "Waiting on the Gelato quote."
+
+#: src/features/commerce/timeline.tsx
+msgid "Waiting to ship"
+msgstr "Waiting to ship"
 
 #: src/features/settings/AppearanceChoices.tsx
 msgid "Warm and soft"

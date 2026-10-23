@@ -181,11 +181,22 @@ function Today() {
               </>
             )}
           </span>
-          {live.overview === undefined ? null : (
-            <LiveNote fetchedAt={live.overview.fetched_at} stale={live.overview.stale} />
-          )}
+          {live.overview === undefined ? null : <SalesNote overview={live.overview} />}
         </div>
       }
+    />
+  );
+}
+
+/** Home's freshness: the sales' own source, from the stored history once it is complete. */
+function SalesNote({ overview }: { overview: ShopOverview }) {
+  const stored = overview.sales_source === "htco_store" && overview.last_synced_at != null;
+  return (
+    <LiveNote
+      fetchedAt={stored ? (overview.last_synced_at ?? overview.fetched_at) : overview.fetched_at}
+      stale={overview.stale}
+      source={stored ? "htco_store" : "etsy_live"}
+      sync={overview.sync ?? null}
     />
   );
 }

@@ -2,14 +2,16 @@ import { Plural, Trans, useLingui } from "@lingui/react/macro";
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState, type ReactNode } from "react";
-import { Dialog, Modal, ModalOverlay } from "react-aria-components";
+import { Dialog, Input, Modal, ModalOverlay, SearchField } from "react-aria-components";
 
 import { RefundChip, RefundDetails } from "./refunds.tsx";
+import { OrderTimeline } from "./timeline.tsx";
 import { useApi } from "../../shared/api/api.tsx";
 import { cx } from "../../shared/lib/cx.ts";
 import { PHONE_QUERY, useMediaQuery } from "../../shared/lib/useMediaQuery.ts";
+import { Banner } from "../../shared/ui/Banner.tsx";
 import { Button, buttonStyle } from "../../shared/ui/Button.tsx";
-import { ArrowEndIcon } from "../../shared/ui/icons.tsx";
+import { ArrowEndIcon, SearchIcon } from "../../shared/ui/icons.tsx";
 import { PageHeader } from "../../shared/ui/PageHeader.tsx";
 import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
 import { Segmented } from "../../shared/ui/Segmented.tsx";
@@ -34,6 +36,7 @@ import {
 import { LiveProblem, ShopReconnectBanner, NoShopYet } from "../shops/index.ts";
 import {
   listingsQuery,
+  orderQuery,
   ordersQuery,
   overviewQuery,
   useLiveShop,
@@ -42,6 +45,14 @@ import {
   type ShopOrder,
 } from "../../shared/api/live.ts";
 import { useCount, useMoney, useShortDate } from "../../shared/i18n/format.ts";
+import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
+import { ago, useNow } from "../../shared/lib/time.ts";
+
+/**
+ * What the order sheet shows about an order's incidents: Phase 6 (slice 6.3) fills it with the
+ * order-to-incident link. Until then nothing is rendered in its place.
+ */
+export type OrderIncidentSlot = (order: ShopOrder) => ReactNode;
 
 /** How each state reads, and its glyph (the shape carries it, not the colour). */
 export function useOrderStates(): Record<OrderFilter, string> {
@@ -93,19 +104,29 @@ function usePeriods(): Record<OrderPeriod, { option: string; title: string; with
   };
 }
 
+/** An order found by its number (with or without "#") or an item's SKU or title. */
+function matchesSearch(order: ShopOrder, query: string): boolean {
+  const q = query.trim().replace(/^#/, "").toLowerCase();
+  if (q === "") return true;
+  if (String(order.order_id).includes(q)) return true;
+  return order.items.some(
+    (item) => (item.sku ?? "").toLowerCase().includes(q) || item.title.toLowerCase().includes(q),
+  );
+}
+
 /** A sale: paid and neither cancelled nor refunded (as the API counts revenue). */
 function isSale(order: ShopOrder): boolean {
   return order.state === "paid" || order.state === "shipped";
 }
 
 /**
- * Commerce › Orders, live from Etsy: the shop's orders of a period (30 days by default, up to all
- * time) with their state,
- * items, totals, ship-by dates and shipments. A read-through view until Phase 5 ingests orders
- * into HTCO's own store (the same screen then reads the store). Buyer names and tracking numbers
- * appear only for roles that may see buyer contacts; the server decides.
+ * Commerce › Orders: the shop's orders of a period (30 days by default, up to all time) with
+ * their state, items, totals, ship-by dates and shipments. From HTCO's stored order history once
+ * it is complete (slice 5.6), live from Etsy while it is being copied; the freshness line says
+ * which. An order's sheet adds its status timeline. Buyer names and tracking numbers appear only
+ * for roles that may see buyer contacts; the server decides.
  */
-export function OrdersPage() {
+export function OrdersPage({ orderIncidents }: { orderIncidents?: OrderIncidentSlot } = {}) {
   const { t } = useLingui();
   const live = useLiveShop();
   return (
@@ -114,7 +135,12 @@ export function OrdersPage() {
       <Flow>
         {live.shop === undefined ? null : <ShopReconnectBanner shop={live.shop} />}
         {live.shop !== undefined ? (
-          <Orders key={live.shop.id} shopId={live.shop.id} chips={<ShopChips live={live} />} />
+          <Orders
+            key={live.shop.id}
+            shopId={live.shop.id}
+            chips={<ShopChips live={live} />}
+            {...(orderIncidents === undefined ? {} : { incidents: orderIncidents })}
+          />
         ) : (
           // No shop yet (or still loading): one panel says so; no empty filters beside it.
           <Panel>
@@ -135,7 +161,15 @@ export function OrdersPage() {
   );
 }
 
-function Orders({ shopId, chips }: { shopId: string; chips: ReactNode }) {
+function Orders({
+  shopId,
+  chips,
+  incidents,
+}: {
+  shopId: string;
+  chips: ReactNode;
+  incidents?: OrderIncidentSlot;
+}) {
   const { t } = useLingui();
   const api = useApi();
   const money = useMoney();
@@ -150,6 +184,7 @@ function Orders({ shopId, chips }: { shopId: string; chips: ReactNode }) {
   const [filter, setFilter] = useState<OrderFilter | "all">("all");
   const [shown, setShown] = useState(step);
   const [open, setOpen] = useState<ShopOrder | null>(null);
+  const [search, setSearch] = useState("");
   const choose = (f: OrderFilter | "all") => {
     setFilter(f);
     setShown(step);
@@ -166,7 +201,8 @@ function Orders({ shopId, chips }: { shopId: string; chips: ReactNode }) {
   );
   const orders = (all.data?.items ?? []).filter(
     (o) =>
-      filter === "all" || (filter === "overdue" ? o.overdue : o.state === filter && !o.overdue),
+      (filter === "all" || (filter === "overdue" ? o.overdue : o.state === filter && !o.overdue)) &&
+      matchesSearch(o, search),
   );
   const counts = all.data?.counts;
   const countOf = (f: OrderFilter | "all") =>
@@ -308,11 +344,19 @@ function Orders({ shopId, chips }: { shopId: string; chips: ReactNode }) {
 
   return (
     <>
+      {all.data?.stale === true && all.data.source === "htco_store" ? (
+        <StaleHistory syncedAt={all.data.last_synced_at ?? all.data.fetched_at} />
+      ) : null}
       <Focus
         title={periods[period].title}
         meta={
           all.data === undefined ? undefined : (
-            <LiveNote fetchedAt={all.data.fetched_at} stale={all.data.stale} />
+            <LiveNote
+              fetchedAt={all.data.fetched_at}
+              stale={all.data.stale}
+              source={all.data.source}
+              sync={all.data.sync ?? null}
+            />
           )
         }
         end={
@@ -415,6 +459,22 @@ function Orders({ shopId, chips }: { shopId: string; chips: ReactNode }) {
       <Panel>
         <PanelHeader title={<Trans>Filters</Trans>} />
         <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4 px-6 pb-5 max-sm:px-4">
+          <SearchField
+            aria-label={t`Find an order`}
+            value={search}
+            onChange={(value) => {
+              setSearch(value);
+              setShown(step);
+            }}
+            className="flex h-10 w-full max-w-[320px] items-center gap-2 rounded-pill border border-line-strong px-4 focus-within:outline-2 focus-within:outline-focus"
+          >
+            <SearchIcon size={16} className="shrink-0 text-secondary" />
+            <Input
+              dir="auto"
+              placeholder={t`Order number or SKU`}
+              className="h-full min-w-0 grow bg-transparent text-body-sm text-primary outline-none placeholder:text-muted [&::-webkit-search-cancel-button]:hidden"
+            />
+          </SearchField>
           <FilterChips
             label={t`Status`}
             value={filter}
@@ -476,7 +536,9 @@ function Orders({ shopId, chips }: { shopId: string; chips: ReactNode }) {
               ? period === "all"
                 ? t`No orders yet.`
                 : t`No orders in ${periods[period].within}.`
-              : t`No orders match this filter.`}
+              : search.trim() !== ""
+                ? t`No order matches "${search.trim()}".`
+                : t`No orders match this filter.`}
           </p>
         ) : (
           <>
@@ -527,14 +589,32 @@ function Orders({ shopId, chips }: { shopId: string; chips: ReactNode }) {
       </Panel>
       {open === null ? null : (
         <OrderSheet
+          shopId={shopId}
           order={open}
           photos={photos}
+          {...(incidents === undefined ? {} : { incidents })}
           onClose={() => {
             setOpen(null);
           }}
         />
       )}
     </>
+  );
+}
+
+/**
+ * The stored history is older than its sync window (AC-5.7.1): how old, and what that means.
+ * The list still shows, from the store.
+ */
+function StaleHistory({ syncedAt }: { syncedAt: string }) {
+  const { t } = useLingui();
+  const { locale } = useLocale();
+  const now = useNow(30_000);
+  const when = ago(syncedAt, Math.max(now, Date.parse(syncedAt)), locale);
+  return (
+    <Banner>
+      {t`The orders were last synced ${when}. Etsy has not answered since, so newer orders may be missing.`}
+    </Banner>
   );
 }
 
@@ -608,15 +688,21 @@ function OrderRow({ order, onOpen }: { order: ShopOrder; onOpen: () => void }) {
  * (a row on phones, the order number on wider screens opens it).
  */
 function OrderSheet({
+  shopId,
   order,
   photos,
+  incidents,
   onClose,
 }: {
+  shopId: string;
   order: ShopOrder;
   photos: Map<number, string | null>;
+  incidents?: OrderIncidentSlot;
   onClose: () => void;
 }) {
   const { t } = useLingui();
+  const api = useApi();
+  const detail = useQuery(orderQuery(api, shopId, order.order_id));
   const money = useMoney();
   const date = useShortDate();
   const states = useOrderStates();
@@ -671,6 +757,7 @@ function OrderSheet({
                 ]}
               />
               <RefundDetails order={order} />
+              {incidents?.(order)}
               <ul className="m-0 flex list-none flex-col gap-2 p-0">
                 {order.items.map((item, i) => (
                   <li
@@ -690,6 +777,7 @@ function OrderSheet({
                   </li>
                 ))}
               </ul>
+              <OrderTimeline timeline={detail.data?.timeline} loading={detail.isPending} />
             </div>
           </Panel>
         </Dialog>

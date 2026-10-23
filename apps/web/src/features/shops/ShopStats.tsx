@@ -182,7 +182,12 @@ function Hero({ shop, stats, picker }: { shop: LiveShop; stats: Stats; picker: R
       meta={
         <>
           <span dir="auto">{shop.name}</span> ·{" "}
-          <LiveNote fetchedAt={stats.fetched_at} stale={stats.stale} />
+          <LiveNote
+            fetchedAt={stats.fetched_at}
+            stale={stats.stale}
+            source={stats.source}
+            sync={stats.sync ?? null}
+          />
         </>
       }
       end={picker}
