@@ -25,6 +25,9 @@ describe("token-radii (DESIGN.md radius roles)", () => {
       'const c = "rounded-[8px] rounded-[10px] rounded-[2px]";',
       // Prose is not a class list.
       "const d = t`Corners are rounded-[4px] in the spec`;",
+      // Untagged prose too: class lists never hold capitals outside brackets (Codex review of #47).
+      'const m = "Use rounded-[4px] for compact tags";',
+      'const n = <p title="Corners: rounded-[6px]. Done." />;',
     ],
     invalid: [
       {
@@ -49,6 +52,29 @@ describe("token-radii (DESIGN.md radius roles)", () => {
           error("rounded-[16px]", "rounded-card"),
           error("md:rounded-[22px]", "rounded-panel"),
         ],
+      },
+      {
+        // Arbitrary and named-group variants (Codex review of #44).
+        code: 'const f = "data-[selected]:rounded-[12px] max-[800px]:rounded-[4px] group-hover/row:rounded-[6px]";',
+        output:
+          'const f = "data-[selected]:rounded-menu-item max-[800px]:rounded-tag group-hover/row:rounded-control";',
+        errors: [
+          error("data-[selected]:rounded-[12px]", "rounded-menu-item"),
+          error("max-[800px]:rounded-[4px]", "rounded-tag"),
+          error("group-hover/row:rounded-[6px]", "rounded-control"),
+        ],
+      },
+      {
+        // Arbitrary variants with nested brackets (Codex review of #47).
+        code: 'const h = "[&>[data-active]+span]:rounded-[4px]";',
+        output: 'const h = "[&>[data-active]+span]:rounded-tag";',
+        errors: [error("[&>[data-active]+span]:rounded-[4px]", "rounded-tag")],
+      },
+      {
+        // Other class syntax in the same list does not hide the radius.
+        code: 'const g = "rounded-[4px] [&+&]:border-t";',
+        output: 'const g = "rounded-tag [&+&]:border-t";',
+        errors: [error("rounded-[4px]", "rounded-tag")],
       },
       {
         code: 'const e = "rounded-s-[6px]";',

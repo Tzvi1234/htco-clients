@@ -13,20 +13,32 @@ const ROLES: Readonly<Record<string, string>> = {
   "22": "panel",
 };
 
-// Optional variants (`md:`, `hover:`), the corner or side (`s`, `ee`, `t`…), then the value.
-const LITERAL = /^((?:[a-z0-9-]+:)*)rounded(-(?:[setbrl]|ss|se|es|ee|tl|tr|bl|br))?-\[(\d+)px\]$/;
+// The corner or side (`s`, `ee`, `t`…), then the literal value.
+const LITERAL = /^rounded(-(?:[setbrl]|ss|se|es|ee|tl|tr|bl|br))?-\[(\d+)px\]$/;
 
-// Class lists hold only these characters; prose with capitals or punctuation is skipped.
-const CLASS_LIST = /^[a-z0-9\s\-:[\]()./_%&=#>~*@!',]*$/;
+/** Splits `md:data-[a]:rounded-[4px]` into its variants and utility, at top-level colons only,
+ * so arbitrary variants with nested brackets (`[&>[data-active]+span]:`) stay whole. */
+function splitVariants(token: string): { variants: string; utility: string } {
+  let depth = 0;
+  let end = 0;
+  for (let index = 0; index < token.length; index++) {
+    const char = token[index];
+    if (char === "[") depth++;
+    else if (char === "]") depth = Math.max(0, depth - 1);
+    else if (char === ":" && depth === 0) end = index + 1;
+  }
+  return { variants: token.slice(0, end), utility: token.slice(end) };
+}
 
 function replacement(token: string): { role: string; fixed: string } | undefined {
-  const match = LITERAL.exec(token);
+  const { variants, utility } = splitVariants(token);
+  const match = LITERAL.exec(utility);
   if (match === null) return undefined;
-  const [, variants = "", side = "", value = ""] = match;
+  const [, side = "", value = ""] = match;
   const role = ROLES[value];
   if (role === undefined) return undefined;
-  const utility = `rounded${side}-${role}`;
-  return { role: utility, fixed: `${variants}${utility}` };
+  const fixed = `rounded${side}-${role}`;
+  return { role: fixed, fixed: `${variants}${fixed}` };
 }
 
 export const tokenRadii: Rule.RuleModule = {
@@ -42,8 +54,10 @@ export const tokenRadii: Rule.RuleModule = {
   create(context) {
     const source = context.sourceCode;
 
+    // Each token is checked on its own, so other class syntax in the list never hides one; a
+    // string with a capital outside brackets is prose (a message, a title), never a class list.
     function check(node: Rule.Node, text: string): void {
-      if (!CLASS_LIST.test(text)) return;
+      if (/[A-Z]/.test(text.replace(/\[[^\]]*\]/g, ""))) return;
       for (const token of text.split(/\s+/)) {
         const found = replacement(token);
         if (found === undefined) continue;
