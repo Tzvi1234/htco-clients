@@ -25,6 +25,9 @@ describe("token-radii (DESIGN.md radius roles)", () => {
       'const c = "rounded-[8px] rounded-[10px] rounded-[2px]";',
       // Prose is not a class list.
       "const d = t`Corners are rounded-[4px] in the spec`;",
+      // Untagged prose too: class lists never hold capitals outside brackets (Codex review of #47).
+      'const m = "Use rounded-[4px] for compact tags";',
+      'const n = <p title="Corners: rounded-[6px]. Done." />;',
     ],
     invalid: [
       {

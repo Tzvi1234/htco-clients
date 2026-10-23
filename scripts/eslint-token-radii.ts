@@ -54,8 +54,10 @@ export const tokenRadii: Rule.RuleModule = {
   create(context) {
     const source = context.sourceCode;
 
-    // Each token is checked on its own, so other class syntax in the list never hides one.
+    // Each token is checked on its own, so other class syntax in the list never hides one; a
+    // string with a capital outside brackets is prose (a message, a title), never a class list.
     function check(node: Rule.Node, text: string): void {
+      if (/[A-Z]/.test(text.replace(/\[[^\]]*\]/g, ""))) return;
       for (const token of text.split(/\s+/)) {
         const found = replacement(token);
         if (found === undefined) continue;
