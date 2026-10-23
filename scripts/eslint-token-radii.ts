@@ -13,11 +13,10 @@ const ROLES: Readonly<Record<string, string>> = {
   "22": "panel",
 };
 
-// Optional variants (`md:`, `hover:`), the corner or side (`s`, `ee`, `t`…), then the value.
-const LITERAL = /^((?:[a-z0-9-]+:)*)rounded(-(?:[setbrl]|ss|se|es|ee|tl|tr|bl|br))?-\[(\d+)px\]$/;
-
-// Class lists hold only these characters; prose with capitals or punctuation is skipped.
-const CLASS_LIST = /^[a-z0-9\s\-:[\]()./_%&=#>~*@!',]*$/;
+// Optional variants, including arbitrary and named ones (`md:`, `data-[selected]:`,
+// `max-[800px]:`, `group-hover/row:`), the corner or side (`s`, `ee`, `t`…), then the value.
+const LITERAL =
+  /^((?:(?:[^\s:[\]]|\[[^\]]*\])+:)*)rounded(-(?:[setbrl]|ss|se|es|ee|tl|tr|bl|br))?-\[(\d+)px\]$/;
 
 function replacement(token: string): { role: string; fixed: string } | undefined {
   const match = LITERAL.exec(token);
@@ -42,8 +41,8 @@ export const tokenRadii: Rule.RuleModule = {
   create(context) {
     const source = context.sourceCode;
 
+    // Each token is checked on its own, so other class syntax in the list never hides one.
     function check(node: Rule.Node, text: string): void {
-      if (!CLASS_LIST.test(text)) return;
       for (const token of text.split(/\s+/)) {
         const found = replacement(token);
         if (found === undefined) continue;
