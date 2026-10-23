@@ -4,11 +4,11 @@ import { useState, type ReactNode, type SyntheticEvent } from "react";
 import { Dialog, Heading, Modal, ModalOverlay } from "react-aria-components";
 
 import { CodeBoxes } from "../../shared/ui/kit/index.ts";
-import { useCodeMessage } from "../auth/SecondFactorPage.tsx";
+import { useCodeMessage } from "../auth/index.ts";
 import { ApiError, apiError, useApi } from "../../shared/api/api.tsx";
 import { browser } from "../../shared/lib/browser.ts";
 import { Button } from "../../shared/ui/Button.tsx";
-import { FormAlert } from "../auth/AuthLayout.tsx";
+import { FormAlert } from "../../shared/ui/FormAlert.tsx";
 
 /** Etsy's consent screen address, when the browser may follow it: https, or this app itself. */
 export function trustedAddress(address: string, origin: string): string | null {

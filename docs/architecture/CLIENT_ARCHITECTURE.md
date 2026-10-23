@@ -60,6 +60,12 @@ apps/web/src/
   shared/lib/     small pure helpers
 ```
 
+Layers, enforced by the ESLint rule `htco/feature-boundaries` (`scripts/eslint-feature-boundaries.ts`):
+
+- A feature uses another feature only through that feature's public entry point, `features/<name>/index.ts`, which exports only what others may use (today `shops`: the reconnect and no-shop states; `auth`: `useCodeMessage`). Everything else in a feature is its own.
+- `shared/` never imports a feature. Parts that several features need live there: the live shop data (`shared/api/live.ts`), money, counts, dates and Etsy's words (`shared/i18n/format.ts`), relative times (`shared/lib/time.ts`), `FormAlert` (`shared/ui`), and the live notes, listing photo, placeholders and shop chips (`kit/live.tsx`).
+- `app/` composes the features (routes, shell) and may import their pages.
+
 No global state library until measurement shows a need; server state lives in TanStack Query.
 
 The office areas follow the organization of [platform ADR-0012](https://github.com/Tzvi1234/htco-platform/blob/main/docs/adr/0012-living-office-organization.md): 16 AI employees in seven departments, deterministic automations, the tool registry, engineering, and Jev as a shared Decision Advisor. They read only recorded activity from the API (activity records, tasks, automation executions, routing decisions, proposals); a client never derives or invents an employee's state, and shows Offline for every employee when the API reports the agent worker offline. Names, titles and departments come from the API's registry, never from client constants.

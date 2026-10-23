@@ -3,17 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 import { useId, useState } from "react";
 
 import { AllCustomersPanel, CustomerHealthPanel } from "./CustomersDemos.tsx";
-import {
-  LiveNote,
-  LiveProblem,
-  ShopReconnectBanner,
-  reviewsQuery,
-  useCount,
-  useLiveShop,
-  useShortDate,
-  type ShopReviews,
-} from "../commerce/live.tsx";
-import { ShopChips } from "../commerce/ShopChips.tsx";
 import { useApi } from "../../shared/api/api.tsx";
 import { cx } from "../../shared/lib/cx.ts";
 import { Button } from "../../shared/ui/Button.tsx";
@@ -31,7 +20,12 @@ import {
   N,
   SubTabs,
   TabPanel,
+  LiveNote,
+  ShopChips,
 } from "../../shared/ui/kit/index.ts";
+import { LiveProblem, ShopReconnectBanner } from "../shops/index.ts";
+import { reviewsQuery, useLiveShop, type ShopReviews } from "../../shared/api/live.ts";
+import { useCount, useShortDate } from "../../shared/i18n/format.ts";
 
 /** Reviews shown at a time; "Show more" adds as many again. */
 const PAGE = 12;

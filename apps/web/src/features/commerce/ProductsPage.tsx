@@ -2,21 +2,6 @@ import { Plural, Trans, useLingui } from "@lingui/react/macro";
 import { useQuery } from "@tanstack/react-query";
 import { useRef, useState, type ReactNode } from "react";
 
-import {
-  ListingPhoto,
-  LiveNote,
-  LiveProblem,
-  ShopReconnectBanner,
-  LiveSkeleton,
-  NoShopYet,
-  listingsQuery,
-  overviewQuery,
-  useCount,
-  useLiveShop,
-  useMoney,
-  type ShopListing,
-} from "./live.tsx";
-import { ShopChips } from "./ShopChips.tsx";
 import { useApi } from "../../shared/api/api.tsx";
 import { cx } from "../../shared/lib/cx.ts";
 import {
@@ -46,7 +31,19 @@ import {
   SectionLabel,
   bi,
   useBi,
+  ListingPhoto,
+  LiveNote,
+  LiveSkeleton,
+  ShopChips,
 } from "../../shared/ui/kit/index.ts";
+import { LiveProblem, ShopReconnectBanner, NoShopYet } from "../shops/index.ts";
+import {
+  listingsQuery,
+  overviewQuery,
+  useLiveShop,
+  type ShopListing,
+} from "../../shared/api/live.ts";
+import { useCount, useMoney } from "../../shared/i18n/format.ts";
 
 /** Listings shown at a time; "Show more" adds as many again (the page never scrolls a panel). */
 const PAGE = 24;

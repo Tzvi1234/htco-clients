@@ -25,6 +25,7 @@ import {
   Zoom,
   useStatusLabels,
   type AgentStatus,
+  useZoomLabels,
 } from "../../shared/ui/kit/index.ts";
 
 const Code = ({ children, size = "text-body-sm" }: { children: string; size?: string }) => (
@@ -35,11 +36,6 @@ const L = ({ children }: { children: string | number }) => <span className="ltr"
 /** Thirty days as dots, the bad days in the accent (`upbar()`). */
 function UptimeBar({ bad, label }: { bad: readonly number[]; label: string }) {
   return <DotBar count={30} filled={30} marks={bad} label={label} />;
-}
-
-export function useZoomLabels() {
-  const { t } = useLingui();
-  return { less: t`Show less`, more: t`Show more` };
 }
 
 /** Admin › Health (`P.health`): the system's state, its services and their uptime. */

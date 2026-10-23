@@ -2,18 +2,6 @@ import { Plural, Trans, useLingui } from "@lingui/react/macro";
 import { useQuery } from "@tanstack/react-query";
 import { useState, type ReactNode } from "react";
 
-import {
-  LiveNote,
-  LiveProblem,
-  LiveSkeleton,
-  statsQuery,
-  useCount,
-  useMoney,
-  useShortDate,
-  type AllTimeSales,
-  type ShopStats as Stats,
-} from "../commerce/live.tsx";
-import { useReason } from "../commerce/refunds.tsx";
 import { useApi } from "../../shared/api/api.tsx";
 import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
 import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
@@ -27,7 +15,12 @@ import {
   HBarList,
   LineChart,
   N,
+  LiveNote,
+  LiveSkeleton,
 } from "../../shared/ui/kit/index.ts";
+import { LiveProblem } from "./reconnect.tsx";
+import { statsQuery, type AllTimeSales, type ShopStats as Stats } from "../../shared/api/live.ts";
+import { useCount, useMoney, useShortDate, useReason } from "../../shared/i18n/format.ts";
 
 interface LiveShop {
   id: string;

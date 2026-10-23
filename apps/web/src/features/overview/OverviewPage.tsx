@@ -6,14 +6,6 @@ import { Link } from "@tanstack/react-router";
 import { useEffect, useId, useState, type ReactNode } from "react";
 
 import { HEROES } from "./heroes.ts";
-import {
-  LiveNote,
-  ShopReconnectBanner,
-  overviewQuery,
-  useCount,
-  useMoney,
-  type ShopOverview,
-} from "../commerce/live.tsx";
 import { shopCardState } from "../../app/shell/ShopSwitcher.tsx";
 import {
   meQuery,
@@ -55,7 +47,11 @@ import {
   circleStyle,
   initialOf,
   useMinutes,
+  LiveNote,
 } from "../../shared/ui/kit/index.ts";
+import { ShopReconnectBanner } from "../shops/index.ts";
+import { overviewQuery, type ShopOverview } from "../../shared/api/live.ts";
+import { useCount, useMoney } from "../../shared/i18n/format.ts";
 
 /**
  * Home (Design 1C `P.home`, clarity round 3): one focus on top, today, with the greeting, the

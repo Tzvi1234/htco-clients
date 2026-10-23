@@ -195,15 +195,3 @@ export const AUTH_LINK =
 
 /** The full-width 48 px primary button of the sign-in screens. */
 export const AUTH_SUBMIT = "h-12 w-full text-body-sm";
-
-export function FormAlert({ message }: { message: string | undefined }) {
-  if (message === undefined) return null;
-  return (
-    <p
-      role="alert"
-      className="m-0 animate-enter rounded-button border border-danger bg-surface px-3 py-2.5 text-body-sm font-medium text-danger-text"
-    >
-      {message}
-    </p>
-  );
-}

@@ -3,11 +3,12 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState, type SyntheticEvent } from "react";
 
-import { AUTH_SUBMIT, AuthLayout, FormAlert } from "./AuthLayout.tsx";
+import { AUTH_SUBMIT, AuthLayout } from "./AuthLayout.tsx";
 import { PasswordField } from "./fields.tsx";
 import { passwordProblem, tokensOf, type LinkTokens } from "./linkTokens.ts";
 import { ApiError, apiError, forgetSession, useApi } from "../../shared/api/api.tsx";
 import { Button } from "../../shared/ui/Button.tsx";
+import { FormAlert } from "../../shared/ui/FormAlert.tsx";
 
 /**
  * Where an invitation link lands: the new member chooses a password and is signed in. The tokens

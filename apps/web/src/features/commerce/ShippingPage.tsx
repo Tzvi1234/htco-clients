@@ -3,25 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 import { useId, useState, type ReactNode } from "react";
 
 import { ORDER_STATE_GLYPH, shownState, useOrderStates } from "./OrdersPage.tsx";
-import {
-  ListingPhoto,
-  LiveNote,
-  LiveProblem,
-  ShopReconnectBanner,
-  LiveSkeleton,
-  NoShopYet,
-  listingsQuery,
-  ordersQuery,
-  overviewQuery,
-  shippingQuery,
-  useCount,
-  useLiveShop,
-  useMoney,
-  useShortDate,
-  type ShopOrder,
-  type ShopShipping,
-} from "./live.tsx";
-import { ShopChips } from "./ShopChips.tsx";
 import { useApi } from "../../shared/api/api.tsx";
 import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
 import { buttonStyle } from "../../shared/ui/Button.tsx";
@@ -46,7 +27,22 @@ import {
   Status,
   SubTabs,
   TabPanel,
+  ListingPhoto,
+  LiveNote,
+  LiveSkeleton,
+  ShopChips,
 } from "../../shared/ui/kit/index.ts";
+import { LiveProblem, ShopReconnectBanner, NoShopYet } from "../shops/index.ts";
+import {
+  listingsQuery,
+  ordersQuery,
+  overviewQuery,
+  shippingQuery,
+  useLiveShop,
+  type ShopOrder,
+  type ShopShipping,
+} from "../../shared/api/live.ts";
+import { useCount, useMoney, useShortDate } from "../../shared/i18n/format.ts";
 
 /**
  * Commerce › Shipping, live from Etsy (clarity round 3): what waits to ship on top with the one

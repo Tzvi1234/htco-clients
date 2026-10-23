@@ -4,7 +4,6 @@ import type { ReactNode } from "react";
 import { useAgents, type AgentId } from "../../shared/demo/office.ts";
 import { Panel, PanelBody, PanelHeader } from "../../shared/ui/Panel.tsx";
 import { GearIcon } from "../../shared/ui/icons.tsx";
-import { useZoomLabels } from "../admin/AdminDemos.tsx";
 import {
   CircleButton,
   DataTable,
@@ -25,6 +24,7 @@ import {
   TrendGlyph,
   Who,
   Zoom,
+  useZoomLabels,
 } from "../../shared/ui/kit/index.ts";
 
 const L = ({ children }: { children: ReactNode }) => <span className="ltr">{children}</span>;

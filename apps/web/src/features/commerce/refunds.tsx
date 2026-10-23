@@ -1,20 +1,15 @@
 import { Trans, useLingui } from "@lingui/react/macro";
 
-import { useMoney, useShortDate, type ShopOrder } from "./live.tsx";
 import { cx } from "../../shared/lib/cx.ts";
 import { N } from "../../shared/ui/kit/index.ts";
+import { useMoney, useShortDate, useReason } from "../../shared/i18n/format.ts";
+import type { ShopOrder } from "../../shared/api/live.ts";
 
 type Refund = ShopOrder["refunds"][number];
 
 /** Whether an order has a refund or cancellation to explain. */
 export function hasRefundStory(order: ShopOrder): boolean {
   return order.state === "canceled" || order.state === "refunded" || order.refunds.length > 0;
-}
-
-/** The reason Etsy gave, as Etsy wrote it, or "No reason given". */
-export function useReason(): (reason: string | null) => string {
-  const { t } = useLingui();
-  return (reason) => (reason === null || reason.trim() === "" ? t`No reason given` : reason);
 }
 
 /**

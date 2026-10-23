@@ -3,12 +3,13 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link, useRouter, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState, type SyntheticEvent } from "react";
 
-import { AUTH_SUBMIT, AuthLayout, FormAlert } from "./AuthLayout.tsx";
+import { AUTH_SUBMIT, AuthLayout } from "./AuthLayout.tsx";
 import { PasswordField } from "./fields.tsx";
 import { CodeBoxes } from "../../shared/ui/kit/index.ts";
 import { passwordProblem, tokensOf, type LinkTokens } from "./linkTokens.ts";
 import { ApiError, apiError, forgetSession, useApi } from "../../shared/api/api.tsx";
 import { Button } from "../../shared/ui/Button.tsx";
+import { FormAlert } from "../../shared/ui/FormAlert.tsx";
 
 /**
  * Where the emailed password reset link lands, like the invitation page: the tokens are read once

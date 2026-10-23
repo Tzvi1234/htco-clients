@@ -6,12 +6,9 @@ import { useId, useState, type ReactNode } from "react";
 import { useConnectEtsy, type ConnectEtsy } from "./connectEtsy.tsx";
 import { ShopCard, needsReconnect, useReconnectLabel } from "./ShopCard.tsx";
 import { useDisconnects, useRechecks, useRemovals } from "./shopActions.tsx";
-import { useNow } from "./time.ts";
 import { ShopStats } from "./ShopStats.tsx";
 import { TopListings } from "./TopListings.tsx";
-import { ReconnectNotice, overviewQuery } from "../commerce/live.tsx";
 import parcel from "../../assets/commerce/parcel.webp";
-import { FormAlert } from "../auth/AuthLayout.tsx";
 import { integrationsQuery, meQuery, shopsQuery, useApi } from "../../shared/api/api.tsx";
 import { Button } from "../../shared/ui/Button.tsx";
 import { PageHeader } from "../../shared/ui/PageHeader.tsx";
@@ -32,6 +29,10 @@ import {
   SubTabs,
   TabPanel,
 } from "../../shared/ui/kit/index.ts";
+import { useNow } from "../../shared/lib/time.ts";
+import { ReconnectNotice } from "./reconnect.tsx";
+import { overviewQuery } from "../../shared/api/live.ts";
+import { FormAlert } from "../../shared/ui/FormAlert.tsx";
 
 /**
  * The organization's shops (Commerce / Shops) in the Design 1C shop panels: one panel per shop

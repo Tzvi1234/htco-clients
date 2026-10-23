@@ -2,11 +2,12 @@ import { Trans, useLingui } from "@lingui/react/macro";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 
-import { ListingPhoto, LiveNote, listingsQuery, useCount, useMoney } from "../commerce/live.tsx";
 import { useApi } from "../../shared/api/api.tsx";
 import { ArrowEndIcon } from "../../shared/ui/icons.tsx";
 import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
-import { N, StripCard, circleStyle } from "../../shared/ui/kit/index.ts";
+import { N, StripCard, circleStyle, ListingPhoto, LiveNote } from "../../shared/ui/kit/index.ts";
+import { listingsQuery } from "../../shared/api/live.ts";
+import { useCount, useMoney } from "../../shared/i18n/format.ts";
 
 /**
  * The "Top listings" tab of Shops: the shop's active listings live from Etsy, most viewed first,

@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Platform** | `GET /v1/shops/{shop_id}/overview · orders · listings · reviews · shipping` ([dashboard data](https://github.com/Tzvi1234/htco-platform/blob/main/docs/features/etsy-integration/dashboard-data.md)) |
-| **Code** | `apps/web/src/features/commerce/live.tsx` (queries, money, freshness, honest states), `OrdersPage`, `ProductsPage`, `ShippingPage`, `features/customers/CustomersPage`, `features/shops/ShopCard` and `TopListings`, Home's `TodayKpis` |
+| **Code** | `apps/web/src/shared/api/live.ts` (queries, the shop on screen), `shared/i18n/format.ts` (money, counts, dates), `shared/ui/kit/live.tsx` (freshness, photos, shop chips), `features/shops/reconnect.tsx` (honest states), `OrdersPage`, `ProductsPage`, `ShippingPage`, `features/customers/CustomersPage`, `features/shops/ShopCard` and `TopListings`, Home's `TodayKpis` |
 | **Last updated** | 2026-10-22 |
 
 ## What each screen shows
