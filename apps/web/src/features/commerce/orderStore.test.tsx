@@ -74,14 +74,16 @@ describe("Orders on the stored history (slice 5.7)", () => {
     const sheet = await screen.findByRole("dialog", { name: /^Order / });
     const history = await within(sheet).findByRole("region", { name: "Order history" });
     const steps = await within(history).findAllByRole("listitem");
-    expect(steps.map((s) => s.textContent?.split(" · ")[0])).toEqual([
+    expect(steps.map((s) => s.textContent.split(" · ")[0])).toEqual([
       "PaidEtsy notice",
       "Recorded in HTCOEtsy notice",
       "Waiting to shipEtsy notice",
       "Shipped (current)Etsy notice",
     ]);
     expect(
-      backend.requests.some((r) => /\/v1\/shops\/[^/]+\/orders\/\d+$/.test(new URL(r.url).pathname)),
+      backend.requests.some((r) =>
+        /\/v1\/shops\/[^/]+\/orders\/\d+$/.test(new URL(r.url).pathname),
+      ),
     ).toBe(true);
   });
 
@@ -107,7 +109,26 @@ describe("Orders on the stored history (slice 5.7)", () => {
     const sheet = await screen.findByRole("dialog");
     const history = await within(sheet).findByRole("region", { name: "היסטוריית ההזמנה" });
     expect((await within(history).findAllByRole("listitem")).length).toBeGreaterThan(0);
-    expect(within(history).getAllByText(/הודעה מ-Etsy/).length).toBeGreaterThan(0);
+    expect(within(history).getAllByText(/הודעה מ־Etsy/).length).toBeGreaterThan(0);
     expect(document.documentElement.dir).toBe("rtl");
+  });
+  it("AC-5.7.3: keyboard only, finds an order by its number and opens its sheet", async () => {
+    const { user } = await open();
+    const table = await screen.findByRole("table", { name: "Orders" });
+    const [first] = within(table).getAllByRole("button", { name: /^Open order/ });
+    const id = first?.textContent?.replace("#", "") ?? "";
+
+    await user.click(screen.getByRole("searchbox", { name: "Find an order" }));
+    await user.keyboard(`#${id}`);
+    await vi.waitFor(() => {
+      expect(within(table).getAllByRole("button", { name: /^Open order/ })).toHaveLength(1);
+    });
+    // Tab on through the filters to the one order left in the table.
+    const target = within(table).getByRole("button", { name: `Open order ${id}` });
+    for (let i = 0; i < 30 && document.activeElement !== target; i += 1) await user.tab();
+    expect(document.activeElement).toBe(target);
+    await user.keyboard("{Enter}");
+
+    expect(await screen.findByRole("dialog", { name: `Order ${id}` })).toBeInTheDocument();
   });
 });
