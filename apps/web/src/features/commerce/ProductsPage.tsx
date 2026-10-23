@@ -13,6 +13,7 @@ import { Button } from "../../shared/ui/Button.tsx";
 import { PageHeader } from "../../shared/ui/PageHeader.tsx";
 import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
 import {
+  FilterChips,
   Aside,
   DemoPart,
   DemoTag,
@@ -210,29 +211,18 @@ function Products({ shopId, chips }: { shopId: string; chips: ReactNode }) {
           ) : (
             <FlowBody className="gap-4">
               {listings.data.sections.length === 0 ? null : (
-                <div className="flex flex-wrap gap-1.5" role="group" aria-label={t`Sections`}>
-                  {[{ section_id: "all" as const, title: t`All` }, ...listings.data.sections].map(
-                    (s) => (
-                      <button
-                        key={String(s.section_id)}
-                        type="button"
-                        aria-pressed={section === s.section_id}
-                        onClick={() => {
-                          setSection(s.section_id);
-                          setShown(PAGE);
-                        }}
-                        className={cx(
-                          "inline-flex h-9 items-center rounded-pill border px-3 text-caption outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus",
-                          section === s.section_id
-                            ? "border-inverse bg-inverse text-on-inverse"
-                            : "border-line-strong hover:border-line-hover",
-                        )}
-                      >
-                        <bdi>{s.title}</bdi>
-                      </button>
-                    ),
-                  )}
-                </div>
+                <FilterChips
+                  label={t`Sections`}
+                  value={section}
+                  onChange={(id) => {
+                    setSection(id);
+                    setShown(PAGE);
+                  }}
+                  options={[
+                    { section_id: "all" as const, title: t`All` },
+                    ...listings.data.sections,
+                  ].map((s) => ({ id: s.section_id, label: s.title }))}
+                />
               )}
               {items.length === 0 ? (
                 <p className="m-0 py-10 text-center text-body-sm text-secondary">
