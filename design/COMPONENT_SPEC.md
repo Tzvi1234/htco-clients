@@ -25,7 +25,9 @@ The design language changed to Design 1C ([client ADR-0008](../docs/adr/0008-des
 | Toast | A 40 px ink pill at the bottom centre, 1.8 s, announced politely; confirmations only |
 | Logo | The owner's Design 1C logo, `full` or `mark`, colours from `logo.*`, the dot drops in once |
 
-## Relay revision (2026-10-15)
+## Relay revision (2026-10-15) — historical
+
+> Superseded by [client ADR-0008](../docs/adr/0008-design-1c.md) (Design 1C) and ADR-0009. Kept for history only; the Design 1C table above is the current specification.
 
 The design language changed to Relay ([client ADR-0007](../docs/adr/0007-relay-design-language.md)). Where this specification and the brand book disagree, the brand book's sizes and colours win. Built on the web so far:
 

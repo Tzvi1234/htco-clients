@@ -12,3 +12,4 @@ Decisions specific to the web, Windows and Android clients and the design system
 | [0006](0006-static-web-hosting.md) | The web app as an App Platform static site, policies in the page | Accepted |
 | [0007](0007-relay-design-language.md) | The Relay design language (Attio layout, Figma colour, the logo recoloured) | Superseded by 0008 |
 | [0008](0008-design-1c.md) | Design 1C: the owner's design, two palettes with dark themes, shared tweaks, the new logo and shell | Accepted |
+| [0009](0009-clarity-round-3.md) | Clarity round 3 (shell, settings, landing, sign-in) | Accepted; builds on 0008 |

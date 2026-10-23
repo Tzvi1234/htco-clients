@@ -1,6 +1,6 @@
 # ADR-0009: Clarity round 3 (shell, settings, landing, sign-in)
 
-- Status: accepted (the owner's brief of 2026-10-22)
+- **Status:** Accepted (the owner's brief of 2026-10-22)
 - Builds on: [ADR-0008](0008-design-1c.md) (Design 1C)
 
 ## Context
