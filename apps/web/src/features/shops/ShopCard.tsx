@@ -22,6 +22,7 @@ import {
   type AgentStatus,
   type DotTone,
   LiveNote,
+  Chip,
 } from "../../shared/ui/kit/index.ts";
 import { useCount, useMoney } from "../../shared/i18n/format.ts";
 import type { ShopOverview } from "../../shared/api/live.ts";
@@ -297,12 +298,9 @@ export function ShopCard({
                 ) : (
                   <ul className="m-0 flex list-none flex-wrap justify-end gap-1.5 p-0">
                     {integration.scopes.map((scope) => (
-                      <li
-                        key={scope}
-                        className="inline-flex h-6 items-center rounded-pill bg-raised px-2.5 text-caption"
-                      >
+                      <Chip as="li" key={scope}>
                         {scopeLabel[scope] ?? <Ltr>{scope}</Ltr>}
-                      </li>
+                      </Chip>
                     ))}
                   </ul>
                 )}

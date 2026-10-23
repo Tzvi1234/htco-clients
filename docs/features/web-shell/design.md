@@ -47,7 +47,7 @@ apps/web/src/
                       Toast (ToastProvider, useToast), icons (the prototype's glyphs), Logo
   shared/ui/kit/      the screen kit, one module per family, imported from kit/index.ts:
                       layout (Screen grids l3 … lc3s, Stack), parts (CircleButton, InkDisc, Pill, Chip,
-                      Dot, IdBlock, KV, KV2, SectionLabel, Card, Tile, CountUp, Toggle, ListRow, Kpis,
+                      Dot, IdBlock, KV, KV2, SectionLabel, Chip (tone, size), TEXT_LINK, Card, Tile, CountUp, Toggle, ListRow, Kpis,
                       Typing, N), status (StatusGlyph, Status, the nine statuses), avatar (Avatar, Who,
                       Avatars), charts/ (BarChart, LineChart, HBarList,
                       ProgressBar), dotted (Matrix, DotBar: Demo screens only), table (DataTable), strip (Strip,

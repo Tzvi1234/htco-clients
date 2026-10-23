@@ -8,6 +8,7 @@ import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
 import { cx } from "../../shared/lib/cx.ts";
 import { Logo } from "../../shared/ui/Logo.tsx";
 import { Segmented } from "../../shared/ui/Segmented.tsx";
+import { TEXT_LINK } from "../../shared/ui/kit/index.ts";
 
 /**
  * The sign-in screens in Design 1C (the demo's `loginHTML()`): two floating panels on the ground.
@@ -190,8 +191,7 @@ export const FIELD_GROUP = cx(
 );
 
 /** The demo's `.lnk`: a small underlined link; padding gives it a 24 px target without moving it. */
-export const AUTH_LINK =
-  "-my-1 inline-block cursor-default rounded-tag py-1 text-caption text-primary underline decoration-1 underline-offset-[3px] outline-none transition-colors hover:text-secondary data-[hovered]:text-secondary";
+export const AUTH_LINK = cx(TEXT_LINK, "-my-1 inline-block cursor-default");
 
 /** The full-width 48 px primary button of the sign-in screens. */
 export const AUTH_SUBMIT = "h-12 w-full text-body-sm";
