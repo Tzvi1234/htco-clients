@@ -33,6 +33,7 @@ export function useNavLabels() {
       orders: t({ message: "Orders", context: "navigation" }),
       products: t({ message: "Products", context: "navigation" }),
       shipping: t({ message: "Shipping", context: "navigation" }),
+      incidents: t({ message: "Incidents", context: "navigation" }),
       suppliers: t({ message: "Suppliers", context: "navigation" }),
     },
     customers: {

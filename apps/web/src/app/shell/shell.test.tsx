@@ -307,6 +307,7 @@ function tabName(id: string): string {
     orders: "Orders",
     products: "Products",
     shipping: "Shipping",
+    incidents: "Incidents",
     suppliers: "Suppliers",
     tickets: "Tickets",
     customers: "Customers",

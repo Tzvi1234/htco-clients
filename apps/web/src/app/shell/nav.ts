@@ -63,6 +63,8 @@ export const AREAS: readonly NavArea[] = [
       { id: "orders", to: "/commerce/orders", built: true },
       { id: "products", to: "/commerce/products", built: true },
       { id: "shipping", to: "/commerce/shipping", built: true },
+      // Fulfillment's incident center (platform slice 6.5); `/incidents/{id}` opens one.
+      { id: "incidents", to: "/incidents", built: true },
       ...soon("commerce", "suppliers"),
     ],
   },
