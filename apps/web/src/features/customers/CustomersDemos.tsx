@@ -390,7 +390,7 @@ export function MailDemo({ title }: { title: string }) {
           </div>
           <div className="flex gap-2">
             <div className="flex items-center gap-3 rounded-card border border-line-strong py-2 ps-2 pe-3.5">
-              <span className="flex size-12 items-center justify-center rounded-[12px] bg-raised">
+              <span className="flex size-12 items-center justify-center rounded-menu-item bg-raised">
                 <DocGlyph size={20} />
               </span>
               <div>

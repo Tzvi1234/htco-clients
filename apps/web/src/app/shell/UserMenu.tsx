@@ -10,7 +10,7 @@ import { cx } from "../../shared/lib/cx.ts";
 import { ChevronIcon } from "../../shared/ui/icons.tsx";
 
 const ITEM =
-  "flex h-9 cursor-default items-center gap-2 rounded-[12px] px-3 text-body-sm outline-none transition-colors duration-[var(--motion-duration-fast)] data-[focused]:bg-panel data-[disabled]:text-muted";
+  "flex h-9 cursor-default items-center gap-2 rounded-menu-item px-3 text-body-sm outline-none transition-colors duration-[var(--motion-duration-fast)] data-[focused]:bg-panel data-[disabled]:text-muted";
 
 /**
  * The role the account card can show: the one role every workspace gives, or "several" when

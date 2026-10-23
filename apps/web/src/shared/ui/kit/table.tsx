@@ -105,7 +105,7 @@ export function DataTable({
                     column(index),
                     ends.includes(index) && "tabular",
                     row.selected === true &&
-                      "border-b-transparent bg-selected group-hover/row:bg-selected first:rounded-s-[12px] last:rounded-e-[12px]",
+                      "border-b-transparent bg-selected group-hover/row:bg-selected first:rounded-s-menu-item last:rounded-e-menu-item",
                   )}
                 >
                   {cell}

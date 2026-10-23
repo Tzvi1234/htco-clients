@@ -89,7 +89,7 @@ export function CommandMenu() {
                 placeholder={t`Search screens and actions…`}
                 className="h-full grow bg-transparent text-[15px] text-primary outline-none placeholder:text-muted [&::-webkit-search-cancel-button]:hidden"
               />
-              <kbd className="inline-flex h-[18px] items-center rounded-[6px] border border-line-strong px-[5px] font-latin text-[11px] text-muted">
+              <kbd className="inline-flex h-[18px] items-center rounded-control border border-line-strong px-[5px] font-latin text-[11px] text-muted">
                 Esc
               </kbd>
             </SearchField>
@@ -114,7 +114,7 @@ export function CommandMenu() {
                       <MenuItem
                         id={item.id}
                         textValue={item.label}
-                        className="flex h-11 cursor-default items-center justify-between gap-3 rounded-[12px] px-4 text-body-sm text-primary outline-none transition-colors duration-[var(--motion-duration-fast)] data-[focused]:bg-panel"
+                        className="flex h-11 cursor-default items-center justify-between gap-3 rounded-menu-item px-4 text-body-sm text-primary outline-none transition-colors duration-[var(--motion-duration-fast)] data-[focused]:bg-panel"
                       >
                         {item.label}
                         {item.built ? null : <SoonTag className="text-muted" />}

@@ -426,7 +426,7 @@ function FloorList({ modes, noWebgl }: { modes: ReactNode; noWebgl: boolean }) {
                 key={s.items}
                 lead={
                   <span
-                    className="k-hatch size-10 shrink-0 rounded-[12px] border border-dashed border-line-hover"
+                    className="k-hatch size-10 shrink-0 rounded-menu-item border border-dashed border-line-hover"
                     aria-hidden="true"
                   />
                 }
