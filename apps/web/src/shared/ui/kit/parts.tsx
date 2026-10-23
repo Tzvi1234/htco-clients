@@ -198,7 +198,7 @@ export function IdBlock({
         className={cx(
           "font-display font-light tracking-[-0.01em]",
           wrap ? "text-balance" : "truncate",
-          size === "lg" ? "text-[40px] leading-[1.25]" : "text-number-lg leading-[1.25]",
+          size === "lg" ? "text-display leading-[1.25]" : "text-number-lg leading-[1.25]",
         )}
       >
         {value}
@@ -408,7 +408,7 @@ export function Tile({
         <span className="truncate text-caption font-light text-muted">{label}</span>
       )}
       {value === undefined ? null : (
-        <span className="font-display text-[28px] leading-[1.2] font-light whitespace-nowrap">
+        <span className="font-display text-display-sm leading-[1.2] font-light whitespace-nowrap">
           {count && typeof value === "string" ? (
             <span className="ltr inline-block">
               <CountUp value={value} />
@@ -526,7 +526,7 @@ export function Kpi({
       className="min-w-0 px-6 pt-4 pb-5 text-center max-lg:px-2.5 max-sm:shrink-0 max-sm:basis-[42%] max-sm:snap-start [&+&]:border-s [&+&]:border-line"
     >
       <div className="text-caption font-light text-muted">{label}</div>
-      <div className="font-display text-[32px] leading-[1.3] font-light tracking-[-0.01em]">
+      <div className="font-display text-number-lg leading-[1.3] font-light tracking-[-0.01em]">
         {value}
       </div>
       {delta === undefined ? null : (

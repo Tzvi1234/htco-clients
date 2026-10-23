@@ -43,7 +43,7 @@
   background: var(--bg-raised);
   border: 1px solid var(--border-strong);
   color: var(--text-primary);
-  font-size: 12px;
+  font-size: var(--font-size-caption);
   display: flex;
   align-items: center;
   white-space: nowrap;
@@ -74,7 +74,7 @@
   height: 24px;
   padding: 0 11px;
   border-radius: 12px;
-  font-size: 12px;
+  font-size: var(--font-size-caption);
   display: flex;
   align-items: center;
   white-space: nowrap;
@@ -159,7 +159,7 @@
   border-radius: 10px;
   background: var(--inverse-bg);
   color: var(--inverse-text);
-  font-size: 12px;
+  font-size: var(--font-size-caption);
   display: none;
   align-items: center;
 }
@@ -250,7 +250,7 @@
   align-items: center;
   gap: 6px;
   padding-inline: 4px 10px;
-  font-size: 12px;
+  font-size: var(--font-size-caption);
   white-space: nowrap;
   color: var(--text-primary);
   transition:

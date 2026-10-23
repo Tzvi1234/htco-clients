@@ -314,7 +314,7 @@ export function AgentCard({ id, title }: { id: AgentId; title?: string }) {
           <Avatar initial={t(a.name).charAt(0)} size="lg" ink />
           <div className="text-start">
             <div className="text-caption font-light text-muted">{t`Agent:`}</div>
-            <div className="font-display text-[32px] leading-tight font-light">{t(a.name)}</div>
+            <div className="font-display text-number-lg leading-tight font-light">{t(a.name)}</div>
           </div>
         </div>
         <div className="text-center text-body-sm">{t(a.role)}</div>

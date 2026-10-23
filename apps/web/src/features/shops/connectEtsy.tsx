@@ -162,7 +162,7 @@ export function StepUpDialog({
               </p>
               <Heading
                 slot="title"
-                className="m-0 font-display text-[32px] leading-[1.25] font-light"
+                className="m-0 font-display text-number-lg leading-[1.25] font-light"
               >
                 <Trans>Confirm it is you</Trans>
               </Heading>
