@@ -1001,6 +1001,10 @@ msgstr "Connect your Etsy shop and its listings appear here, live."
 msgid "Connect your Etsy shop and its orders appear here, live."
 msgstr "Connect your Etsy shop and its orders appear here, live."
 
+#: src/features/shops/ShopsPage.tsx
+msgid "Connect your Etsy shop and its orders, listings and numbers appear here, live from Etsy."
+msgstr "Connect your Etsy shop and its orders, listings and numbers appear here, live from Etsy."
+
 #: src/features/commerce/ShippingPage.tsx
 msgid "Connect your Etsy shop and its shipments appear here, live."
 msgstr "Connect your Etsy shop and its shipments appear here, live."
@@ -1018,10 +1022,6 @@ msgstr "Connect your first shop"
 #: src/features/shops/ShopCard.tsx
 msgid "Connected"
 msgstr "Connected"
-
-#: src/features/shops/ShopsPage.tsx
-msgid "Connected shops appear here with their sync status and capabilities."
-msgstr "Connected shops appear here with their sync status and capabilities."
 
 #: src/features/shops/EtsyCallbackPage.tsx
 msgid "Connecting Etsy"

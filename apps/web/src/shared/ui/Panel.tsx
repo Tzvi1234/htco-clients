@@ -62,10 +62,24 @@ export function PanelHeader({
   );
 }
 
-/** A panel's body: 24 px gutters, scrolling on its own when the content is taller. */
-export function PanelBody({ className, children }: { className?: string; children: ReactNode }) {
+/**
+ * A panel's body: 24 px gutters. In a panel that fills the window (the demo screens) it
+ * scrolls on its own when the content is taller; on a screen that scrolls as one page it must
+ * not (`scroll={false}`; round 3, no panel scrolls on its own).
+ */
+export function PanelBody({
+  className,
+  scroll = true,
+  children,
+}: {
+  className?: string;
+  scroll?: boolean;
+  children: ReactNode;
+}) {
   return (
-    <div className={cx("flex min-h-0 grow flex-col overflow-auto px-6 pb-6", className)}>
+    <div
+      className={cx("flex min-h-0 grow flex-col px-6 pb-6", scroll && "overflow-auto", className)}
+    >
       {children}
     </div>
   );

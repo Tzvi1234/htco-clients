@@ -1001,6 +1001,10 @@ msgstr "חברו את חנות ה־Etsy שלכם והמוצרים שלה יופ�
 msgid "Connect your Etsy shop and its orders appear here, live."
 msgstr "חברו את חנות ה־Etsy שלכם וההזמנות שלה יופיעו כאן, בזמן אמת."
 
+#: src/features/shops/ShopsPage.tsx
+msgid "Connect your Etsy shop and its orders, listings and numbers appear here, live from Etsy."
+msgstr "חבר את חנות ה־Etsy שלך, וההזמנות, המוצרים והמספרים שלה יופיעו כאן, בזמן אמת מ־Etsy."
+
 #: src/features/commerce/ShippingPage.tsx
 msgid "Connect your Etsy shop and its shipments appear here, live."
 msgstr "חברו את חנות ה־Etsy שלכם והמשלוחים שלה יופיעו כאן, בזמן אמת."
@@ -1018,10 +1022,6 @@ msgstr "לחבר את החנות הראשונה"
 #: src/features/shops/ShopCard.tsx
 msgid "Connected"
 msgstr "מחוברת"
-
-#: src/features/shops/ShopsPage.tsx
-msgid "Connected shops appear here with their sync status and capabilities."
-msgstr "חנויות מחוברות יופיעו כאן עם מצב הסנכרון והיכולות שלהן."
 
 #: src/features/shops/EtsyCallbackPage.tsx
 msgid "Connecting Etsy"
