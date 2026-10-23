@@ -31,6 +31,11 @@ msgstr "{0, plural, one {One order is late to ship. Start there.} other {# order
 msgid "{0, plural, one {One order waits to ship; none is late.} other {# orders wait to ship; none is late.}}"
 msgstr "{0, plural, one {One order waits to ship; none is late.} other {# orders wait to ship; none is late.}}"
 
+#. placeholder {0}: stale.length
+#: src/features/admin/OperationsPage.tsx
+msgid "{0, plural, one {One shop has not synced within its window.} other {# shops have not synced within their window.}}"
+msgstr "{0, plural, one {One shop has not synced within its window.} other {# shops have not synced within their window.}}"
+
 #. placeholder {0}: removals.done
 #: src/features/shops/ShopsPage.tsx
 msgid "{0} and its data were removed."
@@ -93,6 +98,10 @@ msgstr "{count} shops"
 #: src/features/shops/ShopCard.tsx
 msgid "{days, plural, one {Reconnect within # day} other {Reconnect within # days}}"
 msgstr "{days, plural, one {Reconnect within # day} other {Reconnect within # days}}"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "{dead, plural, one {One job ran out of retries. Look at its error, then retry it.} other {# jobs ran out of retries. Look at their errors, then retry them.}}"
+msgstr "{dead, plural, one {One job ran out of retries. Look at its error, then retry it.} other {# jobs ran out of retries. Look at their errors, then retry them.}}"
 
 #: src/features/commerce/ShippingPage.tsx
 msgid "{destinations} destinations"
@@ -237,10 +246,6 @@ msgstr "2 rows"
 msgid "2 with Dana"
 msgstr "2 with Dana"
 
-#: src/features/admin/AdminDemos.tsx
-msgid "3 jobs"
-msgstr "3 jobs"
-
 #: src/features/overview/OverviewPage.tsx
 msgid "3 running · 1 waiting for you · 1 failed"
 msgstr "3 running · 1 waiting for you · 1 failed"
@@ -248,14 +253,6 @@ msgstr "3 running · 1 waiting for you · 1 failed"
 #: src/features/commerce/OrdersPage.tsx
 msgid "30 days"
 msgstr "30 days"
-
-#: src/features/admin/AdminDemos.tsx
-msgid "30-day uptime"
-msgstr "30-day uptime"
-
-#: src/features/admin/AdminDemos.tsx
-msgid "30-day uptime:"
-msgstr "30-day uptime:"
 
 #: src/features/office/data.ts
 msgid "4 new mockups ready for review."
@@ -594,6 +591,10 @@ msgstr "At least 12 characters."
 msgid "Attach"
 msgstr "Attach"
 
+#: src/features/admin/OperationsPage.tsx
+msgid "Attempts"
+msgstr "Attempts"
+
 #: src/features/team/TeamPage.tsx
 msgid "Audit log:"
 msgstr "Audit log:"
@@ -608,6 +609,10 @@ msgstr "Authenticator app"
 msgid "Authenticator app is set up"
 msgstr "Authenticator app is set up"
 
+#: src/features/admin/OperationsPage.tsx
+msgid "Automation"
+msgstr "Automation"
+
 #: src/features/admin/AdminDemos.tsx
 msgid "Automation details"
 msgstr "Automation details"
@@ -617,6 +622,7 @@ msgid "Automation:"
 msgstr "Automation:"
 
 #: src/features/admin/AdminDemos.tsx
+#: src/features/admin/OperationsPage.tsx
 #: src/features/office/FloorPage.tsx
 #: src/features/work/demoScreens.tsx
 #: src/shared/demo/office.ts
@@ -765,10 +771,6 @@ msgstr "Cancelled"
 msgid "Cannot scan? Type this key into the app:"
 msgstr "Cannot scan? Type this key into the app:"
 
-#: src/features/admin/AdminDemos.tsx
-msgid "Capacity"
-msgstr "Capacity"
-
 #: src/features/office/EngineeringPage.tsx
 msgid "Carrier token rotation"
 msgstr "Carrier token rotation"
@@ -796,6 +798,10 @@ msgstr "Catalog numbers"
 #: src/features/finance/FinanceDemos.tsx
 msgid "Category"
 msgstr "Category"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Chain"
+msgstr "Chain"
 
 #: src/features/office/EngineeringPage.tsx
 msgid "Change"
@@ -850,6 +856,11 @@ msgstr "Check your connection and try again."
 #: src/features/auth/ForgotPasswordPage.tsx
 msgid "Check your email"
 msgstr "Check your email"
+
+#. placeholder {0}: since(health.generated_at)
+#: src/features/admin/OperationsPage.tsx
+msgid "checked {0}"
+msgstr "checked {0}"
 
 #. placeholder {0}: ago(checkedAt, now, locale)
 #: src/features/shops/Capabilities.tsx
@@ -908,6 +919,7 @@ msgstr "Clicks per day, 1 to 15 October: 18 to 41, highest today"
 
 #: src/app/shell/Flyout.tsx
 #: src/app/shell/TabBar.tsx
+#: src/features/admin/OperationsPage.tsx
 #: src/features/commerce/OrdersPage.tsx
 #: src/features/team/TeamPage.tsx
 msgid "Close"
@@ -1251,6 +1263,10 @@ msgstr "Data deleted after {0}"
 msgid "Date"
 msgstr "Date"
 
+#: src/features/admin/OperationsPage.tsx
+msgid "Dead letters"
+msgstr "Dead letters"
+
 #: src/shared/demo/office.ts
 msgid "Debugger & Reliability Engineer"
 msgstr "Debugger & Reliability Engineer"
@@ -1323,6 +1339,10 @@ msgstr "Description"
 msgid "Desk, monitor and robot"
 msgstr "Desk, monitor and robot"
 
+#: src/features/admin/OperationsPage.tsx
+msgid "Destination"
+msgstr "Destination"
+
 #: src/features/team/TeamPage.tsx
 msgid "Developer"
 msgstr "Developer"
@@ -1382,6 +1402,10 @@ msgstr "Draft"
 #: src/features/office/FloorPage.tsx
 msgid "Drag to orbit · double-click a room"
 msgstr "Drag to orbit · double-click a room"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Drifts today"
+msgstr "Drifts today"
 
 #: src/features/customers/CustomersDemos.tsx
 msgid "Edit reply…"
@@ -1464,7 +1488,6 @@ msgstr "Error"
 msgid "Error 404"
 msgstr "Error 404"
 
-#: src/features/admin/AdminDemos.tsx
 #: src/features/office/EngineeringPage.tsx
 #: src/features/work/demoScreens.tsx
 msgid "Errors"
@@ -1582,6 +1605,10 @@ msgstr "Etsy's count"
 msgid "Etsy's sign-in address looked wrong, so it was not opened. Try again shortly."
 msgstr "Etsy's sign-in address looked wrong, so it was not opened. Try again shortly."
 
+#: src/features/admin/OperationsPage.tsx
+msgid "Event"
+msgstr "Event"
+
 #: src/features/work/demoScreens.tsx
 msgid "Events by hour, busiest at 14:00"
 msgstr "Events by hour, busiest at 14:00"
@@ -1597,6 +1624,10 @@ msgstr "Every 30 min"
 #: src/features/commerce/ProductsPage.tsx
 msgid "Every active listing is in stock."
 msgstr "Every active listing is in stock."
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Every message was delivered."
+msgstr "Every message was delivered."
 
 #: src/features/settings/SettingsPage.tsx
 msgid "Every morning at 08:00"
@@ -1618,6 +1649,10 @@ msgstr "Everyone invited has joined."
 msgid "Everything is shipped. Nothing waits for you in the shop."
 msgstr "Everything is shipped. Nothing waits for you in the shop."
 
+#: src/features/admin/OperationsPage.tsx
+msgid "Everything runs: no dead letters, the workers beat and every shop is in sync."
+msgstr "Everything runs: no dead letters, the workers beat and every shop is in sync."
+
 #: src/features/office/ChatPage.tsx
 #: src/features/work/demoScreens.tsx
 msgid "Evidence"
@@ -1626,6 +1661,10 @@ msgstr "Evidence"
 #: src/features/commerce/ShippingPage.tsx
 msgid "Exchanges"
 msgstr "Exchanges"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Execution"
+msgstr "Execution"
 
 #: src/features/office/floor3d/plan.ts
 #: src/shared/demo/office.ts
@@ -1806,9 +1845,17 @@ msgstr "Fulfillment Inspector"
 msgid "Full screen"
 msgstr "Full screen"
 
+#: src/features/admin/OperationsPage.tsx
+msgid "Full sweep"
+msgstr "Full sweep"
+
 #: src/shared/demo/office.ts
 msgid "Gal"
 msgstr "Gal"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Gave up"
+msgstr "Gave up"
 
 #: src/features/office/data.ts
 msgid "Gelato quote for towels"
@@ -1873,6 +1920,10 @@ msgstr "Growth"
 #: src/features/customers/CustomersDemos.tsx
 msgid "Handled by:"
 msgstr "Handled by:"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Health"
+msgstr "Health"
 
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
@@ -2011,6 +2062,10 @@ msgstr "in stock"
 msgid "In stock"
 msgstr "In stock"
 
+#: src/features/admin/OperationsPage.tsx
+msgid "In sync"
+msgstr "In sync"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "In the web app, for you and your team, from the first sign-in."
 msgstr "In the web app, for you and your team, from the first sign-in."
@@ -2097,6 +2152,10 @@ msgstr "Iris"
 msgid "Items"
 msgstr "Items"
 
+#: src/features/admin/OperationsPage.tsx
+msgid "Job"
+msgstr "Job"
+
 #: src/features/office/TeamRoomPage.tsx
 msgid "Join conversation"
 msgstr "Join conversation"
@@ -2123,6 +2182,10 @@ msgstr "Last 12 months"
 msgid "last 12 months, before Etsy's fees"
 msgstr "last 12 months, before Etsy's fees"
 
+#: src/features/admin/OperationsPage.tsx
+msgid "Last 24 hours"
+msgstr "Last 24 hours"
+
 #: src/features/commerce/OrdersPage.tsx
 msgid "Last 30 days"
 msgstr "Last 30 days"
@@ -2130,6 +2193,10 @@ msgstr "Last 30 days"
 #: src/features/admin/AdminDemos.tsx
 msgid "Last 30 runs"
 msgstr "Last 30 runs"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Last 7 days"
+msgstr "Last 7 days"
 
 #: src/features/commerce/OrdersPage.tsx
 msgid "Last 90 days"
@@ -2140,9 +2207,13 @@ msgstr "Last 90 days"
 msgid "Last active <0>{0}</0>"
 msgstr "Last active <0>{0}</0>"
 
-#: src/features/admin/AdminDemos.tsx
-msgid "Last backup"
-msgstr "Last backup"
+#: src/features/admin/OperationsPage.tsx
+msgid "Last beat"
+msgstr "Last beat"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Last error"
+msgstr "Last error"
 
 #: src/features/customers/CustomersDemos.tsx
 msgid "Last order"
@@ -2151,6 +2222,10 @@ msgstr "Last order"
 #: src/features/admin/AdminDemos.tsx
 msgid "Last run"
 msgstr "Last run"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Last success"
+msgstr "Last success"
 
 #: src/features/shops/ShopCard.tsx
 msgid "Last sync:"
@@ -2308,9 +2383,17 @@ msgstr "Loading shops"
 msgid "Loading statistics"
 msgstr "Loading statistics"
 
+#: src/features/admin/OperationsPage.tsx
+msgid "Loading the execution"
+msgstr "Loading the execution"
+
 #: src/features/commerce/timeline.tsx
 msgid "Loading the order's history…"
 msgstr "Loading the order's history…"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Loading the queue and sync health"
+msgstr "Loading the queue and sync health"
 
 #: src/features/shops/ShopCard.tsx
 msgid "Loading the shop's numbers"
@@ -2605,9 +2688,25 @@ msgstr "No active task"
 msgid "No authenticator app yet."
 msgstr "No authenticator app yet."
 
+#: src/features/admin/OperationsPage.tsx
+msgid "No automation has run in the last seven days."
+msgstr "No automation has run in the last seven days."
+
+#: src/features/admin/OperationsPage.tsx
+msgid "No automation has run yet."
+msgstr "No automation has run yet."
+
 #: src/features/shops/ShopsPage.tsx
 msgid "No connection needs you. A disconnected shop stays paused until you connect it again."
 msgstr "No connection needs you. A disconnected shop stays paused until you connect it again."
+
+#: src/features/admin/OperationsPage.tsx
+msgid "No Etsy notice has arrived yet."
+msgstr "No Etsy notice has arrived yet."
+
+#: src/features/admin/OperationsPage.tsx
+msgid "No job ran out of retries."
+msgstr "No job ran out of retries."
 
 #: src/features/commerce/ProductsPage.tsx
 msgid "No listing matches this view."
@@ -2647,6 +2746,10 @@ msgstr "No orders yet."
 #: src/shared/i18n/format.ts
 msgid "No reason given"
 msgstr "No reason given"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "No reconciliation has run yet."
+msgstr "No reconciliation has run yet."
 
 #: src/features/shops/ShopStats.tsx
 msgid "No refunds or cancellations in these orders."
@@ -2700,6 +2803,14 @@ msgstr "No tracking yet"
 msgid "No WebGL · list view"
 msgstr "No WebGL · list view"
 
+#: src/features/admin/OperationsPage.tsx
+msgid "No worker has beaten in the last seven days."
+msgstr "No worker has beaten in the last seven days."
+
+#: src/features/admin/OperationsPage.tsx
+msgid "No worker is running: jobs wait until one starts."
+msgstr "No worker is running: jobs wait until one starts."
+
 #: src/shared/demo/office.ts
 msgid "Noa"
 msgstr "Noa"
@@ -2751,6 +2862,10 @@ msgstr "Not connected"
 #: src/features/shops/Capabilities.tsx
 msgid "Not known"
 msgstr "Not known"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Not processed yet"
+msgstr "Not processed yet"
 
 #: src/features/shops/Capabilities.tsx
 msgid "Not set up yet. HTCO checks Etsy for new orders regularly instead."
@@ -2887,6 +3002,14 @@ msgstr "On time"
 msgid "One button, Etsy asks you to allow it, and you are back."
 msgstr "One button, Etsy asks you to allow it, and you are back."
 
+#: src/features/admin/OperationsPage.tsx
+msgid "Only the Owner and Admins retry jobs."
+msgstr "Only the Owner and Admins retry jobs."
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Only the workspace Owner and Admins see the queue and sync health."
+msgstr "Only the workspace Owner and Admins see the queue and sync health."
+
 #: src/features/shops/connectEtsy.tsx
 msgid "Only the workspace owner can connect a shop."
 msgstr "Only the workspace owner can connect a shop."
@@ -2914,10 +3037,6 @@ msgstr "Open for {years, plural, one {# year} other {# years}}, since {since}:"
 #: src/features/office/EngineeringPage.tsx
 msgid "Open incident"
 msgstr "Open incident"
-
-#: src/features/admin/AdminDemos.tsx
-msgid "Open incidents"
-msgstr "Open incidents"
 
 #: src/features/overview/OverviewPage.tsx
 msgid "Open incidents:"
@@ -2951,6 +3070,15 @@ msgstr "Open Shops"
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Open the authenticator app on your phone."
 msgstr "Open the authenticator app on your phone."
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Open the execution"
+msgstr "Open the execution"
+
+#. placeholder {0}: e.automation_id
+#: src/features/admin/OperationsPage.tsx
+msgid "Open the execution of {0}"
+msgstr "Open the execution of {0}"
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "Open the web app"
@@ -3059,14 +3187,14 @@ msgstr "Orders, last 7 days"
 msgid "Orders, revenue and rating appear here while the shop is connected."
 msgstr "Orders, revenue and rating appear here while the shop is connected."
 
+#: src/features/admin/OperationsPage.tsx
+msgid "Outbox failures"
+msgstr "Outbox failures"
+
 #. placeholder {0}: count(sales.orders)
 #: src/features/shops/ShopStats.tsx
 msgid "over {0} orders"
 msgstr "over {0} orders"
-
-#: src/features/admin/AdminDemos.tsx
-msgid "Overall"
-msgstr "Overall"
 
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
@@ -3112,6 +3240,14 @@ msgstr "Owners and Admins sign in with a password and a code from an app such as
 #: src/features/team/TeamPage.tsx
 msgid "Owners and Admins work in every shop of the workspace."
 msgstr "Owners and Admins work in every shop of the workspace."
+
+#: src/features/admin/OperationsPage.tsx
+msgid "p50"
+msgstr "p50"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "p95"
+msgstr "p95"
 
 #: src/app/RouteStates.tsx
 msgid "Page not found"
@@ -3348,14 +3484,22 @@ msgstr "Quality & Operations Supervisor"
 msgid "Question about A3 print size"
 msgstr "Question about A3 print size"
 
-#: src/features/admin/AdminDemos.tsx
-msgid "Queue depth"
-msgstr "Queue depth"
+#: src/features/admin/OperationsPage.tsx
+msgid "Queue and sync"
+msgstr "Queue and sync"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Queue numbers"
+msgstr "Queue numbers"
 
 #: src/features/work/demoScreens.tsx
 #: src/shared/ui/kit/status.tsx
 msgid "Queued"
 msgstr "Queued"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Queued again. It runs as soon as a worker is free."
+msgstr "Queued again. It runs as soon as a worker is free."
 
 #: src/app/shell/CommandMenu.tsx
 #: src/app/shell/Sidebar.tsx
@@ -3438,9 +3582,17 @@ msgstr "Read-only"
 msgid "Ready today"
 msgstr "Ready today"
 
+#: src/features/admin/OperationsPage.tsx
+msgid "Received"
+msgstr "Received"
+
 #: src/features/customers/CustomersDemos.tsx
 msgid "Recency"
 msgstr "Recency"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Recent executions"
+msgstr "Recent executions"
 
 #: src/features/customers/CustomersPage.tsx
 msgid "Recent reviews are all four or five stars."
@@ -3449,6 +3601,10 @@ msgstr "Recent reviews are all four or five stars."
 #: src/features/admin/AdminDemos.tsx
 msgid "Recent runs"
 msgstr "Recent runs"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Reconcile"
+msgstr "Reconcile"
 
 #: src/features/shops/reconnect.tsx
 #: src/features/shops/ShopsPage.tsx
@@ -3564,6 +3720,10 @@ msgstr "Reject"
 msgid "Rejected"
 msgstr "Rejected"
 
+#: src/features/admin/OperationsPage.tsx
+msgid "Release"
+msgstr "Release"
+
 #: src/features/office/EngineeringPage.tsx
 msgid "Reliability"
 msgstr "Reliability"
@@ -3643,9 +3803,34 @@ msgstr "Reset your password"
 msgid "Resolve late orders #3152, #3160"
 msgstr "Resolve late orders #3152, #3160"
 
-#: src/features/admin/AdminDemos.tsx
-msgid "Response time"
-msgstr "Response time"
+#: src/features/admin/OperationsPage.tsx
+msgid "Retries"
+msgstr "Retries"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Retry"
+msgstr "Retry"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Retry the execution"
+msgstr "Retry the execution"
+
+#. placeholder {0}: job.kind
+#: src/features/admin/OperationsPage.tsx
+msgid "Retry the job {0}"
+msgstr "Retry the job {0}"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Retrying"
+msgstr "Retrying"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Retrying executions is off on this server."
+msgstr "Retrying executions is off on this server."
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Retrying…"
+msgstr "Retrying…"
 
 #. placeholder {0}: String(i + 1)
 #: src/features/commerce/ShippingPage.tsx
@@ -3770,6 +3955,11 @@ msgstr "Root cause found"
 msgid "Rotate token"
 msgstr "Rotate token"
 
+#: src/features/admin/OperationsPage.tsx
+msgid "Run"
+msgstr "Run"
+
+#: src/features/admin/OperationsPage.tsx
 #: src/features/work/demoScreens.tsx
 #: src/shared/ui/kit/status.tsx
 msgid "Running"
@@ -3778,6 +3968,10 @@ msgstr "Running"
 #: src/features/office/FloorPage.tsx
 msgid "Running now"
 msgstr "Running now"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Runs"
+msgstr "Runs"
 
 #: src/features/admin/AdminDemos.tsx
 msgid "Runs today"
@@ -3918,10 +4112,6 @@ msgstr "Service"
 msgid "Service departments"
 msgstr "Service departments"
 
-#: src/features/admin/AdminDemos.tsx
-msgid "Services"
-msgstr "Services"
-
 #: src/features/security/SecurityPage.tsx
 msgid "Set one up"
 msgstr "Set one up"
@@ -3951,7 +4141,6 @@ msgid "Set your password"
 msgstr "Set your password"
 
 #: src/app/shell/UserMenu.tsx
-#: src/features/admin/AdminDemos.tsx
 #: src/features/customers/CustomersDemos.tsx
 #: src/features/finance/FinanceDemos.tsx
 #: src/features/office/FloorPage.tsx
@@ -4045,6 +4234,7 @@ msgstr "Ships today"
 msgid "Shon"
 msgstr "Shon"
 
+#: src/features/admin/OperationsPage.tsx
 #: src/features/finance/FinanceDemos.tsx
 #: src/features/shops/ShopStats.tsx
 #: src/shared/ui/kit/live.tsx
@@ -4078,6 +4268,10 @@ msgstr "Shop settings"
 #: src/features/shops/ShopStats.tsx
 msgid "Shop statistics"
 msgstr "Shop statistics"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Shop syncs"
+msgstr "Shop syncs"
 
 #: src/features/overview/OverviewPage.tsx
 #: src/features/shops/ShopCard.tsx
@@ -4276,7 +4470,6 @@ msgstr "Spent this month:"
 msgid "Spent today"
 msgstr "Spent today"
 
-#: src/features/admin/AdminDemos.tsx
 #: src/features/office/EngineeringPage.tsx
 msgid "Stable"
 msgstr "Stable"
@@ -4284,6 +4477,22 @@ msgstr "Stable"
 #: src/features/office/FloorPage.tsx
 msgid "Stable performance"
 msgstr "Stable performance"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Stale"
+msgstr "Stale"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Stale shops"
+msgstr "Stale shops"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Started"
+msgstr "Started"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "State"
+msgstr "State"
 
 #: src/features/shops/ShopsPage.tsx
 msgid "Statistics"
@@ -4294,6 +4503,7 @@ msgid "Statistics appear here once a shop is connected."
 msgstr "Statistics appear here once a shop is connected."
 
 #: src/features/admin/AdminDemos.tsx
+#: src/features/admin/OperationsPage.tsx
 #: src/features/commerce/demoScreens.tsx
 #: src/features/commerce/OrdersPage.tsx
 #: src/features/commerce/ShippingPage.tsx
@@ -4333,9 +4543,21 @@ msgstr "Step 2 of 2 · Security"
 msgid "Stock is low on all four. Nothing changes until you say so."
 msgstr "Stock is low on all four. Nothing changes until you say so."
 
+#: src/features/admin/OperationsPage.tsx
+msgid "Stopped"
+msgstr "Stopped"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Stopping"
+msgstr "Stopping"
+
 #: src/features/admin/AdminDemos.tsx
 msgid "Succeeded"
 msgstr "Succeeded"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Success"
+msgstr "Success"
 
 #: src/features/work/demoScreens.tsx
 msgid "Summary"
@@ -4400,10 +4622,6 @@ msgstr "System"
 #: src/features/settings/AppearanceChoices.tsx
 msgid "System follows your device, also when it changes."
 msgstr "System follows your device, also when it changes."
-
-#: src/features/admin/AdminDemos.tsx
-msgid "System health"
-msgstr "System health"
 
 #: src/features/settings/SettingsPage.tsx
 msgid "System incidents"
@@ -4501,6 +4719,18 @@ msgstr "The devices cannot be loaded right now. Try again shortly."
 msgid "The email or the password is wrong."
 msgstr "The email or the password is wrong."
 
+#: src/features/admin/OperationsPage.tsx
+msgid "The execution could not be read."
+msgstr "The execution could not be read."
+
+#: src/features/admin/OperationsPage.tsx
+msgid "The execution could not be retried. Try again shortly."
+msgstr "The execution could not be retried. Try again shortly."
+
+#: src/features/admin/OperationsPage.tsx
+msgid "The execution goes back to its retry."
+msgstr "The execution goes back to its retry."
+
 #: src/features/settings/AppearanceChoices.tsx
 msgid "The ground behind your panels."
 msgstr "The ground behind your panels."
@@ -4508,6 +4738,10 @@ msgstr "The ground behind your panels."
 #: src/features/commerce/timeline.tsx
 msgid "The history could not be read."
 msgstr "The history could not be read."
+
+#: src/features/admin/OperationsPage.tsx
+msgid "The job could not be retried. Try again shortly."
+msgstr "The job could not be retried. Try again shortly."
 
 #: src/features/commerce/OrdersPage.tsx
 msgid "the last 12 months"
@@ -4549,6 +4783,14 @@ msgstr "The Owner's role, shops and membership cannot be changed."
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "The passwords are not the same."
 msgstr "The passwords are not the same."
+
+#: src/features/admin/OperationsPage.tsx
+msgid "The queue and sync health are not available on this server yet."
+msgstr "The queue and sync health are not available on this server yet."
+
+#: src/features/admin/OperationsPage.tsx
+msgid "The queue and sync health could not be loaded. Try again shortly."
+msgstr "The queue and sync health could not be loaded. Try again shortly."
 
 #: src/features/team/TeamPage.tsx
 msgid "The server did not accept this change."
@@ -4675,6 +4917,10 @@ msgstr "This is not available on this server yet."
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "This is your current password. Choose a different one."
 msgstr "This is your current password. Choose a different one."
+
+#: src/features/admin/OperationsPage.tsx
+msgid "This job is no longer dead-lettered."
+msgstr "This job is no longer dead-lettered."
 
 #: src/features/team/TeamPage.tsx
 msgid "This member or shop is no longer in the workspace."
@@ -4916,6 +5162,7 @@ msgid "Trend:"
 msgstr "Trend:"
 
 #: src/app/RouteStates.tsx
+#: src/features/admin/OperationsPage.tsx
 #: src/features/overview/OverviewPage.tsx
 #: src/features/shops/reconnect.tsx
 #: src/features/shops/ShopsPage.tsx
@@ -4925,6 +5172,10 @@ msgstr "Try again"
 #: src/features/finance/FinanceDemos.tsx
 msgid "Tue"
 msgstr "Tue"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Twice a day"
+msgstr "Twice a day"
 
 #: src/features/security/SecurityPage.tsx
 msgid "Two-factor sign-in"
@@ -4986,7 +5237,6 @@ msgstr "updated {when}"
 msgid "updated just now"
 msgstr "updated just now"
 
-#: src/features/admin/AdminDemos.tsx
 #: src/features/office/EngineeringPage.tsx
 msgid "Uptime"
 msgstr "Uptime"
@@ -5013,7 +5263,6 @@ msgstr "Value"
 msgid "Verify and sign in"
 msgstr "Verify and sign in"
 
-#: src/features/admin/AdminDemos.tsx
 #: src/features/work/demoScreens.tsx
 msgid "Version"
 msgstr "Version"
@@ -5043,6 +5292,7 @@ msgstr "Views"
 msgid "vs yesterday"
 msgstr "vs yesterday"
 
+#: src/features/admin/OperationsPage.tsx
 #: src/features/commerce/demoScreens.tsx
 msgid "Waiting"
 msgstr "Waiting"
@@ -5100,6 +5350,10 @@ msgstr "Watch it here"
 msgid "Web"
 msgstr "Web"
 
+#: src/features/admin/OperationsPage.tsx
+msgid "Webhook intake"
+msgstr "Webhook intake"
+
 #: src/features/office/EngineeringPage.tsx
 msgid "Webhook retries"
 msgstr "Webhook retries"
@@ -5156,6 +5410,10 @@ msgstr "What waits to ship and what shipped, live from Etsy."
 msgid "What works today"
 msgstr "What works today"
 
+#: src/features/admin/OperationsPage.tsx
+msgid "When"
+msgstr "When"
+
 #: src/features/settings/SettingsPage.tsx
 msgid "When an automation fails"
 msgstr "When an automation fails"
@@ -5193,6 +5451,18 @@ msgstr "Within policy"
 msgctxt "navigation"
 msgid "Work"
 msgstr "Work"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Worker"
+msgstr "Worker"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Workers"
+msgstr "Workers"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Workers running"
+msgstr "Workers running"
 
 #: src/features/shops/ShopsPage.tsx
 msgid "Working"

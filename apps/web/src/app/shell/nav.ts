@@ -90,7 +90,8 @@ export const AREAS: readonly NavArea[] = [
     icon: PulseIcon,
     to: "/admin/health",
     tabs: [
-      ...soon("admin", "health", "automations"),
+      { id: "health", to: "/admin/health", built: true },
+      ...soon("admin", "automations"),
       { id: "members", to: "/settings/team", built: true },
       { id: "settings", to: "/settings", built: true },
     ],

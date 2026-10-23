@@ -71,12 +71,16 @@ describe("Admin › Health (slice 5.9)", () => {
     const letters = await table("Dead letters");
     expect(within(letters).getByText("MarketplaceUnavailableError")).toBeInTheDocument();
 
-    await user.click(within(letters).getByRole("button", { name: "Retry the job etsy.webhook_event" }));
+    await user.click(
+      within(letters).getByRole("button", { name: "Retry the job etsy.webhook_event" }),
+    );
 
     expect(await screen.findByText(/Queued again/)).toBeInTheDocument();
     expect(backend.state.operations.dead).not.toContain(DEAD_JOB);
     expect(
-      backend.requests.some((r) => r.method === "POST" && r.url.includes(`/dead-letters/${DEAD_JOB}/retry`)),
+      backend.requests.some(
+        (r) => r.method === "POST" && r.url.includes(`/dead-letters/${DEAD_JOB}/retry`),
+      ),
     ).toBe(true);
   });
 
@@ -89,7 +93,9 @@ describe("Admin › Health (slice 5.9)", () => {
     expect(await within(sheet).findByText("etsy.receipts.read")).toBeInTheDocument();
     await user.click(within(sheet).getByRole("button", { name: "Retry the execution" }));
 
-    expect(await within(sheet).findByText("The execution goes back to its retry.")).toBeInTheDocument();
+    expect(
+      await within(sheet).findByText("The execution goes back to its retry."),
+    ).toBeInTheDocument();
     expect(backend.state.operations.retriedExecutions).toEqual([DEAD_EXECUTION]);
   });
 
