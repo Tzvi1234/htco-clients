@@ -51,6 +51,23 @@ describe("token-radii (DESIGN.md radius roles)", () => {
         ],
       },
       {
+        // Arbitrary and named-group variants (Codex review of #44).
+        code: 'const f = "data-[selected]:rounded-[12px] max-[800px]:rounded-[4px] group-hover/row:rounded-[6px]";',
+        output:
+          'const f = "data-[selected]:rounded-menu-item max-[800px]:rounded-tag group-hover/row:rounded-control";',
+        errors: [
+          error("data-[selected]:rounded-[12px]", "rounded-menu-item"),
+          error("max-[800px]:rounded-[4px]", "rounded-tag"),
+          error("group-hover/row:rounded-[6px]", "rounded-control"),
+        ],
+      },
+      {
+        // Other class syntax in the same list does not hide the radius.
+        code: 'const g = "rounded-[4px] [&+&]:border-t";',
+        output: 'const g = "rounded-tag [&+&]:border-t";',
+        errors: [error("rounded-[4px]", "rounded-tag")],
+      },
+      {
         code: 'const e = "rounded-s-[6px]";',
         output: 'const e = "rounded-s-control";',
         errors: [error("rounded-s-[6px]", "rounded-s-control")],
