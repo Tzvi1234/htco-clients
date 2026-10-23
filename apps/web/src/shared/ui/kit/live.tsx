@@ -3,6 +3,7 @@
 import { Trans, useLingui } from "@lingui/react/macro";
 import { useState } from "react";
 
+import { FilterChips } from "./form.tsx";
 import { Dot, SectionLabel } from "./parts.tsx";
 import { useLocale } from "../../i18n/LocaleProvider.tsx";
 import { cx } from "../../lib/cx.ts";
@@ -87,6 +88,7 @@ export interface ShopChoice {
 
 /** The shop a commerce screen shows, chosen among the user's shops (only with more than one). */
 export function ShopChips({ live }: { live: ShopChoice }) {
+  const { t } = useLingui();
   const shops = live.shops ?? [];
   if (shops.length < 2) return null;
   return (
@@ -94,29 +96,12 @@ export function ShopChips({ live }: { live: ShopChoice }) {
       <SectionLabel>
         <Trans>Shop</Trans>
       </SectionLabel>
-      <div className="flex flex-wrap gap-1.5">
-        {shops.map((shop) => {
-          const on = shop.id === live.shop?.id;
-          return (
-            <button
-              key={shop.id}
-              type="button"
-              aria-pressed={on}
-              onClick={() => {
-                live.choose(shop.id);
-              }}
-              className={cx(
-                "inline-flex h-9 max-w-full items-center rounded-pill border px-3 text-caption outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus",
-                on
-                  ? "border-inverse bg-inverse text-on-inverse"
-                  : "border-line-strong hover:border-line-hover",
-              )}
-            >
-              <bdi className="truncate">{shop.name}</bdi>
-            </button>
-          );
-        })}
-      </div>
+      <FilterChips
+        label={t`Shop`}
+        value={live.shop?.id}
+        onChange={live.choose}
+        options={shops.map((shop) => ({ id: shop.id, label: shop.name }))}
+      />
     </div>
   );
 }
