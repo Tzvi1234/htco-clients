@@ -5173,6 +5173,14 @@ msgstr "Your office opens in the browser."
 msgid "Your other devices will be signed out."
 msgstr "Your other devices will be signed out."
 
+#: src/features/shops/shopActions.tsx
+msgid "Your session has ended. Sign in again, then disconnect the shop."
+msgstr "Your session has ended. Sign in again, then disconnect the shop."
+
+#: src/features/shops/shopActions.tsx
+msgid "Your session has ended. Sign in again, then remove the shop."
+msgstr "Your session has ended. Sign in again, then remove the shop."
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "Your shop runs. You decide."
 msgstr "Your shop runs. You decide."
