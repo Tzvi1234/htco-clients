@@ -8,7 +8,7 @@ import { describe, expect, it, vi } from "vitest";
 import { App } from "../../app/App.tsx";
 import { browser } from "../../shared/lib/browser.ts";
 import { memoryStorage } from "../../shared/lib/storage.ts";
-import { demoShops, fakeBackend, type FakeState } from "../../test/fakeApi.ts";
+import { demoShops, fakeBackend, fakeIntegration, type FakeState } from "../../test/fakeApi.ts";
 
 async function open(path: string, state: Partial<FakeState> = {}) {
   const backend = fakeBackend(state);
@@ -651,4 +651,95 @@ describe("Codex review of #31", () => {
       vi.useRealTimers();
     }
   });
+});
+
+describe("post-merge review (2026-10-23)", () => {
+  const WILLOW = "d0000000-0000-7000-8000-000000000001";
+  const onlyWillow: Partial<FakeState> = {
+    shops: [{ id: WILLOW, name: "Willow & Wick", status: "active" }],
+    integrations: [fakeIntegration(WILLOW, "ok")],
+  };
+  const problem = (status: number, type: string) =>
+    ({
+      data: undefined,
+      error: { type: `https://ht-co.app/problems/${type}`, title: type, status },
+      response: new Response(null, { status }),
+    }) as never;
+
+  it("confirms removing the last shop instead of switching to the empty page silently", async () => {
+    const { user, backend } = await open("/shops", { ...owner, ...onlyWillow, steppedUp: true });
+
+    const card = await screen.findByRole("article", { name: "Willow & Wick" });
+    await user.click(within(card).getByRole("button", { name: "Remove Willow & Wick" }));
+    const dialog = await screen.findByRole("alertdialog", { name: "Remove Willow & Wick?" });
+    await user.type(
+      within(dialog).getByLabelText("Type the shop's name to confirm"),
+      "Willow & Wick",
+    );
+    await user.click(within(dialog).getByRole("button", { name: "Remove shop" }));
+
+    expect(await screen.findByText("No shops yet")).toBeInTheDocument();
+    expect(backend.state.removals).toEqual([WILLOW]);
+    expect(screen.getByText("Willow & Wick and its data were removed.")).toBeInTheDocument();
+  });
+
+  it("forgets a disconnected shop's live orders (buyer names) at once", async () => {
+    const { user, backend, history } = await open("/commerce/orders", {
+      ...owner,
+      ...onlyWillow,
+      steppedUp: true,
+    });
+    const table = await screen.findByRole("table", { name: "Orders" }, { timeout: 8000 });
+    expect(within(table).getAllByText("Emma R.").length).toBeGreaterThan(0);
+
+    act(() => {
+      history.push("/shops");
+    });
+    const card = await screen.findByRole("article", { name: "Willow & Wick" });
+    await user.click(within(card).getByRole("button", { name: "Disconnect Willow & Wick" }));
+    const confirm = await screen.findByRole("alertdialog", { name: "Disconnect Willow & Wick?" });
+    await user.click(within(confirm).getByRole("button", { name: "Disconnect" }));
+    expect(await screen.findByText("Willow & Wick is disconnected.")).toBeInTheDocument();
+
+    // The orders are not answered again yet: what shows is whatever the browser still holds.
+    const get = backend.client.GET.bind(backend.client);
+    vi.spyOn(backend.client, "GET").mockImplementation(((path: string, init: unknown) =>
+      path.endsWith("/orders")
+        ? new Promise(() => undefined)
+        : get(path as never, init as never)) as never);
+    act(() => {
+      history.push("/commerce/orders");
+    });
+    await screen.findByRole("heading", { level: 1, name: "Orders" });
+
+    expect(screen.queryAllByText("Emma R.")).toHaveLength(0);
+  });
+
+  it.each([
+    ["removing", "DELETE", "Remove Willow & Wick", "Remove shop", "remove"],
+    ["disconnecting", "POST", "Disconnect Willow & Wick", "Disconnect", "disconnect"],
+  ] as const)(
+    "says the session ended when %s answers 401, instead of 'try again shortly'",
+    async (_, method, trigger, press, verb) => {
+      const { user, backend } = await open("/shops", { ...owner, ...demoShops(), steppedUp: true });
+      const refused = vi
+        .spyOn(backend.client, method)
+        .mockResolvedValueOnce(problem(401, "not-authenticated"));
+
+      const card = await screen.findByRole("article", { name: "Willow & Wick" });
+      await user.click(within(card).getByRole("button", { name: trigger }));
+      const dialog = await screen.findByRole("alertdialog");
+      if (verb === "remove")
+        await user.type(
+          within(dialog).getByLabelText("Type the shop's name to confirm"),
+          "Willow & Wick",
+        );
+      await user.click(within(dialog).getByRole("button", { name: press }));
+
+      expect(
+        await screen.findByText(`Your session has ended. Sign in again, then ${verb} the shop.`),
+      ).toBeInTheDocument();
+      refused.mockRestore();
+    },
+  );
 });

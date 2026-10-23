@@ -9,6 +9,7 @@ Client-specific documentation. Product, plan, system architecture and engineerin
 | **UX** | [Navigation map](ux/NAVIGATION_MAP.md) · [Content style](ux/CONTENT_STYLE.md) · [Accessibility and right-to-left](ux/ACCESSIBILITY.md) |
 | **Decisions** | [Client ADRs](adr/README.md) |
 | **Features** | [Feature docs and template](features/README.md) |
+| **Reviews** | [Post-merge review of #37 to #41](reviews/2026-10-23-post-merge-review.md) (2026-10-23) |
 
 ## Created later, in the phase that needs them
 

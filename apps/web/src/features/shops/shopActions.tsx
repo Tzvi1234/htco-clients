@@ -131,6 +131,9 @@ export function useDisconnects(organizationId: string): Disconnects {
     },
     onSuccess: async (_, shop) => {
       setTarget(null);
+      // The shop's live data (orders carry buyer names) is not kept once HTCO's access is gone;
+      // its screens ask again and say the shop is disconnected (post-merge review, 2026-10-23).
+      queries.removeQueries({ queryKey: ["live", shop.id] });
       await queries.invalidateQueries({ queryKey: shopKeys.list(organizationId) });
       await queries.invalidateQueries({ queryKey: shopKeys.integrations(organizationId) });
       setDone(shop.name);
@@ -144,6 +147,9 @@ export function useDisconnects(organizationId: string): Disconnects {
     const error = disconnect.error;
     if (error === null) return undefined;
     if (error instanceof ApiError) {
+      // The session ended (expired, signed out elsewhere): trying again here cannot work.
+      if (error.status === 401)
+        return t`Your session has ended. Sign in again, then disconnect the shop.`;
       switch (error.type) {
         case "step-up-required":
           return undefined;
@@ -259,6 +265,8 @@ export function useRemovals(organizationId: string): Removals {
     const error = remove.error;
     if (error === null) return undefined;
     if (error instanceof ApiError) {
+      if (error.status === 401)
+        return t`Your session has ended. Sign in again, then remove the shop.`;
       switch (error.type) {
         case "step-up-required":
           return undefined;

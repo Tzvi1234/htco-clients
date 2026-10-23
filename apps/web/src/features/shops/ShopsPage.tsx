@@ -155,14 +155,6 @@ function Shops({
       </FlowRow>
     );
 
-  if (shops.data.length === 0)
-    return (
-      <FlowRow layout="halves" className="items-stretch">
-        <NoShops etsy={etsy} />
-        <HowConnecting />
-      </FlowRow>
-    );
-
   // A role that lost access to connection details must not keep seeing cached ones.
   const byShop = new Map(
     (seesConnections ? (integrations.data ?? []) : []).map((i) => [i.shop_id, i]),
@@ -223,6 +215,23 @@ function Shops({
           <Trans>Try again</Trans>
         </Button>
       </div>,
+    );
+
+  // No shop (left): the confirmation of removing the last one stays on screen above the way to
+  // connect a shop, and so do the dialogs (post-merge review, 2026-10-23).
+  if (shops.data.length === 0)
+    return (
+      <>
+        {notices.length === 0 ? null : (
+          <div className="flex flex-wrap items-center gap-3">{notices}</div>
+        )}
+        <FlowRow layout="halves" className="items-stretch">
+          <NoShops etsy={etsy} />
+          <HowConnecting />
+        </FlowRow>
+        {disconnects.dialogs}
+        {removals.dialogs}
+      </>
     );
 
   // The focus: the shops in three groups that add up to all of them (for the roles that see

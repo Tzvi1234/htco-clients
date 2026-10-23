@@ -5173,6 +5173,14 @@ msgstr "המשרד שלך נפתח בדפדפן."
 msgid "Your other devices will be signed out."
 msgstr "המכשירים האחרים שלכם ינותקו מהחשבון."
 
+#: src/features/shops/shopActions.tsx
+msgid "Your session has ended. Sign in again, then disconnect the shop."
+msgstr "פג תוקף ההתחברות. צריך להתחבר שוב, ואז לנתק את החנות."
+
+#: src/features/shops/shopActions.tsx
+msgid "Your session has ended. Sign in again, then remove the shop."
+msgstr "פג תוקף ההתחברות. צריך להתחבר שוב, ואז להסיר את החנות."
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "Your shop runs. You decide."
 msgstr "החנות רצה. ההחלטה שלך."
