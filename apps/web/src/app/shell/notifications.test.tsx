@@ -213,6 +213,14 @@ describe("the notification bell", () => {
     await vi.waitFor(() => {
       expect(backend.state.reads).toEqual([{ ids: notifications.slice(0, 6).map((n) => n.id) }]);
     });
+    // Codex on #48: the older unread ones come into view next, and can be read and marked.
+    expect(
+      await within(panel).findByText(/Listing 1606/, undefined, { timeout: 5000 }),
+    ).toBeVisible();
+    await user.click(within(panel).getByRole("button", { name: "Mark all read" }));
+    await vi.waitFor(() => {
+      expect(backend.state.reads[1]).toEqual({ ids: notifications.slice(6).map((n) => n.id) });
+    });
   });
 
   it("says when Mark all read failed, and keeps the unread ones", async () => {
@@ -248,6 +256,52 @@ describe("the notification bell", () => {
     await vi.waitFor(() => {
       expect(within(panel).queryByText("Some workspaces' notifications did not load")).toBeNull();
     });
+  });
+
+  it("marks all read across two workspaces: each one's IDs under its own workspace", async () => {
+    const other = "b0000000-0000-7000-8000-0000000000bb";
+    const { user, backend } = await open({
+      otherOrgs: [other],
+      notificationWorkspaces: { "f0000000-0000-7000-8000-000000000002": other },
+    });
+    await user.click(await bell("Notifications, 2 unread"));
+    const panel = await screen.findByRole("dialog", { name: "Notifications" });
+    await user.click(within(panel).getByRole("button", { name: "Mark all read" }));
+
+    await vi.waitFor(() => {
+      expect(backend.state.reads).toHaveLength(2);
+    });
+    const sent = backend.state.readWorkspaces.map((workspace, index) => [
+      workspace,
+      backend.state.reads[index],
+    ]);
+    expect(sent).toEqual(
+      expect.arrayContaining([
+        [ORG, { ids: ["f0000000-0000-7000-8000-000000000001"] }],
+        [other, { ids: ["f0000000-0000-7000-8000-000000000002"] }],
+      ]),
+    );
+  });
+
+  it("opens another workspace's incident in that workspace, even from a center on the first", async () => {
+    // Quill's review of #48: the URL's workspace wins over the one picked before.
+    const other = "b0000000-0000-7000-8000-0000000000bb";
+    const dead = "e0000000-0000-7000-8000-000000000003";
+    const { user } = await open(
+      {
+        otherOrgs: [other],
+        incidentWorkspaces: { [dead]: other },
+        notificationWorkspaces: { "f0000000-0000-7000-8000-000000000001": other },
+      },
+      "en",
+      `/incidents?workspace=${ORG}`,
+    );
+    await user.click(await bell(/^Notifications, \d+ unread/));
+    const panel = await screen.findByRole("dialog", { name: "Notifications" });
+    await user.click(within(panel).getByRole("link", { name: /New incident: Automation gave up/ }));
+
+    expect(await screen.findByRole("region", { name: "Automation gave up" })).toBeVisible();
+    expect(screen.queryByText("This incident is not available to you.")).toBeNull();
   });
 
   it("opens the incident a notification is about, and marks it read", async () => {

@@ -32,15 +32,39 @@ function retry(failures: number, error: Error): boolean {
   return failures < 1;
 }
 
+/** Pages of 200 the center reads at most (1,000 incidents); past them it says "more than". */
+export const INCIDENT_PAGES = 5;
+
+/** A workspace's incidents, every page up to the bound; `more` when the bound cut it short. */
+export interface IncidentList {
+  items: IncidentSummary[];
+  more: boolean;
+}
+
 export function incidentsQuery(api: ApiClient, organizationId: string, state: "open" | "all") {
   return queryOptions({
     queryKey: incidentKeys.list(organizationId, state),
-    queryFn: async (): Promise<IncidentSummary[]> => {
-      const { data, error, response } = await api.GET("/v1/incidents", {
-        params: { query: { organization_id: organizationId, state } },
-      });
-      if (data === undefined) throw apiError(response, error);
-      return data.items;
+    // Follows `next_cursor` (Codex review of #48), so the focus never counts only the newest page.
+    queryFn: async (): Promise<IncidentList> => {
+      const items: IncidentSummary[] = [];
+      let cursor: string | undefined;
+      for (let page = 0; page < INCIDENT_PAGES; page += 1) {
+        const { data, error, response } = await api.GET("/v1/incidents", {
+          params: {
+            query: {
+              organization_id: organizationId,
+              state,
+              ...(cursor === undefined ? {} : { cursor }),
+            },
+          },
+        });
+        if (data === undefined) throw apiError(response, error);
+        items.push(...data.items);
+        if (data.next_cursor === null || data.next_cursor === undefined)
+          return { items, more: false };
+        cursor = data.next_cursor;
+      }
+      return { items, more: true };
     },
     refetchInterval: REFRESH_MS,
     retry,

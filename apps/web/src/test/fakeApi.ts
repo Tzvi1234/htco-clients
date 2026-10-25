@@ -93,8 +93,15 @@ export interface FakeState {
   liveBusy?: boolean;
   /** The organization's incidents (`GET /v1/incidents`), newest first as the API sends them. */
   incidents: FakeIncident[];
-  /** "fail": the incident center answers 503 incidents-unavailable; "hang": it never answers. */
-  incidentsTrouble?: "fail" | "hang" | undefined;
+  /** "fail": the incident center answers 503 incidents-unavailable; "hang": it never answers;
+   * "forbidden": the role may not view incidents (403). */
+  incidentsTrouble?: "fail" | "hang" | "forbidden" | undefined;
+  /** How many incidents one page of `GET /v1/incidents` holds (the API's `limit`, 200). */
+  incidentPageSize?: number | undefined;
+  /** Incidents (by id) that belong to another workspace; the rest are the first workspace's. */
+  incidentWorkspaces?: Record<string, string> | undefined;
+  /** Notifications (by id) that belong to another workspace; the rest are the first's. */
+  notificationWorkspaces?: Record<string, string> | undefined;
   /** A 409 problem the next incident step answers with instead of moving it. */
   stepProblem?: "illegal-incident-step" | "evidence-required" | "incident-moved" | undefined;
   /** The steps asked for (`POST /v1/incidents/{id}/transitions`), in order. */
@@ -111,6 +118,8 @@ export interface FakeState {
   incidentLists: string[];
   /** The bodies of `POST /v1/notifications/read`, in order. */
   reads: unknown[];
+  /** The workspace of each `POST /v1/notifications/read`, in the same order as `reads`. */
+  readWorkspaces: string[];
   /**
    * True: orders, Home's sales and the statistics come from the stored order history (slice
    * 5.6), synced four minutes ago (40 with "stale"); one order comes with its status timeline.
@@ -295,6 +304,7 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
     steps: [],
     notifications: [],
     reads: [],
+    readWorkspaces: [],
     incidentLists: [],
     exports: [],
     resyncs: [],
@@ -638,7 +648,14 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
     if (/^(GET|POST) \/v1\/incidents/.test(route)) {
       if (state.incidentsTrouble === "hang") return new Promise<Response>(() => undefined);
       if (state.incidentsTrouble === "fail") return problem(503, "incidents-unavailable");
+      if (state.incidentsTrouble === "forbidden") return problem(403, "forbidden");
     }
+    // Every call names its workspace; an incident or notification of another one is not there.
+    const asked = url.searchParams.get("organization_id") ?? org;
+    const inWorkspace = (incident: FakeIncident) =>
+      (state.incidentWorkspaces?.[incident.id] ?? org) === asked;
+    const noticeHere = (notice: FakeNotification) =>
+      (state.notificationWorkspaces?.[notice.id] ?? org) === asked;
     const shaped = (incident: FakeIncident): FakeIncident => ({
       ...incident,
       can_update: incident.can_update && updates(),
@@ -650,6 +667,7 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
       const shop = url.searchParams.get("shop_id");
       const receipt = url.searchParams.get("receipt_id");
       const items = state.incidents
+        .filter(inWorkspace)
         .filter((incident) => all || incident.is_open)
         .filter((incident) => shop === null || incident.shop_id === shop)
         .filter((incident) => receipt === null || String(incident.receipt_id) === receipt)
@@ -661,18 +679,30 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
           delete summary.next_states;
           return summary;
         });
-      return json(200, { items, next_cursor: null });
+      // Keyset pages as the API sends them: the cursor here is the next page's offset.
+      const size = Math.min(
+        Number(url.searchParams.get("limit") ?? 200),
+        state.incidentPageSize ?? 200,
+      );
+      const from = Number(url.searchParams.get("cursor") ?? 0);
+      const page = items.slice(from, from + size);
+      const more = from + size < items.length;
+      return json(200, { items: page, next_cursor: more ? String(from + size) : null });
     }
     const one = /^GET \/v1\/incidents\/([^/]+)$/.exec(route);
     if (one !== null) {
-      const incident = state.incidents.find((candidate) => candidate.id === one[1]);
+      const incident = state.incidents.find(
+        (candidate) => candidate.id === one[1] && inWorkspace(candidate),
+      );
       return incident === undefined ? problem(404, "not-found") : json(200, shaped(incident));
     }
     const step = /^POST \/v1\/incidents\/([^/]+)\/transitions$/.exec(route);
     if (step !== null) {
       const id = step[1] ?? "";
       state.steps.push({ id, to_state: body["to_state"], note: body["note"] });
-      const index = state.incidents.findIndex((candidate) => candidate.id === id);
+      const index = state.incidents.findIndex(
+        (candidate) => candidate.id === id && inWorkspace(candidate),
+      );
       const incident = state.incidents[index];
       if (incident === undefined) return problem(404, "not-found");
       if (!updates()) return problem(403, "forbidden");
@@ -709,18 +739,22 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
       if (state.notificationsFailFor?.includes(url.searchParams.get("organization_id") ?? ""))
         return problem(503, "incidents-unavailable");
       const unreadOnly = url.searchParams.get("unread_only") === "true";
+      const here = state.notifications.filter(noticeHere);
       return json(200, {
-        items: state.notifications.filter((n) => !unreadOnly || n.read_at === null),
-        unread_count: state.notifications.filter((n) => n.read_at === null).length,
+        items: here.filter((n) => !unreadOnly || n.read_at === null),
+        unread_count: here.filter((n) => n.read_at === null).length,
       });
     }
     if (route === "POST /v1/notifications/read") {
       if (state.readTrouble === "fail") return problem(503, "incidents-unavailable");
       state.reads.push(body);
+      state.readWorkspaces.push(asked);
       const ids = Array.isArray(body["ids"]) ? (body["ids"] as unknown[]) : undefined;
       const at = new Date().toISOString();
       state.notifications = state.notifications.map((n) =>
-        n.read_at === null && (ids === undefined || ids.includes(n.id)) ? { ...n, read_at: at } : n,
+        n.read_at === null && noticeHere(n) && (ids === undefined || ids.includes(n.id))
+          ? { ...n, read_at: at }
+          : n,
       );
       return json(204, null);
     }

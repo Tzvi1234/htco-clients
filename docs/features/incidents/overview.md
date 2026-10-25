@@ -6,8 +6,8 @@
 | **Phase / slices** | Phase 6 — slice 6.5 (incident center UI and notification bell) |
 | **Platform** | `GET /v1/incidents`, `GET /v1/incidents/{id}`, `POST /v1/incidents/{id}/transitions`, `GET /v1/notifications`, `POST /v1/notifications/read` (tag `incidents`) |
 | **Code** | `apps/web/src/features/incidents/` (`api.ts`, `IncidentState.tsx`, `IncidentsPage.tsx`), `apps/web/src/app/shell/NotificationBell.tsx` |
-| **Status** | In progress (the platform contract is in review) |
-| **Last updated** | 2026-10-23 |
+| **Status** | In review (clients#48); the platform side is merged (platform#87, #98) |
+| **Last updated** | 2026-10-25 |
 
 ## What and why
 
@@ -33,9 +33,16 @@ owner when one opens or closes, and about shipping alerts, sign-ins and shop con
   refused step says why: `illegal-incident-step` and `incident-moved` reload the incident,
   `evidence-required` changes nothing, 403 names the role.
 - **Bell:** the unread count (all the user's workspaces), the newest six notifications in words
-  built on the client from `kind` and `params` (Hebrew and English), "Mark all read" (no `ids`,
-  per workspace), and each notification leading to its subject: an incident opens itself
-  (`/incidents/{id}?workspace=…`) and is marked read.
+  built on the client from `kind` and `params` (Hebrew and English), "Mark all read" (the IDs of
+  the shown unread ones, each workspace's under its own `organization_id`; "Mark these read" when
+  more are unread than shown), and each notification leading to its subject: an incident opens
+  itself (`/incidents/{id}?workspace=…`) and is marked read.
+- **Workspaces:** the address owns the workspace (`?workspace=`). A link from another
+  workspace's notification opens there; switching the workspace on the screen leaves the open
+  incident and shows the other workspace's center.
+- **The order sheet** (Orders, slice 5.7): an order's incidents, asked from its own workspace
+  with `shop_id`, `receipt_id`, `state=all` and `limit=20`, each with its state and a link into
+  the incident center. Nothing shows when the order has none.
 
 ## Acceptance criteria
 
@@ -54,7 +61,9 @@ escalated the ink square, resolved the filled check.
 Loading (`aria-busy`, "Loading incidents…"), nothing open (what opens and closes an incident),
 an empty Resolved or All tab, the incident center not answering (503, "Try again"), a role
 without incidents (403, no retry), an incident not available (404), a role that may view but not
-move (a note instead of steps), and the bell's loading, empty and error states. Every call names
+move (a note instead of steps), and the bell's loading, empty and error states: one workspace's
+notifications not loading ("Some workspaces' notifications did not load", with Try again, the
+others still shown) and a failed "Mark all read" (an alert; the unread ones stay). Every call names
 its workspace; a user in several picks one on the screen (`WorkspacePicker`).
 
 ## Demo data

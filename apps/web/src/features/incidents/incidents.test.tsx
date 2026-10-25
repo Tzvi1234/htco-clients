@@ -9,7 +9,10 @@ import { LocaleProvider } from "../../shared/i18n/LocaleProvider.tsx";
 import { PHONE_QUERY } from "../../shared/lib/useMediaQuery.ts";
 import { memoryStorage } from "../../shared/lib/storage.ts";
 import { fakeBackend, fakeIntegration, type FakeState } from "../../test/fakeApi.ts";
-import { demoIncidents } from "../../test/fakeIncidents.ts";
+import { focusManager } from "@tanstack/react-query";
+import { act } from "@testing-library/react";
+
+import { demoIncidents, fakeIncident } from "../../test/fakeIncidents.ts";
 
 // The incident center (platform slice 6.5): the organization's incidents, each with its
 // evidence, timeline and related order, and the next steps a person may take. Nobody resolves an
@@ -355,6 +358,88 @@ describe("an incident's detail", () => {
     expect(await within(panel).findByRole("alert")).toHaveTextContent(
       /Your role can see incidents but not move them/,
     );
+  });
+});
+
+describe("workspaces and refusals (Quill's review of #48)", () => {
+  const ORG = "a0000000-0000-7000-8000-000000000000";
+  const OTHER = "b0000000-0000-7000-8000-0000000000bb";
+
+  it("switching the workspace leaves the incident of the one before", async () => {
+    const { user, backend } = await open(`/incidents/${DEAD}?workspace=${ORG}`, {
+      otherOrgs: [OTHER],
+    });
+    expect(await screen.findByRole("region", { name: "Automation gave up" })).toBeVisible();
+
+    await user.click(screen.getByRole("radio", { name: OTHER.slice(0, 8) }));
+
+    await settled();
+    expect(screen.queryByRole("region", { name: "Automation gave up" })).toBeNull();
+    expect(screen.queryByText("This incident is not available to you.")).toBeNull();
+    // The other workspace's center asked for its own list, never for the first one's incident.
+    const asked = backend.requests.filter((r) => r.url.includes(`/v1/incidents/${DEAD}`));
+    expect(asked.every((r) => new URL(r.url).searchParams.get("organization_id") === ORG)).toBe(
+      true,
+    );
+  });
+
+  it("says so to a role without incidents (403), with no Try again", async () => {
+    await open("/incidents", { incidentsTrouble: "forbidden" });
+    expect(await screen.findByText(/Your role does not include incidents/)).toBeVisible();
+    expect(screen.queryByRole("button", { name: "Try again" })).toBeNull();
+  });
+
+  it("says an unknown or another workspace's incident is not available, with nothing of it", async () => {
+    await open(`/incidents/e0000000-0000-7000-8000-0000000000ff`);
+    expect(await screen.findByText("This incident is not available to you.")).toBeVisible();
+    expect(screen.queryByRole("button", { name: "Try again" })).toBeNull();
+    expect(screen.queryByRole("heading", { level: 2, name: "Automation gave up" })).toBeNull();
+  });
+});
+
+describe("Codex and Sage on #48: every page, and no cached incident after a refusal", () => {
+  const many = (count: number) =>
+    Array.from({ length: count }, (_, index) =>
+      fakeIncident({
+        id: `e1000000-0000-7000-8000-${String(index).padStart(12, "0")}`,
+        shop_id: WILLOW,
+        receipt_id: 3_412_000_000 + index,
+        detected_at: new Date(Date.now() - (index + 1) * 3_600_000).toISOString(),
+      }),
+    );
+
+  it("follows the cursor, so the focus counts every open incident", async () => {
+    const { backend } = await open("/incidents", { incidents: many(5), incidentPageSize: 2 });
+    expect(await screen.findByRole("heading", { name: "5 open incidents" })).toBeVisible();
+    const pages = backend.state.incidentLists.filter((q) => q.includes("state=open"));
+    expect(pages.map((q) => new URLSearchParams(q).get("cursor"))).toEqual([null, "2", "4"]);
+  });
+
+  it("says more than it read when the pages run past the bound, never a false total", async () => {
+    await open("/incidents", { incidents: many(30), incidentPageSize: 2 });
+    expect(
+      await screen.findByRole("heading", { name: "More than 10 open incidents" }),
+    ).toBeVisible();
+  });
+
+  it("stops showing an incident once a refetch answers 404 (no cached data)", async () => {
+    const other = "b0000000-0000-7000-8000-0000000000bb";
+    const { backend } = await open(`/incidents/${DEAD}`);
+    expect(await screen.findByRole("region", { name: "Automation gave up" })).toBeVisible();
+
+    backend.state.otherOrgs = [other];
+    backend.state.incidentWorkspaces = { [DEAD]: other }; // no longer this workspace's
+    act(() => {
+      focusManager.setFocused(false);
+      focusManager.setFocused(true);
+    });
+
+    expect(
+      await screen.findByText("This incident is not available to you.", undefined, {
+        timeout: 8000,
+      }),
+    ).toBeVisible();
+    expect(screen.queryByRole("heading", { level: 2, name: "Automation gave up" })).toBeNull();
   });
 });
 

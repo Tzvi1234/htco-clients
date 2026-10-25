@@ -58,15 +58,25 @@ export function IncidentsPage() {
   const me = useQuery(meQuery(api));
   const ids = (me.data?.memberships ?? []).map((m) => m.organization_id);
   const search: { workspace?: string } = useSearch({ strict: false });
-  const [chosen, setChosen] = useState<string | null>(() => search.workspace ?? null);
-  const organizationId = pickWorkspace(ids, chosen ?? search.workspace ?? null);
+  const navigate = useNavigate();
+  // The address owns the workspace (Quill's review of #48): `/incidents` and `/incidents/{id}`
+  // are one route that never remounts, so a link from another workspace's notification, or a
+  // switch here, must not meet a choice kept from before. A switch leaves the open incident.
+  const organizationId = pickWorkspace(ids, search.workspace ?? null);
+  const switchTo = (id: string) => {
+    void navigate({
+      to: "/incidents/{-$incidentId}",
+      params: { incidentId: undefined },
+      search: { workspace: id },
+    });
+  };
   return (
     <>
       <PageHeader title={<Trans>Incidents</Trans>} />
       <Flow>
         {ids.length > 1 ? (
           <div className="shrink-0 motion-safe:animate-enter">
-            <WorkspacePicker ids={ids} value={organizationId ?? null} onChange={setChosen} />
+            <WorkspacePicker ids={ids} value={organizationId ?? null} onChange={switchTo} />
           </div>
         ) : null}
         {organizationId === undefined ? null : (
@@ -185,13 +195,15 @@ function Center({ organizationId }: { organizationId: string }) {
       </Panel>
     );
 
-  const openItems = open.data ?? [];
+  const openItems = open.data?.items ?? [];
+  // More than the pages read: the figures say "more than", never a false total.
+  const more = open.data?.more === true;
   const items =
     tab === "open"
-      ? open.data
+      ? open.data?.items
       : tab === "resolved"
-        ? all.data?.filter((incident) => !incident.is_open)
-        : all.data;
+        ? all.data?.items.filter((incident) => !incident.is_open)
+        : all.data?.items;
   const loading = tab === "open" ? open.isPending : all.isPending;
   const urgent = openItems.filter((i) => i.severity === "high" || i.severity === "critical");
   const oldest = openItems.reduce<string | undefined>(
@@ -199,7 +211,7 @@ function Center({ organizationId }: { organizationId: string }) {
     undefined,
   );
   const next = mostUrgent(openItems);
-  const resolvedCount = all.data?.filter((incident) => !incident.is_open).length;
+  const resolvedCount = all.data?.items.filter((incident) => !incident.is_open).length;
 
   return (
     <>
@@ -214,6 +226,8 @@ function Center({ organizationId }: { organizationId: string }) {
             <Trans>Incident center</Trans>
           ) : openItems.length === 0 ? (
             <Trans>Nothing is open</Trans>
+          ) : more ? (
+            <Trans>More than {openItems.length} open incidents</Trans>
           ) : (
             <Plural value={openItems.length} one="# open incident" other="# open incidents" />
           )
@@ -247,7 +261,15 @@ function Center({ organizationId }: { organizationId: string }) {
             <FocusSkeleton label={t`Loading incidents…`} />
           ) : (
             <Figures label={t`Key figures`}>
-              <Figure label={<Trans>Open</Trans>} value={<N>{openItems.length}</N>} />
+              <Figure
+                label={<Trans>Open</Trans>}
+                value={
+                  <N>
+                    {openItems.length}
+                    {more ? "+" : ""}
+                  </N>
+                }
+              />
               <Figure
                 label={<Trans>Oldest open</Trans>}
                 value={oldest === undefined ? "–" : age(oldest, now)}
@@ -282,7 +304,7 @@ function Center({ organizationId }: { organizationId: string }) {
         value={tab}
         onChange={setTab}
         tabs={[
-          { id: "open", label: <Trans>Open</Trans>, count: open.data?.length },
+          { id: "open", label: <Trans>Open</Trans>, count: open.data?.items.length },
           { id: "resolved", label: <Trans>Resolved</Trans> },
           { id: "all", label: <Trans>All</Trans> },
         ]}
@@ -589,18 +611,23 @@ function IncidentDetailPanel({
         <FocusSkeleton label={t`Loading the incident…`} rows={3} />
       </Panel>
     );
-  if (data === undefined)
+  // Denied on the latest answer, whatever is cached: a refetch that answers 403 or 404 (access
+  // removed, another workspace) never keeps showing the incident (Sage's security review of #48).
+  const refused =
+    incident.error instanceof ApiError &&
+    (incident.error.status === 403 || incident.error.status === 404);
+  if (data === undefined || refused)
     return (
       <Panel label={t`Incident`}>
         <div role="alert" className="flex flex-col items-center gap-3 px-6 py-12 text-center">
           <p className="m-0 text-body-sm text-secondary">
-            {incident.error instanceof ApiError && incident.error.status === 404 ? (
+            {refused ? (
               <Trans>This incident is not available to you.</Trans>
             ) : (
               <Trans>The incident could not be loaded. Try again shortly.</Trans>
             )}
           </p>
-          {incident.error instanceof ApiError && incident.error.status === 404 ? null : (
+          {refused ? null : (
             <Button onPress={() => void incident.refetch()}>
               <Trans>Try again</Trans>
             </Button>

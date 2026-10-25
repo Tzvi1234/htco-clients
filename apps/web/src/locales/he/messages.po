@@ -2743,6 +2743,11 @@ msgstr "עוד"
 msgid "More areas"
 msgstr "אזורים נוספים"
 
+#. placeholder {0}: openItems.length
+#: src/features/incidents/IncidentsPage.tsx
+msgid "More than {0} open incidents"
+msgstr "יותר מ־{0} תקלות פתוחות"
+
 #. placeholder {0}: words.state(step)
 #: src/features/incidents/IncidentsPage.tsx
 msgid "Move to {0}"

@@ -2743,6 +2743,11 @@ msgstr "More"
 msgid "More areas"
 msgstr "More areas"
 
+#. placeholder {0}: openItems.length
+#: src/features/incidents/IncidentsPage.tsx
+msgid "More than {0} open incidents"
+msgstr "More than {0} open incidents"
+
 #. placeholder {0}: words.state(step)
 #: src/features/incidents/IncidentsPage.tsx
 msgid "Move to {0}"

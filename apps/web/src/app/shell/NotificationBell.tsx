@@ -202,7 +202,13 @@ export function NotificationBell({ className }: { className?: string }) {
   const refresh = () => {
     void client.invalidateQueries({ queryKey: ["incidents"] });
   };
-  const shown = inbox.items.slice(0, SHOWN);
+  // The unread ones first, newest first, then the read ones: once the shown six are marked read,
+  // the older unread ones come into view, so every unread one can be read and marked without
+  // marking one nobody saw (Codex review of #48).
+  const shown = [
+    ...inbox.items.filter((notice) => notice.read_at === null),
+    ...inbox.items.filter((notice) => notice.read_at !== null),
+  ].slice(0, SHOWN);
   const shownUnread = shown.filter((notice) => notice.read_at === null);
   // Only what the panel shows is marked: never one that arrived after it rendered, nor one
   // beyond the newest six (review of #48).
