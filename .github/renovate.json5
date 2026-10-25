@@ -1,7 +1,12 @@
 // Dependency updates (ER-SEC-09). Needs the Renovate GitHub App installed on this repository.
 {
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
-  extends: ["config:recommended", "helpers:pinGitHubActionDigests", "docker:pinDigests", ":semanticCommits"],
+  extends: [
+    "config:recommended",
+    "helpers:pinGitHubActionDigests",
+    "docker:pinDigests",
+    ":semanticCommits",
+  ],
   // New versions wait a week after publication; pnpm's `minimumReleaseAge` applies the same rule.
   minimumReleaseAge: "7 days",
   internalChecksFilter: "strict",
