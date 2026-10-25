@@ -81,6 +81,8 @@ describe("Admin › Health (slice 5.9)", () => {
 
   it.each([
     ["noWorker", /No worker is running/],
+    // Codex review of #60: an empty worker list is no worker at all, not "everything runs".
+    ["noWorkers", /No worker is running/],
     ["stale", /One shop has not synced within its window/],
     ["calm", /Everything runs/],
   ] as const)(

@@ -13,9 +13,9 @@ export const GOOD_EXECUTION = "0e000000-0000-7000-8000-0000000000e1";
 
 /**
  * What the focus panel leads with: dead letters (the default), no worker running, a stale shop,
- * or everything in order.
+ * or everything in order. `noWorkers`: no worker has beaten at all (an empty list) while work waits.
  */
-export type FakeScene = "dead" | "noWorker" | "stale" | "calm";
+export type FakeScene = "dead" | "noWorker" | "noWorkers" | "stale" | "calm";
 
 export interface FakeOperations {
   scene: FakeScene;
@@ -99,7 +99,7 @@ export function fakeHealth(
         stopping: false,
         current_job_id: null,
       },
-    ],
+    ].filter(() => ops.scene !== "noWorkers"),
     shops: shops.map((s, i) => ({
       shop_id: s.id,
       resource: "orders",
