@@ -67,12 +67,14 @@ export const authKeys = {
 };
 
 /**
- * Forget what belongs to the session that ended: who is signed in, and the shops' live data,
- * whose orders carry buyer details filtered for that user's role (Codex review of #35).
+ * Forget everything the session that ended read: every cached answer belongs to that user and
+ * role (shops, members, orders with buyer details, incidents, notifications), so none may reach
+ * the next user on this tab (Codex review of #35; Sage's security review of #48). In-flight
+ * reads are cancelled first, so a late answer cannot land in the next session's cache.
  */
 export function forgetSession(client: QueryClient): void {
-  client.removeQueries({ queryKey: ["auth"] });
-  client.removeQueries({ queryKey: ["live"] });
+  void client.cancelQueries();
+  client.removeQueries();
 }
 
 /** Who is signed in on this browser; `null` when nobody is. */

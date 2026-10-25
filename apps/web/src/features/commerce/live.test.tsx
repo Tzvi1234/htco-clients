@@ -457,7 +457,8 @@ describe("Codex review of #35", () => {
 
     expect(client.getQueryData(["auth", "me"])).toBeUndefined();
     expect(client.getQueryData(["live", "shop", "orders", "all"])).toBeUndefined();
-    expect(client.getQueryData(["other"])).toBe(1);
+    // Sage's security review of clients#48: everything else goes too (shared/api/session.test).
+    expect(client.getQueryData(["other"])).toBeUndefined();
   });
 
   it("gives a new photo its own chance after the previous one failed", () => {
