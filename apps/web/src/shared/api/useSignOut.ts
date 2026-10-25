@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "@tanstack/react-router";
 
-import { apiError, useApi } from "./api.tsx";
+import { apiError, forgetSession, useApi } from "./api.tsx";
 
 /**
  * Ends the session at the API, and only then forgets it here. A failed request keeps the user
@@ -18,7 +18,8 @@ export function useSignOut() {
       if (!response.ok && response.status !== 401) throw apiError(response, error);
     },
     onSuccess: async () => {
-      queryClient.clear();
+      // The same forgetting as any session that ends: cancel, then remove every answer.
+      forgetSession(queryClient);
       await router.navigate({ to: "/sign-in" });
     },
   });
