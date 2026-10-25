@@ -23,3 +23,10 @@ strictDepBuilds: true
 # present; the binary ships as an optional dependency, so the script is not needed.
 allowBuilds:
   esbuild: false
+# Security overrides for dev-only transitive dependencies flagged by osv-scanner. Each one is
+# scoped to the vulnerable range, so it lifts only the affected versions to the first fix.
+# undici via jsdom: GHSA-xjj6-f33q-929c (fixed in 8.12.2).
+# zod via eslint-plugin-react-hooks: GHSA-mrhx-c7xc-m3w5 (fixed in 4.6.6).
+overrides:
+  "undici@>=8 <8.12.2": "8.12.2"
+  "zod@>=4 <4.6.6": "4.6.6"
