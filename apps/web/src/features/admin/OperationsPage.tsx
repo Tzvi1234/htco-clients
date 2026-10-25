@@ -178,7 +178,8 @@ function Health({ health, organizationId }: { health: OperationsHealth; organiza
     .reduce((n, j) => n + j.count, 0);
   const running = health.jobs.filter((j) => j.state === "running").reduce((n, j) => n + j.count, 0);
   const alive = health.workers.length - stopped.length;
-  const noWorker = health.workers.length > 0 && alive === 0;
+  // No live worker, an empty list included, means nothing runs the queue (Codex review of #60).
+  const noWorker = alive === 0;
   // The lead names one thing; only its figure and its row are orange.
   const lead = dead > 0 ? "dead" : noWorker ? "worker" : stale.length > 0 ? "stale" : "calm";
   const behind = (s: (typeof stale)[number]) =>
