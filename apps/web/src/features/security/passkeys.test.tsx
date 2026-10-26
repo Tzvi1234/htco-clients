@@ -160,6 +160,11 @@ describe("Settings › Security: passkeys", () => {
       await within(panel).findByText("Confirm with your authenticator app first, then try again."),
     ).toHaveAttribute("role", "alert");
     expect(credentials.create).not.toHaveBeenCalled();
+    // Codex on #74: a way to confirm it (the second-factor screen), then try again.
+    expect(within(panel).getByRole("link", { name: "Confirm it is you" })).toHaveAttribute(
+      "href",
+      "/security/setup",
+    );
   });
 
   it("explains a browser without passkeys and keeps the app", async () => {
@@ -206,7 +211,7 @@ describe("sign-in: the second step with a passkey", () => {
     expect(
       await screen.findByRole("heading", { level: 1, name: "Confirm it is you" }),
     ).toBeInTheDocument();
-    await user.click(screen.getByRole("button", { name: "Confirm with Face ID / fingerprint" }));
+    await user.click(screen.getByRole("button", { name: "Confirm with a passkey" }));
     expect(await screen.findByRole("heading", { level: 1, name: "Home" })).toBeInTheDocument();
     expect(credentials.get).toHaveBeenCalledTimes(1);
     expect(backend.state.passkeyCredentials).toHaveLength(1);
@@ -225,14 +230,23 @@ describe("sign-in: the second step with a passkey", () => {
   it("says a refused passkey was not accepted, and the code still works", async () => {
     withWebAuthn();
     const { user } = await open("/", { ...atSignIn, passkeyRefused: true });
-    await user.click(
-      await screen.findByRole("button", { name: "Confirm with Face ID / fingerprint" }),
-    );
+    await user.click(await screen.findByRole("button", { name: "Confirm with a passkey" }));
     expect(await screen.findByRole("alert")).toHaveTextContent(
       "The passkey was not accepted. Try again.",
     );
     await user.click(screen.getByRole("button", { name: "Use a code instead" }));
     expect(screen.getByLabelText("Code from the app")).toBeInTheDocument();
+  });
+
+  it("a prompt refused at sign-in says not confirmed, never cancelled (Pixel on #74)", async () => {
+    withWebAuthn();
+    credentials.get.mockRejectedValueOnce(new DOMException("no key", "NotAllowedError"));
+    const { user } = await open("/", atSignIn);
+    await user.click(await screen.findByRole("button", { name: "Confirm with a passkey" }));
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "Not confirmed. Try again, or use a code instead.",
+    );
+    expect(screen.queryByText("Cancelled. Nothing was changed.")).toBeNull();
   });
 
   it("asks for the code when this browser cannot use passkeys", async () => {
@@ -241,7 +255,7 @@ describe("sign-in: the second step with a passkey", () => {
     expect(
       await screen.findByRole("heading", { level: 1, name: "Two-step code" }),
     ).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Use Face ID / fingerprint instead" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "Use a passkey instead" })).toBeNull();
   });
 });
 

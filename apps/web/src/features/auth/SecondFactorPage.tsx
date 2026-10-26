@@ -5,9 +5,9 @@ import { useState, type SyntheticEvent } from "react";
 import { Button as AriaButton } from "react-aria-components";
 
 import { AUTH_LINK, AUTH_SUBMIT, AuthLayout } from "./AuthLayout.tsx";
-import { confirmWithPasskey, usePasskeyMessage } from "../security/index.ts";
+import { Brand, confirmWithPasskey, usePasskeyMessage } from "../security/index.ts";
 import { passkeysSupported } from "../../shared/lib/passkeys.ts";
-import { CodeBoxes, FingerprintGlyph, ShieldGlyph } from "../../shared/ui/kit/index.ts";
+import { CodeBoxes, PasskeyGlyph, ShieldGlyph } from "../../shared/ui/kit/index.ts";
 import { ApiError, apiError, forgetSession, mfaQuery, useApi } from "../../shared/api/api.tsx";
 import { useSignOut } from "../../shared/api/useSignOut.ts";
 import { Button } from "../../shared/ui/Button.tsx";
@@ -73,14 +73,17 @@ function Confirm({ passkey }: { passkey: boolean }) {
 function ConfirmPasskey({ onCode }: { onCode: () => void }) {
   const api = useApi();
   const finish = useFinish();
-  const message = usePasskeyMessage();
+  const message = usePasskeyMessage("sign-in");
   const confirm = useMutation({ mutationFn: () => confirmWithPasskey(api), onSuccess: finish });
   return (
     <AuthLayout
       eyebrow={<Trans>Step 2 of 2</Trans>}
       title={<Trans>Confirm it is you</Trans>}
       description={
-        <Trans>Use Face ID, Touch ID, Windows Hello or your fingerprint on this device.</Trans>
+        <Trans>
+          Use <Brand>Face ID</Brand>, <Brand>Touch ID</Brand>, <Brand>Windows Hello</Brand> or your
+          fingerprint on this device.
+        </Trans>
       }
       step={2}
     >
@@ -93,8 +96,8 @@ function ConfirmPasskey({ onCode }: { onCode: () => void }) {
             confirm.mutate();
           }}
         >
-          <FingerprintGlyph size={18} />
-          <Trans>Confirm with Face ID / fingerprint</Trans>
+          <PasskeyGlyph size={18} />
+          <Trans>Confirm with a passkey</Trans>
         </Button>
         <FormAlert message={message(confirm.error)} />
         <AriaButton className={AUTH_LINK} onPress={onCode}>
@@ -296,7 +299,7 @@ function ConfirmCode({ onPasskey }: { onPasskey?: () => void }) {
         </p>
         {onPasskey === undefined ? null : (
           <AriaButton className={AUTH_LINK} onPress={onPasskey}>
-            <Trans>Use Face ID / fingerprint instead</Trans>
+            <Trans>Use a passkey instead</Trans>
           </AriaButton>
         )}
       </form>

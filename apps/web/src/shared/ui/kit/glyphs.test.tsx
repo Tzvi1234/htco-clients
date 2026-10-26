@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   ApprovalGlyph,
+  PasskeyGlyph,
   BackGlyph,
   CheckGlyph,
   ChevronGlyph,
@@ -59,5 +60,13 @@ describe("icon mirroring (Hebrew RTL)", () => {
     expect(box(ChevronGlyph)).toBe("0 0 12 12");
     expect(box(CrumbGlyph)).toBe("0 0 12 12");
     expect(box(CheckGlyph)).toBe("0 0 24 24");
+  });
+});
+
+describe("the house style (Pixel on #74)", () => {
+  it("draws the passkey glyph solid, readable at 16 px, never as thin strokes", () => {
+    const svg = render(<PasskeyGlyph size={16} />).container.querySelector("svg");
+    expect(svg?.getAttribute("fill")).toBe("currentColor");
+    expect(svg?.getAttribute("stroke")).toBeNull();
   });
 });

@@ -1124,18 +1124,19 @@ msgid "Confirm"
 msgstr "Confirm"
 
 #: src/features/auth/SecondFactorPage.tsx
+#: src/features/security/Passkeys.tsx
 #: src/features/shops/connectEtsy.tsx
 #: src/features/shops/ShopsPage.tsx
 msgid "Confirm it is you"
 msgstr "Confirm it is you"
 
 #: src/features/security/Passkeys.tsx
-msgid "Confirm sign-in with Face ID, Touch ID, Windows Hello or your fingerprint instead of typing a code. Your authenticator app stays as the backup."
-msgstr "Confirm sign-in with Face ID, Touch ID, Windows Hello or your fingerprint instead of typing a code. Your authenticator app stays as the backup."
+msgid "Confirm sign-in with <0>Face ID</0>, <1>Touch ID</1>, <2>Windows Hello</2> or your fingerprint instead of typing a code. Your authenticator app stays as the backup."
+msgstr "Confirm sign-in with <0>Face ID</0>, <1>Touch ID</1>, <2>Windows Hello</2> or your fingerprint instead of typing a code. Your authenticator app stays as the backup."
 
 #: src/features/auth/SecondFactorPage.tsx
-msgid "Confirm with Face ID / fingerprint"
-msgstr "Confirm with Face ID / fingerprint"
+msgid "Confirm with a passkey"
+msgstr "Confirm with a passkey"
 
 #: src/features/security/Passkeys.tsx
 msgid "Confirm with your authenticator app first, then try again."
@@ -3242,6 +3243,10 @@ msgstr "Not accepted"
 #: src/features/shops/Capabilities.tsx
 msgid "Not checked yet."
 msgstr "Not checked yet."
+
+#: src/features/security/Passkeys.tsx
+msgid "Not confirmed. Try again, or use a code instead."
+msgstr "Not confirmed. Try again, or use a code instead."
 
 #: src/features/settings/SettingsPage.tsx
 msgid "Not connected"
@@ -5878,21 +5883,21 @@ msgid "Usage:"
 msgstr "Usage:"
 
 #: src/features/auth/SecondFactorPage.tsx
+msgid "Use <0>Face ID</0>, <1>Touch ID</1>, <2>Windows Hello</2> or your fingerprint on this device."
+msgstr "Use <0>Face ID</0>, <1>Touch ID</1>, <2>Windows Hello</2> or your fingerprint on this device."
+
+#: src/features/auth/SecondFactorPage.tsx
 msgid "Use a code instead"
 msgstr "Use a code instead"
+
+#: src/features/auth/SecondFactorPage.tsx
+msgid "Use a passkey instead"
+msgstr "Use a passkey instead"
 
 #: src/features/auth/AcceptInvitePage.tsx
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "Use between 12 and 128 characters."
 msgstr "Use between 12 and 128 characters."
-
-#: src/features/auth/SecondFactorPage.tsx
-msgid "Use Face ID / fingerprint instead"
-msgstr "Use Face ID / fingerprint instead"
-
-#: src/features/auth/SecondFactorPage.tsx
-msgid "Use Face ID, Touch ID, Windows Hello or your fingerprint on this device."
-msgstr "Use Face ID, Touch ID, Windows Hello or your fingerprint on this device."
 
 #: src/features/customers/CustomersDemos.tsx
 #: src/features/work/demoScreens.tsx

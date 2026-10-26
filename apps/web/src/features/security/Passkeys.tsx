@@ -5,18 +5,25 @@ import { useState, type SyntheticEvent } from "react";
 import { addPasskey, removeFactor } from "./passkeysApi.ts";
 import { ApiError, authKeys, mfaQuery, useApi } from "../../shared/api/api.tsx";
 import { PasskeyError, deviceName, passkeysSupported } from "../../shared/lib/passkeys.ts";
-import { Button } from "../../shared/ui/Button.tsx";
+import { Link } from "@tanstack/react-router";
+
+import { Button, buttonStyle } from "../../shared/ui/Button.tsx";
 import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
 import { TextField } from "../../shared/ui/TextField.tsx";
-import { FingerprintGlyph, FlowBody, ListRow, Note, PlusGlyph } from "../../shared/ui/kit/index.ts";
+import { PasskeyGlyph, FlowBody, ListRow, Note, PlusGlyph } from "../../shared/ui/kit/index.ts";
 
-/** Plain words for a passkey that did not work, here or at sign-in. Never the word "WebAuthn". */
-export function usePasskeyMessage() {
+/** Plain words for a passkey that did not work, here or at sign-in. Never the word "WebAuthn".
+ * At sign-in a refused prompt (an unknown key, a timeout, a dismissed prompt) was not confirmed;
+ * "nothing was changed" only fits adding one in Settings (Pixel on #74). */
+export function usePasskeyMessage(where: "settings" | "sign-in" = "settings") {
   const { t } = useLingui();
   return (error: Error | null): string | undefined => {
     if (error === null) return undefined;
     if (error instanceof PasskeyError) {
-      if (error.problem === "cancelled") return t`Cancelled. Nothing was changed.`;
+      if (error.problem === "cancelled")
+        return where === "sign-in"
+          ? t`Not confirmed. Try again, or use a code instead.`
+          : t`Cancelled. Nothing was changed.`;
       if (error.problem === "unsupported")
         return t`This browser or device cannot use passkeys. Use your authenticator app.`;
       return t`The passkey did not work. Try again.`;
@@ -89,8 +96,9 @@ export function Passkeys() {
       <FlowBody className="gap-4">
         <p className="m-0 text-body-sm text-secondary">
           <Trans>
-            Confirm sign-in with Face ID, Touch ID, Windows Hello or your fingerprint instead of
-            typing a code. Your authenticator app stays as the backup.
+            Confirm sign-in with <Brand>Face ID</Brand>, <Brand>Touch ID</Brand>,{" "}
+            <Brand>Windows Hello</Brand> or your fingerprint instead of typing a code. Your
+            authenticator app stays as the backup.
           </Trans>
         </p>
         {passkeys.length === 0 ? null : (
@@ -100,7 +108,7 @@ export function Passkeys() {
               return (
                 <li key={passkey.id} className="flex items-center gap-3 rounded-card py-2">
                   <span className="flex size-10 shrink-0 items-center justify-center rounded-pill border border-line bg-raised">
-                    <FingerprintGlyph size={18} />
+                    <PasskeyGlyph size={18} />
                   </span>
                   <ListRow className="min-w-0 flex-1 py-0" title={<bdi>{label}</bdi>} />
                   {confirming === passkey.id ? (
@@ -143,13 +151,13 @@ export function Passkeys() {
           </ul>
         )}
         {!supported ? (
-          <Note icon={<FingerprintGlyph size={16} />}>
+          <Note icon={<PasskeyGlyph size={16} />}>
             <Trans>
               This browser or device cannot use passkeys. Your authenticator app works as before.
             </Trans>
           </Note>
         ) : !hasApp ? (
-          <Note icon={<FingerprintGlyph size={16} />}>
+          <Note icon={<PasskeyGlyph size={16} />}>
             <Trans>Set up an authenticator app first; then you can add a passkey.</Trans>
           </Note>
         ) : naming ? (
@@ -165,7 +173,7 @@ export function Passkeys() {
             />
             <span className="flex flex-wrap items-center gap-2">
               <Button type="submit" variant="primary" isPending={add.isPending}>
-                <FingerprintGlyph size={16} />
+                <PasskeyGlyph size={16} />
                 <Trans>Continue</Trans>
               </Button>
               <Button
@@ -196,10 +204,21 @@ export function Passkeys() {
             {message(error)}
           </p>
         )}
+        {/* Codex on #74: a session that needs the second factor gets a way to give it. */}
+        {error instanceof ApiError && error.type === "step-up-required" ? (
+          <Link to="/security/setup" className={buttonStyle({ size: "sm" }) + " self-start"}>
+            <Trans>Confirm it is you</Trans>
+          </Link>
+        ) : null}
         <p aria-live="polite" className="sr-only">
           {done}
         </p>
       </FlowBody>
     </Panel>
   );
+}
+
+/** A product name (Face ID, Windows Hello) kept on one line and isolated in Hebrew. */
+export function Brand({ children }: { children: string }) {
+  return <bdi className="whitespace-nowrap">{children}</bdi>;
 }
