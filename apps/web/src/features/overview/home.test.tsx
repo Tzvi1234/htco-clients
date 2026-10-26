@@ -206,6 +206,31 @@ describe("Home › Office › Incidents", () => {
     );
   });
 
+  it("says how many are high or critical, as the incident center does", async () => {
+    const { incidents } = await office({ incidents: demoIncidents(SHOPS.map((s) => s.id)) });
+
+    // Open: one critical, one high, one medium.
+    expect(await within(incidents).findByText("2 high or critical")).toBeInTheDocument();
+  });
+
+  it("drops a cached list once a refresh is refused, and says the role does not see them", async () => {
+    const { incidents, backend, user } = await office({
+      incidents: demoIncidents(SHOPS.map((s) => s.id)),
+    });
+    expect(await within(incidents).findByText("3")).toBeInTheDocument();
+
+    // A role change: the next read is refused while React Query still holds the earlier list.
+    backend.state.incidentsTrouble = "forbidden";
+    // Back to Office: the list mounts again and refetches (it is stale at once).
+    await user.click(screen.getByRole("tab", { name: /Today/ }));
+    await user.click(screen.getByRole("tab", { name: /Office/ }));
+
+    const again = panel("Incidents");
+    expect(await within(again).findByText("Your role does not see incidents.")).toBeInTheDocument();
+    expect(within(again).queryByText("3")).toBeNull();
+    expect(within(again).queryByRole("link", { name: /Automation gave up/ })).toBeNull();
+  });
+
   it("says when nothing is open", async () => {
     const { incidents } = await office();
 

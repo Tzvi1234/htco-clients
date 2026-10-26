@@ -190,6 +190,10 @@ msgstr "{range} days"
 msgid "{resolvedCount, plural, one {# resolved so far} other {# resolved so far}}"
 msgstr "{resolvedCount, plural, one {# resolved so far} other {# resolved so far}}"
 
+#: src/features/overview/OverviewPage.tsx
+msgid "{severe, plural, one {# high or critical} other {# high or critical}}"
+msgstr "{severe, plural, one {# high or critical} other {# high or critical}}"
+
 #: src/app/shell/NotificationBell.tsx
 msgid "{shop} needs reconnecting to Etsy"
 msgstr "{shop} needs reconnecting to Etsy"

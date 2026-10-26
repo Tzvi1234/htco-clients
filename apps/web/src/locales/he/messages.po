@@ -190,6 +190,10 @@ msgstr "{range} ימים"
 msgid "{resolvedCount, plural, one {# resolved so far} other {# resolved so far}}"
 msgstr "{resolvedCount, plural, one {תקלה אחת נפתרה עד כה} other {# נפתרו עד כה}}"
 
+#: src/features/overview/OverviewPage.tsx
+msgid "{severe, plural, one {# high or critical} other {# high or critical}}"
+msgstr "{severe, plural, one {אחת בחומרה גבוהה או קריטית} two {# בחומרה גבוהה או קריטית} other {# בחומרה גבוהה או קריטית}}"
+
 #: src/app/shell/NotificationBell.tsx
 msgid "{shop} needs reconnecting to Etsy"
 msgstr "צריך לחבר מחדש את {shop} ל־Etsy"

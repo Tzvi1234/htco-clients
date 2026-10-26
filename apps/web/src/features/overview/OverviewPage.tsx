@@ -698,15 +698,19 @@ function OfficeIncidents() {
   const lists = useQueries({
     queries: ids.map((id) => incidentsQuery(api, id, "open")),
   });
+  // A list whose last read failed is left out even while React Query keeps its earlier data
+  // (Codex review of #75): a refresh refused after a role change must not show stale incidents.
   const read = lists.flatMap((list, index) =>
-    list.data === undefined
+    list.data === undefined || list.isError
       ? []
       : list.data.items.map((incident) => ({ ...incident, organizationId: ids[index] ?? "" })),
   );
   const failed = lists.find((list) => list.isError)?.error;
   const done = me.data !== undefined && lists.every((list) => !list.isPending);
-  const more = lists.some((list) => list.data?.more === true);
+  const more = lists.some((list) => !list.isError && list.data?.more === true);
   const urgent = mostUrgent(read);
+  // As the incident center counts them: the open incidents that are high or critical.
+  const severe = read.filter((i) => i.severity === "high" || i.severity === "critical").length;
   const known = done && failed === undefined;
   return (
     <Panel>
@@ -751,6 +755,11 @@ function OfficeIncidents() {
                 <Severity severity={urgent.severity} />
               </p>
             )}
+            {severe > 0 ? (
+              <p className="m-0 mt-1 text-caption text-secondary">
+                <Plural value={severe} one="# high or critical" other="# high or critical" />
+              </p>
+            ) : null}
             {failed !== undefined && read.length > 0 ? (
               <p className="m-0 mt-1 text-caption text-secondary">
                 {t`One workspace's incidents could not be read.`}
