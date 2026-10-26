@@ -138,7 +138,7 @@ export function fakeHealth(
         created_at: iso(now, 110),
         updated_at: iso(now, 95),
       },
-    ],
+    ].filter((e) => ops.scene === "dead" || e.id !== DEAD_EXECUTION),
     outbox_failures: [
       {
         id: "0f000000-0000-7000-8000-0000000000f1",
@@ -343,12 +343,17 @@ export function fakeRuns(
   if (automationId === "etsy-order-intake")
     return [
       run(GOOD_EXECUTION, "succeeded", 6),
-      run(
-        DEAD_EXECUTION,
-        ops.retriedExecutions.includes(DEAD_EXECUTION) ? "retry_scheduled" : "dead_lettered",
-        110,
-        5,
-      ),
+      // Only the `dead` scene has the dead-lettered run (Codex local on #72).
+      ...(ops.scene === "dead"
+        ? [
+            run(
+              DEAD_EXECUTION,
+              ops.retriedExecutions.includes(DEAD_EXECUTION) ? "retry_scheduled" : "dead_lettered",
+              110,
+              5,
+            ),
+          ]
+        : []),
     ];
   if (automationId === "product-sales-counters")
     return [

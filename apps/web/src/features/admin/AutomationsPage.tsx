@@ -108,7 +108,9 @@ function WorkspaceAutomations({ organizationId }: { organizationId: string }) {
     <Automations
       organizationId={organizationId}
       automations={registry.data}
-      health={health.data}
+      // Only a successful latest read shows metrics: a refetch that answers 403 (a role
+      // lowered meanwhile) never keeps the cached numbers on screen (Codex local on #72).
+      health={health.isError ? undefined : health.data}
       healthError={health.isError ? health.error : null}
     />
   );
@@ -221,8 +223,13 @@ function Automations({
   const current = automations.find((a) => a.id === selected);
   const percent = (value: string | null | undefined) =>
     value == null ? "—" : `${String(Number(value))}%`;
+  // Finished runs only (succeeded or dead-lettered), the same denominator as each automation's
+  // own rate from the server: runs still on their way are not failures (Codex local on #72).
+  const finished = succeeded + deadRuns;
   const overall =
-    runs === 0 ? null : (Math.round((succeeded / runs) * 1000) / 10).toFixed(1).replace(/\.0$/, "");
+    finished === 0
+      ? null
+      : (Math.round((succeeded / finished) * 1000) / 10).toFixed(1).replace(/\.0$/, "");
   const shown = health !== undefined;
 
   return (

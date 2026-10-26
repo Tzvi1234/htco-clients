@@ -1,5 +1,6 @@
+import { focusManager } from "@tanstack/react-query";
 import { createMemoryHistory } from "@tanstack/react-router";
-import { render, screen, within } from "@testing-library/react";
+import { act, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
@@ -107,6 +108,55 @@ describe("Admin › Automations", () => {
 
     const sheet = await screen.findByRole("dialog", { name: "Execution" });
     expect(await within(sheet).findByRole("button", { name: "Retry the execution" })).toBeVisible();
+  });
+
+  it("a retry from the sheet refreshes the automation's latest runs (Codex on #72)", async () => {
+    const { user, backend } = await open();
+    const details = await screen.findByRole("region", { name: "Etsy Order Intake" });
+    const runs = await within(details).findByRole("list", { name: "Latest runs" });
+    expect(within(runs).getByText("Dead-lettered")).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Open the dead-lettered run" }));
+    const sheet = await screen.findByRole("dialog", { name: "Execution" });
+    await user.click(await within(sheet).findByRole("button", { name: "Retry the execution" }));
+    await within(sheet).findByText("The execution goes back to its retry.");
+    expect(backend.state.operations.retriedExecutions).toEqual([DEAD_EXECUTION]);
+
+    await vi.waitFor(() => {
+      expect(within(runs).queryByText("Dead-lettered")).toBeNull();
+    });
+    expect(within(runs).getByText("Retry scheduled")).toBeInTheDocument();
+  });
+
+  it("hides the metrics once a refetch answers 403, after a downgrade (Codex local on #72)", async () => {
+    const { backend } = await open();
+    expect((await row(/Etsy Order Intake/)).textContent).toContain("99.5%");
+
+    backend.state.role = "viewer"; // the Owner made this member a viewer meanwhile
+    act(() => {
+      focusManager.setFocused(false);
+      focusManager.setFocused(true);
+    });
+    expect(
+      await screen.findByText(/Only the workspace Owner and Admins see the success rate/),
+    ).toBeInTheDocument();
+    expect(screen.queryByText("99.5%")).toBeNull();
+    expect(screen.queryByText("Dead letters")).toBeNull();
+    focusManager.setFocused(undefined);
+  });
+
+  it("the overall success counts finished runs only, like each automation's (Codex local on #72)", async () => {
+    await open();
+    // 209 + 198 succeeded of 210 + 198 finished (2 of the 212 intake runs are still on their way).
+    const numbers = screen.getByRole("list", { name: "Automation numbers" });
+    expect(within(numbers).getByText("99.8%")).toBeInTheDocument();
+  });
+
+  it("the calm scene has no dead-lettered run anywhere (Codex local on #72)", async () => {
+    await open({ operations: fakeOperations("calm") });
+    const details = await screen.findByRole("region", { name: "Etsy Order Intake" });
+    const runs = await within(details).findByRole("list", { name: "Latest runs" });
+    expect(within(runs).queryByText("Dead-lettered")).toBeNull();
   });
 
   it("the chosen automation's latest runs open its execution sheet", async () => {

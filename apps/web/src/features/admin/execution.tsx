@@ -7,6 +7,7 @@ import { useState } from "react";
 import { Dialog, Modal, ModalOverlay } from "react-aria-components";
 
 import { ApiError, useApi } from "../../shared/api/api.tsx";
+import { automationKeys } from "../../shared/api/automations.ts";
 import {
   executionChainQuery,
   operationsKeys,
@@ -106,6 +107,10 @@ export function ExecutionSheet({
         queryKey: operationsKeys.execution(organizationId, executionId),
       });
       await client.invalidateQueries({ queryKey: operationsKeys.health(organizationId) });
+      // Admin › Automations: the automation's latest runs show the retry too (Codex on #72).
+      await client.invalidateQueries({
+        queryKey: automationKeys.runs(organizationId, automationId),
+      });
     } catch (error) {
       const status = error instanceof ApiError ? error.status : 0;
       const type = error instanceof ApiError ? error.type : undefined;
