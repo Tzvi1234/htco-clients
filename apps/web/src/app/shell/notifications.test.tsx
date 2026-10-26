@@ -326,6 +326,34 @@ describe("the notification bell", () => {
     );
   });
 
+  it("a shop's alert opened from the same screen switches to that shop (Quill's review of #48)", async () => {
+    const notifications = [
+      fakeNotification({
+        id: "f0000000-0000-7000-8000-000000000302",
+        kind: "alert_out_of_stock",
+        params: { listing_id: "1888" },
+        shop_id: WILLOW,
+      }),
+    ];
+    const { user } = await open({ notifications }, "en", "/commerce/products");
+    // The catalog is keyed by its shop, so its chips are read afresh after each change.
+    const chip = (name: string) =>
+      within(screen.getByRole("group", { name: "Shop" })).getByRole("button", { name });
+    await screen.findByRole("group", { name: "Shop" }, { timeout: 8000 });
+    await user.click(chip("Linen Lane Studio"));
+    await vi.waitFor(() => {
+      expect(chip("Linen Lane Studio")).toHaveAttribute("aria-pressed", "true");
+    });
+
+    await user.click(await bell("Notifications, 1 unread"));
+    const panel = await screen.findByRole("dialog", { name: "Notifications" });
+    await user.click(within(panel).getByRole("link", { name: /Listing 1888 is out of stock/ }));
+
+    await vi.waitFor(() => {
+      expect(chip("Willow & Wick")).toHaveAttribute("aria-pressed", "true");
+    });
+  });
+
   it("opens the incident a notification is about, and marks it read", async () => {
     const { user, backend } = await open();
     await user.click(await bell("Notifications, 2 unread"));

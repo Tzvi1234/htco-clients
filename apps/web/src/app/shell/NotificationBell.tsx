@@ -157,8 +157,7 @@ function targetOf(notice: Notice): Target | undefined {
       params: { incidentId: incident },
       search: { workspace: notice.organizationId },
     };
-  const shop =
-    notice.shop_id === null || notice.shop_id === undefined ? {} : { shop: notice.shop_id };
+  const shop = notice.shop_id === null ? {} : { shop: notice.shop_id };
   switch (notice.kind) {
     case "alert_ship_by":
     case "relay_tracking_needed":

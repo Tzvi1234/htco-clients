@@ -263,12 +263,18 @@ export function useLiveShop(): LiveShops & {
 } {
   const live = useLiveShops();
   const search: { shop?: string } = useSearch({ strict: false });
-  const [chosen, setChosen] = useState<string | null>(null);
+  // A pick holds only under the address it was made at: a link to another shop on the same
+  // screen (a shop's alert from the bell) wins over it (Quill's review of #48).
+  const [chosen, setChosen] = useState<{ id: string; under: string | undefined } | null>(null);
+  const picked = chosen !== null && chosen.under === search.shop ? chosen.id : null;
   const shops = live.shops ?? [];
   const shop =
-    shops.find((s) => s.id === chosen) ??
+    shops.find((s) => s.id === picked) ??
     shops.find((s) => s.id === search.shop) ??
     shops.find((s) => s.status === "active") ??
     shops[0];
-  return { ...live, shop, choose: setChosen };
+  const choose = (shopId: string) => {
+    setChosen({ id: shopId, under: search.shop });
+  };
+  return { ...live, shop, choose };
 }
