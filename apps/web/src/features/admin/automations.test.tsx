@@ -5,8 +5,9 @@ import { describe, expect, it, vi } from "vitest";
 
 import { App } from "../../app/App.tsx";
 import { memoryStorage } from "../../shared/lib/storage.ts";
+import { PHONE_QUERY } from "../../shared/lib/useMediaQuery.ts";
 import { fakeBackend, fakeIntegration, type FakeState } from "../../test/fakeApi.ts";
-import { DEAD_EXECUTION } from "../../test/fakeOperations.ts";
+import { DEAD_EXECUTION, fakeOperations } from "../../test/fakeOperations.ts";
 
 // Admin › Automations (platform slices 5.1, 5.9 and 5.11): every automation of the registry
 // with its readiness and trigger kinds, the last seven days' runs, success, retries and dead
@@ -47,7 +48,11 @@ async function open(state: Partial<FakeState> = {}, locale: "en" | "he" = "en") 
 const calls = (backend: { requests: Request[] }, pattern: RegExp) =>
   backend.requests.filter((r) => pattern.test(new URL(r.url).pathname));
 
+/** A row of the full list: the All sub-tab (the page opens on what needs him). */
 const row = async (name: RegExp) => {
+  const all = screen.queryByRole("tab", { name: /^All/ });
+  if (all !== null && all.getAttribute("aria-selected") !== "true")
+    await userEvent.setup().click(all);
   const table = await screen.findByRole("table", { name: "Automations" });
   const cell = await within(table).findByText(name);
   const tr = cell.closest("tr");
@@ -143,6 +148,88 @@ describe("Admin › Automations", () => {
       screen.getByText(/Only the workspace Owner and Admins see the success rate/),
     ).toBeInTheDocument();
     expect(screen.queryByText("99.5%")).toBeNull();
+  });
+
+  it("puts the list behind sub-tabs: what needs him first, then every automation (Pixel on #72)", async () => {
+    const { user } = await open();
+
+    const tabs = screen.getByRole("tablist", { name: "Automation views" });
+    const needs = within(tabs).getByRole("tab", { name: /Needs you/ });
+    const all = within(tabs).getByRole("tab", { name: /^All/ });
+    expect(needs).toHaveAttribute("aria-selected", "true");
+    expect(needs).toHaveTextContent("1");
+    expect(all).toHaveTextContent("5");
+    const needing = screen.getByRole("table", { name: "Automations" });
+    expect(within(needing).getAllByRole("row")).toHaveLength(2); // the head and Etsy Order Intake
+    expect(within(needing).getByText("Etsy Order Intake")).toBeInTheDocument();
+
+    await user.click(all);
+    const every = screen.getByRole("table", { name: "Automations" });
+    expect(within(every).getAllByRole("row")).toHaveLength(6);
+  });
+
+  it("opens on every automation when nothing needs him", async () => {
+    await open({ operations: fakeOperations("calm") });
+
+    const tabs = screen.getByRole("tablist", { name: "Automation views" });
+    expect(within(tabs).getByRole("tab", { name: /^All/ })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    await screen.findByRole("table", { name: "Automations" });
+  });
+
+  it("shows the chosen automation beside the list, in the side column, with no width cap", async () => {
+    await open();
+
+    const details = await screen.findByRole("region", { name: "Etsy Order Intake" });
+    expect(details.closest(".k-aside")).not.toBeNull();
+    expect(details.querySelector('[class*="max-w-[720px]"]')).toBeNull();
+  });
+
+  it("on a phone the detail offers Back to list, which returns to the list", async () => {
+    vi.stubGlobal("matchMedia", (query: string) => ({
+      matches: query === PHONE_QUERY,
+      media: query,
+      addEventListener: () => undefined,
+      removeEventListener: () => undefined,
+    }));
+    try {
+      const { user } = await open();
+      const details = await screen.findByRole("region", { name: "Etsy Order Intake" });
+      await user.click(within(details).getByRole("button", { name: "Back to list" }));
+      expect(document.activeElement).toHaveAccessibleName("Automations that need you");
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  });
+
+  it("the focus's call to action carries the forward chevron, like the other focus panels", async () => {
+    await open();
+
+    const cta = screen.getByRole("button", { name: "Open the dead-lettered run" });
+    expect(cta.querySelector("svg")).not.toBeNull();
+  });
+
+  it("the execution sheet names its chain in words, never the machine's (Pixel on #72)", async () => {
+    const { user } = await open();
+    await user.click(screen.getByRole("button", { name: "Open the dead-lettered run" }));
+    const sheet = await screen.findByRole("dialog", { name: "Execution" });
+    const chain = await within(sheet).findByRole("list", { name: "Chain" });
+
+    expect(within(chain).getAllByText("Trigger").length).toBeGreaterThan(0);
+    expect(within(chain).getAllByText("Execution").length).toBeGreaterThan(0);
+    expect(within(chain).getAllByText("Pending → Running").length).toBeGreaterThan(0);
+    for (const raw of ["trigger", "execution", "action", "pending → running"])
+      expect(within(chain).queryByText(raw)).toBeNull();
+  });
+
+  it("the execution sheet speaks Hebrew too", async () => {
+    const { user } = await open({}, "he");
+    await user.click(await screen.findByRole("button", { name: "פתחו את ההרצה שנכשלה סופית" }));
+    const sheet = await screen.findByRole("dialog");
+    for (const raw of [/^trigger$/, /^execution$/, /^action$/, /pending → running/])
+      expect(within(sheet).queryByText(raw)).toBeNull();
   });
 
   it("says so when automations are not set up on this server", async () => {

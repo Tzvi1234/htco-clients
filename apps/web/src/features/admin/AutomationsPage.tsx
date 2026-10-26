@@ -1,6 +1,6 @@
 import { Plural, Trans, useLingui } from "@lingui/react/macro";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useId, useRef, useState } from "react";
 
 import { ApiError, meQuery, useApi } from "../../shared/api/api.tsx";
 import {
@@ -11,21 +11,28 @@ import {
 import { useLiveShops } from "../../shared/api/live.ts";
 import { operationsHealthQuery, type OperationsHealth } from "../../shared/api/operations.ts";
 import { useCount } from "../../shared/i18n/format.ts";
+import { PHONE_QUERY, useMediaQuery } from "../../shared/lib/useMediaQuery.ts";
 import { Button } from "../../shared/ui/Button.tsx";
 import { PageHeader } from "../../shared/ui/PageHeader.tsx";
 import { Panel, PanelBody, PanelHeader } from "../../shared/ui/Panel.tsx";
 import {
+  Aside,
+  BackGlyph,
   Chip,
   DataTable,
   Figure,
   Figures,
   Flow,
+  FlowRow,
   Focus,
   KV,
   LiveSkeleton,
   N,
+  NextGlyph,
   SectionLabel,
   Status,
+  SubTabs,
+  TabPanel,
 } from "../../shared/ui/kit/index.ts";
 import { WorkspacePicker, pickWorkspace } from "../../shared/ui/WorkspacePicker.tsx";
 
@@ -198,6 +205,19 @@ function Automations({
     dead[0]?.id ?? live[0]?.id ?? automations[0]?.id,
   );
   const [opened, setOpened] = useState<string | null>(null);
+  // The clarity pattern (Pixel on #72): what needs him first, then every automation.
+  const [tab, setTab] = useState<"needs" | "all">(dead.length > 0 ? "needs" : "all");
+  const tabs = useId();
+  const listRef = useRef<HTMLDivElement>(null);
+  // Phones: the detail sits under the list; this takes him back to it.
+  const backToList = () => {
+    const list = listRef.current;
+    if (list === null) return;
+    list.focus({ preventScroll: true });
+    if (typeof list.scrollIntoView === "function") list.scrollIntoView({ block: "start" });
+  };
+  const listed = tab === "needs" ? dead : automations;
+  const listTitle = tab === "needs" ? t`Automations that need you` : t`All automations`;
   const current = automations.find((a) => a.id === selected);
   const percent = (value: string | null | undefined) =>
     value == null ? "—" : `${String(Number(value))}%`;
@@ -249,6 +269,7 @@ function Automations({
               }}
             >
               <Trans>Open the dead-lettered run</Trans>
+              <NextGlyph size={14} />
             </Button>
           ) : undefined
         }
@@ -279,79 +300,108 @@ function Automations({
           </Figures>
         }
       />
-      <Panel>
-        <PanelHeader title={<Trans>Automations</Trans>} meta={<N>{count(automations.length)}</N>} />
-        {healthError === null ? null : (
-          <p className="m-0 px-6 pb-3 text-body-sm text-secondary">
-            {healthError instanceof ApiError && healthError.status === 403
-              ? t`Only the workspace Owner and Admins see the success rate, retries and dead letters.`
-              : t`The runs and their success could not be loaded; the list is the registry's.`}
-          </p>
-        )}
-        <DataTable
-          flow
-          label={t`Automations`}
-          phoneHidden={[2, 3, 4, 5, 6]}
-          head={[
-            t`Automation`,
-            t`Status`,
-            t`Triggers`,
-            ...(shown ? [t`Runs`, t`Success`, t`Retries`, t`Dead letters`] : []),
-          ]}
-          ends={shown ? [3, 4, 5, 6] : []}
-          rows={automations.map((a) => {
-            const m = metrics.get(a.id);
-            const others = a.callable_from.filter((kind) => kind !== a.primary_trigger);
-            return {
-              key: a.id,
-              selected: a.id === selected,
-              onSelect: () => {
-                setSelected(a.id);
-              },
-              cells: [
-                <span key="n" className="flex min-w-0 flex-col">
-                  <span>{a.name}</span>
-                  <Code>{a.id}</Code>
-                </span>,
-                <Readiness key="r" automation={a} />,
-                <span key="t">
-                  {words.trigger(a.primary_trigger)}
-                  {others.length === 0 ? null : (
-                    <span className="text-muted">
-                      {" · "}
-                      {others.map(words.trigger).join(", ")}
-                    </span>
-                  )}
-                </span>,
-                ...(shown
-                  ? [
-                      <N key="x">{m === undefined ? "—" : count(m.executions)}</N>,
-                      <N key="s">{percent(m?.success_rate)}</N>,
-                      <N key="y">{m === undefined ? "—" : count(m.retries)}</N>,
-                      m === undefined ? (
-                        <N key="d">—</N>
-                      ) : m.dead_lettered > 0 ? (
-                        <Chip key="d" className="ltr">
-                          {count(m.dead_lettered)}
-                        </Chip>
-                      ) : (
-                        <N key="d">0</N>
-                      ),
-                    ]
-                  : []),
-              ],
-            };
-          })}
-        />
-      </Panel>
-      {current === undefined ? null : (
-        <Details
-          key={current.id}
-          organizationId={organizationId}
-          automation={current}
-          onOpen={setOpened}
-        />
-      )}
+      <SubTabs
+        label={t`Automation views`}
+        idBase={tabs}
+        value={tab}
+        onChange={setTab}
+        tabs={[
+          { id: "needs", label: <Trans>Needs you</Trans>, count: dead.length },
+          { id: "all", label: <Trans>All</Trans>, count: automations.length },
+        ]}
+      />
+      <TabPanel idBase={tabs} tab={tab}>
+        <FlowRow layout="main-side">
+          <Panel>
+            <div
+              ref={listRef}
+              tabIndex={-1}
+              className="scroll-mt-28 outline-none"
+              aria-label={listTitle}
+            >
+              <PanelHeader title={listTitle} meta={<N>{count(listed.length)}</N>} />
+            </div>
+            {healthError === null ? null : (
+              <p className="m-0 px-6 pb-3 text-body-sm text-secondary">
+                {healthError instanceof ApiError && healthError.status === 403
+                  ? t`Only the workspace Owner and Admins see the success rate, retries and dead letters.`
+                  : t`The runs and their success could not be loaded; the list is the registry's.`}
+              </p>
+            )}
+            <DataTable
+              flow
+              label={t`Automations`}
+              phoneHidden={[2, 3, 4, 5, 6]}
+              head={[
+                t`Automation`,
+                t`Status`,
+                t`Triggers`,
+                ...(shown ? [t`Runs`, t`Success`, t`Retries`, t`Dead letters`] : []),
+              ]}
+              ends={shown ? [3, 4, 5, 6] : []}
+              rows={listed.map((a) => {
+                const m = metrics.get(a.id);
+                const others = a.callable_from.filter((kind) => kind !== a.primary_trigger);
+                return {
+                  key: a.id,
+                  selected: a.id === selected,
+                  onSelect: () => {
+                    setSelected(a.id);
+                  },
+                  cells: [
+                    <span key="n" className="flex min-w-0 flex-col">
+                      <span>{a.name}</span>
+                      <Code>{a.id}</Code>
+                    </span>,
+                    <Readiness key="r" automation={a} />,
+                    <span key="t">
+                      {words.trigger(a.primary_trigger)}
+                      {others.length === 0 ? null : (
+                        <span className="text-muted">
+                          {" · "}
+                          {others.map(words.trigger).join(", ")}
+                        </span>
+                      )}
+                    </span>,
+                    ...(shown
+                      ? [
+                          <N key="x">{m === undefined ? "—" : count(m.executions)}</N>,
+                          <N key="s">{percent(m?.success_rate)}</N>,
+                          <N key="y">{m === undefined ? "—" : count(m.retries)}</N>,
+                          m === undefined ? (
+                            <N key="d">—</N>
+                          ) : m.dead_lettered > 0 ? (
+                            <Chip key="d" className="ltr">
+                              {count(m.dead_lettered)}
+                            </Chip>
+                          ) : (
+                            <N key="d">0</N>
+                          ),
+                        ]
+                      : []),
+                  ],
+                };
+              })}
+            />
+            {listed.length === 0 ? (
+              <p className="m-0 px-6 pt-2 pb-6 text-body-sm text-secondary max-sm:px-4">
+                <Trans>Nothing needs you: no automation has a dead-lettered run.</Trans>
+              </p>
+            ) : null}
+          </Panel>
+          <Aside>
+            {current === undefined ? null : (
+              <Details
+                key={current.id}
+                organizationId={organizationId}
+                automation={current}
+                onOpen={setOpened}
+                onBack={backToList}
+              />
+            )}
+          </Aside>
+        </FlowRow>
+      </TabPanel>
       {opened === null ? null : (
         <ExecutionSheet
           organizationId={organizationId}
@@ -370,13 +420,16 @@ function Details({
   organizationId,
   automation,
   onOpen,
+  onBack,
 }: {
   organizationId: string;
   automation: Automation;
   onOpen: (executionId: string) => void;
+  onBack: () => void;
 }) {
   const { t } = useLingui();
   const api = useApi();
+  const phone = useMediaQuery(PHONE_QUERY);
   const words = useWords();
   const count = useCount();
   const since = useAgo();
@@ -385,8 +438,16 @@ function Details({
   const Tool = AUTOMATION_TOOLS[automation.id];
   return (
     <Panel label={automation.name}>
+      {phone ? (
+        <div className="px-4 pt-4">
+          <Button variant="ghost" size="sm" onPress={onBack}>
+            <BackGlyph size={14} />
+            <Trans>Back to list</Trans>
+          </Button>
+        </div>
+      ) : null}
       <PanelHeader title={automation.name} meta={<Readiness automation={automation} />} />
-      <PanelBody scroll={false} className="max-w-[720px] gap-6 pt-0">
+      <PanelBody scroll={false} className="gap-6 pt-0">
         <KV
           items={[
             [t`Automation`, <Code key="i">{automation.id}</Code>],

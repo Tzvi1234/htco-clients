@@ -155,7 +155,8 @@ export function fakeHealth(
         automation_id: "etsy-order-intake",
         executions: 212,
         succeeded: 209,
-        dead_lettered: 1,
+        // Only the `dead` scene has a dead-lettered run (Admin › Automations' Needs you tab).
+        dead_lettered: ops.scene === "dead" ? 1 : 0,
         retries: 7,
         success_rate: "99.5",
         p50_seconds: 1.4,

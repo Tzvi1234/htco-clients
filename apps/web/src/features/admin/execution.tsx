@@ -48,6 +48,30 @@ export function useStateWords(): (state: string) => { status: AgentStatus; label
   return (state) => words[state] ?? null;
 }
 
+/** A chain entry's kind in the user's words (Pixel on #72: never the machine's). */
+function useKindWords(): (kind: string) => string {
+  const { t } = useLingui();
+  const words: Record<string, string> = {
+    trigger: t({ message: "Trigger", context: "execution chain" }),
+    execution: t({ message: "Execution", context: "execution chain" }),
+    action: t({ message: "Action", context: "execution chain" }),
+    approval: t({ message: "Approval", context: "execution chain" }),
+    human_task: t({ message: "Task for a person", context: "execution chain" }),
+    event: t({ message: "Event", context: "execution chain" }),
+  };
+  return (kind) => words[kind] ?? kind;
+}
+
+/** An execution entry's "from → to" in words; any other name stays the code it is. */
+function EntryName({ kind, name }: { kind: string; name: string }) {
+  const state = useStateWords();
+  const change = kind === "execution" ? /^([a-z_]+) → ([a-z_]+)$/.exec(name) : null;
+  const from = change?.[1] === undefined ? null : state(change[1]);
+  const to = change?.[2] === undefined ? null : state(change[2]);
+  if (from === null || to === null) return <Code>{name}</Code>;
+  return <span className="text-caption">{`${from.label} → ${to.label}`}</span>;
+}
+
 export function StateWord({ state }: { state: string }) {
   const word = useStateWords()(state);
   return word === null ? <Code>{state}</Code> : <Status status={word.status} label={word.label} />;
@@ -67,6 +91,7 @@ export function ExecutionSheet({
   const api = useApi();
   const client = useQueryClient();
   const since = useAgo();
+  const kindWord = useKindWords();
   const chain = useQuery(executionChainQuery(api, organizationId, executionId));
   const [said, setSaid] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
@@ -153,8 +178,8 @@ export function ExecutionSheet({
                         className="flex flex-wrap items-baseline justify-between gap-x-3 border-b border-line pb-2 last:border-b-0"
                       >
                         <span className="flex min-w-0 items-baseline gap-2">
-                          <Chip>{entry.kind}</Chip>
-                          <Code>{entry.name}</Code>
+                          <Chip>{kindWord(entry.kind)}</Chip>
+                          <EntryName kind={entry.kind} name={entry.name} />
                           {entry.state === null ? null : (
                             <span className="text-caption text-muted">
                               <StateWord state={entry.state} />

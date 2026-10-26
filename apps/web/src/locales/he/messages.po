@@ -418,6 +418,11 @@ msgstr "חשבון"
 msgid "across the shops"
 msgstr "בכל החנויות"
 
+#: src/features/admin/execution.tsx
+msgctxt "execution chain"
+msgid "Action"
+msgstr "פעולה"
+
 #: src/features/commerce/demoScreens.tsx
 #: src/features/team/TeamPage.tsx
 msgid "Active"
@@ -524,6 +529,7 @@ msgstr "התראות"
 msgid "Alex"
 msgstr "אלכס"
 
+#: src/features/admin/AutomationsPage.tsx
 #: src/features/commerce/OrdersPage.tsx
 #: src/features/commerce/ProductsPage.tsx
 #: src/features/incidents/IncidentsPage.tsx
@@ -537,6 +543,10 @@ msgstr "לכל האישורים"
 #: src/app/shell/TabBar.tsx
 msgid "All areas"
 msgstr "כל האזורים"
+
+#: src/features/admin/AutomationsPage.tsx
+msgid "All automations"
+msgstr "כל האוטומציות"
 
 #: src/features/customers/CustomersDemos.tsx
 msgid "All customers"
@@ -641,6 +651,11 @@ msgstr "מראה ושפה"
 #: src/features/admin/AutomationsPage.tsx
 #: src/features/commerce/demoScreens.tsx
 #: src/features/team/TeamPage.tsx
+msgid "Approval"
+msgstr "אישור"
+
+#: src/features/admin/execution.tsx
+msgctxt "execution chain"
 msgid "Approval"
 msgstr "אישור"
 
@@ -761,6 +776,10 @@ msgid "Automation numbers"
 msgstr "מספרי האוטומציות"
 
 #: src/features/admin/AutomationsPage.tsx
+msgid "Automation views"
+msgstr "תצוגות האוטומציות"
+
+#: src/features/admin/AutomationsPage.tsx
 #: src/features/admin/OperationsPage.tsx
 #: src/features/incidents/IncidentState.tsx
 #: src/features/office/FloorPage.tsx
@@ -777,6 +796,10 @@ msgstr "אוטומציות"
 #: src/features/admin/AutomationsPage.tsx
 msgid "Automations are not set up on this server yet."
 msgstr "האוטומציות עדיין לא הוגדרו בשרת הזה."
+
+#: src/features/admin/AutomationsPage.tsx
+msgid "Automations that need you"
+msgstr "אוטומציות שמחכות לך"
 
 #: src/features/office/ChatPage.tsx
 msgid "Autonomy:"
@@ -814,6 +837,7 @@ msgstr "ממתינות למשלוח"
 msgid "Back to inviting"
 msgstr "חזרה להזמנה"
 
+#: src/features/admin/AutomationsPage.tsx
 #: src/features/incidents/IncidentsPage.tsx
 msgid "Back to list"
 msgstr "חזרה לרשימה"
@@ -1818,6 +1842,11 @@ msgstr "כתובת הכניסה של Etsy נראתה שגויה, ולכן לא �
 msgid "Event"
 msgstr "אירוע"
 
+#: src/features/admin/execution.tsx
+msgctxt "execution chain"
+msgid "Event"
+msgstr "אירוע"
+
 #: src/features/work/demoScreens.tsx
 msgid "Events by hour, busiest at 14:00"
 msgstr "אירועים לפי שעה, השיא ב־14:00"
@@ -1869,6 +1898,11 @@ msgid "Exchanges"
 msgstr "החלפות"
 
 #: src/features/admin/execution.tsx
+msgid "Execution"
+msgstr "הרצה"
+
+#: src/features/admin/execution.tsx
+msgctxt "execution chain"
 msgid "Execution"
 msgstr "הרצה"
 
@@ -2938,6 +2972,7 @@ msgstr "צריך לחבר מחדש"
 msgid "Needs reply:"
 msgstr "דורש תשובה:"
 
+#: src/features/admin/AutomationsPage.tsx
 #: src/features/admin/OperationsPage.tsx
 #: src/features/welcome/WelcomePage.tsx
 msgid "Needs you"
@@ -3290,6 +3325,10 @@ msgstr "אין תקלות פתוחות"
 #: src/app/shell/CommandMenu.tsx
 msgid "Nothing matches."
 msgstr "לא נמצאה התאמה."
+
+#: src/features/admin/AutomationsPage.tsx
+msgid "Nothing needs you: no automation has a dead-lettered run."
+msgstr "שום דבר לא מחכה לך: לאף אוטומציה אין הרצה שנכשלה סופית."
 
 #: src/features/commerce/ShippingPage.tsx
 msgid "Nothing to ship and nothing shipped in the last 30 days."
@@ -5148,6 +5187,11 @@ msgstr "תקלות מערכת"
 msgid "Tags"
 msgstr "תגיות"
 
+#: src/features/admin/execution.tsx
+msgctxt "execution chain"
+msgid "Task for a person"
+msgstr "משימה לאדם"
+
 #: src/features/office/TeamRoomPage.tsx
 msgid "Task:"
 msgstr "משימה:"
@@ -5764,6 +5808,11 @@ msgstr "מגמה:"
 msgctxt "incident state"
 msgid "Triaged"
 msgstr "מוינה"
+
+#: src/features/admin/execution.tsx
+msgctxt "execution chain"
+msgid "Trigger"
+msgstr "הפעלה"
 
 #: src/features/admin/AutomationsPage.tsx
 msgid "Triggers"
