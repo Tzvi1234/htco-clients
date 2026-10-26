@@ -68,11 +68,14 @@ export const authKeys = {
 
 /**
  * Forget what belongs to the session that ended: who is signed in, and the shops' live data,
- * whose orders carry buyer details filtered for that user's role (Codex review of #35).
+ * whose orders carry buyer details filtered for that user's role (Codex review of #35), and the
+ * operations health only Owners and Admins see.
  */
 export function forgetSession(client: QueryClient): void {
   client.removeQueries({ queryKey: ["auth"] });
   client.removeQueries({ queryKey: ["live"] });
+  // The queue and sync health of the Owner and Admins (Codex review of clients #60).
+  client.removeQueries({ queryKey: ["operations"] });
 }
 
 /** Who is signed in on this browser; `null` when nobody is. */

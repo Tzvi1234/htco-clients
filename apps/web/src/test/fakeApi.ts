@@ -1,5 +1,13 @@
 import { createApiClient, type ApiClient, type components } from "@htco/api-client";
 
+import {
+  DEAD_EXECUTION,
+  DEAD_EXECUTION_JOB,
+  fakeChain,
+  fakeHealth,
+  fakeOperations,
+  type FakeOperations,
+} from "./fakeOperations.ts";
 import { fakeShopData, type FakePeriod } from "./fakeShopData.ts";
 
 type IntegrationView = components["schemas"]["IntegrationView"];
@@ -99,6 +107,8 @@ export interface FakeState {
   /** The Orders screen's bulk actions (slice 5.7): each export's body, each re-sync's IDs. */
   exports: unknown[];
   resyncs: number[][];
+  /** The queue, execution and sync health (Admin › Health, slice 5.9) and its retries. */
+  operations: FakeOperations;
 }
 
 const PROBLEMS = "https://ht-co.app/problems/";
@@ -272,6 +282,7 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
     recheckTooSoon: false,
     exports: [],
     resyncs: [],
+    operations: fakeOperations(),
     ...initial,
   };
   const requests: Request[] = [];
@@ -478,6 +489,52 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
           "x-orders-exported": String(rows.length),
           "cache-control": "no-store",
         },
+      });
+    }
+
+    // The operations calls name their workspace: a member of several who names none gets 400.
+    const operational =
+      route === "GET /v1/operations/health" ||
+      /^POST \/v1\/operations\/dead-letters\/[^/]+\/retry$/.test(route) ||
+      /^GET \/v1\/executions\/[^/]+$/.test(route) ||
+      /^POST \/v1\/automations\/[^/]+\/executions\/[^/]+\/retry$/.test(route);
+    const named = url.searchParams.get("organization_id");
+    if (operational && named === null && state.otherOrgs.length > 0)
+      return problem(400, "organization-required");
+    const workspace = named ?? org;
+    const admin = workspace === org ? state.role === "owner" || state.role === "admin" : true;
+    if (route === "GET /v1/operations/health") {
+      if (!admin) return problem(403, "forbidden");
+      // Another workspace of the user runs calmly: switching shows its own numbers.
+      const ops = workspace === org ? state.operations : fakeOperations("calm");
+      return json(200, fakeHealth(workspace, state.shops, ops));
+    }
+    const deadRetry = /^POST \/v1\/operations\/dead-letters\/([^/]+)\/retry$/.exec(route);
+    if (deadRetry !== null) {
+      if (!admin) return problem(403, "forbidden");
+      const id = deadRetry[1] ?? "";
+      if (id === DEAD_EXECUTION_JOB)
+        return problem(409, "retry-through-execution", { execution_id: DEAD_EXECUTION });
+      if (!state.operations.dead.includes(id)) return problem(409, "job-not-dead");
+      state.operations.dead = state.operations.dead.filter((d) => d !== id);
+      return json(202, { job_id: id, state: "queued" });
+    }
+    const chain = /^GET \/v1\/executions\/([^/]+)$/.exec(route);
+    if (chain !== null) return json(200, fakeChain(chain[1] ?? "", state.operations));
+    const executionRetry = /^POST \/v1\/automations\/([^/]+)\/executions\/([^/]+)\/retry$/.exec(
+      route,
+    );
+    if (executionRetry !== null) {
+      if (!admin) return problem(403, "forbidden");
+      const id = executionRetry[2] ?? "";
+      if (state.operations.hold !== undefined) await state.operations.hold;
+      if (id !== DEAD_EXECUTION || state.operations.retriedExecutions.includes(id))
+        return problem(409, "execution-not-dead-lettered");
+      state.operations.retriedExecutions.push(id);
+      return json(200, {
+        id,
+        automation_id: executionRetry[1] ?? "",
+        state: "retry_scheduled",
       });
     }
     const one = /^GET \/v1\/shops\/([^/]+)\/orders\/(\d+)$/.exec(route);
