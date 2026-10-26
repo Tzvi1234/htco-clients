@@ -46,6 +46,11 @@ export type Glyph = ReturnType<typeof glyph>;
 export const BackGlyph = glyph(<path d="M14.5 6l-6 6 6 6" />, 1.6, true);
 export const NextGlyph = glyph(<path d="M9.5 6l6 6-6 6" />, 1.6, true);
 export const PlusGlyph = glyph(<path d="M12 5v14M5 12h14" />, 1.6);
+/** A passkey (Face ID, Touch ID, Windows Hello, a fingerprint): a solid key with its bow cut
+ * out, readable at 16 px like the rest of the set (Pixel on #74). */
+export const PasskeyGlyph = glyph(
+  <path d="M8 6.5a5.5 5.5 0 1 1 0 11a5.5 5.5 0 1 1 0-11zM8 10a2 2 0 1 0 0 4a2 2 0 1 0 0-4zM13 10.75h8v2.5h-1v2.75h-1.75v-2.75h-1.25v2.75h-1.75v-2.75H13z" />,
+);
 export const MinusGlyph = glyph(<path d="M5 12h14" />, 1.6);
 export const CheckGlyph = glyph(<path d="M5 12.5l4.5 4.5L19 7.5" />, 2.4);
 export const CloseGlyph = glyph(<path d="M6 6l12 12M18 6L6 18" />, 2);

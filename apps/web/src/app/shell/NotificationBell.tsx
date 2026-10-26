@@ -114,7 +114,7 @@ export function useNoticeText(shopName: (id: string | null | undefined) => strin
       }
       case "mfa_changed":
         return p["change"] === "removed"
-          ? t`Two-step sign-in was turned off`
+          ? t`A second factor was removed`
           : t`Two-step sign-in was set up`;
       case "shop_connected":
         return shop === undefined ? t`A shop was connected` : t`${shop} was connected`;
