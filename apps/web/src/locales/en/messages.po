@@ -2283,6 +2283,14 @@ msgid "Incident center"
 msgstr "Incident center"
 
 #: src/app/shell/NotificationBell.tsx
+msgid "Incident escalated: {cause}"
+msgstr "Incident escalated: {cause}"
+
+#: src/app/shell/NotificationBell.tsx
+msgid "Incident escalated: {cause}, order #{receipt}"
+msgstr "Incident escalated: {cause}, order #{receipt}"
+
+#: src/app/shell/NotificationBell.tsx
 msgid "Incident resolved: {cause}"
 msgstr "Incident resolved: {cause}"
 
