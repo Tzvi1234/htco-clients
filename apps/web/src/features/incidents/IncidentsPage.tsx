@@ -22,7 +22,6 @@ import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
 import { cx } from "../../shared/lib/cx.ts";
 import { PHONE_QUERY, useMediaQuery } from "../../shared/lib/useMediaQuery.ts";
 import { Button } from "../../shared/ui/Button.tsx";
-import { ArrowEndIcon, ArrowStartIcon } from "../../shared/ui/icons.tsx";
 import { PageHeader } from "../../shared/ui/PageHeader.tsx";
 import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
 import { WorkspacePicker, pickWorkspace } from "../../shared/ui/WorkspacePicker.tsx";
@@ -43,6 +42,8 @@ import {
   Sep,
   SubTabs,
   TabPanel,
+  NextGlyph,
+  BackGlyph,
 } from "../../shared/ui/kit/index.ts";
 
 /**
@@ -293,7 +294,7 @@ function Center({ organizationId }: { organizationId: string }) {
               }}
             >
               <Trans>Open the most urgent</Trans>
-              <ArrowEndIcon size={14} />
+              <NextGlyph size={14} />
             </Button>
           )
         }
@@ -642,7 +643,7 @@ function IncidentDetailPanel({
         <div className="flex flex-col gap-2">
           {phone ? (
             <Button variant="ghost" size="sm" className="self-start" onPress={onBack}>
-              <ArrowStartIcon size={14} />
+              <BackGlyph size={14} />
               <Trans>Back to list</Trans>
             </Button>
           ) : null}

@@ -1,7 +1,6 @@
 import { useLingui } from "@lingui/react/macro";
 import type { ReactNode } from "react";
 
-import { GearIcon } from "../../shared/ui/icons.tsx";
 import { Panel, PanelBody, PanelHeader } from "../../shared/ui/Panel.tsx";
 import {
   CircleButton,
@@ -18,6 +17,7 @@ import {
   Stack,
   StatusGlyph,
   Tile,
+  GearGlyph,
 } from "../../shared/ui/kit/index.ts";
 
 const DAILY = [0.6, 0.9, 0.7, 1.1, 0.8, 0.5, 0.4, 1.2, 0.9, 0.7, 1.0, 0.8, 0.6, 0.9, 1.92];
@@ -32,7 +32,7 @@ export function AiOpsPage() {
         <PanelHeader
           title={t`AI budget`}
           meta={t`October`}
-          actions={<CircleButton label={t`Limits`} icon={<GearIcon />} />}
+          actions={<CircleButton label={t`Limits`} icon={<GearGlyph />} />}
         />
         <PanelBody className="justify-between gap-4">
           <IdBlock label={t`Spent this month:`} value={<N>$12.40</N>}>
@@ -151,7 +151,7 @@ function ModelCard({
     <Panel>
       <PanelHeader
         title={<N>{vendor}</N>}
-        actions={<CircleButton label={t`Model settings`} icon={<GearIcon />} />}
+        actions={<CircleButton label={t`Model settings`} icon={<GearGlyph />} />}
       />
       <PanelBody className="justify-between">
         <IdBlock label={t`Model:`} value={model}>

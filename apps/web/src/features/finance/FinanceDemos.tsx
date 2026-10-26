@@ -3,7 +3,6 @@ import type { ReactNode } from "react";
 
 import { useAgents, type AgentId } from "../../shared/demo/office.ts";
 import { Panel, PanelBody, PanelHeader } from "../../shared/ui/Panel.tsx";
-import { GearIcon } from "../../shared/ui/icons.tsx";
 import {
   CircleButton,
   DataTable,
@@ -25,6 +24,7 @@ import {
   Who,
   Zoom,
   useZoomLabels,
+  GearGlyph,
 } from "../../shared/ui/kit/index.ts";
 
 const L = ({ children }: { children: ReactNode }) => <span className="ltr">{children}</span>;
@@ -41,7 +41,7 @@ export function FinanceOverviewDemo({ title }: { title: string }) {
       <Panel>
         <PanelHeader
           title={<Trans>October</Trans>}
-          actions={<CircleButton label={t`Settings`} icon={<GearIcon />} />}
+          actions={<CircleButton label={t`Settings`} icon={<GearGlyph />} />}
         />
         <PanelBody className="justify-between gap-6">
           <IdBlock label={t`Revenue this month:`} value={<L>$14,920</L>} />

@@ -1,11 +1,8 @@
-import {
-  ShieldCheckIcon as ShieldCheck,
-  StorefrontIcon as Storefront,
-} from "@phosphor-icons/react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { ObjectIcon, Tag, type Hue } from "./Tag.tsx";
 import { useBi } from "../../test/stories.ts";
+import { BagGlyph, ShieldGlyph } from "./kit/index.ts";
 
 const HUES: Hue[] = ["iris", "saffron", "coral", "mint", "sky", "rose", "slate"];
 
@@ -49,7 +46,7 @@ export const ObjectIcons: Story = {
       <div className="flex flex-col gap-3">
         {(["sm", "md", "lg"] as const).map((size) => (
           <p key={size} className="m-0 flex items-center gap-2">
-            <ObjectIcon icon={size === "md" ? ShieldCheck : Storefront} size={size} />
+            <ObjectIcon icon={size === "md" ? ShieldGlyph : BagGlyph} size={size} />
             {size === "md" ? say("Security", "אבטחה") : say("Shops", "חנויות")}
           </p>
         ))}
