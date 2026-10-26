@@ -47,6 +47,8 @@ export interface FakeState {
   /** Extra organizations the user is Owner of, by ID. */
   otherOrgs: string[];
   accepted?: Record<string, unknown>;
+  /** True: the members list never answers (a slow read, to see what renders meanwhile). */
+  membersHang?: boolean;
   /** Emails a password reset link was asked for (the same answer for any email). */
   resetRequests: unknown[];
   /** True: asking for a reset link answers 429. */
@@ -339,6 +341,8 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
 
     const orgRoute = /^(GET|POST) \/v1\/organizations\/([^/]+)\/(members|invitations)$/.exec(route);
     if (orgRoute !== null) {
+      if (orgRoute[3] === "members" && route.startsWith("GET") && state.membersHang === true)
+        return new Promise<Response>(() => undefined);
       if (orgRoute[3] === "members")
         return json(200, {
           items: state.members.map((m) => ({ ...m, shop_ids: m.shop_ids ?? [] })),
