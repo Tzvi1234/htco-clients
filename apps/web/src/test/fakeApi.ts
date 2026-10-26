@@ -588,7 +588,17 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
       return json(202, { job_id: id, state: "queued" });
     }
     const chain = /^GET \/v1\/executions\/([^/]+)$/.exec(route);
-    if (chain !== null) return json(200, fakeChain(chain[1] ?? "", state.operations));
+    if (chain !== null) {
+      const recount = state.recounts.executions.get(chain[1] ?? "");
+      if (recount !== undefined)
+        return json(200, {
+          ...fakeChain(chain[1] ?? "", state.operations),
+          automation_id: "product-sales-counters",
+          state: recount.state,
+          output: recount.state === "succeeded" ? { rebuilt: 7, moved: 3 } : null,
+        });
+      return json(200, fakeChain(chain[1] ?? "", state.operations));
+    }
     if (route === "POST /v1/automations/product-sales-counters/executions") {
       if (!admin) return problem(403, "forbidden");
       const key = request.headers.get("Idempotency-Key");

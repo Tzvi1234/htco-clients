@@ -180,6 +180,10 @@ msgstr "{name} tabs"
 msgid "{range} days"
 msgstr "{range} days"
 
+#: src/features/admin/SalesCounters.tsx
+msgid "{rebuilt, plural, one {Recounted, # product} other {Recounted, # products}}"
+msgstr "{rebuilt, plural, one {Recounted, # product} other {Recounted, # products}}"
+
 #: src/features/incidents/IncidentsPage.tsx
 msgid "{resolvedCount, plural, one {# resolved so far} other {# resolved so far}}"
 msgstr "{resolvedCount, plural, one {# resolved so far} other {# resolved so far}}"

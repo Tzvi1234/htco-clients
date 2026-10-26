@@ -1,10 +1,11 @@
-import { Trans, useLingui } from "@lingui/react/macro";
+import { Plural, Trans, useLingui } from "@lingui/react/macro";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Dialog, Heading, Modal, ModalOverlay } from "react-aria-components";
 
 import { ApiError, useApi } from "../../shared/api/api.tsx";
 import {
+  executionChainQuery,
   inFlight,
   recountKeys,
   recountRunsQuery,
@@ -24,8 +25,8 @@ interface Shop {
  * Admin › Health › Sales counters (Phase 5 activation step 2b): the Owner and Admins recount a
  * shop's product sales from its stored orders, for example once after the counters are
  * activated. One run per confirm sheet (its Idempotency-Key), then how it went, from the
- * automation's newest runs. The count it rebuilt shows once the API returns an execution's
- * output (platform #158).
+ * automation's newest runs, and once it succeeded the count it rebuilt (the execution's output,
+ * `GET /v1/executions/{id}`, platform #158).
  */
 export function SalesCounters({
   organizationId,
@@ -100,10 +101,15 @@ export function SalesCounters({
             <div key="n" className="flex min-w-0 flex-col gap-1">
               <span dir="auto">{shop.name}</span>
               <span className="sm:hidden">
-                <RunState run={runOf(shop)} said={said[shop.id]} />
+                <RunState run={runOf(shop)} said={said[shop.id]} organizationId={organizationId} />
               </span>
             </div>,
-            <RunState key="s" run={runOf(shop)} said={said[shop.id]} />,
+            <RunState
+              key="s"
+              run={runOf(shop)}
+              said={said[shop.id]}
+              organizationId={organizationId}
+            />,
             <Button
               key="b"
               variant="secondary"
@@ -177,12 +183,20 @@ function isRunning(run: Execution | undefined): boolean {
 }
 
 /** How the shop's last recount went, as a status glyph and words (never colour alone). */
-function RunState({ run, said }: { run: Execution | undefined; said: string | undefined }) {
+function RunState({
+  run,
+  said,
+  organizationId,
+}: {
+  run: Execution | undefined;
+  said: string | undefined;
+  organizationId: string;
+}) {
   const { t } = useLingui();
   if (said !== undefined && said !== "")
     return <span className="text-body-sm text-secondary">{said}</span>;
   if (run === undefined) return <span className="text-secondary">—</span>;
-  if (run.state === "succeeded") return <Status status="delivered" label={t`Recounted`} />;
+  if (run.state === "succeeded") return <Recounted organizationId={organizationId} id={run.id} />;
   if (run.state === "dead_lettered" || run.state === "failed" || run.state === "cancelled")
     return (
       <span className="text-body-sm text-secondary">
@@ -191,4 +205,19 @@ function RunState({ run, said }: { run: Execution | undefined; said: string | un
     );
   if (run.state === "running") return <Status status="running" label={t`Recounting`} />;
   return <Status status="queued" label={t`Queued`} />;
+}
+
+/** A finished recount and how many products it counted (the execution's output). */
+function Recounted({ organizationId, id }: { organizationId: string; id: string }) {
+  const { t } = useLingui();
+  const api = useApi();
+  const chain = useQuery(executionChainQuery(api, organizationId, id));
+  const rebuilt = chain.data?.output?.["rebuilt"];
+  if (typeof rebuilt !== "number") return <Status status="delivered" label={t`Recounted`} />;
+  return (
+    <Status
+      status="delivered"
+      label={<Plural value={rebuilt} one="Recounted, # product" other="Recounted, # products" />}
+    />
+  );
 }

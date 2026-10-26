@@ -76,7 +76,8 @@ describe("Sales counters: Recount sales (Phase 5 activation 2b)", { timeout: 15_
     await shows(row, "Queued");
 
     backend.state.recounts.finish("succeeded");
-    await shows(row, "Recounted", 8000);
+    // The count comes from the execution's output (GET /v1/executions/{id}, platform #158).
+    await shows(row, "Recounted, 7 products", 8000);
   });
 
   it("cancel sends nothing", async () => {

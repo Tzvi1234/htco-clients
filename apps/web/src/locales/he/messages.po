@@ -180,6 +180,10 @@ msgstr "הכרטיסיות של {name}"
 msgid "{range} days"
 msgstr "{range} ימים"
 
+#: src/features/admin/SalesCounters.tsx
+msgid "{rebuilt, plural, one {Recounted, # product} other {Recounted, # products}}"
+msgstr "{rebuilt, plural, one {נספר מחדש, מוצר אחד} other {נספר מחדש, # מוצרים}}"
+
 #: src/features/incidents/IncidentsPage.tsx
 msgid "{resolvedCount, plural, one {# resolved so far} other {# resolved so far}}"
 msgstr "{resolvedCount, plural, one {תקלה אחת נפתרה עד כה} other {# נפתרו עד כה}}"
