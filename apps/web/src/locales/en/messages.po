@@ -2408,10 +2408,6 @@ msgstr "Invited member"
 msgid "Iris"
 msgstr "Iris"
 
-#: src/features/admin/SalesCounters.tsx
-msgid "It did not finish. See it under dead letters."
-msgstr "It did not finish. See it under dead letters."
-
 #: src/features/commerce/OrdersPage.tsx
 #: src/features/commerce/ShippingPage.tsx
 msgid "Items"
@@ -3115,6 +3111,10 @@ msgstr "No orders yet."
 #: src/shared/i18n/format.ts
 msgid "No reason given"
 msgstr "No reason given"
+
+#: src/features/admin/SalesCounters.tsx
+msgid "No recent recount"
+msgstr "No recent recount"
 
 #: src/features/admin/OperationsPage.tsx
 msgid "No reconciliation has run yet."
@@ -4567,6 +4567,10 @@ msgstr "See all approvals"
 #: src/features/team/TeamPage.tsx
 msgid "see every shop"
 msgstr "see every shop"
+
+#: src/features/admin/SalesCounters.tsx
+msgid "See it under dead letters."
+msgstr "See it under dead letters."
 
 #: src/features/commerce/OrdersPage.tsx
 msgid "Select every order shown"

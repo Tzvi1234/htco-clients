@@ -2408,10 +2408,6 @@ msgstr "חבר/ה שהוזמנו"
 msgid "Iris"
 msgstr "איריס"
 
-#: src/features/admin/SalesCounters.tsx
-msgid "It did not finish. See it under dead letters."
-msgstr "זה לא הסתיים. אפשר לראות את זה תחת משימות שנכשלו."
-
 #: src/features/commerce/OrdersPage.tsx
 #: src/features/commerce/ShippingPage.tsx
 msgid "Items"
@@ -3115,6 +3111,10 @@ msgstr "עדיין אין הזמנות."
 #: src/shared/i18n/format.ts
 msgid "No reason given"
 msgstr "לא צוינה סיבה"
+
+#: src/features/admin/SalesCounters.tsx
+msgid "No recent recount"
+msgstr "אין ספירה אחרונה"
 
 #: src/features/admin/OperationsPage.tsx
 msgid "No reconciliation has run yet."
@@ -4567,6 +4567,10 @@ msgstr "לכל האישורים"
 #: src/features/team/TeamPage.tsx
 msgid "see every shop"
 msgstr "רואים את כל החנויות"
+
+#: src/features/admin/SalesCounters.tsx
+msgid "See it under dead letters."
+msgstr "אפשר לראות את זה תחת משימות שנכשלו."
 
 #: src/features/commerce/OrdersPage.tsx
 msgid "Select every order shown"

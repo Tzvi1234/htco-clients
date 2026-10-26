@@ -246,7 +246,10 @@ function RunState({
   const run = useRun(organizationId, id);
   if (said !== undefined && said !== "")
     return <span className="block text-body-sm whitespace-normal text-secondary">{said}</span>;
-  if (id === undefined) return <span className="text-secondary">—</span>;
+  // Not among the newest runs (the list has no shop filter yet, platform #188): say so, never a
+  // wrong status. A rebuild may run again any time (idempotent), so the button stays free.
+  if (id === undefined)
+    return <span className="text-body-sm text-secondary">{t`No recent recount`}</span>;
   const state = run.data?.state;
   if (state === "succeeded") {
     const rebuilt = run.data?.output?.["rebuilt"];
@@ -269,9 +272,7 @@ function RunState({
     return (
       <span className="flex flex-col gap-0.5 whitespace-normal">
         <Status status="failed" label={t`Did not finish`} />
-        <span className="text-caption text-secondary">
-          {t`It did not finish. See it under dead letters.`}
-        </span>
+        <span className="text-caption text-secondary">{t`See it under dead letters.`}</span>
       </span>
     );
   if (state === "running") return <Status status="running" label={t`Recounting`} />;

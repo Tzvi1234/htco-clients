@@ -132,7 +132,7 @@ describe("Sales counters: Recount sales (Phase 5 activation 2b)", { timeout: 15_
     });
 
     backend.state.recounts.finish("dead_lettered");
-    await shows(row, "It did not finish. See it under dead letters.", 8000);
+    await shows(row, "See it under dead letters.", 8000);
     // Pixel on #73: a status dot and a short word, like every other state, then the pointer.
     const word = within(row).getAllByText("Did not finish")[0];
     expect(word?.closest("span")?.querySelector("svg[data-status]")).not.toBeNull();
@@ -252,6 +252,14 @@ describe("Sales counters: Recount sales (Phase 5 activation 2b)", { timeout: 15_
     }
     const [first, second] = backend.state.recounts.started;
     expect(first?.key).not.toBe(second?.key);
+  });
+
+  it("a shop with no run among the newest says no recent recount, never a wrong status (main on #73)", async () => {
+    await open();
+    const panel = await counters();
+    const row = within(panel).getByRole("row", { name: /Willow & Wick/ });
+    await shows(row, "No recent recount");
+    expect(within(row).getByRole("button", { name: "Recount sales" })).toBeEnabled();
   });
 
   it("is in Hebrew too", async () => {
