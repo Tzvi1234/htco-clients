@@ -23,7 +23,6 @@ import {
 } from "../../shared/demo/office.ts";
 import { cx } from "../../shared/lib/cx.ts";
 import { REDUCED_MOTION_QUERY, useMediaQuery } from "../../shared/lib/useMediaQuery.ts";
-import { GearIcon, GridIcon, SearchIcon } from "../../shared/ui/icons.tsx";
 import { useToast } from "../../shared/ui/Toast.tsx";
 import { Panel, PanelBody, PanelHeader } from "../../shared/ui/Panel.tsx";
 import {
@@ -51,6 +50,9 @@ import {
   StripCard,
   Zoom,
   initialOf,
+  GearGlyph,
+  GridGlyph,
+  SearchGlyph,
 } from "../../shared/ui/kit/index.ts";
 
 /**
@@ -321,7 +323,7 @@ function FloorList({ modes, noWebgl }: { modes: ReactNode; noWebgl: boolean }) {
       <Panel className="max-sm:hidden">
         <PanelHeader
           title={t`Department details`}
-          actions={<CircleButton label={t`Department settings`} icon={<GearIcon />} />}
+          actions={<CircleButton label={t`Department settings`} icon={<GearGlyph />} />}
         />
         <PanelBody className="justify-between">
           <IdBlock label={t`Department:`} value={t(d.name)} />
@@ -449,9 +451,9 @@ function FloorList({ modes, noWebgl }: { modes: ReactNode; noWebgl: boolean }) {
         zoom={<Zoom page={page} onPage={setPage} labels={{ less: t`Fewer`, more: t`More` }} />}
         actions={
           <>
-            <CircleButton label={t`Find agent`} icon={<SearchIcon />} />
-            <CircleButton label={t`Grid view`} icon={<GridIcon />} />
-            <CircleButton label={t`Settings`} icon={<GearIcon />} className="max-sm:hidden" />
+            <CircleButton label={t`Find agent`} icon={<SearchGlyph />} />
+            <CircleButton label={t`Grid view`} icon={<GridGlyph />} />
+            <CircleButton label={t`Settings`} icon={<GearGlyph />} className="max-sm:hidden" />
           </>
         }
       >

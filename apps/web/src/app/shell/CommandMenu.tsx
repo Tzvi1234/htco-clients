@@ -19,8 +19,8 @@ import {
 import { AREAS } from "./nav.ts";
 import { useShell } from "./ShellState.tsx";
 import { useNavLabels } from "./useNavLabels.ts";
-import { SearchIcon } from "../../shared/ui/icons.tsx";
 import { SoonTag } from "../../shared/ui/SoonTag.tsx";
+import { SearchGlyph } from "../../shared/ui/kit/index.ts";
 
 interface Destination {
   id: string;
@@ -83,7 +83,7 @@ export function CommandMenu() {
               autoFocus
               className="mb-2 flex h-12 items-center gap-2.5 rounded-pill border border-line-strong px-4"
             >
-              <SearchIcon size={16} className="text-secondary" />
+              <SearchGlyph size={16} className="text-secondary" />
               <Input
                 dir="auto"
                 placeholder={t`Search screens and actions…`}

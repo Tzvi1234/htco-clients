@@ -10,10 +10,9 @@ import hero2 from "../../assets/hero/hero2.webp";
 import hero3 from "../../assets/hero/hero3.webp";
 import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
 import { cx } from "../../shared/lib/cx.ts";
-import { ArrowEndIcon } from "../../shared/ui/icons.tsx";
 import { Logo } from "../../shared/ui/Logo.tsx";
 import { Segmented } from "../../shared/ui/Segmented.tsx";
-import { TEXT_LINK } from "../../shared/ui/kit/index.ts";
+import { TEXT_LINK, NextGlyph } from "../../shared/ui/kit/index.ts";
 
 const PILL_PRIMARY =
   "inline-flex h-12 items-center justify-center gap-2 rounded-pill bg-action-primary px-6 text-body-sm text-action-primary-fg no-underline outline-none transition-[background-color,scale] duration-[var(--motion-duration-fast)] ease-standard hover:bg-action-primary-hover active:scale-[0.97]";
@@ -177,7 +176,7 @@ function Hero() {
         <div className="w-in flex flex-wrap items-center gap-2 [animation-delay:160ms]">
           <Link to="/sign-in" className={PILL_PRIMARY}>
             <Trans>Open the web app</Trans>
-            <ArrowEndIcon size={14} />
+            <NextGlyph size={14} />
           </Link>
           <a href="#today" className={PILL_SECONDARY}>
             <Trans>What works today</Trans>
@@ -489,7 +488,7 @@ function Apps() {
                 className="inline-flex h-14 items-center gap-2 rounded-pill bg-inverse px-7 text-body text-on-inverse no-underline outline-none transition-[background-color,scale] duration-[var(--motion-duration-fast)] ease-standard hover:bg-inverse-hover active:scale-[0.97]"
               >
                 <Trans>Open the web app</Trans>
-                <ArrowEndIcon size={16} />
+                <NextGlyph size={16} />
               </Link>
             </div>
           </div>

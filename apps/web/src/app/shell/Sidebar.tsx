@@ -9,9 +9,9 @@ import { useNavLabels } from "./useNavLabels.ts";
 import { UserMenu } from "./UserMenu.tsx";
 import { cx } from "../../shared/lib/cx.ts";
 import { useIntro } from "../../shared/motion/intro.tsx";
-import { ChevronIcon, SearchIcon, SidebarIcon } from "../../shared/ui/icons.tsx";
 import { Logo } from "../../shared/ui/Logo.tsx";
 import { SoonTag } from "../../shared/ui/SoonTag.tsx";
+import { ChevronGlyph, SearchGlyph, SidebarGlyph } from "../../shared/ui/kit/index.ts";
 
 /** A 40 px circle (Design 1C `.cb`) around an icon; add its outline colour. */
 export const CIRCLE =
@@ -129,7 +129,7 @@ function Category({
         {name}
       </span>
       {area.tabs.length > 0 ? (
-        <ChevronIcon
+        <ChevronGlyph
           size={12}
           className={cx(
             LABEL,
@@ -281,7 +281,7 @@ export function Sidebar() {
             "cursor-default border-line-strong text-primary hover:border-line-hover active:scale-95",
           )}
         >
-          <SidebarIcon />
+          <SidebarGlyph />
         </button>
       </div>
       <ShopSwitcher />
@@ -298,7 +298,7 @@ export function Sidebar() {
           "group-data-[mini]/sb:mx-4 group-data-[mini]/sb:w-10 group-data-[mini]/sb:justify-center group-data-[mini]/sb:px-0",
         )}
       >
-        <SearchIcon size={14} />
+        <SearchGlyph size={14} />
         <span className={LABEL}>{t`Quick actions`}</span>
         <kbd
           className={cx(

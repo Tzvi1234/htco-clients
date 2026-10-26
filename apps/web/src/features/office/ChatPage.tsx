@@ -5,7 +5,6 @@ import { CONVERSATIONS } from "./data.ts";
 import { RiskChip } from "../../shared/demo/AgentBits.tsx";
 import { agent, dept, type AgentId } from "../../shared/demo/office.ts";
 import { cx } from "../../shared/lib/cx.ts";
-import { GearIcon, MoreIcon, SearchIcon } from "../../shared/ui/icons.tsx";
 import { Button } from "../../shared/ui/Button.tsx";
 import { Panel, PanelBody, PanelHeader } from "../../shared/ui/Panel.tsx";
 import { StarMapThumb } from "./thumbs.tsx";
@@ -33,6 +32,9 @@ import {
   StatusGlyph,
   Typing,
   useStatusLabels,
+  GearGlyph,
+  MoreGlyph,
+  SearchGlyph,
 } from "../../shared/ui/kit/index.ts";
 
 /**
@@ -66,7 +68,7 @@ function Conversations({ chat, onChat }: { chat: AgentId; onChat: (id: AgentId) 
       />
       <div className="px-4 pb-2">
         <div className={cx(PILL, "h-10 w-full justify-start text-muted")}>
-          <SearchIcon size={14} />
+          <SearchGlyph size={14} />
           {t`Search agents`}
         </div>
       </div>
@@ -130,7 +132,7 @@ function Thread({ chat }: { chat: AgentId }) {
           <>
             <Status status={c.status} live />
             <span className="w-3" />
-            <CircleButton label={t`More`} icon={<MoreIcon />} />
+            <CircleButton label={t`More`} icon={<MoreGlyph />} />
           </>
         }
       />
@@ -307,7 +309,7 @@ export function AgentCard({ id, title }: { id: AgentId; title?: string }) {
     <Panel>
       <PanelHeader
         title={<N>{title ?? "Claude · agent-worker"}</N>}
-        actions={<CircleButton label={t`Agent settings`} icon={<GearIcon />} />}
+        actions={<CircleButton label={t`Agent settings`} icon={<GearGlyph />} />}
       />
       <PanelBody className="justify-between">
         <div className="flex items-center justify-center gap-4">
@@ -366,7 +368,7 @@ function Shared() {
                 {item.icon === "doc" ? (
                   <DocGlyph size={14} />
                 ) : item.icon === "search" ? (
-                  <SearchIcon size={14} />
+                  <SearchGlyph size={14} />
                 ) : (
                   <StarMapThumb size={28} />
                 )}

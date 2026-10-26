@@ -21,7 +21,6 @@ export default defineConfig({
       "react-dom",
       "react-dom/client",
       "react-aria-components",
-      "@phosphor-icons/react",
       "@lingui/core",
       "@lingui/react",
     ],

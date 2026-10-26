@@ -2,7 +2,6 @@ import { useLingui } from "@lingui/react/macro";
 
 import { AgentWho } from "../../shared/demo/AgentBits.tsx";
 import { agent, type AgentId } from "../../shared/demo/office.ts";
-import { MoreIcon } from "../../shared/ui/icons.tsx";
 import { Panel, PanelBody, PanelHeader } from "../../shared/ui/Panel.tsx";
 import {
   Avatar,
@@ -22,6 +21,7 @@ import {
   StatusGlyph,
   useStatusLabels,
   type AgentStatus,
+  MoreGlyph,
 } from "../../shared/ui/kit/index.ts";
 
 /**
@@ -104,7 +104,7 @@ export function EngineeringPage() {
         <PanelHeader
           title={t`Changes & deploys`}
           meta={<N>7</N>}
-          actions={<CircleButton label={t`More`} icon={<MoreIcon />} />}
+          actions={<CircleButton label={t`More`} icon={<MoreGlyph />} />}
         />
         <DataTable
           label={t`Changes & deploys`}

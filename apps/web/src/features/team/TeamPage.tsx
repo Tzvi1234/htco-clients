@@ -18,7 +18,6 @@ import {
 import { cx } from "../../shared/lib/cx.ts";
 import { PHONE_QUERY, useMediaQuery } from "../../shared/lib/useMediaQuery.ts";
 import { Button } from "../../shared/ui/Button.tsx";
-import { CheckIcon, CloseIcon } from "../../shared/ui/icons.tsx";
 import { PageHeader } from "../../shared/ui/PageHeader.tsx";
 import { Panel, PanelBody, PanelHeader } from "../../shared/ui/Panel.tsx";
 import {
@@ -51,6 +50,8 @@ import {
   WhatsappGlyph,
   Who,
   useStatusLabels,
+  CheckGlyph,
+  CloseGlyph,
 } from "../../shared/ui/kit/index.ts";
 
 type Role = components["schemas"]["Role"];
@@ -541,7 +542,7 @@ function InvitePanel({
         <PanelBody className="animate-enter justify-between gap-4">
           <div className="flex flex-col items-center gap-2 pt-1">
             <span className="flex size-12 animate-pop-in items-center justify-center rounded-pill bg-inverse text-on-inverse">
-              <CheckIcon size={18} />
+              <CheckGlyph size={18} />
             </span>
             <IdBlock
               label={t`Invitation ready · ${invitedRole}`}
@@ -571,7 +572,7 @@ function InvitePanel({
                 });
               }}
             >
-              {copied ? <CheckIcon size={14} /> : <CopyGlyph size={14} />}
+              {copied ? <CheckGlyph size={14} /> : <CopyGlyph size={14} />}
               {copied ? <Trans>Copied</Trans> : <Trans>Copy link</Trans>}
             </Button>
             <a
@@ -704,7 +705,7 @@ function MemberPanel({
         actions={
           <CircleButton
             label={sheet ? t`Close` : t`Back to inviting`}
-            icon={<CloseIcon size={14} />}
+            icon={<CloseGlyph size={14} />}
             onClick={onClose}
           />
         }

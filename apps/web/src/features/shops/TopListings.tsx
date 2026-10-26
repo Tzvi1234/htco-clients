@@ -3,9 +3,15 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 
 import { useApi } from "../../shared/api/api.tsx";
-import { ArrowEndIcon } from "../../shared/ui/icons.tsx";
 import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
-import { N, StripCard, circleStyle, ListingPhoto, LiveNote } from "../../shared/ui/kit/index.ts";
+import {
+  N,
+  StripCard,
+  circleStyle,
+  ListingPhoto,
+  LiveNote,
+  NextGlyph,
+} from "../../shared/ui/kit/index.ts";
 import { listingsQuery } from "../../shared/api/live.ts";
 import { useCount, useMoney } from "../../shared/i18n/format.ts";
 
@@ -55,7 +61,7 @@ export function TopListings({
             title={t`All products`}
             className={circleStyle()}
           >
-            <ArrowEndIcon size={16} />
+            <NextGlyph size={16} />
           </Link>
         }
       />
