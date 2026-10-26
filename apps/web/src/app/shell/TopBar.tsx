@@ -9,7 +9,7 @@ import { CIRCLE } from "./Sidebar.tsx";
 import { useNavLabels } from "./useNavLabels.ts";
 import { UserMenu } from "./UserMenu.tsx";
 import { cx } from "../../shared/lib/cx.ts";
-import { ApprovalIcon, CrumbIcon, SearchIcon } from "../../shared/ui/icons.tsx";
+import { ApprovalGlyph, CrumbGlyph, SearchGlyph } from "../../shared/ui/kit/index.ts";
 
 const ACTION = cx(
   CIRCLE,
@@ -32,7 +32,7 @@ function Crumbs() {
       {trail.map((crumb, index) => (
         // By position: an area and its tab may share a name (Customers › Customers).
         <Fragment key={index}>
-          {index === 0 ? null : <CrumbIcon size={12} className="shrink-0" />}
+          {index === 0 ? null : <CrumbGlyph size={12} className="shrink-0" />}
           {index === trail.length - 1 ? (
             <span className="truncate text-primary">{crumb}</span>
           ) : (
@@ -111,7 +111,7 @@ export function TopBar({
             title={t`Pending approvals`}
             className={ACTION}
           >
-            <ApprovalIcon />
+            <ApprovalGlyph />
           </Link>
         )}
         <NotificationBell />
@@ -124,7 +124,7 @@ export function TopBar({
           }}
           className={ACTION}
         >
-          <SearchIcon />
+          <SearchGlyph />
         </button>
         {phone ? <UserMenu compact /> : null}
       </div>

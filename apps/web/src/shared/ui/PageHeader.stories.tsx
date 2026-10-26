@@ -1,4 +1,3 @@
-import { StorefrontIcon as Storefront } from "@phosphor-icons/react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
 
@@ -6,6 +5,7 @@ import { Button } from "./Button.tsx";
 import { PageBody, PageHeader } from "./PageHeader.tsx";
 import { ObjectIcon } from "./Tag.tsx";
 import { useBi } from "../../test/stories.ts";
+import { BagGlyph } from "./kit/index.ts";
 
 const meta = {
   title: "Components/PageHeader",
@@ -29,7 +29,7 @@ export const Full: Story = {
     return (
       <PageHeader
         {...args}
-        icon={<ObjectIcon icon={Storefront} />}
+        icon={<ObjectIcon icon={BagGlyph} />}
         title={say("Shops", "חנויות")}
         description={say("Every connected Etsy shop", "כל חנויות האטסי המחוברות")}
         actions={<Button variant="primary">{say("Connect a shop", "חיבור חנות")}</Button>}

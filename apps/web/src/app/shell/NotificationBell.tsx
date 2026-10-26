@@ -12,7 +12,7 @@ import { meQuery, shopsQuery, useApi } from "../../shared/api/api.tsx";
 import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
 import { cx } from "../../shared/lib/cx.ts";
 import { Button as TextButton } from "../../shared/ui/Button.tsx";
-import { BellIcon } from "../../shared/ui/icons.tsx";
+import { BellGlyph } from "../../shared/ui/kit/index.ts";
 
 /** The panel shows the newest few: it never scrolls inside itself. */
 const SHOWN = 6;
@@ -249,7 +249,7 @@ export function NotificationBell({ className }: { className?: string }) {
             className,
           )}
         >
-          <BellIcon />
+          <BellGlyph />
           {inbox.unread > 0 ? (
             <span
               aria-hidden="true"

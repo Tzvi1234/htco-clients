@@ -8,8 +8,8 @@ import {
   type ReactNode,
 } from "react";
 
-import { CheckIcon } from "./icons.tsx";
 import { cx } from "../lib/cx.ts";
+import { CheckGlyph } from "./kit/index.ts";
 
 type ShowToast = (message: string) => void;
 
@@ -60,7 +60,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       >
         {toast.shown ? (
           <>
-            <CheckIcon size={14} />
+            <CheckGlyph size={14} />
             {toast.message}
           </>
         ) : null}
