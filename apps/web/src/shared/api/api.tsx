@@ -84,7 +84,11 @@ export function forgetSession(client: QueryClient): void {
   // of #62). The answer then lands on a mutation that nothing holds any more.
   for (const mutation of mutations.getAll())
     if (mutation.state.status === "pending")
-      mutation.setOptions({ mutationFn: mutation.options.mutationFn });
+      mutation.setOptions(
+        mutation.options.mutationFn === undefined
+          ? {}
+          : { mutationFn: mutation.options.mutationFn },
+      );
   mutations.clear();
 }
 
