@@ -73,7 +73,7 @@ export function CommandMenu() {
       isOpen={isOpen}
       onOpenChange={setOpen}
       isDismissable
-      className="fixed inset-0 z-50 flex items-start justify-center bg-[color-mix(in_srgb,var(--bg-ground)_60%,transparent)] px-4 pt-[min(120px,14vh)] data-[entering]:animate-enter data-[exiting]:animate-[htco-enter_var(--motion-duration-fast)_reverse_both]"
+      className="fixed inset-0 z-overlay flex items-start justify-center bg-[color-mix(in_srgb,var(--bg-ground)_60%,transparent)] px-4 pt-[min(120px,14vh)] data-[entering]:animate-enter data-[exiting]:animate-[htco-enter_var(--motion-duration-fast)_reverse_both]"
     >
       <Modal className="glass w-full max-w-[560px] rounded-panel border border-line bg-menu p-2 shadow-popover outline-none data-[entering]:animate-pop-in">
         <Dialog aria-label={t`Quick actions`} className="outline-none">
@@ -89,7 +89,7 @@ export function CommandMenu() {
                 placeholder={t`Search screens and actions…`}
                 className="h-full grow bg-transparent text-[15px] text-primary outline-none placeholder:text-muted [&::-webkit-search-cancel-button]:hidden"
               />
-              <kbd className="inline-flex h-[18px] items-center rounded-control border border-line-strong px-[5px] font-latin text-[11px] text-muted">
+              <kbd className="inline-flex h-[18px] items-center rounded-control border border-line-strong px-[5px] font-latin text-caption text-muted">
                 Esc
               </kbd>
             </SearchField>
@@ -106,7 +106,7 @@ export function CommandMenu() {
             >
               {(section) => (
                 <MenuSection id={section.id}>
-                  <Header className="px-4 pt-2 pb-1 text-[11px] font-light text-muted">
+                  <Header className="px-4 pt-2 pb-1 text-caption font-light text-muted">
                     {section.name}
                   </Header>
                   <Collection items={section.items}>

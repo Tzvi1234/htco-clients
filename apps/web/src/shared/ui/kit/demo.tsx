@@ -29,7 +29,7 @@ function DemoPill() {
     <div
       role="note"
       className={cx(
-        "pointer-events-none z-20 flex justify-center",
+        "pointer-events-none z-sticky flex justify-center",
         header === null
           ? "mb-2"
           : "absolute inset-x-0 top-1/2 -translate-y-1/2 max-sm:top-full max-sm:translate-y-1",
@@ -141,7 +141,7 @@ export function DemoTag({ className }: { className?: string }) {
   return (
     <span
       className={cx(
-        "inline-flex h-5 shrink-0 items-center gap-1 rounded-pill border border-line-strong bg-raised px-2 text-[11px] leading-none font-normal text-secondary",
+        "inline-flex h-5 shrink-0 items-center gap-1 rounded-pill border border-line-strong bg-raised px-2 text-caption leading-none font-normal text-secondary",
         className,
       )}
     >

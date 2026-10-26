@@ -23,7 +23,7 @@ apps/web/src/
   features/           overview, shops, settings
   shared/i18n/        locale (pure), i18n (Lingui catalogs), LocaleProvider (Lingui + React Aria + <html lang dir>)
   shared/theme/       theme (pure), ThemeProvider (<html data-theme>)
-  shared/ui/          Button, IconButton, StatusDot, Ltr, EmptyState, ErrorState, Banner, Logo, PageHeader
+  shared/ui/          Button, Ltr, EmptyState, ErrorState, Banner, Logo, PageHeader
   shared/lib/         storage (guarded localStorage), useOnline, cx
   locales/{en,he}/    messages.po
 ```
@@ -47,7 +47,7 @@ apps/web/src/
                       Toast (ToastProvider, useToast), icons (the prototype's glyphs), Logo
   shared/ui/kit/      the screen kit, one module per family, imported from kit/index.ts:
                       layout (Screen grids l3 … lc3s, Stack), parts (CircleButton, InkDisc, Pill, Chip,
-                      Dot, IdBlock, KV, KV2, SectionLabel, Card, Tile, CountUp, Toggle, ListRow, Kpis,
+                      Dot, IdBlock, KV, KV2, SectionLabel, Chip (tone, size), TEXT_LINK, Card, Tile, CountUp, Toggle, ListRow,
                       Typing, N), status (StatusGlyph, Status, the nine statuses), avatar (Avatar, Who,
                       Avatars), charts/ (BarChart, LineChart, HBarList,
                       ProgressBar), dotted (Matrix, DotBar: Demo screens only), table (DataTable), strip (Strip,
@@ -95,7 +95,6 @@ apps/web/src/
 | Code-based TanStack routes | File-based routes with the router plugin | Three routes do not justify a code generator; switch when the route tree grows. |
 | Lingui macros compiled natively by `@lingui/vite-plugin` (`macroTransform`) | Babel or SWC plugin | No Babel in the Vite 8 toolchain. |
 | Catalog origins without line numbers (`formatter({ lineNumbers: false })`) | Line numbers (Lingui's default) | Reformatting code shifted line numbers and put the catalogs out of sync in CI; file names are enough to find a message. |
-| `GHSA-vfj7-8cjw-p6xm` (braces 3.0.3) ignored in `osv-scanner.toml` until 2026-12-31 | Block the web app until a fix ships | No fixed release exists; braces is reached only through `@lingui/cli` (development tooling, our own patterns, never untrusted input) and is not in the bundle. The entry expires so it is reviewed again. |
 | `semver@6.3.1` excluded from `trustPolicy` | Drop `eslint-plugin-react-hooks` | The npm team's 2023 ReDoS backport predates provenance on the 6.x line; the exclusion names that exact version only. |
 | Repository scripts in TypeScript, run by Node | Reuse the platform's Python scripts | Each repository builds with its own toolchain (ADR-0001 in `htco-platform`); the scripts are small and tested here. |
 | `uvx` for actionlint and zizmor in CI | Release binaries with checksums | The same versions as the platform repository, no Python project needed. |

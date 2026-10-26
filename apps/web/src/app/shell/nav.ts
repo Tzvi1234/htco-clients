@@ -63,6 +63,8 @@ export const AREAS: readonly NavArea[] = [
       { id: "orders", to: "/commerce/orders", built: true },
       { id: "products", to: "/commerce/products", built: true },
       { id: "shipping", to: "/commerce/shipping", built: true },
+      // Fulfillment's incident center (platform slice 6.5); `/incidents/{id}` opens one.
+      { id: "incidents", to: "/incidents", built: true },
       ...soon("commerce", "suppliers"),
     ],
   },
@@ -90,7 +92,8 @@ export const AREAS: readonly NavArea[] = [
     icon: PulseGlyph,
     to: "/admin/health",
     tabs: [
-      ...soon("admin", "health", "automations"),
+      { id: "health", to: "/admin/health", built: true },
+      ...soon("admin", "automations"),
       { id: "members", to: "/settings/team", built: true },
       { id: "settings", to: "/settings", built: true },
     ],

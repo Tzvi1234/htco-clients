@@ -3,12 +3,13 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { Fragment, useEffect, useState, type Ref } from "react";
 
 import { locate } from "./nav.ts";
+import { NotificationBell } from "./NotificationBell.tsx";
 import { useShell } from "./ShellState.tsx";
 import { CIRCLE } from "./Sidebar.tsx";
 import { useNavLabels } from "./useNavLabels.ts";
 import { UserMenu } from "./UserMenu.tsx";
 import { cx } from "../../shared/lib/cx.ts";
-import { BellGlyph, CrumbGlyph, SearchGlyph } from "../../shared/ui/kit/index.ts";
+import { ApprovalGlyph, CrumbGlyph, SearchGlyph } from "../../shared/ui/kit/index.ts";
 
 const ACTION = cx(
   CIRCLE,
@@ -45,7 +46,7 @@ function Crumbs() {
 
 /**
  * The top bar on the ground (Design 1C `.tbar`): the crumbs and the page's title (placed here by
- * the page's PageHeader), then approvals and search. The language, theme and palette live in
+ * the page's PageHeader), then approvals, the notification bell and search. The language, theme and palette live in
  * Settings (round 3). It is frosted glass over the ground: where the screen scrolls under it
  * (phones, and screens that scroll as one page) it stays on top and, once the page has scrolled,
  * a hairline appears under it. Phones keep the title, search and the account in an iOS-style
@@ -78,11 +79,11 @@ export function TopBar({
         "border-b border-transparent transition-[border-color,padding] duration-[var(--motion-duration-base)] ease-standard data-[scrolled]:border-line",
         phone
           ? cx(
-              "sticky top-0 z-20 min-h-[60px] ps-4 pe-3 pt-[max(8px,env(safe-area-inset-top))] pb-2",
+              "sticky top-0 z-sticky min-h-[60px] ps-4 pe-3 pt-[max(8px,env(safe-area-inset-top))] pb-2",
               "data-[scrolled]:pb-1.5",
               "[&_h1]:transition-[font-size] [&_h1]:duration-[var(--motion-duration-base)] data-[scrolled]:[&_h1]:text-title-sm data-[scrolled]:[&_h1]:font-normal",
             )
-          : cx("h-[72px] ps-6 pe-4", pageScroll ? "sticky top-0 z-20" : "relative"),
+          : cx("h-[72px] ps-6 pe-4", pageScroll ? "sticky top-0 z-sticky" : "relative"),
       )}
     >
       <div className="flex min-w-0 flex-col gap-0.5">
@@ -110,9 +111,10 @@ export function TopBar({
             title={t`Pending approvals`}
             className={ACTION}
           >
-            <BellGlyph />
+            <ApprovalGlyph />
           </Link>
         )}
+        <NotificationBell />
         <button
           type="button"
           aria-label={t`Search`}

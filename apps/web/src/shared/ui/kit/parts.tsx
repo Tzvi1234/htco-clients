@@ -4,11 +4,11 @@ import {
   useState,
   type ButtonHTMLAttributes,
   type CSSProperties,
+  type HTMLAttributes,
   type ReactNode,
 } from "react";
 import { SwitchButton, SwitchField } from "react-aria-components";
 
-import { TrendGlyph } from "./glyphs.tsx";
 import { cx } from "../../lib/cx.ts";
 import { REDUCED_MOTION_QUERY } from "../../lib/useMediaQuery.ts";
 
@@ -135,17 +135,54 @@ export function Pill({
   );
 }
 
-/** `.chip`: a 24 px raised capsule for small facts ("Policy refunds.partial"). */
-export function Chip({ children, className }: { children: ReactNode; className?: string }) {
+/**
+ * A link in running text or under a panel ("See all approvals", "Open on Etsy", "Sign in"):
+ * caption ink, underlined, quieter on hover. For a router `Link`, an `<a>` or a React Aria
+ * link; add `-my-1 inline-block` where it sits in a line of text so its padding does not push
+ * the line.
+ */
+export const TEXT_LINK =
+  "rounded-tag py-1 text-caption text-primary underline decoration-1 underline-offset-[3px] outline-none transition-colors hover:text-secondary data-[hovered]:text-secondary";
+
+export type ChipTone = "neutral" | "tertiary";
+
+const CHIP_TONE: Record<ChipTone, string> = {
+  neutral: "bg-raised",
+  // Orange for a fact that needs the owner (sold out, a refund): the tertiary wash and text.
+  tertiary: "bg-tertiary-subtle text-tertiary-text",
+};
+
+const CHIP_SIZE = { md: "h-6 gap-1.5 px-2.5", sm: "h-5 gap-1 px-2" } as const;
+
+/**
+ * `.chip`: a small capsule for a fact ("Policy refunds.partial", a tag, a scope): 24 px and
+ * raised by default, 20 px (`size="sm"`) inside dense cards and table cells, orange-tinted
+ * (`tone="tertiary"`) for what needs the owner. A list item (`as="li"`) in a list of them.
+ */
+export function Chip({
+  children,
+  className,
+  tone = "neutral",
+  size = "md",
+  as: Tag = "span",
+  ...props
+}: HTMLAttributes<HTMLElement> & {
+  tone?: ChipTone;
+  size?: keyof typeof CHIP_SIZE;
+  as?: "span" | "li";
+}) {
   return (
-    <span
+    <Tag
+      {...props}
       className={cx(
-        "inline-flex h-6 items-center gap-1.5 rounded-pill bg-raised px-2.5 text-caption whitespace-nowrap",
+        "inline-flex items-center rounded-pill text-caption whitespace-nowrap",
+        CHIP_SIZE[size],
+        CHIP_TONE[tone],
         className,
       )}
     >
       {children}
-    </span>
+    </Tag>
   );
 }
 
@@ -490,51 +527,6 @@ export function ListRow({
         )}
       </div>
       {end}
-    </div>
-  );
-}
-
-/** The four numbers under a hero (`.kpis`); phones scroll them sideways. */
-export function Kpis({ children, label }: { children: ReactNode; label?: string }) {
-  return (
-    <div
-      role="list"
-      aria-label={label}
-      // Phones scroll the numbers sideways: the region takes focus so keys can scroll it.
-      tabIndex={0}
-      className="grid grid-cols-4 border-t border-line outline-none focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus max-sm:flex max-sm:snap-x max-sm:snap-mandatory max-sm:overflow-x-auto max-sm:[scrollbar-width:none]"
-    >
-      {children}
-    </div>
-  );
-}
-
-export function Kpi({
-  label,
-  value,
-  delta,
-  trend,
-}: {
-  label: ReactNode;
-  value: ReactNode;
-  delta?: ReactNode;
-  trend?: "up" | "down";
-}) {
-  return (
-    <div
-      role="listitem"
-      className="min-w-0 px-6 pt-4 pb-5 text-center max-lg:px-2.5 max-sm:shrink-0 max-sm:basis-[42%] max-sm:snap-start [&+&]:border-s [&+&]:border-line"
-    >
-      <div className="text-caption font-light text-muted">{label}</div>
-      <div className="font-display text-number-lg leading-[1.3] font-light tracking-[-0.01em]">
-        {value}
-      </div>
-      {delta === undefined ? null : (
-        <div className="inline-flex items-center gap-1 text-caption whitespace-nowrap text-secondary">
-          {trend === undefined ? null : <TrendGlyph up={trend === "up"} />}
-          {delta}
-        </div>
-      )}
     </div>
   );
 }

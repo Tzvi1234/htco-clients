@@ -7,15 +7,29 @@ msgstr ""
 "X-Generator: @lingui/cli\n"
 "Language: he\n"
 
+#: src/features/commerce/timeline.tsx
+msgid " (current)"
+msgstr " (המצב הנוכחי)"
+
 #: src/features/team/TeamPage.tsx
 msgid "(you)"
 msgstr "(את/ה)"
+
+#. placeholder {0}: openItems.length
+#: src/features/incidents/IncidentsPage.tsx
+msgid "{0, plural, one {# open incident} other {# open incidents}}"
+msgstr "{0, plural, one {תקלה פתוחה אחת} two {# תקלות פתוחות} other {# תקלות פתוחות}}"
 
 #. placeholder {0}: best.orders
 #. placeholder {0}: r.orders
 #: src/features/shops/ShopStats.tsx
 msgid "{0, plural, one {# order} other {# orders}}"
 msgstr "{0, plural, one {הזמנה אחת} two {# הזמנות} other {# הזמנות}}"
+
+#. placeholder {0}: urgent.length
+#: src/features/incidents/IncidentsPage.tsx
+msgid "{0, plural, one {One is high or critical: start there. Incidents close themselves once the evidence arrives, such as tracking found in Etsy.} other {# are high or critical: start with the most urgent. Incidents close themselves once the evidence arrives, such as tracking found in Etsy.}}"
+msgstr "{0, plural, one {אחת בחומרה גבוהה או קריטית: כדאי להתחיל בה. תקלות נסגרות מעצמן כשמגיעה ראיה, למשל מספר מעקב שנמצא ב־Etsy.} two {# בחומרה גבוהה או קריטית: כדאי להתחיל בדחופה ביותר. תקלות נסגרות מעצמן כשמגיעה ראיה, למשל מספר מעקב שנמצא ב־Etsy.} other {# בחומרה גבוהה או קריטית: כדאי להתחיל בדחופה ביותר. תקלות נסגרות מעצמן כשמגיעה ראיה, למשל מספר מעקב שנמצא ב־Etsy.}}"
 
 #. placeholder {0}: sales.overdue
 #: src/features/overview/OverviewPage.tsx
@@ -27,20 +41,48 @@ msgstr "{0, plural, one {הזמנה אחת מאחרת במשלוח. כדאי ל�
 msgid "{0, plural, one {One order waits to ship; none is late.} other {# orders wait to ship; none is late.}}"
 msgstr "{0, plural, one {הזמנה אחת ממתינה למשלוח, ואף אחת לא מאחרת.} other {# הזמנות ממתינות למשלוח, ואף אחת לא מאחרת.}}"
 
+#. placeholder {0}: stale.length
+#: src/features/admin/OperationsPage.tsx
+msgid "{0, plural, one {One shop has not synced within its window.} other {# shops have not synced within their window.}}"
+msgstr "{0, plural, one {חנות אחת לא סונכרנה בזמן.} other {# חנויות לא סונכרנו בזמן.}}"
+
 #. placeholder {0}: removals.done
 #: src/features/shops/ShopsPage.tsx
 msgid "{0} and its data were removed."
 msgstr "{0} והנתונים שלה הוסרו."
+
+#. placeholder {0}: String(days)
+#: src/features/incidents/IncidentsPage.tsx
+msgctxt "age in days"
+msgid "{0} d"
+msgstr "{0} ימ׳"
 
 #. placeholder {0}: count(profile.digital_listing_count)
 #: src/features/shops/ShopStats.tsx
 msgid "{0} digital"
 msgstr "{0} דיגיטליים"
 
+#. placeholder {0}: String(hours)
+#: src/features/incidents/IncidentsPage.tsx
+msgctxt "age in hours"
+msgid "{0} h"
+msgstr "{0} שע׳"
+
 #. placeholder {0}: disconnects.done
 #: src/features/shops/ShopsPage.tsx
 msgid "{0} is disconnected."
 msgstr "החנות {0} נותקה."
+
+#. placeholder {0}: String(minutes)
+#: src/features/incidents/IncidentsPage.tsx
+msgctxt "age in minutes"
+msgid "{0} min"
+msgstr "{0} דק׳"
+
+#. placeholder {0}: fresh.length
+#: src/app/shell/NotificationBell.tsx
+msgid "{0} new notifications"
+msgstr "{0} התראות חדשות"
 
 #. placeholder {0}: count(cancelled)
 #. placeholder {1}: count(sales.receipts_read)
@@ -53,6 +95,11 @@ msgstr "{0} מתוך {1} הזמנות בוטלו"
 #: src/features/shops/ShopStats.tsx
 msgid "{0} of {1} orders refunded"
 msgstr "{0} מתוך {1} הזמנות הוחזרו"
+
+#. placeholder {0}: count(queued)
+#: src/features/commerce/OrdersPage.tsx
+msgid "{0} orders queued to be read again from Etsy."
+msgstr "{0} הזמנות נכנסו לתור לקריאה חוזרת מ־Etsy."
 
 #. placeholder {0}: count(reviews)
 #: src/features/shops/ShopCard.tsx
@@ -84,6 +131,10 @@ msgstr "{count} חנויות"
 #: src/features/shops/ShopCard.tsx
 msgid "{days, plural, one {Reconnect within # day} other {Reconnect within # days}}"
 msgstr "{days, plural, one {לחבר מחדש בתוך יום אחד} two {לחבר מחדש בתוך יומיים} other {לחבר מחדש בתוך # ימים}}"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "{dead, plural, one {One job ran out of retries. Look at its error, then retry it.} other {# jobs ran out of retries. Look at their errors, then retry them.}}"
+msgstr "{dead, plural, one {משימה אחת מיצתה את הניסיונות. בדקו את השגיאה ונסו שוב.} other {# משימות מיצו את הניסיונות. בדקו את השגיאות ונסו שוב.}}"
 
 #: src/features/commerce/ShippingPage.tsx
 msgid "{destinations} destinations"
@@ -128,6 +179,26 @@ msgstr "הכרטיסיות של {name}"
 #: src/features/commerce/ShippingPage.tsx
 msgid "{range} days"
 msgstr "{range} ימים"
+
+#: src/features/incidents/IncidentsPage.tsx
+msgid "{resolvedCount, plural, one {# resolved so far} other {# resolved so far}}"
+msgstr "{resolvedCount, plural, one {תקלה אחת נפתרה עד כה} other {# נפתרו עד כה}}"
+
+#: src/app/shell/NotificationBell.tsx
+msgid "{shop} needs reconnecting to Etsy"
+msgstr "צריך לחבר מחדש את {shop} ל־Etsy"
+
+#: src/app/shell/NotificationBell.tsx
+msgid "{shop} was connected"
+msgstr "{shop} חוברה"
+
+#: src/app/shell/NotificationBell.tsx
+msgid "{shop} was disconnected"
+msgstr "{shop} נותקה"
+
+#: src/app/shell/NotificationBell.tsx
+msgid "{shop}'s Etsy connection expires soon"
+msgstr "החיבור של {shop} ל־Etsy יפוג בקרוב"
 
 #: src/features/overview/OverviewPage.tsx
 msgid "{shopCount} shops"
@@ -174,6 +245,11 @@ msgstr "$5 ליום"
 #: src/features/settings/SettingsPage.tsx
 msgid "1 device"
 msgstr "מכשיר אחד"
+
+#. placeholder {0}: text(first)
+#: src/app/shell/NotificationBell.tsx
+msgid "1 new notification: {0}"
+msgstr "התראה חדשה אחת: {0}"
 
 #: src/features/settings/SettingsPage.tsx
 #: src/features/team/TeamPage.tsx
@@ -228,10 +304,6 @@ msgstr "2 שורות"
 msgid "2 with Dana"
 msgstr "2 ממתינות לדנה"
 
-#: src/features/admin/AdminDemos.tsx
-msgid "3 jobs"
-msgstr "3 משימות"
-
 #: src/features/overview/OverviewPage.tsx
 msgid "3 running · 1 waiting for you · 1 failed"
 msgstr "3 עובדים · 1 ממתין לך · 1 נכשל"
@@ -239,14 +311,6 @@ msgstr "3 עובדים · 1 ממתין לך · 1 נכשל"
 #: src/features/commerce/OrdersPage.tsx
 msgid "30 days"
 msgstr "30 יום"
-
-#: src/features/admin/AdminDemos.tsx
-msgid "30-day uptime"
-msgstr "זמינות 30 יום"
-
-#: src/features/admin/AdminDemos.tsx
-msgid "30-day uptime:"
-msgstr "זמינות 30 יום:"
 
 #: src/features/office/data.ts
 msgid "4 new mockups ready for review."
@@ -265,6 +329,10 @@ msgstr "7 מחלקות · 3 מחלקות שירות"
 msgid "90 days"
 msgstr "90 יום"
 
+#: src/app/shell/NotificationBell.tsx
+msgid "A {rating}-star review arrived"
+msgstr "התקבלה ביקורת של {rating} כוכבים"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "A native desktop app with the same features."
 msgstr "אפליקציה טבעית למחשב עם אותן יכולות."
@@ -272,6 +340,30 @@ msgstr "אפליקציה טבעית למחשב עם אותן יכולות."
 #: src/features/office/floor3d/engine.ts
 msgid "A new loop in the office"
 msgstr "יום עבודה חדש במשרד"
+
+#: src/app/shell/NotificationBell.tsx
+msgid "A new notification"
+msgstr "התראה חדשה"
+
+#: src/app/shell/NotificationBell.tsx
+msgid "A shop needs reconnecting to Etsy"
+msgstr "צריך לחבר חנות מחדש ל־Etsy"
+
+#: src/app/shell/NotificationBell.tsx
+msgid "A shop was connected"
+msgstr "חנות חוברה"
+
+#: src/app/shell/NotificationBell.tsx
+msgid "A shop was disconnected"
+msgstr "חנות נותקה"
+
+#: src/app/shell/NotificationBell.tsx
+msgid "A shop's Etsy connection expires soon"
+msgstr "החיבור של חנות ל־Etsy יפוג בקרוב"
+
+#: src/features/incidents/IncidentsPage.tsx
+msgid "A team member"
+msgstr "חבר/ת צוות"
 
 #: src/features/shops/ShopsPage.tsx
 msgid "About a minute"
@@ -319,6 +411,10 @@ msgstr "לקוחות פעילים:"
 msgid "Active listings"
 msgstr "ליסטינגים פעילים"
 
+#: src/features/admin/OperationsPage.tsx
+msgid "Activity"
+msgstr "פעילות"
+
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
 msgid "Activity"
@@ -340,6 +436,10 @@ msgstr "מנהל/ת"
 msgctxt "navigation"
 msgid "Admin"
 msgstr "ניהול"
+
+#: src/features/incidents/IncidentsPage.tsx
+msgid "Age"
+msgstr "גיל"
 
 #: src/features/work/demoScreens.tsx
 msgid "Agent actions"
@@ -398,6 +498,7 @@ msgstr "אלכס"
 
 #: src/features/commerce/OrdersPage.tsx
 #: src/features/commerce/ProductsPage.tsx
+#: src/features/incidents/IncidentsPage.tsx
 msgid "All"
 msgstr "הכל"
 
@@ -416,6 +517,10 @@ msgstr "כל הלקוחות"
 #: src/features/office/FloorPage.tsx
 msgid "All employees"
 msgstr "כל העובדים"
+
+#: src/features/incidents/IncidentsPage.tsx
+msgid "All incidents"
+msgstr "כל התקלות"
 
 #: src/features/office/data.ts
 msgid "All of yesterday’s tickets closed."
@@ -465,13 +570,25 @@ msgstr "אמיר לקח את התקלה"
 msgid "Amount"
 msgstr "סכום"
 
+#: src/features/incidents/IncidentsPage.tsx
+msgid "An AI employee"
+msgstr "עובד/ת AI"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "An app for your phone with the same features."
 msgstr "אפליקציה לטלפון עם אותן יכולות."
 
+#: src/features/incidents/IncidentsPage.tsx
+msgid "An automation"
+msgstr "אוטומציה"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "An example of what will ask you"
 msgstr "דוגמה למה שיבקש ממך"
+
+#: src/features/incidents/IncidentsPage.tsx
+msgid "An incident closes only on evidence, such as tracking found in Etsy. Nothing was changed."
+msgstr "תקלה נסגרת רק על סמך ראיה, למשל מספר מעקב שנמצא ב־Etsy. שום דבר לא השתנה."
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "Android"
@@ -585,6 +702,11 @@ msgstr "לפחות 12 תווים."
 msgid "Attach"
 msgstr "צירוף קובץ"
 
+#: src/features/admin/OperationsPage.tsx
+#: src/features/incidents/IncidentsPage.tsx
+msgid "Attempts"
+msgstr "ניסיונות"
+
 #: src/features/team/TeamPage.tsx
 msgid "Audit log:"
 msgstr "יומן ביקורת:"
@@ -599,15 +721,26 @@ msgstr "אפליקציית אימות"
 msgid "Authenticator app is set up"
 msgstr "אפליקציית האימות מוגדרת"
 
+#: src/features/admin/OperationsPage.tsx
+#: src/features/incidents/IncidentsPage.tsx
+msgid "Automation"
+msgstr "אוטומציה"
+
 #: src/features/admin/AdminDemos.tsx
 msgid "Automation details"
 msgstr "פרטי אוטומציה"
+
+#: src/features/incidents/IncidentState.tsx
+msgid "Automation gave up"
+msgstr "אוטומציה נכשלה סופית"
 
 #: src/features/admin/AdminDemos.tsx
 msgid "Automation:"
 msgstr "אוטומציה:"
 
 #: src/features/admin/AdminDemos.tsx
+#: src/features/admin/OperationsPage.tsx
+#: src/features/incidents/IncidentState.tsx
 #: src/features/office/FloorPage.tsx
 #: src/features/work/demoScreens.tsx
 #: src/shared/demo/office.ts
@@ -637,6 +770,7 @@ msgid "Avg. value"
 msgstr "ערך ממוצע"
 
 #: src/features/commerce/OrdersPage.tsx
+#: src/features/commerce/timeline.tsx
 msgid "Awaiting payment"
 msgstr "ממתינה לתשלום"
 
@@ -653,6 +787,10 @@ msgstr "ממתינות למשלוח"
 #: src/features/team/TeamPage.tsx
 msgid "Back to inviting"
 msgstr "חזרה להזמנה"
+
+#: src/features/incidents/IncidentsPage.tsx
+msgid "Back to list"
+msgstr "חזרה לרשימה"
 
 #: src/features/shops/EtsyCallbackPage.tsx
 msgid "Back to shops"
@@ -744,8 +882,10 @@ msgstr "ביטול"
 msgid "Cancellation rate"
 msgstr "שיעור ביטולים"
 
+#: src/features/admin/OperationsPage.tsx
 #: src/features/commerce/OrdersPage.tsx
 #: src/features/commerce/refunds.tsx
+#: src/features/commerce/timeline.tsx
 #: src/features/shops/ShopStats.tsx
 msgid "Cancelled"
 msgstr "בוטלה"
@@ -753,10 +893,6 @@ msgstr "בוטלה"
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Cannot scan? Type this key into the app:"
 msgstr "לא מצליחים לסרוק? הקלידו באפליקציה את המפתח הזה:"
-
-#: src/features/admin/AdminDemos.tsx
-msgid "Capacity"
-msgstr "קיבולת"
 
 #: src/features/office/EngineeringPage.tsx
 msgid "Carrier token rotation"
@@ -785,6 +921,10 @@ msgstr "נתוני הקטלוג"
 #: src/features/finance/FinanceDemos.tsx
 msgid "Category"
 msgstr "קטגוריה"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Chain"
+msgstr "שרשרת"
 
 #: src/features/office/EngineeringPage.tsx
 msgid "Change"
@@ -840,6 +980,11 @@ msgstr "כדאי לבדוק את החיבור לאינטרנט ולנסות שו
 msgid "Check your email"
 msgstr "בדקו את האימייל"
 
+#. placeholder {0}: since(health.generated_at)
+#: src/features/admin/OperationsPage.tsx
+msgid "checked {0}"
+msgstr "נבדק {0}"
+
 #. placeholder {0}: ago(checkedAt, now, locale)
 #: src/features/shops/Capabilities.tsx
 msgid "Checked {0}"
@@ -875,9 +1020,17 @@ msgstr "בחר/י סיסמה ארוכה יותר שקשה לנחש."
 msgid "Choose a new password"
 msgstr "בחירת סיסמה חדשה"
 
+#: src/features/incidents/IncidentsPage.tsx
+msgid "Choose an incident to see its evidence, its timeline and its order."
+msgstr "בחרו תקלה כדי לראות את הראיות, את ציר הזמן ואת ההזמנה שלה."
+
 #: src/features/team/TeamPage.tsx
 msgid "Choose the workspace whose members you want to see and invite."
 msgstr "בחרו את סביבת העבודה שאת חבריה תרצו לראות ולהזמין."
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Choose the workspace whose queue and syncs you want to see."
+msgstr "בחרו את סביבת העבודה שאת התור והסנכרונים שלה תרצו לראות."
 
 #: src/features/office/FloorPage.tsx
 msgid "Claude · model"
@@ -897,6 +1050,7 @@ msgstr "הקלקות לפי יום, 1 עד 15 באוקטובר: 18 עד 41, הש
 
 #: src/app/shell/Flyout.tsx
 #: src/app/shell/TabBar.tsx
+#: src/features/admin/OperationsPage.tsx
 #: src/features/commerce/OrdersPage.tsx
 #: src/features/team/TeamPage.tsx
 msgid "Close"
@@ -935,6 +1089,10 @@ msgstr "בהמשך"
 msgctxt "navigation"
 msgid "Commerce"
 msgstr "מסחר"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Compensated"
+msgstr "בוטל בפיצוי"
 
 #: src/features/work/demoScreens.tsx
 msgid "Completed today"
@@ -995,6 +1153,10 @@ msgstr "חברו את חנות ה־Etsy שלכם והמוצרים שלה יופ�
 msgid "Connect your Etsy shop and its orders appear here, live."
 msgstr "חברו את חנות ה־Etsy שלכם וההזמנות שלה יופיעו כאן, בזמן אמת."
 
+#: src/features/shops/ShopsPage.tsx
+msgid "Connect your Etsy shop and its orders, listings and numbers appear here, live from Etsy."
+msgstr "חבר את חנות ה־Etsy שלך, וההזמנות, המוצרים והמספרים שלה יופיעו כאן, בזמן אמת מ־Etsy."
+
 #: src/features/commerce/ShippingPage.tsx
 msgid "Connect your Etsy shop and its shipments appear here, live."
 msgstr "חברו את חנות ה־Etsy שלכם והמשלוחים שלה יופיעו כאן, בזמן אמת."
@@ -1012,10 +1174,6 @@ msgstr "לחבר את החנות הראשונה"
 #: src/features/shops/ShopCard.tsx
 msgid "Connected"
 msgstr "מחוברת"
-
-#: src/features/shops/ShopsPage.tsx
-msgid "Connected shops appear here with their sync status and capabilities."
-msgstr "חנויות מחוברות יופיעו כאן עם מצב הסנכרון והיכולות שלהן."
 
 #: src/features/shops/EtsyCallbackPage.tsx
 msgid "Connecting Etsy"
@@ -1090,6 +1248,10 @@ msgstr "הועתק"
 msgid "Copy link"
 msgstr "העתקת הקישור"
 
+#: src/shared/ui/kit/live.tsx
+msgid "copying the order history ({count} so far)"
+msgstr "מעתיקים את היסטוריית ההזמנות ({count} עד עכשיו)"
+
 #: src/features/office/FloorPage.tsx
 msgid "Cost"
 msgstr "עלות"
@@ -1117,6 +1279,11 @@ msgstr "שמנת"
 #: src/shared/demo/office.ts
 msgid "Creative & GPT Image Specialist"
 msgstr "מומחית קריאייטיב ו־GPT Image"
+
+#: src/features/incidents/IncidentState.tsx
+msgctxt "severity"
+msgid "Critical"
+msgstr "קריטית"
 
 #: src/features/settings/SettingsPage.tsx
 msgid "Currency"
@@ -1179,6 +1346,10 @@ msgstr "ממוצע יומי"
 msgid "Daily cap"
 msgstr "מגבלה יומית"
 
+#: src/features/commerce/timeline.tsx
+msgid "Daily check"
+msgstr "בדיקה יומית"
+
 #: src/features/finance/FinanceDemos.tsx
 msgid "Daily revenue"
 msgstr "הכנסה יומית"
@@ -1232,6 +1403,14 @@ msgstr "הנתונים יימחקו אחרי {0}"
 msgid "Date"
 msgstr "תאריך"
 
+#: src/features/admin/OperationsPage.tsx
+msgid "Dead letters"
+msgstr "משימות שנכשלו"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Dead-lettered"
+msgstr "נכשל סופית"
+
 #: src/shared/demo/office.ts
 msgid "Debugger & Reliability Engineer"
 msgstr "מהנדס דיבאג ואמינות"
@@ -1252,6 +1431,7 @@ msgstr "ערך החלטה 92%, בתוך המדיניות"
 msgid "Deletes the shop and all its data in HTCO"
 msgstr "מוחק את החנות ואת כל הנתונים שלה ב־HTCO"
 
+#: src/features/commerce/timeline.tsx
 #: src/shared/ui/kit/status.tsx
 msgid "Delivered"
 msgstr "נמסר"
@@ -1302,6 +1482,23 @@ msgstr "תיאור"
 #: src/features/overview/heroes.ts
 msgid "Desk, monitor and robot"
 msgstr "שולחן, מסך ורובוט"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Destination"
+msgstr "יעד"
+
+#: src/features/incidents/IncidentsPage.tsx
+msgid "Details"
+msgstr "פרטים"
+
+#: src/features/incidents/IncidentsPage.tsx
+msgid "Detected"
+msgstr "זוהתה"
+
+#: src/features/incidents/IncidentState.tsx
+msgctxt "incident state"
+msgid "Detected"
+msgstr "זוהתה"
 
 #: src/features/team/TeamPage.tsx
 msgid "Developer"
@@ -1362,6 +1559,10 @@ msgstr "טיוטה"
 #: src/features/office/FloorPage.tsx
 msgid "Drag to orbit · double-click a room"
 msgstr "גרירה לסיבוב · לחיצה כפולה על חדר"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Drifts today"
+msgstr "פערים היום"
 
 #: src/features/customers/CustomersDemos.tsx
 msgid "Edit reply…"
@@ -1444,11 +1645,15 @@ msgstr "שגיאה"
 msgid "Error 404"
 msgstr "שגיאה 404"
 
-#: src/features/admin/AdminDemos.tsx
 #: src/features/office/EngineeringPage.tsx
 #: src/features/work/demoScreens.tsx
 msgid "Errors"
 msgstr "שגיאות"
+
+#: src/features/incidents/IncidentState.tsx
+msgctxt "incident state"
+msgid "Escalated"
+msgstr "הוסלמה"
 
 #: src/features/shops/ShopCard.tsx
 msgid "Etsy"
@@ -1461,6 +1666,10 @@ msgstr "Etsy · קריאה בלבד"
 #: src/features/shops/ShopsPage.tsx
 msgid "Etsy access:"
 msgstr "גישה ל־Etsy:"
+
+#: src/features/incidents/IncidentState.tsx
+msgid "Etsy and HTCO agree again"
+msgstr "Etsy ו־HTCO שוב תואמים"
 
 #: src/features/shops/Capabilities.tsx
 msgid "Etsy asked HTCO to slow down. Re-check in a few minutes."
@@ -1530,6 +1739,14 @@ msgstr "Etsy כבר לא מקבלת את החיבור של החנות. חברו 
 msgid "Etsy no longer accepts the shop's connection. The workspace owner can reconnect it."
 msgstr "Etsy כבר לא מקבלת את החיבור של החנות. בעלי סביבת העבודה יכולים לחבר אותה מחדש."
 
+#: src/features/commerce/timeline.tsx
+msgid "Etsy notice"
+msgstr "הודעה מ־Etsy"
+
+#: src/features/incidents/IncidentState.tsx
+msgid "Etsy receipt"
+msgstr "קבלה ב־Etsy"
+
 #: src/features/shops/Capabilities.tsx
 msgid "Etsy refused this. Reconnect the shop; if it stays blocked, Etsy has limited the app."
 msgstr "Etsy סירבה. יש לחבר את החנות מחדש; אם זה נשאר חסום, Etsy הגבילה את האפליקציה."
@@ -1558,6 +1775,10 @@ msgstr "הספירה של Etsy"
 msgid "Etsy's sign-in address looked wrong, so it was not opened. Try again shortly."
 msgstr "כתובת הכניסה של Etsy נראתה שגויה, ולכן לא נפתחה. אפשר לנסות שוב בעוד רגע."
 
+#: src/features/admin/OperationsPage.tsx
+msgid "Event"
+msgstr "אירוע"
+
 #: src/features/work/demoScreens.tsx
 msgid "Events by hour, busiest at 14:00"
 msgstr "אירועים לפי שעה, השיא ב־14:00"
@@ -1573,6 +1794,10 @@ msgstr "כל 30 דקות"
 #: src/features/commerce/ProductsPage.tsx
 msgid "Every active listing is in stock."
 msgstr "כל הליסטינגים הפעילים במלאי."
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Every message was delivered."
+msgstr "כל ההודעות נמסרו."
 
 #: src/features/settings/SettingsPage.tsx
 msgid "Every morning at 08:00"
@@ -1594,6 +1819,11 @@ msgstr "כל מי שהוזמן הצטרף."
 msgid "Everything is shipped. Nothing waits for you in the shop."
 msgstr "הכול נשלח. שום דבר בחנות לא ממתין לך."
 
+#: src/features/admin/OperationsPage.tsx
+msgid "Everything runs: no dead letters, the workers beat and every shop is in sync."
+msgstr "הכול רץ: אין משימות שנכשלו, העובדים פעילים וכל החנויות מסונכרנות."
+
+#: src/features/incidents/IncidentsPage.tsx
 #: src/features/office/ChatPage.tsx
 #: src/features/work/demoScreens.tsx
 msgid "Evidence"
@@ -1602,6 +1832,10 @@ msgstr "ראיות"
 #: src/features/commerce/ShippingPage.tsx
 msgid "Exchanges"
 msgstr "החלפות"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Execution"
+msgstr "הרצה"
 
 #: src/features/office/floor3d/plan.ts
 #: src/shared/demo/office.ts
@@ -1621,10 +1855,25 @@ msgstr "הוצאות החודש"
 msgid "Export"
 msgstr "ייצוא"
 
+#. placeholder {0}: count(selected.size)
+#: src/features/commerce/OrdersPage.tsx
+msgid "Export {0} selected"
+msgstr "ייצוא {0} שנבחרו"
+
 #: src/features/finance/FinanceDemos.tsx
 msgid "Export CSV"
 msgstr "ייצוא CSV"
 
+#: src/features/commerce/OrdersPage.tsx
+msgid "Export to CSV"
+msgstr "ייצוא ל־CSV"
+
+#. placeholder {0}: count(file.count)
+#: src/features/commerce/OrdersPage.tsx
+msgid "Exported {0} orders."
+msgstr "יוצאו {0} הזמנות."
+
+#: src/features/admin/OperationsPage.tsx
 #: src/shared/ui/kit/status.tsx
 msgid "Failed"
 msgstr "נכשל"
@@ -1698,6 +1947,10 @@ msgstr "בריאות פיננסית"
 msgid "Find agent"
 msgstr "חיפוש סוכן"
 
+#: src/features/commerce/OrdersPage.tsx
+msgid "Find an order"
+msgstr "חיפוש הזמנה"
+
 #: src/features/shops/EtsyCallbackPage.tsx
 msgid "Finish connecting in the web app where you are signed in."
 msgstr "יש להשלים את החיבור באפליקציית הרשת שבה נכנסת לחשבון."
@@ -1705,6 +1958,16 @@ msgstr "יש להשלים את החיבור באפליקציית הרשת שבה
 #: src/features/customers/CustomersPage.tsx
 msgid "Five stars"
 msgstr "חמישה כוכבים"
+
+#: src/features/incidents/IncidentState.tsx
+msgctxt "incident state"
+msgid "Fix proposed"
+msgstr "הוצע תיקון"
+
+#: src/features/incidents/IncidentState.tsx
+msgctxt "incident state"
+msgid "Fixing automatically"
+msgstr "בתיקון אוטומטי"
 
 #: src/app/shell/useNavLabels.ts
 #: src/features/office/FloorPage.tsx
@@ -1736,6 +1999,10 @@ msgstr "שכחתם את הסיסמה?"
 msgid "Found 2 late orders. Approval request attached."
 msgstr "מצאתי 2 הזמנות באיחור. מצרפת בקשת אישור."
 
+#: src/features/incidents/IncidentsPage.tsx
+msgid "Found by"
+msgstr "זוהתה על ידי"
+
 #: src/features/office/TeamRoomPage.tsx
 msgid "Found it: the carrier API token expired at 07:38, every call gets a 502 from the gateway. Rotating the token and re-running the sync."
 msgstr "מצאתי: ה־token של ספק המעקב פג ב־07:38, כל הקריאות מקבלות 502 מה־gateway. מחדש token ומריץ סנכרון חוזר."
@@ -1764,9 +2031,17 @@ msgstr "מפקח הגשמה"
 msgid "Full screen"
 msgstr "מסך מלא"
 
+#: src/features/admin/OperationsPage.tsx
+msgid "Full sweep"
+msgstr "סריקה מלאה"
+
 #: src/shared/demo/office.ts
 msgid "Gal"
 msgstr "גל"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Gave up"
+msgstr "הופסק"
 
 #: src/features/office/data.ts
 msgid "Gelato quote for towels"
@@ -1832,10 +2107,18 @@ msgstr "צמיחה"
 msgid "Handled by:"
 msgstr "מטפלת:"
 
+#: src/features/admin/OperationsPage.tsx
+msgid "Health"
+msgstr "בריאות מערכת"
+
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
 msgid "Health"
 msgstr "בריאות מערכת"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Health views"
+msgstr "תצוגות בריאות מערכת"
 
 #: src/features/customers/CustomersDemos.tsx
 #: src/features/office/AiOpsPage.tsx
@@ -1866,9 +2149,26 @@ msgstr "הסתרת הסיסמה"
 msgid "High"
 msgstr "גבוה"
 
+#: src/features/incidents/IncidentState.tsx
+msgctxt "severity"
+msgid "High"
+msgstr "גבוהה"
+
+#: src/features/incidents/IncidentsPage.tsx
+msgid "High or critical"
+msgstr "גבוהה או קריטית"
+
 #: src/features/work/demoScreens.tsx
 msgid "High risk"
 msgstr "סיכון גבוה"
+
+#: src/features/commerce/timeline.tsx
+msgid "History"
+msgstr "היסטוריה"
+
+#: src/features/commerce/timeline.tsx
+msgid "History import"
+msgstr "ייבוא היסטוריה"
 
 #: src/features/customers/CustomersDemos.tsx
 msgid "Holiday towels"
@@ -1961,6 +2261,10 @@ msgstr "במלאי"
 msgid "In stock"
 msgstr "במלאי"
 
+#: src/features/admin/OperationsPage.tsx
+msgid "In sync"
+msgstr "מסונכרן"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "In the web app, for you and your team, from the first sign-in."
 msgstr "באפליקציית הרשת, לך ולצוות שלך, מהכניסה הראשונה."
@@ -1969,13 +2273,49 @@ msgstr "באפליקציית הרשת, לך ולצוות שלך, מהכניסה 
 msgid "Inbox"
 msgstr "תיבת דואר"
 
+#: src/features/incidents/IncidentsPage.tsx
+#: src/features/incidents/IncidentState.tsx
+msgid "Incident"
+msgstr "תקלה"
+
+#: src/features/incidents/IncidentsPage.tsx
+msgid "Incident center"
+msgstr "מרכז התקלות"
+
+#: src/app/shell/NotificationBell.tsx
+msgid "Incident resolved: {cause}"
+msgstr "תקלה נפתרה: {cause}"
+
+#: src/app/shell/NotificationBell.tsx
+msgid "Incident resolved: {cause}, order #{receipt}"
+msgstr "תקלה נפתרה: {cause}, הזמנה #{receipt}"
+
 #: src/features/office/EngineeringPage.tsx
 msgid "Incident:"
 msgstr "תקלה:"
 
+#: src/features/incidents/IncidentsPage.tsx
+#: src/features/incidents/OrderIncidents.tsx
 #: src/features/overview/OverviewPage.tsx
 msgid "Incidents"
 msgstr "תקלות"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Incidents"
+msgstr "תקלות"
+
+#: src/features/incidents/IncidentsPage.tsx
+msgid "Incidents could not be loaded"
+msgstr "לא ניתן היה לטעון את התקלות"
+
+#: src/features/incidents/IncidentsPage.tsx
+msgid "Incidents open on their own when an order misses its shipping window or an automation gives up, and close themselves once the evidence arrives."
+msgstr "תקלות נפתחות מעצמן כשהזמנה מפספסת את חלון המשלוח או כשאוטומציה נכשלת סופית, ונסגרות מעצמן כשמגיעה ראיה."
+
+#: src/app/shell/NotificationBell.tsx
+msgid "Incidents, shipping alerts and sign-ins on a new device appear here."
+msgstr "תקלות, התראות משלוח וכניסות ממכשיר חדש יופיעו כאן."
 
 #: src/features/office/EngineeringPage.tsx
 msgid "Index on orders.status"
@@ -1992,6 +2332,11 @@ msgstr "התראות מיידיות על הזמנות"
 #: src/features/settings/SettingsPage.tsx
 msgid "Instant Telegram alert"
 msgstr "התראה מיידית בטלגרם"
+
+#: src/features/incidents/IncidentState.tsx
+msgctxt "incident state"
+msgid "Investigating"
+msgstr "בבדיקה"
 
 #: src/features/auth/AcceptInvitePage.tsx
 msgid "Invitation"
@@ -2047,9 +2392,17 @@ msgstr "איריס"
 msgid "Items"
 msgstr "פריטים"
 
+#: src/features/admin/OperationsPage.tsx
+msgid "Job"
+msgstr "משימה"
+
 #: src/features/office/TeamRoomPage.tsx
 msgid "Join conversation"
 msgstr "הצטרפות לשיחה"
+
+#: src/features/incidents/IncidentsPage.tsx
+msgid "Key figures"
+msgstr "נתונים עיקריים"
 
 #: src/features/overview/OverviewPage.tsx
 msgid "Key numbers"
@@ -2073,6 +2426,10 @@ msgstr "12 החודשים האחרונים"
 msgid "last 12 months, before Etsy's fees"
 msgstr "12 החודשים האחרונים, לפני העמלות של Etsy"
 
+#: src/features/admin/OperationsPage.tsx
+msgid "Last 24 hours"
+msgstr "24 השעות האחרונות"
+
 #: src/features/commerce/OrdersPage.tsx
 msgid "Last 30 days"
 msgstr "30 הימים האחרונים"
@@ -2080,6 +2437,10 @@ msgstr "30 הימים האחרונים"
 #: src/features/admin/AdminDemos.tsx
 msgid "Last 30 runs"
 msgstr "30 ריצות אחרונות"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Last 7 days"
+msgstr "7 הימים האחרונים"
 
 #: src/features/commerce/OrdersPage.tsx
 msgid "Last 90 days"
@@ -2090,9 +2451,13 @@ msgstr "90 הימים האחרונים"
 msgid "Last active <0>{0}</0>"
 msgstr "פעילות אחרונה <0>{0}</0>"
 
-#: src/features/admin/AdminDemos.tsx
-msgid "Last backup"
-msgstr "גיבוי אחרון"
+#: src/features/admin/OperationsPage.tsx
+msgid "Last beat"
+msgstr "דופק אחרון"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Last error"
+msgstr "שגיאה אחרונה"
 
 #: src/features/customers/CustomersDemos.tsx
 msgid "Last order"
@@ -2102,6 +2467,10 @@ msgstr "הזמנה אחרונה"
 msgid "Last run"
 msgstr "ריצה אחרונה"
 
+#: src/features/admin/OperationsPage.tsx
+msgid "Last success"
+msgstr "הצלחה אחרונה"
+
 #: src/features/shops/ShopCard.tsx
 msgid "Last sync:"
 msgstr "סנכרון אחרון"
@@ -2110,6 +2479,10 @@ msgstr "סנכרון אחרון"
 #: src/features/shops/ShopCard.tsx
 msgid "Last synced {0}"
 msgstr "סונכרנה לאחרונה {0}"
+
+#: src/shared/ui/kit/live.tsx
+msgid "Last synced at {time} · Etsy has not answered since"
+msgstr "סונכרן לאחרונה ב־{time} · Etsy לא עונה מאז"
 
 #: src/features/security/SecurityPage.tsx
 msgid "Last used:"
@@ -2183,6 +2556,10 @@ msgstr "משימה מקושרת"
 msgid "List"
 msgstr "רשימה"
 
+#: src/app/shell/NotificationBell.tsx
+msgid "Listing {listing} is out of stock"
+msgstr "המוצר {listing} אזל מהמלאי"
+
 #: src/features/office/ChatPage.tsx
 msgid "Listing image"
 msgstr "תמונת ליסטינג"
@@ -2229,6 +2606,14 @@ msgstr "לא ניתן לטעון את נתוני החנות. נסו שוב בק�
 msgid "Loading connection details"
 msgstr "טוען את פרטי החיבור"
 
+#: src/features/incidents/IncidentsPage.tsx
+msgid "Loading incidents…"
+msgstr "טוען תקלות…"
+
+#: src/app/shell/NotificationBell.tsx
+msgid "Loading notifications…"
+msgstr "טוען התראות…"
+
 #: src/features/commerce/OrdersPage.tsx
 msgid "Loading orders"
 msgstr "טוען הזמנות"
@@ -2254,6 +2639,22 @@ msgstr "טוענים חנויות"
 msgid "Loading statistics"
 msgstr "טוען סטטיסטיקה"
 
+#: src/features/admin/OperationsPage.tsx
+msgid "Loading the execution"
+msgstr "טוענים את ההרצה"
+
+#: src/features/incidents/IncidentsPage.tsx
+msgid "Loading the incident…"
+msgstr "טוען את התקלה…"
+
+#: src/features/commerce/timeline.tsx
+msgid "Loading the order's history…"
+msgstr "טוענים את היסטוריית ההזמנה…"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Loading the queue and sync health"
+msgstr "טוענים את מצב התור והסנכרון"
+
 #: src/features/shops/ShopCard.tsx
 msgid "Loading the shop's numbers"
 msgstr "טוען את נתוני החנות"
@@ -2265,6 +2666,11 @@ msgstr "טרקלין"
 #: src/features/work/demoScreens.tsx
 msgid "Low"
 msgstr "נמוך"
+
+#: src/features/incidents/IncidentState.tsx
+msgctxt "severity"
+msgid "Low"
+msgstr "נמוכה"
 
 #: src/features/work/demoScreens.tsx
 msgid "Low risk"
@@ -2291,6 +2697,14 @@ msgstr "מפה"
 #: src/features/finance/FinanceDemos.tsx
 msgid "Margin"
 msgstr "מרווח"
+
+#: src/app/shell/NotificationBell.tsx
+msgid "Mark all read"
+msgstr "סימון הכול כנקרא"
+
+#: src/app/shell/NotificationBell.tsx
+msgid "Mark these read"
+msgstr "סימון אלה כנקראו"
 
 #: src/features/finance/FinanceDemos.tsx
 #: src/features/office/floor3d/plan.ts
@@ -2329,6 +2743,11 @@ msgstr "מאיה חזרה למשרד המנכ״לית"
 #: src/features/work/demoScreens.tsx
 msgid "Medium"
 msgstr "בינוני"
+
+#: src/features/incidents/IncidentState.tsx
+msgctxt "severity"
+msgid "Medium"
+msgstr "בינונית"
 
 #: src/features/work/demoScreens.tsx
 msgid "Medium risk"
@@ -2423,6 +2842,20 @@ msgstr "עוד"
 msgid "More areas"
 msgstr "אזורים נוספים"
 
+#. placeholder {0}: openItems.length
+#: src/features/incidents/IncidentsPage.tsx
+msgid "More than {0} open incidents"
+msgstr "יותר מ־{0} תקלות פתוחות"
+
+#. placeholder {0}: words.state(step)
+#: src/features/incidents/IncidentsPage.tsx
+msgid "Move to {0}"
+msgstr "העברה למצב: {0}"
+
+#: src/features/incidents/IncidentsPage.tsx
+msgid "Moved to {moved}"
+msgstr "הועברה למצב: {moved}"
+
 #: src/features/customers/CustomersDemos.tsx
 msgid "Mug arrived cracked"
 msgstr "ספל הגיע סדוק"
@@ -2436,9 +2869,19 @@ msgstr "שם"
 msgid "Need you"
 msgstr "צריכות אותך"
 
+#: src/features/incidents/IncidentState.tsx
+msgctxt "incident state"
+msgid "Needs a developer"
+msgstr "דורשת מפתח"
+
 #: src/features/team/TeamPage.tsx
 msgid "Needs approval"
 msgstr "אישור נדרש"
+
+#: src/features/incidents/IncidentState.tsx
+msgctxt "incident state"
+msgid "Needs approval"
+msgstr "ממתינה לאישור"
 
 #: src/features/shops/ShopCard.tsx
 msgid "Needs reconnecting"
@@ -2448,6 +2891,7 @@ msgstr "צריך לחבר מחדש"
 msgid "Needs reply:"
 msgstr "דורש תשובה:"
 
+#: src/features/admin/OperationsPage.tsx
 #: src/features/welcome/WelcomePage.tsx
 msgid "Needs you"
 msgstr "מחכה לך"
@@ -2468,6 +2912,14 @@ msgstr "אוטומציה חדשה"
 msgid "New chat"
 msgstr "שיחה חדשה"
 
+#: src/app/shell/NotificationBell.tsx
+msgid "New incident: {cause}"
+msgstr "תקלה חדשה: {cause}"
+
+#: src/app/shell/NotificationBell.tsx
+msgid "New incident: {cause}, order #{receipt}"
+msgstr "תקלה חדשה: {cause}, הזמנה #{receipt}"
+
 #: src/features/office/EngineeringPage.tsx
 msgid "New MCP tool: Etsy listings"
 msgstr "כלי MCP חדש: Etsy listings"
@@ -2476,6 +2928,14 @@ msgstr "כלי MCP חדש: Etsy listings"
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "New password"
 msgstr "סיסמה חדשה"
+
+#: src/app/shell/NotificationBell.tsx
+msgid "New sign-in on {device}"
+msgstr "כניסה חדשה מ־{device}"
+
+#: src/app/shell/NotificationBell.tsx
+msgid "New sign-in on a new device"
+msgstr "כניסה חדשה ממכשיר חדש"
 
 #: src/features/office/data.ts
 msgid "New star map mockups"
@@ -2499,6 +2959,7 @@ msgid "newest {0} orders, before Etsy's fees"
 msgstr "{0} ההזמנות האחרונות, לפני עמלות Etsy"
 
 #: src/features/customers/CustomersPage.tsx
+#: src/features/incidents/IncidentsPage.tsx
 msgid "Newest first"
 msgstr "החדשות קודם"
 
@@ -2509,6 +2970,10 @@ msgstr "המחלקה הבאה"
 #: src/features/finance/FinanceDemos.tsx
 msgid "Next payout"
 msgstr "תשלום הבא"
+
+#: src/features/incidents/IncidentsPage.tsx
+msgid "Next step"
+msgstr "הצעד הבא"
 
 #: src/features/office/EngineeringPage.tsx
 msgid "Next:"
@@ -2547,9 +3012,33 @@ msgstr "אין משימה פעילה"
 msgid "No authenticator app yet."
 msgstr "עדיין אין אפליקציית אימות."
 
+#: src/features/admin/OperationsPage.tsx
+msgid "No automation has run in the last seven days."
+msgstr "אף אוטומציה לא רצה בשבעת הימים האחרונים."
+
+#: src/features/admin/OperationsPage.tsx
+msgid "No automation has run yet."
+msgstr "אף אוטומציה עוד לא רצה."
+
 #: src/features/shops/ShopsPage.tsx
 msgid "No connection needs you. A disconnected shop stays paused until you connect it again."
 msgstr "אף חיבור לא צריך אותך. חנות מנותקת נשארת מושהית עד שתחבר אותה שוב."
+
+#: src/features/admin/OperationsPage.tsx
+msgid "No Etsy notice has arrived yet."
+msgstr "עוד לא הגיעה הודעה מ־Etsy."
+
+#: src/features/incidents/IncidentsPage.tsx
+msgid "No evidence yet. It closes once the evidence arrives, such as tracking found in Etsy."
+msgstr "עדיין אין ראיה. התקלה תיסגר כשתגיע ראיה, למשל מספר מעקב שנמצא ב־Etsy."
+
+#: src/features/incidents/IncidentsPage.tsx
+msgid "No incidents yet"
+msgstr "עדיין אין תקלות"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "No job ran out of retries."
+msgstr "אין משימות שמיצו את הניסיונות."
 
 #: src/features/commerce/ProductsPage.tsx
 msgid "No listing matches this view."
@@ -2558,6 +3047,19 @@ msgstr "אין ליסטינג שמתאים לתצוגה הזו."
 #: src/features/shops/ShopStats.tsx
 msgid "No month with sales yet."
 msgstr "עדיין אין חודש עם מכירות."
+
+#: src/app/shell/NotificationBell.tsx
+msgid "No notifications yet"
+msgstr "עדיין אין התראות"
+
+#: src/features/incidents/IncidentsPage.tsx
+msgid "No open incidents"
+msgstr "אין תקלות פתוחות"
+
+#. placeholder {0}: search.trim()
+#: src/features/commerce/OrdersPage.tsx
+msgid "No order matches \"{0}\"."
+msgstr "אין הזמנה שמתאימה לחיפוש: {0}"
 
 #. placeholder {0}: periods[period].within
 #: src/features/commerce/OrdersPage.tsx
@@ -2585,9 +3087,17 @@ msgstr "עדיין אין הזמנות."
 msgid "No reason given"
 msgstr "לא צוינה סיבה"
 
+#: src/features/admin/OperationsPage.tsx
+msgid "No reconciliation has run yet."
+msgstr "עוד לא רצה התאמה."
+
 #: src/features/shops/ShopStats.tsx
 msgid "No refunds or cancellations in these orders."
 msgstr "אין החזרים או ביטולים בהזמנות האלה."
+
+#: src/features/incidents/IncidentsPage.tsx
+msgid "No resolved incidents yet"
+msgstr "עדיין אין תקלות שנפתרו"
 
 #: src/features/commerce/ShippingPage.tsx
 msgid "No return policy on Etsy."
@@ -2637,6 +3147,14 @@ msgstr "אין מעקב עדיין"
 msgid "No WebGL · list view"
 msgstr "אין WebGL · תצוגת רשימה"
 
+#: src/features/admin/OperationsPage.tsx
+msgid "No worker has beaten in the last seven days."
+msgstr "אף עובד לא דיווח בשבעת הימים האחרונים."
+
+#: src/features/admin/OperationsPage.tsx
+msgid "No worker is running: jobs wait until one starts."
+msgstr "אין עובד פעיל: המשימות ממתינות עד שאחד יתחיל."
+
 #: src/shared/demo/office.ts
 msgid "Noa"
 msgstr "נועה"
@@ -2665,9 +3183,14 @@ msgstr "נועה, תכיני הצעת החזר חלקי ל־#3152 ותעבירי
 msgid "Noam"
 msgstr "נועם"
 
+#: src/features/incidents/IncidentsPage.tsx
 #: src/features/shops/ShopCard.tsx
 msgid "None"
 msgstr "אין"
+
+#: src/features/incidents/IncidentsPage.tsx
+msgid "None is high or critical. Incidents close themselves once the evidence arrives, such as tracking found in Etsy."
+msgstr "אף אחת אינה בחומרה גבוהה או קריטית. תקלות נסגרות מעצמן כשמגיעה ראיה, למשל מספר מעקב שנמצא ב־Etsy."
 
 #: src/features/commerce/ProductsPage.tsx
 msgid "None of the listings read is sold out; the catalog is larger than one read."
@@ -2689,6 +3212,10 @@ msgstr "לא מחובר"
 msgid "Not known"
 msgstr "לא ידוע"
 
+#: src/features/admin/OperationsPage.tsx
+msgid "Not processed yet"
+msgstr "עוד לא טופלו"
+
 #: src/features/shops/Capabilities.tsx
 msgid "Not set up yet. HTCO checks Etsy for new orders regularly instead."
 msgstr "עוד לא הוגדר. במקום זה HTCO בודקת ב־Etsy הזמנות חדשות באופן קבוע."
@@ -2705,6 +3232,10 @@ msgstr "לא מסתנכרנת. יש לחבר אותה שוב כדי להמשיך
 msgid "Nothing changes in your Etsy shop."
 msgstr "שום דבר לא משתנה בחנות שלכם ב־Etsy."
 
+#: src/features/incidents/IncidentsPage.tsx
+msgid "Nothing is open"
+msgstr "אין תקלות פתוחות"
+
 #: src/app/shell/CommandMenu.tsx
 msgid "Nothing matches."
 msgstr "לא נמצאה התאמה."
@@ -2717,9 +3248,19 @@ msgstr "אין מה לשלוח ולא נשלח דבר ב־30 הימים האחר
 msgid "Nothing waits to ship."
 msgstr "שום דבר לא ממתין למשלוח."
 
+#: src/app/shell/NotificationBell.tsx
 #: src/features/settings/SettingsPage.tsx
 msgid "Notifications"
 msgstr "התראות"
+
+#: src/app/shell/NotificationBell.tsx
+msgid "Notifications could not be loaded"
+msgstr "לא ניתן היה לטעון את ההתראות"
+
+#. placeholder {0}: inbox.unread
+#: src/app/shell/NotificationBell.tsx
+msgid "Notifications, {0} unread"
+msgstr "התראות, {0} שלא נקראו"
 
 #: src/features/settings/AppearanceChoices.tsx
 msgid "Now dark"
@@ -2790,6 +3331,10 @@ msgstr "לא מחובר מאז 18:00"
 msgid "Oldest"
 msgstr "הוותיק ביותר"
 
+#: src/features/incidents/IncidentsPage.tsx
+msgid "Oldest open"
+msgstr "הפתוחה הוותיקה"
+
 #: src/shared/demo/office.ts
 msgid "Omer"
 msgstr "עומר"
@@ -2824,6 +3369,14 @@ msgstr "בזמן"
 msgid "One button, Etsy asks you to allow it, and you are back."
 msgstr "כפתור אחד, Etsy מבקשת את אישורך, וחוזרים."
 
+#: src/features/admin/OperationsPage.tsx
+msgid "Only the Owner and Admins retry jobs."
+msgstr "רק הבעלים והמנהלים מריצים משימות מחדש."
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Only the workspace Owner and Admins see the queue and sync health."
+msgstr "רק הבעלים והמנהלים של סביבת העבודה רואים את מצב התור והסנכרון."
+
 #: src/features/shops/connectEtsy.tsx
 msgid "Only the workspace owner can connect a shop."
 msgstr "רק הבעלים של סביבת העבודה יכולים לחבר חנות."
@@ -2840,6 +3393,10 @@ msgstr "רק בעלי סביבת העבודה יכולים להסיר חנות."
 msgid "Only the workspace owner or an admin can re-check a shop."
 msgstr "רק הבעלים או מנהלים של סביבת העבודה יכולים לבדוק חנות מחדש."
 
+#: src/features/incidents/IncidentsPage.tsx
+msgid "Open"
+msgstr "פתוחות"
+
 #: src/features/shops/ShopStats.tsx
 msgid "Open for {months, plural, one {# month} other {# months}}, since {since}:"
 msgstr "פתוחה {months, plural, one {חודש אחד} two {חודשיים} other {# חודשים}}, מאז {since}:"
@@ -2852,9 +3409,13 @@ msgstr "פתוחה {years, plural, one {שנה אחת} two {שנתיים} other 
 msgid "Open incident"
 msgstr "תקלה פתוחה"
 
-#: src/features/admin/AdminDemos.tsx
+#: src/features/incidents/IncidentsPage.tsx
 msgid "Open incidents"
 msgstr "תקלות פתוחות"
+
+#: src/features/incidents/IncidentsPage.tsx
+msgid "Open incidents by state"
+msgstr "תקלות פתוחות לפי מצב"
 
 #: src/features/overview/OverviewPage.tsx
 msgid "Open incidents:"
@@ -2889,6 +3450,27 @@ msgstr "פתיחת חנויות"
 msgid "Open the authenticator app on your phone."
 msgstr "פתחו את אפליקציית האימות בטלפון."
 
+#: src/features/admin/OperationsPage.tsx
+msgid "Open the execution"
+msgstr "פתיחת ההרצה"
+
+#. placeholder {0}: e.automation_id
+#: src/features/admin/OperationsPage.tsx
+msgid "Open the execution of {0}"
+msgstr "פתיחת ההרצה של {0}"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Open the first dead letter"
+msgstr "פתיחת המשימה הראשונה שנכשלה"
+
+#: src/features/incidents/OrderIncidents.tsx
+msgid "Open the incident: {cause}"
+msgstr "לפתוח את התקלה: {cause}"
+
+#: src/features/incidents/IncidentsPage.tsx
+msgid "Open the most urgent"
+msgstr "פתיחת הדחופה ביותר"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "Open the web app"
 msgstr "לפתיחת אפליקציית הרשת"
@@ -2917,6 +3499,7 @@ msgstr "תפעול"
 
 #: src/features/commerce/OrdersPage.tsx
 #: src/features/commerce/ShippingPage.tsx
+#: src/features/incidents/IncidentsPage.tsx
 #: src/features/office/ChatPage.tsx
 msgid "Order"
 msgstr "הזמנה"
@@ -2926,10 +3509,28 @@ msgstr "הזמנה"
 msgid "Order {0}"
 msgstr "הזמנה {0}"
 
+#. placeholder {0}: receipt ?? ""
+#: src/app/shell/NotificationBell.tsx
+msgid "Order #{0} must ship by {by}"
+msgstr "הזמנה #{0} צריכה לצאת עד {by}"
+
+#. placeholder {0}: receipt ?? ""
+#: src/app/shell/NotificationBell.tsx
+msgid "Order #{0} needs its tracking copied to Etsy"
+msgstr "צריך להעתיק ל־Etsy את מספר המעקב של הזמנה #{0}"
+
 #: src/features/office/floor3d/plan.ts
 #: src/shared/demo/office.ts
 msgid "Order Assurance"
 msgstr "הבטחת הזמנות"
+
+#: src/features/commerce/timeline.tsx
+msgid "Order history"
+msgstr "היסטוריית ההזמנה"
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "Order number or SKU"
+msgstr "מספר הזמנה או SKU"
 
 #: src/features/commerce/OrdersPage.tsx
 msgid "Order numbers"
@@ -2988,14 +3589,18 @@ msgstr "הזמנות, 7 הימים האחרונים"
 msgid "Orders, revenue and rating appear here while the shop is connected."
 msgstr "הזמנות, הכנסות ודירוג יופיעו כאן כל עוד החנות מחוברת."
 
+#: src/features/incidents/IncidentState.tsx
+msgid "Out of sync with Etsy"
+msgstr "לא מסונכרן עם Etsy"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Outbox failures"
+msgstr "כשלי מסירה"
+
 #. placeholder {0}: count(sales.orders)
 #: src/features/shops/ShopStats.tsx
 msgid "over {0} orders"
 msgstr "על פני {0} הזמנות"
-
-#: src/features/admin/AdminDemos.tsx
-msgid "Overall"
-msgstr "מצב כללי"
 
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
@@ -3042,11 +3647,20 @@ msgstr "בעלים ומנהלים נכנסים עם סיסמה וקוד מאפל
 msgid "Owners and Admins work in every shop of the workspace."
 msgstr "בעלים ומנהלים עובדים בכל החנויות של סביבת העבודה."
 
+#: src/features/admin/OperationsPage.tsx
+msgid "p50"
+msgstr "p50"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "p95"
+msgstr "p95"
+
 #: src/app/RouteStates.tsx
 msgid "Page not found"
 msgstr "הדף לא נמצא"
 
 #: src/features/commerce/OrdersPage.tsx
+#: src/features/commerce/timeline.tsx
 msgid "Paid"
 msgstr "שולם"
 
@@ -3112,6 +3726,10 @@ msgstr "השהיית שיחה"
 #: src/features/office/FloorPage.tsx
 msgid "Paused"
 msgstr "מושהה"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Pending"
+msgstr "ממתין להתחלה"
 
 #: src/app/shell/TopBar.tsx
 msgid "Pending approvals"
@@ -3276,14 +3894,22 @@ msgstr "מפקחת איכות ותפעול"
 msgid "Question about A3 print size"
 msgstr "שאלה על גודל הדפס A3"
 
-#: src/features/admin/AdminDemos.tsx
-msgid "Queue depth"
-msgstr "עומס תור"
+#: src/features/admin/OperationsPage.tsx
+msgid "Queue and sync"
+msgstr "תור וסנכרון"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Queue numbers"
+msgstr "מספרי התור"
 
 #: src/features/work/demoScreens.tsx
 #: src/shared/ui/kit/status.tsx
 msgid "Queued"
 msgstr "בתור"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Queued again. It runs as soon as a worker is free."
+msgstr "נכנסה שוב לתור. היא תרוץ ברגע שיתפנה עובד."
 
 #: src/app/shell/CommandMenu.tsx
 #: src/app/shell/Sidebar.tsx
@@ -3318,6 +3944,10 @@ msgstr "בדיקה מחדש"
 msgid "Re-check what HTCO can do with {shopName}"
 msgstr "בדיקה מחדש של מה ש־HTCO יכולה לעשות עם {shopName}"
 
+#: src/features/commerce/OrdersPage.tsx
+msgid "Re-sync selected"
+msgstr "סנכרון מחדש של הנבחרות"
+
 #: src/features/customers/CustomersDemos.tsx
 msgid "Reach:"
 msgstr "היקף:"
@@ -3333,6 +3963,10 @@ msgstr "קריאה + טיוטה"
 #: src/features/shops/ShopCard.tsx
 msgid "Read listings"
 msgstr "קריאת מוצרים"
+
+#: src/features/commerce/timeline.tsx
+msgid "Read live from Etsy: the steps appear once HTCO has stored this order."
+msgstr "נקרא ישירות מ־Etsy: השלבים יופיעו אחרי ש־HTCO תשמור את ההזמנה."
 
 #: src/features/shops/ShopsPage.tsx
 msgid "Read only"
@@ -3358,9 +3992,17 @@ msgstr "צפייה בלבד"
 msgid "Ready today"
 msgstr "זמין היום"
 
+#: src/features/admin/OperationsPage.tsx
+msgid "Received"
+msgstr "התקבלו"
+
 #: src/features/customers/CustomersDemos.tsx
 msgid "Recency"
 msgstr "טריות"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Recent executions"
+msgstr "הרצות אחרונות"
 
 #: src/features/customers/CustomersPage.tsx
 msgid "Recent reviews are all four or five stars."
@@ -3369,6 +4011,14 @@ msgstr "כל הביקורות האחרונות קיבלו ארבעה או חמי
 #: src/features/admin/AdminDemos.tsx
 msgid "Recent runs"
 msgstr "ריצות אחרונות"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Reconcile"
+msgstr "התאמה"
+
+#: src/features/incidents/IncidentState.tsx
+msgid "Reconciliation"
+msgstr "התאמה"
 
 #: src/features/shops/reconnect.tsx
 #: src/features/shops/ShopsPage.tsx
@@ -3403,6 +4053,10 @@ msgstr "יש לחבר מחדש היום"
 #: src/features/finance/FinanceDemos.tsx
 msgid "Recorded by"
 msgstr "נרשם ע״י"
+
+#: src/features/commerce/timeline.tsx
+msgid "Recorded in HTCO"
+msgstr "נרשמה ב־HTCO"
 
 #: src/features/security/SecurityPage.tsx
 msgid "Recovery"
@@ -3451,6 +4105,7 @@ msgstr "החזר ללא אישור"
 
 #: src/features/commerce/OrdersPage.tsx
 #: src/features/commerce/refunds.tsx
+#: src/features/commerce/timeline.tsx
 #: src/features/shops/ShopStats.tsx
 msgid "Refunded"
 msgstr "הוחזר כסף"
@@ -3478,6 +4133,10 @@ msgstr "דחייה"
 #: src/features/work/demoScreens.tsx
 msgid "Rejected"
 msgstr "נדחה"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Release"
+msgstr "גרסה"
 
 #: src/features/office/EngineeringPage.tsx
 msgid "Reliability"
@@ -3558,9 +4217,55 @@ msgstr "איפוס הסיסמה"
 msgid "Resolve late orders #3152, #3160"
 msgstr "טיפול בהזמנות באיחור #3152, #3160"
 
-#: src/features/admin/AdminDemos.tsx
-msgid "Response time"
-msgstr "זמן תגובה"
+#: src/features/incidents/IncidentsPage.tsx
+msgid "Resolved"
+msgstr "נפתרו"
+
+#: src/features/incidents/IncidentState.tsx
+msgctxt "incident state"
+msgid "Resolved"
+msgstr "נפתרה"
+
+#: src/features/incidents/IncidentsPage.tsx
+msgid "Resolved incidents"
+msgstr "תקלות שנפתרו"
+
+#: src/features/incidents/IncidentsPage.tsx
+msgid "Resolved incidents closed themselves when the evidence arrived. Open one to see what closed it."
+msgstr "תקלות שנפתרו נסגרו מעצמן כשהגיעה הראיה. אפשר לפתוח אחת כדי לראות מה סגר אותה."
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Retries"
+msgstr "ניסיונות חוזרים"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Retry"
+msgstr "ניסיון חוזר"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Retry scheduled"
+msgstr "ניסיון חוזר מתוזמן"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Retry the execution"
+msgstr "הרצה מחדש"
+
+#. placeholder {0}: job.kind
+#: src/features/admin/OperationsPage.tsx
+msgid "Retry the job {0}"
+msgstr "הרצה מחדש של המשימה {0}"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Retrying"
+msgstr "בניסיון חוזר"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Retrying executions is off on this server."
+msgstr "הרצה מחדש של הרצות כבויה בשרת הזה."
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Retrying…"
+msgstr "מריצים מחדש…"
 
 #. placeholder {0}: String(i + 1)
 #: src/features/commerce/ShippingPage.tsx
@@ -3685,6 +4390,11 @@ msgstr "נמצא שורש התקלה"
 msgid "Rotate token"
 msgstr "החלפת token"
 
+#: src/features/admin/OperationsPage.tsx
+msgid "Run"
+msgstr "הרצה"
+
+#: src/features/admin/OperationsPage.tsx
 #: src/features/work/demoScreens.tsx
 #: src/shared/ui/kit/status.tsx
 msgid "Running"
@@ -3693,6 +4403,10 @@ msgstr "עובד"
 #: src/features/office/FloorPage.tsx
 msgid "Running now"
 msgstr "עובדים כעת"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Runs"
+msgstr "הרצות"
 
 #: src/features/admin/AdminDemos.tsx
 msgid "Runs today"
@@ -3791,6 +4505,15 @@ msgstr "לכל האישורים"
 msgid "see every shop"
 msgstr "רואים את כל החנויות"
 
+#: src/features/commerce/OrdersPage.tsx
+msgid "Select every order shown"
+msgstr "בחירת כל ההזמנות המוצגות"
+
+#. placeholder {0}: String(o.order_id)
+#: src/features/commerce/OrdersPage.tsx
+msgid "Select order {0}"
+msgstr "בחירת הזמנה {0}"
+
 #: src/features/commerce/refunds.tsx
 msgid "Seller's note:"
 msgstr "הערת המוכר:"
@@ -3824,10 +4547,6 @@ msgstr "שירות"
 msgid "Service departments"
 msgstr "מחלקות שירות"
 
-#: src/features/admin/AdminDemos.tsx
-msgid "Services"
-msgstr "שירותים"
-
 #: src/features/security/SecurityPage.tsx
 msgid "Set one up"
 msgstr "להגדרה"
@@ -3857,7 +4576,6 @@ msgid "Set your password"
 msgstr "בחירת סיסמה"
 
 #: src/app/shell/UserMenu.tsx
-#: src/features/admin/AdminDemos.tsx
 #: src/features/customers/CustomersDemos.tsx
 #: src/features/finance/FinanceDemos.tsx
 #: src/features/office/FloorPage.tsx
@@ -3874,6 +4592,7 @@ msgstr "הגדרות"
 msgid "Several workspaces"
 msgstr "כמה סביבות עבודה"
 
+#: src/features/incidents/IncidentsPage.tsx
 #: src/features/office/EngineeringPage.tsx
 msgid "Severity"
 msgstr "חומרה"
@@ -3888,6 +4607,7 @@ msgstr "שותף בשיחה"
 
 #: src/features/commerce/OrdersPage.tsx
 #: src/features/commerce/ShippingPage.tsx
+#: src/features/incidents/IncidentsPage.tsx
 msgid "Ship by"
 msgstr "לשלוח עד"
 
@@ -3906,6 +4626,7 @@ msgid "Shipment"
 msgstr "משלוח"
 
 #: src/features/commerce/OrdersPage.tsx
+#: src/features/commerce/timeline.tsx
 msgid "Shipped"
 msgstr "נשלח"
 
@@ -3938,6 +4659,10 @@ msgstr "פרופילי משלוח"
 msgid "Shipping views"
 msgstr "תצוגות המשלוחים"
 
+#: src/features/incidents/IncidentState.tsx
+msgid "Shipping window check"
+msgstr "בדיקת חלון המשלוח"
+
 #: src/features/commerce/ShippingPage.tsx
 msgid "Ships from"
 msgstr "נשלח מ־"
@@ -3950,7 +4675,9 @@ msgstr "שולח היום"
 msgid "Shon"
 msgstr "שון"
 
+#: src/features/admin/OperationsPage.tsx
 #: src/features/finance/FinanceDemos.tsx
+#: src/features/incidents/IncidentsPage.tsx
 #: src/features/shops/ShopStats.tsx
 #: src/shared/ui/kit/live.tsx
 msgid "Shop"
@@ -3983,6 +4710,10 @@ msgstr "הגדרות חנות"
 #: src/features/shops/ShopStats.tsx
 msgid "Shop statistics"
 msgstr "סטטיסטיקת החנות"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Shop syncs"
+msgstr "סנכרון חנויות"
 
 #: src/features/overview/OverviewPage.tsx
 #: src/features/shops/ShopCard.tsx
@@ -4147,6 +4878,10 @@ msgstr "אזל"
 msgid "Sold, 30 days"
 msgstr "נמכרו, 30 ימים"
 
+#: src/app/shell/NotificationBell.tsx
+msgid "Some workspaces' notifications did not load"
+msgstr "ההתראות של חלק מסביבות העבודה לא נטענו"
+
 #: src/app/RouteStates.tsx
 msgid "Something went wrong"
 msgstr "משהו השתבש"
@@ -4181,7 +4916,6 @@ msgstr "הוצאה החודש:"
 msgid "Spent today"
 msgstr "עלות היום"
 
-#: src/features/admin/AdminDemos.tsx
 #: src/features/office/EngineeringPage.tsx
 msgid "Stable"
 msgstr "יציב"
@@ -4189,6 +4923,23 @@ msgstr "יציב"
 #: src/features/office/FloorPage.tsx
 msgid "Stable performance"
 msgstr "ביצוע יציב"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Stale"
+msgstr "לא עדכני"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Stale shops"
+msgstr "חנויות לא מעודכנות"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Started"
+msgstr "התחילה"
+
+#: src/features/admin/OperationsPage.tsx
+#: src/features/incidents/IncidentsPage.tsx
+msgid "State"
+msgstr "מצב"
 
 #: src/features/shops/ShopsPage.tsx
 msgid "Statistics"
@@ -4199,6 +4950,7 @@ msgid "Statistics appear here once a shop is connected."
 msgstr "הסטטיסטיקה תופיע כאן אחרי שתחובר חנות."
 
 #: src/features/admin/AdminDemos.tsx
+#: src/features/admin/OperationsPage.tsx
 #: src/features/commerce/demoScreens.tsx
 #: src/features/commerce/OrdersPage.tsx
 #: src/features/commerce/ShippingPage.tsx
@@ -4238,9 +4990,22 @@ msgstr "שלב 2 מתוך 2 · אבטחה"
 msgid "Stock is low on all four. Nothing changes until you say so."
 msgstr "המלאי נמוך בכל הארבעה. שום דבר לא משתנה עד שתאשר."
 
+#: src/features/admin/OperationsPage.tsx
+msgid "Stopped"
+msgstr "נעצר"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Stopping"
+msgstr "נעצר עכשיו"
+
 #: src/features/admin/AdminDemos.tsx
+#: src/features/admin/OperationsPage.tsx
 msgid "Succeeded"
 msgstr "הצליח"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Success"
+msgstr "הצלחה"
 
 #: src/features/work/demoScreens.tsx
 msgid "Summary"
@@ -4277,6 +5042,10 @@ msgstr "תמיכה"
 msgid "Switch linen towels to Gelato (−$2.10 per unit)"
 msgstr "מעבר לספק Gelato למגבות מפשתן (−$2.10 ליחידה)"
 
+#: src/features/commerce/timeline.tsx
+msgid "Sync"
+msgstr "סנכרון"
+
 #: src/features/office/floor3d/engine.ts
 msgid "Sync fixed?"
 msgstr "הסנכרון תוקן?"
@@ -4284,6 +5053,10 @@ msgstr "הסנכרון תוקן?"
 #: src/features/admin/AdminDemos.tsx
 msgid "Sync tracking numbers from carriers"
 msgstr "סנכרון מספרי מעקב מחברות השילוח"
+
+#: src/shared/ui/kit/live.tsx
+msgid "Synced from Etsy"
+msgstr "מסונכרן מ־Etsy"
 
 #: src/features/settings/AppearanceChoices.tsx
 msgid "System"
@@ -4297,10 +5070,6 @@ msgstr "מערכת"
 #: src/features/settings/AppearanceChoices.tsx
 msgid "System follows your device, also when it changes."
 msgstr "עוקב אחרי המכשיר, גם כשהוא משתנה."
-
-#: src/features/admin/AdminDemos.tsx
-msgid "System health"
-msgstr "בריאות מערכת"
 
 #: src/features/settings/SettingsPage.tsx
 msgid "System incidents"
@@ -4343,6 +5112,10 @@ msgstr "תודה!"
 #: src/features/security/SecurityPage.tsx
 msgid "That device is still signed in. Try again shortly."
 msgstr "המכשיר עדיין מחובר. נסו שוב בעוד רגע."
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "That did not work. Try again shortly."
+msgstr "זה לא הצליח. נסו שוב בעוד רגע."
 
 #: src/features/office/FloorPage.tsx
 msgid "The 3D map could not load. Use the list view."
@@ -4394,9 +5167,37 @@ msgstr "אי אפשר לטעון את המכשירים כרגע. נסו שוב �
 msgid "The email or the password is wrong."
 msgstr "האימייל או הסיסמה שגויים."
 
+#: src/features/admin/OperationsPage.tsx
+msgid "The execution could not be read."
+msgstr "לא הצלחנו לקרוא את ההרצה."
+
+#: src/features/admin/OperationsPage.tsx
+msgid "The execution could not be retried. Try again shortly."
+msgstr "לא הצלחנו להריץ מחדש את ההרצה. נסו שוב בעוד רגע."
+
+#: src/features/admin/OperationsPage.tsx
+msgid "The execution goes back to its retry."
+msgstr "ההרצה חוזרת לניסיון חוזר."
+
 #: src/features/settings/AppearanceChoices.tsx
 msgid "The ground behind your panels."
 msgstr "הרקע שמאחורי הלוחות."
+
+#: src/features/commerce/timeline.tsx
+msgid "The history could not be read."
+msgstr "לא הצלחנו לקרוא את ההיסטוריה."
+
+#: src/features/incidents/IncidentsPage.tsx
+msgid "The incident center is not answering. Check your connection and try again."
+msgstr "מרכז התקלות לא עונה. כדאי לבדוק את החיבור ולנסות שוב."
+
+#: src/features/incidents/IncidentsPage.tsx
+msgid "The incident could not be loaded. Try again shortly."
+msgstr "לא ניתן היה לטעון את התקלה. כדאי לנסות שוב בעוד רגע."
+
+#: src/features/admin/OperationsPage.tsx
+msgid "The job could not be retried. Try again shortly."
+msgstr "לא הצלחנו להריץ מחדש את המשימה. נסו שוב בעוד רגע."
 
 #: src/features/commerce/OrdersPage.tsx
 msgid "the last 12 months"
@@ -4418,6 +5219,11 @@ msgstr "הקישור עובד פעם אחת. אם הוא לא מגיע, בדקו
 msgid "The members cannot be loaded right now. Try again shortly."
 msgstr "אי אפשר לטעון את החברים כרגע. נסו שוב בעוד רגע."
 
+#. placeholder {0}: inbox.items.length
+#: src/app/shell/NotificationBell.tsx
+msgid "The newest {SHOWN} of {0}"
+msgstr "{SHOWN} החדשות מתוך {0}"
+
 #: src/features/office/FloorPage.tsx
 msgid "The office is waking up…"
 msgstr "המשרד מתעורר…"
@@ -4425,6 +5231,14 @@ msgstr "המשרד מתעורר…"
 #: src/features/welcome/WelcomePage.tsx
 msgid "The office that works for you, built step by step. It asks before anything risky."
 msgstr "המשרד שעובד בשבילך, נבנה צעד אחר צעד. הוא שואל לפני כל דבר מסוכן."
+
+#: src/features/incidents/IncidentState.tsx
+msgid "The order was cancelled or refunded"
+msgstr "ההזמנה בוטלה או הוחזרה"
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "The orders were last synced {when}. Etsy has not answered since, so newer orders may be missing."
+msgstr "ההזמנות סונכרנו לאחרונה {when}. Etsy לא עונה מאז, ולכן ייתכן שחסרות הזמנות חדשות."
 
 #: src/features/team/TeamPage.tsx
 msgid "The Owner's role, shops and membership cannot be changed."
@@ -4434,6 +5248,14 @@ msgstr "אי אפשר לשנות את התפקיד, החנויות או החבר
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "The passwords are not the same."
 msgstr "הסיסמאות אינן זהות."
+
+#: src/features/admin/OperationsPage.tsx
+msgid "The queue and sync health are not available on this server yet."
+msgstr "מצב התור והסנכרון עוד לא זמין בשרת הזה."
+
+#: src/features/admin/OperationsPage.tsx
+msgid "The queue and sync health could not be loaded. Try again shortly."
+msgstr "לא הצלחנו לטעון את מצב התור והסנכרון. נסו שוב בעוד רגע."
 
 #: src/features/team/TeamPage.tsx
 msgid "The server did not accept this change."
@@ -4483,6 +5305,10 @@ msgstr "ההזמנות של החנות, בזמן אמת מ־Etsy."
 msgid "The shop's reviews on Etsy, newest first."
 msgstr "הביקורות של החנות ב־Etsy, החדשות קודם."
 
+#: src/features/incidents/IncidentsPage.tsx
+msgid "The step could not be saved. Check your connection and try again."
+msgstr "לא ניתן היה לשמור את הצעד. כדאי לבדוק את החיבור ולנסות שוב."
+
 #: src/features/shops/ShopsPage.tsx
 msgid "The term 'Etsy' is a trademark of Etsy, Inc. This application uses the Etsy API but is not endorsed or certified by Etsy, Inc."
 msgstr "המונח ״Etsy״ הוא סימן מסחרי של חברת Etsy, Inc. אפליקציה זו משתמשת ב־API של Etsy, אך חברת Etsy, Inc. אינה תומכת בה ואינה מאשרת אותה."
@@ -4510,6 +5336,22 @@ msgstr "הבעלים של סביבת העבודה מחברים חנויות."
 #: src/features/settings/AppearanceChoices.tsx
 msgid "Theme"
 msgstr "ערכת נושא"
+
+#: src/features/incidents/IncidentsPage.tsx
+msgid "There is no Resolve button: an incident resolves on its own on evidence."
+msgstr "אין כפתור ״נפתרה״: תקלה נפתרת מעצמה על סמך ראיה."
+
+#: src/features/incidents/IncidentsPage.tsx
+msgid "These incidents could not be loaded. Try again shortly."
+msgstr "לא ניתן היה לטעון את התקלות האלה. כדאי לנסות שוב בעוד רגע."
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "These orders were re-synced moments ago. Try again in a minute."
+msgstr "ההזמנות האלה סונכרנו מחדש לפני רגע. נסו שוב בעוד דקה."
+
+#: src/app/shell/NotificationBell.tsx
+msgid "They could not be marked read. Try again."
+msgstr "לא ניתן היה לסמן אותן כנקראו. אפשר לנסות שוב."
 
 #: src/features/team/TeamPage.tsx
 msgid "They join as members with the living office"
@@ -4544,14 +5386,34 @@ msgstr "לחשבון ה־Etsy הזה עדיין אין חנות. אפשר לפת
 msgid "This Etsy shop is already connected to another workspace."
 msgstr "חנות ה־Etsy הזו כבר מחוברת לסביבת עבודה אחרת."
 
+#: src/features/admin/OperationsPage.tsx
+msgid "This execution is no longer dead-lettered."
+msgstr "ההרצה כבר לא במצב כשל."
+
+#: src/features/incidents/IncidentsPage.tsx
+msgid "This incident changed while you were looking at it. It has been reloaded: check its state, then try again."
+msgstr "התקלה השתנתה בזמן שצפית בה. היא נטענה מחדש: כדאי לבדוק את המצב שלה ולנסות שוב."
+
+#: src/features/incidents/IncidentsPage.tsx
+msgid "This incident is not available to you."
+msgstr "התקלה הזו אינה זמינה לך."
+
 #: src/features/auth/AcceptInvitePage.tsx
 msgid "This invitation link has expired or was already used. Ask for a new one."
 msgstr "פג תוקף קישור ההזמנה או שכבר השתמשו בו. בקש/י קישור חדש."
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "This is not available on this server yet."
+msgstr "זה עוד לא זמין בשרת הזה."
 
 #: src/features/auth/AcceptInvitePage.tsx
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "This is your current password. Choose a different one."
 msgstr "זו הסיסמה הנוכחית שלכם. בחרו סיסמה אחרת."
+
+#: src/features/admin/OperationsPage.tsx
+msgid "This job is no longer dead-lettered."
+msgstr "המשימה כבר לא במצב כשל."
 
 #: src/features/team/TeamPage.tsx
 msgid "This member or shop is no longer in the workspace."
@@ -4620,6 +5482,10 @@ msgstr "החיבור לחנות צריך חידוש"
 msgid "This shop needs reconnecting: Etsy no longer accepts its connection. Press Reconnect."
 msgstr "החיבור לחנות צריך חידוש: Etsy כבר לא מקבלת אותו. לחצו על חבר מחדש."
 
+#: src/features/incidents/IncidentsPage.tsx
+msgid "This step is no longer possible from the incident's current state. It has been reloaded with the steps it allows now."
+msgstr "הצעד הזה כבר לא אפשרי מהמצב הנוכחי של התקלה. היא נטענה מחדש עם הצעדים שמותרים עכשיו."
+
 #: src/features/shops/EtsyCallbackPage.tsx
 msgid "This takes a few seconds. Keep this page open."
 msgstr "זה לוקח כמה שניות. נא להשאיר את העמוד פתוח."
@@ -4665,6 +5531,7 @@ msgstr "שעה"
 msgid "Time zone"
 msgstr "אזור זמן"
 
+#: src/features/incidents/IncidentsPage.tsx
 #: src/features/office/EngineeringPage.tsx
 msgid "Timeline"
 msgstr "ציר זמן"
@@ -4752,6 +5619,26 @@ msgstr "עם מעקב"
 msgid "Tracking"
 msgstr "מעקב"
 
+#: src/features/incidents/IncidentState.tsx
+msgid "Tracking found in Etsy"
+msgstr "נמצא מספר מעקב ב־Etsy"
+
+#: src/features/incidents/IncidentState.tsx
+msgid "Tracking mismatch"
+msgstr "מספר מעקב לא תואם"
+
+#: src/features/incidents/IncidentState.tsx
+msgid "Tracking missing"
+msgstr "חסר מספר מעקב"
+
+#: src/features/incidents/IncidentsPage.tsx
+msgid "Tracking number"
+msgstr "מספר מעקב"
+
+#: src/features/incidents/IncidentState.tsx
+msgid "Tracking relay"
+msgstr "העברת מספרי מעקב"
+
 #: src/features/commerce/ShippingPage.tsx
 msgid "Tracking sync"
 msgstr "סנכרון מעקב"
@@ -4792,7 +5679,15 @@ msgstr "tracking.sync החל להחזיר 502"
 msgid "Trend:"
 msgstr "מגמה:"
 
+#: src/features/incidents/IncidentState.tsx
+msgctxt "incident state"
+msgid "Triaged"
+msgstr "מוינה"
+
 #: src/app/RouteStates.tsx
+#: src/app/shell/NotificationBell.tsx
+#: src/features/admin/OperationsPage.tsx
+#: src/features/incidents/IncidentsPage.tsx
 #: src/features/overview/OverviewPage.tsx
 #: src/features/shops/reconnect.tsx
 #: src/features/shops/ShopsPage.tsx
@@ -4802,6 +5697,10 @@ msgstr "לנסות שוב"
 #: src/features/finance/FinanceDemos.tsx
 msgid "Tue"
 msgstr "ג׳"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Twice a day"
+msgstr "פעמיים ביום"
 
 #: src/features/security/SecurityPage.tsx
 msgid "Two-factor sign-in"
@@ -4827,6 +5726,14 @@ msgstr "אימות דו־שלבי כבוי"
 msgid "Two-step sign-in on"
 msgstr "אימות דו־שלבי פעיל"
 
+#: src/app/shell/NotificationBell.tsx
+msgid "Two-step sign-in was set up"
+msgstr "הוגדרה כניסה דו־שלבית"
+
+#: src/app/shell/NotificationBell.tsx
+msgid "Two-step sign-in was turned off"
+msgstr "הכניסה הדו־שלבית בוטלה"
+
 #: src/features/team/TeamPage.tsx
 msgid "Two-step sign-in:"
 msgstr "אימות דו־שלבי:"
@@ -4851,6 +5758,10 @@ msgstr "עלות ליחידה"
 msgid "Unknown device"
 msgstr "מכשיר לא מזוהה"
 
+#: src/app/shell/NotificationBell.tsx
+msgid "Unread"
+msgstr "לא נקראה"
+
 #: src/features/commerce/ShippingPage.tsx
 msgid "Untitled profile"
 msgstr "פרופיל ללא שם"
@@ -4863,7 +5774,6 @@ msgstr "עודכן {when}"
 msgid "updated just now"
 msgstr "עודכן זה עתה"
 
-#: src/features/admin/AdminDemos.tsx
 #: src/features/office/EngineeringPage.tsx
 msgid "Uptime"
 msgstr "זמינות"
@@ -4890,7 +5800,11 @@ msgstr "ערך"
 msgid "Verify and sign in"
 msgstr "אימות וכניסה"
 
-#: src/features/admin/AdminDemos.tsx
+#: src/features/incidents/IncidentState.tsx
+msgctxt "incident state"
+msgid "Verifying"
+msgstr "באימות"
+
 #: src/features/work/demoScreens.tsx
 msgid "Version"
 msgstr "גרסה"
@@ -4920,6 +5834,7 @@ msgstr "צפיות"
 msgid "vs yesterday"
 msgstr "לעומת אתמול"
 
+#: src/features/admin/OperationsPage.tsx
 #: src/features/commerce/demoScreens.tsx
 msgid "Waiting"
 msgstr "ממתין"
@@ -4961,6 +5876,10 @@ msgstr "ממתינה לך · החזר #3152"
 msgid "Waiting on the Gelato quote."
 msgstr "ממתין להצעת מחיר מ־Gelato."
 
+#: src/features/commerce/timeline.tsx
+msgid "Waiting to ship"
+msgstr "ממתינה למשלוח"
+
 #: src/features/settings/AppearanceChoices.tsx
 msgid "Warm and soft"
 msgstr "חם ורך"
@@ -4972,6 +5891,10 @@ msgstr "מעקב כאן"
 #: src/features/welcome/WelcomePage.tsx
 msgid "Web"
 msgstr "דפדפן"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Webhook intake"
+msgstr "קליטת הודעות"
 
 #: src/features/office/EngineeringPage.tsx
 msgid "Webhook retries"
@@ -5029,9 +5952,17 @@ msgstr "מה ממתין למשלוח ומה נשלח, בזמן אמת מ־Etsy."
 msgid "What works today"
 msgstr "מה עובד היום"
 
+#: src/features/admin/OperationsPage.tsx
+msgid "When"
+msgstr "מתי"
+
 #: src/features/settings/SettingsPage.tsx
 msgid "When an automation fails"
 msgstr "כאשר אוטומציה נכשלת"
+
+#: src/features/incidents/IncidentsPage.tsx
+msgid "When an order goes without tracking past its shipping window, or an automation gives up, the incident appears here on its own."
+msgstr "כשהזמנה נשארת בלי מספר מעקב אחרי חלון המשלוח, או כשאוטומציה נכשלת סופית, התקלה מופיעה כאן מעצמה."
 
 #: src/features/customers/CustomersDemos.tsx
 msgid "Where is my order?"
@@ -5067,6 +5998,18 @@ msgctxt "navigation"
 msgid "Work"
 msgstr "עבודה"
 
+#: src/features/admin/OperationsPage.tsx
+msgid "Worker"
+msgstr "עובד"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Workers"
+msgstr "עובדים"
+
+#: src/features/admin/OperationsPage.tsx
+msgid "Workers running"
+msgstr "עובדים פעילים"
+
 #: src/features/shops/ShopsPage.tsx
 msgid "Working"
 msgstr "פעילות"
@@ -5094,6 +6037,10 @@ msgstr "כן, 24 שעות"
 #: src/features/office/EngineeringPage.tsx
 msgid "Yesterday"
 msgstr "אתמול"
+
+#: src/features/incidents/IncidentsPage.tsx
+msgid "You"
+msgstr "את/ה"
 
 #: src/app/RouteStates.tsx
 msgid "You are not in a workspace yet"
@@ -5172,6 +6119,22 @@ msgstr "המשרד שלך נפתח בדפדפן."
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "Your other devices will be signed out."
 msgstr "המכשירים האחרים שלכם ינותקו מהחשבון."
+
+#: src/features/incidents/IncidentsPage.tsx
+msgid "Your role can see incidents but not move them. Ask an Owner or Admin."
+msgstr "התפקיד שלך מאפשר לראות תקלות אבל לא להעביר אותן. כדאי לפנות לבעלים או למנהל/ת."
+
+#: src/features/incidents/IncidentsPage.tsx
+msgid "Your role can see this incident but not move it."
+msgstr "התפקיד שלך מאפשר לראות את התקלה אבל לא להעביר אותה."
+
+#: src/features/incidents/IncidentsPage.tsx
+msgid "Your role does not include incidents. Ask an Owner or Admin."
+msgstr "התפקיד שלך אינו כולל תקלות. כדאי לפנות לבעלים או למנהל/ת."
+
+#: src/features/commerce/OrdersPage.tsx
+msgid "Your role may see these orders but not re-sync them."
+msgstr "התפקיד שלך מאפשר לראות את ההזמנות אבל לא לסנכרן אותן מחדש."
 
 #: src/features/shops/shopActions.tsx
 msgid "Your session has ended. Sign in again, then disconnect the shop."

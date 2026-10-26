@@ -2,6 +2,7 @@ import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import {
+  ApprovalGlyph,
   BackGlyph,
   CheckGlyph,
   ChevronGlyph,
@@ -41,6 +42,7 @@ describe("icon mirroring (Hebrew RTL)", () => {
     ["ChevronGlyph", ChevronGlyph],
     ["PlayGlyph", PlayGlyph],
     ["SendGlyph", SendGlyph],
+    ["ApprovalGlyph", ApprovalGlyph],
   ])("%s has a fixed meaning and never flips", (_, Icon) => {
     expect(classOf(Icon)).not.toContain("scale-x");
   });

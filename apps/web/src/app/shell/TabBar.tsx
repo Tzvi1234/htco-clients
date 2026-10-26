@@ -57,12 +57,12 @@ export function TabBar() {
       {/* Content fades out under the floating bar instead of meeting it with a hard edge. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none fixed inset-x-0 bottom-0 z-10 h-28 bg-gradient-to-t from-[var(--bg-ground)] to-transparent"
+        className="pointer-events-none fixed inset-x-0 bottom-0 z-raised h-28 bg-gradient-to-t from-[var(--bg-ground)] to-transparent"
       />
       <nav
         aria-label={t`Main`}
         data-glass=""
-        className="fixed inset-x-3 bottom-3 z-20 isolate flex h-16 gap-1 rounded-[28px] border border-sidebar-line bg-sidebar p-1.5 shadow-sidebar pb-[max(6px,env(safe-area-inset-bottom))]"
+        className="fixed inset-x-3 bottom-3 z-sticky isolate flex h-16 gap-1 rounded-[28px] border border-sidebar-line bg-sidebar p-1.5 shadow-sidebar pb-[max(6px,env(safe-area-inset-bottom))]"
       >
         {slot < 0 ? null : (
           <span
@@ -116,7 +116,7 @@ export function TabBar() {
         isOpen={more}
         onOpenChange={setMore}
         isDismissable
-        className="nav-sheet-overlay fixed inset-0 z-50 flex items-end bg-[color-mix(in_srgb,var(--bg-ground)_60%,transparent)]"
+        className="nav-sheet-overlay fixed inset-0 z-overlay flex items-end bg-[color-mix(in_srgb,var(--bg-ground)_60%,transparent)]"
       >
         <Modal
           data-glass=""
@@ -130,7 +130,7 @@ export function TabBar() {
           {/* iOS sheet grabber: drag it down to close the sheet; dragging up meets friction. */}
           <div
             aria-hidden="true"
-            className="sticky top-0 z-10 -mx-4 flex touch-none justify-center bg-menu pt-2 pb-3"
+            className="sticky top-0 z-raised -mx-4 flex touch-none justify-center bg-menu pt-2 pb-3"
             onPointerDown={(event) => {
               // One finger at a time: a second touch does not restart the drag.
               if (drag !== null) return;

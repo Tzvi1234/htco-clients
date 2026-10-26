@@ -1,5 +1,14 @@
 import { createApiClient, type ApiClient, type components } from "@htco/api-client";
 
+import { personSteps, type FakeIncident, type FakeNotification } from "./fakeIncidents.ts";
+import {
+  DEAD_EXECUTION,
+  DEAD_EXECUTION_JOB,
+  fakeChain,
+  fakeHealth,
+  fakeOperations,
+  type FakeOperations,
+} from "./fakeOperations.ts";
 import { fakeShopData, type FakePeriod } from "./fakeShopData.ts";
 
 type IntegrationView = components["schemas"]["IntegrationView"];
@@ -39,6 +48,8 @@ export interface FakeState {
   /** Extra organizations the user is Owner of, by ID. */
   otherOrgs: string[];
   accepted?: Record<string, unknown>;
+  /** True: the members list never answers (a slow read, to see what renders meanwhile). */
+  membersHang?: boolean;
   /** Emails a password reset link was asked for (the same answer for any email). */
   resetRequests: unknown[];
   /** True: asking for a reset link answers 429. */
@@ -90,6 +101,46 @@ export interface FakeState {
   statsFailFor?: string[];
   /** True: the shops are busy, 160 orders in 30 days (more than one page of 100). */
   liveBusy?: boolean;
+  /** The organization's incidents (`GET /v1/incidents`), newest first as the API sends them. */
+  incidents: FakeIncident[];
+  /** "fail": the incident center answers 503 incidents-unavailable; "hang": it never answers;
+   * "forbidden": the role may not view incidents (403). */
+  incidentsTrouble?: "fail" | "hang" | "forbidden" | undefined;
+  /** How many incidents one page of `GET /v1/incidents` holds (the API's `limit`, 200). */
+  incidentPageSize?: number | undefined;
+  /** Incidents (by id) that belong to another workspace; the rest are the first workspace's. */
+  incidentWorkspaces?: Record<string, string> | undefined;
+  /** Notifications (by id) that belong to another workspace; the rest are the first's. */
+  notificationWorkspaces?: Record<string, string> | undefined;
+  /** A 409 problem the next incident step answers with instead of moving it. */
+  stepProblem?: "illegal-incident-step" | "evidence-required" | "incident-moved" | undefined;
+  /** The steps asked for (`POST /v1/incidents/{id}/transitions`), in order. */
+  steps: { id: string; to_state: unknown; note: unknown }[];
+  /** The user's notifications (`GET /v1/notifications`), newest first. */
+  notifications: FakeNotification[];
+  /** "fail": the notifications answer 503 incidents-unavailable. */
+  notificationsTrouble?: "fail" | undefined;
+  /** Workspaces whose notifications answer 503 (the others answer as usual). */
+  notificationsFailFor?: string[] | undefined;
+  /** "fail": `POST /v1/notifications/read` answers 503. */
+  readTrouble?: "fail" | undefined;
+  /** The query strings of `GET /v1/incidents`, in order (which workspace, shop and order). */
+  incidentLists: string[];
+  /** The bodies of `POST /v1/notifications/read`, in order. */
+  reads: unknown[];
+  /** The workspace of each `POST /v1/notifications/read`, in the same order as `reads`. */
+  readWorkspaces: string[];
+  /**
+   * True: orders, Home's sales and the statistics come from the stored order history (slice
+   * 5.6), synced four minutes ago (40 with "stale"); one order comes with its status timeline.
+   * False or unset: read live from Etsy, as before the history is complete.
+   */
+  orderStore?: boolean;
+  /** The Orders screen's bulk actions (slice 5.7): each export's body, each re-sync's IDs. */
+  exports: unknown[];
+  resyncs: number[][];
+  /** The queue, execution and sync health (Admin › Health, slice 5.9) and its retries. */
+  operations: FakeOperations;
 }
 
 const PROBLEMS = "https://ht-co.app/problems/";
@@ -261,6 +312,15 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
     disconnects: [],
     removals: [],
     recheckTooSoon: false,
+    incidents: [],
+    steps: [],
+    notifications: [],
+    reads: [],
+    readWorkspaces: [],
+    incidentLists: [],
+    exports: [],
+    resyncs: [],
+    operations: fakeOperations(),
     ...initial,
   };
   const requests: Request[] = [];
@@ -317,6 +377,8 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
 
     const orgRoute = /^(GET|POST) \/v1\/organizations\/([^/]+)\/(members|invitations)$/.exec(route);
     if (orgRoute !== null) {
+      if (orgRoute[3] === "members" && route.startsWith("GET") && state.membersHang === true)
+        return new Promise<Response>(() => undefined);
       if (orgRoute[3] === "members")
         return json(200, {
           items: state.members.map((m) => ({ ...m, shop_ids: m.shop_ids ?? [] })),
@@ -431,6 +493,95 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
       return new Response(null, { status: 204 });
     }
 
+    const center = incidentCenter(route, body, url);
+    if (center !== undefined) return center;
+
+    const bulk = /^POST \/v1\/shops\/([^/]+)\/order-(exports|resyncs)$/.exec(route);
+    if (bulk !== null) {
+      const shop = state.shops.find((s) => s.id === bulk[1]);
+      if (shop === undefined) return problem(404, "not-found");
+      if (bulk[2] === "resyncs") {
+        if (!(state.role === "owner" || state.role === "admin"))
+          return problem(403, "orders-action-forbidden");
+        const ids = Array.isArray(body["order_ids"]) ? (body["order_ids"] as number[]) : [];
+        state.resyncs.push(ids);
+        return json(202, { queued: new Set(ids).size });
+      }
+      state.exports.push(body);
+      const contact = state.role === "owner" || state.role === "admin" || state.role === "support";
+      const every = fakeShopData(shop.id, shop.name, Date.now(), contact).ordersFor(
+        null,
+        10_000,
+        0,
+        (body["period"] as FakePeriod | undefined) ?? "30d",
+      ).items;
+      const chosen = Array.isArray(body["order_ids"]) ? (body["order_ids"] as number[]) : [];
+      const rows = every.filter((o) => chosen.length === 0 || chosen.includes(o.order_id));
+      const head = contact ? "order,state,total,buyer_name" : "order,state,total";
+      const text = [
+        head,
+        ...rows.map((o) =>
+          [o.order_id, o.state, o.total.amount, ...(contact ? [o.buyer ?? ""] : [])].join(","),
+        ),
+      ].join("\r\n");
+      return new Response(text, {
+        status: 200,
+        headers: {
+          "content-type": "text/csv; charset=utf-8",
+          "content-disposition": 'attachment; filename="orders-30d.csv"',
+          "x-orders-exported": String(rows.length),
+          "cache-control": "no-store",
+        },
+      });
+    }
+
+    // The operations calls name their workspace: a member of several who names none gets 400.
+    const operational =
+      route === "GET /v1/operations/health" ||
+      /^POST \/v1\/operations\/dead-letters\/[^/]+\/retry$/.test(route) ||
+      /^GET \/v1\/executions\/[^/]+$/.test(route) ||
+      /^POST \/v1\/automations\/[^/]+\/executions\/[^/]+\/retry$/.test(route);
+    const named = url.searchParams.get("organization_id");
+    if (operational && named === null && state.otherOrgs.length > 0)
+      return problem(400, "organization-required");
+    const workspace = named ?? org;
+    const admin = workspace === org ? state.role === "owner" || state.role === "admin" : true;
+    if (route === "GET /v1/operations/health") {
+      if (!admin) return problem(403, "forbidden");
+      // Another workspace of the user runs calmly: switching shows its own numbers.
+      const ops = workspace === org ? state.operations : fakeOperations("calm");
+      return json(200, fakeHealth(workspace, state.shops, ops));
+    }
+    const deadRetry = /^POST \/v1\/operations\/dead-letters\/([^/]+)\/retry$/.exec(route);
+    if (deadRetry !== null) {
+      if (!admin) return problem(403, "forbidden");
+      const id = deadRetry[1] ?? "";
+      if (id === DEAD_EXECUTION_JOB)
+        return problem(409, "retry-through-execution", { execution_id: DEAD_EXECUTION });
+      if (!state.operations.dead.includes(id)) return problem(409, "job-not-dead");
+      state.operations.dead = state.operations.dead.filter((d) => d !== id);
+      return json(202, { job_id: id, state: "queued" });
+    }
+    const chain = /^GET \/v1\/executions\/([^/]+)$/.exec(route);
+    if (chain !== null) return json(200, fakeChain(chain[1] ?? "", state.operations));
+    const executionRetry = /^POST \/v1\/automations\/([^/]+)\/executions\/([^/]+)\/retry$/.exec(
+      route,
+    );
+    if (executionRetry !== null) {
+      if (!admin) return problem(403, "forbidden");
+      const id = executionRetry[2] ?? "";
+      if (state.operations.hold !== undefined) await state.operations.hold;
+      if (id !== DEAD_EXECUTION || state.operations.retriedExecutions.includes(id))
+        return problem(409, "execution-not-dead-lettered");
+      state.operations.retriedExecutions.push(id);
+      return json(200, {
+        id,
+        automation_id: executionRetry[1] ?? "",
+        state: "retry_scheduled",
+      });
+    }
+    const one = /^GET \/v1\/shops\/([^/]+)\/orders\/(\d+)$/.exec(route);
+    if (one !== null) return orderDetail(one[1] ?? "", Number(one[2]));
     const live =
       /^GET \/v1\/shops\/([^/]+)\/(overview|orders|listings|reviews|shipping|stats)$/.exec(route);
     if (live !== null) return liveData(live[1] ?? "", live[2] ?? "", url);
@@ -546,6 +697,224 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
     }
   }
 
+  /** May the role move incidents? Owners and Admins (the API's update-incidents capability). */
+  const updates = () => state.role === "owner" || state.role === "admin";
+
+  /** The incident center and the notification inbox (slices 6.3 to 6.5). */
+  function incidentCenter(
+    route: string,
+    body: Record<string, unknown>,
+    url: URL,
+  ): Response | Promise<Response> | undefined {
+    if (/^(GET|POST) \/v1\/incidents/.test(route)) {
+      if (state.incidentsTrouble === "hang") return new Promise<Response>(() => undefined);
+      if (state.incidentsTrouble === "fail") return problem(503, "incidents-unavailable");
+      if (state.incidentsTrouble === "forbidden") return problem(403, "forbidden");
+    }
+    // Every call names its workspace; an incident or notification of another one is not there.
+    const asked = url.searchParams.get("organization_id") ?? org;
+    const inWorkspace = (incident: FakeIncident) =>
+      (state.incidentWorkspaces?.[incident.id] ?? org) === asked;
+    const noticeHere = (notice: FakeNotification) =>
+      (state.notificationWorkspaces?.[notice.id] ?? org) === asked;
+    const shaped = (incident: FakeIncident): FakeIncident => ({
+      ...incident,
+      can_update: incident.can_update && updates(),
+      next_states: incident.can_update && updates() ? incident.next_states : [],
+    });
+    if (route === "GET /v1/incidents") {
+      state.incidentLists.push(url.search);
+      const all = url.searchParams.get("state") === "all";
+      const shop = url.searchParams.get("shop_id");
+      const receipt = url.searchParams.get("receipt_id");
+      const items = state.incidents
+        .filter(inWorkspace)
+        .filter((incident) => all || incident.is_open)
+        .filter((incident) => shop === null || incident.shop_id === shop)
+        .filter((incident) => receipt === null || String(incident.receipt_id) === receipt)
+        .map((incident) => {
+          const summary: Partial<FakeIncident> = { ...incident };
+          delete summary.details;
+          delete summary.history;
+          delete summary.can_update;
+          delete summary.next_states;
+          return summary;
+        });
+      // Keyset pages as the API sends them: the cursor here is the next page's offset.
+      const size = Math.min(
+        Number(url.searchParams.get("limit") ?? 200),
+        state.incidentPageSize ?? 200,
+      );
+      const from = Number(url.searchParams.get("cursor") ?? 0);
+      const page = items.slice(from, from + size);
+      const more = from + size < items.length;
+      return json(200, { items: page, next_cursor: more ? String(from + size) : null });
+    }
+    const one = /^GET \/v1\/incidents\/([^/]+)$/.exec(route);
+    if (one !== null) {
+      const incident = state.incidents.find(
+        (candidate) => candidate.id === one[1] && inWorkspace(candidate),
+      );
+      return incident === undefined ? problem(404, "not-found") : json(200, shaped(incident));
+    }
+    const step = /^POST \/v1\/incidents\/([^/]+)\/transitions$/.exec(route);
+    if (step !== null) {
+      const id = step[1] ?? "";
+      state.steps.push({ id, to_state: body["to_state"], note: body["note"] });
+      const index = state.incidents.findIndex(
+        (candidate) => candidate.id === id && inWorkspace(candidate),
+      );
+      const incident = state.incidents[index];
+      if (incident === undefined) return problem(404, "not-found");
+      if (!updates()) return problem(403, "forbidden");
+      if (state.stepProblem !== undefined) return problem(409, state.stepProblem);
+      const target = String(body["to_state"]);
+      if (target === "resolved") return problem(409, "evidence-required");
+      if (!personSteps(incident.state).includes(target))
+        return problem(409, "illegal-incident-step");
+      const at = new Date().toISOString();
+      const note = body["note"];
+      const moved: FakeIncident = {
+        ...incident,
+        state: target,
+        updated_at: at,
+        history: [
+          ...incident.history,
+          {
+            from_state: incident.state,
+            to_state: target,
+            actor_kind: "user",
+            actor_id: user,
+            at,
+            note: typeof note === "string" && note !== "" ? note : null,
+            evidence: null,
+          },
+        ],
+        next_states: personSteps(target),
+      };
+      state.incidents[index] = moved;
+      return json(200, shaped(moved));
+    }
+    if (route === "GET /v1/notifications") {
+      if (state.notificationsTrouble === "fail") return problem(503, "incidents-unavailable");
+      if (state.notificationsFailFor?.includes(url.searchParams.get("organization_id") ?? ""))
+        return problem(503, "incidents-unavailable");
+      const unreadOnly = url.searchParams.get("unread_only") === "true";
+      const here = state.notifications.filter(noticeHere);
+      return json(200, {
+        items: here.filter((n) => !unreadOnly || n.read_at === null),
+        unread_count: here.filter((n) => n.read_at === null).length,
+      });
+    }
+    if (route === "POST /v1/notifications/read") {
+      if (state.readTrouble === "fail") return problem(503, "incidents-unavailable");
+      state.reads.push(body);
+      state.readWorkspaces.push(asked);
+      const ids = Array.isArray(body["ids"]) ? (body["ids"] as unknown[]) : undefined;
+      const at = new Date().toISOString();
+      state.notifications = state.notifications.map((n) =>
+        n.read_at === null && noticeHere(n) && (ids === undefined || ids.includes(n.id))
+          ? { ...n, read_at: at }
+          : n,
+      );
+      return json(204, null);
+    }
+    return undefined;
+  }
+
+  /** When the stored history last synced (slice 5.6), and the answer as the store gives it. */
+  function syncedAt(): string {
+    return new Date(Date.now() - (state.liveTrouble === "stale" ? 40 : 4) * 60_000).toISOString();
+  }
+  function fromStore<T extends { source: string; fetched_at: string; stale: boolean }>(
+    body: T,
+    stored: number,
+  ): T {
+    if (state.orderStore !== true) return body;
+    const at = syncedAt();
+    return {
+      ...body,
+      source: "htco_store",
+      fetched_at: at,
+      stale: state.liveTrouble === "stale",
+      sync: { state: "complete", orders_stored: stored, last_synced_at: at },
+      last_synced_at: at,
+    };
+  }
+
+  /** One order with its status timeline, as the stored history recorded it (invented). */
+  function orderDetail(shopId: string, orderId: number): Response {
+    const shop = state.shops.find((s) => s.id === shopId);
+    if (shop === undefined) return problem(404, "not-found");
+    const integration = state.integrations.find((i) => i.shop_id === shopId);
+    if (integration !== undefined && integration.status !== "connected")
+      return notConnected(integration);
+    const contact = state.role === "owner" || state.role === "admin" || state.role === "support";
+    const data = fakeShopData(shopId, shop.name, Date.now(), contact, state.liveBusy === true);
+    const every = data.ordersFor(null, 10_000, 0, "all");
+    const order = every.items.find((o) => o.order_id === orderId);
+    if (order === undefined) return problem(404, "not-found");
+    const stored = state.orderStore === true;
+    const at = syncedAt();
+    const step = (from: string | null, to: string, source: string, when: string) => ({
+      from_state: from,
+      to_state: to,
+      state:
+        to === "ingested" || to === "awaiting_shipment"
+          ? "paid"
+          : to === "delivered"
+            ? "shipped"
+            : to === "cancelled"
+              ? "canceled"
+              : to,
+      source,
+      observed_at: when,
+    });
+    const placed = order.created_at;
+    const timeline = !stored
+      ? []
+      : order.state === "unpaid"
+        ? [step(null, "unpaid", "webhook", placed)]
+        : [
+            step(null, "paid", "webhook", placed),
+            step("paid", "ingested", "webhook", placed),
+            ...(order.state === "canceled"
+              ? [step("ingested", "cancelled", "reconciliation", order.updated_at)]
+              : [step("ingested", "awaiting_shipment", "webhook", placed)]),
+            ...(order.state === "shipped" || order.state === "refunded"
+              ? [
+                  step(
+                    "awaiting_shipment",
+                    "shipped",
+                    "webhook",
+                    order.shipments[0]?.shipped_at ?? order.updated_at,
+                  ),
+                ]
+              : []),
+            ...(order.state === "refunded"
+              ? [
+                  step(
+                    "shipped",
+                    "refunded",
+                    "reconciliation",
+                    order.refunds[0]?.refunded_at ?? order.updated_at,
+                  ),
+                ]
+              : []),
+          ];
+    return json(200, {
+      source: stored ? "htco_store" : "etsy_live",
+      fetched_at: stored ? at : new Date(Date.now() - 90_000).toISOString(),
+      stale: false,
+      shop_id: shopId,
+      order,
+      timeline,
+      buyer_details: contact,
+      sync: stored ? { state: "complete", orders_stored: every.total, last_synced_at: at } : null,
+      last_synced_at: stored ? at : null,
+    });
+  }
+
   /** A connected shop's invented Etsy data, as the API answers it. */
   function liveData(shopId: string, view: string, url: URL): Response | Promise<Response> {
     const shop = state.shops.find((s) => s.id === shopId);
@@ -588,7 +957,17 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
           },
         });
       }
-      return json(200, trouble === "no-sales" ? { ...overview, sales: null } : overview);
+      const body = trouble === "no-sales" ? { ...overview, sales: null } : overview;
+      if (state.orderStore !== true || body.sales === null) return json(200, body);
+      // Home's sales from the stored history; the profile is still read live.
+      const at = syncedAt();
+      const stored = data.ordersFor(null, 10_000, 0, "all").total;
+      return json(200, {
+        ...body,
+        sales_source: "htco_store",
+        sync: { state: "complete", orders_stored: stored, last_synced_at: at },
+        last_synced_at: at,
+      });
     }
     if (view === "orders") {
       const period = url.searchParams.get("period") ?? "30d";
@@ -606,7 +985,11 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
           total: 0,
           counts: { unpaid: 0, paid: 0, shipped: 0, canceled: 0, refunded: 0, overdue: 0 },
         });
-      return json(200, mark(trouble === "partial" ? { ...page, partial: true } : page));
+      const stored = data.ordersFor(null, 10_000, 0, "all").total;
+      return json(
+        200,
+        fromStore(mark(trouble === "partial" ? { ...page, partial: true } : page), stored),
+      );
     }
     if (view === "listings")
       return json(
@@ -648,10 +1031,13 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
       const stats = data.stats(trouble === "partial" ? 120 : undefined);
       return json(
         200,
-        mark(
-          trouble === "partial" && stats.sales !== null
-            ? { ...stats, sales: { ...stats.sales, partial: true } }
-            : stats,
+        fromStore(
+          mark(
+            trouble === "partial" && stats.sales !== null
+              ? { ...stats, sales: { ...stats.sales, partial: true } }
+              : stats,
+          ),
+          data.ordersFor(null, 10_000, 0, "all").total,
         ),
       );
     }

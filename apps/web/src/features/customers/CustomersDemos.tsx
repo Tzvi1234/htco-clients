@@ -85,7 +85,7 @@ function Bubble({
 }) {
   return (
     <div className={cx("flex max-w-[72%] flex-col", me ? "items-end self-end" : "items-start")}>
-      <div className="mb-1 flex items-center gap-1.5 text-[11px] text-muted">{meta}</div>
+      <div className="mb-1 flex items-center gap-1.5 text-caption text-muted">{meta}</div>
       <div
         className={cx(
           "rounded-[20px] px-4 py-3 text-body leading-[1.45]",
@@ -114,7 +114,7 @@ function Event({ children, className }: { children: ReactNode; className?: strin
 
 function DaySeparator({ children }: { children: ReactNode }) {
   return (
-    <div className="flex w-full items-center gap-3 self-center text-[11px] text-muted before:h-0 before:flex-1 before:border-t before:border-dashed before:border-line-strong after:h-0 after:flex-1 after:border-t after:border-dashed after:border-line-strong">
+    <div className="flex w-full items-center gap-3 self-center text-caption text-muted before:h-0 before:flex-1 before:border-t before:border-dashed before:border-line-strong after:h-0 after:flex-1 after:border-t after:border-dashed after:border-line-strong">
       {children}
     </div>
   );
@@ -395,7 +395,7 @@ export function MailDemo({ title }: { title: string }) {
                 <div className="text-body-sm">
                   <L>summary.pdf</L>
                 </div>
-                <div className="text-[11px] text-muted">
+                <div className="text-caption text-muted">
                   <L>220 KB</L>
                 </div>
               </div>

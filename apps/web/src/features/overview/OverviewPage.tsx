@@ -47,6 +47,7 @@ import {
   initialOf,
   useMinutes,
   LiveNote,
+  TEXT_LINK,
   NextGlyph,
   GearGlyph,
 } from "../../shared/ui/kit/index.ts";
@@ -181,11 +182,22 @@ function Today() {
               </>
             )}
           </span>
-          {live.overview === undefined ? null : (
-            <LiveNote fetchedAt={live.overview.fetched_at} stale={live.overview.stale} />
-          )}
+          {live.overview === undefined ? null : <SalesNote overview={live.overview} />}
         </div>
       }
+    />
+  );
+}
+
+/** Home's freshness: the sales' own source, from the stored history once it is complete. */
+function SalesNote({ overview }: { overview: ShopOverview }) {
+  const stored = overview.sales_source === "htco_store" && overview.last_synced_at != null;
+  return (
+    <LiveNote
+      fetchedAt={stored ? (overview.last_synced_at ?? overview.fetched_at) : overview.fetched_at}
+      stale={overview.stale}
+      source={stored ? "htco_store" : "etsy_live"}
+      sync={overview.sync ?? null}
     />
   );
 }
@@ -388,10 +400,7 @@ function NeedsYou() {
         </ul>
       </DemoPart>
       <div className="flex justify-center px-6 pb-5">
-        <Link
-          to="/work/approvals"
-          className="rounded-tag py-1 text-caption text-primary underline underline-offset-[3px]"
-        >
+        <Link to="/work/approvals" className={TEXT_LINK}>
           {t`See all approvals`}
         </Link>
       </div>
@@ -607,10 +616,7 @@ function GettingStarted() {
               {step.done ? (
                 <span className="text-caption text-muted">{t`Done`}</span>
               ) : (
-                <Link
-                  to={step.to}
-                  className="-my-1 inline-block rounded-tag py-1 text-caption text-primary underline underline-offset-[3px]"
-                >
+                <Link to={step.to} className={cx(TEXT_LINK, "-my-1 inline-block")}>
                   {step.soon === true ? t`Soon` : step.action}
                 </Link>
               )}

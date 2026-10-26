@@ -11,7 +11,7 @@ export function SoonTag({ className }: { className?: string }) {
   return (
     <span
       className={cx(
-        "inline-flex h-[18px] shrink-0 items-center rounded-pill border border-current px-1.5 text-[11px] leading-none font-normal",
+        "inline-flex h-[18px] shrink-0 items-center rounded-pill border border-current px-1.5 text-caption leading-none font-normal",
         className,
       )}
     >

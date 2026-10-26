@@ -1,7 +1,7 @@
 import { Trans, useLingui } from "@lingui/react/macro";
 
 import { cx } from "../../shared/lib/cx.ts";
-import { N } from "../../shared/ui/kit/index.ts";
+import { N, Chip } from "../../shared/ui/kit/index.ts";
 import { useMoney, useShortDate, useReason } from "../../shared/i18n/format.ts";
 import type { ShopOrder } from "../../shared/api/live.ts";
 
@@ -29,18 +29,17 @@ export function RefundChip({ order, className }: { order: ShopOrder; className?:
       ? t`Partial refund ${money(order.refunded_total)}`
       : reason(latest?.reason ?? null);
   return (
-    <span
+    <Chip
       data-refund-chip
       title={text}
-      className={cx(
-        "inline-flex h-5 max-w-[180px] items-center rounded-pill bg-tertiary-subtle px-2 text-caption text-tertiary-text",
-        className,
-      )}
+      tone="tertiary"
+      size="sm"
+      className={cx("max-w-[180px]", className)}
     >
       <span dir="auto" className="truncate">
         {text}
       </span>
-    </span>
+    </Chip>
   );
 }
 

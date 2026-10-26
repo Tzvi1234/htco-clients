@@ -223,13 +223,15 @@ function Shops({
   if (shops.data.length === 0)
     return (
       <>
-        {notices.length === 0 ? null : (
-          <div className="flex flex-wrap items-center gap-3">{notices}</div>
-        )}
-        <FlowRow layout="halves" className="items-stretch">
-          <NoShops etsy={etsy} />
-          <HowConnecting />
-        </FlowRow>
+        <NoShops
+          etsy={etsy}
+          notices={
+            notices.length === 0 ? undefined : (
+              <div className="flex flex-wrap items-center gap-3">{notices}</div>
+            )
+          }
+        />
+        <HowConnecting />
         {disconnects.dialogs}
         {removals.dialogs}
       </>
@@ -468,29 +470,27 @@ function Shops({
 }
 
 /** No shop yet: the parcel, what will appear here, and the Owner's way to connect the first. */
-function NoShops({ etsy }: { etsy: ConnectEtsy | undefined }) {
+/**
+ * No shop yet: the view's focus says what will appear and leads to connecting one (only the
+ * Owner connects; everyone else is told who does). Notices (the last shop removed) sit under it.
+ */
+function NoShops({ etsy, notices }: { etsy: ConnectEtsy | undefined; notices: ReactNode }) {
   return (
-    <Panel>
-      <PanelHeader title={<Trans>Shops</Trans>} meta={<span className="ltr">0</span>} />
-      <div className="flex min-h-0 grow flex-col items-center justify-between gap-5 px-6 pb-6 text-center">
-        <IdBlock label={<Trans>Shops:</Trans>} value={<Trans>No shops yet</Trans>} />
-        <div className="flex min-h-0 grow items-center justify-center max-sm:h-28 max-sm:grow-0">
-          <img
-            src={parcel}
-            alt=""
-            draggable={false}
-            className="max-h-48 w-auto object-contain motion-safe:animate-[htco-float_6s_ease-in-out_infinite] max-sm:h-full"
-          />
-        </div>
-        <p className="m-0 max-w-[340px] text-body-sm text-secondary">
-          <Trans>Connected shops appear here with their sync status and capabilities.</Trans>
-        </p>
-        {etsy === undefined ? (
+    <Focus
+      title={<Trans>No shops yet</Trans>}
+      meta={<Trans>Etsy · read only</Trans>}
+      lead={
+        <Trans>
+          Connect your Etsy shop and its orders, listings and numbers appear here, live from Etsy.
+        </Trans>
+      }
+      actions={
+        etsy === undefined ? (
           <p className="m-0 text-caption text-muted">
             <Trans>The workspace owner connects shops.</Trans>
           </p>
         ) : (
-          <div className="flex flex-col items-center gap-3">
+          <>
             <Button
               variant="primary"
               size="lg"
@@ -502,10 +502,19 @@ function NoShops({ etsy }: { etsy: ConnectEtsy | undefined }) {
               <Trans>Connect Etsy shop</Trans>
             </Button>
             <FormAlert message={etsy.message} />
-          </div>
-        )}
-      </div>
-    </Panel>
+          </>
+        )
+      }
+      footer={notices}
+      aside={
+        <img
+          src={parcel}
+          alt=""
+          draggable={false}
+          className="h-40 w-auto object-contain motion-safe:animate-[htco-float_6s_ease-in-out_infinite]"
+        />
+      }
+    />
   );
 }
 
@@ -531,9 +540,9 @@ function HowConnecting() {
         title={<Trans>How connecting works</Trans>}
         meta={<span className="ltr">3</span>}
       />
-      <div className="flex min-h-0 grow flex-col gap-6 px-6 pb-6">
+      <div className="flex flex-col gap-6 px-6 pb-6">
         <IdBlock label={<Trans>Connecting takes:</Trans>} value={<Trans>About a minute</Trans>} />
-        <ol className="m-0 my-auto flex list-none flex-col gap-5 p-0 [&>li+li]:relative [&>li+li]:before:absolute [&>li+li]:before:inset-s-[32px] [&>li+li]:before:-top-[29px] [&>li+li]:before:h-[38px] [&>li+li]:before:border-s [&>li+li]:before:border-line-strong [&>li+li]:before:content-['']">
+        <ol className="m-0 grid list-none gap-3 p-0 md:grid-cols-3">
           {steps.map((step, index) => (
             <li
               key={index}

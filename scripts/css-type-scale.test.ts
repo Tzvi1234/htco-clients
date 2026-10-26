@@ -1,8 +1,8 @@
 // The web app's stylesheets write a font size that is on the type scale as its token
 // (`font-size: 12px` -> `var(--font-size-caption)`), so a change to the scale reaches every
-// screen (DESIGN.md typography, packages/design-tokens). Sizes off the scale (11px, 12.5px) are
+// screen (DESIGN.md typography, packages/design-tokens). Sizes off the scale (12.5px) are
 // listed in docs/reviews/2026-10-23-architecture-audit.md until the design gives them a step.
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { join, relative } from "node:path";
 
 import { describe, expect, it } from "vitest";
@@ -39,6 +39,27 @@ describe("the web app's stylesheets (type scale)", () => {
           if (token === undefined) return [];
           return [`${relative(root, file)}:${String(index + 1)} ${size} -> var(${token})`];
         }),
+    );
+    expect(findings).toEqual([]);
+  });
+
+  // Round 3 retired 11 px text (docs/design/round3-clarity.md): captions are 12 px.
+  it("never set the retired 11 px text, in stylesheets or class lists", () => {
+    const root = join(repo, "apps", "web", "src");
+    const files = [
+      ...stylesheets(root),
+      ...readdirSync(root, { recursive: true, encoding: "utf8" })
+        .filter((name) => /\.tsx?$/.test(name) && !/\.test\.tsx?$/.test(name))
+        .map((name) => join(root, name)),
+    ];
+    const findings = files.flatMap((file) =>
+      readFileSync(file, "utf8")
+        .split("\n")
+        .flatMap((text, index) =>
+          /font-size:\s*11px|text-\[11px\]/.test(text)
+            ? [`${relative(root, file)}:${String(index + 1)}`]
+            : [],
+        ),
     );
     expect(findings).toEqual([]);
   });

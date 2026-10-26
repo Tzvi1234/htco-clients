@@ -76,7 +76,7 @@ function Frame() {
           event.preventDefault();
           document.getElementById("main")?.focus();
         }}
-        className="fixed inset-s-3 top-3 z-50 -translate-y-24 rounded-pill bg-inverse px-5 py-2.5 text-body-sm text-on-inverse no-underline shadow-popover transition-[translate] duration-[var(--motion-duration-fast)] focus-visible:translate-y-0"
+        className="fixed inset-s-3 top-3 z-overlay -translate-y-24 rounded-pill bg-inverse px-5 py-2.5 text-body-sm text-on-inverse no-underline shadow-popover transition-[translate] duration-[var(--motion-duration-fast)] focus-visible:translate-y-0"
       >
         <Trans>Skip to content</Trans>
       </a>

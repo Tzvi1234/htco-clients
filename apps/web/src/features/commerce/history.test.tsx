@@ -236,3 +236,31 @@ describe("Orders: a capped period's revenue says what it covers (Codex, #38)", (
     ).toBeInTheDocument();
   });
 });
+
+// One focus panel per view (clarity round 3; audit 2026-10-23, P2-9): the Shops page's focus
+// stays the view's focus on every sub-tab, and Statistics' summary is a plain panel.
+describe("Shops: one focus panel per view", () => {
+  const focusPanels = () => document.querySelectorAll("#main .k-focus, main .k-focus");
+
+  it("keeps one focus on the shops, top listings and statistics views", async () => {
+    const { user } = await open("/shops");
+    await screen.findByRole("article", { name: "Willow & Wick" });
+    expect(focusPanels()).toHaveLength(1);
+
+    await user.click(screen.getByRole("tab", { name: "Top listings" }));
+    expect(focusPanels()).toHaveLength(1);
+
+    await user.click(screen.getByRole("tab", { name: "Statistics" }));
+    const summary = await panel("Since the shop opened");
+    expect(summary).not.toHaveClass("k-focus");
+    expect(focusPanels()).toHaveLength(1);
+  });
+
+  it("gives the no-shop view its focus, with the way to connect a shop", async () => {
+    await open("/shops", { shops: [], integrations: [] });
+    const focus = await panel("No shops yet");
+    expect(focus).toHaveClass("k-focus");
+    expect(focusPanels()).toHaveLength(1);
+    expect(within(focus).getByRole("button", { name: "Connect Etsy shop" })).toBeInTheDocument();
+  });
+});

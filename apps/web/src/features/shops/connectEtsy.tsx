@@ -151,7 +151,7 @@ export function StepUpDialog({
           onClose();
         }
       }}
-      className="fixed inset-0 z-50 flex items-start justify-center bg-[color-mix(in_srgb,var(--bg-ground)_60%,transparent)] px-4 pt-[14vh] data-[entering]:animate-enter"
+      className="fixed inset-0 z-overlay flex items-start justify-center bg-[color-mix(in_srgb,var(--bg-ground)_60%,transparent)] px-4 pt-[14vh] data-[entering]:animate-enter"
     >
       <Modal className="glass w-full max-w-[420px] rounded-panel border border-edge bg-menu p-6 shadow-popover outline-none data-[entering]:animate-pop-in">
         <Dialog className="outline-none">

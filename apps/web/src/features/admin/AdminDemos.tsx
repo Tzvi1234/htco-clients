@@ -12,7 +12,6 @@ import {
   IdBlock,
   KV,
   KV2,
-  Matrix,
   PlusGlyph,
   SectionLabel,
   Status,
@@ -26,7 +25,6 @@ import {
   type AgentStatus,
   useZoomLabels,
   ChatGlyph,
-  GearGlyph,
 } from "../../shared/ui/kit/index.ts";
 
 const Code = ({ children, size = "text-body-sm" }: { children: string; size?: string }) => (
@@ -37,95 +35,6 @@ const L = ({ children }: { children: string | number }) => <span className="ltr"
 /** Thirty days as dots, the bad days in the accent (`upbar()`). */
 function UptimeBar({ bad, label }: { bad: readonly number[]; label: string }) {
   return <DotBar count={30} filled={30} marks={bad} label={label} />;
-}
-
-/** Admin › Health (`P.health`): the system's state, its services and their uptime. */
-export function HealthDemo({ title }: { title: string }) {
-  const { t } = useLingui();
-  const words = useStatusLabels();
-  const services: [string, AgentStatus, string, string][] = [
-    ["api", "running", "182 ms", "v1.13"],
-    ["postgres", "running", "12 ms", "16.4"],
-    ["agent-worker", "running", t`3 jobs`, "v0.42"],
-    ["tracking.sync", "failed", "502", "—"],
-    ["etsy.order_intake", "running", "07:58", "v2"],
-    ["MCP gateway", "running", "41 ms", "v0.9"],
-  ];
-  const uptime: [string, string, number[]][] = [
-    ["api", "99.9%", []],
-    ["postgres", "100%", []],
-    ["agent-worker", "99.7%", [21]],
-    ["tracking.sync", "97.1%", [18, 29]],
-  ];
-  return (
-    <DemoFrame title={title} layout="l3">
-      <Panel>
-        <PanelHeader
-          title={<Trans>Overall</Trans>}
-          actions={<CircleButton label={t`Settings`} icon={<GearGlyph />} />}
-        />
-        <PanelBody className="justify-between gap-6">
-          <IdBlock label={t`30-day uptime:`} value={<L>99.82%</L>} />
-          <KV
-            items={[
-              [t`Open incidents`, <L key="a">1</L>],
-              [t`Response time`, <L key="b">182 ms</L>],
-              [t`Queue depth`, <L key="c">3</L>],
-              [t`Last backup`, <L key="d">03:00</L>],
-            ]}
-          />
-          <Matrix
-            top={t`System health`}
-            start={t`Uptime`}
-            end={t`Capacity`}
-            bottom={t`Errors`}
-            value="96"
-            caption={t`Stable`}
-          />
-        </PanelBody>
-      </Panel>
-      <Panel>
-        <PanelHeader title={<Trans>Services</Trans>} meta={<L>6</L>} />
-        <PanelBody className="pt-0">
-          <div className="grid flex-1 auto-rows-fr grid-cols-2 gap-2">
-            {services.map(([name, state, metric, version]) => (
-              <div
-                key={name}
-                className="flex min-w-0 flex-col justify-between gap-1 rounded-card border border-line p-4 transition-colors hover:bg-hover"
-              >
-                <div className="flex items-center justify-between gap-2">
-                  <Code>{name}</Code>
-                  <Status live status={state} label={words[state]} />
-                </div>
-                <div className="font-display text-display-sm leading-[1.2] font-light">
-                  <L>{metric}</L>
-                </div>
-                <div className="text-caption text-muted">
-                  {t`Version`} <L>{version}</L>
-                </div>
-              </div>
-            ))}
-          </div>
-        </PanelBody>
-      </Panel>
-      <Panel>
-        <PanelHeader title={<Trans>30-day uptime</Trans>} />
-        <PanelBody className="justify-between gap-6">
-          {uptime.map(([name, value, bad]) => (
-            <div key={name}>
-              <div className="mb-2 flex justify-between text-body-sm">
-                <Code>{name}</Code>
-                <span className="text-muted">
-                  <L>{value}</L>
-                </span>
-              </div>
-              <UptimeBar bad={bad} label={`${name} ${value}`} />
-            </div>
-          ))}
-        </PanelBody>
-      </Panel>
-    </DemoFrame>
-  );
 }
 
 /** Admin › Automations (`P.automations`): the deterministic automations and their runs. */
