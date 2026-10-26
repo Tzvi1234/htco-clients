@@ -5,12 +5,13 @@ import { Dialog, Heading, Modal, ModalOverlay } from "react-aria-components";
 
 import { ApiError, useApi } from "../../shared/api/api.tsx";
 import {
-  executionChainQuery,
   inFlight,
   recountKeys,
+  recountRunQuery,
   recountRunsQuery,
   startRecount,
-  type Execution,
+  trackedRecountsQuery,
+  type Tracked,
 } from "../../shared/api/operations.ts";
 import { Button } from "../../shared/ui/Button.tsx";
 import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
@@ -21,12 +22,22 @@ interface Shop {
   name: string;
 }
 
+/** The keys without this shop's. */
+function without(keys: Record<string, string>, shopId: string): Record<string, string> {
+  return Object.fromEntries(Object.entries(keys).filter(([id]) => id !== shopId));
+}
+
 /**
  * Admin › Health › Sales counters (Phase 5 activation step 2b): the Owner and Admins recount a
  * shop's product sales from its stored orders, for example once after the counters are
- * activated. One run per confirm sheet (its Idempotency-Key), then how it went, from the
- * automation's newest runs, and once it succeeded the count it rebuilt (the execution's output,
- * `GET /v1/executions/{id}`, platform #158).
+ * activated. One run per confirm sheet (its Idempotency-Key), then how it went, and once it
+ * succeeded the count it rebuilt (the execution's output, `GET /v1/executions/{id}`, #158).
+ *
+ * A shop's run is followed by its own id, kept in the query cache, so it stays shown (and the
+ * button stays locked) when the panel remounts or newer runs push it off the list's first page;
+ * after a reload it is found again in the newest runs by its shop (Codex on #73). A request whose
+ * answer was lost keeps its Idempotency-Key, so trying again replays it instead of starting a
+ * second run.
  */
 export function SalesCounters({
   organizationId,
@@ -37,25 +48,38 @@ export function SalesCounters({
 }) {
   const { t } = useLingui();
   const api = useApi();
+  const client = useQueryClient();
   const runs = useQuery(recountRunsQuery(api, organizationId));
+  const tracked = useQuery(trackedRecountsQuery(organizationId)).data;
   const [asking, setAsking] = useState<{ shop: Shop; key: string } | null>(null);
   const [said, setSaid] = useState<Record<string, string>>({});
-  const [started, setStarted] = useState<Record<string, string>>({});
-  const client = useQueryClient();
+
+  const track = (change: (before: Tracked) => Tracked) => {
+    client.setQueryData<Tracked>(recountKeys.tracked(organizationId), (before) =>
+      change(before ?? { runs: {}, keys: {} }),
+    );
+  };
 
   const recount = useMutation({
     mutationFn: ({ shop, key }: { shop: Shop; key: string }) =>
       startRecount(api, organizationId, shop.id, key),
+    onMutate: ({ shop, key }) => {
+      // Kept until the run is known, so a lost answer is retried with the same key.
+      track((before) => ({ ...before, keys: { ...before.keys, [shop.id]: key } }));
+    },
     onSuccess: (execution, { shop }) => {
-      setStarted((before) => ({ ...before, [shop.id]: execution.id }));
+      track((before) => ({
+        runs: { ...before.runs, [shop.id]: execution.id },
+        keys: without(before.keys, shop.id),
+      }));
       setSaid((before) => ({ ...before, [shop.id]: "" }));
-      client.setQueryData<Execution[]>(recountKeys.runs(organizationId), (before) => [
-        execution,
-        ...(before ?? []).filter((run) => run.id !== execution.id),
-      ]);
     },
     onError: (error, { shop }) => {
+      const status = error instanceof ApiError ? error.status : 0;
       const type = error instanceof ApiError ? error.type : undefined;
+      // A refusal (4xx) made nothing: its key goes. Anything else may have made the run.
+      if (status >= 400 && status < 500)
+        track((before) => ({ ...before, keys: without(before.keys, shop.id) }));
       setSaid((before) => ({
         ...before,
         [shop.id]:
@@ -71,10 +95,9 @@ export function SalesCounters({
     },
   });
 
-  const runOf = (shop: Shop): Execution | undefined => {
-    const id = started[shop.id];
-    return id === undefined ? undefined : runs.data?.find((run) => run.id === id);
-  };
+  /** The shop's run: the one this session started, else its newest in the list. */
+  const runOf = (shop: Shop): string | undefined =>
+    tracked?.runs[shop.id] ?? runs.data?.find((run) => run.shop_id === shop.id)?.id;
 
   return (
     <Panel label={t`Sales counters`}>
@@ -101,26 +124,24 @@ export function SalesCounters({
             <div key="n" className="flex min-w-0 flex-col gap-1">
               <span dir="auto">{shop.name}</span>
               <span className="sm:hidden">
-                <RunState run={runOf(shop)} said={said[shop.id]} organizationId={organizationId} />
+                <RunState organizationId={organizationId} id={runOf(shop)} said={said[shop.id]} />
               </span>
             </div>,
             <RunState
               key="s"
-              run={runOf(shop)}
-              said={said[shop.id]}
               organizationId={organizationId}
+              id={runOf(shop)}
+              said={said[shop.id]}
             />,
-            <Button
+            <RecountButton
               key="b"
-              variant="secondary"
-              size="sm"
-              isDisabled={recount.isPending || isRunning(runOf(shop))}
+              organizationId={organizationId}
+              id={runOf(shop)}
+              busy={recount.isPending}
               onPress={() => {
-                setAsking({ shop, key: crypto.randomUUID() });
+                setAsking({ shop, key: tracked?.keys[shop.id] ?? crypto.randomUUID() });
               }}
-            >
-              <Trans>Recount sales</Trans>
-            </Button>,
+            />,
           ],
         }))}
       />
@@ -178,46 +199,68 @@ export function SalesCounters({
   );
 }
 
-function isRunning(run: Execution | undefined): boolean {
-  return run !== undefined && inFlight(run);
+/** The shop's run, read by its id and followed while it is on its way. */
+function useRun(organizationId: string, id: string | undefined) {
+  const api = useApi();
+  return useQuery({
+    ...recountRunQuery(api, organizationId, id ?? ""),
+    enabled: id !== undefined,
+  });
+}
+
+/** Locked while the shop's run is on its way (or not yet read), so one run at a time. */
+function RecountButton({
+  organizationId,
+  id,
+  busy,
+  onPress,
+}: {
+  organizationId: string;
+  id: string | undefined;
+  busy: boolean;
+  onPress: () => void;
+}) {
+  const run = useRun(organizationId, id);
+  const running = id !== undefined && (run.data === undefined || inFlight(run.data.state));
+  return (
+    <Button variant="secondary" size="sm" isDisabled={busy || running} onPress={onPress}>
+      <Trans>Recount sales</Trans>
+    </Button>
+  );
 }
 
 /** How the shop's last recount went, as a status glyph and words (never colour alone). */
 function RunState({
-  run,
-  said,
   organizationId,
+  id,
+  said,
 }: {
-  run: Execution | undefined;
-  said: string | undefined;
   organizationId: string;
+  id: string | undefined;
+  said: string | undefined;
 }) {
   const { t } = useLingui();
+  const run = useRun(organizationId, id);
   if (said !== undefined && said !== "")
     return <span className="text-body-sm text-secondary">{said}</span>;
-  if (run === undefined) return <span className="text-secondary">—</span>;
-  if (run.state === "succeeded") return <Recounted organizationId={organizationId} id={run.id} />;
-  if (run.state === "dead_lettered" || run.state === "failed" || run.state === "cancelled")
+  if (id === undefined) return <span className="text-secondary">—</span>;
+  const state = run.data?.state;
+  if (state === "succeeded") {
+    const rebuilt = run.data?.output?.["rebuilt"];
+    if (typeof rebuilt !== "number") return <Status status="delivered" label={t`Recounted`} />;
+    return (
+      <Status
+        status="delivered"
+        label={<Plural value={rebuilt} one="Recounted, # product" other="Recounted, # products" />}
+      />
+    );
+  }
+  if (state === "dead_lettered" || state === "failed" || state === "cancelled")
     return (
       <span className="text-body-sm text-secondary">
         {t`It did not finish. See it under dead letters.`}
       </span>
     );
-  if (run.state === "running") return <Status status="running" label={t`Recounting`} />;
+  if (state === "running") return <Status status="running" label={t`Recounting`} />;
   return <Status status="queued" label={t`Queued`} />;
-}
-
-/** A finished recount and how many products it counted (the execution's output). */
-function Recounted({ organizationId, id }: { organizationId: string; id: string }) {
-  const { t } = useLingui();
-  const api = useApi();
-  const chain = useQuery(executionChainQuery(api, organizationId, id));
-  const rebuilt = chain.data?.output?.["rebuilt"];
-  if (typeof rebuilt !== "number") return <Status status="delivered" label={t`Recounted`} />;
-  return (
-    <Status
-      status="delivered"
-      label={<Plural value={rebuilt} one="Recounted, # product" other="Recounted, # products" />}
-    />
-  );
 }

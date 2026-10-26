@@ -348,7 +348,10 @@ function Health({ health, organizationId }: { health: OperationsHealth; organiza
             </Panel>
             <SalesCounters
               organizationId={organizationId}
-              shops={(shops ?? []).filter((shop) => shop.status === "active")}
+              // Only the chosen workspace's shops: a shop is recounted in its own workspace (Codex on #73).
+              shops={(shops ?? []).filter(
+                (shop) => shop.status === "active" && shop.organization_id === organizationId,
+              )}
             />
           </>
         ) : (

@@ -18,7 +18,7 @@ type CapabilityView = components["schemas"]["CapabilityView"];
 export interface FakeRecounts {
   started: { key: string | null; body: unknown; workspace: string }[];
   executions: Map<string, { state: string; shop_id: string; key: string }>;
-  /** Moves every queued rebuild to this state (the worker ran it). */
+  /** Moves every unfinished rebuild (`pending` or `running`, the platform's words) on. */
   finish: (state: string) => void;
 }
 
@@ -29,7 +29,7 @@ function fakeRecounts(): FakeRecounts {
     executions,
     finish: (state) => {
       for (const execution of executions.values())
-        if (execution.state === "queued") execution.state = state;
+        if (execution.state === "pending" || execution.state === "running") execution.state = state;
     },
   };
 }
@@ -148,6 +148,10 @@ export interface FakeState {
   incidentLists: string[];
   /** The sales counters' rebuilds (`POST /v1/automations/product-sales-counters/executions`). */
   recounts: FakeRecounts;
+  /** True: the server makes the run but its answer is lost (a 503 after the insert). */
+  recountLoseAnswer?: boolean | undefined;
+  /** True: newer runs push the rebuilds off the list's first page (it lists none). */
+  recountListHides?: boolean | undefined;
   /** True: the counters are still a draft, so the engine refuses the run (409). */
   recountRefused?: boolean | undefined;
   /** The bodies of `POST /v1/notifications/read`, in order. */
@@ -610,16 +614,20 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
         `e9000000-0000-7000-8000-${String(state.recounts.executions.size + 1).padStart(12, "0")}`;
       if (known === undefined)
         state.recounts.executions.set(id, {
-          state: "queued",
+          state: "pending",
           shop_id: String(body["shop_id"]),
           key: key ?? "",
         });
+      if (state.recountLoseAnswer === true) return problem(503, "unavailable");
       return json(202, recountView(id));
     }
     if (route === "GET /v1/automations/product-sales-counters/executions") {
       if (!admin) return problem(403, "forbidden");
       return json(200, {
-        items: [...state.recounts.executions.keys()].reverse().map(recountView),
+        items:
+          state.recountListHides === true
+            ? []
+            : [...state.recounts.executions.keys()].reverse().map(recountView),
         next_cursor: null,
       });
     }
@@ -768,8 +776,8 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
       trigger: "user_action",
       actor_kind: "user",
       actor_id: user,
-      state: execution?.state ?? "queued",
-      attempts: execution?.state === "queued" ? 0 : 1,
+      state: execution?.state ?? "pending",
+      attempts: execution?.state === "pending" ? 0 : 1,
       correlation_id: `req-${id}`,
       last_error: execution?.state === "dead_lettered" ? "JobError" : null,
       created_at: at,

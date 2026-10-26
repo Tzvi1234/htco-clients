@@ -135,6 +135,106 @@ describe("Sales counters: Recount sales (Phase 5 activation 2b)", { timeout: 15_
     await shows(row, "It did not finish. See it under dead letters.", 8000);
   });
 
+  it("follows a new run from the platform's `pending` to Recounted (quill on #73)", async () => {
+    const { user, backend } = await open();
+    const panel = await counters();
+    const row = within(panel).getByRole("row", { name: /Willow & Wick/ });
+    await user.click(within(row).getByRole("button", { name: "Recount sales" }));
+    await user.click(
+      within(await screen.findByRole("dialog")).getByRole("button", { name: "Recount" }),
+    );
+    await vi.waitFor(() => {
+      expect([...backend.state.recounts.executions.values()].map((e) => e.state)).toEqual([
+        "pending",
+      ]);
+    });
+    await shows(row, "Queued");
+    backend.state.recounts.finish("running");
+    await shows(row, "Recounting", 8000);
+    backend.state.recounts.finish("succeeded");
+    await shows(row, "Recounted, 7 products", 8000);
+  });
+
+  it("lists only the chosen workspace's shops, and recounts them in it (Codex on #73)", async () => {
+    const OTHER = "c0000000-0000-7000-8000-000000000009";
+    const { user, backend } = await open({ otherOrgs: [OTHER] });
+    await user.click(await screen.findByRole("radio", { name: /a0000000/ }));
+    const panel = await counters();
+    expect(within(panel).getAllByRole("button", { name: "Recount sales" })).toHaveLength(2);
+    const row = within(panel).getByRole("row", { name: /Willow & Wick/ });
+    await user.click(within(row).getByRole("button", { name: "Recount sales" }));
+    await user.click(
+      within(await screen.findByRole("dialog")).getByRole("button", { name: "Recount" }),
+    );
+    await vi.waitFor(() => {
+      expect(backend.state.recounts.started).toHaveLength(1);
+    });
+    expect(backend.state.recounts.started[0]?.body).toMatchObject({
+      organization_id: "a0000000-0000-7000-8000-000000000000",
+      shop_id: WILLOW,
+    });
+  });
+
+  it("a running recount stays shown and locked after the panel remounts (Codex on #73)", async () => {
+    const { user, backend } = await open();
+    let panel = await counters();
+    let row = within(panel).getByRole("row", { name: /Willow & Wick/ });
+    await user.click(within(row).getByRole("button", { name: "Recount sales" }));
+    await user.click(
+      within(await screen.findByRole("dialog")).getByRole("button", { name: "Recount" }),
+    );
+    await shows(row, "Queued");
+
+    // Away to the Activity sub-tab and back: the panel unmounts and mounts again.
+    await user.click(screen.getByRole("tab", { name: /Activity/ }));
+    await user.click(screen.getByRole("tab", { name: /Needs you/ }));
+    panel = await counters();
+    row = within(panel).getByRole("row", { name: /Willow & Wick/ });
+    await shows(row, "Queued");
+    expect(within(row).getByRole("button", { name: "Recount sales" })).toBeDisabled();
+    expect(backend.state.recounts.started).toHaveLength(1);
+  });
+
+  it("a recount whose answer was lost is retried with the same Idempotency-Key (Codex on #73)", async () => {
+    const { user, backend } = await open({ recountLoseAnswer: true });
+    const panel = await counters();
+    const row = within(panel).getByRole("row", { name: /Willow & Wick/ });
+    await user.click(within(row).getByRole("button", { name: "Recount sales" }));
+    await user.click(
+      within(await screen.findByRole("dialog")).getByRole("button", { name: "Recount" }),
+    );
+    await vi.waitFor(() => {
+      expect(backend.state.recounts.started).toHaveLength(1);
+    });
+    // The server made the run, but its answer was lost: try again sends the same key.
+    backend.state.recountLoseAnswer = false;
+    const again = within(row).queryByRole("button", { name: "Recount sales" });
+    if (again !== null && !again.hasAttribute("disabled")) await user.click(again);
+    await user.click(
+      within(await screen.findByRole("dialog")).getByRole("button", { name: "Recount" }),
+    );
+    await vi.waitFor(() => {
+      expect(backend.state.recounts.started).toHaveLength(2);
+    });
+    const keys = backend.state.recounts.started.map((s) => s.key);
+    expect(keys[0]).toBe(keys[1]);
+    expect(backend.state.recounts.executions.size).toBe(1);
+  });
+
+  it("keeps following a run that left the newest page (Codex on #73)", async () => {
+    const { user, backend } = await open();
+    const panel = await counters();
+    const row = within(panel).getByRole("row", { name: /Willow & Wick/ });
+    await user.click(within(row).getByRole("button", { name: "Recount sales" }));
+    await user.click(
+      within(await screen.findByRole("dialog")).getByRole("button", { name: "Recount" }),
+    );
+    await shows(row, "Queued");
+    backend.state.recountListHides = true; // 20 newer runs push it off the first page
+    backend.state.recounts.finish("succeeded");
+    await shows(row, "Recounted, 7 products", 8000);
+  });
+
   it("is in Hebrew too", async () => {
     await open({}, "he");
     const panel = await screen.findByRole("region", { name: "מוני מכירות" }, { timeout: 8000 });

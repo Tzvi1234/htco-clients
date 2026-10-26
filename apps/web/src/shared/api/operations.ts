@@ -97,14 +97,50 @@ export const SALES_COUNTERS = "product-sales-counters";
 
 export const recountKeys = {
   runs: (organizationId: string) => ["operations", organizationId, "recounts"] as const,
+  /** Each shop's tracked run (shop → execution id), kept in the cache across remounts and
+   * removed with the session like every `operations` key. */
+  tracked: (organizationId: string) =>
+    ["operations", organizationId, "recounts", "tracked"] as const,
 };
 
+/** The platform's unfinished execution states (`htco_domain.automations`): the worker has not
+ * finished the run yet (quill on #73: a new run is `pending`, never "queued"). */
+const IN_FLIGHT = new Set(["pending", "running", "waiting", "retry_scheduled"]);
+
 /** A run still on its way (the worker has not finished it). */
-export function inFlight(execution: Execution): boolean {
-  return ["queued", "running", "retry_scheduled", "waiting"].includes(execution.state);
+export function inFlight(state: string | undefined): boolean {
+  return state !== undefined && IN_FLIGHT.has(state);
 }
 
-/** The newest runs of the sales counters, followed every few seconds while one is on its way. */
+/** Per shop: the run being followed, and the Idempotency-Key of a request not yet answered. */
+export interface Tracked {
+  runs: Record<string, string>;
+  keys: Record<string, string>;
+}
+
+/** Each shop's tracked recount: a store in the query cache, never fetched. */
+export function trackedRecountsQuery(organizationId: string) {
+  return queryOptions({
+    queryKey: recountKeys.tracked(organizationId),
+    queryFn: (): Tracked => ({ runs: {}, keys: {} }),
+    staleTime: Infinity,
+    gcTime: Infinity,
+  });
+}
+
+/**
+ * One recount, read by its own id (`GET /v1/executions/{id}`, the same key and cache as the
+ * execution sheet) and followed every few seconds while it is on its way, so it never drops out
+ * of view when newer runs push it off the list's first page (Codex on #73).
+ */
+export function recountRunQuery(api: ApiClient, organizationId: string, executionId: string) {
+  return queryOptions({
+    ...executionChainQuery(api, organizationId, executionId),
+    refetchInterval: (query) => (inFlight(query.state.data?.state) ? 2_000 : false),
+  });
+}
+
+/** The newest runs of the sales counters: where a shop's last run is found after a reload. */
 export function recountRunsQuery(api: ApiClient, organizationId: string) {
   return queryOptions({
     queryKey: recountKeys.runs(organizationId),
@@ -121,7 +157,6 @@ export function recountRunsQuery(api: ApiClient, organizationId: string) {
       if (data === undefined) throw apiError(response, error);
       return data.items;
     },
-    refetchInterval: (query) => ((query.state.data ?? []).some(inFlight) ? 2_000 : false),
     retry,
   });
 }
