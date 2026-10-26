@@ -1,7 +1,7 @@
 import { QueryClient, focusManager } from "@tanstack/react-query";
 import { createMemoryHistory } from "@tanstack/react-router";
 import { act, render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { forgetSession } from "./api.tsx";
 import { App } from "../../app/App.tsx";
@@ -49,6 +49,39 @@ describe("the session's cache", () => {
 
     expect(client.getMutationCache().getAll()).toEqual([]);
     expect(JSON.stringify(client.getMutationCache().getAll())).not.toContain("t0ken");
+  });
+
+  it("a mutation still in flight when the session ends runs no callback and writes nothing", async () => {
+    // Local Codex review of #62 (P1): clearing the cache does not stop a pending mutation; its
+    // onSuccess could write the last user's answer into the next session's cache.
+    const client = new QueryClient();
+    let answer: ((value: { invite_link: string }) => void) | undefined;
+    const callbacks: string[] = [];
+    const invite = client.getMutationCache().build(client, {
+      mutationFn: () =>
+        new Promise<{ invite_link: string }>((resolve) => {
+          answer = resolve;
+        }),
+      onSuccess: (data) => {
+        callbacks.push("success");
+        client.setQueryData(["organizations", ORG, "invitations"], [data]);
+      },
+      onSettled: () => {
+        callbacks.push("settled");
+      },
+    });
+    const pending = invite.execute(undefined);
+    await vi.waitFor(() => {
+      expect(answer).toBeDefined();
+    });
+
+    forgetSession(client);
+    answer?.({ invite_link: "https://office.example.test/invite#late-t0ken" });
+    await pending.catch(() => undefined);
+
+    expect(callbacks).toEqual([]);
+    expect(client.getQueryCache().getAll()).toEqual([]);
+    expect(client.getMutationCache().getAll()).toEqual([]);
   });
 
   it("shows the next user nothing of the last one after the session ended on the server", async () => {
@@ -99,5 +132,5 @@ describe("the session's cache", () => {
       await screen.findByRole("heading", { level: 1, name: "Members & access" }, { timeout: 8000 }),
     ).toBeVisible();
     expect(screen.queryByText("Tzvi Weiss")).toBeNull();
-  });
+  }, 20_000); // a sign-in, a 401 and two screens: more than the default 5 s on a busy runner
 });
