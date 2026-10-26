@@ -41,6 +41,7 @@ describe("the navigation model (Design 1C, client ADR-0008)", () => {
       "commerce/incidents /incidents",
       "customers/customers /customers/customers",
       "admin/health /admin/health",
+      "admin/automations /admin/automations",
       "admin/members /settings/team",
       "admin/settings /settings",
     ]);

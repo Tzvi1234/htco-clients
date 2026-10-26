@@ -56,7 +56,8 @@ Seven areas in the owner's order and wording, defined once in `apps/web/src/app/
 | Customers (לקוחות) | Customers | `/customers/customers` | Built: the shop's reviews live from Etsy; customer health and list as Demo parts (a customer store arrives with Phase 5) |
 | | Tickets · Mail · Marketing | `/customers/tickets` · `/customers/mail` · `/customers/marketing` | Soon (the demo's full screens in the demo frame) |
 | Finance (כספים) | Overview · Ledger | `/finance/overview` · `/finance/ledger` | Soon (the demo's full screens in the demo frame) |
-| Admin (ניהול) | Health · Automations | `/admin/health` · `/admin/automations` | Soon (the demo's full screens in the demo frame) |
+| Admin (ניהול) | Health | `/admin/health` | Built (slice 5.9): the focus (dead letters, workers, stale shops), sub-tabs Needs you (dead letters with retry, workers, shop syncs) and Activity (automation metrics, webhook intake, recent executions, outbox failures); an execution opens its chain sheet |
+| | Automations | `/admin/automations` | Built: the focus (live automations, dead-lettered runs, "Open the dead-lettered run"), the registry list (readiness, trigger kinds and, for the Owner and Admins, seven days of runs, success, retries and dead letters from the health read), then the chosen one (its facts, latest runs opening the execution sheet, and its tools such as Recount sales) |
 | | Members & access | `/settings/team` (also `/admin/members`) | Built: the focus (members, invited, Owners and Admins, invite), sub-tabs People (members, inviting with the one-time link, role changes, shop access, removal), AI employees and Policy (demos) |
 | | Settings | `/settings`, with Security at `/settings/security` (also `/admin/settings`) | Built: interface language, the design tweaks, access and security, Etsy connections; business settings, notifications and other connections as demos. Security: the second factor and signed-in devices; recovery as a demo |
 
