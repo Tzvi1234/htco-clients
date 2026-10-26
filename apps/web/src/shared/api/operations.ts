@@ -87,3 +87,59 @@ export async function retryExecution(
   );
   if (data === undefined) throw apiError(response, error);
 }
+
+// --- Sales counters (Phase 5 activation step 2b) -------------------------------------------------
+
+export type Execution = components["schemas"]["ExecutionView"];
+
+/** The automation that keeps each product's sales; its rebuild recounts a shop from its orders. */
+export const SALES_COUNTERS = "product-sales-counters";
+
+export const recountKeys = {
+  runs: (organizationId: string) => ["operations", organizationId, "recounts"] as const,
+};
+
+/** A run still on its way (the worker has not finished it). */
+export function inFlight(execution: Execution): boolean {
+  return ["queued", "running", "retry_scheduled", "waiting"].includes(execution.state);
+}
+
+/** The newest runs of the sales counters, followed every few seconds while one is on its way. */
+export function recountRunsQuery(api: ApiClient, organizationId: string) {
+  return queryOptions({
+    queryKey: recountKeys.runs(organizationId),
+    queryFn: async (): Promise<Execution[]> => {
+      const { data, error, response } = await api.GET(
+        "/v1/automations/{automation_id}/executions",
+        {
+          params: {
+            path: { automation_id: SALES_COUNTERS },
+            query: { organization_id: organizationId, limit: 20 },
+          },
+        },
+      );
+      if (data === undefined) throw apiError(response, error);
+      return data.items;
+    },
+    refetchInterval: (query) => ((query.state.data ?? []).some(inFlight) ? 2_000 : false),
+    retry,
+  });
+}
+
+/**
+ * Recount one shop's product sales from its stored orders (the Owner and Admins, audited by the
+ * server). `key` is made once per confirm sheet, so a second press or a retry starts nothing new.
+ */
+export async function startRecount(
+  api: ApiClient,
+  organizationId: string,
+  shopId: string,
+  key: string,
+): Promise<Execution> {
+  const { data, error, response } = await api.POST("/v1/automations/{automation_id}/executions", {
+    params: { path: { automation_id: SALES_COUNTERS }, header: { "Idempotency-Key": key } },
+    body: { organization_id: organizationId, shop_id: shopId, payload: { rebuild: true } },
+  });
+  if (data === undefined) throw apiError(response, error);
+  return data;
+}

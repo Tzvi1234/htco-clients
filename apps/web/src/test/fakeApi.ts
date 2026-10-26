@@ -14,6 +14,26 @@ import { fakeShopData, type FakePeriod } from "./fakeShopData.ts";
 type IntegrationView = components["schemas"]["IntegrationView"];
 type CapabilityView = components["schemas"]["CapabilityView"];
 
+/** The rebuilds started: each request's key and body, and each execution's state. */
+export interface FakeRecounts {
+  started: { key: string | null; body: unknown; workspace: string }[];
+  executions: Map<string, { state: string; shop_id: string; key: string }>;
+  /** Moves every queued rebuild to this state (the worker ran it). */
+  finish: (state: string) => void;
+}
+
+function fakeRecounts(): FakeRecounts {
+  const executions = new Map<string, { state: string; shop_id: string; key: string }>();
+  return {
+    started: [],
+    executions,
+    finish: (state) => {
+      for (const execution of executions.values())
+        if (execution.state === "queued") execution.state = state;
+    },
+  };
+}
+
 /** The API's sign-in, MFA and identity endpoints in memory, for the web app's tests. */
 export interface FakeBackend {
   client: ApiClient;
@@ -126,6 +146,10 @@ export interface FakeState {
   readTrouble?: "fail" | undefined;
   /** The query strings of `GET /v1/incidents`, in order (which workspace, shop and order). */
   incidentLists: string[];
+  /** The sales counters' rebuilds (`POST /v1/automations/product-sales-counters/executions`). */
+  recounts: FakeRecounts;
+  /** True: the counters are still a draft, so the engine refuses the run (409). */
+  recountRefused?: boolean | undefined;
   /** The bodies of `POST /v1/notifications/read`, in order. */
   reads: unknown[];
   /** The workspace of each `POST /v1/notifications/read`, in the same order as `reads`. */
@@ -316,6 +340,7 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
     steps: [],
     notifications: [],
     reads: [],
+    recounts: fakeRecounts(),
     readWorkspaces: [],
     incidentLists: [],
     exports: [],
@@ -564,6 +589,30 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
     }
     const chain = /^GET \/v1\/executions\/([^/]+)$/.exec(route);
     if (chain !== null) return json(200, fakeChain(chain[1] ?? "", state.operations));
+    if (route === "POST /v1/automations/product-sales-counters/executions") {
+      if (!admin) return problem(403, "forbidden");
+      const key = request.headers.get("Idempotency-Key");
+      state.recounts.started.push({ key, body, workspace });
+      if (state.recountRefused === true) return problem(409, "automation-refused");
+      const known = [...state.recounts.executions].find(([, e]) => e.key === key);
+      const id =
+        known?.[0] ??
+        `e9000000-0000-7000-8000-${String(state.recounts.executions.size + 1).padStart(12, "0")}`;
+      if (known === undefined)
+        state.recounts.executions.set(id, {
+          state: "queued",
+          shop_id: String(body["shop_id"]),
+          key: key ?? "",
+        });
+      return json(202, recountView(id));
+    }
+    if (route === "GET /v1/automations/product-sales-counters/executions") {
+      if (!admin) return problem(403, "forbidden");
+      return json(200, {
+        items: [...state.recounts.executions.keys()].reverse().map(recountView),
+        next_cursor: null,
+      });
+    }
     const executionRetry = /^POST \/v1\/automations\/([^/]+)\/executions\/([^/]+)\/retry$/.exec(
       route,
     );
@@ -695,6 +744,27 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
         return problem(404, "not-found");
       }
     }
+  }
+
+  /** A rebuild as the API's `ExecutionView` shows it. */
+  function recountView(id: string) {
+    const execution = state.recounts.executions.get(id);
+    const at = new Date().toISOString();
+    return {
+      id,
+      automation_id: "product-sales-counters",
+      automation_version: 1,
+      shop_id: execution?.shop_id ?? null,
+      trigger: "user_action",
+      actor_kind: "user",
+      actor_id: user,
+      state: execution?.state ?? "queued",
+      attempts: execution?.state === "queued" ? 0 : 1,
+      correlation_id: `req-${id}`,
+      last_error: execution?.state === "dead_lettered" ? "JobError" : null,
+      created_at: at,
+      updated_at: at,
+    };
   }
 
   /** May the role move incidents? Owners and Admins (the API's update-incidents capability). */

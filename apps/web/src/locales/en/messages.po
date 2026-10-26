@@ -394,6 +394,10 @@ msgstr "Account"
 msgid "across the shops"
 msgstr "across the shops"
 
+#: src/features/admin/SalesCounters.tsx
+msgid "Action"
+msgstr "Action"
+
 #: src/features/commerce/demoScreens.tsx
 #: src/features/team/TeamPage.tsx
 msgid "Active"
@@ -868,6 +872,7 @@ msgstr "Calls"
 msgid "Campaign:"
 msgstr "Campaign:"
 
+#: src/features/admin/SalesCounters.tsx
 #: src/features/shops/connectEtsy.tsx
 #: src/features/shops/shopActions.tsx
 #: src/features/team/TeamPage.tsx
@@ -2023,6 +2028,10 @@ msgstr "from"
 msgid "from {covered} of {asking} shops"
 msgstr "from {covered} of {asking} shops"
 
+#: src/features/admin/SalesCounters.tsx
+msgid "From the stored orders"
+msgstr "From the stored orders"
+
 #: src/shared/demo/office.ts
 msgid "Fulfillment Inspector"
 msgstr "Fulfillment Inspector"
@@ -2211,6 +2220,10 @@ msgstr "HT-Commerce is the operating system for your Etsy business: your shops, 
 msgid "HTCO could not be reached. Check your connection."
 msgstr "HTCO could not be reached. Check your connection."
 
+#: src/features/admin/SalesCounters.tsx
+msgid "HTCO counts every product's sales again from this shop's stored orders. It takes a moment, changes nothing on Etsy, and is safe to run again."
+msgstr "HTCO counts every product's sales again from this shop's stored orders. It takes a moment, changes nothing on Etsy, and is safe to run again."
+
 #: src/features/shops/shopActions.tsx
 msgid "HTCO deletes its access to this shop at once and stops syncing. The shop's data in HTCO is deleted after 30 days unless you reconnect."
 msgstr "HTCO deletes its access to this shop at once and stops syncing. The shop's data in HTCO is deleted after 30 days unless you reconnect."
@@ -2387,6 +2400,10 @@ msgstr "Invited member"
 msgid "Iris"
 msgstr "Iris"
 
+#: src/features/admin/SalesCounters.tsx
+msgid "It did not finish. See it under dead letters."
+msgstr "It did not finish. See it under dead letters."
+
 #: src/features/commerce/OrdersPage.tsx
 #: src/features/commerce/ShippingPage.tsx
 msgid "Items"
@@ -2462,6 +2479,10 @@ msgstr "Last error"
 #: src/features/customers/CustomersDemos.tsx
 msgid "Last order"
 msgstr "Last order"
+
+#: src/features/admin/SalesCounters.tsx
+msgid "Last recount"
+msgstr "Last recount"
 
 #: src/features/admin/AdminDemos.tsx
 msgid "Last run"
@@ -3369,6 +3390,10 @@ msgstr "On time"
 msgid "One button, Etsy asks you to allow it, and you are back."
 msgstr "One button, Etsy asks you to allow it, and you are back."
 
+#: src/features/admin/SalesCounters.tsx
+msgid "Only the Owner and Admins recount sales."
+msgstr "Only the Owner and Admins recount sales."
+
 #: src/features/admin/OperationsPage.tsx
 msgid "Only the Owner and Admins retry jobs."
 msgstr "Only the Owner and Admins retry jobs."
@@ -3902,6 +3927,7 @@ msgstr "Queue and sync"
 msgid "Queue numbers"
 msgstr "Queue numbers"
 
+#: src/features/admin/SalesCounters.tsx
 #: src/features/work/demoScreens.tsx
 #: src/shared/ui/kit/status.tsx
 msgid "Queued"
@@ -4057,6 +4083,31 @@ msgstr "Recorded by"
 #: src/features/commerce/timeline.tsx
 msgid "Recorded in HTCO"
 msgstr "Recorded in HTCO"
+
+#: src/features/admin/SalesCounters.tsx
+msgid "Recount"
+msgstr "Recount"
+
+#: src/features/admin/SalesCounters.tsx
+msgid "Recount a shop's product sales from its stored orders: once after the counters are activated, or after a gap. The shop's orders on Etsy are not touched."
+msgstr "Recount a shop's product sales from its stored orders: once after the counters are activated, or after a gap. The shop's orders on Etsy are not touched."
+
+#: src/features/admin/SalesCounters.tsx
+msgid "Recount sales"
+msgstr "Recount sales"
+
+#. placeholder {0}: asking.shop.name
+#: src/features/admin/SalesCounters.tsx
+msgid "Recount sales for {0}?"
+msgstr "Recount sales for {0}?"
+
+#: src/features/admin/SalesCounters.tsx
+msgid "Recounted"
+msgstr "Recounted"
+
+#: src/features/admin/SalesCounters.tsx
+msgid "Recounting"
+msgstr "Recounting"
 
 #: src/features/security/SecurityPage.tsx
 msgid "Recovery"
@@ -4420,6 +4471,10 @@ msgstr "Sales"
 msgid "Sales are not available for this shop."
 msgstr "Sales are not available for this shop."
 
+#: src/features/admin/SalesCounters.tsx
+msgid "Sales counters"
+msgstr "Sales counters"
+
 #: src/features/customers/CustomersDemos.tsx
 msgid "Sales up 12% this week"
 msgstr "Sales up 12% this week"
@@ -4676,6 +4731,7 @@ msgid "Shon"
 msgstr "Shon"
 
 #: src/features/admin/OperationsPage.tsx
+#: src/features/admin/SalesCounters.tsx
 #: src/features/finance/FinanceDemos.tsx
 #: src/features/incidents/IncidentsPage.tsx
 #: src/features/shops/ShopStats.tsx
@@ -5256,6 +5312,14 @@ msgstr "The queue and sync health are not available on this server yet."
 #: src/features/admin/OperationsPage.tsx
 msgid "The queue and sync health could not be loaded. Try again shortly."
 msgstr "The queue and sync health could not be loaded. Try again shortly."
+
+#: src/features/admin/SalesCounters.tsx
+msgid "The recount could not start. Try again shortly."
+msgstr "The recount could not start. Try again shortly."
+
+#: src/features/admin/SalesCounters.tsx
+msgid "The sales counters are not active yet. Activate them first, then recount."
+msgstr "The sales counters are not active yet. Activate them first, then recount."
 
 #: src/features/team/TeamPage.tsx
 msgid "The server did not accept this change."

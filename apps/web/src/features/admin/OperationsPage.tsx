@@ -35,6 +35,7 @@ import {
   type AgentStatus,
 } from "../../shared/ui/kit/index.ts";
 import { WorkspacePicker, pickWorkspace } from "../../shared/ui/WorkspacePicker.tsx";
+import { SalesCounters } from "./SalesCounters.tsx";
 
 /** A time as "4 minutes ago", in the user's language. */
 function useAgo(): (iso: string | null | undefined) => string {
@@ -345,6 +346,10 @@ function Health({ health, organizationId }: { health: OperationsHealth; organiza
                 />
               )}
             </Panel>
+            <SalesCounters
+              organizationId={organizationId}
+              shops={(shops ?? []).filter((shop) => shop.status === "active")}
+            />
           </>
         ) : (
           <>

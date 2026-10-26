@@ -394,6 +394,10 @@ msgstr "חשבון"
 msgid "across the shops"
 msgstr "בכל החנויות"
 
+#: src/features/admin/SalesCounters.tsx
+msgid "Action"
+msgstr "פעולה"
+
 #: src/features/commerce/demoScreens.tsx
 #: src/features/team/TeamPage.tsx
 msgid "Active"
@@ -868,6 +872,7 @@ msgstr "קריאות"
 msgid "Campaign:"
 msgstr "קמפיין:"
 
+#: src/features/admin/SalesCounters.tsx
 #: src/features/shops/connectEtsy.tsx
 #: src/features/shops/shopActions.tsx
 #: src/features/team/TeamPage.tsx
@@ -2023,6 +2028,10 @@ msgstr "החל מ־"
 msgid "from {covered} of {asking} shops"
 msgstr "מ־{covered} מתוך {asking} חנויות"
 
+#: src/features/admin/SalesCounters.tsx
+msgid "From the stored orders"
+msgstr "מההזמנות השמורות"
+
 #: src/shared/demo/office.ts
 msgid "Fulfillment Inspector"
 msgstr "מפקח הגשמה"
@@ -2211,6 +2220,10 @@ msgstr "HT-Commerce היא מערכת ההפעלה של העסק שלך ב־Etsy
 msgid "HTCO could not be reached. Check your connection."
 msgstr "אין קשר ל־HTCO. בדקו את החיבור לאינטרנט."
 
+#: src/features/admin/SalesCounters.tsx
+msgid "HTCO counts every product's sales again from this shop's stored orders. It takes a moment, changes nothing on Etsy, and is safe to run again."
+msgstr "HTCO סופר מחדש את המכירות של כל מוצר מההזמנות השמורות של החנות. זה לוקח רגע, לא משנה דבר ב־Etsy, ואפשר להריץ שוב בבטחה."
+
 #: src/features/shops/shopActions.tsx
 msgid "HTCO deletes its access to this shop at once and stops syncing. The shop's data in HTCO is deleted after 30 days unless you reconnect."
 msgstr "HTCO מוחקת מיד את הגישה שלה לחנות ומפסיקה לסנכרן. נתוני החנות ב־HTCO יימחקו אחרי 30 יום, אלא אם החנות תחובר מחדש."
@@ -2387,6 +2400,10 @@ msgstr "חבר/ה שהוזמנו"
 msgid "Iris"
 msgstr "איריס"
 
+#: src/features/admin/SalesCounters.tsx
+msgid "It did not finish. See it under dead letters."
+msgstr "זה לא הסתיים. אפשר לראות את זה תחת משימות שנכשלו."
+
 #: src/features/commerce/OrdersPage.tsx
 #: src/features/commerce/ShippingPage.tsx
 msgid "Items"
@@ -2462,6 +2479,10 @@ msgstr "שגיאה אחרונה"
 #: src/features/customers/CustomersDemos.tsx
 msgid "Last order"
 msgstr "הזמנה אחרונה"
+
+#: src/features/admin/SalesCounters.tsx
+msgid "Last recount"
+msgstr "ספירה אחרונה"
 
 #: src/features/admin/AdminDemos.tsx
 msgid "Last run"
@@ -3369,6 +3390,10 @@ msgstr "בזמן"
 msgid "One button, Etsy asks you to allow it, and you are back."
 msgstr "כפתור אחד, Etsy מבקשת את אישורך, וחוזרים."
 
+#: src/features/admin/SalesCounters.tsx
+msgid "Only the Owner and Admins recount sales."
+msgstr "רק הבעלים והמנהלים סופרים מחדש את המכירות."
+
 #: src/features/admin/OperationsPage.tsx
 msgid "Only the Owner and Admins retry jobs."
 msgstr "רק הבעלים והמנהלים מריצים משימות מחדש."
@@ -3902,6 +3927,7 @@ msgstr "תור וסנכרון"
 msgid "Queue numbers"
 msgstr "מספרי התור"
 
+#: src/features/admin/SalesCounters.tsx
 #: src/features/work/demoScreens.tsx
 #: src/shared/ui/kit/status.tsx
 msgid "Queued"
@@ -4057,6 +4083,31 @@ msgstr "נרשם ע״י"
 #: src/features/commerce/timeline.tsx
 msgid "Recorded in HTCO"
 msgstr "נרשמה ב־HTCO"
+
+#: src/features/admin/SalesCounters.tsx
+msgid "Recount"
+msgstr "לספור מחדש"
+
+#: src/features/admin/SalesCounters.tsx
+msgid "Recount a shop's product sales from its stored orders: once after the counters are activated, or after a gap. The shop's orders on Etsy are not touched."
+msgstr "ספירה מחדש של מכירות המוצרים של חנות מההזמנות השמורות שלה: פעם אחת אחרי הפעלת המונים, או אחרי פער. ההזמנות של החנות ב־Etsy לא משתנות."
+
+#: src/features/admin/SalesCounters.tsx
+msgid "Recount sales"
+msgstr "ספירה מחדש של המכירות"
+
+#. placeholder {0}: asking.shop.name
+#: src/features/admin/SalesCounters.tsx
+msgid "Recount sales for {0}?"
+msgstr "לספור מחדש את המכירות של {0}?"
+
+#: src/features/admin/SalesCounters.tsx
+msgid "Recounted"
+msgstr "נספר מחדש"
+
+#: src/features/admin/SalesCounters.tsx
+msgid "Recounting"
+msgstr "בספירה"
 
 #: src/features/security/SecurityPage.tsx
 msgid "Recovery"
@@ -4420,6 +4471,10 @@ msgstr "מכירות"
 msgid "Sales are not available for this shop."
 msgstr "נתוני המכירות אינם זמינים לחנות הזו."
 
+#: src/features/admin/SalesCounters.tsx
+msgid "Sales counters"
+msgstr "מוני מכירות"
+
 #: src/features/customers/CustomersDemos.tsx
 msgid "Sales up 12% this week"
 msgstr "המכירות עלו 12% השבוע"
@@ -4676,6 +4731,7 @@ msgid "Shon"
 msgstr "שון"
 
 #: src/features/admin/OperationsPage.tsx
+#: src/features/admin/SalesCounters.tsx
 #: src/features/finance/FinanceDemos.tsx
 #: src/features/incidents/IncidentsPage.tsx
 #: src/features/shops/ShopStats.tsx
@@ -5256,6 +5312,14 @@ msgstr "מצב התור והסנכרון עוד לא זמין בשרת הזה."
 #: src/features/admin/OperationsPage.tsx
 msgid "The queue and sync health could not be loaded. Try again shortly."
 msgstr "לא הצלחנו לטעון את מצב התור והסנכרון. נסו שוב בעוד רגע."
+
+#: src/features/admin/SalesCounters.tsx
+msgid "The recount could not start. Try again shortly."
+msgstr "לא ניתן היה להתחיל את הספירה. נסו שוב בעוד רגע."
+
+#: src/features/admin/SalesCounters.tsx
+msgid "The sales counters are not active yet. Activate them first, then recount."
+msgstr "מוני המכירות עדיין לא פעילים. הפעילו אותם קודם, ואז ספרו מחדש."
 
 #: src/features/team/TeamPage.tsx
 msgid "The server did not accept this change."
