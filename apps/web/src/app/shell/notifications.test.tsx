@@ -304,6 +304,28 @@ describe("the notification bell", () => {
     expect(screen.queryByText("This incident is not available to you.")).toBeNull();
   });
 
+  it("opens a shop's alert on that shop, not on the first one (Codex review of #48)", async () => {
+    const notifications = [
+      fakeNotification({
+        id: "f0000000-0000-7000-8000-000000000301",
+        kind: "alert_out_of_stock",
+        params: { listing_id: "1777" },
+        shop_id: LINEN,
+      }),
+    ];
+    const { user } = await open({ notifications });
+    await user.click(await bell("Notifications, 1 unread"));
+    const panel = await screen.findByRole("dialog", { name: "Notifications" });
+    await user.click(within(panel).getByRole("link", { name: /Listing 1777 is out of stock/ }));
+
+    expect(await screen.findByRole("heading", { level: 1, name: "Products" })).toBeVisible();
+    const shops = await screen.findByRole("group", { name: "Shop" }, { timeout: 8000 });
+    expect(within(shops).getByRole("button", { name: "Linen Lane Studio" })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+  });
+
   it("opens the incident a notification is about, and marks it read", async () => {
     const { user, backend } = await open();
     await user.click(await bell("Notifications, 2 unread"));

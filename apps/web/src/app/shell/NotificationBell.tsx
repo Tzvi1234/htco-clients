@@ -141,13 +141,11 @@ type Target =
       search: { workspace: string };
     }
   | {
-      to:
-        | "/commerce/shipping"
-        | "/commerce/products"
-        | "/customers/customers"
-        | "/shops"
-        | "/settings/security";
-    };
+      // A shop's alert opens on that shop (`?shop=`), not on the first one (Codex review of #48).
+      to: "/commerce/shipping" | "/commerce/products" | "/customers/customers";
+      search: { shop?: string };
+    }
+  | { to: "/shops" | "/settings/security" };
 
 /** Where a notification leads: its incident, or the screen its subject lives on. */
 function targetOf(notice: Notice): Target | undefined {
@@ -159,14 +157,16 @@ function targetOf(notice: Notice): Target | undefined {
       params: { incidentId: incident },
       search: { workspace: notice.organizationId },
     };
+  const shop =
+    notice.shop_id === null || notice.shop_id === undefined ? {} : { shop: notice.shop_id };
   switch (notice.kind) {
     case "alert_ship_by":
     case "relay_tracking_needed":
-      return { to: "/commerce/shipping" };
+      return { to: "/commerce/shipping", search: shop };
     case "alert_out_of_stock":
-      return { to: "/commerce/products" };
+      return { to: "/commerce/products", search: shop };
     case "alert_low_review":
-      return { to: "/customers/customers" };
+      return { to: "/customers/customers", search: shop };
     case "sign_in_new_device":
     case "mfa_changed":
       return { to: "/settings/security" };

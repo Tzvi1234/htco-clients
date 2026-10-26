@@ -148,6 +148,11 @@ const demoRoutes = AREAS.flatMap((area) =>
     ),
 );
 
+/** `?shop=`: the shop a commerce screen opens on, as a shop's notification names it. */
+function shopSearch(search: Record<string, unknown>): { shop?: string } {
+  return typeof search["shop"] === "string" ? { shop: search["shop"] } : {};
+}
+
 /** An area's own address opens its first tab; the demo's addresses lead to existing screens. */
 const redirects = [
   ...AREAS.filter((area) => area.tabs.length > 0).map((area) => [`/${area.id}`, area.to] as const),
@@ -207,12 +212,14 @@ const routeTree = rootRoute.addChildren([
       createRoute({
         getParentRoute: () => appRoute,
         path: "/commerce/products",
+        validateSearch: shopSearch,
         staticData: { layout: "panels", scroll: "page" },
         component: ProductsPage,
       }),
       createRoute({
         getParentRoute: () => appRoute,
         path: "/commerce/shipping",
+        validateSearch: shopSearch,
         staticData: { layout: "panels", scroll: "page" },
         component: ShippingPage,
       }),
@@ -229,6 +236,7 @@ const routeTree = rootRoute.addChildren([
       createRoute({
         getParentRoute: () => appRoute,
         path: "/customers/customers",
+        validateSearch: shopSearch,
         staticData: { layout: "panels", scroll: "page" },
         component: CustomersPage,
       }),
