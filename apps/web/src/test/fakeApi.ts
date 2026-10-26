@@ -1,5 +1,6 @@
 import { createApiClient, type ApiClient, type components } from "@htco/api-client";
 
+import { personSteps, type FakeIncident, type FakeNotification } from "./fakeIncidents.ts";
 import {
   DEAD_EXECUTION,
   DEAD_EXECUTION_JOB,
@@ -100,6 +101,35 @@ export interface FakeState {
   statsFailFor?: string[];
   /** True: the shops are busy, 160 orders in 30 days (more than one page of 100). */
   liveBusy?: boolean;
+  /** The organization's incidents (`GET /v1/incidents`), newest first as the API sends them. */
+  incidents: FakeIncident[];
+  /** "fail": the incident center answers 503 incidents-unavailable; "hang": it never answers;
+   * "forbidden": the role may not view incidents (403). */
+  incidentsTrouble?: "fail" | "hang" | "forbidden" | undefined;
+  /** How many incidents one page of `GET /v1/incidents` holds (the API's `limit`, 200). */
+  incidentPageSize?: number | undefined;
+  /** Incidents (by id) that belong to another workspace; the rest are the first workspace's. */
+  incidentWorkspaces?: Record<string, string> | undefined;
+  /** Notifications (by id) that belong to another workspace; the rest are the first's. */
+  notificationWorkspaces?: Record<string, string> | undefined;
+  /** A 409 problem the next incident step answers with instead of moving it. */
+  stepProblem?: "illegal-incident-step" | "evidence-required" | "incident-moved" | undefined;
+  /** The steps asked for (`POST /v1/incidents/{id}/transitions`), in order. */
+  steps: { id: string; to_state: unknown; note: unknown }[];
+  /** The user's notifications (`GET /v1/notifications`), newest first. */
+  notifications: FakeNotification[];
+  /** "fail": the notifications answer 503 incidents-unavailable. */
+  notificationsTrouble?: "fail" | undefined;
+  /** Workspaces whose notifications answer 503 (the others answer as usual). */
+  notificationsFailFor?: string[] | undefined;
+  /** "fail": `POST /v1/notifications/read` answers 503. */
+  readTrouble?: "fail" | undefined;
+  /** The query strings of `GET /v1/incidents`, in order (which workspace, shop and order). */
+  incidentLists: string[];
+  /** The bodies of `POST /v1/notifications/read`, in order. */
+  reads: unknown[];
+  /** The workspace of each `POST /v1/notifications/read`, in the same order as `reads`. */
+  readWorkspaces: string[];
   /**
    * True: orders, Home's sales and the statistics come from the stored order history (slice
    * 5.6), synced four minutes ago (40 with "stale"); one order comes with its status timeline.
@@ -282,6 +312,12 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
     disconnects: [],
     removals: [],
     recheckTooSoon: false,
+    incidents: [],
+    steps: [],
+    notifications: [],
+    reads: [],
+    readWorkspaces: [],
+    incidentLists: [],
     exports: [],
     resyncs: [],
     operations: fakeOperations(),
@@ -456,6 +492,9 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
       state.integrations = state.integrations.filter((i) => i.shop_id !== shopId);
       return new Response(null, { status: 204 });
     }
+
+    const center = incidentCenter(route, body, url);
+    if (center !== undefined) return center;
 
     const bulk = /^POST \/v1\/shops\/([^/]+)\/order-(exports|resyncs)$/.exec(route);
     if (bulk !== null) {
@@ -656,6 +695,131 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
         return problem(404, "not-found");
       }
     }
+  }
+
+  /** May the role move incidents? Owners and Admins (the API's update-incidents capability). */
+  const updates = () => state.role === "owner" || state.role === "admin";
+
+  /** The incident center and the notification inbox (slices 6.3 to 6.5). */
+  function incidentCenter(
+    route: string,
+    body: Record<string, unknown>,
+    url: URL,
+  ): Response | Promise<Response> | undefined {
+    if (/^(GET|POST) \/v1\/incidents/.test(route)) {
+      if (state.incidentsTrouble === "hang") return new Promise<Response>(() => undefined);
+      if (state.incidentsTrouble === "fail") return problem(503, "incidents-unavailable");
+      if (state.incidentsTrouble === "forbidden") return problem(403, "forbidden");
+    }
+    // Every call names its workspace; an incident or notification of another one is not there.
+    const asked = url.searchParams.get("organization_id") ?? org;
+    const inWorkspace = (incident: FakeIncident) =>
+      (state.incidentWorkspaces?.[incident.id] ?? org) === asked;
+    const noticeHere = (notice: FakeNotification) =>
+      (state.notificationWorkspaces?.[notice.id] ?? org) === asked;
+    const shaped = (incident: FakeIncident): FakeIncident => ({
+      ...incident,
+      can_update: incident.can_update && updates(),
+      next_states: incident.can_update && updates() ? incident.next_states : [],
+    });
+    if (route === "GET /v1/incidents") {
+      state.incidentLists.push(url.search);
+      const all = url.searchParams.get("state") === "all";
+      const shop = url.searchParams.get("shop_id");
+      const receipt = url.searchParams.get("receipt_id");
+      const items = state.incidents
+        .filter(inWorkspace)
+        .filter((incident) => all || incident.is_open)
+        .filter((incident) => shop === null || incident.shop_id === shop)
+        .filter((incident) => receipt === null || String(incident.receipt_id) === receipt)
+        .map((incident) => {
+          const summary: Partial<FakeIncident> = { ...incident };
+          delete summary.details;
+          delete summary.history;
+          delete summary.can_update;
+          delete summary.next_states;
+          return summary;
+        });
+      // Keyset pages as the API sends them: the cursor here is the next page's offset.
+      const size = Math.min(
+        Number(url.searchParams.get("limit") ?? 200),
+        state.incidentPageSize ?? 200,
+      );
+      const from = Number(url.searchParams.get("cursor") ?? 0);
+      const page = items.slice(from, from + size);
+      const more = from + size < items.length;
+      return json(200, { items: page, next_cursor: more ? String(from + size) : null });
+    }
+    const one = /^GET \/v1\/incidents\/([^/]+)$/.exec(route);
+    if (one !== null) {
+      const incident = state.incidents.find(
+        (candidate) => candidate.id === one[1] && inWorkspace(candidate),
+      );
+      return incident === undefined ? problem(404, "not-found") : json(200, shaped(incident));
+    }
+    const step = /^POST \/v1\/incidents\/([^/]+)\/transitions$/.exec(route);
+    if (step !== null) {
+      const id = step[1] ?? "";
+      state.steps.push({ id, to_state: body["to_state"], note: body["note"] });
+      const index = state.incidents.findIndex(
+        (candidate) => candidate.id === id && inWorkspace(candidate),
+      );
+      const incident = state.incidents[index];
+      if (incident === undefined) return problem(404, "not-found");
+      if (!updates()) return problem(403, "forbidden");
+      if (state.stepProblem !== undefined) return problem(409, state.stepProblem);
+      const target = String(body["to_state"]);
+      if (target === "resolved") return problem(409, "evidence-required");
+      if (!personSteps(incident.state).includes(target))
+        return problem(409, "illegal-incident-step");
+      const at = new Date().toISOString();
+      const note = body["note"];
+      const moved: FakeIncident = {
+        ...incident,
+        state: target,
+        updated_at: at,
+        history: [
+          ...incident.history,
+          {
+            from_state: incident.state,
+            to_state: target,
+            actor_kind: "user",
+            actor_id: user,
+            at,
+            note: typeof note === "string" && note !== "" ? note : null,
+            evidence: null,
+          },
+        ],
+        next_states: personSteps(target),
+      };
+      state.incidents[index] = moved;
+      return json(200, shaped(moved));
+    }
+    if (route === "GET /v1/notifications") {
+      if (state.notificationsTrouble === "fail") return problem(503, "incidents-unavailable");
+      if (state.notificationsFailFor?.includes(url.searchParams.get("organization_id") ?? ""))
+        return problem(503, "incidents-unavailable");
+      const unreadOnly = url.searchParams.get("unread_only") === "true";
+      const here = state.notifications.filter(noticeHere);
+      return json(200, {
+        items: here.filter((n) => !unreadOnly || n.read_at === null),
+        unread_count: here.filter((n) => n.read_at === null).length,
+      });
+    }
+    if (route === "POST /v1/notifications/read") {
+      if (state.readTrouble === "fail") return problem(503, "incidents-unavailable");
+      state.reads.push(body);
+      state.readWorkspaces.push(asked);
+      const ids = Array.isArray(body["ids"]) ? (body["ids"] as unknown[]) : undefined;
+      const at = new Date().toISOString();
+      state.notifications = state.notifications.map((n) =>
+        n.read_at === null && noticeHere(n) && (ids === undefined || ids.includes(n.id))
+          ? { ...n, read_at: at }
+          : n,
+      );
+      return json(204, null);
+    }
+    return undefined;
   }
 
   /** When the stored history last synced (slice 5.6), and the answer as the store gives it. */

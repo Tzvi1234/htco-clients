@@ -3,12 +3,13 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { Fragment, useEffect, useState, type Ref } from "react";
 
 import { locate } from "./nav.ts";
+import { NotificationBell } from "./NotificationBell.tsx";
 import { useShell } from "./ShellState.tsx";
 import { CIRCLE } from "./Sidebar.tsx";
 import { useNavLabels } from "./useNavLabels.ts";
 import { UserMenu } from "./UserMenu.tsx";
 import { cx } from "../../shared/lib/cx.ts";
-import { BellIcon, CrumbIcon, SearchIcon } from "../../shared/ui/icons.tsx";
+import { ApprovalIcon, CrumbIcon, SearchIcon } from "../../shared/ui/icons.tsx";
 
 const ACTION = cx(
   CIRCLE,
@@ -45,7 +46,7 @@ function Crumbs() {
 
 /**
  * The top bar on the ground (Design 1C `.tbar`): the crumbs and the page's title (placed here by
- * the page's PageHeader), then approvals and search. The language, theme and palette live in
+ * the page's PageHeader), then approvals, the notification bell and search. The language, theme and palette live in
  * Settings (round 3). It is frosted glass over the ground: where the screen scrolls under it
  * (phones, and screens that scroll as one page) it stays on top and, once the page has scrolled,
  * a hairline appears under it. Phones keep the title, search and the account in an iOS-style
@@ -110,9 +111,10 @@ export function TopBar({
             title={t`Pending approvals`}
             className={ACTION}
           >
-            <BellIcon />
+            <ApprovalIcon />
           </Link>
         )}
+        <NotificationBell />
         <button
           type="button"
           aria-label={t`Search`}

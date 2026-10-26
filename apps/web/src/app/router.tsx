@@ -19,10 +19,12 @@ import { ResetPasswordPage } from "../features/auth/ResetPasswordPage.tsx";
 import { SecondFactorPage } from "../features/auth/SecondFactorPage.tsx";
 import { SignInPage } from "../features/auth/SignInPage.tsx";
 import { OrdersPage } from "../features/commerce/OrdersPage.tsx";
+import { OrderIncidents } from "../features/incidents/OrderIncidents.tsx";
 import { OperationsPage } from "../features/admin/OperationsPage.tsx";
 import { ProductsPage } from "../features/commerce/ProductsPage.tsx";
 import { ShippingPage } from "../features/commerce/ShippingPage.tsx";
 import { CustomersPage } from "../features/customers/CustomersPage.tsx";
+import { IncidentsPage } from "../features/incidents/IncidentsPage.tsx";
 import { OverviewPage } from "../features/overview/OverviewPage.tsx";
 import { SecurityPage } from "../features/security/SecurityPage.tsx";
 import { SettingsPage } from "../features/settings/SettingsPage.tsx";
@@ -146,6 +148,11 @@ const demoRoutes = AREAS.flatMap((area) =>
     ),
 );
 
+/** `?shop=`: the shop a commerce screen opens on, as a shop's notification names it. */
+function shopSearch(search: Record<string, unknown>): { shop?: string } {
+  return typeof search["shop"] === "string" ? { shop: search["shop"] } : {};
+}
+
 /** An area's own address opens its first tab; the demo's addresses lead to existing screens. */
 const redirects = [
   ...AREAS.filter((area) => area.tabs.length > 0).map((area) => [`/${area.id}`, area.to] as const),
@@ -189,23 +196,47 @@ const routeTree = rootRoute.addChildren([
         getParentRoute: () => appRoute,
         path: "/commerce/orders",
         staticData: { layout: "panels", scroll: "page" },
-        component: OrdersPage,
+        // The order sheet links to the order's incidents (slice 6.3).
+        component: () => (
+          <OrdersPage
+            orderIncidents={(order, shop) => (
+              <OrderIncidents
+                organizationId={shop.organizationId}
+                shopId={shop.id}
+                receiptId={order.order_id}
+              />
+            )}
+          />
+        ),
       }),
       createRoute({
         getParentRoute: () => appRoute,
         path: "/commerce/products",
+        validateSearch: shopSearch,
         staticData: { layout: "panels", scroll: "page" },
         component: ProductsPage,
       }),
       createRoute({
         getParentRoute: () => appRoute,
         path: "/commerce/shipping",
+        validateSearch: shopSearch,
         staticData: { layout: "panels", scroll: "page" },
         component: ShippingPage,
+      }),
+      // The incident center (platform slice 6.5); a notification opens `/incidents/{id}` and
+      // may name the workspace (`?workspace=`) for a user in several.
+      createRoute({
+        getParentRoute: () => appRoute,
+        path: "/incidents/{-$incidentId}",
+        validateSearch: (search: Record<string, unknown>): { workspace?: string } =>
+          typeof search["workspace"] === "string" ? { workspace: search["workspace"] } : {},
+        staticData: { layout: "panels", scroll: "page" },
+        component: IncidentsPage,
       }),
       createRoute({
         getParentRoute: () => appRoute,
         path: "/customers/customers",
+        validateSearch: shopSearch,
         staticData: { layout: "panels", scroll: "page" },
         component: CustomersPage,
       }),

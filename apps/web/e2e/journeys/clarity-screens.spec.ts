@@ -16,6 +16,7 @@ const SCREENS = [
   ["Orders", "/commerce/orders"],
   ["Products", "/commerce/products"],
   ["Shipping", "/commerce/shipping"],
+  ["Incidents", "/incidents"],
   ["Customers", "/customers/customers"],
   ["Members & access", "/settings/team"],
   ["Security", "/settings/security"],

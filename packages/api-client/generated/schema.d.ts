@@ -378,6 +378,8 @@ export interface paths {
         /**
          * The organization's incidents the caller may view
          * @description Newest first; a shop-scoped role sees its granted shops' incidents only.
+         *     `shop_id` and `receipt_id` narrow the list to one shop or one order; pass
+         *     `next_cursor` back as `cursor` for the next page.
          */
         get: operations["get_incidents"];
         put?: never;
@@ -1493,6 +1495,8 @@ export interface components {
         IncidentListView: {
             /** Items */
             items: components["schemas"]["IncidentSummaryView"][];
+            /** Next Cursor */
+            next_cursor?: string | null;
         };
         /** IncidentSummaryView */
         IncidentSummaryView: {
@@ -4245,7 +4249,11 @@ export interface operations {
     get_incidents: {
         parameters: {
             query?: {
+                cursor?: string | null;
+                limit?: number;
                 organization_id?: string | null;
+                receipt_id?: number | null;
+                shop_id?: string | null;
                 state?: "open" | "all";
             };
             header?: never;

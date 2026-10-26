@@ -4,6 +4,7 @@
 // the shops feature.
 import type { ApiClient, components } from "@htco/api-client";
 import { useQueries, useQuery, queryOptions } from "@tanstack/react-query";
+import { useSearch } from "@tanstack/react-router";
 import { useState } from "react";
 
 import { ApiError, apiError, meQuery, shopsQuery, useApi, type ShopView } from "./api.tsx";
@@ -251,15 +252,29 @@ export function useLiveShops(): LiveShops {
   });
 }
 
-/** The shop a commerce screen shows: the first active one until the user picks another. */
+/**
+ * The shop a commerce screen shows: the one the user picks; else the one the address names
+ * (`?shop=`, how a shop's notification opens it); else the first active one. An unknown shop in
+ * the address is ignored.
+ */
 export function useLiveShop(): LiveShops & {
   shop: ShopView | undefined;
   choose: (shopId: string) => void;
 } {
   const live = useLiveShops();
-  const [chosen, setChosen] = useState<string | null>(null);
+  const search: { shop?: string } = useSearch({ strict: false });
+  // A pick holds only under the address it was made at: a link to another shop on the same
+  // screen (a shop's alert from the bell) wins over it (Quill's review of #48).
+  const [chosen, setChosen] = useState<{ id: string; under: string | undefined } | null>(null);
+  const picked = chosen !== null && chosen.under === search.shop ? chosen.id : null;
   const shops = live.shops ?? [];
   const shop =
-    shops.find((s) => s.id === chosen) ?? shops.find((s) => s.status === "active") ?? shops[0];
-  return { ...live, shop, choose: setChosen };
+    shops.find((s) => s.id === picked) ??
+    shops.find((s) => s.id === search.shop) ??
+    shops.find((s) => s.status === "active") ??
+    shops[0];
+  const choose = (shopId: string) => {
+    setChosen({ id: shopId, under: search.shop });
+  };
+  return { ...live, shop, choose };
 }

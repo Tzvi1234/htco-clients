@@ -27,6 +27,7 @@ const api =
     ? undefined
     : await (async () => {
         const { demoShops, fakeBackend } = await import("./test/fakeApi.ts");
+        const { demoIncidents, demoNotifications } = await import("./test/fakeIncidents.ts");
         if (demo === "signed-out") return fakeBackend().client;
         // Signed in with a password only: the authenticator code step.
         if (demo === "mfa")
@@ -37,7 +38,18 @@ const api =
           enrolled: true,
           assurance: "aal2",
           authorizationUrl: `/integrations/etsy/callback?code=demo-code&state=demo-state&demo=${demo}`,
-          ...(demo === "shops" || demo === "history" ? demoShops() : {}),
+          ...(demo === "shops" || demo === "history"
+            ? (() => {
+                const shops = demoShops();
+                // The incident center and the bell: three open incidents, one resolved.
+                const ids = shops.shops.map((shop) => shop.id);
+                return {
+                  ...shops,
+                  incidents: demoIncidents(ids),
+                  notifications: demoNotifications(ids),
+                };
+              })()
+            : {}),
           // `?demo=shops`: the orders come from the stored history (slice 5.6).
           ...(demo === "shops" ? { orderStore: true } : {}),
           // `?demo=history`: every order is older than 30 days (the owner's live shop).
