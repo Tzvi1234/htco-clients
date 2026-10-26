@@ -1131,11 +1131,11 @@ msgstr "אישור זהות"
 
 #: src/features/security/Passkeys.tsx
 msgid "Confirm sign-in with Face ID, Touch ID, Windows Hello or your fingerprint instead of typing a code. Your authenticator app stays as the backup."
-msgstr "אישור הכניסה ב-Face ID, ב-Touch ID, ב-Windows Hello או בטביעת אצבע, במקום להקליד קוד. אפליקציית האימות נשארת כגיבוי."
+msgstr "אישור הכניסה ב־Face ID, ב־Touch ID, ב־Windows Hello או בטביעת אצבע, במקום להקליד קוד. אפליקציית האימות נשארת כגיבוי."
 
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Confirm with Face ID / fingerprint"
-msgstr "אישור ב-Face ID / בטביעת אצבע"
+msgstr "אישור ב־Face ID / בטביעת אצבע"
 
 #: src/features/security/Passkeys.tsx
 msgid "Confirm with your authenticator app first, then try again."
@@ -3735,11 +3735,11 @@ msgstr "מפתח גישה"
 #. placeholder {0}: factor.name
 #: src/features/security/Passkeys.tsx
 msgid "Passkey \"{0}\" removed."
-msgstr "מפתח הגישה \"{0}\" הוסר."
+msgstr "מפתח הגישה ״{0}״ הוסר."
 
 #: src/features/security/Passkeys.tsx
 msgid "Passkey \"{chosen}\" added."
-msgstr "מפתח הגישה \"{chosen}\" נוסף."
+msgstr "מפתח הגישה ״{chosen}״ נוסף."
 
 #: src/features/security/Passkeys.tsx
 msgid "Passkeys"
@@ -5888,11 +5888,11 @@ msgstr "השתמש/י ב־12 עד 128 תווים."
 
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Use Face ID / fingerprint instead"
-msgstr "שימוש ב-Face ID / בטביעת אצבע במקום"
+msgstr "שימוש ב־Face ID / בטביעת אצבע במקום"
 
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Use Face ID, Touch ID, Windows Hello or your fingerprint on this device."
-msgstr "אפשר להשתמש ב-Face ID, ב-Touch ID, ב-Windows Hello או בטביעת אצבע במכשיר הזה."
+msgstr "אפשר להשתמש ב־Face ID, ב־Touch ID, ב־Windows Hello או בטביעת אצבע במכשיר הזה."
 
 #: src/features/customers/CustomersDemos.tsx
 #: src/features/work/demoScreens.tsx
