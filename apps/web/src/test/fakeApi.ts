@@ -64,6 +64,13 @@ export interface FakeState {
   integrationsTrouble?: "fail" | "hang" | undefined;
   /** True once the user confirmed a code in the last ten minutes (POST /v1/auth/step-up). */
   steppedUp: boolean;
+  /** Passkeys (issue #113): whether the server offers them, and the user's verified ones. */
+  passkeysOffered: boolean;
+  passkeys: { id: string; name: string }[];
+  /** True: the server refuses the passkey (401 passkey-refused). */
+  passkeyRefused: boolean;
+  /** The credentials the browser handed over (verify and step-up), in order. */
+  passkeyCredentials: unknown[];
   /** Where `POST /v1/shops/etsy/connect` sends the browser. */
   authorizationUrl: string;
   /** True: Etsy is unavailable (503 etsy-unavailable) when starting a connection. */
@@ -305,6 +312,10 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
     shops: [],
     integrations: [],
     steppedUp: false,
+    passkeysOffered: false,
+    passkeys: [],
+    passkeyRefused: false,
+    passkeyCredentials: [],
     authorizationUrl: "https://www.etsy.com/oauth/connect?response_type=code&state=s-1",
     etsyDown: false,
     callbacks: [],
@@ -585,6 +596,8 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
     const live =
       /^GET \/v1\/shops\/([^/]+)\/(overview|orders|listings|reviews|shipping|stats)$/.exec(route);
     if (live !== null) return liveData(live[1] ?? "", live[2] ?? "", url);
+    const passkey = passkeyRoutes(route, body);
+    if (passkey !== undefined) return passkey;
 
     switch (route) {
       case "GET /v1/auth/session":
@@ -603,7 +616,11 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
         return json(200, {
           assurance: state.assurance,
           enrolled: state.enrolled,
-          factors: state.enrolled ? [{ id: "f1", name: "Phone", verified: true }] : [],
+          factors: [
+            ...(state.enrolled ? [{ id: "f1", name: "Phone", verified: true, kind: "totp" }] : []),
+            ...state.passkeys.map((p) => ({ ...p, verified: true, kind: "webauthn" })),
+          ],
+          passkeys: state.passkeysOffered,
         });
       case "POST /v1/auth/mfa/enroll":
         return json(200, {
@@ -699,6 +716,69 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
 
   /** May the role move incidents? Owners and Admins (the API's update-incidents capability). */
   const updates = () => state.role === "owner" || state.role === "admin";
+
+  /** Passkeys as a second factor (issue #113), as the API answers them. */
+  function passkeyRoutes(route: string, body: Record<string, unknown>): Response | undefined {
+    const options = { publicKey: { challenge: "Y2hhbGxlbmdl", rpId: "localhost" } };
+    const verify = /^POST \/v1\/auth\/mfa\/passkeys\/([^/]+)\/verify$/.exec(route);
+    const remove = /^DELETE \/v1\/auth\/mfa\/factors\/([^/]+)$/.exec(route);
+    const known =
+      verify !== null ||
+      remove !== null ||
+      route === "POST /v1/auth/mfa/passkeys" ||
+      route === "POST /v1/auth/mfa/passkeys/challenge" ||
+      route === "POST /v1/auth/step-up/passkey";
+    if (!known) return undefined;
+    if (!state.passkeysOffered && remove === null) return problem(404, "passkeys-unavailable");
+    if (route === "POST /v1/auth/mfa/passkeys") {
+      if (state.assurance !== "aal2") return problem(403, "step-up-required");
+      const id = `pk-${String(state.passkeys.length + 1)}`;
+      pendingPasskey = { id, name: String(body["name"]) };
+      const create = {
+        publicKey: {
+          ...options.publicKey,
+          rp: { id: "localhost", name: "HTCO" },
+          user: { id: "dXNlcg", name: "owner@example.test", displayName: "Owner" },
+          pubKeyCredParams: [{ type: "public-key", alg: -7 }],
+        },
+      };
+      return json(200, {
+        factor_id: id,
+        challenge_id: "ch-1",
+        ceremony: "create",
+        options: create,
+      });
+    }
+    if (verify !== null) {
+      state.passkeyCredentials.push(body["credential"]);
+      if (state.passkeyRefused) return problem(401, "passkey-refused");
+      const pending = pendingPasskey;
+      if (pending === undefined || pending.id !== verify[1]) return problem(404, "not-found");
+      state.passkeys.push(pending);
+      pendingPasskey = undefined;
+      return json(200, { assurance: "aal2" });
+    }
+    if (route === "POST /v1/auth/mfa/passkeys/challenge") {
+      const first = state.passkeys[0];
+      if (first === undefined) return problem(409, "mfa-not-enrolled");
+      return json(200, { factor_id: first.id, challenge_id: "ch-2", ceremony: "request", options });
+    }
+    if (route === "POST /v1/auth/step-up/passkey") {
+      state.passkeyCredentials.push(body["credential"]);
+      if (state.passkeyRefused) return problem(401, "passkey-refused");
+      state.assurance = "aal2";
+      state.steppedUp = true;
+      return json(204, null);
+    }
+    if (remove !== null) {
+      if (state.assurance !== "aal2") return problem(403, "step-up-required");
+      if (remove[1] === "f1") return problem(409, "last-factor");
+      state.passkeys = state.passkeys.filter((p) => p.id !== remove[1]);
+      return json(204, null);
+    }
+    return undefined;
+  }
+  let pendingPasskey: { id: string; name: string } | undefined;
 
   /** The incident center and the notification inbox (slices 6.3 to 6.5). */
   function incidentCenter(

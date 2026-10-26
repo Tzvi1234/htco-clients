@@ -6,7 +6,9 @@ import { useState, type SyntheticEvent } from "react";
 import { Button as AriaButton } from "react-aria-components";
 
 import { AUTH_LINK, AUTH_SUBMIT, AuthLayout } from "./AuthLayout.tsx";
-import { CodeBoxes } from "../../shared/ui/kit/index.ts";
+import { confirmWithPasskey, usePasskeyMessage } from "../security/index.ts";
+import { passkeysSupported } from "../../shared/lib/passkeys.ts";
+import { CodeBoxes, FingerprintGlyph } from "../../shared/ui/kit/index.ts";
 import { ApiError, apiError, forgetSession, mfaQuery, useApi } from "../../shared/api/api.tsx";
 import { useSignOut } from "../../shared/api/useSignOut.ts";
 import { Button } from "../../shared/ui/Button.tsx";
@@ -16,7 +18,8 @@ import { FormAlert } from "../../shared/ui/FormAlert.tsx";
 
 /**
  * The second factor for Owners and Admins (AC-3.5.3): set up an authenticator app, or confirm
- * with its code. Either way the session is then signed in with two factors (`aal2`).
+ * with a passkey (offered first when the user has one and this browser can use it, issue #113)
+ * or the app's code. Either way the session is then signed in with two factors (`aal2`).
  */
 export function SecondFactorPage() {
   const api = useApi();
@@ -38,7 +41,70 @@ export function SecondFactorPage() {
         </div>
       </AuthLayout>
     );
-  return status.data.enrolled ? <ConfirmCode /> : <SetUp />;
+  if (!status.data.enrolled) return <SetUp />;
+  const passkey =
+    status.data.passkeys &&
+    status.data.factors.some((f) => f.kind === "webauthn" && f.verified) &&
+    passkeysSupported();
+  return <Confirm passkey={passkey} />;
+}
+
+/** A passkey by default when there is one; "Use a code instead" is always there. */
+function Confirm({ passkey }: { passkey: boolean }) {
+  const [withCode, setWithCode] = useState(!passkey);
+  return withCode ? (
+    <ConfirmCode
+      {...(passkey
+        ? {
+            onPasskey: () => {
+              setWithCode(false);
+            },
+          }
+        : {})}
+    />
+  ) : (
+    <ConfirmPasskey
+      onCode={() => {
+        setWithCode(true);
+      }}
+    />
+  );
+}
+
+function ConfirmPasskey({ onCode }: { onCode: () => void }) {
+  const api = useApi();
+  const finish = useFinish();
+  const message = usePasskeyMessage();
+  const confirm = useMutation({ mutationFn: () => confirmWithPasskey(api), onSuccess: finish });
+  return (
+    <AuthLayout
+      eyebrow={<Trans>Step 2 of 2</Trans>}
+      title={<Trans>Confirm it is you</Trans>}
+      description={
+        <Trans>Use Face ID, Touch ID, Windows Hello or your fingerprint on this device.</Trans>
+      }
+      step={2}
+    >
+      <div className="flex flex-col gap-6">
+        <Button
+          variant="primary"
+          className={AUTH_SUBMIT}
+          isPending={confirm.isPending}
+          onPress={() => {
+            confirm.mutate();
+          }}
+        >
+          <FingerprintGlyph size={18} />
+          <Trans>Confirm with Face ID / fingerprint</Trans>
+        </Button>
+        <FormAlert message={message(confirm.error)} />
+        <AriaButton className={AUTH_LINK} onPress={onCode}>
+          <Trans>Use a code instead</Trans>
+        </AriaButton>
+        <BackLink />
+      </div>
+    </AuthLayout>
+  );
 }
 
 /** Plain words for a refused or failed authenticator code. */
@@ -184,7 +250,7 @@ function SetUp() {
   );
 }
 
-function ConfirmCode() {
+function ConfirmCode({ onPasskey }: { onPasskey?: () => void }) {
   const api = useApi();
   const finish = useFinish();
   const codeMessage = useCodeMessage();
@@ -229,6 +295,11 @@ function ConfirmCode() {
         <p className="m-0 text-center text-caption font-light text-muted">
           <Trans>The app shows a new code every 30 seconds</Trans>
         </p>
+        {onPasskey === undefined ? null : (
+          <AriaButton className={AUTH_LINK} onPress={onPasskey}>
+            <Trans>Use Face ID / fingerprint instead</Trans>
+          </AriaButton>
+        )}
       </form>
     </AuthLayout>
   );

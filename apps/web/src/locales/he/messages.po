@@ -346,6 +346,10 @@ msgid "A new notification"
 msgstr "התראה חדשה"
 
 #: src/app/shell/NotificationBell.tsx
+msgid "A second factor was removed"
+msgstr "אמצעי אימות שני הוסר"
+
+#: src/app/shell/NotificationBell.tsx
 msgid "A shop needs reconnecting to Etsy"
 msgstr "צריך לחבר חנות מחדש ל־Etsy"
 
@@ -427,6 +431,10 @@ msgstr "יומן פעילות"
 #: src/features/security/SecurityPage.tsx
 msgid "Add an authenticator app: without it, a stolen password is enough to get in."
 msgstr "הוסף אפליקציית אימות: בלעדיה, סיסמה גנובה מספיקה כדי להיכנס."
+
+#: src/features/security/Passkeys.tsx
+msgid "Add biometric sign-in (passkey)"
+msgstr "הוספת כניסה ביומטרית (מפתח גישה)"
 
 #: src/features/team/TeamPage.tsx
 msgid "Admin"
@@ -668,6 +676,10 @@ msgstr "אושר על ידך"
 msgid "Apps"
 msgstr "אפליקציות"
 
+#: src/features/security/SecurityPage.tsx
+msgid "Apps and passkeys"
+msgstr "אפליקציות ומפתחות גישה"
+
 #: src/features/office/TeamRoomPage.tsx
 msgid "Archive"
 msgstr "ארכיון"
@@ -815,6 +827,10 @@ msgstr "על סמך {0} ההזמנות האחרונות, מאז {1}. סך המכ
 msgid "Best month"
 msgstr "החודש הטוב ביותר"
 
+#: src/features/security/Passkeys.tsx
+msgid "Biometric sign-in"
+msgstr "כניסה ביומטרית"
+
 #: src/features/shops/Capabilities.tsx
 #: src/shared/ui/kit/status.tsx
 msgid "Blocked"
@@ -868,6 +884,7 @@ msgstr "קריאות"
 msgid "Campaign:"
 msgstr "קמפיין:"
 
+#: src/features/security/Passkeys.tsx
 #: src/features/shops/connectEtsy.tsx
 #: src/features/shops/shopActions.tsx
 #: src/features/team/TeamPage.tsx
@@ -889,6 +906,10 @@ msgstr "שיעור ביטולים"
 #: src/features/shops/ShopStats.tsx
 msgid "Cancelled"
 msgstr "בוטלה"
+
+#: src/features/security/Passkeys.tsx
+msgid "Cancelled. Nothing was changed."
+msgstr "בוטל. שום דבר לא השתנה."
 
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Cannot scan? Type this key into the app:"
@@ -1069,10 +1090,6 @@ msgstr "קוד"
 msgid "Code from the app"
 msgstr "הקוד מהאפליקציה"
 
-#: src/features/security/SecurityPage.tsx
-msgid "Codes set up"
-msgstr "קודים מוגדרים"
-
 #: src/app/shell/Sidebar.tsx
 msgid "Collapse the menu"
 msgstr "כיווץ התפריט"
@@ -1106,18 +1123,27 @@ msgstr "הודעה חדשה"
 msgid "Confirm"
 msgstr "אישור"
 
+#: src/features/auth/SecondFactorPage.tsx
 #: src/features/shops/connectEtsy.tsx
 #: src/features/shops/ShopsPage.tsx
 msgid "Confirm it is you"
 msgstr "אישור זהות"
 
+#: src/features/security/Passkeys.tsx
+msgid "Confirm sign-in with Face ID, Touch ID, Windows Hello or your fingerprint instead of typing a code. Your authenticator app stays as the backup."
+msgstr "אישור הכניסה ב-Face ID, ב-Touch ID, ב-Windows Hello או בטביעת אצבע, במקום להקליד קוד. אפליקציית האימות נשארת כגיבוי."
+
+#: src/features/auth/SecondFactorPage.tsx
+msgid "Confirm with Face ID / fingerprint"
+msgstr "אישור ב-Face ID / בטביעת אצבע"
+
+#: src/features/security/Passkeys.tsx
+msgid "Confirm with your authenticator app first, then try again."
+msgstr "קודם יש לאשר עם אפליקציית האימות, ואז לנסות שוב."
+
 #: src/features/team/TeamPage.tsx
 msgid "Confirm with your authenticator app, then try again."
 msgstr "אשרו באפליקציית האימות ונסו שוב."
-
-#: src/features/security/SecurityPage.tsx
-msgid "Confirmed with a code"
-msgstr "אומת בקוד"
 
 #: src/features/overview/OverviewPage.tsx
 #: src/features/welcome/WelcomePage.tsx
@@ -1213,6 +1239,7 @@ msgid "Connections"
 msgstr "חיבורים"
 
 #: src/features/auth/SignInPage.tsx
+#: src/features/security/Passkeys.tsx
 msgid "Continue"
 msgstr "המשך"
 
@@ -2400,6 +2427,14 @@ msgstr "משימה"
 msgid "Join conversation"
 msgstr "הצטרפות לשיחה"
 
+#: src/features/security/Passkeys.tsx
+msgid "Keep"
+msgstr "להשאיר"
+
+#: src/features/security/Passkeys.tsx
+msgid "Keep at least one authenticator app: it is how you sign in if a device is lost."
+msgstr "צריך להשאיר לפחות אפליקציית אימות אחת: כך נכנסים אם מכשיר אובד."
+
 #: src/features/incidents/IncidentsPage.tsx
 msgid "Key figures"
 msgstr "נתונים עיקריים"
@@ -2864,6 +2899,10 @@ msgstr "ספל הגיע סדוק"
 #: src/features/team/TeamPage.tsx
 msgid "Name"
 msgstr "שם"
+
+#: src/features/security/Passkeys.tsx
+msgid "Name this passkey"
+msgstr "שם למפתח הגישה"
 
 #: src/features/shops/ShopsPage.tsx
 msgid "Need you"
@@ -3689,9 +3728,22 @@ msgstr "החזר חלקי 15% ($7.20) על הזמנה #3152 של Emma R."
 msgid "Participants"
 msgstr "משתתפים"
 
-#: src/features/security/SecurityPage.tsx
-msgid "Passkey:"
-msgstr "מפתח גישה:"
+#: src/features/security/Passkeys.tsx
+msgid "Passkey"
+msgstr "מפתח גישה"
+
+#. placeholder {0}: factor.name
+#: src/features/security/Passkeys.tsx
+msgid "Passkey \"{0}\" removed."
+msgstr "מפתח הגישה \"{0}\" הוסר."
+
+#: src/features/security/Passkeys.tsx
+msgid "Passkey \"{chosen}\" added."
+msgstr "מפתח הגישה \"{chosen}\" נוסף."
+
+#: src/features/security/Passkeys.tsx
+msgid "Passkeys"
+msgstr "מפתחות גישה"
 
 #: src/features/auth/ForgotPasswordPage.tsx
 #: src/features/auth/ResetPasswordPage.tsx
@@ -4146,6 +4198,7 @@ msgstr "אמינות"
 msgid "Remaining"
 msgstr "נותר"
 
+#: src/features/security/Passkeys.tsx
 #: src/features/team/TeamPage.tsx
 msgid "Remove"
 msgstr "הסרה"
@@ -4154,6 +4207,10 @@ msgstr "הסרה"
 #: src/features/shops/ShopsPage.tsx
 msgid "Remove {0}"
 msgstr "הסרת {0}"
+
+#: src/features/security/Passkeys.tsx
+msgid "Remove {label}"
+msgstr "הסרת {label}"
 
 #: src/features/team/TeamPage.tsx
 msgid "Remove {name} from this workspace? Their access ends at once."
@@ -4473,6 +4530,10 @@ msgstr "חיפוש לקוח"
 msgid "Search screens and actions…"
 msgstr "חיפוש מסכים ופעולות…"
 
+#: src/features/security/SecurityPage.tsx
+msgid "Second factors"
+msgstr "אמצעי אימות שני"
+
 #: src/features/commerce/ProductsPage.tsx
 msgid "Section"
 msgstr "מדור"
@@ -4550,6 +4611,10 @@ msgstr "מחלקות שירות"
 #: src/features/security/SecurityPage.tsx
 msgid "Set one up"
 msgstr "להגדרה"
+
+#: src/features/security/Passkeys.tsx
+msgid "Set up an authenticator app first; then you can add a passkey."
+msgstr "קודם מגדירים אפליקציית אימות, ואז אפשר להוסיף מפתח גישה."
 
 #: src/features/shops/connectEtsy.tsx
 msgid "Set up two-factor sign-in in Security first, then connect the shop."
@@ -4846,6 +4911,10 @@ msgstr "מכשירים מחוברים"
 msgid "Signing in asks for a code from your authenticator app, so a password alone is not enough."
 msgstr "הכניסה מבקשת קוד מאפליקציית האימות, כך שסיסמה לבדה לא מספיקה."
 
+#: src/features/security/SecurityPage.tsx
+msgid "Signing in asks for your passkey or a code from your authenticator app, so a password alone is not enough."
+msgstr "הכניסה מבקשת את מפתח הגישה שלך או קוד מאפליקציית האימות, כך שסיסמה לבדה לא מספיקה."
+
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Signs you out first"
 msgstr "מנתק אתכם קודם"
@@ -4861,6 +4930,10 @@ msgstr "שישה־עשר עובדי AI בשבע מחלקות, שעובדים ל�
 #: src/app/shell/AppShell.tsx
 msgid "Skip to content"
 msgstr "דילוג לתוכן"
+
+#: src/features/security/Passkeys.tsx
+msgid "So you can tell your devices apart."
+msgstr "כדי להבחין בין המכשירים שלך."
 
 #: src/features/finance/FinanceDemos.tsx
 msgid "Software"
@@ -5244,6 +5317,14 @@ msgstr "ההזמנות סונכרנו לאחרונה {when}. Etsy לא עונה 
 msgid "The Owner's role, shops and membership cannot be changed."
 msgstr "אי אפשר לשנות את התפקיד, החנויות או החברות של הבעלים."
 
+#: src/features/security/Passkeys.tsx
+msgid "The passkey did not work. Try again."
+msgstr "מפתח הגישה לא עבד. אפשר לנסות שוב."
+
+#: src/features/security/Passkeys.tsx
+msgid "The passkey was not accepted. Try again."
+msgstr "מפתח הגישה לא התקבל. אפשר לנסות שוב."
+
 #: src/features/auth/AcceptInvitePage.tsx
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "The passwords are not the same."
@@ -5357,6 +5438,14 @@ msgstr "לא ניתן היה לסמן אותן כנקראו. אפשר לנסות
 msgid "They join as members with the living office"
 msgstr "הם יצטרפו כחברים עם המשרד החי"
 
+#: src/features/security/Passkeys.tsx
+msgid "This browser or device cannot use passkeys. Use your authenticator app."
+msgstr "הדפדפן או המכשיר הזה לא תומכים במפתחות גישה. אפשר להשתמש באפליקציית האימות."
+
+#: src/features/security/Passkeys.tsx
+msgid "This browser or device cannot use passkeys. Your authenticator app works as before."
+msgstr "הדפדפן או המכשיר הזה לא תומכים במפתחות גישה. אפליקציית האימות עובדת כרגיל."
+
 #: src/features/shops/EtsyCallbackPage.tsx
 msgid "This connection link has expired or was already used. Start again from Shops."
 msgstr "קישור החיבור פג או כבר נוצל. אפשר להתחיל מחדש מעמוד החנויות."
@@ -5373,6 +5462,7 @@ msgstr "המכשיר הזה"
 #: src/features/auth/ForgotPasswordPage.tsx
 #: src/features/auth/ResetPasswordPage.tsx
 #: src/features/auth/SecondFactorPage.tsx
+#: src/features/security/Passkeys.tsx
 #: src/features/shops/connectEtsy.tsx
 #: src/features/team/TeamPage.tsx
 msgid "This did not work. Try again shortly."
@@ -5582,6 +5672,7 @@ msgstr "תום"
 #: src/features/auth/ResetPasswordPage.tsx
 #: src/features/auth/SecondFactorPage.tsx
 #: src/features/auth/SignInPage.tsx
+#: src/features/security/Passkeys.tsx
 msgid "Too many attempts. Wait 15 minutes and try again."
 msgstr "יותר מדי ניסיונות. המתינו 15 דקות ונסו שוב."
 
@@ -5715,6 +5806,10 @@ msgid "Two-step code"
 msgstr "קוד אימות"
 
 #: src/features/security/SecurityPage.tsx
+msgid "Two-step confirmed"
+msgstr "אומת בשני שלבים"
+
+#: src/features/security/SecurityPage.tsx
 msgid "Two-step sign-in"
 msgstr "אימות דו־שלבי"
 
@@ -5729,10 +5824,6 @@ msgstr "אימות דו־שלבי פעיל"
 #: src/app/shell/NotificationBell.tsx
 msgid "Two-step sign-in was set up"
 msgstr "הוגדרה כניסה דו־שלבית"
-
-#: src/app/shell/NotificationBell.tsx
-msgid "Two-step sign-in was turned off"
-msgstr "הכניסה הדו־שלבית בוטלה"
 
 #: src/features/team/TeamPage.tsx
 msgid "Two-step sign-in:"
@@ -5786,10 +5877,22 @@ msgstr "דחוף"
 msgid "Usage:"
 msgstr "שימוש:"
 
+#: src/features/auth/SecondFactorPage.tsx
+msgid "Use a code instead"
+msgstr "שימוש בקוד במקום"
+
 #: src/features/auth/AcceptInvitePage.tsx
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "Use between 12 and 128 characters."
 msgstr "השתמש/י ב־12 עד 128 תווים."
+
+#: src/features/auth/SecondFactorPage.tsx
+msgid "Use Face ID / fingerprint instead"
+msgstr "שימוש ב-Face ID / בטביעת אצבע במקום"
+
+#: src/features/auth/SecondFactorPage.tsx
+msgid "Use Face ID, Touch ID, Windows Hello or your fingerprint on this device."
+msgstr "אפשר להשתמש ב-Face ID, ב-Touch ID, ב-Windows Hello או בטביעת אצבע במכשיר הזה."
 
 #: src/features/customers/CustomersDemos.tsx
 #: src/features/work/demoScreens.tsx

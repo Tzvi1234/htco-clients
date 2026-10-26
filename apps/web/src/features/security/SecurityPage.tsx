@@ -2,6 +2,7 @@ import { Trans, useLingui } from "@lingui/react/macro";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 
+import { Passkeys } from "./Passkeys.tsx";
 import {
   apiError,
   authKeys,
@@ -52,6 +53,7 @@ export function SecurityPage() {
         <FlowRow layout="main-side">
           <Devices />
           <Aside>
+            <Passkeys />
             <RecoveryDemo />
           </Aside>
         </FlowRow>
@@ -74,10 +76,17 @@ function SecondFactor() {
       meta={<Trans>Required for Owners and Admins</Trans>}
       lead={
         enrolled === undefined ? undefined : enrolled ? (
-          <Trans>
-            Signing in asks for a code from your authenticator app, so a password alone is not
-            enough.
-          </Trans>
+          mfa.data?.factors.some((f) => f.kind === "webauthn" && f.verified) === true ? (
+            <Trans>
+              Signing in asks for your passkey or a code from your authenticator app, so a password
+              alone is not enough.
+            </Trans>
+          ) : (
+            <Trans>
+              Signing in asks for a code from your authenticator app, so a password alone is not
+              enough.
+            </Trans>
+          )
         ) : (
           <Trans>
             Add an authenticator app: without it, a stolen password is enough to get in.
@@ -92,15 +101,15 @@ function SecondFactor() {
             tone={enrolled === false ? "tertiary" : undefined}
           />
           <Figure
-            label={t`Codes set up`}
+            label={t`Second factors`}
             value={<N>{String(mfa.data?.factors.filter((f) => f.verified).length ?? "…")}</N>}
-            note={t`Authenticator app`}
+            note={mfa.data?.passkeys === true ? t`Apps and passkeys` : t`Authenticator app`}
           />
           <Figure
             label={t`This session`}
             value={
               <span className="text-title-lg">
-                {session.data?.assurance === "aal2" ? t`Confirmed with a code` : t`Password only`}
+                {session.data?.assurance === "aal2" ? t`Two-step confirmed` : t`Password only`}
               </span>
             }
           />
@@ -143,7 +152,7 @@ function SecondFactor() {
   );
 }
 
-/** Recovery codes and passkeys: planned with MFA recovery, so a demo. */
+/** Recovery codes: planned with MFA recovery, so a demo. Passkeys are real (issue #113). */
 function RecoveryDemo() {
   const { t } = useLingui();
   return (
@@ -159,13 +168,6 @@ function RecoveryDemo() {
                 <>
                   <Dot tone="ink" />
                   {t`Never`}
-                </>,
-              ],
-              [
-                t`Passkey:`,
-                <>
-                  <Dot tone="muted" />
-                  {t`Off`}
                 </>,
               ],
             ]}

@@ -18,7 +18,7 @@ if (container === null) throw new Error("index.html has no #root element");
 const storage = deviceStorage();
 
 // Development only: `?demo` (signed in), `?demo=shops` (signed in, with shops in each connection
-// state), `?demo=mfa` (the authenticator code step), `?demo=history` (orders all older than 30 days), `?demo=no-workspace` or `?demo=signed-out` runs the app on the in-memory API used by the tests, to review
+// state), `?demo=mfa` (the authenticator code step), `?demo=passkey` (the passkey step), `?demo=history` (orders all older than 30 days), `?demo=no-workspace` or `?demo=signed-out` runs the app on the in-memory API used by the tests, to review
 // screens without a local API. Connecting a shop asks for the code 123456 and comes straight back
 // to the Etsy callback. Production builds drop this branch.
 const demo = import.meta.env.DEV ? new URLSearchParams(window.location.search).get("demo") : null;
@@ -32,11 +32,17 @@ const api =
         // Signed in with a password only: the authenticator code step.
         if (demo === "mfa")
           return fakeBackend({ signedIn: true, enrolled: true, assurance: "aal1" }).client;
+        // `?demo=passkey`: the same step with a passkey, offered first (issue #113).
+        const passkeys = { passkeysOffered: true, passkeys: [{ id: "pk-1", name: "iPhone" }] };
+        if (demo === "passkey")
+          return fakeBackend({ signedIn: true, enrolled: true, assurance: "aal1", ...passkeys })
+            .client;
         if (demo === "no-workspace") return fakeBackend({ signedIn: true, member: false }).client;
         return fakeBackend({
           signedIn: true,
           enrolled: true,
           assurance: "aal2",
+          ...passkeys,
           authorizationUrl: `/integrations/etsy/callback?code=demo-code&state=demo-state&demo=${demo}`,
           ...(demo === "shops" || demo === "history"
             ? (() => {

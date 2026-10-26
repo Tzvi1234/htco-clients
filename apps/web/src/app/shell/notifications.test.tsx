@@ -89,7 +89,7 @@ describe("the notification bell", () => {
         "A 2-star review arrived",
         "Listing 1500 is out of stock",
         "Order #77 needs its tracking copied to Etsy",
-        "Two-step sign-in was turned off",
+        "A second factor was removed",
         "Willow & Wick was connected",
         "Willow & Wick was disconnected",
         "Willow & Wick needs reconnecting to Etsy",
