@@ -67,15 +67,29 @@ export const authKeys = {
 };
 
 /**
- * Forget what belongs to the session that ended: who is signed in, and the shops' live data,
- * whose orders carry buyer details filtered for that user's role (Codex review of #35), and the
- * operations health only Owners and Admins see.
+ * Forget everything of the session that ended: every cached answer belongs to that user and role
+ * (shops, members, orders with buyer details, incidents, notifications, the operations health of
+ * the Owner and Admins), and every mutation holds what was submitted and what came back (an
+ * invitation's link, an authenticator's enrolment), so none may reach the next user on this tab
+ * (Codex reviews of #35, #60 and #62; Sage's security review of #48; Quill's review of #62).
+ * In-flight reads are cancelled first, so a late answer cannot land in the next session's cache;
+ * a mutation still in flight loses its callbacks, so its answer reaches nobody.
  */
 export function forgetSession(client: QueryClient): void {
-  client.removeQueries({ queryKey: ["auth"] });
-  client.removeQueries({ queryKey: ["live"] });
-  // The queue and sync health of the Owner and Admins (Codex review of clients #60).
-  client.removeQueries({ queryKey: ["operations"] });
+  void client.cancelQueries();
+  client.removeQueries();
+  const mutations = client.getMutationCache();
+  // A mutation still in flight keeps running: strip its callbacks first, so its late answer
+  // runs no onSuccess or onSettled and writes nothing into the next session (local Codex review
+  // of #62). The answer then lands on a mutation that nothing holds any more.
+  for (const mutation of mutations.getAll())
+    if (mutation.state.status === "pending")
+      mutation.setOptions(
+        mutation.options.mutationFn === undefined
+          ? {}
+          : { mutationFn: mutation.options.mutationFn },
+      );
+  mutations.clear();
 }
 
 /** Who is signed in on this browser; `null` when nobody is. */
