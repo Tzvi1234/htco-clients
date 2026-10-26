@@ -11,7 +11,6 @@ import { cx } from "../../shared/lib/cx.ts";
 import { PHONE_QUERY, useMediaQuery } from "../../shared/lib/useMediaQuery.ts";
 import { Banner } from "../../shared/ui/Banner.tsx";
 import { Button, buttonStyle } from "../../shared/ui/Button.tsx";
-import { ArrowEndIcon, SearchIcon } from "../../shared/ui/icons.tsx";
 import { PageHeader } from "../../shared/ui/PageHeader.tsx";
 import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
 import { Segmented } from "../../shared/ui/Segmented.tsx";
@@ -32,6 +31,8 @@ import {
   LiveNote,
   LiveSkeleton,
   ShopChips,
+  NextGlyph,
+  SearchGlyph,
 } from "../../shared/ui/kit/index.ts";
 import { LiveProblem, ShopReconnectBanner, NoShopYet } from "../shops/index.ts";
 import {
@@ -484,7 +485,7 @@ function Orders({
               className={buttonStyle({ variant: "primary", size: "lg" })}
             >
               <Trans>Open what waits to ship</Trans>
-              <ArrowEndIcon size={14} />
+              <NextGlyph size={14} />
             </Link>
           ) : undefined
         }
@@ -518,7 +519,7 @@ function Orders({
             }}
             className="flex h-10 w-full max-w-[320px] items-center gap-2 rounded-pill border border-line-strong px-4 focus-within:outline-2 focus-within:outline-focus"
           >
-            <SearchIcon size={16} className="shrink-0 text-secondary" />
+            <SearchGlyph size={16} className="shrink-0 text-secondary" />
             <Input
               dir="auto"
               placeholder={t`Order number or SKU`}

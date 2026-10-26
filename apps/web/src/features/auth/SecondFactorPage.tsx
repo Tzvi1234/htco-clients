@@ -1,5 +1,4 @@
 import { Trans, useLingui } from "@lingui/react/macro";
-import { ShieldCheckIcon as ShieldCheck } from "@phosphor-icons/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "@tanstack/react-router";
 import { useState, type SyntheticEvent } from "react";
@@ -8,7 +7,7 @@ import { Button as AriaButton } from "react-aria-components";
 import { AUTH_LINK, AUTH_SUBMIT, AuthLayout } from "./AuthLayout.tsx";
 import { confirmWithPasskey, usePasskeyMessage } from "../security/index.ts";
 import { passkeysSupported } from "../../shared/lib/passkeys.ts";
-import { CodeBoxes, FingerprintGlyph } from "../../shared/ui/kit/index.ts";
+import { CodeBoxes, FingerprintGlyph, ShieldGlyph } from "../../shared/ui/kit/index.ts";
 import { ApiError, apiError, forgetSession, mfaQuery, useApi } from "../../shared/api/api.tsx";
 import { useSignOut } from "../../shared/api/useSignOut.ts";
 import { Button } from "../../shared/ui/Button.tsx";
@@ -350,7 +349,7 @@ export function CodeField({
   return (
     <TextField
       size="lg"
-      icon={ShieldCheck}
+      icon={ShieldGlyph}
       label={t`Code from the app`}
       inputMode="numeric"
       autoComplete="one-time-code"

@@ -5,14 +5,6 @@ import { useAgents } from "../../shared/demo/office.ts";
 import { cx } from "../../shared/lib/cx.ts";
 import { Panel, PanelBody, PanelHeader } from "../../shared/ui/Panel.tsx";
 import {
-  BoltIcon,
-  ChatIcon,
-  CheckIcon,
-  GearIcon,
-  MoreIcon,
-  SearchIcon,
-} from "../../shared/ui/icons.tsx";
-import {
   Avatar,
   CircleButton,
   ClipGlyph,
@@ -36,6 +28,12 @@ import {
   StatusGlyph,
   useStatusLabels,
   type AgentStatus,
+  BoltGlyph,
+  ChatGlyph,
+  CheckGlyph,
+  GearGlyph,
+  MoreGlyph,
+  SearchGlyph,
 } from "../../shared/ui/kit/index.ts";
 
 const L = ({ children }: { children: ReactNode }) => <span className="ltr">{children}</span>;
@@ -108,7 +106,7 @@ function Event({ children, className }: { children: ReactNode; className?: strin
         className,
       )}
     >
-      <BoltIcon size={12} />
+      <BoltGlyph size={12} />
       {children}
     </div>
   );
@@ -306,7 +304,7 @@ export function AllCustomersPanel() {
         meta={<L>6</L>}
         actions={
           <span className="flex h-10 w-[220px] items-center gap-2 rounded-pill border border-line-strong px-3.5 text-body-sm text-muted max-md:hidden">
-            <SearchIcon size={14} />
+            <SearchGlyph size={14} />
             {t`Search customer`}
           </span>
         }
@@ -379,7 +377,7 @@ export function MailDemo({ title }: { title: string }) {
         <PanelHeader
           title={t`Your weekly sales summary`}
           meta={<L>Etsy</L>}
-          actions={<CircleButton label={t`More`} icon={<MoreIcon />} />}
+          actions={<CircleButton label={t`More`} icon={<MoreGlyph />} />}
         />
         <PanelBody className="gap-4 pt-2">
           <div className="max-w-[720px] rounded-card bg-raised p-4 text-body leading-relaxed">
@@ -411,7 +409,7 @@ export function MailDemo({ title }: { title: string }) {
       <Panel className="max-sm:hidden">
         <PanelHeader
           title={<Trans>Lia’s notes</Trans>}
-          actions={<CircleButton label={t`Chat with Lia`} icon={<ChatIcon />} />}
+          actions={<CircleButton label={t`Chat with Lia`} icon={<ChatGlyph />} />}
         />
         <PanelBody className="justify-between gap-6">
           <div className="flex items-center justify-center gap-4">
@@ -432,7 +430,7 @@ export function MailDemo({ title }: { title: string }) {
                     </span>
                   ) : (
                     <span className="flex size-[18px] items-center justify-center rounded-pill bg-inverse text-on-inverse">
-                      <CheckIcon size={10} />
+                      <CheckGlyph size={10} />
                     </span>
                   )
                 }
@@ -478,7 +476,7 @@ export function MarketingDemo({ title }: { title: string }) {
       <Panel>
         <PanelHeader
           title={<Trans>Active campaign</Trans>}
-          actions={<CircleButton label={t`Settings`} icon={<GearIcon />} />}
+          actions={<CircleButton label={t`Settings`} icon={<GearGlyph />} />}
         />
         <PanelBody className="justify-between gap-6">
           <IdBlock label={t`Campaign:`} value={<L>Q4-STAR</L>} />
@@ -528,7 +526,7 @@ export function MarketingDemo({ title }: { title: string }) {
           <Panel key={id}>
             <PanelHeader
               title={name}
-              actions={<CircleButton label={t`Settings`} icon={<GearIcon />} />}
+              actions={<CircleButton label={t`Settings`} icon={<GearGlyph />} />}
             />
             <PanelBody className="justify-between gap-4">
               <IdBlock label={t`Campaign:`} value={<L>{id}</L>} />

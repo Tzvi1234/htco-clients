@@ -1,10 +1,10 @@
-import { StorefrontIcon as Storefront } from "@phosphor-icons/react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
 
 import { Button } from "./Button.tsx";
 import { EmptyState, StateCard } from "./EmptyState.tsx";
 import { useBi } from "../../test/stories.ts";
+import { BagGlyph } from "./kit/index.ts";
 
 const meta = {
   title: "Components/EmptyState",
@@ -30,7 +30,7 @@ type Story = StoryObj<typeof meta>;
 
 /** The shape of what will appear, the record type's icon, and one action. */
 export const WithAction: Story = {
-  args: { icon: Storefront },
+  args: { icon: BagGlyph },
   render: function Render(args) {
     const say = useBi();
     return (
@@ -54,10 +54,10 @@ export const WithAction: Story = {
 };
 
 /** Without an action: a plain "not yet". */
-export const NoAction: Story = { args: { icon: Storefront } };
+export const NoAction: Story = { args: { icon: BagGlyph } };
 
 /** Inside a table or panel, without a frame of its own. */
-export const Bare: Story = { args: { icon: Storefront, bare: true } };
+export const Bare: Story = { args: { icon: BagGlyph, bare: true } };
 
 /** The card under every state, without the preview rows (here as a page-level state). */
 export const PlainStateCard: Story = {

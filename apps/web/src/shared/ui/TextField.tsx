@@ -1,4 +1,3 @@
-import type { Icon } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
 import {
   FieldError,
@@ -11,6 +10,7 @@ import {
 } from "react-aria-components";
 
 import { cx } from "../lib/cx.ts";
+import type { Glyph } from "./kit/glyphs.tsx";
 
 export interface TextFieldProps extends Omit<AriaTextFieldProps, "className" | "children"> {
   label: string;
@@ -20,7 +20,7 @@ export interface TextFieldProps extends Omit<AriaTextFieldProps, "className" | "
   ltr?: boolean;
   size?: "md" | "lg";
   /** A leading icon inside the field (envelope for email, lock for password). */
-  icon?: Icon;
+  icon?: Glyph;
   placeholder?: string;
   /** A control at the end of the field, such as "show password". */
   end?: ReactNode;
@@ -61,7 +61,6 @@ export function TextField({
           <Lead
             aria-hidden="true"
             size={size === "lg" ? 18 : 15}
-            weight="duotone"
             className="shrink-0 text-icon-muted transition-colors group-focus-within:text-accent-text"
           />
         )}
