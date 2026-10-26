@@ -14,7 +14,7 @@ import {
   type IncidentSummary,
   type Step,
 } from "./api.ts";
-import { IncidentState, SEVERITY_RANK, Severity, useIncidentWords } from "./IncidentState.tsx";
+import { IncidentState, Severity, mostUrgent, useIncidentWords } from "./IncidentState.tsx";
 import { useNow } from "../../shared/lib/time.ts";
 import { FormAlert } from "../../shared/ui/FormAlert.tsx";
 import { ApiError, meQuery, shopsQuery, useApi } from "../../shared/api/api.tsx";
@@ -119,15 +119,6 @@ function useDateTime(): (iso: string) => string {
       hour: "2-digit",
       minute: "2-digit",
     }).format(new Date(iso));
-}
-
-/** The most urgent open incident: the highest severity, then the oldest. */
-function mostUrgent(items: readonly IncidentSummary[]): IncidentSummary | undefined {
-  return [...items].sort(
-    (a, b) =>
-      (SEVERITY_RANK[a.severity] ?? 9) - (SEVERITY_RANK[b.severity] ?? 9) ||
-      Date.parse(a.detected_at) - Date.parse(b.detected_at),
-  )[0];
 }
 
 function Center({ organizationId }: { organizationId: string }) {

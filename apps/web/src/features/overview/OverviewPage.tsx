@@ -8,6 +8,7 @@ import { useEffect, useId, useState, type ReactNode } from "react";
 import { HEROES } from "./heroes.ts";
 import { shopCardState } from "../../app/shell/ShopSwitcher.tsx";
 import {
+  ApiError,
   meQuery,
   needsReconnecting,
   sessionQuery,
@@ -26,7 +27,6 @@ import {
   Avatar,
   CheckGlyph,
   DemoPart,
-  DemoTag,
   Dot,
   BarChart,
   Figure,
@@ -36,10 +36,10 @@ import {
   FlowRow,
   Focus,
   IdBlock,
+  LiveSkeleton,
   N,
   ProgressBar,
   Status,
-  StatusGlyph,
   StripCard,
   SubTabs,
   TabPanel,
@@ -52,6 +52,7 @@ import {
   GearGlyph,
 } from "../../shared/ui/kit/index.ts";
 import { ShopReconnectBanner } from "../shops/index.ts";
+import { Severity, incidentsQuery, mostUrgent, useIncidentWords } from "../incidents/index.ts";
 import { overviewQuery, type ShopOverview } from "../../shared/api/live.ts";
 import { useCount, useMoney } from "../../shared/i18n/format.ts";
 
@@ -78,7 +79,8 @@ export function OverviewPage() {
           onChange={setTab}
           tabs={[
             { id: "today", label: t`Today` },
-            { id: "office", label: t`Office`, demo: <DemoTag /> },
+            // Mixed: the incidents are live, the pulse and the tickets carry their own Demo tags.
+            { id: "office", label: t`Office` },
           ]}
         />
         <TabPanel idBase={tabs} tab={tab}>
@@ -631,7 +633,7 @@ function GettingStarted() {
 
 /* ---------------------------------------------------------------- the office (demo) */
 
-/** The office's pulse, tickets and incidents: designed, not built, so all of it is Demo. */
+/** The office's pulse and tickets (designed, not built: Demo) beside the live open incidents. */
 function OfficeTab() {
   const { t } = useLingui();
   return (
@@ -675,18 +677,88 @@ function OfficeTab() {
             </IdBlock>
           </DemoPart>
         </Panel>
-        <Panel>
-          <PanelHeader title={t`Incidents`} />
-          <DemoPart tag="edge" className="px-6 pb-6">
-            <IdBlock label={t`Open incidents:`} value={<N>1</N>}>
-              <p className="m-0 mt-1 inline-flex items-center gap-1.5 text-caption text-secondary">
-                <StatusGlyph status="failed" />
-                <N>tracking.sync</N>
-              </p>
-            </IdBlock>
-          </DemoPart>
-        </Panel>
+        <OfficeIncidents />
       </FlowRow>
     </>
+  );
+}
+
+/**
+ * The open incidents, live (platform slice 6.5): how many are open in the user's workspaces and
+ * the most urgent one (the highest severity, then the oldest), which opens in the incident
+ * center. The same query and cache as the incident center; never a zero it did not read.
+ */
+function OfficeIncidents() {
+  const { t } = useLingui();
+  const api = useApi();
+  const count = useCount();
+  const words = useIncidentWords();
+  const me = useQuery(meQuery(api));
+  const ids = (me.data?.memberships ?? []).map((m) => m.organization_id);
+  const lists = useQueries({
+    queries: ids.map((id) => incidentsQuery(api, id, "open")),
+  });
+  const read = lists.flatMap((list, index) =>
+    list.data === undefined
+      ? []
+      : list.data.items.map((incident) => ({ ...incident, organizationId: ids[index] ?? "" })),
+  );
+  const failed = lists.find((list) => list.isError)?.error;
+  const done = me.data !== undefined && lists.every((list) => !list.isPending);
+  const more = lists.some((list) => list.data?.more === true);
+  const urgent = mostUrgent(read);
+  const known = done && failed === undefined;
+  return (
+    <Panel>
+      <PanelHeader
+        title={t`Incidents`}
+        actions={
+          <Link to="/incidents" className={cx(TEXT_LINK, "me-4 text-caption")}>
+            {t`All incidents`}
+          </Link>
+        }
+      />
+      <div className="px-6 pb-6">
+        {!done ? (
+          <LiveSkeleton rows={2} label={t`Loading the open incidents`} />
+        ) : failed !== undefined && read.length === 0 ? (
+          <p role="alert" className="m-0 text-body-sm text-secondary">
+            {failed instanceof ApiError && failed.status === 403
+              ? t`Your role does not see incidents.`
+              : t`The incidents could not be loaded. Try again shortly.`}
+          </p>
+        ) : (
+          <IdBlock
+            label={t`Open incidents:`}
+            value={<N>{more ? `${count(read.length)}+` : count(read.length)}</N>}
+          >
+            {urgent === undefined ? (
+              known ? (
+                <p className="m-0 mt-1 text-caption text-secondary">{t`No open incident.`}</p>
+              ) : null
+            ) : (
+              <p className="m-0 mt-1 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-caption">
+                <Link
+                  to="/incidents/{-$incidentId}"
+                  params={{ incidentId: urgent.id }}
+                  search={{ workspace: urgent.organizationId }}
+                  className={TEXT_LINK}
+                >
+                  {urgent.receipt_id === null
+                    ? words.cause(urgent.cause)
+                    : t`${words.cause(urgent.cause)}, order #${urgent.receipt_id}`}
+                </Link>
+                <Severity severity={urgent.severity} />
+              </p>
+            )}
+            {failed !== undefined && read.length > 0 ? (
+              <p className="m-0 mt-1 text-caption text-secondary">
+                {t`One workspace's incidents could not be read.`}
+              </p>
+            ) : null}
+          </IdBlock>
+        )}
+      </div>
+    </Panel>
   );
 }

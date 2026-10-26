@@ -6,6 +6,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { App } from "../../app/App.tsx";
 import { memoryStorage } from "../../shared/lib/storage.ts";
 import { fakeBackend, type FakeState } from "../../test/fakeApi.ts";
+import { demoIncidents } from "../../test/fakeIncidents.ts";
 
 async function open(state: Partial<FakeState> = {}, locale: "en" | "he" = "en") {
   const backend = fakeBackend({ signedIn: true, enrolled: true, assurance: "aal2", ...state });
@@ -158,10 +159,91 @@ describe("Home (Design 1C P.home)", () => {
     const numbers = screen.getByRole("list", { name: "Key numbers" });
     expect(within(numbers).getByText("Revenue").closest("[data-demo-part]")).toBeNull();
     await user.click(screen.getByRole("tab", { name: /Office/ }));
+    // The pulse and the tickets; the incidents are live (below).
     const officeParts = screen.getByRole("tabpanel").querySelectorAll("[data-demo-part]");
-    expect(officeParts.length).toBeGreaterThanOrEqual(3);
+    expect(officeParts).toHaveLength(2);
     for (const part of officeParts) {
       expect(part.querySelector(":scope > [inert][aria-hidden='true']")).not.toBeNull();
     }
+  });
+});
+
+// Home › Office › Incidents on the live incident list (platform slice 6.5): how many are open
+// and the most urgent one, leading into the incident center. The same query and cache as the
+// incident center; invented incidents only.
+describe("Home › Office › Incidents", () => {
+  const ORG = "a0000000-0000-7000-8000-000000000000";
+  const SHOPS = [
+    { id: "d0000000-0000-7000-8000-000000000001", name: "Willow & Wick", status: "active" },
+    { id: "d0000000-0000-7000-8000-000000000002", name: "Paper Fox", status: "active" },
+  ];
+
+  async function office(state: Partial<FakeState> = {}, locale: "en" | "he" = "en") {
+    const opened = await open({ shops: SHOPS, ...state }, locale);
+    await opened.user.click(
+      screen.getByRole("tab", { name: locale === "he" ? /המשרד/ : /Office/ }),
+    );
+    const incidents = panel(locale === "he" ? "תקלות" : "Incidents");
+    return { ...opened, incidents };
+  }
+
+  it("counts the open incidents and leads with the most urgent, not a demo", async () => {
+    const { incidents } = await office({ incidents: demoIncidents(SHOPS.map((s) => s.id)) });
+
+    expect(incidents.closest("[data-demo-part]")).toBeNull();
+    expect(incidents.querySelector("[data-demo-part]")).toBeNull();
+    expect(await within(incidents).findByText("3")).toBeInTheDocument();
+    // The most urgent: the highest severity (critical), then the oldest.
+    const urgent = within(incidents).getByRole("link", { name: /Automation gave up/ });
+    expect(urgent).toHaveAttribute(
+      "href",
+      `/incidents/e0000000-0000-7000-8000-000000000003?workspace=${ORG}`,
+    );
+    expect(within(incidents).getByText("Critical")).toBeInTheDocument();
+    expect(within(incidents).getByRole("link", { name: "All incidents" })).toHaveAttribute(
+      "href",
+      "/incidents",
+    );
+  });
+
+  it("says when nothing is open", async () => {
+    const { incidents } = await office();
+
+    expect(await within(incidents).findByText("No open incident.")).toBeInTheDocument();
+    expect(within(incidents).getByText("0")).toBeInTheDocument();
+  });
+
+  it.each([
+    ["forbidden", "Your role does not see incidents."],
+    ["fail", "The incidents could not be loaded. Try again shortly."],
+  ] as const)("says why when the list is %s, never a zero", async (trouble, words) => {
+    const { incidents } = await office({ incidentsTrouble: trouble });
+
+    expect(await within(incidents).findByText(words)).toBeInTheDocument();
+    expect(within(incidents).queryByText("0")).toBeNull();
+  });
+
+  it("asks for the open incidents of the workspace by name", async () => {
+    const { backend } = await office({ incidents: demoIncidents(SHOPS.map((s) => s.id)) });
+    await vi.waitFor(() => {
+      expect(backend.requests.some((r) => new URL(r.url).pathname.endsWith("/v1/incidents"))).toBe(
+        true,
+      );
+    });
+
+    for (const request of backend.requests.filter((r) =>
+      new URL(r.url).pathname.endsWith("/v1/incidents"),
+    )) {
+      const query = new URL(request.url).searchParams;
+      expect(query.get("organization_id")).toBe(ORG);
+      expect(query.get("state")).toBe("open");
+    }
+  });
+
+  it("speaks Hebrew", async () => {
+    const { incidents } = await office({ incidents: demoIncidents(SHOPS.map((s) => s.id)) }, "he");
+
+    expect(await within(incidents).findByText("3")).toBeInTheDocument();
+    expect(within(incidents).getByRole("link", { name: "כל התקלות" })).toBeInTheDocument();
   });
 });
