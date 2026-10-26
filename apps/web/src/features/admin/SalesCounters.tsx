@@ -121,9 +121,10 @@ export function SalesCounters({
         rows={shops.map((shop) => ({
           key: shop.id,
           cells: [
-            <div key="n" className="flex min-w-0 flex-col gap-1">
+            <div key="n" className="flex min-w-0 flex-col gap-1 whitespace-normal">
               <span dir="auto">{shop.name}</span>
-              <span className="sm:hidden">
+              {/* Pixel on #73: a long message wraps under the shop, never widening the row. */}
+              <span className="min-w-0 sm:hidden">
                 <RunState organizationId={organizationId} id={runOf(shop)} said={said[shop.id]} />
               </span>
             </div>,
@@ -221,7 +222,9 @@ function RecountButton({
   onPress: () => void;
 }) {
   const run = useRun(organizationId, id);
-  const running = id !== undefined && (run.data === undefined || inFlight(run.data.state));
+  // A run that cannot be read (a 4xx) never locks the button for good (quill on #73).
+  const running =
+    id !== undefined && !run.isError && (run.data === undefined || inFlight(run.data.state));
   return (
     <Button variant="secondary" size="sm" isDisabled={busy || running} onPress={onPress}>
       <Trans>Recount sales</Trans>
@@ -242,7 +245,7 @@ function RunState({
   const { t } = useLingui();
   const run = useRun(organizationId, id);
   if (said !== undefined && said !== "")
-    return <span className="text-body-sm text-secondary">{said}</span>;
+    return <span className="block text-body-sm whitespace-normal text-secondary">{said}</span>;
   if (id === undefined) return <span className="text-secondary">—</span>;
   const state = run.data?.state;
   if (state === "succeeded") {
@@ -255,10 +258,20 @@ function RunState({
       />
     );
   }
-  if (state === "dead_lettered" || state === "failed" || state === "cancelled")
+  if (run.isError) return <span className="text-secondary">—</span>;
+  if (
+    state === "dead_lettered" ||
+    state === "failed" ||
+    state === "cancelled" ||
+    state === "compensated"
+  )
+    // Pixel on #73: a status dot and a short word like every state, then where to look.
     return (
-      <span className="text-body-sm text-secondary">
-        {t`It did not finish. See it under dead letters.`}
+      <span className="flex flex-col gap-0.5 whitespace-normal">
+        <Status status="failed" label={t`Did not finish`} />
+        <span className="text-caption text-secondary">
+          {t`It did not finish. See it under dead letters.`}
+        </span>
       </span>
     );
   if (state === "running") return <Status status="running" label={t`Recounting`} />;

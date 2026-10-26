@@ -133,6 +133,9 @@ describe("Sales counters: Recount sales (Phase 5 activation 2b)", { timeout: 15_
 
     backend.state.recounts.finish("dead_lettered");
     await shows(row, "It did not finish. See it under dead letters.", 8000);
+    // Pixel on #73: a status dot and a short word, like every other state, then the pointer.
+    const word = within(row).getAllByText("Did not finish")[0];
+    expect(word?.closest("span")?.querySelector("svg[data-status]")).not.toBeNull();
   });
 
   it("follows a new run from the platform's `pending` to Recounted (quill on #73)", async () => {
@@ -208,8 +211,7 @@ describe("Sales counters: Recount sales (Phase 5 activation 2b)", { timeout: 15_
     });
     // The server made the run, but its answer was lost: try again sends the same key.
     backend.state.recountLoseAnswer = false;
-    const again = within(row).queryByRole("button", { name: "Recount sales" });
-    if (again !== null && !again.hasAttribute("disabled")) await user.click(again);
+    await user.click(within(row).getByRole("button", { name: "Recount sales" }));
     await user.click(
       within(await screen.findByRole("dialog")).getByRole("button", { name: "Recount" }),
     );
@@ -233,6 +235,23 @@ describe("Sales counters: Recount sales (Phase 5 activation 2b)", { timeout: 15_
     backend.state.recountListHides = true; // 20 newer runs push it off the first page
     backend.state.recounts.finish("succeeded");
     await shows(row, "Recounted, 7 products", 8000);
+  });
+
+  it("a 4xx refusal drops its key, so the next sheet sends a new one (quill on #73)", async () => {
+    const { user, backend } = await open({ recountRefused: true });
+    const panel = await counters();
+    const row = within(panel).getByRole("row", { name: /Willow & Wick/ });
+    for (let attempt = 0; attempt < 2; attempt += 1) {
+      await user.click(within(row).getByRole("button", { name: "Recount sales" }));
+      await user.click(
+        within(await screen.findByRole("dialog")).getByRole("button", { name: "Recount" }),
+      );
+      await vi.waitFor(() => {
+        expect(backend.state.recounts.started).toHaveLength(attempt + 1);
+      });
+    }
+    const [first, second] = backend.state.recounts.started;
+    expect(first?.key).not.toBe(second?.key);
   });
 
   it("is in Hebrew too", async () => {

@@ -1517,6 +1517,10 @@ msgstr "Developer"
 msgid "Diagnosis"
 msgstr "Diagnosis"
 
+#: src/features/admin/SalesCounters.tsx
+msgid "Did not finish"
+msgstr "Did not finish"
+
 #: src/features/commerce/ProductsPage.tsx
 msgid "Digital"
 msgstr "Digital"

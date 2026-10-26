@@ -1517,6 +1517,10 @@ msgstr "מפתח/ת"
 msgid "Diagnosis"
 msgstr "אבחון"
 
+#: src/features/admin/SalesCounters.tsx
+msgid "Did not finish"
+msgstr "לא הסתיים"
+
 #: src/features/commerce/ProductsPage.tsx
 msgid "Digital"
 msgstr "דיגיטלי"
