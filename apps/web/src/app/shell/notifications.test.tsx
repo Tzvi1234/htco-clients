@@ -144,6 +144,76 @@ describe("the notification bell", () => {
     expect(screen.getAllByRole("listitem").map((item) => item.textContent)).toEqual(expected);
   });
 
+  // Platform #163: each escalation of an incident notifies the Owners and Admins.
+  it.each([
+    [
+      "en",
+      "Incident escalated: Automation gave up",
+      "Incident escalated: Tracking missing, order #77",
+    ],
+    ["he", "תקלה הוסלמה: אוטומציה נכשלה סופית", "תקלה הוסלמה: חסר מספר מעקב, הזמנה #77"],
+  ] as const)(
+    "says an escalated incident in words, with its order when it has one (%s)",
+    (locale, bare, withOrder) => {
+      const notices = [
+        fakeNotification({
+          id: "esc-1",
+          kind: "incident_escalated",
+          params: { incident_id: "e1", cause: "automation_dead_lettered", severity: "critical" },
+        }),
+        fakeNotification({
+          id: "esc-2",
+          kind: "incident_escalated",
+          params: {
+            incident_id: "e2",
+            cause: "tracking_missing",
+            severity: "high",
+            receipt_id: "77",
+          },
+        }),
+      ];
+      function Texts() {
+        const text = useNoticeText(() => undefined);
+        return (
+          <ul>
+            {notices.map((notice) => (
+              <li key={notice.id}>{text(notice)}</li>
+            ))}
+          </ul>
+        );
+      }
+      render(
+        <LocaleProvider initialLocale={locale} storage={undefined}>
+          <Texts />
+        </LocaleProvider>,
+      );
+      expect(screen.getAllByRole("listitem").map((item) => item.textContent)).toEqual([
+        bare,
+        withOrder,
+      ]);
+    },
+  );
+
+  it("opens an escalated incident from the bell", async () => {
+    const escalated = fakeNotification({
+      id: "f0000000-0000-7000-8000-0000000002e1",
+      kind: "incident_escalated",
+      params: {
+        incident_id: "e0000000-0000-7000-8000-000000000003",
+        cause: "automation_dead_lettered",
+        severity: "critical",
+      },
+      incident_id: "e0000000-0000-7000-8000-000000000003",
+      shop_id: LINEN,
+    });
+    const { user } = await open({ notifications: [escalated] });
+    await user.click(await bell("Notifications, 1 unread"));
+    const panel = await screen.findByRole("dialog", { name: "Notifications" });
+    await user.click(within(panel).getByText("Incident escalated: Automation gave up"));
+
+    expect(await screen.findByRole("region", { name: "Automation gave up" })).toBeInTheDocument();
+  });
+
   it("shows the newest six and says how many there are", async () => {
     const notifications = Array.from({ length: 9 }, (_, index) =>
       fakeNotification({
