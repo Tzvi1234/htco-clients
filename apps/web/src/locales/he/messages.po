@@ -2264,6 +2264,10 @@ msgstr "השפעה"
 msgid "In development"
 msgstr "בפיתוח"
 
+#: src/shared/ui/kit/status.tsx
+msgid "In progress"
+msgstr "בטיפול"
+
 #: src/features/commerce/ProductsPage.tsx
 msgid "in stock"
 msgstr "במלאי"

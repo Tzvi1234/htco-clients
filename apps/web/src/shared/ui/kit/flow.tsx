@@ -249,7 +249,12 @@ export function SubTabs<K extends string>({
   const { locale } = useLocale();
   const rtl = directionOf(locale) === "rtl";
   const list = useRef<HTMLDivElement>(null);
-  const [mark, setMark] = useState<{ start: number; width: number } | null>(null);
+  const [mark, setMark] = useState<{
+    start: number;
+    width: number;
+    top: number;
+    height: number;
+  } | null>(null);
   const index = Math.max(
     0,
     tabs.findIndex((tab) => tab.id === value),
@@ -270,7 +275,9 @@ export function SubTabs<K extends string>({
       const start = rtl
         ? box.right - element.clientLeft - own.right - element.scrollLeft
         : own.left - box.left - element.clientLeft + element.scrollLeft;
-      setMark({ start, width: own.width });
+      // Its row too: on phones the tabs wrap onto a second line rather than run off the screen.
+      const top = own.top - box.top - element.clientTop;
+      setMark({ start, width: own.width, top, height: own.height });
     };
     measure();
     // The capsule follows its tab's own size too: a web font that arrives late widens the label
@@ -326,7 +333,9 @@ export function SubTabs<K extends string>({
       onKeyDown={keys}
       className={cx(
         "k-tabs relative flex max-w-full shrink-0 items-center gap-1 self-start rounded-pill border border-line-strong p-1",
-        "max-sm:self-stretch max-sm:overflow-x-auto max-sm:[scrollbar-width:none]",
+        // Phones: every tab stays in sight. Tabs that do not fit one line wrap onto a second
+        // (Pixel's design notes: Shipping's ran 53 px past a pill that hid its scrollbar).
+        "max-sm:flex-wrap max-sm:self-stretch max-sm:rounded-panel",
         className,
       )}
     >
@@ -335,7 +344,13 @@ export function SubTabs<K extends string>({
         className="k-tabs-mark pointer-events-none absolute inset-y-1 rounded-pill bg-tertiary-subtle"
         style={
           measured
-            ? { insetInlineStart: `${String(mark.start)}px`, width: `${String(mark.width)}px` }
+            ? {
+                insetInlineStart: `${String(mark.start)}px`,
+                width: `${String(mark.width)}px`,
+                top: `${String(mark.top)}px`,
+                bottom: "auto",
+                height: `${String(mark.height)}px`,
+              }
             : { opacity: 0 }
         }
       />

@@ -49,9 +49,9 @@ const TILE = {
 
 /**
  * A record type's icon (Shops, Orders, Security): a quiet white tile with a hairline and a
- * monochrome duotone Phosphor glyph, at 20, 32 or 40 px. Colour is kept for meaning (status,
- * the decision ring) and for solid accent surfaces, never for icons. Decorative; the label
- * beside it names the record type.
+ * monochrome glyph from the kit (kit/glyphs.tsx), at 20, 32 or 40 px. Colour is kept for
+ * meaning (status, the decision ring) and for solid accent surfaces, never for icons.
+ * Decorative; the label beside it names the record type.
  */
 export function ObjectIcon({
   icon: Shape,

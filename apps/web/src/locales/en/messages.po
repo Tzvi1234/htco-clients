@@ -2264,6 +2264,10 @@ msgstr "Impact"
 msgid "In development"
 msgstr "In development"
 
+#: src/shared/ui/kit/status.tsx
+msgid "In progress"
+msgstr "In progress"
+
 #: src/features/commerce/ProductsPage.tsx
 msgid "in stock"
 msgstr "in stock"
