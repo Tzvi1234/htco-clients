@@ -7,6 +7,8 @@ import { App } from "../../app/App.tsx";
 import { memoryStorage } from "../../shared/lib/storage.ts";
 import { fakeBackend, fakeIntegration, type FakeState } from "../../test/fakeApi.ts";
 import { fakeNotification } from "../../test/fakeIncidents.ts";
+import { fakeQuoteBoard } from "../../test/fakeQuotes.ts";
+import type { QuoteCard } from "./api.ts";
 
 // Commerce › Suppliers, "New product quotes" (platform slice 7.16), on the in-memory API with
 // invented quotes: the server's order (cheapest first), the cheapest choosable one emphasised, an
@@ -67,6 +69,52 @@ describe("New product quotes", () => {
     // A product still without quotes says so.
     expect(screen.getByText(/No quote yet/)).toBeInTheDocument();
     expect(screen.queryByTestId("demo-content")).not.toBeInTheDocument();
+  });
+
+  // Pixel2 on #81: in the fixed-height header the chips of four shops wrapped over the sentence.
+  it("puts the shop chips on their own row under the sentence, never in the panel header", async () => {
+    const shops = ["Willow & Wick", "Paper Fox", "Linen Lane Studio", "Copper Kiln"].map(
+      (name, index) => ({
+        id: `d0000000-0000-7000-8000-00000000000${String(index + 1)}`,
+        name,
+        status: "active",
+      }),
+    );
+    await open({ shops, integrations: shops.map((s) => fakeIntegration(s.id, "ok")) });
+    await settled();
+
+    const heading = await screen.findByRole("heading", {
+      level: 2,
+      name: "Waiting for a supplier",
+    });
+    const group = screen.getByRole("group", { name: "Shop" });
+    expect(within(group).getAllByRole("button")).toHaveLength(4);
+    // Not inside the header row the heading sits in, and after the intro sentence.
+    expect(heading.parentElement?.parentElement?.contains(group)).toBe(false);
+    const sentence = screen.getByText(/waiting for you to choose a supplier/);
+    expect(sentence.compareDocumentPosition(group) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
+  // Pixel2 on #81: the expired card came first (cheapest total), so the highlighted one was second.
+  it("lists the choosable quotes first in the server's order, the expired ones last", async () => {
+    const [product] = fakeQuoteBoard([1777]);
+    if (product === undefined) throw new Error("the demo's product");
+    const [cheap, express, expired] = product.quotes as [QuoteCard, QuoteCard, QuoteCard];
+    // As the server sorts them by total: the expired one is the cheapest, so it comes first.
+    await open({ quotes: { [WILLOW]: [{ ...product, quotes: [expired, cheap, express] }] } });
+    await settled();
+
+    const list = await screen.findByRole("list", { name: /^Quotes for / });
+    const cards = within(list).getAllByRole("listitem");
+    expect(cards.map((c) => within(c).getByRole("heading", { level: 3 }).textContent)).toEqual([
+      "Guangzhou Leather Works",
+      "Express Hides Co.",
+      "Old Mill Supply",
+    ]);
+    const [first, , last] = cards;
+    if (first === undefined || last === undefined) throw new Error("three cards");
+    expect(within(first).getByText("Lowest total")).toBeInTheDocument();
+    expect(last).toHaveAttribute("aria-disabled", "true");
   });
 
   it("keeps amounts left-to-right in Hebrew", async () => {

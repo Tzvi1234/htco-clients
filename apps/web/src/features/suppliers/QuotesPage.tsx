@@ -54,6 +54,14 @@ export function QuotesPage() {
   );
 }
 
+/**
+ * The shop chips on their own row in the panel body, never in the fixed-height header, where four
+ * shops wrapped over the sentence (Pixel2 on #81). Empty (one shop) takes no room.
+ */
+function ChipsRow({ chips }: { chips: ReactNode }) {
+  return <div className="px-6 pb-5 empty:hidden">{chips}</div>;
+}
+
 function Board({ shopId, chips }: { shopId: string; chips: ReactNode }) {
   const { t } = useLingui();
   const api = useApi();
@@ -65,7 +73,8 @@ function Board({ shopId, chips }: { shopId: string; chips: ReactNode }) {
   if (board.isPending)
     return (
       <Panel>
-        <PanelHeader title={<Trans>New product quotes</Trans>} meta={chips} />
+        <PanelHeader title={<Trans>New product quotes</Trans>} />
+        <ChipsRow chips={chips} />
         <LiveSkeleton rows={4} label={t`Loading quotes`} />
       </Panel>
     );
@@ -101,7 +110,8 @@ function Board({ shopId, chips }: { shopId: string; chips: ReactNode }) {
   if (items.length === 0)
     return (
       <Panel>
-        <PanelHeader title={<Trans>New product quotes</Trans>} meta={chips} />
+        <PanelHeader title={<Trans>New product quotes</Trans>} />
+        <ChipsRow chips={chips} />
         <div className="px-6 pb-6">
           <Note>
             <Trans>
@@ -116,7 +126,7 @@ function Board({ shopId, chips }: { shopId: string; chips: ReactNode }) {
   return (
     <>
       <Panel>
-        <PanelHeader title={<Trans>Waiting for a supplier</Trans>} meta={chips} />
+        <PanelHeader title={<Trans>Waiting for a supplier</Trans>} />
         <p className="m-0 px-6 pb-5 text-body-sm text-secondary">
           <Plural
             value={items.length}
@@ -124,6 +134,7 @@ function Board({ shopId, chips }: { shopId: string; chips: ReactNode }) {
             other="# products are waiting for you to choose a supplier. Quotes are sorted by their total, cheapest first."
           />
         </p>
+        <ChipsRow chips={chips} />
       </Panel>
       {items.map((product) => {
         const listing = titles.get(product.listing_id);
@@ -152,8 +163,14 @@ function ProductPanel({
   const { t } = useLingui();
   const date = useShortDate();
   const heading = title ?? t`Listing ${String(product.listing_id)}`;
-  // The server's order: the first choosable card is the cheapest one that can be chosen.
-  const best = product.quotes.find((q) => q.choosable)?.id;
+  // The choosable cards first, in the server's order (cheapest total first), then the expired
+  // ones, so the emphasised card leads the row (Pixel2 on #81). The first choosable card is the
+  // cheapest one that can be chosen.
+  const quotes = [
+    ...product.quotes.filter((q) => q.choosable),
+    ...product.quotes.filter((q) => !q.choosable),
+  ];
+  const best = quotes.find((q) => q.choosable)?.id;
   return (
     <Panel label={heading}>
       <div className="flex items-center gap-3 px-6 pt-5 pb-4">
@@ -186,7 +203,7 @@ function ProductPanel({
           aria-label={t`Quotes for ${heading}`}
           className="m-0 grid list-none grid-cols-[repeat(auto-fill,minmax(232px,1fr))] gap-3 px-6 pb-6"
         >
-          {product.quotes.map((quote) => (
+          {quotes.map((quote) => (
             <QuoteCardItem key={quote.id} quote={quote} best={quote.id === best} />
           ))}
         </ul>
