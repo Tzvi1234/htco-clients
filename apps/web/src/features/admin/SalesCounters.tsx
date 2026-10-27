@@ -77,13 +77,17 @@ export function SalesCounters({
     onError: (error, { shop }) => {
       const status = error instanceof ApiError ? error.status : 0;
       const type = error instanceof ApiError ? error.type : undefined;
-      // A refusal (4xx) made nothing: its key goes. Anything else may have made the run.
-      if (status >= 400 && status < 500)
+      // A refusal (4xx) made nothing: its key goes. Anything else may have made the run, and so
+      // may a 409 idempotency-in-progress (the first request with this key is still being
+      // handled): its key stays, so trying again replays that run, never a second one.
+      const inProgress = type === "idempotency-in-progress";
+      if (status >= 400 && status < 500 && !inProgress)
         track((before) => ({ ...before, keys: without(before.keys, shop.id) }));
       setSaid((before) => ({
         ...before,
-        [shop.id]:
-          type === "automation-refused"
+        [shop.id]: inProgress
+          ? t`This recount is still starting. Try again in a moment: it won't start twice.`
+          : type === "automation-refused"
             ? t`The sales counters are not active yet. Activate them first, then recount.`
             : type === "forbidden" || type === "mfa-required" || type === "step-up-required"
               ? t`Only the Owner and Admins recount sales.`
@@ -201,6 +205,11 @@ export function SalesCounters({
 }
 
 /** The shop's run, read by its id and followed while it is on its way. */
+/** A refusal (4xx): the run cannot be read, and will not be. A network error or a 5xx passes. */
+function refused(error: unknown): boolean {
+  return error instanceof ApiError && error.status >= 400 && error.status < 500;
+}
+
 function useRun(organizationId: string, id: string | undefined) {
   const api = useApi();
   return useQuery({
@@ -222,9 +231,13 @@ function RecountButton({
   onPress: () => void;
 }) {
   const run = useRun(organizationId, id);
-  // A run that cannot be read (a 4xx) never locks the button for good (quill on #73).
+  // A run that cannot be read (a 4xx) never locks the button for good (quill on #73). A read
+  // that fails for a moment (a network error, a 5xx) keeps the last known state, so a run on its
+  // way stays locked and cannot be started twice (#79).
   const running =
-    id !== undefined && !run.isError && (run.data === undefined || inFlight(run.data.state));
+    id !== undefined &&
+    !(run.isError && refused(run.error)) &&
+    (run.data === undefined || inFlight(run.data.state));
   return (
     <Button variant="secondary" size="sm" isDisabled={busy || running} onPress={onPress}>
       <Trans>Recount sales</Trans>
@@ -261,7 +274,10 @@ function RunState({
       />
     );
   }
-  if (run.isError) return <span className="text-secondary">—</span>;
+  // Unreadable, or failing before it was ever read: no state to show. A passing failure keeps
+  // the last known state (#79).
+  if (run.isError && (refused(run.error) || run.data === undefined))
+    return <span className="text-secondary">—</span>;
   if (
     state === "dead_lettered" ||
     state === "failed" ||

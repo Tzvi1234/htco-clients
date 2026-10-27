@@ -1,5 +1,5 @@
 import { createMemoryHistory } from "@tanstack/react-router";
-import { render, screen, within } from "@testing-library/react";
+import { act, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
@@ -221,6 +221,60 @@ describe("Sales counters: Recount sales (Phase 5 activation 2b)", { timeout: 15_
     const keys = backend.state.recounts.started.map((s) => s.key);
     expect(keys[0]).toBe(keys[1]);
     expect(backend.state.recounts.executions.size).toBe(1);
+  });
+
+  it("a 409 idempotency-in-progress keeps its key, so trying again never starts a second run", async () => {
+    const { user, backend } = await open({ recountInProgress: true });
+    const panel = await counters();
+    const row = within(panel).getByRole("row", { name: /Willow & Wick/ });
+    await user.click(within(row).getByRole("button", { name: "Recount sales" }));
+    await user.click(
+      within(await screen.findByRole("dialog")).getByRole("button", { name: "Recount" }),
+    );
+    // The first request with this key is still being handled: the run may already exist.
+    await shows(
+      row,
+      "This recount is still starting. Try again in a moment: it won't start twice.",
+    );
+    backend.state.recountInProgress = false;
+    await user.click(within(row).getByRole("button", { name: "Recount sales" }));
+    await user.click(
+      within(await screen.findByRole("dialog")).getByRole("button", { name: "Recount" }),
+    );
+    await vi.waitFor(() => {
+      expect(backend.state.recounts.started).toHaveLength(2);
+    });
+    const keys = backend.state.recounts.started.map((s) => s.key);
+    expect(keys[0]).toBe(keys[1]);
+    expect(backend.state.recounts.executions.size).toBe(1);
+  });
+
+  it("a run on its way stays locked when reading it fails for a moment (#79)", async () => {
+    const { user, backend } = await open();
+    const panel = await counters();
+    const row = within(panel).getByRole("row", { name: /Willow & Wick/ });
+    await user.click(within(row).getByRole("button", { name: "Recount sales" }));
+    await user.click(
+      within(await screen.findByRole("dialog")).getByRole("button", { name: "Recount" }),
+    );
+    await shows(row, "Queued");
+    const reads = () =>
+      backend.requests.filter((r) => /\/v1\/executions\/[^/]+$/.test(new URL(r.url).pathname))
+        .length;
+    const before = reads();
+    // The next poll answers 503, and so do its two retries: the read fails, the run is not over.
+    backend.state.executionReadFails = true;
+    await vi.waitFor(
+      () => {
+        expect(reads()).toBeGreaterThanOrEqual(before + 3);
+      },
+      { timeout: 8000 },
+    );
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    });
+    expect(within(row).getByRole("button", { name: "Recount sales" })).toBeDisabled();
+    await shows(row, "Queued");
   });
 
   it("keeps following a run that left the newest page (Codex on #73)", async () => {

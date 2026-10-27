@@ -158,6 +158,11 @@ export interface FakeState {
   recountListHides?: boolean | undefined;
   /** True: the counters are still a draft, so the engine refuses the run (409). */
   recountRefused?: boolean | undefined;
+  /** True: the recount answers 409 idempotency-in-progress (its first request is still being
+   * handled, and has made the run). */
+  recountInProgress?: boolean | undefined;
+  /** True: reading an execution (`GET /v1/executions/{id}`) answers 503 for now. */
+  executionReadFails?: boolean | undefined;
   /** The bodies of `POST /v1/notifications/read`, in order. */
   reads: unknown[];
   /** The workspace of each `POST /v1/notifications/read`, in the same order as `reads`. */
@@ -626,6 +631,7 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
     }
     const chain = /^GET \/v1\/executions\/([^/]+)$/.exec(route);
     if (chain !== null) {
+      if (state.executionReadFails === true) return problem(503, "unavailable");
       const recount = state.recounts.executions.get(chain[1] ?? "");
       if (recount !== undefined)
         return json(200, {
@@ -651,6 +657,7 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
           shop_id: String(body["shop_id"]),
           key: key ?? "",
         });
+      if (state.recountInProgress === true) return problem(409, "idempotency-in-progress");
       if (state.recountLoseAnswer === true) return problem(503, "unavailable");
       return json(202, recountView(id));
     }

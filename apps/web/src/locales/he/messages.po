@@ -5671,6 +5671,10 @@ msgstr "פג תוקף הקישור לאיפוס הסיסמה או שכבר הש�
 msgid "This person is already a member."
 msgstr "האדם הזה כבר חבר בצוות."
 
+#: src/features/admin/SalesCounters.tsx
+msgid "This recount is still starting. Try again in a moment: it won't start twice."
+msgstr "הספירה הזו עדיין מתחילה. נסו שוב בעוד רגע: היא לא תתחיל פעמיים."
+
 #: src/app/RouteStates.tsx
 msgid "This screen could not be shown"
 msgstr "לא ניתן להציג את המסך"

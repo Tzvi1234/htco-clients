@@ -5671,6 +5671,10 @@ msgstr "This password reset link has expired or was already used. Ask for a new 
 msgid "This person is already a member."
 msgstr "This person is already a member."
 
+#: src/features/admin/SalesCounters.tsx
+msgid "This recount is still starting. Try again in a moment: it won't start twice."
+msgstr "This recount is still starting. Try again in a moment: it won't start twice."
+
 #: src/app/RouteStates.tsx
 msgid "This screen could not be shown"
 msgstr "This screen could not be shown"
