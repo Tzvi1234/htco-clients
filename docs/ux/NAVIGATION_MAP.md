@@ -46,7 +46,7 @@ Seven areas in the owner's order and wording, defined once in `apps/web/src/app/
 
 | Area (he) | Tab | Address | Screen |
 |---|---|---|---|
-| Home (בית) | — | `/` | Built: the focus (greeting, today's numbers live from Etsy, the next step), then sub-tabs Today (what needs you as a demo, the shop and getting started) and Office (pulse, tickets, incidents as demos) |
+| Home (בית) | — | `/` | Built: the focus (greeting, today's numbers live from Etsy, the next step), then sub-tabs Today (what needs you as a demo, the shop and getting started) and Office (the open incidents live, with the most urgent one leading into the incident center; the pulse and tickets as demos) |
 | Office (המשרד) | Floor · Chat · Team room · AI ops · Engineering | `/office/floor` · `/office/chat` · `/office/team` · `/office/aiops` · `/office/eng` | Soon (the demo's full screens in the demo frame; the floor is the living 3D office) |
 | Work (עבודה) | Tasks · Approvals · Activity | `/work/tasks` · `/work/approvals` · `/work/activity` | Soon (the demo's full screens in the demo frame) |
 | Commerce (מסחר) | Shops | `/shops` (also `/commerce/shops`; the Etsy return `/integrations/etsy/callback` belongs here) | Built: the focus (shops by state, connect another), sub-tabs Shops (their connection, numbers live from Etsy) and Top listings |

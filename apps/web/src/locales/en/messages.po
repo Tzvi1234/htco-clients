@@ -126,6 +126,12 @@ msgstr "{0} orders queued to be read again from Etsy."
 msgid "{0} reviews"
 msgstr "{0} reviews"
 
+#. placeholder {0}: words.cause(urgent.cause)
+#. placeholder {1}: urgent.receipt_id
+#: src/features/overview/OverviewPage.tsx
+msgid "{0}, order #{1}"
+msgstr "{0}, order #{1}"
+
 #: src/features/office/TeamRoomPage.tsx
 msgid "{amir} is typing…"
 msgstr "{amir} is typing…"
@@ -203,6 +209,10 @@ msgstr "{range} days"
 #: src/features/incidents/IncidentsPage.tsx
 msgid "{resolvedCount, plural, one {# resolved so far} other {# resolved so far}}"
 msgstr "{resolvedCount, plural, one {# resolved so far} other {# resolved so far}}"
+
+#: src/features/overview/OverviewPage.tsx
+msgid "{severe, plural, one {# high or critical} other {# high or critical}}"
+msgstr "{severe, plural, one {# high or critical} other {# high or critical}}"
 
 #: src/app/shell/NotificationBell.tsx
 msgid "{shop} needs reconnecting to Etsy"
@@ -557,6 +567,7 @@ msgid "All employees"
 msgstr "All employees"
 
 #: src/features/incidents/IncidentsPage.tsx
+#: src/features/overview/OverviewPage.tsx
 msgid "All incidents"
 msgstr "All incidents"
 
@@ -2725,6 +2736,10 @@ msgstr "Loading the execution"
 msgid "Loading the incident…"
 msgstr "Loading the incident…"
 
+#: src/features/overview/OverviewPage.tsx
+msgid "Loading the open incidents"
+msgstr "Loading the open incidents"
+
 #: src/features/commerce/timeline.tsx
 msgid "Loading the order's history…"
 msgstr "Loading the order's history…"
@@ -3130,6 +3145,10 @@ msgstr "No month with sales yet."
 msgid "No notifications yet"
 msgstr "No notifications yet"
 
+#: src/features/overview/OverviewPage.tsx
+msgid "No open incident."
+msgstr "No open incident."
+
 #: src/features/incidents/IncidentsPage.tsx
 msgid "No open incidents"
 msgstr "No open incidents"
@@ -3462,6 +3481,10 @@ msgstr "One automation has a dead-lettered run: {0}. Open it, read its error, th
 #: src/features/welcome/WelcomePage.tsx
 msgid "One button, Etsy asks you to allow it, and you are back."
 msgstr "One button, Etsy asks you to allow it, and you are back."
+
+#: src/features/overview/OverviewPage.tsx
+msgid "One workspace's incidents could not be read."
+msgstr "One workspace's incidents could not be read."
 
 #: src/features/admin/OperationsPage.tsx
 msgid "Only the Owner and Admins retry jobs."
@@ -5312,6 +5335,10 @@ msgstr "The incident center is not answering. Check your connection and try agai
 msgid "The incident could not be loaded. Try again shortly."
 msgstr "The incident could not be loaded. Try again shortly."
 
+#: src/features/overview/OverviewPage.tsx
+msgid "The incidents could not be loaded. Try again shortly."
+msgstr "The incidents could not be loaded. Try again shortly."
+
 #: src/features/admin/OperationsPage.tsx
 msgid "The job could not be retried. Try again shortly."
 msgstr "The job could not be retried. Try again shortly."
@@ -6276,6 +6303,10 @@ msgstr "Your role can see this incident but not move it."
 #: src/features/incidents/IncidentsPage.tsx
 msgid "Your role does not include incidents. Ask an Owner or Admin."
 msgstr "Your role does not include incidents. Ask an Owner or Admin."
+
+#: src/features/overview/OverviewPage.tsx
+msgid "Your role does not see incidents."
+msgstr "Your role does not see incidents."
 
 #: src/features/admin/AutomationsPage.tsx
 msgid "Your role does not see the office's automations."
