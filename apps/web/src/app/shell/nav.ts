@@ -65,6 +65,8 @@ export const AREAS: readonly NavArea[] = [
       { id: "shipping", to: "/commerce/shipping", built: true },
       // Fulfillment's incident center (platform slice 6.5); `/incidents/{id}` opens one.
       { id: "incidents", to: "/incidents", built: true },
+      // New product quotes (platform slice 7.16); a quote notification opens it on its shop.
+      { id: "quotes", to: "/commerce/quotes", built: true },
       ...soon("commerce", "suppliers"),
     ],
   },

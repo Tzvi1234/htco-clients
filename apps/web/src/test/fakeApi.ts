@@ -11,6 +11,7 @@ import {
   fakeRuns,
   type FakeOperations,
 } from "./fakeOperations.ts";
+import { fakeQuoteBoard } from "./fakeQuotes.ts";
 import { fakeShopData, type FakePeriod } from "./fakeShopData.ts";
 
 type IntegrationView = components["schemas"]["IntegrationView"];
@@ -103,6 +104,10 @@ export interface FakeState {
   statsFailFor?: string[];
   /** True: the shops are busy, 160 orders in 30 days (more than one page of 100). */
   liveBusy?: boolean;
+  /** A shop's quote board (`GET /v1/shops/{id}/quote-requests`); by default invented quotes. */
+  quotes?: Record<string, components["schemas"]["ProductQuotesView"][]> | undefined;
+  /** "fail": the quote board answers 503 quotes-unavailable. */
+  quotesTrouble?: "fail" | undefined;
   /** The organization's incidents (`GET /v1/incidents`), newest first as the API sends them. */
   incidents: FakeIncident[];
   /** "fail": the incident center answers 503 incidents-unavailable; "hang": it never answers;
@@ -601,6 +606,8 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
         state: "retry_scheduled",
       });
     }
+    const quoteBoard = /^GET \/v1\/shops\/([^/]+)\/quote-requests$/.exec(route);
+    if (quoteBoard !== null) return quotes(quoteBoard[1] ?? "");
     const one = /^GET \/v1\/shops\/([^/]+)\/orders\/(\d+)$/.exec(route);
     if (one !== null) return orderDetail(one[1] ?? "", Number(one[2]));
     const live =
@@ -866,6 +873,16 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
   }
 
   /** One order with its status timeline, as the stored history recorded it (invented). */
+  function quotes(shopId: string): Response {
+    const shop = state.shops.find((s) => s.id === shopId);
+    if (shop === undefined) return problem(404, "not-found");
+    if (state.role !== "owner" && state.role !== "admin") return problem(403, "forbidden");
+    if (state.quotesTrouble === "fail") return problem(503, "quotes-unavailable");
+    const listings = fakeShopData(shopId, shop.name, Date.now(), true).listings.items;
+    const items = state.quotes?.[shopId] ?? fakeQuoteBoard(listings.map((l) => l.listing_id));
+    return json(200, { shop_id: shopId, items });
+  }
+
   function orderDetail(shopId: string, orderId: number): Response {
     const shop = state.shops.find((s) => s.id === shopId);
     if (shop === undefined) return problem(404, "not-found");

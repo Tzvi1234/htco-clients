@@ -108,6 +108,10 @@ export function useNoticeText(shopName: (id: string | null | undefined) => strin
       }
       case "relay_tracking_needed":
         return t`Order #${receipt ?? ""} needs its tracking copied to Etsy`;
+      case "new_product_quote": {
+        const listing = p["listing_id"] ?? "";
+        return t`A new supplier quote for listing ${listing}`;
+      }
       case "sign_in_new_device": {
         const device = p["device"];
         return device === undefined ? t`New sign-in on a new device` : t`New sign-in on ${device}`;
@@ -142,7 +146,7 @@ type Target =
     }
   | {
       // A shop's alert opens on that shop (`?shop=`), not on the first one (Codex review of #48).
-      to: "/commerce/shipping" | "/commerce/products" | "/customers/customers";
+      to: "/commerce/shipping" | "/commerce/products" | "/commerce/quotes" | "/customers/customers";
       search: { shop?: string };
     }
   | { to: "/shops" | "/settings/security" };
@@ -164,6 +168,8 @@ function targetOf(notice: Notice): Target | undefined {
       return { to: "/commerce/shipping", search: shop };
     case "alert_out_of_stock":
       return { to: "/commerce/products", search: shop };
+    case "new_product_quote":
+      return { to: "/commerce/quotes", search: shop };
     case "alert_low_review":
       return { to: "/customers/customers", search: shop };
     case "sign_in_new_device":

@@ -357,7 +357,8 @@ export interface paths {
         };
         /**
          * One execution with its trigger, actions, approvals and events
-         * @description In causal order; IDs, states and codes only, never payloads or buyer data.
+         * @description In causal order; IDs, states and codes only, never payloads or buyer data. The run's
+         *     checked output (per-run counts) is shown to the Owner and Admins.
          */
         get: operations["get_execution_chain"];
         put?: never;
@@ -906,6 +907,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/shops/{shop_id}/quote-requests": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Products waiting for a supplier, with their quotes side by side */
+        get: operations["list_quote_requests"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/shops/{shop_id}/reviews": {
         parameters: {
             query?: never;
@@ -984,6 +1002,26 @@ export interface paths {
          *     session for ten minutes). Requested scopes: shops_r, transactions_r, listings_r.
          */
         post: operations["connect_etsy_shop"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/webhooks/autova-quotes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Receive a quote mail notice from Resend inbound
+         * @description Resend's signed `email.received` notice for the quote mailbox (slice 7.14, Svix signature). Off unless the quote mailbox is configured.
+         */
+        post: operations["receive_quote_mail"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1211,6 +1249,13 @@ export interface components {
          * @enum {string}
          */
         DataSource: "etsy_live" | "htco_store";
+        /** DayRangeView */
+        DayRangeView: {
+            /** Max */
+            max: number;
+            /** Min */
+            min: number;
+        };
         /** DeadJobView */
         DeadJobView: {
             /** Attempts */
@@ -1302,6 +1347,10 @@ export interface components {
              * Format: uuid
              */
             id: string;
+            /** Output */
+            output?: {
+                [key: string]: unknown;
+            } | null;
             /** Shop Id */
             shop_id: string | null;
             /** State */
@@ -2063,6 +2112,68 @@ export interface components {
             name: string;
             /** Partner Id */
             partner_id: number;
+        };
+        /** ProductQuotesView */
+        ProductQuotesView: {
+            /** Listing Id */
+            listing_id: number;
+            /** Quotes */
+            quotes: components["schemas"]["QuoteCardView"][];
+            /**
+             * Request Id
+             * Format: uuid
+             */
+            request_id: string;
+            /**
+             * Requested At
+             * Format: date-time
+             */
+            requested_at: string;
+            /** State */
+            state: string;
+            /** Variant */
+            variant: string;
+        };
+        /** QuoteBoardView */
+        QuoteBoardView: {
+            /** Items */
+            items: components["schemas"]["ProductQuotesView"][];
+            /**
+             * Shop Id
+             * Format: uuid
+             */
+            shop_id: string;
+        };
+        /** QuoteCardView */
+        QuoteCardView: {
+            /** Choosable */
+            choosable: boolean;
+            /** Currency */
+            currency: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            processing_days: components["schemas"]["DayRangeView"];
+            /**
+             * Received At
+             * Format: date-time
+             */
+            received_at: string;
+            /** Shipping Cost */
+            shipping_cost: string;
+            shipping_days: components["schemas"]["DayRangeView"];
+            /** Shipping Method */
+            shipping_method: string;
+            /** Supplier */
+            supplier: string;
+            /** Total */
+            total: string;
+            /** Unit Price */
+            unit_price: string;
+            /** Valid Until */
+            valid_until: string | null;
         };
         /** ReadinessStatus */
         ReadinessStatus: {
@@ -7051,6 +7162,96 @@ export interface operations {
             };
         };
     };
+    list_quote_requests: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                shop_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["QuoteBoardView"];
+                };
+            };
+            /** @description Not signed in, or the access token was rejected */
+            401: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Only the Owner and Admins see supplier quotes (forbidden) */
+            403: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description No such shop for the caller */
+            404: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Invalid shop ID */
+            422: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"];
+                };
+            };
+            /** @description Unexpected error. Quote the request ID when reporting it */
+            500: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Quotes cannot be read on this server (quotes-unavailable) */
+            503: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
     list_shop_reviews: {
         parameters: {
             query?: never;
@@ -7411,6 +7612,81 @@ export interface operations {
             };
             /** @description Sign-in, the database or the Etsy connection is unavailable (etsy-unavailable) */
             503: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    receive_quote_mail: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Signed, but not an email.received notice (webhook-invalid) */
+            400: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Signature, timestamp or headers invalid (webhook-signature-invalid) */
+            401: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The quote mailbox is not configured on this server (not-found) */
+            404: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Body over 64 KiB (webhook-too-large) */
+            413: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Unexpected error. Quote the request ID when reporting it */
+            500: {
                 headers: {
                     /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
                     "X-Request-Id": string;
