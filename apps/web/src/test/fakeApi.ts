@@ -145,6 +145,8 @@ export interface FakeState {
   resyncs: number[][];
   /** The queue, execution and sync health (Admin › Health, slice 5.9) and its retries. */
   operations: FakeOperations;
+  /** "fail": `GET /v1/operations/health` answers 503 (the registry and the runs still answer). */
+  healthTrouble?: "fail" | undefined;
   /** True: automations are not set up on this server (503 automations-unavailable). */
   automationsOff?: boolean;
 }
@@ -566,6 +568,7 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
     }
     if (route === "GET /v1/operations/health") {
       if (!admin) return problem(403, "forbidden");
+      if (state.healthTrouble === "fail") return problem(503, "operations-unavailable");
       // Another workspace of the user runs calmly: switching shows its own numbers.
       const ops = workspace === org ? state.operations : fakeOperations("calm");
       return json(200, fakeHealth(workspace, state.shops, ops));

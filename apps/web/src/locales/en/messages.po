@@ -6157,6 +6157,10 @@ msgstr "Within {0} days"
 msgid "Within policy"
 msgstr "Within policy"
 
+#: src/features/admin/AutomationsPage.tsx
+msgid "Without the run health, HTCO can't tell which automations need you. Each one's latest runs are under All."
+msgstr "Without the run health, HTCO can't tell which automations need you. Each one's latest runs are under All."
+
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
 msgid "Work"

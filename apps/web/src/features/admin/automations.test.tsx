@@ -218,6 +218,50 @@ describe("Admin › Automations", () => {
     expect(within(every).getAllByRole("row")).toHaveLength(6);
   });
 
+  // Codex local on #72 (6409eac): without the health read, no count of what needs him is known.
+  it.each([
+    ["answers 403", { role: "viewer" }],
+    ["fails", { healthTrouble: "fail" }],
+  ] as const)(
+    "never says nothing needs him when the health read %s",
+    async (_, state: Partial<FakeState>) => {
+      const { user } = await open(state);
+      const tabs = screen.getByRole("tablist", { name: "Automation views" });
+      const needs = within(tabs).getByRole("tab", { name: /Needs you/ });
+      // No count beside the tab: a zero it did not read would be a false all-clear.
+      expect(needs.textContent).toBe("Needs you");
+
+      await user.click(needs);
+      expect(
+        await screen.findByText(
+          "Without the run health, HTCO can't tell which automations need you. Each one's latest runs are under All.",
+        ),
+      ).toBeInTheDocument();
+      expect(screen.queryByText(/Nothing needs you/)).toBeNull();
+    },
+  );
+
+  // Codex local on #72 (6409eac): the detail beside the list is always one of the tab's rows.
+  it("shows a detail from the open tab only, after switching tabs", async () => {
+    const { user } = await open();
+    expect(await screen.findByRole("region", { name: "Etsy Order Intake" })).toBeInTheDocument();
+
+    await user.click(await row(/Product Sales Counters/));
+    expect(
+      await screen.findByRole("region", { name: "Product Sales Counters" }),
+    ).toBeInTheDocument();
+    await user.click(screen.getByRole("tab", { name: /Needs you/ }));
+
+    // Product Sales Counters has no dead letter: the Needs you list leads with Etsy Order Intake.
+    expect(await screen.findByRole("region", { name: "Etsy Order Intake" })).toBeInTheDocument();
+    expect(screen.queryByRole("region", { name: "Product Sales Counters" })).toBeNull();
+    const table = screen.getByRole("table", { name: "Automations" });
+    expect(within(table).getByText("Etsy Order Intake").closest("tr")).toHaveAttribute(
+      "data-selected",
+      "true",
+    );
+  });
+
   it("opens on every automation when nothing needs him", async () => {
     await open({ operations: fakeOperations("calm") });
 

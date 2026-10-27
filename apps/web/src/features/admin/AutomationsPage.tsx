@@ -220,7 +220,9 @@ function Automations({
   };
   const listed = tab === "needs" ? dead : automations;
   const listTitle = tab === "needs" ? t`Automations that need you` : t`All automations`;
-  const current = automations.find((a) => a.id === selected);
+  // The detail is always one of the open tab's rows: the chosen one, else the tab's first
+  // (Codex local on #72: switching tabs left an automation the tab does not list).
+  const current = listed.find((a) => a.id === selected) ?? listed[0];
   const percent = (value: string | null | undefined) =>
     value == null ? "—" : `${String(Number(value))}%`;
   // Finished runs only (succeeded or dead-lettered), the same denominator as each automation's
@@ -313,7 +315,8 @@ function Automations({
         value={tab}
         onChange={setTab}
         tabs={[
-          { id: "needs", label: <Trans>Needs you</Trans>, count: dead.length },
+          // Without the health read the count is unknown, never a zero (Codex local on #72).
+          { id: "needs", label: <Trans>Needs you</Trans>, count: shown ? dead.length : undefined },
           { id: "all", label: <Trans>All</Trans>, count: automations.length },
         ]}
       />
@@ -351,7 +354,7 @@ function Automations({
                 const others = a.callable_from.filter((kind) => kind !== a.primary_trigger);
                 return {
                   key: a.id,
-                  selected: a.id === selected,
+                  selected: a.id === current?.id,
                   onSelect: () => {
                     setSelected(a.id);
                   },
@@ -390,11 +393,18 @@ function Automations({
                 };
               })}
             />
-            {listed.length === 0 ? (
+            {listed.length > 0 ? null : !shown ? (
+              <p className="m-0 px-6 pt-2 pb-6 text-body-sm text-secondary max-sm:px-4">
+                <Trans>
+                  Without the run health, HTCO can't tell which automations need you. Each one's
+                  latest runs are under All.
+                </Trans>
+              </p>
+            ) : (
               <p className="m-0 px-6 pt-2 pb-6 text-body-sm text-secondary max-sm:px-4">
                 <Trans>Nothing needs you: no automation has a dead-lettered run.</Trans>
               </p>
-            ) : null}
+            )}
           </Panel>
           <Aside>
             {current === undefined ? null : (
