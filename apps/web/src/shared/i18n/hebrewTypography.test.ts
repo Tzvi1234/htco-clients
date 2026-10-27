@@ -67,7 +67,8 @@ describe("Hebrew punctuation", () => {
 
   it("holds in the Hebrew sample data of the screens", () => {
     const literals = hebrewLiterals();
-    expect(literals.length).toBeGreaterThan(50);
+    // The scan finds the sample data (45 literals since Work › Activity became a real screen).
+    expect(literals.length).toBeGreaterThan(40);
     const problems = literals.flatMap(({ file, text }) =>
       hebrewPunctuationProblems(text).map((problem) => `${file}: ${problem}: ${text}`),
     );

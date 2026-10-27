@@ -34,6 +34,7 @@ describe("the navigation model (Design 1C, client ADR-0008)", () => {
       tabs.filter((tab) => tab.built).map((tab) => `${id}/${tab.id} ${tab.to}`),
     );
     expect(built).toEqual([
+      "work/activity /work/activity",
       "commerce/shops /shops",
       "commerce/orders /commerce/orders",
       "commerce/products /commerce/products",

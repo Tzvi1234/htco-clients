@@ -16,7 +16,6 @@ import {
   CountUp,
   DemoFrame,
   Dot,
-  BarChart,
   FilterGlyph,
   IdBlock,
   InkDisc,
@@ -400,94 +399,6 @@ function ApprovalsDemo() {
   );
 }
 
-/* --------------------------------------------------------------- Activity */
-
-const EVENTS: readonly [string, AgentId, Bi][] = [
-  [
-    "09:21",
-    "maya",
-    bi("פתחה בקשת אישור AP-118 עבור החזר #3152", "Opened approval AP-118 for refund on #3152"),
-  ],
-  ["08:47", "nika", bi("העלתה 4 הדמיות לבדיקה", "Uploaded 4 mockups for review")],
-  ["08:30", "alex", bi("התחיל פריסת api v1.14", "Started deploy of api v1.14")],
-  [
-    "08:21",
-    "amir",
-    bi("אבחן כשל tracking.sync — token פג", "Diagnosed tracking.sync failure — expired token"),
-  ],
-  ["08:12", "eitan", bi("סומן כחסום: אין נתוני מעקב", "Marked blocked: no tracking data")],
-  ["08:02", "noa", bi("זיהתה 2 הזמנות באיחור", "Flagged 2 late orders")],
-  ["07:58", "maya", bi("קליטת הזמנות לילית הושלמה (37)", "Nightly order intake complete (37)")],
-  ["07:40", "dana", bi("סגרה 3 פניות לקוח", "Closed 3 customer tickets")],
-  ["07:12", "roni", bi("התאים תשלום Etsy לספר החשבונות", "Matched Etsy payout to the ledger")],
-  ["06:30", "noam", bi("עדכן כותרות SEO ב־6 ליסטינגים", "Updated SEO titles on 6 listings")],
-  ["03:00", "noa", bi("בדיקת איכות לילית הושלמה", "Nightly quality audit complete")],
-  ["02:14", "iris", bi("פרסה מדד זמן תגובה לסוכנים", "Shipped agent latency metric")],
-];
-
-function ActivityDemo() {
-  const { t } = useLingui();
-  const text = useBi();
-  const agent = useAgent();
-  return (
-    <Screen layout="l2">
-      <Panel>
-        <PanelHeader title={<Trans>Today in numbers</Trans>} />
-        <Body className="justify-between gap-6">
-          <IdBlock label={<Trans>Events today:</Trans>} value={ltr(<CountUp value="128" />)} />
-          <KV
-            items={[
-              [<Trans>Agent actions</Trans>, ltr(96)],
-              [<Trans>Approvals</Trans>, ltr(4)],
-              [<Trans>Errors</Trans>, ltr(3)],
-              [<Trans>Automations</Trans>, ltr(25)],
-            ]}
-          />
-          <div className="max-sm:hidden">
-            <BarChart
-              values={[4, 6, 3, 8, 12, 16, 14, 22, 18, 11, 8, 6]}
-              highlight={7}
-              labels={["00", "", "", "06", "", "", "12", "", "", "18", "", "23"]}
-              label={t`Events by hour, busiest at 14:00`}
-              valueLabels="key"
-            />
-          </div>
-        </Body>
-      </Panel>
-      <Panel>
-        <PanelHeader
-          title={<Trans>Activity log</Trans>}
-          meta={<Trans>15 October</Trans>}
-          actions={<CircleButton label={t`Filter`} icon={<FilterGlyph />} />}
-        />
-        <Body className="overflow-auto [scrollbar-width:thin]">
-          <ol className="m-0 list-none p-0">
-            {EVENTS.map(([time, who, what], i) => {
-              const person = agent(who);
-              return (
-                <li
-                  key={`${time}-${who}`}
-                  style={{ animationDelay: `${String(80 + i * 40)}ms` }}
-                  className="flex gap-4 border-t border-line py-3 first:border-t-0 motion-safe:animate-enter"
-                >
-                  <span className="ltr w-12 shrink-0 pt-1.5 text-caption text-muted">{time}</span>
-                  <Avatar initial={initialOf(person.name)} status={person.status} size="sm" />
-                  <div className="min-w-0 grow">
-                    <div className="text-body">
-                      {person.name} · <span className="text-secondary">{text(what)}</span>
-                    </div>
-                    <div className="text-caption text-muted">{person.dept}</div>
-                  </div>
-                </li>
-              );
-            })}
-          </ol>
-        </Body>
-      </Panel>
-    </Screen>
-  );
-}
-
 /** In the demo frame: dimmed, inert, the DEMO pill in the top bar (app/shell/DemoRoute.tsx). */
 const framed =
   (Content: ComponentType) =>
@@ -500,5 +411,4 @@ const framed =
 export const demoScreens = {
   "work/tasks": framed(TasksDemo),
   "work/approvals": framed(ApprovalsDemo),
-  "work/activity": framed(ActivityDemo),
 };

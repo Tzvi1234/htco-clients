@@ -25,6 +25,7 @@ import { ProductsPage } from "../features/commerce/ProductsPage.tsx";
 import { ShippingPage } from "../features/commerce/ShippingPage.tsx";
 import { CustomersPage } from "../features/customers/CustomersPage.tsx";
 import { IncidentsPage } from "../features/incidents/IncidentsPage.tsx";
+import { ActivityPage, activitySearch } from "../features/activity/ActivityPage.tsx";
 import { OverviewPage } from "../features/overview/OverviewPage.tsx";
 import { SecurityPage } from "../features/security/SecurityPage.tsx";
 import { SettingsPage } from "../features/settings/SettingsPage.tsx";
@@ -232,6 +233,14 @@ const routeTree = rootRoute.addChildren([
           typeof search["workspace"] === "string" ? { workspace: search["workspace"] } : {},
         staticData: { layout: "panels", scroll: "page" },
         component: IncidentsPage,
+      }),
+      // Work › Activity (platform slice 7.8): saved views, an actor and a task's trail in the address.
+      createRoute({
+        getParentRoute: () => appRoute,
+        path: "/work/activity",
+        validateSearch: activitySearch,
+        staticData: { layout: "panels", scroll: "page" },
+        component: ActivityPage,
       }),
       createRoute({
         getParentRoute: () => appRoute,

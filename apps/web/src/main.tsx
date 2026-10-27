@@ -28,6 +28,7 @@ const api =
     : await (async () => {
         const { demoShops, fakeBackend } = await import("./test/fakeApi.ts");
         const { demoIncidents, demoNotifications } = await import("./test/fakeIncidents.ts");
+        const { demoActivity } = await import("./test/fakeActivity.ts");
         if (demo === "signed-out") return fakeBackend().client;
         // Signed in with a password only: the authenticator code step.
         if (demo === "mfa")
@@ -47,6 +48,8 @@ const api =
                   ...shops,
                   incidents: demoIncidents(ids),
                   notifications: demoNotifications(ids),
+                  // Work › Activity: today's records and one task's trail (slice 7.8).
+                  activity: demoActivity(ids[0]),
                 };
               })()
             : {}),

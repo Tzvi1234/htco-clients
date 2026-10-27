@@ -1,5 +1,6 @@
 import { createApiClient, type ApiClient, type components } from "@htco/api-client";
 
+import type { FakeActivity } from "./fakeActivity.ts";
 import { personSteps, type FakeIncident, type FakeNotification } from "./fakeIncidents.ts";
 import {
   DEAD_EXECUTION,
@@ -101,6 +102,12 @@ export interface FakeState {
   statsFailFor?: string[];
   /** True: the shops are busy, 160 orders in 30 days (more than one page of 100). */
   liveBusy?: boolean;
+  /** The workspace's activity records (`GET /v1/activity`, slice 7.8), newest first. */
+  activity: FakeActivity[];
+  /** "fail": the activity query answers 503 activity-unavailable; "forbidden": 403. */
+  activityTrouble?: "fail" | "forbidden" | undefined;
+  /** The query strings of `GET /v1/activity`, in order. */
+  activityQueries: string[];
   /** The organization's incidents (`GET /v1/incidents`), newest first as the API sends them. */
   incidents: FakeIncident[];
   /** "fail": the incident center answers 503 incidents-unavailable; "hang": it never answers;
@@ -314,6 +321,8 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
     disconnects: [],
     removals: [],
     recheckTooSoon: false,
+    activity: [],
+    activityQueries: [],
     incidents: [],
     steps: [],
     notifications: [],
@@ -494,6 +503,9 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
       state.integrations = state.integrations.filter((i) => i.shop_id !== shopId);
       return new Response(null, { status: 204 });
     }
+
+    const records = activityQuery(route, url);
+    if (records !== undefined) return records;
 
     const center = incidentCenter(route, body, url);
     if (center !== undefined) return center;
@@ -697,6 +709,51 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
         return problem(404, "not-found");
       }
     }
+  }
+
+  /** The activity query (slice 7.8): the API's filters, its page and its source line. */
+  function activityQuery(route: string, url: URL): Response | undefined {
+    const trail = /^GET \/v1\/tasks\/([^/]+)\/activity$/.exec(route);
+    if (route !== "GET /v1/activity" && trail === null) return undefined;
+    if (state.activityTrouble === "fail") return problem(503, "activity-unavailable");
+    if (state.activityTrouble === "forbidden" || state.role === "viewer")
+      return problem(403, "forbidden");
+    const page = (items: FakeActivity[], next: string | null) =>
+      json(200, {
+        items,
+        next_cursor: next,
+        source: "app.activity_records",
+        read_at: new Date().toISOString(),
+        empty_reason: items.length === 0 ? "no_recorded_activity" : null,
+      });
+    if (trail !== null) {
+      const task = trail[1];
+      const correlations = new Set(
+        state.activity.filter((r) => r.task_id === task).map((r) => r.correlation_id),
+      );
+      const rows = state.activity
+        .filter((r) => r.task_id === task || correlations.has(r.correlation_id))
+        .sort((a, b) => a.occurred_at.localeCompare(b.occurred_at));
+      return page(rows, null);
+    }
+    state.activityQueries.push(url.search);
+    const q = url.searchParams;
+    const zone = q.get("timezone") ?? "UTC";
+    const dayOf = (iso: string) =>
+      new Intl.DateTimeFormat("en-CA", { timeZone: zone }).format(new Date(iso));
+    const rows = state.activity.filter(
+      (r) =>
+        (q.get("actor") === null || r.actor === q.get("actor")) &&
+        (q.get("actor_kind") === null || r.actor_kind === q.get("actor_kind")) &&
+        (q.get("outcome") === null || r.outcome === q.get("outcome")) &&
+        (q.get("day") === null || dayOf(r.occurred_at) === q.get("day")) &&
+        (q.get("since") === null || r.occurred_at >= String(q.get("since"))),
+    );
+    // The cursor here is the next page's offset.
+    const size = Number(q.get("limit") ?? 50);
+    const from = Number(q.get("cursor") ?? 0);
+    const more = from + size < rows.length;
+    return page(rows.slice(from, from + size), more ? String(from + size) : null);
   }
 
   /** May the role move incidents? Owners and Admins (the API's update-incidents capability). */

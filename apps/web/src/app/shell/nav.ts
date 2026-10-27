@@ -51,7 +51,11 @@ export const AREAS: readonly NavArea[] = [
     group: "workspace",
     icon: BoltGlyph,
     to: "/work/tasks",
-    tabs: soon("work", "tasks", "approvals", "activity"),
+    tabs: [
+      ...soon("work", "tasks", "approvals"),
+      // The activity query (platform slice 7.8).
+      { id: "activity", to: "/work/activity", built: true },
+    ],
   },
   {
     id: "commerce",

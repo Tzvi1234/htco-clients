@@ -47,7 +47,6 @@ const content = () => screen.getByTestId("demo-content");
 const SCREENS = [
   ["/work/tasks", "Tasks", "Completed today"],
   ["/work/approvals", "Approvals", "Pending decisions"],
-  ["/work/activity", "Activity", "Activity log"],
   ["/commerce/suppliers", "Suppliers", "Unit cost by product"],
 ] as const;
 

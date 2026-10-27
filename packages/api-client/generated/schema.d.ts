@@ -41,6 +41,28 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/activity": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The organization's activity records the caller may view
+         * @description Newest first; a shop-scoped role sees its granted shops' records only. `day` is the
+         *     caller's day in `timezone` (instead of `since`/`until`); pass `next_cursor` back as
+         *     `cursor` for the next page.
+         */
+        get: operations["get_activity"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/auth/invitations/accept": {
         parameters: {
             query?: never;
@@ -357,7 +379,8 @@ export interface paths {
         };
         /**
          * One execution with its trigger, actions, approvals and events
-         * @description In causal order; IDs, states and codes only, never payloads or buyer data.
+         * @description In causal order; IDs, states and codes only, never payloads or buyer data. The run's
+         *     checked output (per-run counts) is shown to the Owner and Admins.
          */
         get: operations["get_execution_chain"];
         put?: never;
@@ -990,6 +1013,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/tasks/{task_id}/activity": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * One task's activity trail across actors
+         * @description Every record of the task and every record sharing its correlation IDs, oldest
+         *     first (at most 200).
+         */
+        get: operations["get_task_activity"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/webhooks/etsy": {
         parameters: {
             query?: never;
@@ -1023,6 +1067,70 @@ export interface components {
             /** Refresh Token */
             refresh_token: string;
         };
+        /**
+         * ActivityKind
+         * @enum {string}
+         */
+        ActivityKind: "task_execution" | "automation_execution" | "business_event" | "tool_invocation" | "message" | "decision" | "approval" | "incident" | "routing_decision" | "engineering_change" | "reconciliation" | "quality_finding";
+        /**
+         * ActivityOutcome
+         * @enum {string}
+         */
+        ActivityOutcome: "succeeded" | "failed" | "denied" | "pending";
+        /** ActivityPageView */
+        ActivityPageView: {
+            /** Empty Reason */
+            empty_reason: string | null;
+            /** Items */
+            items: components["schemas"]["ActivityRecordView"][];
+            /** Next Cursor */
+            next_cursor?: string | null;
+            /**
+             * Read At
+             * Format: date-time
+             */
+            read_at: string;
+            /** Source */
+            source: string;
+        };
+        /** ActivityRecordView */
+        ActivityRecordView: {
+            /** Action */
+            action: string;
+            /** Actor */
+            actor: string;
+            /** Actor Kind */
+            actor_kind: string;
+            /** Causation Id */
+            causation_id: string | null;
+            /** Correlation Id */
+            correlation_id: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Kind */
+            kind: string;
+            /**
+             * Occurred At
+             * Format: date-time
+             */
+            occurred_at: string;
+            /** Outcome */
+            outcome: string;
+            /** Shop Id */
+            shop_id: string | null;
+            /** Summary */
+            summary: string;
+            /** Task Id */
+            task_id: string | null;
+        };
+        /**
+         * ActorKind
+         * @enum {string}
+         */
+        ActorKind: "user" | "employee" | "automation" | "advisor" | "system";
         /** AllTimeSalesView */
         AllTimeSalesView: {
             average_order_value: components["schemas"]["MoneyView"] | null;
@@ -1302,6 +1410,10 @@ export interface components {
              * Format: uuid
              */
             id: string;
+            /** Output */
+            output?: {
+                [key: string]: unknown;
+            } | null;
             /** Shop Id */
             shop_id: string | null;
             /** State */
@@ -2698,6 +2810,108 @@ export interface operations {
                 };
                 content: {
                     "application/problem+json": components["schemas"]["NotReadyProblem"];
+                };
+            };
+        };
+    };
+    get_activity: {
+        parameters: {
+            query?: {
+                actor?: string | null;
+                actor_kind?: components["schemas"]["ActorKind"] | null;
+                cursor?: string | null;
+                day?: string | null;
+                kind?: components["schemas"]["ActivityKind"] | null;
+                limit?: number;
+                organization_id?: string | null;
+                outcome?: components["schemas"]["ActivityOutcome"] | null;
+                shop_id?: string | null;
+                since?: string | null;
+                task_id?: string | null;
+                timezone?: string;
+                until?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ActivityPageView"];
+                };
+            };
+            /** @description The caller belongs to several organizations and named none */
+            400: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not signed in, or the access token was rejected */
+            401: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The role may not view activity */
+            403: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Invalid filter, cursor or organization */
+            422: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"];
+                };
+            };
+            /** @description Unexpected error. Quote the request ID when reporting it */
+            500: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Activity cannot be read on this server (activity-unavailable) */
+            503: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
                 };
             };
         };
@@ -7410,6 +7624,98 @@ export interface operations {
                 };
             };
             /** @description Sign-in, the database or the Etsy connection is unavailable (etsy-unavailable) */
+            503: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    get_task_activity: {
+        parameters: {
+            query?: {
+                organization_id?: string | null;
+            };
+            header?: never;
+            path: {
+                task_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ActivityPageView"];
+                };
+            };
+            /** @description The caller belongs to several organizations and named none */
+            400: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not signed in, or the access token was rejected */
+            401: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The role may not view activity */
+            403: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Invalid filter, cursor or organization */
+            422: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"];
+                };
+            };
+            /** @description Unexpected error. Quote the request ID when reporting it */
+            500: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Activity cannot be read on this server (activity-unavailable) */
             503: {
                 headers: {
                     /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
