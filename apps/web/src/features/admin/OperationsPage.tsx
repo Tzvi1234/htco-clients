@@ -30,6 +30,7 @@ import {
   TabPanel,
 } from "../../shared/ui/kit/index.ts";
 import { WorkspacePicker, pickWorkspace } from "../../shared/ui/WorkspacePicker.tsx";
+import { SalesCounters } from "./SalesCounters.tsx";
 
 import { Code, ExecutionSheet, StateWord, useAgo } from "./execution.tsx";
 
@@ -307,6 +308,13 @@ function Health({ health, organizationId }: { health: OperationsHealth; organiza
                 />
               )}
             </Panel>
+            <SalesCounters
+              organizationId={organizationId}
+              // Only the chosen workspace's shops: a shop is recounted in its own workspace (Codex on #73).
+              shops={(shops ?? []).filter(
+                (shop) => shop.status === "active" && shop.organization_id === organizationId,
+              )}
+            />
           </>
         ) : (
           <>

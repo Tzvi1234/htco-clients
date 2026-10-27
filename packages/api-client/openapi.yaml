@@ -5089,7 +5089,10 @@ paths:
       tags:
         - automations
       summary: One execution with its trigger, actions, approvals and events
-      description: In causal order; IDs, states and codes only, never payloads or buyer data.
+      description:
+        "In causal order; IDs, states and codes only, never payloads or buyer data. The run's
+
+        checked output (per-run counts) is shown to the Owner and Admins."
       operationId: get_execution_chain
       security:
         - HTTPBearer: []
@@ -6714,6 +6717,12 @@ components:
             $ref: "#/components/schemas/ChainEntryView"
           type: array
           title: Entries
+        output:
+          anyOf:
+            - additionalProperties: true
+              type: object
+            - type: "null"
+          title: Output
       type: object
       required:
         - id

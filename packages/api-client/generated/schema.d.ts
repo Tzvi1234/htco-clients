@@ -357,7 +357,8 @@ export interface paths {
         };
         /**
          * One execution with its trigger, actions, approvals and events
-         * @description In causal order; IDs, states and codes only, never payloads or buyer data.
+         * @description In causal order; IDs, states and codes only, never payloads or buyer data. The run's
+         *     checked output (per-run counts) is shown to the Owner and Admins.
          */
         get: operations["get_execution_chain"];
         put?: never;
@@ -1302,6 +1303,10 @@ export interface components {
              * Format: uuid
              */
             id: string;
+            /** Output */
+            output?: {
+                [key: string]: unknown;
+            } | null;
             /** Shop Id */
             shop_id: string | null;
             /** State */
