@@ -86,6 +86,11 @@ export function useNoticeText(shopName: (id: string | null | undefined) => strin
         return receipt === undefined
           ? t`Incident resolved: ${cause}`
           : t`Incident resolved: ${cause}, order #${receipt}`;
+      // Platform #163: an incident that waited past its limit; each escalation notifies.
+      case "incident_escalated":
+        return receipt === undefined
+          ? t`Incident escalated: ${cause}`
+          : t`Incident escalated: ${cause}, order #${receipt}`;
       case "alert_ship_by": {
         const date = p["ship_by"];
         const by =
