@@ -119,6 +119,17 @@ export const SEVERITY_RANK: Partial<Record<string, number>> = {
   low: 3,
 };
 
+/** The most urgent open incident: the highest severity, then the oldest. */
+export function mostUrgent<T extends { severity: string; detected_at: string }>(
+  items: readonly T[],
+): T | undefined {
+  return [...items].sort(
+    (a, b) =>
+      (SEVERITY_RANK[a.severity] ?? 9) - (SEVERITY_RANK[b.severity] ?? 9) ||
+      Date.parse(a.detected_at) - Date.parse(b.detected_at),
+  )[0];
+}
+
 /** An incident's severity: a dot and its word; high and critical are set heavier too. */
 export function Severity({ severity }: { severity: string }) {
   const words = useIncidentWords();

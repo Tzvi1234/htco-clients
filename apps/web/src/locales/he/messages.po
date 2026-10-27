@@ -106,6 +106,12 @@ msgstr "{0} הזמנות נכנסו לתור לקריאה חוזרת מ־Etsy."
 msgid "{0} reviews"
 msgstr "{0} ביקורות"
 
+#. placeholder {0}: words.cause(urgent.cause)
+#. placeholder {1}: urgent.receipt_id
+#: src/features/overview/OverviewPage.tsx
+msgid "{0}, order #{1}"
+msgstr "{0}, הזמנה #{1}"
+
 #: src/features/office/TeamRoomPage.tsx
 msgid "{amir} is typing…"
 msgstr "{amir} מקליד…"
@@ -183,6 +189,10 @@ msgstr "{range} ימים"
 #: src/features/incidents/IncidentsPage.tsx
 msgid "{resolvedCount, plural, one {# resolved so far} other {# resolved so far}}"
 msgstr "{resolvedCount, plural, one {תקלה אחת נפתרה עד כה} other {# נפתרו עד כה}}"
+
+#: src/features/overview/OverviewPage.tsx
+msgid "{severe, plural, one {# high or critical} other {# high or critical}}"
+msgstr "{severe, plural, one {אחת בחומרה גבוהה או קריטית} two {# בחומרה גבוהה או קריטית} other {# בחומרה גבוהה או קריטית}}"
 
 #: src/app/shell/NotificationBell.tsx
 msgid "{shop} needs reconnecting to Etsy"
@@ -519,6 +529,7 @@ msgid "All employees"
 msgstr "כל העובדים"
 
 #: src/features/incidents/IncidentsPage.tsx
+#: src/features/overview/OverviewPage.tsx
 msgid "All incidents"
 msgstr "כל התקלות"
 
@@ -2647,6 +2658,10 @@ msgstr "טוענים את ההרצה"
 msgid "Loading the incident…"
 msgstr "טוען את התקלה…"
 
+#: src/features/overview/OverviewPage.tsx
+msgid "Loading the open incidents"
+msgstr "טוען את התקלות הפתוחות"
+
 #: src/features/commerce/timeline.tsx
 msgid "Loading the order's history…"
 msgstr "טוענים את היסטוריית ההזמנה…"
@@ -3052,6 +3067,10 @@ msgstr "עדיין אין חודש עם מכירות."
 msgid "No notifications yet"
 msgstr "עדיין אין התראות"
 
+#: src/features/overview/OverviewPage.tsx
+msgid "No open incident."
+msgstr "אין תקלה פתוחה."
+
 #: src/features/incidents/IncidentsPage.tsx
 msgid "No open incidents"
 msgstr "אין תקלות פתוחות"
@@ -3368,6 +3387,10 @@ msgstr "בזמן"
 #: src/features/welcome/WelcomePage.tsx
 msgid "One button, Etsy asks you to allow it, and you are back."
 msgstr "כפתור אחד, Etsy מבקשת את אישורך, וחוזרים."
+
+#: src/features/overview/OverviewPage.tsx
+msgid "One workspace's incidents could not be read."
+msgstr "לא הצלחנו לקרוא את התקלות של אחת מסביבות העבודה."
 
 #: src/features/admin/OperationsPage.tsx
 msgid "Only the Owner and Admins retry jobs."
@@ -5195,6 +5218,10 @@ msgstr "מרכז התקלות לא עונה. כדאי לבדוק את החיבו
 msgid "The incident could not be loaded. Try again shortly."
 msgstr "לא ניתן היה לטעון את התקלה. כדאי לנסות שוב בעוד רגע."
 
+#: src/features/overview/OverviewPage.tsx
+msgid "The incidents could not be loaded. Try again shortly."
+msgstr "לא הצלחנו לטעון את התקלות. נסו שוב בעוד רגע."
+
 #: src/features/admin/OperationsPage.tsx
 msgid "The job could not be retried. Try again shortly."
 msgstr "לא הצלחנו להריץ מחדש את המשימה. נסו שוב בעוד רגע."
@@ -6131,6 +6158,10 @@ msgstr "התפקיד שלך מאפשר לראות את התקלה אבל לא ל
 #: src/features/incidents/IncidentsPage.tsx
 msgid "Your role does not include incidents. Ask an Owner or Admin."
 msgstr "התפקיד שלך אינו כולל תקלות. כדאי לפנות לבעלים או למנהל/ת."
+
+#: src/features/overview/OverviewPage.tsx
+msgid "Your role does not see incidents."
+msgstr "התפקיד שלכם לא רואה תקלות."
 
 #: src/features/commerce/OrdersPage.tsx
 msgid "Your role may see these orders but not re-sync them."
