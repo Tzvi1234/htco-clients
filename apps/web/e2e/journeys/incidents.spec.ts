@@ -41,3 +41,33 @@ for (const [locale, scheme] of [
     await checkpoint(page, `notifications-${locale}-${scheme}`);
   });
 }
+
+// Pixel's design notes: on a phone the detail sits under the list, so a link to an incident that
+// is not available left its message out of sight. It comes into view with focus and a way back,
+// and the Back chevron points along the reading direction (right in Hebrew).
+for (const locale of ["en", "he"] as const) {
+  test(`a link to an unavailable incident shows why, on a phone too (${locale})`, async ({
+    page,
+  }) => {
+    const he = locale === "he";
+    await page.addInitScript((value) => {
+      localStorage.setItem("htco.locale", value);
+    }, locale);
+    await openApp(page, "/incidents/e0000000-0000-7000-8000-0000000000ff", "shops");
+    const message = page.getByRole("alert").filter({
+      hasText: he ? "התקלה הזו אינה זמינה לך." : "This incident is not available to you.",
+    });
+    await expect(message).toBeVisible();
+    if ((page.viewportSize()?.width ?? 0) >= 640) return;
+    await expect(message).toBeFocused();
+    await expect(message).toBeInViewport();
+    const back = page.getByRole("button", { name: he ? "חזרה לרשימה" : "Back to list" });
+    await expect(back).toBeInViewport();
+    const flip = await back.locator("svg").evaluate((svg) => getComputedStyle(svg).scale);
+    expect(flip).toBe(he ? "-1 1" : "none");
+    await back.click();
+    const list = page.locator(":focus");
+    await expect(list).toHaveAccessibleName(he ? "תקלות פתוחות" : "Open incidents");
+    await expect(list).toBeInViewport();
+  });
+}

@@ -172,11 +172,14 @@ export const MailGlyph = glyph(
     d="M5 4.5h14a2 2 0 012 2v11a2 2 0 01-2 2H5a2 2 0 01-2-2v-11a2 2 0 012-2zm-.4 2.7l7.4 5.6 7.4-5.6v1.9l-7.4 5.6-7.4-5.6z"
   />,
 );
-/** Offline or out of date: a cloud with an exclamation mark cut out of it. */
+/**
+ * Offline or out of date: a cloud with an exclamation mark cut out of it, its bar 2.6 and its
+ * dot 3 units wide so it reads at 16 px (Pixel's design notes).
+ */
 export const CloudAlertGlyph = glyph(
   <path
     fillRule="evenodd"
-    d="M7 19a4.5 4.5 0 01-.6-9 6 6 0 0111.4-1.6A5 5 0 0117.5 19zm5-8.8a.9.9 0 00-.9.9v3.4a.9.9 0 001.8 0v-3.4a.9.9 0 00-.9-.9zm0 5.5a1.1 1.1 0 100 2.2 1.1 1.1 0 000-2.2z"
+    d="M7 19a4.5 4.5 0 01-.6-9 6 6 0 0111.4-1.6A5 5 0 0117.5 19zM12 8.2a1.3 1.3 0 00-1.3 1.3v3.2a1.3 1.3 0 002.6 0V9.5A1.3 1.3 0 0012 8.2zm0 6.9a1.5 1.5 0 100 3 1.5 1.5 0 000-3z"
   />,
 );
 export const PlugGlyph = glyph(

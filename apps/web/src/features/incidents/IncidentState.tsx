@@ -25,16 +25,17 @@ export type IncidentStateId = (typeof INCIDENT_STATES)[number];
 
 /**
  * Each state's glyph from the kit (kit/status.tsx), so its shape carries the meaning as well as
- * its colour: new is a dashed ring, sorted an empty ring, work in hand a filled dot, a fix that
+ * its colour: new is a dashed ring, sorted an empty ring, work in hand a filled info-tone dot
+ * (Pixel: never the office's green Running), a fix that
  * needs the owner the orange halo, waiting on someone else the half disc, escalated the ink
  * square, and resolved the filled check.
  */
 const GLYPH: Record<IncidentStateId, AgentStatus> & Partial<Record<string, AgentStatus>> = {
   detected: "queued",
   triaged: "idle",
-  investigating: "running",
+  investigating: "working",
   remediation_proposed: "waityou",
-  auto_remediating: "running",
+  auto_remediating: "working",
   approval_required: "waityou",
   developer_required: "waitext",
   verifying: "waitext",
