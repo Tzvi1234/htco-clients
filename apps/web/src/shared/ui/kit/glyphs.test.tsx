@@ -7,6 +7,7 @@ import {
   CheckGlyph,
   ChevronGlyph,
   CloseGlyph,
+  CloudAlertGlyph,
   CrumbGlyph,
   NextGlyph,
   PlayGlyph,
@@ -59,5 +60,21 @@ describe("icon mirroring (Hebrew RTL)", () => {
     expect(box(ChevronGlyph)).toBe("0 0 12 12");
     expect(box(CrumbGlyph)).toBe("0 0 12 12");
     expect(box(CheckGlyph)).toBe("0 0 24 24");
+  });
+});
+
+// Pixel's design notes: the cloud-alert's "!" barely read at 16 px. Its bar and its dot are cut
+// out at least 2.6 and 3 units wide on the 24 grid (about 1.7 and 2 px at 16 px).
+describe("CloudAlertGlyph", () => {
+  it("cuts a '!' out of the cloud that reads at 16 px", () => {
+    const d = render(<CloudAlertGlyph size={16} />)
+      .container.querySelector("path")
+      ?.getAttribute("d");
+    // The cloud, then the bar, then the dot: each subpath's first arc radius is its half width.
+    const [, bar, dot] = (d ?? "")
+      .split(/z/i)
+      .map((part) => Number(/a(\d*\.?\d+)/.exec(part)?.[1]));
+    expect(2 * (bar ?? 0)).toBeGreaterThanOrEqual(2.6);
+    expect(2 * (dot ?? 0)).toBeGreaterThanOrEqual(3);
   });
 });

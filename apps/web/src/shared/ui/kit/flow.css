@@ -36,6 +36,7 @@
   transition:
     inset-inline-start 260ms var(--motion-easing-out),
     width 260ms var(--motion-easing-out),
+    top 260ms var(--motion-easing-out),
     opacity var(--motion-duration-fast) ease;
 }
 .k-tab {

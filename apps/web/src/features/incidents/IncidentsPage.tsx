@@ -14,7 +14,7 @@ import {
   type IncidentSummary,
   type Step,
 } from "./api.ts";
-import { IncidentState, SEVERITY_RANK, Severity, useIncidentWords } from "./IncidentState.tsx";
+import { IncidentState, Severity, mostUrgent, useIncidentWords } from "./IncidentState.tsx";
 import { useNow } from "../../shared/lib/time.ts";
 import { FormAlert } from "../../shared/ui/FormAlert.tsx";
 import { ApiError, meQuery, shopsQuery, useApi } from "../../shared/api/api.tsx";
@@ -119,15 +119,6 @@ function useDateTime(): (iso: string) => string {
       hour: "2-digit",
       minute: "2-digit",
     }).format(new Date(iso));
-}
-
-/** The most urgent open incident: the highest severity, then the oldest. */
-function mostUrgent(items: readonly IncidentSummary[]): IncidentSummary | undefined {
-  return [...items].sort(
-    (a, b) =>
-      (SEVERITY_RANK[a.severity] ?? 9) - (SEVERITY_RANK[b.severity] ?? 9) ||
-      Date.parse(a.detected_at) - Date.parse(b.detected_at),
-  )[0];
 }
 
 function Center({ organizationId }: { organizationId: string }) {
@@ -589,8 +580,15 @@ function IncidentDetailPanel({
   });
 
   const data = incident.data;
+  const problemRef = useRef<HTMLDivElement>(null);
+  const problemViewRef = useRef<HTMLDivElement>(null);
+  // Denied on the latest answer, whatever is cached: a refetch that answers 403 or 404 (access
+  // removed, another workspace) never keeps showing the incident (Sage's security review of #48).
+  const refused =
+    incident.error instanceof ApiError &&
+    (incident.error.status === 403 || incident.error.status === 404);
   useEffect(() => {
-    if (data === undefined || !focusOnLoadRef.current) return;
+    if (data === undefined || refused || !focusOnLoadRef.current) return;
     focusOnLoadRef.current = false;
     // After the route change has settled: focus the heading and bring it into view under the
     // sticky top bar (on phones the detail sits below the list).
@@ -604,7 +602,27 @@ function IncidentDetailPanel({
     return () => {
       cancelAnimationFrame(frame);
     };
-  }, [data, focusOnLoadRef]);
+  }, [data, refused, focusOnLoadRef]);
+
+  // Not available or not loaded: the message takes focus and comes into view too, as the
+  // detail's heading does, when he picked the incident or (on phones, where it sits under the
+  // list) arrived by a link (Pixel's design notes).
+  const unavailable = !incident.isPending && (data === undefined || refused);
+  useEffect(() => {
+    if (!unavailable || !(phone || focusOnLoadRef.current)) return;
+    focusOnLoadRef.current = false;
+    const frame = requestAnimationFrame(() => {
+      const message = problemRef.current;
+      if (message === null) return;
+      message.focus({ preventScroll: true });
+      // Its panel from the top, so Back to list shows above it on phones.
+      const view = problemViewRef.current ?? message;
+      if (typeof view.scrollIntoView === "function") view.scrollIntoView({ block: "start" });
+    });
+    return () => {
+      cancelAnimationFrame(frame);
+    };
+  }, [unavailable, phone, focusOnLoadRef]);
 
   if (incident.isPending)
     return (
@@ -612,27 +630,37 @@ function IncidentDetailPanel({
         <FocusSkeleton label={t`Loading the incident…`} rows={3} />
       </Panel>
     );
-  // Denied on the latest answer, whatever is cached: a refetch that answers 403 or 404 (access
-  // removed, another workspace) never keeps showing the incident (Sage's security review of #48).
-  const refused =
-    incident.error instanceof ApiError &&
-    (incident.error.status === 403 || incident.error.status === 404);
   if (data === undefined || refused)
     return (
       <Panel label={t`Incident`}>
-        <div role="alert" className="flex flex-col items-center gap-3 px-6 py-12 text-center">
-          <p className="m-0 text-body-sm text-secondary">
-            {refused ? (
-              <Trans>This incident is not available to you.</Trans>
-            ) : (
-              <Trans>The incident could not be loaded. Try again shortly.</Trans>
+        <div ref={problemViewRef} className="scroll-mt-28">
+          {phone ? (
+            <div className="px-6 pt-6">
+              <Button variant="ghost" size="sm" onPress={onBack}>
+                <BackGlyph size={14} />
+                <Trans>Back to list</Trans>
+              </Button>
+            </div>
+          ) : null}
+          <div
+            ref={problemRef}
+            tabIndex={-1}
+            role="alert"
+            className="flex scroll-mt-28 flex-col items-center gap-3 px-6 py-12 text-center outline-none focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-focus"
+          >
+            <p className="m-0 text-body-sm text-secondary">
+              {refused ? (
+                <Trans>This incident is not available to you.</Trans>
+              ) : (
+                <Trans>The incident could not be loaded. Try again shortly.</Trans>
+              )}
+            </p>
+            {refused ? null : (
+              <Button onPress={() => void incident.refetch()}>
+                <Trans>Try again</Trans>
+              </Button>
             )}
-          </p>
-          {refused ? null : (
-            <Button onPress={() => void incident.refetch()}>
-              <Trans>Try again</Trans>
-            </Button>
-          )}
+          </div>
         </div>
       </Panel>
     );

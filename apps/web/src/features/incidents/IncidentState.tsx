@@ -25,16 +25,17 @@ export type IncidentStateId = (typeof INCIDENT_STATES)[number];
 
 /**
  * Each state's glyph from the kit (kit/status.tsx), so its shape carries the meaning as well as
- * its colour: new is a dashed ring, sorted an empty ring, work in hand a filled dot, a fix that
+ * its colour: new is a dashed ring, sorted an empty ring, work in hand a filled info-tone dot
+ * (Pixel: never the office's green Running), a fix that
  * needs the owner the orange halo, waiting on someone else the half disc, escalated the ink
  * square, and resolved the filled check.
  */
 const GLYPH: Record<IncidentStateId, AgentStatus> & Partial<Record<string, AgentStatus>> = {
   detected: "queued",
   triaged: "idle",
-  investigating: "running",
+  investigating: "working",
   remediation_proposed: "waityou",
-  auto_remediating: "running",
+  auto_remediating: "working",
   approval_required: "waityou",
   developer_required: "waitext",
   verifying: "waitext",
@@ -118,6 +119,17 @@ export const SEVERITY_RANK: Partial<Record<string, number>> = {
   medium: 2,
   low: 3,
 };
+
+/** The most urgent open incident: the highest severity, then the oldest. */
+export function mostUrgent<T extends { severity: string; detected_at: string }>(
+  items: readonly T[],
+): T | undefined {
+  return [...items].sort(
+    (a, b) =>
+      (SEVERITY_RANK[a.severity] ?? 9) - (SEVERITY_RANK[b.severity] ?? 9) ||
+      Date.parse(a.detected_at) - Date.parse(b.detected_at),
+  )[0];
+}
 
 /** An incident's severity: a dot and its word; high and critical are set heavier too. */
 export function Severity({ severity }: { severity: string }) {

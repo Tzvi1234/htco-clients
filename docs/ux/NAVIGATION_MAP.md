@@ -46,7 +46,7 @@ Seven areas in the owner's order and wording, defined once in `apps/web/src/app/
 
 | Area (he) | Tab | Address | Screen |
 |---|---|---|---|
-| Home (בית) | — | `/` | Built: the focus (greeting, today's numbers live from Etsy, the next step), then sub-tabs Today (what needs you as a demo, the shop and getting started) and Office (pulse, tickets, incidents as demos) |
+| Home (בית) | — | `/` | Built: the focus (greeting, today's numbers live from Etsy, the next step), then sub-tabs Today (what needs you as a demo, the shop and getting started) and Office (the open incidents live, with the most urgent one leading into the incident center; the pulse and tickets as demos) |
 | Office (המשרד) | Floor · Chat · Team room · AI ops · Engineering | `/office/floor` · `/office/chat` · `/office/team` · `/office/aiops` · `/office/eng` | Soon (the demo's full screens in the demo frame; the floor is the living 3D office) |
 | Work (עבודה) | Tasks · Approvals · Activity | `/work/tasks` · `/work/approvals` · `/work/activity` | Soon (the demo's full screens in the demo frame) |
 | Commerce (מסחר) | Shops | `/shops` (also `/commerce/shops`; the Etsy return `/integrations/etsy/callback` belongs here) | Built: the focus (shops by state, connect another), sub-tabs Shops (their connection, numbers live from Etsy) and Top listings |
@@ -56,7 +56,8 @@ Seven areas in the owner's order and wording, defined once in `apps/web/src/app/
 | Customers (לקוחות) | Customers | `/customers/customers` | Built: the shop's reviews live from Etsy; customer health and list as Demo parts (a customer store arrives with Phase 5) |
 | | Tickets · Mail · Marketing | `/customers/tickets` · `/customers/mail` · `/customers/marketing` | Soon (the demo's full screens in the demo frame) |
 | Finance (כספים) | Overview · Ledger | `/finance/overview` · `/finance/ledger` | Soon (the demo's full screens in the demo frame) |
-| Admin (ניהול) | Health · Automations | `/admin/health` · `/admin/automations` | Soon (the demo's full screens in the demo frame) |
+| Admin (ניהול) | Health | `/admin/health` | Built (slice 5.9): the focus (dead letters, workers, stale shops), sub-tabs Needs you (dead letters with retry, workers, shop syncs) and Activity (automation metrics, webhook intake, recent executions, outbox failures); an execution opens its chain sheet |
+| | Automations | `/admin/automations` | Built: the focus (live automations, dead-lettered runs, "Open the dead-lettered run"), the registry list (readiness, trigger kinds and, for the Owner and Admins, seven days of runs, success, retries and dead letters from the health read), then the chosen one (its facts, latest runs opening the execution sheet, and its tools such as Recount sales) |
 | | Members & access | `/settings/team` (also `/admin/members`) | Built: the focus (members, invited, Owners and Admins, invite), sub-tabs People (members, inviting with the one-time link, role changes, shop access, removal), AI employees and Policy (demos) |
 | | Settings | `/settings`, with Security at `/settings/security` (also `/admin/settings`) | Built: interface language, the design tweaks, access and security, Etsy connections; business settings, notifications and other connections as demos. Security: the second factor and signed-in devices; recovery as a demo |
 

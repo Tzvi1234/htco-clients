@@ -93,7 +93,7 @@ export const AREAS: readonly NavArea[] = [
     to: "/admin/health",
     tabs: [
       { id: "health", to: "/admin/health", built: true },
-      ...soon("admin", "automations"),
+      { id: "automations", to: "/admin/automations", built: true },
       { id: "members", to: "/settings/team", built: true },
       { id: "settings", to: "/settings", built: true },
     ],

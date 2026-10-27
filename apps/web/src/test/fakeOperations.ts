@@ -138,7 +138,7 @@ export function fakeHealth(
         created_at: iso(now, 110),
         updated_at: iso(now, 95),
       },
-    ],
+    ].filter((e) => ops.scene === "dead" || e.id !== DEAD_EXECUTION),
     outbox_failures: [
       {
         id: "0f000000-0000-7000-8000-0000000000f1",
@@ -155,7 +155,8 @@ export function fakeHealth(
         automation_id: "etsy-order-intake",
         executions: 212,
         succeeded: 209,
-        dead_lettered: 1,
+        // Only the `dead` scene has a dead-lettered run (Admin › Automations' Needs you tab).
+        dead_lettered: ops.scene === "dead" ? 1 : 0,
         retries: 7,
         success_rate: "99.5",
         p50_seconds: 1.4,
@@ -237,4 +238,127 @@ export function fakeChain(executionId: string, ops: FakeOperations, now = Date.n
           },
     ],
   };
+}
+
+type AutomationView = components["schemas"]["AutomationView"];
+type ExecutionView = components["schemas"]["ExecutionView"];
+
+const automation = (
+  id: string,
+  name: string,
+  primary: string,
+  callable: string[],
+  readiness: string,
+  phase: number,
+  extra: Partial<AutomationView> = {},
+): AutomationView => ({
+  id,
+  name,
+  version: 1,
+  business_owner: "roni",
+  primary_trigger: primary,
+  callable_from: callable,
+  readiness,
+  activation_phase: phase,
+  side_effect: "internal",
+  approval_required: false,
+  user_triggerable: false,
+  ...extra,
+});
+
+/** What `GET /v1/automations` answers: the three live order automations and two drafts. */
+export function fakeAutomations(): AutomationView[] {
+  return [
+    automation(
+      "etsy-order-intake",
+      "Etsy Order Intake",
+      "event",
+      ["event", "schedule", "workflow", "agent_tool"],
+      "ready",
+      5,
+      { business_owner: "maya", side_effect: "external_read" },
+    ),
+    automation(
+      "order-dedup-verification",
+      "Order Deduplication & Verification",
+      "workflow",
+      ["workflow", "schedule", "agent_tool"],
+      "ready",
+      5,
+      { business_owner: "maya" },
+    ),
+    automation(
+      "product-sales-counters",
+      "Product Sales Counters",
+      "event",
+      ["event", "workflow", "user_action"],
+      "ready",
+      5,
+      { user_triggerable: true },
+    ),
+    automation(
+      "incident-detection-escalation",
+      "Incident Detection & Escalation",
+      "schedule",
+      ["event", "schedule", "workflow"],
+      "draft",
+      6,
+      { business_owner: "eitan" },
+    ),
+    automation(
+      "tracking-sync",
+      "Tracking Sync",
+      "schedule",
+      ["schedule", "event", "workflow", "agent_tool"],
+      "draft",
+      6,
+      { business_owner: "eitan", side_effect: "external_write", approval_required: true },
+    ),
+  ];
+}
+
+/** What `GET /v1/automations/{id}/executions` answers for one automation, newest first. */
+export function fakeRuns(
+  automationId: string,
+  shops: readonly { id: string }[],
+  ops: FakeOperations,
+  now = Date.now(),
+): ExecutionView[] {
+  const shop = shops[0]?.id ?? null;
+  const run = (id: string, state: string, minutesAgo: number, attempts = 1): ExecutionView => ({
+    id,
+    automation_id: automationId,
+    automation_version: 1,
+    shop_id: shop,
+    trigger: "event",
+    actor_kind: "system",
+    actor_id: "engine",
+    state,
+    attempts,
+    correlation_id: `corr-${id.slice(-4)}`,
+    last_error: state === "dead_lettered" ? "ShopBusyError" : null,
+    created_at: iso(now, minutesAgo),
+    updated_at: iso(now, minutesAgo),
+  });
+  if (automationId === "etsy-order-intake")
+    return [
+      run(GOOD_EXECUTION, "succeeded", 6),
+      // Only the `dead` scene has the dead-lettered run (Codex local on #72).
+      ...(ops.scene === "dead"
+        ? [
+            run(
+              DEAD_EXECUTION,
+              ops.retriedExecutions.includes(DEAD_EXECUTION) ? "retry_scheduled" : "dead_lettered",
+              110,
+              5,
+            ),
+          ]
+        : []),
+    ];
+  if (automationId === "product-sales-counters")
+    return [
+      run("0e000000-0000-7000-8000-0000000000e3", "succeeded", 6),
+      run("0e000000-0000-7000-8000-0000000000e4", "succeeded", 48),
+    ];
+  return [];
 }

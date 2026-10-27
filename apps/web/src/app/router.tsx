@@ -20,6 +20,7 @@ import { SecondFactorPage } from "../features/auth/SecondFactorPage.tsx";
 import { SignInPage } from "../features/auth/SignInPage.tsx";
 import { OrdersPage } from "../features/commerce/OrdersPage.tsx";
 import { OrderIncidents } from "../features/incidents/OrderIncidents.tsx";
+import { AutomationsPage } from "../features/admin/AutomationsPage.tsx";
 import { OperationsPage } from "../features/admin/OperationsPage.tsx";
 import { ProductsPage } from "../features/commerce/ProductsPage.tsx";
 import { ShippingPage } from "../features/commerce/ShippingPage.tsx";
@@ -246,6 +247,13 @@ const routeTree = rootRoute.addChildren([
         path: "/admin/health",
         staticData: { layout: "panels", scroll: "page" },
         component: OperationsPage,
+      }),
+      // The office's automations (platform slices 5.1, 5.9 and 5.11), on the health read.
+      createRoute({
+        getParentRoute: () => appRoute,
+        path: "/admin/automations",
+        staticData: { layout: "panels", scroll: "page" },
+        component: AutomationsPage,
       }),
       createRoute({
         getParentRoute: () => appRoute,

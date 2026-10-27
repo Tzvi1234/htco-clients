@@ -4,7 +4,7 @@ import { checkpoint, openApp, pageTitle } from "./support.ts";
 
 /**
  * Round 3 (clarity): no panel the user must scroll inside, on the screens redesigned in part A,
- * at this project's viewport (1440×900 or 375×812) with the demo data. A panel counts when it
+ * at this project's viewport (1440ֳ—900 or 375ֳ—812) with the demo data. A panel counts when it
  * scrolls itself (overflow auto or scroll) and holds more than it shows.
  */
 async function innerScrollers(page: Page): Promise<string[]> {
@@ -30,6 +30,37 @@ for (const [path, as, title] of [
     await openApp(page, path, as);
     await expect(pageTitle(page, title)).toBeVisible();
     expect(await innerScrollers(page)).toEqual([]);
+  });
+}
+
+// Pixel's design notes on #48: at 375 px the Shipping sub-tabs ran 53 px past their pill and
+// "Orders to ship" was cut off. Every tab and the list title show in full, in both languages.
+for (const locale of ["en", "he"] as const) {
+  test(`Shipping's sub-tabs and list title fit the screen (${locale})`, async ({ page }) => {
+    await page.addInitScript((value) => {
+      localStorage.setItem("htco.locale", value);
+    }, locale);
+    await openApp(page, "/commerce/shipping", "shops");
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    await expect(page.locator('[aria-busy="true"]')).toHaveCount(0);
+    await page.evaluate(() => document.fonts.ready.then(() => undefined));
+    const fit = await page.evaluate(() => {
+      const list = document.querySelector<HTMLElement>("#main [role='tablist']");
+      const title = document.querySelector<HTMLElement>("#main [role='tabpanel'] h2");
+      const width = document.documentElement.clientWidth;
+      const tabs = [...(list?.querySelectorAll<HTMLElement>("[role='tab']") ?? [])];
+      return {
+        overflow: list === null ? -1 : list.scrollWidth - list.clientWidth,
+        outside: tabs.filter((tab) => {
+          const box = tab.getBoundingClientRect();
+          return box.left < -0.5 || box.right > width + 0.5;
+        }).length,
+        title: title === null ? -1 : title.scrollWidth - title.clientWidth,
+      };
+    });
+    expect(fit.overflow, "the sub-tabs scroll past their pill").toBeLessThanOrEqual(1);
+    expect(fit.outside, "a sub-tab off the screen").toBe(0);
+    expect(fit.title, "the list title is cut off").toBeLessThanOrEqual(1);
   });
 }
 

@@ -4,9 +4,11 @@ import { personSteps, type FakeIncident, type FakeNotification } from "./fakeInc
 import {
   DEAD_EXECUTION,
   DEAD_EXECUTION_JOB,
+  fakeAutomations,
   fakeChain,
   fakeHealth,
   fakeOperations,
+  fakeRuns,
   type FakeOperations,
 } from "./fakeOperations.ts";
 import { fakeShopData, type FakePeriod } from "./fakeShopData.ts";
@@ -126,6 +128,8 @@ export interface FakeState {
   /** "fail": the incident center answers 503 incidents-unavailable; "hang": it never answers;
    * "forbidden": the role may not view incidents (403). */
   incidentsTrouble?: "fail" | "hang" | "forbidden" | undefined;
+  /** Workspaces whose incident center answers 503 incidents-unavailable (the others as usual). */
+  incidentsFailFor?: string[] | undefined;
   /** How many incidents one page of `GET /v1/incidents` holds (the API's `limit`, 200). */
   incidentPageSize?: number | undefined;
   /** Incidents (by id) that belong to another workspace; the rest are the first workspace's. */
@@ -169,6 +173,10 @@ export interface FakeState {
   resyncs: number[][];
   /** The queue, execution and sync health (Admin › Health, slice 5.9) and its retries. */
   operations: FakeOperations;
+  /** "fail": `GET /v1/operations/health` answers 503 (the registry and the runs still answer). */
+  healthTrouble?: "fail" | undefined;
+  /** True: automations are not set up on this server (503 automations-unavailable). */
+  automationsOff?: boolean;
 }
 
 const PROBLEMS = "https://ht-co.app/problems/";
@@ -569,14 +577,39 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
       route === "GET /v1/operations/health" ||
       /^POST \/v1\/operations\/dead-letters\/[^/]+\/retry$/.test(route) ||
       /^GET \/v1\/executions\/[^/]+$/.test(route) ||
-      /^POST \/v1\/automations\/[^/]+\/executions\/[^/]+\/retry$/.test(route);
+      /^POST \/v1\/automations\/[^/]+\/executions\/[^/]+\/retry$/.test(route) ||
+      route === "GET /v1/automations" ||
+      /^GET \/v1\/automations\/[^/]+\/executions$/.test(route);
     const named = url.searchParams.get("organization_id");
     if (operational && named === null && state.otherOrgs.length > 0)
       return problem(400, "organization-required");
     const workspace = named ?? org;
     const admin = workspace === org ? state.role === "owner" || state.role === "admin" : true;
+    // The registry and the runs: every role that sees the office (the runs of granted shops).
+    if (route === "GET /v1/automations") {
+      if (state.automationsOff === true) return problem(503, "automations-unavailable");
+      return json(200, { items: fakeAutomations() });
+    }
+    // The sales counters' runs are the recounts this fake started (#73), so it answers before the
+    // generic runs of #72, which would otherwise shadow it.
+    if (route === "GET /v1/automations/product-sales-counters/executions") {
+      if (!admin) return problem(403, "forbidden");
+      return json(200, {
+        items:
+          state.recountListHides === true
+            ? []
+            : [...state.recounts.executions.keys()].reverse().map(recountView),
+        next_cursor: null,
+      });
+    }
+    const runs = /^GET \/v1\/automations\/([^/]+)\/executions$/.exec(route);
+    if (runs !== null) {
+      const ops = workspace === org ? state.operations : fakeOperations("calm");
+      return json(200, { items: fakeRuns(runs[1] ?? "", state.shops, ops), next_cursor: null });
+    }
     if (route === "GET /v1/operations/health") {
       if (!admin) return problem(403, "forbidden");
+      if (state.healthTrouble === "fail") return problem(503, "operations-unavailable");
       // Another workspace of the user runs calmly: switching shows its own numbers.
       const ops = workspace === org ? state.operations : fakeOperations("calm");
       return json(200, fakeHealth(workspace, state.shops, ops));
@@ -620,16 +653,6 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
         });
       if (state.recountLoseAnswer === true) return problem(503, "unavailable");
       return json(202, recountView(id));
-    }
-    if (route === "GET /v1/automations/product-sales-counters/executions") {
-      if (!admin) return problem(403, "forbidden");
-      return json(200, {
-        items:
-          state.recountListHides === true
-            ? []
-            : [...state.recounts.executions.keys()].reverse().map(recountView),
-        next_cursor: null,
-      });
     }
     const executionRetry = /^POST \/v1\/automations\/([^/]+)\/executions\/([^/]+)\/retry$/.exec(
       route,
@@ -798,6 +821,8 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
       if (state.incidentsTrouble === "hang") return new Promise<Response>(() => undefined);
       if (state.incidentsTrouble === "fail") return problem(503, "incidents-unavailable");
       if (state.incidentsTrouble === "forbidden") return problem(403, "forbidden");
+      if (state.incidentsFailFor?.includes(url.searchParams.get("organization_id") ?? org) === true)
+        return problem(503, "incidents-unavailable");
     }
     // Every call names its workspace; an incident or notification of another one is not there.
     const asked = url.searchParams.get("organization_id") ?? org;

@@ -113,6 +113,23 @@ describe("AC-6.5.1: incident states", () => {
     ]);
   });
 
+  it.each(["investigating", "auto_remediating"])(
+    "%s is work in hand, in the kit's info tone, never the office's green Running dot",
+    (state) => {
+      render(
+        <LocaleProvider initialLocale="en" storage={undefined}>
+          <IncidentState state={state} />
+        </LocaleProvider>,
+      );
+      const glyph = document.querySelector("svg[data-status]");
+      const marks = [...(glyph?.querySelectorAll("[fill], [stroke]") ?? [])].map(
+        (mark) => `${mark.getAttribute("fill") ?? ""} ${mark.getAttribute("stroke") ?? ""}`,
+      );
+      expect(marks.join(" ")).toContain("var(--info-dot)");
+      expect(marks.join(" ")).not.toContain("var(--success-dot)");
+    },
+  );
+
   it("AC-6.5.1 the list and the detail show the state with its glyph and word", async () => {
     const { user } = await open("/incidents");
     const list = await table();
@@ -207,6 +224,67 @@ describe("the incident center", () => {
       const panel = await detail("Automation gave up");
       await user.click(within(panel).getByRole("button", { name: "Back to list" }));
       expect(document.activeElement).toHaveAccessibleName("Open incidents");
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  });
+
+  // Pixel's design notes: on a phone the detail sits under the list, so a link to an incident
+  // that is not available left its message out of sight, with no way back.
+  it("brings an unavailable incident's message into view on a phone, with Back to list", async () => {
+    vi.stubGlobal("matchMedia", (query: string) => ({
+      matches: query === PHONE_QUERY,
+      media: query,
+      addEventListener: () => undefined,
+      removeEventListener: () => undefined,
+    }));
+    // jsdom does not scroll: record what asks to be brought into view.
+    const scrolled: Element[] = [];
+    Object.defineProperty(Element.prototype, "scrollIntoView", {
+      configurable: true,
+      value(this: Element) {
+        scrolled.push(this);
+      },
+    });
+    try {
+      const { user } = await open(`/incidents/e0000000-0000-7000-8000-0000000000ff`);
+      const words = await screen.findByText("This incident is not available to you.");
+      const alert = words.closest("[role='alert']");
+      await vi.waitFor(() => {
+        expect(alert).toHaveFocus();
+      });
+      // Its panel comes into view from the top: Back to list above the message.
+      const back = screen.getByRole("button", { name: "Back to list" });
+      expect(scrolled.some((element) => element.contains(back) && element.contains(alert))).toBe(
+        true,
+      );
+      await user.click(back);
+      expect(document.activeElement).toHaveAccessibleName("Open incidents");
+    } finally {
+      Reflect.deleteProperty(Element.prototype, "scrollIntoView");
+      vi.unstubAllGlobals();
+    }
+  });
+
+  it("points Back to list along the reading direction in Hebrew, flipped once", async () => {
+    vi.stubGlobal("matchMedia", (query: string) => ({
+      matches: query === PHONE_QUERY,
+      media: query,
+      addEventListener: () => undefined,
+      removeEventListener: () => undefined,
+    }));
+    try {
+      await open(`/incidents/${DEAD}`, {}, "he");
+      await settled();
+      expect(document.documentElement.dir).toBe("rtl");
+      const back = await screen.findByRole("button", { name: "חזרה לרשימה" });
+      const glyph = back.querySelector("svg");
+      // The kit's Back glyph draws "<" and mirrors itself in RTL, so it points right in Hebrew;
+      // nothing around it may flip it a second time.
+      expect(glyph?.getAttribute("class")?.split(" ")).toContain("rtl:-scale-x-100");
+      for (let node = glyph?.parentElement; node; node = node.parentElement)
+        expect(node.getAttribute("class") ?? "").not.toContain("scale-x");
+      expect(glyph?.querySelector("path")?.getAttribute("d")).toBe("M14.5 6l-6 6 6 6");
     } finally {
       vi.unstubAllGlobals();
     }

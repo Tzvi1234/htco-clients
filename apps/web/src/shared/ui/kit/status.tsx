@@ -6,7 +6,8 @@ import { cx } from "../../lib/cx.ts";
 /**
  * The demo's work statuses (the office's eight, and "delivered" for shipments). The glyph's
  * shape is the cue that does not rely on colour: filled, ring, dashed ring, half, halo, square,
- * cross, bar, and a filled check.
+ * cross, bar, and a filled check. "working" is work in hand outside the office (an incident
+ * being investigated or fixed): the filled dot in the info tone, not the office's green.
  */
 export type AgentStatus =
   | "running"
@@ -17,10 +18,11 @@ export type AgentStatus =
   | "blocked"
   | "failed"
   | "offline"
-  | "delivered";
+  | "delivered"
+  | "working";
 
 /** The office's eight statuses (an employee is never "delivered"). */
-export type OfficeStatus = Exclude<AgentStatus, "delivered">;
+export type OfficeStatus = Exclude<AgentStatus, "delivered" | "working">;
 
 /** The office's eight statuses in the demo's order (its legend). */
 export const AGENT_STATUSES: readonly OfficeStatus[] = [
@@ -47,6 +49,7 @@ export function useStatusLabels(): Record<AgentStatus, string> {
     failed: t`Failed`,
     offline: t`Offline`,
     delivered: t`Delivered`,
+    working: t`In progress`,
   };
 }
 
@@ -71,6 +74,7 @@ export function StatusGlyph({
     running: (
       <circle cx="5" cy="5" r="4" fill="var(--success-dot)" className={live ? LED : undefined} />
     ),
+    working: <circle cx="5" cy="5" r="4" fill="var(--info-dot)" />,
     idle: <circle cx="5" cy="5" r="3.6" fill="none" stroke="var(--icon-faint)" strokeWidth="1.4" />,
     queued: (
       <circle
