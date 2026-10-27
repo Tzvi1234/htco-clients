@@ -24,6 +24,7 @@ import { AutomationsPage } from "../features/admin/AutomationsPage.tsx";
 import { OperationsPage } from "../features/admin/OperationsPage.tsx";
 import { ProductsPage } from "../features/commerce/ProductsPage.tsx";
 import { ShippingPage } from "../features/commerce/ShippingPage.tsx";
+import { QuotesPage } from "../features/suppliers/QuotesPage.tsx";
 import { CustomersPage } from "../features/customers/CustomersPage.tsx";
 import { IncidentsPage } from "../features/incidents/IncidentsPage.tsx";
 import { OverviewPage } from "../features/overview/OverviewPage.tsx";
@@ -223,6 +224,14 @@ const routeTree = rootRoute.addChildren([
         validateSearch: shopSearch,
         staticData: { layout: "panels", scroll: "page" },
         component: ShippingPage,
+      }),
+      // New product quotes (platform slice 7.16), read only: choosing one is 7.17.
+      createRoute({
+        getParentRoute: () => appRoute,
+        path: "/commerce/quotes",
+        validateSearch: shopSearch,
+        staticData: { layout: "panels", scroll: "page" },
+        component: QuotesPage,
       }),
       // The incident center (platform slice 6.5); a notification opens `/incidents/{id}` and
       // may name the workspace (`?workspace=`) for a user in several.

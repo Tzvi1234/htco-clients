@@ -31,6 +31,11 @@ msgstr "{0, plural, one {# open incident} other {# open incidents}}"
 msgid "{0, plural, one {# order} other {# orders}}"
 msgstr "{0, plural, one {# order} other {# orders}}"
 
+#. placeholder {0}: items.length
+#: src/features/suppliers/QuotesPage.tsx
+msgid "{0, plural, one {# product is waiting for you to choose a supplier. Quotes are sorted by their total, cheapest first.} other {# products are waiting for you to choose a supplier. Quotes are sorted by their total, cheapest first.}}"
+msgstr "{0, plural, one {# product is waiting for you to choose a supplier. Quotes are sorted by their total, cheapest first.} other {# products are waiting for you to choose a supplier. Quotes are sorted by their total, cheapest first.}}"
+
 #. placeholder {0}: dead.length
 #: src/features/admin/AutomationsPage.tsx
 msgid "{0, plural, one {One automation has dead-lettered runs.} other {# automations have dead-lettered runs. Open each, read its error, then retry it.}}"
@@ -250,6 +255,12 @@ msgstr "{value} of 5 stars"
 msgid "#3152 (Emma R.) and #3160 (Liam K.) — a print delay at the supplier. I suggest a 15% partial refund on #3152, it is 4 days late."
 msgstr "#3152 (Emma R.) and #3160 (Liam K.) — a print delay at the supplier. I suggest a 15% partial refund on #3152, it is 4 days late."
 
+#. placeholder {0}: days(quote.processing_days)
+#. placeholder {0}: days(quote.shipping_days)
+#: src/features/suppliers/QuotesPage.tsx
+msgid "<0>{0}</0> days"
+msgstr "<0>{0}</0> days"
+
 #. placeholder {0}: Number(profile.review_average).toFixed(1)
 #. placeholder {1}: count(profile.review_count)
 #: src/features/shops/ShopStats.tsx
@@ -374,6 +385,10 @@ msgstr "A new loop in the office"
 #: src/app/shell/NotificationBell.tsx
 msgid "A new notification"
 msgstr "A new notification"
+
+#: src/app/shell/NotificationBell.tsx
+msgid "A new supplier quote for listing {listing}"
+msgstr "A new supplier quote for listing {listing}"
 
 #: src/features/admin/AutomationsPage.tsx
 msgid "A person"
@@ -738,6 +753,11 @@ msgstr "Ask for a new link"
 #: src/features/office/floor3d/engine.ts
 msgid "Ask Tzvi"
 msgstr "Ask Tzvi"
+
+#. placeholder {0}: date(product.requested_at)
+#: src/features/suppliers/QuotesPage.tsx
+msgid "Asked {0}"
+msgstr "Asked {0}"
 
 #: src/features/office/ChatPage.tsx
 msgid "Asks first"
@@ -1225,6 +1245,10 @@ msgstr "Connect your Etsy shop and its orders, listings and numbers appear here,
 msgid "Connect your Etsy shop and its shipments appear here, live."
 msgstr "Connect your Etsy shop and its shipments appear here, live."
 
+#: src/features/suppliers/QuotesPage.tsx
+msgid "Connect your Etsy shop and its suppliers' quotes appear here."
+msgstr "Connect your Etsy shop and its suppliers' quotes appear here."
+
 #: src/features/overview/OverviewPage.tsx
 msgid "Connect your Etsy shop and today’s orders, revenue and what waits to ship appear here."
 msgstr "Connect your Etsy shop and today’s orders, revenue and what waits to ship appear here."
@@ -1500,6 +1524,10 @@ msgstr "Deletes the shop and all its data in HTCO"
 #: src/shared/ui/kit/status.tsx
 msgid "Delivered"
 msgstr "Delivered"
+
+#: src/features/suppliers/QuotesPage.tsx
+msgid "Delivery"
+msgstr "Delivery"
 
 #: src/features/commerce/ShippingPage.tsx
 msgid "Delivery performance"
@@ -1929,6 +1957,15 @@ msgstr "Expand the menu"
 #: src/features/finance/FinanceDemos.tsx
 msgid "Expenses (month)"
 msgstr "Expenses (month)"
+
+#: src/features/suppliers/QuotesPage.tsx
+msgid "Expired"
+msgstr "Expired"
+
+#. placeholder {0}: date(quote.valid_until)
+#: src/features/suppliers/QuotesPage.tsx
+msgid "Expired on {0}, cannot be chosen"
+msgstr "Expired on {0}, cannot be chosen"
 
 #: src/features/finance/FinanceDemos.tsx
 #: src/features/office/AiOpsPage.tsx
@@ -2640,6 +2677,11 @@ msgstr "Linked task"
 msgid "List"
 msgstr "List"
 
+#. placeholder {0}: String(product.listing_id)
+#: src/features/suppliers/QuotesPage.tsx
+msgid "Listing {0}"
+msgstr "Listing {0}"
+
 #: src/app/shell/NotificationBell.tsx
 msgid "Listing {listing} is out of stock"
 msgstr "Listing {listing} is out of stock"
@@ -2711,6 +2753,10 @@ msgstr "Loading orders"
 msgid "Loading products"
 msgstr "Loading products"
 
+#: src/features/suppliers/QuotesPage.tsx
+msgid "Loading quotes"
+msgstr "Loading quotes"
+
 #: src/features/commerce/ShippingPage.tsx
 msgid "Loading shipping"
 msgstr "Loading shipping"
@@ -2776,6 +2822,10 @@ msgstr "Low"
 #: src/features/work/demoScreens.tsx
 msgid "Low risk"
 msgstr "Low risk"
+
+#: src/features/suppliers/QuotesPage.tsx
+msgid "Lowest total"
+msgstr "Lowest total"
 
 #: src/features/customers/CustomersDemos.tsx
 msgid "Loyalty"
@@ -3030,6 +3080,10 @@ msgstr "New MCP tool: Etsy listings"
 msgid "New password"
 msgstr "New password"
 
+#: src/features/suppliers/QuotesPage.tsx
+msgid "New product quotes"
+msgstr "New product quotes"
+
 #: src/app/shell/NotificationBell.tsx
 msgid "New sign-in on {device}"
 msgstr "New sign-in on {device}"
@@ -3121,6 +3175,10 @@ msgstr "No automation has run yet."
 msgid "No connection needs you. A disconnected shop stays paused until you connect it again."
 msgstr "No connection needs you. A disconnected shop stays paused until you connect it again."
 
+#: src/features/suppliers/QuotesPage.tsx
+msgid "No end date given"
+msgstr "No end date given"
+
 #: src/features/admin/OperationsPage.tsx
 msgid "No Etsy notice has arrived yet."
 msgstr "No Etsy notice has arrived yet."
@@ -3183,6 +3241,14 @@ msgstr "No orders match this filter."
 #: src/features/commerce/OrdersPage.tsx
 msgid "No orders yet."
 msgstr "No orders yet."
+
+#: src/features/suppliers/QuotesPage.tsx
+msgid "No product is waiting for a supplier. When AutoVA sends a quote for a new product, it appears here and you get a notification."
+msgstr "No product is waiting for a supplier. When AutoVA sends a quote for a new product, it appears here and you get a notification."
+
+#: src/features/suppliers/QuotesPage.tsx
+msgid "No quote yet. AutoVA's suppliers usually answer within a few days."
+msgstr "No quote yet. AutoVA's suppliers usually answer within a few days."
 
 #: src/shared/i18n/format.ts
 msgid "No reason given"
@@ -3489,6 +3555,10 @@ msgstr "One button, Etsy asks you to allow it, and you are back."
 #: src/features/overview/OverviewPage.tsx
 msgid "One workspace's incidents could not be read."
 msgstr "One workspace's incidents could not be read."
+
+#: src/features/suppliers/QuotesPage.tsx
+msgid "Only an Owner or Admin sees supplier quotes."
+msgstr "Only an Owner or Admin sees supplier quotes."
 
 #: src/features/admin/OperationsPage.tsx
 msgid "Only the Owner and Admins retry jobs."
@@ -3946,6 +4016,10 @@ msgstr "Printful invoice #4471"
 msgid "Printful invoice matches orders"
 msgstr "Printful invoice matches orders"
 
+#: src/features/suppliers/QuotesPage.tsx
+msgid "Processing"
+msgstr "Processing"
+
 #: src/features/office/floor3d/plan.ts
 #: src/shared/demo/office.ts
 msgid "Procurement & Finance"
@@ -4060,6 +4134,19 @@ msgstr "Quote: linen tea towels"
 #: src/features/commerce/demoScreens.tsx
 msgid "Quoted price"
 msgstr "Quoted price"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Quotes"
+msgstr "Quotes"
+
+#: src/features/suppliers/QuotesPage.tsx
+msgid "Quotes could not be loaded"
+msgstr "Quotes could not be loaded"
+
+#: src/features/suppliers/QuotesPage.tsx
+msgid "Quotes for {heading}"
+msgstr "Quotes for {heading}"
 
 #: src/features/shops/ShopCard.tsx
 msgid "Rating"
@@ -4767,6 +4854,7 @@ msgid "Shipped, 30 days"
 msgstr "Shipped, 30 days"
 
 #: src/features/commerce/ShippingPage.tsx
+#: src/features/suppliers/QuotesPage.tsx
 msgid "Shipping"
 msgstr "Shipping"
 
@@ -5405,6 +5493,10 @@ msgstr "The queue and sync health are not available on this server yet."
 msgid "The queue and sync health could not be loaded. Try again shortly."
 msgstr "The queue and sync health could not be loaded. Try again shortly."
 
+#: src/features/suppliers/QuotesPage.tsx
+msgid "The quotes are not answering. Check your connection and try again."
+msgstr "The quotes are not answering. Check your connection and try again."
+
 #: src/features/admin/AutomationsPage.tsx
 msgid "The runs and their success could not be loaded; the list is the registry's."
 msgstr "The runs and their success could not be loaded; the list is the registry's."
@@ -5759,6 +5851,10 @@ msgstr "Top products"
 msgid "Total"
 msgstr "Total"
 
+#: src/features/suppliers/QuotesPage.tsx
+msgid "Total per unit, with shipping"
+msgstr "Total per unit, with shipping"
+
 #: src/features/shops/ShopStats.tsx
 msgid "Total sales"
 msgstr "Total sales"
@@ -5857,6 +5953,7 @@ msgstr "Triggers"
 #: src/features/overview/OverviewPage.tsx
 #: src/features/shops/reconnect.tsx
 #: src/features/shops/ShopsPage.tsx
+#: src/features/suppliers/QuotesPage.tsx
 msgid "Try again"
 msgstr "Try again"
 
@@ -5920,6 +6017,10 @@ msgstr "Tzvi"
 msgid "Unit cost by product"
 msgstr "Unit cost by product"
 
+#: src/features/suppliers/QuotesPage.tsx
+msgid "Unit price"
+msgstr "Unit price"
+
 #: src/features/security/SecurityPage.tsx
 msgid "Unknown device"
 msgstr "Unknown device"
@@ -5956,6 +6057,11 @@ msgstr "Usage:"
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "Use between 12 and 128 characters."
 msgstr "Use between 12 and 128 characters."
+
+#. placeholder {0}: date(quote.valid_until)
+#: src/features/suppliers/QuotesPage.tsx
+msgid "Valid until {0}"
+msgstr "Valid until {0}"
 
 #: src/features/customers/CustomersDemos.tsx
 #: src/features/work/demoScreens.tsx
@@ -6018,6 +6124,10 @@ msgstr "Waiting / blocked"
 #: src/features/commerce/ShippingPage.tsx
 msgid "Waiting first, by ship-by date; then recently shipped"
 msgstr "Waiting first, by ship-by date; then recently shipped"
+
+#: src/features/suppliers/QuotesPage.tsx
+msgid "Waiting for a supplier"
+msgstr "Waiting for a supplier"
 
 #: src/shared/demo/office.ts
 msgid "Waiting for Gelato quote"

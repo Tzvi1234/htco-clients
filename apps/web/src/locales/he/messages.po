@@ -31,6 +31,11 @@ msgstr "{0, plural, one {תקלה פתוחה אחת} two {# תקלות פתוח�
 msgid "{0, plural, one {# order} other {# orders}}"
 msgstr "{0, plural, one {הזמנה אחת} two {# הזמנות} other {# הזמנות}}"
 
+#. placeholder {0}: items.length
+#: src/features/suppliers/QuotesPage.tsx
+msgid "{0, plural, one {# product is waiting for you to choose a supplier. Quotes are sorted by their total, cheapest first.} other {# products are waiting for you to choose a supplier. Quotes are sorted by their total, cheapest first.}}"
+msgstr "{0, plural, one {מוצר # מחכה שתבחרו לו ספק. ההצעות ממוינות לפי הסכום הכולל, מהזולה ביותר.} other {# מוצרים מחכים שתבחרו להם ספק. ההצעות ממוינות לפי הסכום הכולל, מהזולה ביותר.}}"
+
 #. placeholder {0}: dead.length
 #: src/features/admin/AutomationsPage.tsx
 msgid "{0, plural, one {One automation has dead-lettered runs.} other {# automations have dead-lettered runs. Open each, read its error, then retry it.}}"
@@ -250,6 +255,12 @@ msgstr "{value} מתוך 5 כוכבים"
 msgid "#3152 (Emma R.) and #3160 (Liam K.) — a print delay at the supplier. I suggest a 15% partial refund on #3152, it is 4 days late."
 msgstr "#3152 של Emma R. ו־#3160 של Liam K. — עיכוב בהדפסה אצל הספק. ממליצה על החזר חלקי של 15% ל־#3152, היא באיחור של 4 ימים."
 
+#. placeholder {0}: days(quote.processing_days)
+#. placeholder {0}: days(quote.shipping_days)
+#: src/features/suppliers/QuotesPage.tsx
+msgid "<0>{0}</0> days"
+msgstr "<0>{0}</0> ימים"
+
 #. placeholder {0}: Number(profile.review_average).toFixed(1)
 #. placeholder {1}: count(profile.review_count)
 #: src/features/shops/ShopStats.tsx
@@ -374,6 +385,10 @@ msgstr "יום עבודה חדש במשרד"
 #: src/app/shell/NotificationBell.tsx
 msgid "A new notification"
 msgstr "התראה חדשה"
+
+#: src/app/shell/NotificationBell.tsx
+msgid "A new supplier quote for listing {listing}"
+msgstr "הצעת מחיר חדשה מספק למוצר {listing}"
 
 #: src/features/admin/AutomationsPage.tsx
 msgid "A person"
@@ -738,6 +753,11 @@ msgstr "בקשת קישור חדש"
 #: src/features/office/floor3d/engine.ts
 msgid "Ask Tzvi"
 msgstr "נבקש מצבי"
+
+#. placeholder {0}: date(product.requested_at)
+#: src/features/suppliers/QuotesPage.tsx
+msgid "Asked {0}"
+msgstr "התבקש {0}"
 
 #: src/features/office/ChatPage.tsx
 msgid "Asks first"
@@ -1225,6 +1245,10 @@ msgstr "חבר את חנות ה־Etsy שלך, וההזמנות, המוצרים �
 msgid "Connect your Etsy shop and its shipments appear here, live."
 msgstr "חברו את חנות ה־Etsy שלכם והמשלוחים שלה יופיעו כאן, בזמן אמת."
 
+#: src/features/suppliers/QuotesPage.tsx
+msgid "Connect your Etsy shop and its suppliers' quotes appear here."
+msgstr "חברו את חנות ה־Etsy, והצעות המחיר של הספקים יופיעו כאן."
+
 #: src/features/overview/OverviewPage.tsx
 msgid "Connect your Etsy shop and today’s orders, revenue and what waits to ship appear here."
 msgstr "חבר את חנות ה־Etsy שלך, וההזמנות, ההכנסות ומה שממתין למשלוח היום יופיעו כאן."
@@ -1500,6 +1524,10 @@ msgstr "מוחק את החנות ואת כל הנתונים שלה ב־HTCO"
 #: src/shared/ui/kit/status.tsx
 msgid "Delivered"
 msgstr "נמסר"
+
+#: src/features/suppliers/QuotesPage.tsx
+msgid "Delivery"
+msgstr "משלוח"
 
 #: src/features/commerce/ShippingPage.tsx
 msgid "Delivery performance"
@@ -1929,6 +1957,15 @@ msgstr "הרחבת התפריט"
 #: src/features/finance/FinanceDemos.tsx
 msgid "Expenses (month)"
 msgstr "הוצאות החודש"
+
+#: src/features/suppliers/QuotesPage.tsx
+msgid "Expired"
+msgstr "פג תוקף"
+
+#. placeholder {0}: date(quote.valid_until)
+#: src/features/suppliers/QuotesPage.tsx
+msgid "Expired on {0}, cannot be chosen"
+msgstr "פג תוקף ב־{0}, אי אפשר לבחור"
 
 #: src/features/finance/FinanceDemos.tsx
 #: src/features/office/AiOpsPage.tsx
@@ -2640,6 +2677,11 @@ msgstr "משימה מקושרת"
 msgid "List"
 msgstr "רשימה"
 
+#. placeholder {0}: String(product.listing_id)
+#: src/features/suppliers/QuotesPage.tsx
+msgid "Listing {0}"
+msgstr "מוצר {0}"
+
 #: src/app/shell/NotificationBell.tsx
 msgid "Listing {listing} is out of stock"
 msgstr "המוצר {listing} אזל מהמלאי"
@@ -2711,6 +2753,10 @@ msgstr "טוען הזמנות"
 msgid "Loading products"
 msgstr "טוען מוצרים"
 
+#: src/features/suppliers/QuotesPage.tsx
+msgid "Loading quotes"
+msgstr "טוען הצעות מחיר"
+
 #: src/features/commerce/ShippingPage.tsx
 msgid "Loading shipping"
 msgstr "טוען משלוחים"
@@ -2776,6 +2822,10 @@ msgstr "נמוכה"
 #: src/features/work/demoScreens.tsx
 msgid "Low risk"
 msgstr "סיכון נמוך"
+
+#: src/features/suppliers/QuotesPage.tsx
+msgid "Lowest total"
+msgstr "הסכום הנמוך ביותר"
 
 #: src/features/customers/CustomersDemos.tsx
 msgid "Loyalty"
@@ -3030,6 +3080,10 @@ msgstr "כלי MCP חדש: Etsy listings"
 msgid "New password"
 msgstr "סיסמה חדשה"
 
+#: src/features/suppliers/QuotesPage.tsx
+msgid "New product quotes"
+msgstr "הצעות מחיר למוצרים חדשים"
+
 #: src/app/shell/NotificationBell.tsx
 msgid "New sign-in on {device}"
 msgstr "כניסה חדשה מ־{device}"
@@ -3121,6 +3175,10 @@ msgstr "אף אוטומציה עוד לא רצה."
 msgid "No connection needs you. A disconnected shop stays paused until you connect it again."
 msgstr "אף חיבור לא צריך אותך. חנות מנותקת נשארת מושהית עד שתחבר אותה שוב."
 
+#: src/features/suppliers/QuotesPage.tsx
+msgid "No end date given"
+msgstr "לא צוין תאריך סיום"
+
 #: src/features/admin/OperationsPage.tsx
 msgid "No Etsy notice has arrived yet."
 msgstr "עוד לא הגיעה הודעה מ־Etsy."
@@ -3183,6 +3241,14 @@ msgstr "אין הזמנות שמתאימות לסינון הזה."
 #: src/features/commerce/OrdersPage.tsx
 msgid "No orders yet."
 msgstr "עדיין אין הזמנות."
+
+#: src/features/suppliers/QuotesPage.tsx
+msgid "No product is waiting for a supplier. When AutoVA sends a quote for a new product, it appears here and you get a notification."
+msgstr "אין מוצר שמחכה לספק. כש־AutoVA שולחת הצעת מחיר למוצר חדש, היא מופיעה כאן ומקבלים התראה."
+
+#: src/features/suppliers/QuotesPage.tsx
+msgid "No quote yet. AutoVA's suppliers usually answer within a few days."
+msgstr "עדיין אין הצעה. הספקים של AutoVA עונים בדרך כלל תוך כמה ימים."
 
 #: src/shared/i18n/format.ts
 msgid "No reason given"
@@ -3489,6 +3555,10 @@ msgstr "כפתור אחד, Etsy מבקשת את אישורך, וחוזרים."
 #: src/features/overview/OverviewPage.tsx
 msgid "One workspace's incidents could not be read."
 msgstr "לא הצלחנו לקרוא את התקלות של אחת מסביבות העבודה."
+
+#: src/features/suppliers/QuotesPage.tsx
+msgid "Only an Owner or Admin sees supplier quotes."
+msgstr "רק בעלים או מנהל רואים הצעות מחיר של ספקים."
 
 #: src/features/admin/OperationsPage.tsx
 msgid "Only the Owner and Admins retry jobs."
@@ -3946,6 +4016,10 @@ msgstr "חשבונית Printful #4471"
 msgid "Printful invoice matches orders"
 msgstr "חשבונית Printful תואמת להזמנות"
 
+#: src/features/suppliers/QuotesPage.tsx
+msgid "Processing"
+msgstr "הכנה"
+
 #: src/features/office/floor3d/plan.ts
 #: src/shared/demo/office.ts
 msgid "Procurement & Finance"
@@ -4060,6 +4134,19 @@ msgstr "הצעת מחיר: מגבות מפשתן"
 #: src/features/commerce/demoScreens.tsx
 msgid "Quoted price"
 msgstr "מחיר מוצע"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Quotes"
+msgstr "הצעות מחיר"
+
+#: src/features/suppliers/QuotesPage.tsx
+msgid "Quotes could not be loaded"
+msgstr "לא ניתן לטעון את הצעות המחיר"
+
+#: src/features/suppliers/QuotesPage.tsx
+msgid "Quotes for {heading}"
+msgstr "הצעות מחיר עבור {heading}"
 
 #: src/features/shops/ShopCard.tsx
 msgid "Rating"
@@ -4767,6 +4854,7 @@ msgid "Shipped, 30 days"
 msgstr "נשלחו, 30 ימים"
 
 #: src/features/commerce/ShippingPage.tsx
+#: src/features/suppliers/QuotesPage.tsx
 msgid "Shipping"
 msgstr "משלוחים"
 
@@ -5405,6 +5493,10 @@ msgstr "מצב התור והסנכרון עוד לא זמין בשרת הזה."
 msgid "The queue and sync health could not be loaded. Try again shortly."
 msgstr "לא הצלחנו לטעון את מצב התור והסנכרון. נסו שוב בעוד רגע."
 
+#: src/features/suppliers/QuotesPage.tsx
+msgid "The quotes are not answering. Check your connection and try again."
+msgstr "הצעות המחיר לא עונות. בדקו את החיבור ונסו שוב."
+
 #: src/features/admin/AutomationsPage.tsx
 msgid "The runs and their success could not be loaded; the list is the registry's."
 msgstr "לא הצלחנו לטעון את ההרצות וההצלחה שלהן; הרשימה היא של המרשם."
@@ -5759,6 +5851,10 @@ msgstr "המוצרים המובילים"
 msgid "Total"
 msgstr "סה״כ"
 
+#: src/features/suppliers/QuotesPage.tsx
+msgid "Total per unit, with shipping"
+msgstr "סך הכול ליחידה, כולל משלוח"
+
 #: src/features/shops/ShopStats.tsx
 msgid "Total sales"
 msgstr "סך המכירות"
@@ -5857,6 +5953,7 @@ msgstr "מפעילים"
 #: src/features/overview/OverviewPage.tsx
 #: src/features/shops/reconnect.tsx
 #: src/features/shops/ShopsPage.tsx
+#: src/features/suppliers/QuotesPage.tsx
 msgid "Try again"
 msgstr "לנסות שוב"
 
@@ -5920,6 +6017,10 @@ msgstr "צבי"
 msgid "Unit cost by product"
 msgstr "עלות ליחידה"
 
+#: src/features/suppliers/QuotesPage.tsx
+msgid "Unit price"
+msgstr "מחיר ליחידה"
+
 #: src/features/security/SecurityPage.tsx
 msgid "Unknown device"
 msgstr "מכשיר לא מזוהה"
@@ -5956,6 +6057,11 @@ msgstr "שימוש:"
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "Use between 12 and 128 characters."
 msgstr "השתמש/י ב־12 עד 128 תווים."
+
+#. placeholder {0}: date(quote.valid_until)
+#: src/features/suppliers/QuotesPage.tsx
+msgid "Valid until {0}"
+msgstr "בתוקף עד {0}"
 
 #: src/features/customers/CustomersDemos.tsx
 #: src/features/work/demoScreens.tsx
@@ -6018,6 +6124,10 @@ msgstr "ממתינות / חסומות"
 #: src/features/commerce/ShippingPage.tsx
 msgid "Waiting first, by ship-by date; then recently shipped"
 msgstr "הממתינות קודם, לפי מועד המשלוח; אחריהן מה שנשלח לאחרונה"
+
+#: src/features/suppliers/QuotesPage.tsx
+msgid "Waiting for a supplier"
+msgstr "מחכים לספק"
 
 #: src/shared/demo/office.ts
 msgid "Waiting for Gelato quote"
