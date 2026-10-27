@@ -6,7 +6,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { App } from "../../app/App.tsx";
 import { memoryStorage } from "../../shared/lib/storage.ts";
 import { fakeBackend, type FakeState } from "../../test/fakeApi.ts";
-import { demoIncidents } from "../../test/fakeIncidents.ts";
+import { demoIncidents, fakeIncident } from "../../test/fakeIncidents.ts";
 
 async function open(state: Partial<FakeState> = {}, locale: "en" | "he" = "en") {
   const backend = fakeBackend({ signedIn: true, enrolled: true, assurance: "aal2", ...state });
@@ -229,6 +229,53 @@ describe("Home › Office › Incidents", () => {
     expect(await within(again).findByText("Your role does not see incidents.")).toBeInTheDocument();
     expect(within(again).queryByText("3")).toBeNull();
     expect(within(again).queryByRole("link", { name: /Automation gave up/ })).toBeNull();
+  });
+
+  // Quill's review of #75: the two branches no test reached.
+  it("says more than it read when the pages run past the bound, never a false total", async () => {
+    // At most five pages are read (INCIDENT_PAGES): one incident a page and six open is "5+".
+    const many = Array.from({ length: 6 }, (_, index) =>
+      fakeIncident({
+        id: `e1000000-0000-7000-8000-${String(index).padStart(12, "0")}`,
+        shop_id: SHOPS[0]?.id ?? null,
+        detected_at: new Date(Date.now() - (index + 1) * 3_600_000).toISOString(),
+      }),
+    );
+    const { incidents } = await office({ incidents: many, incidentPageSize: 1 });
+
+    expect(await within(incidents).findByText("5+")).toBeInTheDocument();
+    expect(within(incidents).queryByText("6")).toBeNull();
+    expect(within(incidents).queryByText("5")).toBeNull();
+  });
+
+  it("shows the readable workspace's incidents when another's cannot be read", async () => {
+    const OTHER = "b0000000-0000-7000-8000-0000000000bb";
+    const DEAD = "e0000000-0000-7000-8000-000000000003";
+    const MISMATCH = "e0000000-0000-7000-8000-000000000001";
+    // The critical one is the other workspace's, and that workspace's incident center fails.
+    const { incidents } = await office({
+      otherOrgs: [OTHER],
+      incidents: demoIncidents(SHOPS.map((s) => s.id)),
+      incidentWorkspaces: { [DEAD]: OTHER },
+      incidentsFailFor: [OTHER],
+    });
+
+    // One quick retry of the 503 first (App.tsx), then the readable workspace's two.
+    expect(
+      await within(incidents).findByText(
+        "One workspace's incidents could not be read.",
+        undefined,
+        {
+          timeout: 3000,
+        },
+      ),
+    ).toBeInTheDocument();
+    expect(within(incidents).getByText("2")).toBeInTheDocument();
+    const urgent = within(incidents).getByRole("link", { name: /Tracking mismatch/ });
+    expect(urgent).toHaveAttribute("href", `/incidents/${MISMATCH}?workspace=${ORG}`);
+    expect(within(incidents).getByText("High")).toBeInTheDocument();
+    expect(within(incidents).getByText("1 high or critical")).toBeInTheDocument();
+    expect(within(incidents).queryByRole("link", { name: /Automation gave up/ })).toBeNull();
   });
 
   it("says when nothing is open", async () => {

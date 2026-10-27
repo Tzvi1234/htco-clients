@@ -106,6 +106,8 @@ export interface FakeState {
   /** "fail": the incident center answers 503 incidents-unavailable; "hang": it never answers;
    * "forbidden": the role may not view incidents (403). */
   incidentsTrouble?: "fail" | "hang" | "forbidden" | undefined;
+  /** Workspaces whose incident center answers 503 incidents-unavailable (the others as usual). */
+  incidentsFailFor?: string[] | undefined;
   /** How many incidents one page of `GET /v1/incidents` holds (the API's `limit`, 200). */
   incidentPageSize?: number | undefined;
   /** Incidents (by id) that belong to another workspace; the rest are the first workspace's. */
@@ -710,6 +712,8 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
       if (state.incidentsTrouble === "hang") return new Promise<Response>(() => undefined);
       if (state.incidentsTrouble === "fail") return problem(503, "incidents-unavailable");
       if (state.incidentsTrouble === "forbidden") return problem(403, "forbidden");
+      if (state.incidentsFailFor?.includes(url.searchParams.get("organization_id") ?? org) === true)
+        return problem(503, "incidents-unavailable");
     }
     // Every call names its workspace; an incident or notification of another one is not there.
     const asked = url.searchParams.get("organization_id") ?? org;
