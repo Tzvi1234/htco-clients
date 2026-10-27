@@ -15,6 +15,11 @@ msgstr " (current)"
 msgid "(you)"
 msgstr "(you)"
 
+#. placeholder {0}: run.attempts
+#: src/features/admin/AutomationsPage.tsx
+msgid "{0, plural, one {# attempt} other {# attempts}}"
+msgstr "{0, plural, one {# attempt} other {# attempts}}"
+
 #. placeholder {0}: openItems.length
 #: src/features/incidents/IncidentsPage.tsx
 msgid "{0, plural, one {# open incident} other {# open incidents}}"
@@ -25,6 +30,16 @@ msgstr "{0, plural, one {# open incident} other {# open incidents}}"
 #: src/features/shops/ShopStats.tsx
 msgid "{0, plural, one {# order} other {# orders}}"
 msgstr "{0, plural, one {# order} other {# orders}}"
+
+#. placeholder {0}: dead.length
+#: src/features/admin/AutomationsPage.tsx
+msgid "{0, plural, one {One automation has dead-lettered runs.} other {# automations have dead-lettered runs. Open each, read its error, then retry it.}}"
+msgstr "{0, plural, one {One automation has dead-lettered runs.} other {# automations have dead-lettered runs. Open each, read its error, then retry it.}}"
+
+#. placeholder {0}: live.length
+#: src/features/admin/AutomationsPage.tsx
+msgid "{0, plural, one {One automation is live. Its runs and their success are for the Owner and Admins.} other {# automations are live. Their runs and success are for the Owner and Admins.}}"
+msgstr "{0, plural, one {One automation is live. Its runs and their success are for the Owner and Admins.} other {# automations are live. Their runs and success are for the Owner and Admins.}}"
 
 #. placeholder {0}: urgent.length
 #: src/features/incidents/IncidentsPage.tsx
@@ -45,6 +60,11 @@ msgstr "{0, plural, one {One order waits to ship; none is late.} other {# orders
 #: src/features/admin/OperationsPage.tsx
 msgid "{0, plural, one {One shop has not synced within its window.} other {# shops have not synced within their window.}}"
 msgstr "{0, plural, one {One shop has not synced within its window.} other {# shops have not synced within their window.}}"
+
+#. placeholder {0}: live.length
+#: src/features/admin/AutomationsPage.tsx
+msgid "{0, plural, one {The live automation runs: no dead-lettered run in the last seven days.} other {All # live automations run: no dead-lettered run in the last seven days.}}"
+msgstr "{0, plural, one {The live automation runs: no dead-lettered run in the last seven days.} other {All # live automations run: no dead-lettered run in the last seven days.}}"
 
 #. placeholder {0}: removals.done
 #: src/features/shops/ShopsPage.tsx
@@ -355,6 +375,10 @@ msgstr "A new loop in the office"
 msgid "A new notification"
 msgstr "A new notification"
 
+#: src/features/admin/AutomationsPage.tsx
+msgid "A person"
+msgstr "A person"
+
 #: src/app/shell/NotificationBell.tsx
 msgid "A shop needs reconnecting to Etsy"
 msgstr "A shop needs reconnecting to Etsy"
@@ -403,6 +427,11 @@ msgstr "Account"
 #: src/features/shops/ShopsPage.tsx
 msgid "across the shops"
 msgstr "across the shops"
+
+#: src/features/admin/execution.tsx
+msgctxt "execution chain"
+msgid "Action"
+msgstr "Action"
 
 #: src/features/commerce/demoScreens.tsx
 #: src/features/team/TeamPage.tsx
@@ -480,6 +509,10 @@ msgstr "AI budget"
 msgid "AI costs"
 msgstr "AI costs"
 
+#: src/features/admin/AutomationsPage.tsx
+msgid "AI employee"
+msgstr "AI employee"
+
 #: src/features/team/TeamPage.tsx
 msgid "AI employees"
 msgstr "AI employees"
@@ -506,6 +539,7 @@ msgstr "Alerts"
 msgid "Alex"
 msgstr "Alex"
 
+#: src/features/admin/AutomationsPage.tsx
 #: src/features/commerce/OrdersPage.tsx
 #: src/features/commerce/ProductsPage.tsx
 #: src/features/incidents/IncidentsPage.tsx
@@ -519,6 +553,10 @@ msgstr "All approvals"
 #: src/app/shell/TabBar.tsx
 msgid "All areas"
 msgstr "All areas"
+
+#: src/features/admin/AutomationsPage.tsx
+msgid "All automations"
+msgstr "All automations"
 
 #: src/features/customers/CustomersDemos.tsx
 msgid "All customers"
@@ -621,8 +659,14 @@ msgstr "api v1.14 deploying, 60% done."
 msgid "Appearance and language"
 msgstr "Appearance and language"
 
+#: src/features/admin/AutomationsPage.tsx
 #: src/features/commerce/demoScreens.tsx
 #: src/features/team/TeamPage.tsx
+msgid "Approval"
+msgstr "Approval"
+
+#: src/features/admin/execution.tsx
+msgctxt "execution chain"
 msgid "Approval"
 msgstr "Approval"
 
@@ -699,10 +743,6 @@ msgstr "Ask Tzvi"
 msgid "Asks first"
 msgstr "Asks first"
 
-#: src/features/admin/AdminDemos.tsx
-msgid "Assigned:"
-msgstr "Assigned:"
-
 #: src/features/auth/AcceptInvitePage.tsx
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "At least 12 characters."
@@ -732,24 +772,25 @@ msgstr "Authenticator app"
 msgid "Authenticator app is set up"
 msgstr "Authenticator app is set up"
 
+#: src/features/admin/AutomationsPage.tsx
 #: src/features/admin/OperationsPage.tsx
 #: src/features/incidents/IncidentsPage.tsx
 msgid "Automation"
 msgstr "Automation"
 
-#: src/features/admin/AdminDemos.tsx
-msgid "Automation details"
-msgstr "Automation details"
-
 #: src/features/incidents/IncidentState.tsx
 msgid "Automation gave up"
 msgstr "Automation gave up"
 
-#: src/features/admin/AdminDemos.tsx
-msgid "Automation:"
-msgstr "Automation:"
+#: src/features/admin/AutomationsPage.tsx
+msgid "Automation numbers"
+msgstr "Automation numbers"
 
-#: src/features/admin/AdminDemos.tsx
+#: src/features/admin/AutomationsPage.tsx
+msgid "Automation views"
+msgstr "Automation views"
+
+#: src/features/admin/AutomationsPage.tsx
 #: src/features/admin/OperationsPage.tsx
 #: src/features/incidents/IncidentState.tsx
 #: src/features/office/FloorPage.tsx
@@ -762,6 +803,14 @@ msgstr "Automations"
 msgctxt "navigation"
 msgid "Automations"
 msgstr "Automations"
+
+#: src/features/admin/AutomationsPage.tsx
+msgid "Automations are not set up on this server yet."
+msgstr "Automations are not set up on this server yet."
+
+#: src/features/admin/AutomationsPage.tsx
+msgid "Automations that need you"
+msgstr "Automations that need you"
 
 #: src/features/office/ChatPage.tsx
 msgid "Autonomy:"
@@ -799,6 +848,7 @@ msgstr "Awaiting shipment"
 msgid "Back to inviting"
 msgstr "Back to inviting"
 
+#: src/features/admin/AutomationsPage.tsx
 #: src/features/incidents/IncidentsPage.tsx
 msgid "Back to list"
 msgstr "Back to list"
@@ -893,7 +943,7 @@ msgstr "Cancellation"
 msgid "Cancellation rate"
 msgstr "Cancellation rate"
 
-#: src/features/admin/OperationsPage.tsx
+#: src/features/admin/execution.tsx
 #: src/features/commerce/OrdersPage.tsx
 #: src/features/commerce/refunds.tsx
 #: src/features/commerce/timeline.tsx
@@ -933,7 +983,7 @@ msgstr "Catalog numbers"
 msgid "Category"
 msgstr "Category"
 
-#: src/features/admin/OperationsPage.tsx
+#: src/features/admin/execution.tsx
 msgid "Chain"
 msgstr "Chain"
 
@@ -962,7 +1012,6 @@ msgctxt "navigation"
 msgid "Chat"
 msgstr "Chat"
 
-#: src/features/admin/AdminDemos.tsx
 #: src/features/office/EngineeringPage.tsx
 msgid "Chat with Amir"
 msgstr "Chat with Amir"
@@ -1035,6 +1084,10 @@ msgstr "Choose a new password"
 msgid "Choose an incident to see its evidence, its timeline and its order."
 msgstr "Choose an incident to see its evidence, its timeline and its order."
 
+#: src/features/admin/AutomationsPage.tsx
+msgid "Choose the workspace whose automations you want to see."
+msgstr "Choose the workspace whose automations you want to see."
+
 #: src/features/team/TeamPage.tsx
 msgid "Choose the workspace whose members you want to see and invite."
 msgstr "Choose the workspace whose members you want to see and invite."
@@ -1061,7 +1114,7 @@ msgstr "Clicks per day, 1 to 15 October: 18 to 41, highest today"
 
 #: src/app/shell/Flyout.tsx
 #: src/app/shell/TabBar.tsx
-#: src/features/admin/OperationsPage.tsx
+#: src/features/admin/execution.tsx
 #: src/features/commerce/OrdersPage.tsx
 #: src/features/team/TeamPage.tsx
 msgid "Close"
@@ -1101,7 +1154,7 @@ msgctxt "navigation"
 msgid "Commerce"
 msgstr "Commerce"
 
-#: src/features/admin/OperationsPage.tsx
+#: src/features/admin/execution.tsx
 msgid "Compensated"
 msgstr "Compensated"
 
@@ -1414,11 +1467,12 @@ msgstr "Data deleted after {0}"
 msgid "Date"
 msgstr "Date"
 
+#: src/features/admin/AutomationsPage.tsx
 #: src/features/admin/OperationsPage.tsx
 msgid "Dead letters"
 msgstr "Dead letters"
 
-#: src/features/admin/OperationsPage.tsx
+#: src/features/admin/execution.tsx
 msgid "Dead-lettered"
 msgstr "Dead-lettered"
 
@@ -1485,7 +1539,6 @@ msgstr "Department:"
 msgid "Deploying api v1.14"
 msgstr "Deploying api v1.14"
 
-#: src/features/admin/AdminDemos.tsx
 #: src/features/finance/FinanceDemos.tsx
 msgid "Description"
 msgstr "Description"
@@ -1567,6 +1620,11 @@ msgstr "Done"
 msgid "Draft"
 msgstr "Draft"
 
+#. placeholder {0}: automation.activation_phase
+#: src/features/admin/AutomationsPage.tsx
+msgid "Draft · Phase {0}"
+msgstr "Draft · Phase {0}"
+
 #: src/features/office/FloorPage.tsx
 msgid "Drag to orbit · double-click a room"
 msgstr "Drag to orbit · double-click a room"
@@ -1575,9 +1633,17 @@ msgstr "Drag to orbit · double-click a room"
 msgid "Drifts today"
 msgstr "Drifts today"
 
+#: src/features/admin/AutomationsPage.tsx
+msgid "Each run is approved"
+msgstr "Each run is approved"
+
 #: src/features/customers/CustomersDemos.tsx
 msgid "Edit reply…"
 msgstr "Edit reply…"
+
+#: src/features/admin/AutomationsPage.tsx
+msgid "Effect"
+msgstr "Effect"
 
 #: src/shared/demo/office.ts
 msgid "Eitan"
@@ -1647,10 +1713,6 @@ msgstr "Enter your email and we will send you a link to choose a new one."
 #: src/features/auth/ForgotPasswordPage.tsx
 msgid "Enter your email."
 msgstr "Enter your email."
-
-#: src/features/admin/AdminDemos.tsx
-msgid "Error"
-msgstr "Error"
 
 #: src/app/RouteStates.tsx
 msgid "Error 404"
@@ -1786,7 +1848,13 @@ msgstr "Etsy's count"
 msgid "Etsy's sign-in address looked wrong, so it was not opened. Try again shortly."
 msgstr "Etsy's sign-in address looked wrong, so it was not opened. Try again shortly."
 
+#: src/features/admin/AutomationsPage.tsx
 #: src/features/admin/OperationsPage.tsx
+msgid "Event"
+msgstr "Event"
+
+#: src/features/admin/execution.tsx
+msgctxt "execution chain"
 msgid "Event"
 msgstr "Event"
 
@@ -1797,10 +1865,6 @@ msgstr "Events by hour, busiest at 14:00"
 #: src/features/work/demoScreens.tsx
 msgid "Events today:"
 msgstr "Events today:"
-
-#: src/features/admin/AdminDemos.tsx
-msgid "Every 30 min"
-msgstr "Every 30 min"
 
 #: src/features/commerce/ProductsPage.tsx
 msgid "Every active listing is in stock."
@@ -1844,7 +1908,12 @@ msgstr "Evidence"
 msgid "Exchanges"
 msgstr "Exchanges"
 
-#: src/features/admin/OperationsPage.tsx
+#: src/features/admin/execution.tsx
+msgid "Execution"
+msgstr "Execution"
+
+#: src/features/admin/execution.tsx
+msgctxt "execution chain"
 msgid "Execution"
 msgstr "Execution"
 
@@ -1884,14 +1953,10 @@ msgstr "Export to CSV"
 msgid "Exported {0} orders."
 msgstr "Exported {0} orders."
 
-#: src/features/admin/OperationsPage.tsx
+#: src/features/admin/execution.tsx
 #: src/shared/ui/kit/status.tsx
 msgid "Failed"
 msgstr "Failed"
-
-#: src/features/admin/AdminDemos.tsx
-msgid "Failures"
-msgstr "Failures"
 
 #: src/features/commerce/ProductsPage.tsx
 msgid "favourites"
@@ -1925,7 +1990,6 @@ msgstr "Filed in:"
 msgid "Files"
 msgstr "Files"
 
-#: src/features/admin/AdminDemos.tsx
 #: src/features/commerce/demoScreens.tsx
 #: src/features/customers/CustomersDemos.tsx
 #: src/features/office/TeamRoomPage.tsx
@@ -2340,6 +2404,10 @@ msgstr "Index on orders.status"
 msgid "Infrastructure"
 msgstr "Infrastructure"
 
+#: src/features/admin/AutomationsPage.tsx
+msgid "Inside HTCO only"
+msgstr "Inside HTCO only"
+
 #: src/features/shops/Capabilities.tsx
 msgid "Instant order alerts"
 msgstr "Instant order alerts"
@@ -2402,6 +2470,10 @@ msgstr "Invited member"
 msgid "Iris"
 msgstr "Iris"
 
+#: src/features/admin/AutomationsPage.tsx
+msgid "It has not run: it goes live in its phase."
+msgstr "It has not run: it goes live in its phase."
+
 #: src/features/commerce/OrdersPage.tsx
 #: src/features/commerce/ShippingPage.tsx
 msgid "Items"
@@ -2449,10 +2521,7 @@ msgstr "Last 24 hours"
 msgid "Last 30 days"
 msgstr "Last 30 days"
 
-#: src/features/admin/AdminDemos.tsx
-msgid "Last 30 runs"
-msgstr "Last 30 runs"
-
+#: src/features/admin/AutomationsPage.tsx
 #: src/features/admin/OperationsPage.tsx
 msgid "Last 7 days"
 msgstr "Last 7 days"
@@ -2477,10 +2546,6 @@ msgstr "Last error"
 #: src/features/customers/CustomersDemos.tsx
 msgid "Last order"
 msgstr "Last order"
-
-#: src/features/admin/AdminDemos.tsx
-msgid "Last run"
-msgstr "Last run"
 
 #: src/features/admin/OperationsPage.tsx
 msgid "Last success"
@@ -2512,6 +2577,10 @@ msgstr "Late"
 #: src/features/office/data.ts
 msgid "Late orders + tracking sync failure"
 msgstr "Late orders + tracking sync failure"
+
+#: src/features/admin/AutomationsPage.tsx
+msgid "Latest runs"
+msgstr "Latest runs"
 
 #: src/shared/demo/office.ts
 msgid "Lead Software & Platform Engineer"
@@ -2605,6 +2674,11 @@ msgstr "Listings could not be loaded from Etsy right now."
 msgid "Live"
 msgstr "Live"
 
+#: src/features/admin/AutomationsPage.tsx
+msgctxt "automation"
+msgid "Live"
+msgstr "Live"
+
 #: src/features/office/FloorPage.tsx
 msgid "Live activity"
 msgstr "Live activity"
@@ -2654,7 +2728,11 @@ msgstr "Loading shops"
 msgid "Loading statistics"
 msgstr "Loading statistics"
 
-#: src/features/admin/OperationsPage.tsx
+#: src/features/admin/AutomationsPage.tsx
+msgid "Loading the automations"
+msgstr "Loading the automations"
+
+#: src/features/admin/execution.tsx
 msgid "Loading the execution"
 msgstr "Loading the execution"
 
@@ -2673,6 +2751,10 @@ msgstr "Loading the order's history…"
 #: src/features/admin/OperationsPage.tsx
 msgid "Loading the queue and sync health"
 msgstr "Loading the queue and sync health"
+
+#: src/features/admin/AutomationsPage.tsx
+msgid "Loading the runs"
+msgstr "Loading the runs"
 
 #: src/features/shops/ShopCard.tsx
 msgid "Loading the shop's numbers"
@@ -2879,7 +2961,6 @@ msgstr "Moved to {moved}"
 msgid "Mug arrived cracked"
 msgstr "Mug arrived cracked"
 
-#: src/features/admin/AdminDemos.tsx
 #: src/features/team/TeamPage.tsx
 msgid "Name"
 msgstr "Name"
@@ -2910,6 +2991,7 @@ msgstr "Needs reconnecting"
 msgid "Needs reply:"
 msgstr "Needs reply:"
 
+#: src/features/admin/AutomationsPage.tsx
 #: src/features/admin/OperationsPage.tsx
 #: src/features/welcome/WelcomePage.tsx
 msgid "Needs you"
@@ -2923,9 +3005,9 @@ msgstr "Net by day"
 msgid "Never"
 msgstr "Never"
 
-#: src/features/admin/AdminDemos.tsx
-msgid "New automation"
-msgstr "New automation"
+#: src/features/admin/AutomationsPage.tsx
+msgid "Never: it runs on its own"
+msgstr "Never: it runs on its own"
 
 #: src/features/office/ChatPage.tsx
 msgid "New chat"
@@ -2997,10 +3079,6 @@ msgstr "Next step"
 #: src/features/office/EngineeringPage.tsx
 msgid "Next:"
 msgstr "Next:"
-
-#: src/features/admin/AdminDemos.tsx
-msgid "Nightly listing quality audit"
-msgstr "Nightly listing quality audit"
 
 #: src/features/office/EngineeringPage.tsx
 msgid "Nightly postgres backup"
@@ -3134,6 +3212,10 @@ msgstr "No reviews yet."
 msgid "No reviews yet. They appear here as buyers leave them on Etsy."
 msgstr "No reviews yet. They appear here as buyers leave them on Etsy."
 
+#: src/features/admin/AutomationsPage.tsx
+msgid "No run yet in this workspace."
+msgstr "No run yet in this workspace."
+
 #: src/features/commerce/ShippingPage.tsx
 msgid "No shipping profiles on Etsy."
 msgstr "No shipping profiles on Etsy."
@@ -3235,6 +3317,10 @@ msgstr "Not connected"
 msgid "Not known"
 msgstr "Not known"
 
+#: src/features/admin/AutomationsPage.tsx
+msgid "Not needed"
+msgstr "Not needed"
+
 #: src/features/admin/OperationsPage.tsx
 msgid "Not processed yet"
 msgstr "Not processed yet"
@@ -3262,6 +3348,10 @@ msgstr "Nothing is open"
 #: src/app/shell/CommandMenu.tsx
 msgid "Nothing matches."
 msgstr "Nothing matches."
+
+#: src/features/admin/AutomationsPage.tsx
+msgid "Nothing needs you: no automation has a dead-lettered run."
+msgstr "Nothing needs you: no automation has a dead-lettered run."
 
 #: src/features/commerce/ShippingPage.tsx
 msgid "Nothing to ship and nothing shipped in the last 30 days."
@@ -3370,7 +3460,6 @@ msgstr "Omer → lounge"
 msgid "Omer back at desk"
 msgstr "Omer back at desk"
 
-#: src/features/admin/AdminDemos.tsx
 #: src/features/security/SecurityPage.tsx
 #: src/features/team/TeamPage.tsx
 msgid "On"
@@ -3388,6 +3477,11 @@ msgstr "On this device"
 msgid "On time"
 msgstr "On time"
 
+#. placeholder {0}: nameOf(dead[0]?.id ?? "")
+#: src/features/admin/AutomationsPage.tsx
+msgid "One automation has a dead-lettered run: {0}. Open it, read its error, then retry it."
+msgstr "One automation has a dead-lettered run: {0}. Open it, read its error, then retry it."
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "One button, Etsy asks you to allow it, and you are back."
 msgstr "One button, Etsy asks you to allow it, and you are back."
@@ -3403,6 +3497,10 @@ msgstr "Only the Owner and Admins retry jobs."
 #: src/features/admin/OperationsPage.tsx
 msgid "Only the workspace Owner and Admins see the queue and sync health."
 msgstr "Only the workspace Owner and Admins see the queue and sync health."
+
+#: src/features/admin/AutomationsPage.tsx
+msgid "Only the workspace Owner and Admins see the success rate, retries and dead letters."
+msgstr "Only the workspace Owner and Admins see the success rate, retries and dead letters."
 
 #: src/features/shops/connectEtsy.tsx
 msgid "Only the workspace owner can connect a shop."
@@ -3477,6 +3575,10 @@ msgstr "Open Shops"
 msgid "Open the authenticator app on your phone."
 msgstr "Open the authenticator app on your phone."
 
+#: src/features/admin/AutomationsPage.tsx
+msgid "Open the dead-lettered run"
+msgstr "Open the dead-lettered run"
+
 #: src/features/admin/OperationsPage.tsx
 msgid "Open the execution"
 msgstr "Open the execution"
@@ -3497,6 +3599,11 @@ msgstr "Open the incident: {cause}"
 #: src/features/incidents/IncidentsPage.tsx
 msgid "Open the most urgent"
 msgstr "Open the most urgent"
+
+#. placeholder {0}: since(run.created_at)
+#: src/features/admin/AutomationsPage.tsx
+msgid "Open the run of {0}"
+msgstr "Open the run of {0}"
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "Open the web app"
@@ -3634,7 +3741,6 @@ msgctxt "navigation"
 msgid "Overview"
 msgstr "Overview"
 
-#: src/features/admin/AdminDemos.tsx
 #: src/features/commerce/demoScreens.tsx
 #: src/features/team/TeamPage.tsx
 msgid "Owner"
@@ -3649,6 +3755,10 @@ msgstr "Owner"
 msgctxt "responsible, she"
 msgid "Owner"
 msgstr "Owner"
+
+#: src/features/admin/AutomationsPage.tsx
+msgid "Owner and Admins"
+msgstr "Owner and Admins"
 
 #: src/shared/demo/office.ts
 msgid "Owner Assistant"
@@ -3754,7 +3864,7 @@ msgstr "Pause thread"
 msgid "Paused"
 msgstr "Paused"
 
-#: src/features/admin/OperationsPage.tsx
+#: src/features/admin/execution.tsx
 msgid "Pending"
 msgstr "Pending"
 
@@ -3900,10 +4010,6 @@ msgstr "Publish listing"
 msgid "Publishing"
 msgstr "Publishing"
 
-#: src/features/admin/AdminDemos.tsx
-msgid "Pull Etsy orders every 15 minutes"
-msgstr "Pull Etsy orders every 15 minutes"
-
 #: src/features/auth/SecondFactorPage.tsx
 msgid "QR code for your authenticator app"
 msgstr "QR code for your authenticator app"
@@ -4015,6 +4121,10 @@ msgstr "Read the low ratings"
 msgid "Read-only"
 msgstr "Read-only"
 
+#: src/features/admin/AutomationsPage.tsx
+msgid "Reads from the marketplace"
+msgstr "Reads from the marketplace"
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "Ready today"
 msgstr "Ready today"
@@ -4034,10 +4144,6 @@ msgstr "Recent executions"
 #: src/features/customers/CustomersPage.tsx
 msgid "Recent reviews are all four or five stars."
 msgstr "Recent reviews are all four or five stars."
-
-#: src/features/admin/AdminDemos.tsx
-msgid "Recent runs"
-msgstr "Recent runs"
 
 #: src/features/admin/OperationsPage.tsx
 msgid "Reconcile"
@@ -4261,6 +4367,7 @@ msgstr "Resolved incidents"
 msgid "Resolved incidents closed themselves when the evidence arrived. Open one to see what closed it."
 msgstr "Resolved incidents closed themselves when the evidence arrived. Open one to see what closed it."
 
+#: src/features/admin/AutomationsPage.tsx
 #: src/features/admin/OperationsPage.tsx
 msgid "Retries"
 msgstr "Retries"
@@ -4269,11 +4376,11 @@ msgstr "Retries"
 msgid "Retry"
 msgstr "Retry"
 
-#: src/features/admin/OperationsPage.tsx
+#: src/features/admin/execution.tsx
 msgid "Retry scheduled"
 msgstr "Retry scheduled"
 
-#: src/features/admin/OperationsPage.tsx
+#: src/features/admin/execution.tsx
 msgid "Retry the execution"
 msgstr "Retry the execution"
 
@@ -4286,7 +4393,7 @@ msgstr "Retry the job {0}"
 msgid "Retrying"
 msgstr "Retrying"
 
-#: src/features/admin/OperationsPage.tsx
+#: src/features/admin/execution.tsx
 msgid "Retrying executions is off on this server."
 msgstr "Retrying executions is off on this server."
 
@@ -4421,6 +4528,7 @@ msgstr "Rotate token"
 msgid "Run"
 msgstr "Run"
 
+#: src/features/admin/execution.tsx
 #: src/features/admin/OperationsPage.tsx
 #: src/features/work/demoScreens.tsx
 #: src/shared/ui/kit/status.tsx
@@ -4431,13 +4539,10 @@ msgstr "Running"
 msgid "Running now"
 msgstr "Running now"
 
+#: src/features/admin/AutomationsPage.tsx
 #: src/features/admin/OperationsPage.tsx
 msgid "Runs"
 msgstr "Runs"
-
-#: src/features/admin/AdminDemos.tsx
-msgid "Runs today"
-msgstr "Runs today"
 
 #: src/features/customers/CustomersDemos.tsx
 msgid "Sales"
@@ -4476,7 +4581,7 @@ msgstr "Scan the QR code we show you."
 msgid "Scan the QR code with the app."
 msgstr "Scan the QR code with the app."
 
-#: src/features/admin/AdminDemos.tsx
+#: src/features/admin/AutomationsPage.tsx
 msgid "Schedule"
 msgstr "Schedule"
 
@@ -4963,6 +5068,14 @@ msgstr "Stale shops"
 msgid "Started"
 msgstr "Started"
 
+#: src/features/admin/AutomationsPage.tsx
+msgid "Started by hand"
+msgstr "Started by hand"
+
+#: src/features/admin/AutomationsPage.tsx
+msgid "Starts on"
+msgstr "Starts on"
+
 #: src/features/admin/OperationsPage.tsx
 #: src/features/incidents/IncidentsPage.tsx
 msgid "State"
@@ -4976,7 +5089,7 @@ msgstr "Statistics"
 msgid "Statistics appear here once a shop is connected."
 msgstr "Statistics appear here once a shop is connected."
 
-#: src/features/admin/AdminDemos.tsx
+#: src/features/admin/AutomationsPage.tsx
 #: src/features/admin/OperationsPage.tsx
 #: src/features/commerce/demoScreens.tsx
 #: src/features/commerce/OrdersPage.tsx
@@ -4986,7 +5099,6 @@ msgstr "Statistics appear here once a shop is connected."
 msgid "Status"
 msgstr "Status"
 
-#: src/features/admin/AdminDemos.tsx
 #: src/features/commerce/demoScreens.tsx
 #: src/features/customers/CustomersDemos.tsx
 #: src/features/office/AiOpsPage.tsx
@@ -5025,11 +5137,11 @@ msgstr "Stopped"
 msgid "Stopping"
 msgstr "Stopping"
 
-#: src/features/admin/AdminDemos.tsx
-#: src/features/admin/OperationsPage.tsx
+#: src/features/admin/execution.tsx
 msgid "Succeeded"
 msgstr "Succeeded"
 
+#: src/features/admin/AutomationsPage.tsx
 #: src/features/admin/OperationsPage.tsx
 msgid "Success"
 msgstr "Success"
@@ -5077,10 +5189,6 @@ msgstr "Sync"
 msgid "Sync fixed?"
 msgstr "Sync fixed?"
 
-#: src/features/admin/AdminDemos.tsx
-msgid "Sync tracking numbers from carriers"
-msgstr "Sync tracking numbers from carriers"
-
 #: src/shared/ui/kit/live.tsx
 msgid "Synced from Etsy"
 msgstr "Synced from Etsy"
@@ -5105,6 +5213,11 @@ msgstr "System incidents"
 #: src/features/commerce/ProductsPage.tsx
 msgid "Tags"
 msgstr "Tags"
+
+#: src/features/admin/execution.tsx
+msgctxt "execution chain"
+msgid "Task for a person"
+msgstr "Task for a person"
 
 #: src/features/office/TeamRoomPage.tsx
 msgid "Task:"
@@ -5164,6 +5277,10 @@ msgstr "The AI office"
 msgid "The app shows a new code every 30 seconds"
 msgstr "The app shows a new code every 30 seconds"
 
+#: src/features/admin/AutomationsPage.tsx
+msgid "The automations could not be loaded. Try again shortly."
+msgstr "The automations could not be loaded. Try again shortly."
+
 #. placeholder {0}: count(active)
 #: src/features/shops/ShopStats.tsx
 msgid "The best of <0>{0}</0> months with sales."
@@ -5194,15 +5311,15 @@ msgstr "The devices cannot be loaded right now. Try again shortly."
 msgid "The email or the password is wrong."
 msgstr "The email or the password is wrong."
 
-#: src/features/admin/OperationsPage.tsx
+#: src/features/admin/execution.tsx
 msgid "The execution could not be read."
 msgstr "The execution could not be read."
 
-#: src/features/admin/OperationsPage.tsx
+#: src/features/admin/execution.tsx
 msgid "The execution could not be retried. Try again shortly."
 msgstr "The execution could not be retried. Try again shortly."
 
-#: src/features/admin/OperationsPage.tsx
+#: src/features/admin/execution.tsx
 msgid "The execution goes back to its retry."
 msgstr "The execution goes back to its retry."
 
@@ -5287,6 +5404,14 @@ msgstr "The queue and sync health are not available on this server yet."
 #: src/features/admin/OperationsPage.tsx
 msgid "The queue and sync health could not be loaded. Try again shortly."
 msgstr "The queue and sync health could not be loaded. Try again shortly."
+
+#: src/features/admin/AutomationsPage.tsx
+msgid "The runs and their success could not be loaded; the list is the registry's."
+msgstr "The runs and their success could not be loaded; the list is the registry's."
+
+#: src/features/admin/AutomationsPage.tsx
+msgid "The runs could not be loaded. Try again shortly."
+msgstr "The runs could not be loaded. Try again shortly."
 
 #: src/features/team/TeamPage.tsx
 msgid "The server did not accept this change."
@@ -5417,7 +5542,7 @@ msgstr "This Etsy account has no shop yet. Open a shop on Etsy, then connect it.
 msgid "This Etsy shop is already connected to another workspace."
 msgstr "This Etsy shop is already connected to another workspace."
 
-#: src/features/admin/OperationsPage.tsx
+#: src/features/admin/execution.tsx
 msgid "This execution is no longer dead-lettered."
 msgstr "This execution is no longer dead-lettered."
 
@@ -5715,8 +5840,18 @@ msgctxt "incident state"
 msgid "Triaged"
 msgstr "Triaged"
 
+#: src/features/admin/execution.tsx
+msgctxt "execution chain"
+msgid "Trigger"
+msgstr "Trigger"
+
+#: src/features/admin/AutomationsPage.tsx
+msgid "Triggers"
+msgstr "Triggers"
+
 #: src/app/RouteStates.tsx
 #: src/app/shell/NotificationBell.tsx
+#: src/features/admin/AutomationsPage.tsx
 #: src/features/admin/OperationsPage.tsx
 #: src/features/incidents/IncidentsPage.tsx
 #: src/features/overview/OverviewPage.tsx
@@ -5836,6 +5971,7 @@ msgctxt "incident state"
 msgid "Verifying"
 msgstr "Verifying"
 
+#: src/features/admin/AutomationsPage.tsx
 #: src/features/work/demoScreens.tsx
 msgid "Version"
 msgstr "Version"
@@ -5865,6 +6001,7 @@ msgstr "Views"
 msgid "vs yesterday"
 msgstr "vs yesterday"
 
+#: src/features/admin/execution.tsx
 #: src/features/admin/OperationsPage.tsx
 #: src/features/commerce/demoScreens.tsx
 msgid "Waiting"
@@ -6024,6 +6161,10 @@ msgstr "Within {0} days"
 msgid "Within policy"
 msgstr "Within policy"
 
+#: src/features/admin/AutomationsPage.tsx
+msgid "Without the run health, HTCO can't tell which automations need you. Each one's latest runs are under All."
+msgstr "Without the run health, HTCO can't tell which automations need you. Each one's latest runs are under All."
+
 #: src/app/shell/useNavLabels.ts
 msgctxt "navigation"
 msgid "Work"
@@ -6040,6 +6181,10 @@ msgstr "Workers"
 #: src/features/admin/OperationsPage.tsx
 msgid "Workers running"
 msgstr "Workers running"
+
+#: src/features/admin/AutomationsPage.tsx
+msgid "Workflow"
+msgstr "Workflow"
 
 #: src/features/shops/ShopsPage.tsx
 msgid "Working"
@@ -6058,6 +6203,10 @@ msgstr "Workspace"
 msgctxt "navigation"
 msgid "Workspace"
 msgstr "Workspace"
+
+#: src/features/admin/AutomationsPage.tsx
+msgid "Writes to the marketplace"
+msgstr "Writes to the marketplace"
 
 #: src/features/work/demoScreens.tsx
 msgid "Yes, 24 h"
@@ -6166,6 +6315,10 @@ msgstr "Your role does not include incidents. Ask an Owner or Admin."
 #: src/features/overview/OverviewPage.tsx
 msgid "Your role does not see incidents."
 msgstr "Your role does not see incidents."
+
+#: src/features/admin/AutomationsPage.tsx
+msgid "Your role does not see the office's automations."
+msgstr "Your role does not see the office's automations."
 
 #: src/features/commerce/OrdersPage.tsx
 msgid "Your role may see these orders but not re-sync them."

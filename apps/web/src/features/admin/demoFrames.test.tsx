@@ -45,7 +45,6 @@ const SCREENS = [
   ["/customers/marketing", "Marketing", "Active campaign"],
   ["/finance/overview", "Overview", "Revenue this month:"],
   ["/finance/ledger", "Ledger", "Etsy balance:"],
-  ["/admin/automations", "Automations", "Automation details"],
 ] as const;
 
 describe("the demo screens of Customers, Finance and Admin", () => {
