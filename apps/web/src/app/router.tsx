@@ -26,6 +26,7 @@ import { ProductsPage } from "../features/commerce/ProductsPage.tsx";
 import { ShippingPage } from "../features/commerce/ShippingPage.tsx";
 import { CustomersPage } from "../features/customers/CustomersPage.tsx";
 import { IncidentsPage } from "../features/incidents/IncidentsPage.tsx";
+import { RelayPage } from "../features/incidents/RelayPage.tsx";
 import { OverviewPage } from "../features/overview/OverviewPage.tsx";
 import { SecurityPage } from "../features/security/SecurityPage.tsx";
 import { SettingsPage } from "../features/settings/SettingsPage.tsx";
@@ -233,6 +234,15 @@ const routeTree = rootRoute.addChildren([
           typeof search["workspace"] === "string" ? { workspace: search["workspace"] } : {},
         staticData: { layout: "panels", scroll: "page" },
         component: IncidentsPage,
+      }),
+      // The AutoVA tracking relay (platform slice 6.10); its notification names the workspace.
+      createRoute({
+        getParentRoute: () => appRoute,
+        path: "/commerce/tracking",
+        validateSearch: (search: Record<string, unknown>): { workspace?: string } =>
+          typeof search["workspace"] === "string" ? { workspace: search["workspace"] } : {},
+        staticData: { layout: "panels", scroll: "page" },
+        component: RelayPage,
       }),
       createRoute({
         getParentRoute: () => appRoute,

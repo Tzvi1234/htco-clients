@@ -28,6 +28,7 @@ const api =
     : await (async () => {
         const { demoShops, fakeBackend } = await import("./test/fakeApi.ts");
         const { demoIncidents, demoNotifications } = await import("./test/fakeIncidents.ts");
+        const { demoRelay } = await import("./test/fakeRelay.ts");
         if (demo === "signed-out") return fakeBackend().client;
         // Signed in with a password only: the authenticator code step.
         if (demo === "mfa")
@@ -41,12 +42,14 @@ const api =
           ...(demo === "shops" || demo === "history"
             ? (() => {
                 const shops = demoShops();
-                // The incident center and the bell: three open incidents, one resolved.
+                // The incident center and the bell: three open incidents, one resolved; the
+                // tracking relay: two orders waiting for a number, one ready for Etsy.
                 const ids = shops.shops.map((shop) => shop.id);
                 return {
                   ...shops,
                   incidents: demoIncidents(ids),
                   notifications: demoNotifications(ids),
+                  relay: demoRelay(ids),
                 };
               })()
             : {}),

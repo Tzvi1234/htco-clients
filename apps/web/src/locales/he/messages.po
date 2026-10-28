@@ -25,6 +25,11 @@ msgstr "{0, plural, one {ניסיון אחד} other {# ניסיונות}}"
 msgid "{0, plural, one {# open incident} other {# open incidents}}"
 msgstr "{0, plural, one {תקלה פתוחה אחת} two {# תקלות פתוחות} other {# תקלות פתוחות}}"
 
+#. placeholder {0}: waiting.length
+#: src/features/incidents/RelayPage.tsx
+msgid "{0, plural, one {# order needs a tracking number} other {# orders need a tracking number}}"
+msgstr "{0, plural, one {הזמנה אחת צריכה מספר מעקב} other {# הזמנות צריכות מספר מעקב}}"
+
 #. placeholder {0}: best.orders
 #. placeholder {0}: r.orders
 #: src/features/shops/ShopStats.tsx
@@ -73,6 +78,7 @@ msgstr "{0} והנתונים שלה הוסרו."
 
 #. placeholder {0}: String(days)
 #: src/features/incidents/IncidentsPage.tsx
+#: src/features/incidents/RelayPage.tsx
 msgctxt "age in days"
 msgid "{0} d"
 msgstr "{0} ימ׳"
@@ -84,6 +90,7 @@ msgstr "{0} דיגיטליים"
 
 #. placeholder {0}: String(hours)
 #: src/features/incidents/IncidentsPage.tsx
+#: src/features/incidents/RelayPage.tsx
 msgctxt "age in hours"
 msgid "{0} h"
 msgstr "{0} שע׳"
@@ -378,6 +385,14 @@ msgstr "יום עבודה חדש במשרד"
 #: src/app/shell/NotificationBell.tsx
 msgid "A new notification"
 msgstr "התראה חדשה"
+
+#: src/features/incidents/RelayPage.tsx
+msgid "A number shows here once it is pasted and checked, until Etsy shows it."
+msgstr "מספר מופיע כאן אחרי שהודבק ונבדק, עד ש־Etsy מציגה אותו."
+
+#: src/features/incidents/RelayPage.tsx
+msgid "A paid order shows here when it still has no tracking two business days after payment."
+msgstr "הזמנה ששולמה מופיעה כאן כשאין לה עדיין מספר מעקב שני ימי עסקים אחרי התשלום."
 
 #: src/features/admin/AutomationsPage.tsx
 msgid "A person"
@@ -972,6 +987,10 @@ msgstr "החלפת token לספק מעקב"
 msgid "Carrier token rotation failed (D-411)"
 msgstr "החלפת ה־token של ספק המעקב נכשלה (D-411)"
 
+#: src/features/incidents/RelayPage.tsx
+msgid "Carrier, as AutoVA shows it"
+msgstr "חברת המשלוח, כפי שמופיעה ב־AutoVA"
+
 #: src/features/finance/FinanceDemos.tsx
 msgid "Cash"
 msgstr "מזומנים"
@@ -1037,6 +1056,10 @@ msgstr "שיחה עם המבקש"
 msgid "Chat with Tom"
 msgstr "שיחה עם תום"
 
+#: src/features/incidents/RelayPage.tsx
+msgid "Check and save"
+msgstr "בדיקה ושמירה"
+
 #: src/features/team/TeamPage.tsx
 msgid "Check the email address."
 msgstr "בדקו את כתובת האימייל."
@@ -1062,6 +1085,13 @@ msgstr "נבדק {0}"
 #: src/features/shops/Capabilities.tsx
 msgid "Checked again once the shop has its first order."
 msgstr "ייבדק שוב כשתגיע ההזמנה הראשונה של החנות."
+
+#. placeholder {0}: carrierName(outcome.item.carrier ?? "")
+#. placeholder {1}: outcome.item.last4 ?? ""
+#. placeholder {2}: outcome.item.receipt_id
+#: src/features/incidents/RelayPage.tsx
+msgid "Checked and saved: {0} number ending in <0>{1}</0> for order <1>#{2}</1>. Now copy it into Etsy."
+msgstr "נבדק ונשמר: מספר {0} שמסתיים ב־<0>{1}</0> להזמנה <1>#{2}</1>. עכשיו מעתיקים אותו ל־Etsy."
 
 #: src/features/shops/Capabilities.tsx
 msgid "Checked just now."
@@ -1183,6 +1213,10 @@ msgstr "אישור"
 #: src/features/shops/ShopsPage.tsx
 msgid "Confirm it is you"
 msgstr "אישור זהות"
+
+#: src/features/incidents/RelayPage.tsx
+msgid "Confirm my second factor"
+msgstr "לאמת את הגורם השני"
 
 #: src/features/team/TeamPage.tsx
 msgid "Confirm with your authenticator app, then try again."
@@ -1317,9 +1351,33 @@ msgstr "מתאמת טיפול בהזמנות מאחרות"
 msgid "Copied"
 msgstr "הועתק"
 
+#: src/features/incidents/RelayPage.tsx
+msgid "Copied. In Etsy, open this order and add the tracking with this carrier."
+msgstr "הועתק. ב־Etsy, פותחים את ההזמנה ומוסיפים את מספר המעקב עם חברת המשלוח הזו."
+
+#: src/features/incidents/RelayPage.tsx
+msgid "Copy into Etsy"
+msgstr "העתקה ל־Etsy"
+
+#: src/features/incidents/RelayPage.tsx
+msgid "Copy it into Etsy"
+msgstr "מעתיקים אותו ל־Etsy"
+
 #: src/features/team/TeamPage.tsx
 msgid "Copy link"
 msgstr "העתקת הקישור"
+
+#: src/features/incidents/RelayPage.tsx
+msgid "Copy the number from the order in AutoVA and paste it here: HTCO checks it before anything is saved. Then copy it into Etsy. The order closes on its own once Etsy shows the tracking."
+msgstr "מעתיקים את המספר מההזמנה ב־AutoVA ומדביקים כאן: HTCO בודקת אותו לפני שמשהו נשמר. אחר כך מעתיקים אותו ל־Etsy. ההזמנה נסגרת מעצמה כש־Etsy מציגה את המעקב."
+
+#: src/features/incidents/RelayPage.tsx
+msgid "Copy the number in AutoVA"
+msgstr "מעתיקים את המספר ב־AutoVA"
+
+#: src/features/incidents/RelayPage.tsx
+msgid "Copy to clipboard"
+msgstr "העתקה ללוח"
 
 #: src/shared/ui/kit/live.tsx
 msgid "copying the order history ({count} so far)"
@@ -1616,6 +1674,10 @@ msgstr "מנותקת"
 msgid "Disconnecting is unavailable on the server right now. Try again in a few minutes."
 msgstr "ניתוק אינו זמין בשרת כרגע. נסו שוב בעוד כמה דקות."
 
+#: src/features/incidents/RelayPage.tsx
+msgid "Dismiss"
+msgstr "סגירה"
+
 #: src/features/security/SecurityPage.tsx
 msgid "Don’t recognise a device? Sign it out here. Only that device is signed out; this one stays signed in."
 msgstr "לא מזהים מכשיר? אפשר לנתק אותו כאן. רק המכשיר ההוא יתנתק, והמכשיר הנוכחי יישאר מחובר."
@@ -1645,6 +1707,10 @@ msgstr "גרירה לסיבוב · לחיצה כפולה על חדר"
 #: src/features/admin/OperationsPage.tsx
 msgid "Drifts today"
 msgstr "פערים היום"
+
+#: src/features/incidents/RelayPage.tsx
+msgid "Each reveal is recorded in the audit log. The order closes on its own once Etsy shows the tracking."
+msgstr "כל חשיפה נרשמת ביומן הביקורת. ההזמנה נסגרת מעצמה כש־Etsy מציגה את המעקב."
 
 #: src/features/admin/AutomationsPage.tsx
 msgid "Each run is approved"
@@ -1752,6 +1818,11 @@ msgstr "Etsy · קריאה בלבד"
 #: src/features/shops/ShopsPage.tsx
 msgid "Etsy access:"
 msgstr "גישה ל־Etsy:"
+
+#. placeholder {0}: outcome.item.receipt_id
+#: src/features/incidents/RelayPage.tsx
+msgid "Etsy already shows this number for order <0>#{0}</0>, so the order is done. Nothing to copy."
+msgstr "Etsy כבר מציגה את המספר הזה להזמנה <0>#{0}</0>, כך שההזמנה הושלמה. אין מה להעתיק."
 
 #: src/features/incidents/IncidentState.tsx
 msgid "Etsy and HTCO agree again"
@@ -1894,6 +1965,10 @@ msgstr "כל בוקר ב־08:00"
 #: src/features/welcome/WelcomePage.tsx
 msgid "Every order checked against the marketplace, with tracking that keeps up."
 msgstr "כל הזמנה נבדקת מול הפלטפורמה, עם מעקב משלוח שמתעדכן."
+
+#: src/features/incidents/RelayPage.tsx
+msgid "Every order has its tracking number"
+msgstr "לכל ההזמנות יש מספר מעקב"
 
 #: src/features/commerce/OrdersPage.tsx
 msgid "Every paid order is shipped."
@@ -2233,6 +2308,14 @@ msgstr "היי Emma, ההדפס שלך מוכן ויוצא היום. כפיצו�
 msgid "Hi, my order was supposed to ship 4 days ago and I have no tracking number. Can you check?"
 msgstr "היי, ההזמנה שלי הייתה אמורה לצאת לפני 4 ימים ואין לי מספר מעקב. אפשר לבדוק?"
 
+#: src/features/incidents/RelayPage.tsx
+msgid "Hidden until you reveal it"
+msgstr "מוסתר עד שחושפים אותו"
+
+#: src/features/incidents/RelayPage.tsx
+msgid "Hide"
+msgstr "הסתרה"
+
 #: src/features/auth/fields.tsx
 msgid "Hide password"
 msgstr "הסתרת הסיסמה"
@@ -2283,6 +2366,7 @@ msgstr "תצוגות הבית"
 msgid "How connecting works"
 msgstr "איך מחברים"
 
+#: src/features/incidents/RelayPage.tsx
 #: src/features/welcome/WelcomePage.tsx
 msgid "How it works"
 msgstr "איך זה עובד"
@@ -2298,6 +2382,10 @@ msgstr "HT-Commerce מבית H.T.Z Studios"
 #: src/features/welcome/WelcomePage.tsx
 msgid "HT-Commerce is the operating system for your Etsy business: your shops, your team and, step by step, an AI office that asks you before anything risky."
 msgstr "HT-Commerce היא מערכת ההפעלה של העסק שלך ב־Etsy: החנויות, הצוות, ובהדרגה גם משרד AI ששואל אותך לפני כל דבר מסוכן."
+
+#: src/features/incidents/RelayPage.tsx
+msgid "HTCO checks the carrier and the number before saving. Nothing is sent to Etsy from here."
+msgstr "HTCO בודקת את חברת המשלוח ואת המספר לפני השמירה. שום דבר לא נשלח ל־Etsy מכאן."
 
 #: src/features/shops/shopActions.tsx
 msgid "HTCO could not be reached. Check your connection."
@@ -2517,6 +2605,7 @@ msgid "Join conversation"
 msgstr "הצטרפות לשיחה"
 
 #: src/features/incidents/IncidentsPage.tsx
+#: src/features/incidents/RelayPage.tsx
 msgid "Key figures"
 msgstr "נתונים עיקריים"
 
@@ -2579,10 +2668,6 @@ msgstr "הזמנה אחרונה"
 #: src/features/admin/SalesCounters.tsx
 msgid "Last recount"
 msgstr "ספירה אחרונה"
-
-#: src/features/admin/AdminDemos.tsx
-#~ msgid "Last run"
-#~ msgstr "ריצה אחרונה"
 
 #: src/features/admin/OperationsPage.tsx
 msgid "Last success"
@@ -2785,6 +2870,10 @@ msgstr "טוען את התקלות הפתוחות"
 msgid "Loading the order's history…"
 msgstr "טוענים את היסטוריית ההזמנה…"
 
+#: src/features/incidents/RelayPage.tsx
+msgid "Loading the orders…"
+msgstr "טוען את ההזמנות…"
+
 #: src/features/admin/OperationsPage.tsx
 msgid "Loading the queue and sync health"
 msgstr "טוענים את מצב התור והסנכרון"
@@ -2985,6 +3074,11 @@ msgstr "אזורים נוספים"
 msgid "More than {0} open incidents"
 msgstr "יותר מ־{0} תקלות פתוחות"
 
+#. placeholder {0}: waiting.length
+#: src/features/incidents/RelayPage.tsx
+msgid "More than {0} orders need a tracking number"
+msgstr "יותר מ־{0} הזמנות צריכות מספר מעקב"
+
 #. placeholder {0}: words.state(step)
 #: src/features/incidents/IncidentsPage.tsx
 msgid "Move to {0}"
@@ -3001,6 +3095,10 @@ msgstr "ספל הגיע סדוק"
 #: src/features/team/TeamPage.tsx
 msgid "Name"
 msgstr "שם"
+
+#: src/features/incidents/RelayPage.tsx
+msgid "Need a number"
+msgstr "צריכות מספר"
 
 #: src/features/shops/ShopsPage.tsx
 msgid "Need you"
@@ -3193,6 +3291,10 @@ msgstr "אין תקלה פתוחה."
 #: src/features/incidents/IncidentsPage.tsx
 msgid "No open incidents"
 msgstr "אין תקלות פתוחות"
+
+#: src/features/incidents/RelayPage.tsx
+msgid "No order is waiting for tracking"
+msgstr "אין הזמנה שממתינה למספר מעקב"
 
 #. placeholder {0}: search.trim()
 #: src/features/commerce/OrdersPage.tsx
@@ -3394,6 +3496,10 @@ msgstr "לא נמצאה התאמה."
 msgid "Nothing needs you: no automation has a dead-lettered run."
 msgstr "שום דבר לא מחכה לך: לאף אוטומציה אין הרצה שנכשלה סופית."
 
+#: src/features/incidents/RelayPage.tsx
+msgid "Nothing to copy into Etsy"
+msgstr "אין מה להעתיק ל־Etsy"
+
 #: src/features/commerce/ShippingPage.tsx
 msgid "Nothing to ship and nothing shipped in the last 30 days."
 msgstr "אין מה לשלוח ולא נשלח דבר ב־30 הימים האחרונים."
@@ -3423,6 +3529,10 @@ msgstr "עכשיו כהה"
 #: src/features/settings/AppearanceChoices.tsx
 msgid "Now light"
 msgstr "עכשיו בהיר"
+
+#: src/features/incidents/RelayPage.tsx
+msgid "Numbers ready for Etsy"
+msgstr "מספרים מוכנים ל־Etsy"
 
 #: src/features/finance/FinanceDemos.tsx
 #: src/features/office/AiOpsPage.tsx
@@ -3485,9 +3595,17 @@ msgstr "לא מחובר מאז 18:00"
 msgid "Oldest"
 msgstr "הוותיק ביותר"
 
+#: src/features/incidents/RelayPage.tsx
+msgid "Oldest first"
+msgstr "מהישנה לחדשה"
+
 #: src/features/incidents/IncidentsPage.tsx
 msgid "Oldest open"
 msgstr "הפתוחה הוותיקה"
+
+#: src/features/incidents/RelayPage.tsx
+msgid "Oldest waiting"
+msgstr "ההמתנה הארוכה ביותר"
 
 #: src/shared/demo/office.ts
 msgid "Omer"
@@ -3530,6 +3648,10 @@ msgstr "כפתור אחד, Etsy מבקשת את אישורך, וחוזרים."
 #: src/features/overview/OverviewPage.tsx
 msgid "One workspace's incidents could not be read."
 msgstr "לא הצלחנו לקרוא את התקלות של אחת מסביבות העבודה."
+
+#: src/features/incidents/RelayPage.tsx
+msgid "Only an Owner or Admin can paste or copy tracking numbers. Ask one of them."
+msgstr "רק בעלים או מנהל יכולים להדביק או להעתיק מספרי מעקב. כדאי לפנות לאחד מהם."
 
 #: src/features/admin/SalesCounters.tsx
 msgid "Only the Owner and Admins recount sales."
@@ -3679,6 +3801,7 @@ msgstr "תפעול"
 #: src/features/commerce/OrdersPage.tsx
 #: src/features/commerce/ShippingPage.tsx
 #: src/features/incidents/IncidentsPage.tsx
+#: src/features/incidents/RelayPage.tsx
 #: src/features/office/ChatPage.tsx
 msgid "Order"
 msgstr "הזמנה"
@@ -3697,6 +3820,11 @@ msgstr "הזמנה #{0} צריכה לצאת עד {by}"
 #: src/app/shell/NotificationBell.tsx
 msgid "Order #{0} needs its tracking copied to Etsy"
 msgstr "צריך להעתיק ל־Etsy את מספר המעקב של הזמנה #{0}"
+
+#. placeholder {0}: item.receipt_id
+#: src/features/incidents/RelayPage.tsx
+msgid "Order <0>#{0}</0>"
+msgstr "הזמנה <0>#{0}</0>"
 
 #: src/features/office/floor3d/plan.ts
 #: src/shared/demo/office.ts
@@ -3759,6 +3887,10 @@ msgstr "הזמנות למשלוח"
 #: src/features/shops/ShopsPage.tsx
 msgid "Orders today"
 msgstr "הזמנות היום"
+
+#: src/features/incidents/RelayPage.tsx
+msgid "Orders without tracking"
+msgstr "הזמנות בלי מספר מעקב"
 
 #: src/features/overview/OverviewPage.tsx
 msgid "Orders, last 7 days"
@@ -3843,6 +3975,7 @@ msgstr "הדף לא נמצא"
 
 #: src/features/commerce/OrdersPage.tsx
 #: src/features/commerce/timeline.tsx
+#: src/features/incidents/RelayPage.tsx
 msgid "Paid"
 msgstr "שולם"
 
@@ -3892,6 +4025,10 @@ msgstr "סיסמה בלבד"
 #: src/features/overview/OverviewPage.tsx
 msgid "past the ship-by date"
 msgstr "אחרי מועד המשלוח"
+
+#: src/features/incidents/RelayPage.tsx
+msgid "Paste it here to check it"
+msgstr "מדביקים כאן לבדיקה"
 
 #: src/features/office/FloorPage.tsx
 msgid "Pause"
@@ -4170,6 +4307,10 @@ msgstr "צפייה בלבד"
 #: src/features/admin/AutomationsPage.tsx
 msgid "Reads from the marketplace"
 msgstr "קוראת מהמרקטפלייס"
+
+#: src/features/incidents/RelayPage.tsx
+msgid "Ready for Etsy"
+msgstr "מוכנות ל־Etsy"
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "Ready today"
@@ -4488,6 +4629,10 @@ msgstr "החזרות"
 #: src/features/commerce/ShippingPage.tsx
 msgid "Returns and partners"
 msgstr "החזרות ושותפים"
+
+#: src/features/incidents/RelayPage.tsx
+msgid "Reveal the number"
+msgstr "חשיפת המספר"
 
 #: src/features/commerce/OrdersPage.tsx
 #: src/features/finance/FinanceDemos.tsx
@@ -4890,6 +5035,7 @@ msgstr "שון"
 #: src/features/admin/SalesCounters.tsx
 #: src/features/finance/FinanceDemos.tsx
 #: src/features/incidents/IncidentsPage.tsx
+#: src/features/incidents/RelayPage.tsx
 #: src/features/shops/ShopStats.tsx
 #: src/shared/ui/kit/live.tsx
 msgid "Shop"
@@ -5366,6 +5512,10 @@ msgstr "לא הצלחנו לטעון את האוטומציות. נסו שוב ב
 msgid "The best of <0>{0}</0> months with sales."
 msgstr "הטוב מבין <0>{0}</0> חודשים עם מכירות."
 
+#: src/features/incidents/RelayPage.tsx
+msgid "The browser did not allow copying. Select the number and copy it by hand."
+msgstr "הדפדפן לא אפשר העתקה. מסמנים את המספר ומעתיקים ידנית."
+
 #: src/features/shops/shopActions.tsx
 msgid "The check did not finish. Try again shortly."
 msgstr "הבדיקה לא הסתיימה. אפשר לנסות שוב בעוד רגע."
@@ -5464,6 +5614,10 @@ msgstr "המשרד שעובד בשבילך, נבנה צעד אחר צעד. הו�
 msgid "The order was cancelled or refunded"
 msgstr "ההזמנה בוטלה או הוחזרה"
 
+#: src/features/incidents/RelayPage.tsx
+msgid "The orders waiting for tracking could not be loaded"
+msgstr "לא ניתן לטעון את ההזמנות שממתינות למספר מעקב"
+
 #: src/features/commerce/OrdersPage.tsx
 msgid "The orders were last synced {when}. Etsy has not answered since, so newer orders may be missing."
 msgstr "ההזמנות סונכרנו לאחרונה {when}. Etsy לא עונה מאז, ולכן ייתכן שחסרות הזמנות חדשות."
@@ -5504,6 +5658,10 @@ msgstr "מוני המכירות עדיין לא פעילים. הפעילו או�
 #: src/features/team/TeamPage.tsx
 msgid "The server did not accept this change."
 msgstr "השרת לא קיבל את השינוי."
+
+#: src/features/incidents/RelayPage.tsx
+msgid "The server is not answering. Check your connection and try again."
+msgstr "השרת לא עונה. כדאי לבדוק את החיבור ולנסות שוב."
 
 #: src/features/shops/ShopsPage.tsx
 msgid "The shop appears with its connection health and last sync."
@@ -5556,6 +5714,10 @@ msgstr "לא ניתן היה לשמור את הצעד. כדאי לבדוק את 
 #: src/features/shops/ShopsPage.tsx
 msgid "The term 'Etsy' is a trademark of Etsy, Inc. This application uses the Etsy API but is not endorsed or certified by Etsy, Inc."
 msgstr "המונח ״Etsy״ הוא סימן מסחרי של חברת Etsy, Inc. אפליקציה זו משתמשת ב־API של Etsy, אך חברת Etsy, Inc. אינה תומכת בה ואינה מאשרת אותה."
+
+#: src/features/incidents/RelayPage.tsx
+msgid "The tracking relay is not set up on this server yet."
+msgstr "העברת מספרי המעקב עוד לא הוגדרה בשרת הזה."
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "The web app is open today"
@@ -5613,6 +5775,10 @@ msgstr "קישור החיבור חסר. אפשר להתחיל מחדש מעמו�
 msgid "This device"
 msgstr "המכשיר הזה"
 
+#: src/features/incidents/RelayPage.tsx
+msgid "This did not work. Check your connection and try again."
+msgstr "זה לא הצליח. כדאי לבדוק את החיבור ולנסות שוב."
+
 #: src/features/auth/AcceptInvitePage.tsx
 #: src/features/auth/ForgotPasswordPage.tsx
 #: src/features/auth/ResetPasswordPage.tsx
@@ -5646,6 +5812,14 @@ msgstr "התקלה הזו אינה זמינה לך."
 msgid "This invitation link has expired or was already used. Ask for a new one."
 msgstr "פג תוקף קישור ההזמנה או שכבר השתמשו בו. בקש/י קישור חדש."
 
+#: src/features/incidents/RelayPage.tsx
+msgid "This is not a valid {name} tracking number. Check the number and the carrier in AutoVA, then paste it again."
+msgstr "זה לא מספר מעקב תקין של {name}. כדאי לבדוק ב־AutoVA את המספר ואת חברת המשלוח, ולהדביק שוב."
+
+#: src/features/incidents/RelayPage.tsx
+msgid "This is not a valid tracking number. Check it in AutoVA and paste it again."
+msgstr "זה לא מספר מעקב תקין. כדאי לבדוק אותו ב־AutoVA ולהדביק שוב."
+
 #: src/features/commerce/OrdersPage.tsx
 msgid "This is not available on this server yet."
 msgstr "זה עוד לא זמין בשרת הזה."
@@ -5666,6 +5840,22 @@ msgstr "החבר או החנות כבר לא בסביבת העבודה."
 #: src/features/office/AiOpsPage.tsx
 msgid "this month"
 msgstr "החודש"
+
+#: src/features/incidents/RelayPage.tsx
+msgid "This needs your second factor. Confirm it with your authenticator app, then try again."
+msgstr "הפעולה דורשת את הגורם השני. מאמתים אותו באפליקציית האימות ומנסים שוב."
+
+#: src/features/incidents/RelayPage.tsx
+msgid "This number is already used for another order of this shop. Check that you copied it from the right order in AutoVA."
+msgstr "המספר הזה כבר משמש הזמנה אחרת של החנות. כדאי לוודא שהועתק מההזמנה הנכונה ב־AutoVA."
+
+#: src/features/incidents/RelayPage.tsx
+msgid "This order is no longer here: it closed, or its number expired after 30 days. The list is up to date."
+msgstr "ההזמנה כבר לא כאן: היא נסגרה, או שהמספר שלה פג אחרי 30 יום. הרשימה מעודכנת."
+
+#: src/features/incidents/RelayPage.tsx
+msgid "This order is no longer waiting for a number. The list is up to date."
+msgstr "ההזמנה כבר לא ממתינה למספר. הרשימה מעודכנת."
 
 #: src/features/auth/SignInPage.tsx
 msgid "This page could not sign you in. Reload it and try again."
@@ -5864,12 +6054,23 @@ msgid "Tracked"
 msgstr "עם מעקב"
 
 #: src/features/commerce/ShippingPage.tsx
+#: src/features/incidents/RelayPage.tsx
 msgid "Tracking"
 msgstr "מעקב"
+
+#: src/app/shell/useNavLabels.ts
+#: src/features/incidents/RelayPage.tsx
+msgctxt "navigation"
+msgid "Tracking"
+msgstr "מספרי מעקב"
 
 #: src/features/incidents/IncidentState.tsx
 msgid "Tracking found in Etsy"
 msgstr "נמצא מספר מעקב ב־Etsy"
+
+#: src/features/incidents/RelayPage.tsx
+msgid "Tracking from AutoVA"
+msgstr "מספרי מעקב מ־AutoVA"
 
 #: src/features/incidents/IncidentState.tsx
 msgid "Tracking mismatch"
@@ -5880,6 +6081,7 @@ msgid "Tracking missing"
 msgstr "חסר מספר מעקב"
 
 #: src/features/incidents/IncidentsPage.tsx
+#: src/features/incidents/RelayPage.tsx
 msgid "Tracking number"
 msgstr "מספר מעקב"
 
@@ -5946,6 +6148,7 @@ msgstr "מפעילים"
 #: src/features/admin/AutomationsPage.tsx
 #: src/features/admin/OperationsPage.tsx
 #: src/features/incidents/IncidentsPage.tsx
+#: src/features/incidents/RelayPage.tsx
 #: src/features/overview/OverviewPage.tsx
 #: src/features/shops/reconnect.tsx
 #: src/features/shops/ShopsPage.tsx
@@ -6096,6 +6299,7 @@ msgstr "לעומת אתמול"
 #: src/features/admin/execution.tsx
 #: src/features/admin/OperationsPage.tsx
 #: src/features/commerce/demoScreens.tsx
+#: src/features/incidents/RelayPage.tsx
 msgid "Waiting"
 msgstr "ממתין"
 
@@ -6399,6 +6603,10 @@ msgstr "התפקיד שלך מאפשר לראות תקלות אבל לא להע�
 #: src/features/incidents/IncidentsPage.tsx
 msgid "Your role can see this incident but not move it."
 msgstr "התפקיד שלך מאפשר לראות את התקלה אבל לא להעביר אותה."
+
+#: src/features/incidents/RelayPage.tsx
+msgid "Your role does not include fulfillment. Ask an Owner or Admin."
+msgstr "התפקיד שלך לא כולל טיפול במשלוחים. כדאי לפנות לבעלים או למנהל."
 
 #: src/features/incidents/IncidentsPage.tsx
 msgid "Your role does not include incidents. Ask an Owner or Admin."

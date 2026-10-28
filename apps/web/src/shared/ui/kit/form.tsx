@@ -62,9 +62,14 @@ export function PillField({
   );
 }
 
-/** A choice chip (the demo's `.tab` pill): ink when chosen. */
+/**
+ * A choice chip (the demo's `.tab` pill): ink when chosen. It draws 32 px tall, but an invisible
+ * `::before` stretches its hit area 6 px above and below, so a finger gets a 44 px target without
+ * the chip looking any bigger.
+ */
 export const CHOICE_CHIP = cx(
-  "flex h-8 cursor-default items-center gap-1.5 rounded-pill border border-line-strong px-3 text-caption whitespace-nowrap outline-none",
+  "relative flex h-8 cursor-default items-center gap-1.5 rounded-pill border border-line-strong px-3 text-caption whitespace-nowrap outline-none",
+  "before:absolute before:inset-x-0 before:-inset-y-1.5 before:content-['']",
   "transition-[background-color,border-color,color,scale] duration-[var(--motion-duration-fast)] ease-standard",
   "data-[hovered]:border-line-hover data-[pressed]:scale-95",
   "data-[focus-visible]:outline-2 data-[focus-visible]:outline-offset-2 data-[focus-visible]:outline-focus",
