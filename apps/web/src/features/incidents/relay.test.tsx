@@ -1,6 +1,6 @@
 import { MutationCache, QueryCache } from "@tanstack/react-query";
 import { createMemoryHistory, type RouterHistory } from "@tanstack/react-router";
-import { render, screen, within } from "@testing-library/react";
+import { act, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
@@ -89,6 +89,7 @@ async function pasteInto(
 vi.setConfig({ testTimeout: 20_000 });
 
 afterEach(() => {
+  vi.useRealTimers();
   vi.restoreAllMocks();
 });
 
@@ -241,6 +242,17 @@ describe("the paste, checked by the server (AC-6.10.4)", () => {
       "/security/setup",
     );
   });
+
+  it("goes back to sign-in when the session ended before the paste (401)", async () => {
+    const { user, backend } = await open();
+    const panel = await orderPanel("3481220917");
+    backend.state.signedIn = false;
+    await pasteInto(user, panel, "Yun Express", GOOD);
+    expect(
+      await screen.findByRole("heading", { level: 1, name: "Sign in" }, { timeout: 8000 }),
+    ).toBeVisible();
+    expect(backend.state.relay.pastes).toEqual([]);
+  });
 });
 
 describe("the copy into Etsy (AC-6.10.3)", () => {
@@ -289,6 +301,34 @@ describe("the copy into Etsy (AC-6.10.3)", () => {
     expect(await within(panel).findByRole("alert")).toHaveTextContent(
       "This order is no longer here",
     );
+    expect(backend.state.relay.reveals).toEqual([]);
+    expect(document.body.textContent).not.toContain(PASTED);
+  });
+
+  it("hides the revealed number again after two minutes, with its copied status", async () => {
+    // Time still runs (for the user's clicks), and can be pushed ahead by hand.
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    const { user, panel } = await copyTab();
+    await user.click(within(panel).getByRole("button", { name: "Reveal the number" }));
+    expect(await within(panel).findByText(PASTED)).toBeVisible();
+    await user.click(within(panel).getByRole("button", { name: "Copy to clipboard" }));
+    expect(within(panel).getByRole("status")).toHaveTextContent("Copied.");
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(120_000);
+    });
+    expect(document.body.textContent).not.toContain(PASTED);
+    expect(within(panel).getByRole("button", { name: "Reveal the number" })).toBeVisible();
+    expect(within(panel).getByRole("status")).not.toHaveTextContent("Copied");
+  });
+
+  it("goes back to sign-in when the session ended before a reveal (401)", async () => {
+    const { backend, user, panel } = await copyTab();
+    backend.state.signedIn = false;
+    await user.click(within(panel).getByRole("button", { name: "Reveal the number" }));
+    expect(
+      await screen.findByRole("heading", { level: 1, name: "Sign in" }, { timeout: 8000 }),
+    ).toBeVisible();
     expect(backend.state.relay.reveals).toEqual([]);
     expect(document.body.textContent).not.toContain(PASTED);
   });
@@ -346,13 +386,16 @@ describe("the pasted number is never kept", () => {
     expect(leaks(settings.mock.calls)).toEqual([]);
     expect(history.location.href).not.toContain(GOOD);
     for (const request of backend.requests) expect(request.url).not.toContain(GOOD);
-    // No query or mutation holds it, as data or as what was sent.
+    // No query or mutation holds it, as data, as what was sent or in its stored error.
     expect(queryCaches.length + mutationCaches.length).toBeGreaterThan(0);
     for (const cache of queryCaches)
-      for (const query of cache.getAll()) expect(dump(query.state.data)).not.toContain(GOOD);
+      for (const query of cache.getAll())
+        expect(dump([query.state.data, query.state.error])).not.toContain(GOOD);
     for (const cache of mutationCaches)
       for (const mutation of cache.getAll())
-        expect(dump([mutation.state.data, mutation.state.variables])).not.toContain(GOOD);
+        expect(
+          dump([mutation.state.data, mutation.state.variables, mutation.state.error]),
+        ).not.toContain(GOOD);
   });
 
   it("asks the browser not to cache the reveal", async () => {

@@ -388,7 +388,7 @@ msgstr "התראה חדשה"
 
 #: src/features/incidents/RelayPage.tsx
 msgid "A number shows here once it is pasted and checked, until Etsy shows it."
-msgstr "מספר מופיע כאן אחרי שהודבק ונבדק, עד ש-Etsy מציגה אותו."
+msgstr "מספר מופיע כאן אחרי שהודבק ונבדק, עד ש־Etsy מציגה אותו."
 
 #: src/features/incidents/RelayPage.tsx
 msgid "A paid order shows here when it still has no tracking two business days after payment."
@@ -989,7 +989,7 @@ msgstr "החלפת ה־token של ספק המעקב נכשלה (D-411)"
 
 #: src/features/incidents/RelayPage.tsx
 msgid "Carrier, as AutoVA shows it"
-msgstr "חברת המשלוח, כפי שמופיעה ב-AutoVA"
+msgstr "חברת המשלוח, כפי שמופיעה ב־AutoVA"
 
 #: src/features/finance/FinanceDemos.tsx
 msgid "Cash"
@@ -1091,7 +1091,7 @@ msgstr "ייבדק שוב כשתגיע ההזמנה הראשונה של החנו
 #. placeholder {2}: outcome.item.receipt_id
 #: src/features/incidents/RelayPage.tsx
 msgid "Checked and saved: {0} number ending in <0>{1}</0> for order <1>#{2}</1>. Now copy it into Etsy."
-msgstr "נבדק ונשמר: מספר {0} שמסתיים ב-<0>{1}</0> להזמנה <1>#{2}</1>. עכשיו מעתיקים אותו ל-Etsy."
+msgstr "נבדק ונשמר: מספר {0} שמסתיים ב־<0>{1}</0> להזמנה <1>#{2}</1>. עכשיו מעתיקים אותו ל־Etsy."
 
 #: src/features/shops/Capabilities.tsx
 msgid "Checked just now."
@@ -1353,15 +1353,15 @@ msgstr "הועתק"
 
 #: src/features/incidents/RelayPage.tsx
 msgid "Copied. In Etsy, open this order and add the tracking with this carrier."
-msgstr "הועתק. ב-Etsy, פותחים את ההזמנה ומוסיפים את מספר המעקב עם חברת המשלוח הזו."
+msgstr "הועתק. ב־Etsy, פותחים את ההזמנה ומוסיפים את מספר המעקב עם חברת המשלוח הזו."
 
 #: src/features/incidents/RelayPage.tsx
 msgid "Copy into Etsy"
-msgstr "העתקה ל-Etsy"
+msgstr "העתקה ל־Etsy"
 
 #: src/features/incidents/RelayPage.tsx
 msgid "Copy it into Etsy"
-msgstr "מעתיקים אותו ל-Etsy"
+msgstr "מעתיקים אותו ל־Etsy"
 
 #: src/features/team/TeamPage.tsx
 msgid "Copy link"
@@ -1369,11 +1369,11 @@ msgstr "העתקת הקישור"
 
 #: src/features/incidents/RelayPage.tsx
 msgid "Copy the number from the order in AutoVA and paste it here: HTCO checks it before anything is saved. Then copy it into Etsy. The order closes on its own once Etsy shows the tracking."
-msgstr "מעתיקים את המספר מההזמנה ב-AutoVA ומדביקים כאן: HTCO בודקת אותו לפני שמשהו נשמר. אחר כך מעתיקים אותו ל-Etsy. ההזמנה נסגרת מעצמה כש-Etsy מציגה את המעקב."
+msgstr "מעתיקים את המספר מההזמנה ב־AutoVA ומדביקים כאן: HTCO בודקת אותו לפני שמשהו נשמר. אחר כך מעתיקים אותו ל־Etsy. ההזמנה נסגרת מעצמה כש־Etsy מציגה את המעקב."
 
 #: src/features/incidents/RelayPage.tsx
 msgid "Copy the number in AutoVA"
-msgstr "מעתיקים את המספר ב-AutoVA"
+msgstr "מעתיקים את המספר ב־AutoVA"
 
 #: src/features/incidents/RelayPage.tsx
 msgid "Copy to clipboard"
@@ -1710,7 +1710,7 @@ msgstr "פערים היום"
 
 #: src/features/incidents/RelayPage.tsx
 msgid "Each reveal is recorded in the audit log. The order closes on its own once Etsy shows the tracking."
-msgstr "כל חשיפה נרשמת ביומן הביקורת. ההזמנה נסגרת מעצמה כש-Etsy מציגה את המעקב."
+msgstr "כל חשיפה נרשמת ביומן הביקורת. ההזמנה נסגרת מעצמה כש־Etsy מציגה את המעקב."
 
 #: src/features/admin/AutomationsPage.tsx
 msgid "Each run is approved"
@@ -2385,7 +2385,7 @@ msgstr "HT-Commerce היא מערכת ההפעלה של העסק שלך ב־Etsy
 
 #: src/features/incidents/RelayPage.tsx
 msgid "HTCO checks the carrier and the number before saving. Nothing is sent to Etsy from here."
-msgstr "HTCO בודקת את חברת המשלוח ואת המספר לפני השמירה. שום דבר לא נשלח ל-Etsy מכאן."
+msgstr "HTCO בודקת את חברת המשלוח ואת המספר לפני השמירה. שום דבר לא נשלח ל־Etsy מכאן."
 
 #: src/features/shops/shopActions.tsx
 msgid "HTCO could not be reached. Check your connection."
@@ -3077,7 +3077,7 @@ msgstr "יותר מ־{0} תקלות פתוחות"
 #. placeholder {0}: waiting.length
 #: src/features/incidents/RelayPage.tsx
 msgid "More than {0} orders need a tracking number"
-msgstr "יותר מ-{0} הזמנות צריכות מספר מעקב"
+msgstr "יותר מ־{0} הזמנות צריכות מספר מעקב"
 
 #. placeholder {0}: words.state(step)
 #: src/features/incidents/IncidentsPage.tsx
@@ -3498,7 +3498,7 @@ msgstr "שום דבר לא מחכה לך: לאף אוטומציה אין הרצ�
 
 #: src/features/incidents/RelayPage.tsx
 msgid "Nothing to copy into Etsy"
-msgstr "אין מה להעתיק ל-Etsy"
+msgstr "אין מה להעתיק ל־Etsy"
 
 #: src/features/commerce/ShippingPage.tsx
 msgid "Nothing to ship and nothing shipped in the last 30 days."
@@ -3532,7 +3532,7 @@ msgstr "עכשיו בהיר"
 
 #: src/features/incidents/RelayPage.tsx
 msgid "Numbers ready for Etsy"
-msgstr "מספרים מוכנים ל-Etsy"
+msgstr "מספרים מוכנים ל־Etsy"
 
 #: src/features/finance/FinanceDemos.tsx
 #: src/features/office/AiOpsPage.tsx
@@ -3597,7 +3597,7 @@ msgstr "הוותיק ביותר"
 
 #: src/features/incidents/RelayPage.tsx
 msgid "Oldest first"
-msgstr "הישנות קודם"
+msgstr "מהישנה לחדשה"
 
 #: src/features/incidents/IncidentsPage.tsx
 msgid "Oldest open"
@@ -3605,7 +3605,7 @@ msgstr "הפתוחה הוותיקה"
 
 #: src/features/incidents/RelayPage.tsx
 msgid "Oldest waiting"
-msgstr "הממתינה הוותיקה"
+msgstr "ההמתנה הארוכה ביותר"
 
 #: src/shared/demo/office.ts
 msgid "Omer"
@@ -4310,7 +4310,7 @@ msgstr "קוראת מהמרקטפלייס"
 
 #: src/features/incidents/RelayPage.tsx
 msgid "Ready for Etsy"
-msgstr "מוכנות ל-Etsy"
+msgstr "מוכנות ל־Etsy"
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "Ready today"
@@ -5814,11 +5814,11 @@ msgstr "פג תוקף קישור ההזמנה או שכבר השתמשו בו. �
 
 #: src/features/incidents/RelayPage.tsx
 msgid "This is not a valid {name} tracking number. Check the number and the carrier in AutoVA, then paste it again."
-msgstr "זה לא מספר מעקב תקין של {name}. כדאי לבדוק ב-AutoVA את המספר ואת חברת המשלוח, ולהדביק שוב."
+msgstr "זה לא מספר מעקב תקין של {name}. כדאי לבדוק ב־AutoVA את המספר ואת חברת המשלוח, ולהדביק שוב."
 
 #: src/features/incidents/RelayPage.tsx
 msgid "This is not a valid tracking number. Check it in AutoVA and paste it again."
-msgstr "זה לא מספר מעקב תקין. כדאי לבדוק אותו ב-AutoVA ולהדביק שוב."
+msgstr "זה לא מספר מעקב תקין. כדאי לבדוק אותו ב־AutoVA ולהדביק שוב."
 
 #: src/features/commerce/OrdersPage.tsx
 msgid "This is not available on this server yet."
@@ -5847,7 +5847,7 @@ msgstr "הפעולה דורשת את הגורם השני. מאמתים אותו 
 
 #: src/features/incidents/RelayPage.tsx
 msgid "This number is already used for another order of this shop. Check that you copied it from the right order in AutoVA."
-msgstr "המספר הזה כבר משמש הזמנה אחרת של החנות. כדאי לוודא שהועתק מההזמנה הנכונה ב-AutoVA."
+msgstr "המספר הזה כבר משמש הזמנה אחרת של החנות. כדאי לוודא שהועתק מההזמנה הנכונה ב־AutoVA."
 
 #: src/features/incidents/RelayPage.tsx
 msgid "This order is no longer here: it closed, or its number expired after 30 days. The list is up to date."
@@ -6070,7 +6070,7 @@ msgstr "נמצא מספר מעקב ב־Etsy"
 
 #: src/features/incidents/RelayPage.tsx
 msgid "Tracking from AutoVA"
-msgstr "מספרי מעקב מ-AutoVA"
+msgstr "מספרי מעקב מ־AutoVA"
 
 #: src/features/incidents/IncidentState.tsx
 msgid "Tracking mismatch"

@@ -14,7 +14,7 @@ import {
   type RelayItem,
   type RelayPaste,
 } from "./relay.ts";
-import { ApiError, meQuery, shopsQuery, useApi } from "../../shared/api/api.tsx";
+import { ApiError, forgetSession, meQuery, shopsQuery, useApi } from "../../shared/api/api.tsx";
 import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
 import { cx } from "../../shared/lib/cx.ts";
 import { useNow } from "../../shared/lib/time.ts";
@@ -471,6 +471,22 @@ function OrderHead({
   );
 }
 
+/**
+ * A paste or reveal answered 401: the session ended (expired, signed out elsewhere), so trying
+ * again here cannot work. Like the query cache's handler in `App.tsx`, forget the session and go
+ * back to sign-in. True when it did.
+ */
+function useSessionEnded(): (error: unknown) => boolean {
+  const client = useQueryClient();
+  const navigate = useNavigate();
+  return (error) => {
+    if (!(error instanceof ApiError && error.status === 401)) return false;
+    forgetSession(client);
+    void navigate({ to: "/sign-in" });
+    return true;
+  };
+}
+
 /** The words for a refused paste or reveal, and whether the second factor is the way out. */
 function useProblem(): (error: unknown, carrier: Carrier | null) => { text: string; mfa: boolean } {
   const { t } = useLingui();
@@ -548,6 +564,7 @@ function PastePanel({
   const client = useQueryClient();
   const heading = useId();
   const problemOf = useProblem();
+  const sessionEnded = useSessionEnded();
   const [carrier, setCarrier] = useState<Carrier | null>(null);
   const [code, setCode] = useState("");
   const [problem, setProblem] = useState<{ text: string; mfa: boolean } | undefined>();
@@ -570,6 +587,7 @@ function PastePanel({
       );
       void refresh();
     } catch (error) {
+      if (sessionEnded(error)) return;
       if (
         error instanceof ApiError &&
         (error.type === "relay-item-moved" || error.status === 404)
@@ -649,6 +667,7 @@ function CopyPanel({
   const client = useQueryClient();
   const heading = useId();
   const problemOf = useProblem();
+  const sessionEnded = useSessionEnded();
   // The number lives here only, and only while shown.
   const [code, setCode] = useState<string | null>(null);
   const [copied, setCopied] = useState<"yes" | "refused" | null>(null);
@@ -663,6 +682,7 @@ function CopyPanel({
       setCopied(null);
     },
     onError: (error) => {
+      if (sessionEnded(error)) return;
       setProblem(problemOf(error, null));
       if (error instanceof ApiError && error.status === 404)
         void client.invalidateQueries({ queryKey: relayKeys.list(organizationId) });
