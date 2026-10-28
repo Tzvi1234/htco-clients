@@ -150,6 +150,11 @@ type Target =
       to: "/commerce/shipping" | "/commerce/products" | "/customers/customers";
       search: { shop?: string };
     }
+  | {
+      // The tracking relay (slice 6.10) in the notification's own workspace.
+      to: "/commerce/tracking";
+      search: { workspace: string };
+    }
   | { to: "/shops" | "/settings/security" };
 
 /** Where a notification leads: its incident, or the screen its subject lives on. */
@@ -165,8 +170,9 @@ function targetOf(notice: Notice): Target | undefined {
   const shop = notice.shop_id === null ? {} : { shop: notice.shop_id };
   switch (notice.kind) {
     case "alert_ship_by":
-    case "relay_tracking_needed":
       return { to: "/commerce/shipping", search: shop };
+    case "relay_tracking_needed":
+      return { to: "/commerce/tracking", search: { workspace: notice.organizationId } };
     case "alert_out_of_stock":
       return { to: "/commerce/products", search: shop };
     case "alert_low_review":

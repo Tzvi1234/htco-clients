@@ -65,6 +65,8 @@ export const AREAS: readonly NavArea[] = [
       { id: "shipping", to: "/commerce/shipping", built: true },
       // Fulfillment's incident center (platform slice 6.5); `/incidents/{id}` opens one.
       { id: "incidents", to: "/incidents", built: true },
+      // The AutoVA tracking relay (platform slice 6.10): paste the number, copy it into Etsy.
+      { id: "tracking", to: "/commerce/tracking", built: true },
       ...soon("commerce", "suppliers"),
     ],
   },

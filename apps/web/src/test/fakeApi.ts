@@ -11,6 +11,7 @@ import {
   fakeRuns,
   type FakeOperations,
 } from "./fakeOperations.ts";
+import { fakeRelay, relayRoutes, type FakeRelay } from "./fakeRelay.ts";
 import { fakeShopData, type FakePeriod } from "./fakeShopData.ts";
 
 type IntegrationView = components["schemas"]["IntegrationView"];
@@ -182,6 +183,8 @@ export interface FakeState {
   healthTrouble?: "fail" | undefined;
   /** True: automations are not set up on this server (503 automations-unavailable). */
   automationsOff?: boolean;
+  /** The AutoVA tracking relay (slice 6.10): its items, pastes and audited reveals. */
+  relay: FakeRelay;
 }
 
 const PROBLEMS = "https://ht-co.app/problems/";
@@ -363,6 +366,7 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
     exports: [],
     resyncs: [],
     operations: fakeOperations(),
+    relay: fakeRelay(),
     ...initial,
   };
   const requests: Request[] = [];
@@ -537,6 +541,25 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
 
     const center = incidentCenter(route, body, url);
     if (center !== undefined) return center;
+
+    const relay = relayRoutes(
+      state.relay,
+      route,
+      body,
+      url,
+      {
+        may: state.role === "owner" || state.role === "admin",
+        aal2: state.assurance === "aal2",
+        listForbidden: state.role === "viewer",
+      },
+      (status, payload, headers = {}) =>
+        new Response(JSON.stringify(payload), {
+          status,
+          headers: { "content-type": "application/json", ...headers },
+        }),
+      problem,
+    );
+    if (relay !== undefined) return relay;
 
     const bulk = /^POST \/v1\/shops\/([^/]+)\/order-(exports|resyncs)$/.exec(route);
     if (bulk !== null) {

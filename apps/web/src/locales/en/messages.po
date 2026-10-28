@@ -25,6 +25,11 @@ msgstr "{0, plural, one {# attempt} other {# attempts}}"
 msgid "{0, plural, one {# open incident} other {# open incidents}}"
 msgstr "{0, plural, one {# open incident} other {# open incidents}}"
 
+#. placeholder {0}: waiting.length
+#: src/features/incidents/RelayPage.tsx
+msgid "{0, plural, one {# order needs a tracking number} other {# orders need a tracking number}}"
+msgstr "{0, plural, one {# order needs a tracking number} other {# orders need a tracking number}}"
+
 #. placeholder {0}: best.orders
 #. placeholder {0}: r.orders
 #: src/features/shops/ShopStats.tsx
@@ -73,6 +78,7 @@ msgstr "{0} and its data were removed."
 
 #. placeholder {0}: String(days)
 #: src/features/incidents/IncidentsPage.tsx
+#: src/features/incidents/RelayPage.tsx
 msgctxt "age in days"
 msgid "{0} d"
 msgstr "{0} d"
@@ -84,6 +90,7 @@ msgstr "{0} digital"
 
 #. placeholder {0}: String(hours)
 #: src/features/incidents/IncidentsPage.tsx
+#: src/features/incidents/RelayPage.tsx
 msgctxt "age in hours"
 msgid "{0} h"
 msgstr "{0} h"
@@ -378,6 +385,14 @@ msgstr "A new loop in the office"
 #: src/app/shell/NotificationBell.tsx
 msgid "A new notification"
 msgstr "A new notification"
+
+#: src/features/incidents/RelayPage.tsx
+msgid "A number shows here once it is pasted and checked, until Etsy shows it."
+msgstr "A number shows here once it is pasted and checked, until Etsy shows it."
+
+#: src/features/incidents/RelayPage.tsx
+msgid "A paid order shows here when it still has no tracking two business days after payment."
+msgstr "A paid order shows here when it still has no tracking two business days after payment."
 
 #: src/features/admin/AutomationsPage.tsx
 msgid "A person"
@@ -972,6 +987,10 @@ msgstr "Carrier token rotation"
 msgid "Carrier token rotation failed (D-411)"
 msgstr "Carrier token rotation failed (D-411)"
 
+#: src/features/incidents/RelayPage.tsx
+msgid "Carrier, as AutoVA shows it"
+msgstr "Carrier, as AutoVA shows it"
+
 #: src/features/finance/FinanceDemos.tsx
 msgid "Cash"
 msgstr "Cash"
@@ -1037,6 +1056,10 @@ msgstr "Chat with requester"
 msgid "Chat with Tom"
 msgstr "Chat with Tom"
 
+#: src/features/incidents/RelayPage.tsx
+msgid "Check and save"
+msgstr "Check and save"
+
 #: src/features/team/TeamPage.tsx
 msgid "Check the email address."
 msgstr "Check the email address."
@@ -1062,6 +1085,13 @@ msgstr "Checked {0}"
 #: src/features/shops/Capabilities.tsx
 msgid "Checked again once the shop has its first order."
 msgstr "Checked again once the shop has its first order."
+
+#. placeholder {0}: carrierName(outcome.item.carrier ?? "")
+#. placeholder {1}: outcome.item.last4 ?? ""
+#. placeholder {2}: outcome.item.receipt_id
+#: src/features/incidents/RelayPage.tsx
+msgid "Checked and saved: {0} number ending in <0>{1}</0> for order <1>#{2}</1>. Now copy it into Etsy."
+msgstr "Checked and saved: {0} number ending in <0>{1}</0> for order <1>#{2}</1>. Now copy it into Etsy."
 
 #: src/features/shops/Capabilities.tsx
 msgid "Checked just now."
@@ -1183,6 +1213,10 @@ msgstr "Confirm"
 #: src/features/shops/ShopsPage.tsx
 msgid "Confirm it is you"
 msgstr "Confirm it is you"
+
+#: src/features/incidents/RelayPage.tsx
+msgid "Confirm my second factor"
+msgstr "Confirm my second factor"
 
 #: src/features/team/TeamPage.tsx
 msgid "Confirm with your authenticator app, then try again."
@@ -1317,9 +1351,33 @@ msgstr "Coordinating late orders"
 msgid "Copied"
 msgstr "Copied"
 
+#: src/features/incidents/RelayPage.tsx
+msgid "Copied. In Etsy, open this order and add the tracking with this carrier."
+msgstr "Copied. In Etsy, open this order and add the tracking with this carrier."
+
+#: src/features/incidents/RelayPage.tsx
+msgid "Copy into Etsy"
+msgstr "Copy into Etsy"
+
+#: src/features/incidents/RelayPage.tsx
+msgid "Copy it into Etsy"
+msgstr "Copy it into Etsy"
+
 #: src/features/team/TeamPage.tsx
 msgid "Copy link"
 msgstr "Copy link"
+
+#: src/features/incidents/RelayPage.tsx
+msgid "Copy the number from the order in AutoVA and paste it here: HTCO checks it before anything is saved. Then copy it into Etsy. The order closes on its own once Etsy shows the tracking."
+msgstr "Copy the number from the order in AutoVA and paste it here: HTCO checks it before anything is saved. Then copy it into Etsy. The order closes on its own once Etsy shows the tracking."
+
+#: src/features/incidents/RelayPage.tsx
+msgid "Copy the number in AutoVA"
+msgstr "Copy the number in AutoVA"
+
+#: src/features/incidents/RelayPage.tsx
+msgid "Copy to clipboard"
+msgstr "Copy to clipboard"
 
 #: src/shared/ui/kit/live.tsx
 msgid "copying the order history ({count} so far)"
@@ -1616,6 +1674,10 @@ msgstr "Disconnected"
 msgid "Disconnecting is unavailable on the server right now. Try again in a few minutes."
 msgstr "Disconnecting is unavailable on the server right now. Try again in a few minutes."
 
+#: src/features/incidents/RelayPage.tsx
+msgid "Dismiss"
+msgstr "Dismiss"
+
 #: src/features/security/SecurityPage.tsx
 msgid "Don’t recognise a device? Sign it out here. Only that device is signed out; this one stays signed in."
 msgstr "Don’t recognise a device? Sign it out here. Only that device is signed out; this one stays signed in."
@@ -1645,6 +1707,10 @@ msgstr "Drag to orbit · double-click a room"
 #: src/features/admin/OperationsPage.tsx
 msgid "Drifts today"
 msgstr "Drifts today"
+
+#: src/features/incidents/RelayPage.tsx
+msgid "Each reveal is recorded in the audit log. The order closes on its own once Etsy shows the tracking."
+msgstr "Each reveal is recorded in the audit log. The order closes on its own once Etsy shows the tracking."
 
 #: src/features/admin/AutomationsPage.tsx
 msgid "Each run is approved"
@@ -1752,6 +1818,11 @@ msgstr "Etsy · read only"
 #: src/features/shops/ShopsPage.tsx
 msgid "Etsy access:"
 msgstr "Etsy access:"
+
+#. placeholder {0}: outcome.item.receipt_id
+#: src/features/incidents/RelayPage.tsx
+msgid "Etsy already shows this number for order <0>#{0}</0>, so the order is done. Nothing to copy."
+msgstr "Etsy already shows this number for order <0>#{0}</0>, so the order is done. Nothing to copy."
 
 #: src/features/incidents/IncidentState.tsx
 msgid "Etsy and HTCO agree again"
@@ -1894,6 +1965,10 @@ msgstr "Every morning at 08:00"
 #: src/features/welcome/WelcomePage.tsx
 msgid "Every order checked against the marketplace, with tracking that keeps up."
 msgstr "Every order checked against the marketplace, with tracking that keeps up."
+
+#: src/features/incidents/RelayPage.tsx
+msgid "Every order has its tracking number"
+msgstr "Every order has its tracking number"
 
 #: src/features/commerce/OrdersPage.tsx
 msgid "Every paid order is shipped."
@@ -2233,6 +2308,14 @@ msgstr "Hi Emma, your print is ready and ships today. To make up for the delay w
 msgid "Hi, my order was supposed to ship 4 days ago and I have no tracking number. Can you check?"
 msgstr "Hi, my order was supposed to ship 4 days ago and I have no tracking number. Can you check?"
 
+#: src/features/incidents/RelayPage.tsx
+msgid "Hidden until you reveal it"
+msgstr "Hidden until you reveal it"
+
+#: src/features/incidents/RelayPage.tsx
+msgid "Hide"
+msgstr "Hide"
+
 #: src/features/auth/fields.tsx
 msgid "Hide password"
 msgstr "Hide password"
@@ -2283,6 +2366,7 @@ msgstr "Home views"
 msgid "How connecting works"
 msgstr "How connecting works"
 
+#: src/features/incidents/RelayPage.tsx
 #: src/features/welcome/WelcomePage.tsx
 msgid "How it works"
 msgstr "How it works"
@@ -2298,6 +2382,10 @@ msgstr "HT-Commerce by H.T.Z Studios"
 #: src/features/welcome/WelcomePage.tsx
 msgid "HT-Commerce is the operating system for your Etsy business: your shops, your team and, step by step, an AI office that asks you before anything risky."
 msgstr "HT-Commerce is the operating system for your Etsy business: your shops, your team and, step by step, an AI office that asks you before anything risky."
+
+#: src/features/incidents/RelayPage.tsx
+msgid "HTCO checks the carrier and the number before saving. Nothing is sent to Etsy from here."
+msgstr "HTCO checks the carrier and the number before saving. Nothing is sent to Etsy from here."
 
 #: src/features/shops/shopActions.tsx
 msgid "HTCO could not be reached. Check your connection."
@@ -2517,6 +2605,7 @@ msgid "Join conversation"
 msgstr "Join conversation"
 
 #: src/features/incidents/IncidentsPage.tsx
+#: src/features/incidents/RelayPage.tsx
 msgid "Key figures"
 msgstr "Key figures"
 
@@ -2579,10 +2668,6 @@ msgstr "Last order"
 #: src/features/admin/SalesCounters.tsx
 msgid "Last recount"
 msgstr "Last recount"
-
-#: src/features/admin/AdminDemos.tsx
-#~ msgid "Last run"
-#~ msgstr "Last run"
 
 #: src/features/admin/OperationsPage.tsx
 msgid "Last success"
@@ -2785,6 +2870,10 @@ msgstr "Loading the open incidents"
 msgid "Loading the order's history…"
 msgstr "Loading the order's history…"
 
+#: src/features/incidents/RelayPage.tsx
+msgid "Loading the orders…"
+msgstr "Loading the orders…"
+
 #: src/features/admin/OperationsPage.tsx
 msgid "Loading the queue and sync health"
 msgstr "Loading the queue and sync health"
@@ -2985,6 +3074,11 @@ msgstr "More areas"
 msgid "More than {0} open incidents"
 msgstr "More than {0} open incidents"
 
+#. placeholder {0}: waiting.length
+#: src/features/incidents/RelayPage.tsx
+msgid "More than {0} orders need a tracking number"
+msgstr "More than {0} orders need a tracking number"
+
 #. placeholder {0}: words.state(step)
 #: src/features/incidents/IncidentsPage.tsx
 msgid "Move to {0}"
@@ -3001,6 +3095,10 @@ msgstr "Mug arrived cracked"
 #: src/features/team/TeamPage.tsx
 msgid "Name"
 msgstr "Name"
+
+#: src/features/incidents/RelayPage.tsx
+msgid "Need a number"
+msgstr "Need a number"
 
 #: src/features/shops/ShopsPage.tsx
 msgid "Need you"
@@ -3193,6 +3291,10 @@ msgstr "No open incident."
 #: src/features/incidents/IncidentsPage.tsx
 msgid "No open incidents"
 msgstr "No open incidents"
+
+#: src/features/incidents/RelayPage.tsx
+msgid "No order is waiting for tracking"
+msgstr "No order is waiting for tracking"
 
 #. placeholder {0}: search.trim()
 #: src/features/commerce/OrdersPage.tsx
@@ -3394,6 +3496,10 @@ msgstr "Nothing matches."
 msgid "Nothing needs you: no automation has a dead-lettered run."
 msgstr "Nothing needs you: no automation has a dead-lettered run."
 
+#: src/features/incidents/RelayPage.tsx
+msgid "Nothing to copy into Etsy"
+msgstr "Nothing to copy into Etsy"
+
 #: src/features/commerce/ShippingPage.tsx
 msgid "Nothing to ship and nothing shipped in the last 30 days."
 msgstr "Nothing to ship and nothing shipped in the last 30 days."
@@ -3423,6 +3529,10 @@ msgstr "Now dark"
 #: src/features/settings/AppearanceChoices.tsx
 msgid "Now light"
 msgstr "Now light"
+
+#: src/features/incidents/RelayPage.tsx
+msgid "Numbers ready for Etsy"
+msgstr "Numbers ready for Etsy"
 
 #: src/features/finance/FinanceDemos.tsx
 #: src/features/office/AiOpsPage.tsx
@@ -3485,9 +3595,17 @@ msgstr "Offline since 18:00"
 msgid "Oldest"
 msgstr "Oldest"
 
+#: src/features/incidents/RelayPage.tsx
+msgid "Oldest first"
+msgstr "Oldest first"
+
 #: src/features/incidents/IncidentsPage.tsx
 msgid "Oldest open"
 msgstr "Oldest open"
+
+#: src/features/incidents/RelayPage.tsx
+msgid "Oldest waiting"
+msgstr "Oldest waiting"
 
 #: src/shared/demo/office.ts
 msgid "Omer"
@@ -3530,6 +3648,10 @@ msgstr "One button, Etsy asks you to allow it, and you are back."
 #: src/features/overview/OverviewPage.tsx
 msgid "One workspace's incidents could not be read."
 msgstr "One workspace's incidents could not be read."
+
+#: src/features/incidents/RelayPage.tsx
+msgid "Only an Owner or Admin can paste or copy tracking numbers. Ask one of them."
+msgstr "Only an Owner or Admin can paste or copy tracking numbers. Ask one of them."
 
 #: src/features/admin/SalesCounters.tsx
 msgid "Only the Owner and Admins recount sales."
@@ -3679,6 +3801,7 @@ msgstr "Operations"
 #: src/features/commerce/OrdersPage.tsx
 #: src/features/commerce/ShippingPage.tsx
 #: src/features/incidents/IncidentsPage.tsx
+#: src/features/incidents/RelayPage.tsx
 #: src/features/office/ChatPage.tsx
 msgid "Order"
 msgstr "Order"
@@ -3697,6 +3820,11 @@ msgstr "Order #{0} must ship by {by}"
 #: src/app/shell/NotificationBell.tsx
 msgid "Order #{0} needs its tracking copied to Etsy"
 msgstr "Order #{0} needs its tracking copied to Etsy"
+
+#. placeholder {0}: item.receipt_id
+#: src/features/incidents/RelayPage.tsx
+msgid "Order <0>#{0}</0>"
+msgstr "Order <0>#{0}</0>"
 
 #: src/features/office/floor3d/plan.ts
 #: src/shared/demo/office.ts
@@ -3759,6 +3887,10 @@ msgstr "Orders to ship"
 #: src/features/shops/ShopsPage.tsx
 msgid "Orders today"
 msgstr "Orders today"
+
+#: src/features/incidents/RelayPage.tsx
+msgid "Orders without tracking"
+msgstr "Orders without tracking"
 
 #: src/features/overview/OverviewPage.tsx
 msgid "Orders, last 7 days"
@@ -3843,6 +3975,7 @@ msgstr "Page not found"
 
 #: src/features/commerce/OrdersPage.tsx
 #: src/features/commerce/timeline.tsx
+#: src/features/incidents/RelayPage.tsx
 msgid "Paid"
 msgstr "Paid"
 
@@ -3892,6 +4025,10 @@ msgstr "Password only"
 #: src/features/overview/OverviewPage.tsx
 msgid "past the ship-by date"
 msgstr "past the ship-by date"
+
+#: src/features/incidents/RelayPage.tsx
+msgid "Paste it here to check it"
+msgstr "Paste it here to check it"
 
 #: src/features/office/FloorPage.tsx
 msgid "Pause"
@@ -4170,6 +4307,10 @@ msgstr "Read-only"
 #: src/features/admin/AutomationsPage.tsx
 msgid "Reads from the marketplace"
 msgstr "Reads from the marketplace"
+
+#: src/features/incidents/RelayPage.tsx
+msgid "Ready for Etsy"
+msgstr "Ready for Etsy"
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "Ready today"
@@ -4488,6 +4629,10 @@ msgstr "Returns"
 #: src/features/commerce/ShippingPage.tsx
 msgid "Returns and partners"
 msgstr "Returns and partners"
+
+#: src/features/incidents/RelayPage.tsx
+msgid "Reveal the number"
+msgstr "Reveal the number"
 
 #: src/features/commerce/OrdersPage.tsx
 #: src/features/finance/FinanceDemos.tsx
@@ -4890,6 +5035,7 @@ msgstr "Shon"
 #: src/features/admin/SalesCounters.tsx
 #: src/features/finance/FinanceDemos.tsx
 #: src/features/incidents/IncidentsPage.tsx
+#: src/features/incidents/RelayPage.tsx
 #: src/features/shops/ShopStats.tsx
 #: src/shared/ui/kit/live.tsx
 msgid "Shop"
@@ -5366,6 +5512,10 @@ msgstr "The automations could not be loaded. Try again shortly."
 msgid "The best of <0>{0}</0> months with sales."
 msgstr "The best of <0>{0}</0> months with sales."
 
+#: src/features/incidents/RelayPage.tsx
+msgid "The browser did not allow copying. Select the number and copy it by hand."
+msgstr "The browser did not allow copying. Select the number and copy it by hand."
+
 #: src/features/shops/shopActions.tsx
 msgid "The check did not finish. Try again shortly."
 msgstr "The check did not finish. Try again shortly."
@@ -5464,6 +5614,10 @@ msgstr "The office that works for you, built step by step. It asks before anythi
 msgid "The order was cancelled or refunded"
 msgstr "The order was cancelled or refunded"
 
+#: src/features/incidents/RelayPage.tsx
+msgid "The orders waiting for tracking could not be loaded"
+msgstr "The orders waiting for tracking could not be loaded"
+
 #: src/features/commerce/OrdersPage.tsx
 msgid "The orders were last synced {when}. Etsy has not answered since, so newer orders may be missing."
 msgstr "The orders were last synced {when}. Etsy has not answered since, so newer orders may be missing."
@@ -5504,6 +5658,10 @@ msgstr "The sales counters are not active yet. Activate them first, then recount
 #: src/features/team/TeamPage.tsx
 msgid "The server did not accept this change."
 msgstr "The server did not accept this change."
+
+#: src/features/incidents/RelayPage.tsx
+msgid "The server is not answering. Check your connection and try again."
+msgstr "The server is not answering. Check your connection and try again."
 
 #: src/features/shops/ShopsPage.tsx
 msgid "The shop appears with its connection health and last sync."
@@ -5556,6 +5714,10 @@ msgstr "The step could not be saved. Check your connection and try again."
 #: src/features/shops/ShopsPage.tsx
 msgid "The term 'Etsy' is a trademark of Etsy, Inc. This application uses the Etsy API but is not endorsed or certified by Etsy, Inc."
 msgstr "The term 'Etsy' is a trademark of Etsy, Inc. This application uses the Etsy API but is not endorsed or certified by Etsy, Inc."
+
+#: src/features/incidents/RelayPage.tsx
+msgid "The tracking relay is not set up on this server yet."
+msgstr "The tracking relay is not set up on this server yet."
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "The web app is open today"
@@ -5613,6 +5775,10 @@ msgstr "This connection link is incomplete. Start again from Shops."
 msgid "This device"
 msgstr "This device"
 
+#: src/features/incidents/RelayPage.tsx
+msgid "This did not work. Check your connection and try again."
+msgstr "This did not work. Check your connection and try again."
+
 #: src/features/auth/AcceptInvitePage.tsx
 #: src/features/auth/ForgotPasswordPage.tsx
 #: src/features/auth/ResetPasswordPage.tsx
@@ -5646,6 +5812,14 @@ msgstr "This incident is not available to you."
 msgid "This invitation link has expired or was already used. Ask for a new one."
 msgstr "This invitation link has expired or was already used. Ask for a new one."
 
+#: src/features/incidents/RelayPage.tsx
+msgid "This is not a valid {name} tracking number. Check the number and the carrier in AutoVA, then paste it again."
+msgstr "This is not a valid {name} tracking number. Check the number and the carrier in AutoVA, then paste it again."
+
+#: src/features/incidents/RelayPage.tsx
+msgid "This is not a valid tracking number. Check it in AutoVA and paste it again."
+msgstr "This is not a valid tracking number. Check it in AutoVA and paste it again."
+
 #: src/features/commerce/OrdersPage.tsx
 msgid "This is not available on this server yet."
 msgstr "This is not available on this server yet."
@@ -5666,6 +5840,22 @@ msgstr "This member or shop is no longer in the workspace."
 #: src/features/office/AiOpsPage.tsx
 msgid "this month"
 msgstr "this month"
+
+#: src/features/incidents/RelayPage.tsx
+msgid "This needs your second factor. Confirm it with your authenticator app, then try again."
+msgstr "This needs your second factor. Confirm it with your authenticator app, then try again."
+
+#: src/features/incidents/RelayPage.tsx
+msgid "This number is already used for another order of this shop. Check that you copied it from the right order in AutoVA."
+msgstr "This number is already used for another order of this shop. Check that you copied it from the right order in AutoVA."
+
+#: src/features/incidents/RelayPage.tsx
+msgid "This order is no longer here: it closed, or its number expired after 30 days. The list is up to date."
+msgstr "This order is no longer here: it closed, or its number expired after 30 days. The list is up to date."
+
+#: src/features/incidents/RelayPage.tsx
+msgid "This order is no longer waiting for a number. The list is up to date."
+msgstr "This order is no longer waiting for a number. The list is up to date."
 
 #: src/features/auth/SignInPage.tsx
 msgid "This page could not sign you in. Reload it and try again."
@@ -5864,12 +6054,23 @@ msgid "Tracked"
 msgstr "Tracked"
 
 #: src/features/commerce/ShippingPage.tsx
+#: src/features/incidents/RelayPage.tsx
+msgid "Tracking"
+msgstr "Tracking"
+
+#: src/app/shell/useNavLabels.ts
+#: src/features/incidents/RelayPage.tsx
+msgctxt "navigation"
 msgid "Tracking"
 msgstr "Tracking"
 
 #: src/features/incidents/IncidentState.tsx
 msgid "Tracking found in Etsy"
 msgstr "Tracking found in Etsy"
+
+#: src/features/incidents/RelayPage.tsx
+msgid "Tracking from AutoVA"
+msgstr "Tracking from AutoVA"
 
 #: src/features/incidents/IncidentState.tsx
 msgid "Tracking mismatch"
@@ -5880,6 +6081,7 @@ msgid "Tracking missing"
 msgstr "Tracking missing"
 
 #: src/features/incidents/IncidentsPage.tsx
+#: src/features/incidents/RelayPage.tsx
 msgid "Tracking number"
 msgstr "Tracking number"
 
@@ -5946,6 +6148,7 @@ msgstr "Triggers"
 #: src/features/admin/AutomationsPage.tsx
 #: src/features/admin/OperationsPage.tsx
 #: src/features/incidents/IncidentsPage.tsx
+#: src/features/incidents/RelayPage.tsx
 #: src/features/overview/OverviewPage.tsx
 #: src/features/shops/reconnect.tsx
 #: src/features/shops/ShopsPage.tsx
@@ -6096,6 +6299,7 @@ msgstr "vs yesterday"
 #: src/features/admin/execution.tsx
 #: src/features/admin/OperationsPage.tsx
 #: src/features/commerce/demoScreens.tsx
+#: src/features/incidents/RelayPage.tsx
 msgid "Waiting"
 msgstr "Waiting"
 
@@ -6399,6 +6603,10 @@ msgstr "Your role can see incidents but not move them. Ask an Owner or Admin."
 #: src/features/incidents/IncidentsPage.tsx
 msgid "Your role can see this incident but not move it."
 msgstr "Your role can see this incident but not move it."
+
+#: src/features/incidents/RelayPage.tsx
+msgid "Your role does not include fulfillment. Ask an Owner or Admin."
+msgstr "Your role does not include fulfillment. Ask an Owner or Admin."
 
 #: src/features/incidents/IncidentsPage.tsx
 msgid "Your role does not include incidents. Ask an Owner or Admin."
