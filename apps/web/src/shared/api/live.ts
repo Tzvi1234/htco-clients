@@ -16,6 +16,8 @@ export type ShopOrder = components["schemas"]["OrderView"];
 /** One order with its status timeline from the stored history (slice 5.6). */
 export type ShopOrderDetail = components["schemas"]["OrderDetailView"];
 export type OrderStatusChange = components["schemas"]["OrderStatusChangeView"];
+/** One parcel's tracking as first seen (AC-6.1.2): the carrier and the code's last four only. */
+export type OrderTracking = components["schemas"]["OrderTrackingView"];
 /** The stored history's state: `syncing_history` while the backfill runs, then `complete`. */
 export type HistorySync = components["schemas"]["SyncView"];
 export type ShopListings = components["schemas"]["ListingsView"];

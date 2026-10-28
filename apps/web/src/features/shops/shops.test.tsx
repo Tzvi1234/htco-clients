@@ -262,6 +262,77 @@ describe("the shop card (slice 4.6)", () => {
   });
 });
 
+describe("Etsy's daily request budget on the shop card (AC-4.1.2)", () => {
+  const quota = (remaining: number | null, below = false): FakeState["etsyQuota"] => ({
+    limit_per_day: remaining === null ? null : 10_000,
+    remaining_today: remaining,
+    observed_at: new Date().toISOString(),
+    floor: 500,
+    below_floor: below,
+  });
+
+  it("shows what is left today on each connected shop", async () => {
+    await open("/shops", { ...owner, ...demoShops(), etsyQuota: quota(8_412) });
+
+    const card = await screen.findByRole("article", { name: "Willow & Wick" });
+    const row = within(card).getByText("Etsy requests left today").closest("div");
+    if (row === null) throw new Error("no quota row");
+    expect(row).toHaveTextContent("8,412 of 10,000");
+    expect(row.querySelector('[data-quota="ok"]')).not.toBeNull();
+    expect(within(card).queryByRole("note")).toBeNull();
+    // A disconnected shop is not read from Etsy, so it has no budget line.
+    const asleep = screen.getByRole("article", { name: "Old Harbor Goods" });
+    expect(within(asleep).queryByText("Etsy requests left today")).toBeNull();
+  });
+
+  it("warns in the attention tone below the floor: routine reads wait", async () => {
+    await open("/shops", { ...owner, ...demoShops(), etsyQuota: quota(320, true) });
+
+    const card = await screen.findByRole("article", { name: "Willow & Wick" });
+    const note = within(card).getByRole("note");
+    expect(note).toHaveTextContent(
+      "Etsy's daily request budget is low: 320 left, under the floor of 500. Routine reads wait until it resets; urgent ones still run.",
+    );
+    expect(note).toHaveAttribute("data-tone", "attention");
+    expect(card.querySelector('[data-quota="low"]')).not.toBeNull();
+  });
+
+  it("says it is not known before the first Etsy call", async () => {
+    await open("/shops", { ...owner, ...demoShops(), etsyQuota: quota(null) });
+
+    const card = await screen.findByRole("article", { name: "Willow & Wick" });
+    expect(within(card).getByText("Not known until the first Etsy call")).toBeInTheDocument();
+  });
+
+  it("shows no budget line when the API has none", async () => {
+    await open("/shops", { ...owner, ...demoShops() });
+    const card = await screen.findByRole("article", { name: "Willow & Wick" });
+    expect(within(card).queryByText("Etsy requests left today")).toBeNull();
+  });
+
+  it("is not shown to a role that may not see connections (403 on the list)", async () => {
+    await open("/shops", { ...owner, ...demoShops(), role: "support", etsyQuota: quota(8_412) });
+    const card = await screen.findByRole("article", { name: "Willow & Wick" });
+    expect(within(card).queryByText("Etsy requests left today")).toBeNull();
+  });
+
+  it("he: the numbers stay in order in the RTL card", async () => {
+    const backend = fakeBackend({ ...owner, ...demoShops(), etsyQuota: quota(320, true) });
+    render(
+      <App
+        locale="he"
+        theme="system"
+        storage={memoryStorage()}
+        history={createMemoryHistory({ initialEntries: ["/shops"] })}
+        api={backend.client}
+      />,
+    );
+    const card = await screen.findByRole("article", { name: "Willow & Wick" });
+    expect(within(card).getByRole("note")).toHaveTextContent(/320/);
+    expect(document.documentElement.dir).toBe("rtl");
+  });
+});
+
 describe("loading the shops page", () => {
   it("shows the shops at once while their connection details load", async () => {
     await open("/shops", { ...owner, ...demoShops(), integrationsTrouble: "hang" });
@@ -391,6 +462,28 @@ describe("what HTCO can do with the shop (slice 4.5)", () => {
     expect(
       within(alerts).getByText(
         "Not set up yet. HTCO checks Etsy for new orders regularly instead.",
+      ),
+    ).toBeInTheDocument();
+  });
+
+  it("AC-4.6.2 probing: says the checks are running while Etsy is asked", async () => {
+    const { user } = await open("/shops", { ...owner, ...demoShops(), recheckTrouble: "hang" });
+
+    const card = await screen.findByRole("article", { name: "Willow & Wick" });
+    await user.click(within(card).getByRole("button", { name: recheckLabel("Willow & Wick") }));
+
+    expect(await within(card).findByText("Checking with Etsy now…")).toBeInTheDocument();
+  });
+
+  it("AC-4.6.2 error: says Etsy's checks are unavailable when the re-check fails", async () => {
+    const { user } = await open("/shops", { ...owner, ...demoShops(), recheckTrouble: "fail" });
+
+    const card = await screen.findByRole("article", { name: "Willow & Wick" });
+    await user.click(within(card).getByRole("button", { name: recheckLabel("Willow & Wick") }));
+
+    expect(
+      await within(card).findByText(
+        "Etsy checks are unavailable right now. Try again in a few minutes.",
       ),
     ).toBeInTheDocument();
   });

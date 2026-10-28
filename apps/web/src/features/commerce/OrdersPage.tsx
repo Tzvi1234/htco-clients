@@ -5,7 +5,7 @@ import { useState, type ReactNode } from "react";
 import { Dialog, Input, Modal, ModalOverlay, SearchField } from "react-aria-components";
 
 import { RefundChip, RefundDetails } from "./refunds.tsx";
-import { OrderTimeline } from "./timeline.tsx";
+import { OrderTimeline, TrackingEvents } from "./timeline.tsx";
 import { ApiError, useApi } from "../../shared/api/api.tsx";
 import { useActionKey } from "../../shared/api/idempotency.ts";
 import { cx } from "../../shared/lib/cx.ts";
@@ -929,6 +929,7 @@ function OrderSheet({
                   </li>
                 ))}
               </ul>
+              <TrackingEvents tracking={detail.data?.tracking} loading={detail.isPending} />
               <OrderTimeline timeline={detail.data?.timeline} loading={detail.isPending} />
             </div>
           </Panel>

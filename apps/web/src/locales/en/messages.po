@@ -261,6 +261,12 @@ msgstr "{value} of 5 stars"
 msgid "#3152 (Emma R.) and #3160 (Liam K.) — a print delay at the supplier. I suggest a 15% partial refund on #3152, it is 4 days late."
 msgstr "#3152 (Emma R.) and #3160 (Liam K.) — a print delay at the supplier. I suggest a 15% partial refund on #3152, it is 4 days late."
 
+#. placeholder {0}: count(quota.remaining_today)
+#. placeholder {1}: count(quota.limit_per_day)
+#: src/features/shops/ShopCard.tsx
+msgid "<0>{0}</0> of <1>{1}</1>"
+msgstr "<0>{0}</0> of <1>{1}</1>"
+
 #. placeholder {0}: Number(profile.review_average).toFixed(1)
 #. placeholder {1}: count(profile.review_count)
 #: src/features/shops/ShopStats.tsx
@@ -1102,6 +1108,10 @@ msgstr "Checked just now."
 msgid "Checked moments ago. Try again in {0} seconds."
 msgstr "Checked moments ago. Try again in {0} seconds."
 
+#: src/features/shops/Capabilities.tsx
+msgid "Checking with Etsy now…"
+msgstr "Checking with Etsy now…"
+
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Checking your account"
 msgstr "Checking your account"
@@ -1909,6 +1919,10 @@ msgid "Etsy refused this. Reconnect the shop; if it stays blocked, Etsy has limi
 msgstr "Etsy refused this. Reconnect the shop; if it stays blocked, Etsy has limited the app."
 
 #: src/features/shops/ShopCard.tsx
+msgid "Etsy requests left today"
+msgstr "Etsy requests left today"
+
+#: src/features/shops/ShopCard.tsx
 msgid "Etsy shop ID"
 msgstr "Etsy shop ID"
 
@@ -1927,6 +1941,16 @@ msgstr "etsy.order_intake flagged 2 late orders"
 #: src/features/shops/ShopStats.tsx
 msgid "Etsy's count"
 msgstr "Etsy's count"
+
+#: src/features/shops/ShopCard.tsx
+msgid "Etsy's daily request budget is below its floor. Routine reads wait until it resets; urgent ones still run."
+msgstr "Etsy's daily request budget is below its floor. Routine reads wait until it resets; urgent ones still run."
+
+#. placeholder {0}: count(budget.remaining_today)
+#. placeholder {1}: count(budget.floor)
+#: src/features/shops/ShopCard.tsx
+msgid "Etsy's daily request budget is low: {0} left, under the floor of {1}. Routine reads wait until it resets; urgent ones still run."
+msgstr "Etsy's daily request budget is low: {0} left, under the floor of {1}. Routine reads wait until it resets; urgent ones still run."
 
 #: src/features/shops/connectEtsy.tsx
 msgid "Etsy's sign-in address looked wrong, so it was not opened. Try again shortly."
@@ -2118,6 +2142,11 @@ msgstr "Find an order"
 msgid "Finish connecting in the web app where you are signed in."
 msgstr "Finish connecting in the web app where you are signed in."
 
+#. placeholder {0}: when.format(new Date(parcel.first_observed_at))
+#: src/features/commerce/timeline.tsx
+msgid "first seen {0}"
+msgstr "first seen {0}"
+
 #: src/features/customers/CustomersPage.tsx
 msgid "Five stars"
 msgstr "Five stars"
@@ -2185,6 +2214,22 @@ msgstr "from"
 #: src/features/shops/ShopsPage.tsx
 msgid "from {covered} of {asking} shops"
 msgstr "from {covered} of {asking} shops"
+
+#: src/features/commerce/timeline.tsx
+msgid "From AutoVA, pasted"
+msgstr "From AutoVA, pasted"
+
+#: src/features/commerce/timeline.tsx
+msgid "From AutoVA's browser"
+msgstr "From AutoVA's browser"
+
+#: src/features/commerce/timeline.tsx
+msgid "From AutoVA's email"
+msgstr "From AutoVA's email"
+
+#: src/features/commerce/timeline.tsx
+msgid "From Etsy"
+msgstr "From Etsy"
 
 #: src/features/admin/SalesCounters.tsx
 msgid "From the stored orders"
@@ -2886,6 +2931,10 @@ msgstr "Loading the runs"
 msgid "Loading the shop's numbers"
 msgstr "Loading the shop's numbers"
 
+#: src/features/commerce/timeline.tsx
+msgid "Loading the tracking…"
+msgstr "Loading the tracking…"
+
 #: src/features/office/floor3d/plan.ts
 msgid "Lounge"
 msgstr "Lounge"
@@ -3387,6 +3436,10 @@ msgstr "No shops yet"
 msgid "No shops yet. Connect one under Commerce › Shops."
 msgstr "No shops yet. Connect one under Commerce › Shops."
 
+#: src/features/commerce/timeline.tsx
+msgid "No tracking number seen yet."
+msgstr "No tracking number seen yet."
+
 #: src/features/office/floor3d/engine.ts
 msgid "No tracking yet"
 msgstr "No tracking yet"
@@ -3459,6 +3512,10 @@ msgstr "Not connected"
 #: src/features/shops/Capabilities.tsx
 msgid "Not known"
 msgstr "Not known"
+
+#: src/features/shops/ShopCard.tsx
+msgid "Not known until the first Etsy call"
+msgstr "Not known until the first Etsy call"
 
 #: src/features/admin/AutomationsPage.tsx
 msgid "Not needed"
@@ -4467,6 +4524,10 @@ msgstr "Refunds and cancellations"
 #: src/features/shops/ShopStats.tsx
 msgid "Refunds and cancellations by reason"
 msgstr "Refunds and cancellations by reason"
+
+#: src/features/commerce/timeline.tsx
+msgid "Regular check"
+msgstr "Regular check"
 
 #: src/features/commerce/demoScreens.tsx
 #: src/features/office/ChatPage.tsx
@@ -5715,6 +5776,10 @@ msgstr "The step could not be saved. Check your connection and try again."
 msgid "The term 'Etsy' is a trademark of Etsy, Inc. This application uses the Etsy API but is not endorsed or certified by Etsy, Inc."
 msgstr "The term 'Etsy' is a trademark of Etsy, Inc. This application uses the Etsy API but is not endorsed or certified by Etsy, Inc."
 
+#: src/features/commerce/timeline.tsx
+msgid "The tracking could not be read."
+msgstr "The tracking could not be read."
+
 #: src/features/incidents/RelayPage.tsx
 msgid "The tracking relay is not set up on this server yet."
 msgstr "The tracking relay is not set up on this server yet."
@@ -6054,6 +6119,7 @@ msgid "Tracked"
 msgstr "Tracked"
 
 #: src/features/commerce/ShippingPage.tsx
+#: src/features/commerce/timeline.tsx
 #: src/features/incidents/RelayPage.tsx
 msgid "Tracking"
 msgstr "Tracking"
@@ -6085,6 +6151,7 @@ msgstr "Tracking missing"
 msgid "Tracking number"
 msgstr "Tracking number"
 
+#: src/features/commerce/timeline.tsx
 #: src/features/incidents/IncidentState.tsx
 msgid "Tracking relay"
 msgstr "Tracking relay"
