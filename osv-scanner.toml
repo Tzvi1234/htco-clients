@@ -1,5 +1,10 @@
 # Reviewed exceptions for osv-scanner (security job). Each entry names why it is safe for now
 # and expires, so it is reviewed again.
 #
-# None at the moment. The braces 3.0.3 entry (GHSA-vfj7-8cjw-p6xm) was removed on 2026-10-25
+# The braces 3.0.3 entry (GHSA-vfj7-8cjw-p6xm) was removed on 2026-10-25
 # after the advisory was withdrawn as not practically exploitable.
+
+[[IgnoredVulns]]
+id = "GHSA-gcqx-w48m-w2h4"
+ignoreUntil = 2026-11-27
+reason = "deepmerge 4.3.1 (prototype pollution in mergeObject, no fix released, CVSS 5.3). Only reachable through style-dictionary > @bundled-es-modules/deepmerge in @htco/design-tokens, a devDependency used at build time to turn our own checked-in token files into CSS. Inputs are repo-controlled, not attacker-controlled, and the pnpm --filter @htco/web build output contains no deepmerge code. Re-review when a fixed deepmerge or style-dictionary release exists."
