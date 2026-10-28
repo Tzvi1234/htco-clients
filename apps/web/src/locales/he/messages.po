@@ -265,7 +265,7 @@ msgstr "#3152 של Emma R. ו־#3160 של Liam K. — עיכוב בהדפסה א
 #. placeholder {1}: count(quota.limit_per_day)
 #: src/features/shops/ShopCard.tsx
 msgid "<0>{0}</0> of <1>{1}</1>"
-msgstr ""
+msgstr "<0>{0}</0> מתוך <1>{1}</1>"
 
 #. placeholder {0}: Number(profile.review_average).toFixed(1)
 #. placeholder {1}: count(profile.review_count)
@@ -453,6 +453,7 @@ msgstr "חשבון"
 msgid "across the shops"
 msgstr "בכל החנויות"
 
+#: src/features/admin/AuditPage.tsx
 #: src/features/admin/SalesCounters.tsx
 msgid "Action"
 msgstr "פעולה"
@@ -492,6 +493,14 @@ msgstr "יומן פעילות"
 msgid "Activity log"
 msgstr "יומן פעילות"
 
+#: src/features/admin/AuditPage.tsx
+msgid "Actor"
+msgstr "מבצע"
+
+#: src/features/admin/AuditPage.tsx
+msgid "Actor ID"
+msgstr "מזהה המבצע"
+
 #: src/features/security/SecurityPage.tsx
 msgid "Add an authenticator app: without it, a stolen password is enough to get in."
 msgstr "הוסף אפליקציית אימות: בלעדיה, סיסמה גנובה מספיקה כדי להיכנס."
@@ -504,6 +513,10 @@ msgstr "מנהל/ת"
 msgctxt "navigation"
 msgid "Admin"
 msgstr "ניהול"
+
+#: src/features/admin/AuditPage.tsx
+msgid "After"
+msgstr "אחרי"
 
 #: src/features/incidents/IncidentsPage.tsx
 msgid "Age"
@@ -538,6 +551,7 @@ msgstr "תקציב AI"
 msgid "AI costs"
 msgstr "עלויות AI"
 
+#: src/features/admin/AuditPage.tsx
 #: src/features/admin/AutomationsPage.tsx
 msgid "AI employee"
 msgstr "עובד AI"
@@ -626,6 +640,7 @@ msgstr "כל הסטטוסים"
 msgid "all time"
 msgstr "בכל הזמנים"
 
+#: src/features/admin/AuditPage.tsx
 #: src/features/commerce/OrdersPage.tsx
 msgid "All time"
 msgstr "כל הזמן"
@@ -675,6 +690,10 @@ msgstr "Android"
 #: src/features/welcome/WelcomePage.tsx
 msgid "Any browser, nothing to install."
 msgstr "בכל דפדפן, בלי התקנה."
+
+#: src/features/admin/AuditPage.tsx
+msgid "Anyone"
+msgstr "כל אחד"
 
 #: src/features/office/EngineeringPage.tsx
 msgid "api v1.14 — order cache"
@@ -787,9 +806,34 @@ msgstr "צירוף קובץ"
 msgid "Attempts"
 msgstr "ניסיונות"
 
+#: src/features/admin/AuditPage.tsx
+msgid "Audit filters"
+msgstr "מסנני יומן הביקורת"
+
+#: src/features/admin/AuditPage.tsx
+msgid "Audit log"
+msgstr "יומן ביקורת"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Audit log"
+msgstr "יומן ביקורת"
+
 #: src/features/team/TeamPage.tsx
 msgid "Audit log:"
 msgstr "יומן ביקורת:"
+
+#: src/features/admin/AuditPage.tsx
+msgid "Audit numbers"
+msgstr "מספרי יומן הביקורת"
+
+#: src/features/admin/AuditPage.tsx
+msgid "Audit record"
+msgstr "רשומת ביקורת"
+
+#: src/features/admin/AuditPage.tsx
+msgid "Audit records"
+msgstr "רשומות ביקורת"
 
 #: src/features/auth/SecondFactorPage.tsx
 #: src/features/security/SecurityPage.tsx
@@ -801,6 +845,7 @@ msgstr "אפליקציית אימות"
 msgid "Authenticator app is set up"
 msgstr "אפליקציית האימות מוגדרת"
 
+#: src/features/admin/AuditPage.tsx
 #: src/features/admin/AutomationsPage.tsx
 #: src/features/admin/OperationsPage.tsx
 #: src/features/incidents/IncidentsPage.tsx
@@ -819,6 +864,7 @@ msgstr "מספרי האוטומציות"
 msgid "Automation views"
 msgstr "תצוגות האוטומציות"
 
+#: src/features/admin/AuditPage.tsx
 #: src/features/admin/AutomationsPage.tsx
 #: src/features/admin/OperationsPage.tsx
 #: src/features/incidents/IncidentState.tsx
@@ -900,6 +946,10 @@ msgstr "יתרות"
 #: src/features/shops/ShopStats.tsx
 msgid "Based on the latest {0} orders, since {1}. Total sales is Etsy's own count; revenue, averages and months come from these orders."
 msgstr "על סמך {0} ההזמנות האחרונות, מאז {1}. סך המכירות הוא הספירה של Etsy עצמה; ההכנסות, הממוצעים והחודשים מחושבים מההזמנות האלה."
+
+#: src/features/admin/AuditPage.tsx
+msgid "Before"
+msgstr "לפני"
 
 #: src/features/shops/ShopStats.tsx
 msgid "Best month"
@@ -1110,7 +1160,7 @@ msgstr "נבדק לפני רגע. אפשר לנסות שוב בעוד {0} שני
 
 #: src/features/shops/Capabilities.tsx
 msgid "Checking with Etsy now…"
-msgstr ""
+msgstr "בודקים מול Etsy עכשיו…"
 
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Checking your account"
@@ -1132,6 +1182,10 @@ msgstr "בחירת סיסמה חדשה"
 #: src/features/incidents/IncidentsPage.tsx
 msgid "Choose an incident to see its evidence, its timeline and its order."
 msgstr "בחרו תקלה כדי לראות את הראיות, את ציר הזמן ואת ההזמנה שלה."
+
+#: src/features/admin/AuditPage.tsx
+msgid "Choose the workspace whose audit log you want to see."
+msgstr "בחרו את סביבת העבודה שאת יומן הביקורת שלה תרצו לראות."
 
 #: src/features/admin/AutomationsPage.tsx
 msgid "Choose the workspace whose automations you want to see."
@@ -1393,6 +1447,10 @@ msgstr "העתקה ללוח"
 msgid "copying the order history ({count} so far)"
 msgstr "מעתיקים את היסטוריית ההזמנות ({count} עד עכשיו)"
 
+#: src/features/admin/AuditPage.tsx
+msgid "Correlation ID"
+msgstr "מזהה קישור"
+
 #: src/features/office/FloorPage.tsx
 msgid "Cost"
 msgstr "עלות"
@@ -1546,6 +1604,7 @@ msgstr "תאריך"
 
 #: src/features/admin/AutomationsPage.tsx
 #: src/features/admin/OperationsPage.tsx
+#: src/features/admin/TrackingSync.tsx
 msgid "Dead letters"
 msgstr "משימות שנכשלו"
 
@@ -1560,6 +1619,10 @@ msgstr "מהנדס דיבאג ואמינות"
 #: src/features/work/demoScreens.tsx
 msgid "Decided today"
 msgstr "הוחלט היום"
+
+#: src/features/admin/AuditPage.tsx
+msgid "Decision Advisor"
+msgstr "יועץ ההחלטות"
 
 #: src/features/work/demoScreens.tsx
 msgid "Decision value"
@@ -1742,6 +1805,7 @@ msgstr "איתן"
 msgid "Eitan, #3152 and #3160 passed their promised ship date. What is the supplier status?"
 msgstr "איתן, #3152 ו־#3160 עברו את תאריך המשלוח המובטח. מה הסטטוס אצל הספק?"
 
+#: src/features/admin/EmailFailures.tsx
 #: src/features/auth/ForgotPasswordPage.tsx
 #: src/features/auth/SignInPage.tsx
 #: src/features/team/TeamPage.tsx
@@ -1802,6 +1866,10 @@ msgstr "הזינו את האימייל ונשלח קישור לבחירת סיס
 #: src/features/auth/ForgotPasswordPage.tsx
 msgid "Enter your email."
 msgstr "הזינו את האימייל."
+
+#: src/features/admin/AuditPage.tsx
+msgid "Entity"
+msgstr "ישות"
 
 #: src/app/RouteStates.tsx
 msgid "Error 404"
@@ -1920,7 +1988,7 @@ msgstr "Etsy סירבה. יש לחבר את החנות מחדש; אם זה נש�
 
 #: src/features/shops/ShopCard.tsx
 msgid "Etsy requests left today"
-msgstr ""
+msgstr "בקשות Etsy שנותרו היום"
 
 #: src/features/shops/ShopCard.tsx
 msgid "Etsy shop ID"
@@ -1944,13 +2012,13 @@ msgstr "הספירה של Etsy"
 
 #: src/features/shops/ShopCard.tsx
 msgid "Etsy's daily request budget is below its floor. Routine reads wait until it resets; urgent ones still run."
-msgstr ""
+msgstr "מכסת הבקשות היומית של Etsy מתחת לסף. קריאות שגרתיות ממתינות עד לאיפוס; דחופות עדיין רצות."
 
 #. placeholder {0}: count(budget.remaining_today)
 #. placeholder {1}: count(budget.floor)
 #: src/features/shops/ShopCard.tsx
 msgid "Etsy's daily request budget is low: {0} left, under the floor of {1}. Routine reads wait until it resets; urgent ones still run."
-msgstr ""
+msgstr "מכסת הבקשות היומית של Etsy נמוכה: נותרו {0}, מתחת לסף של {1}. קריאות שגרתיות ממתינות עד לאיפוס; דחופות עדיין רצות."
 
 #: src/features/shops/connectEtsy.tsx
 msgid "Etsy's sign-in address looked wrong, so it was not opened. Try again shortly."
@@ -1974,9 +2042,17 @@ msgstr "אירועים לפי שעה, השיא ב־14:00"
 msgid "Events today:"
 msgstr "אירועים היום:"
 
+#: src/features/admin/AuditPage.tsx
+msgid "Every action"
+msgstr "כל הפעולות"
+
 #: src/features/commerce/ProductsPage.tsx
 msgid "Every active listing is in stock."
 msgstr "כל הליסטינגים הפעילים במלאי."
+
+#: src/features/admin/AuditPage.tsx
+msgid "Every change in this workspace, by people, AI employees and automations. Choose a record to see what it changed."
+msgstr "כל שינוי בסביבת העבודה, של אנשים, עובדי AI ואוטומציות. בחרו רשומה כדי לראות מה היא שינתה."
 
 #: src/features/admin/OperationsPage.tsx
 msgid "Every message was delivered."
@@ -1997,6 +2073,10 @@ msgstr "לכל ההזמנות יש מספר מעקב"
 #: src/features/commerce/OrdersPage.tsx
 msgid "Every paid order is shipped."
 msgstr "כל ההזמנות ששולמו נשלחו."
+
+#: src/features/admin/AuditPage.tsx
+msgid "Every shop"
+msgstr "כל החנויות"
 
 #: src/features/team/TeamPage.tsx
 msgid "Everyone invited has joined."
@@ -2068,6 +2148,14 @@ msgstr "יוצאו {0} הזמנות."
 #: src/features/admin/execution.tsx
 #: src/shared/ui/kit/status.tsx
 msgid "Failed"
+msgstr "נכשל"
+
+#: src/features/admin/EmailFailures.tsx
+msgid "Failed emails"
+msgstr "מיילים שנכשלו"
+
+#: src/features/admin/TrackingSync.tsx
+msgid "Failing"
 msgstr "נכשל"
 
 #: src/features/commerce/ProductsPage.tsx
@@ -2145,7 +2233,7 @@ msgstr "יש להשלים את החיבור באפליקציית הרשת שבה
 #. placeholder {0}: when.format(new Date(parcel.first_observed_at))
 #: src/features/commerce/timeline.tsx
 msgid "first seen {0}"
-msgstr ""
+msgstr "נראה לראשונה {0}"
 
 #: src/features/customers/CustomersPage.tsx
 msgid "Five stars"
@@ -2217,19 +2305,19 @@ msgstr "מ־{covered} מתוך {asking} חנויות"
 
 #: src/features/commerce/timeline.tsx
 msgid "From AutoVA, pasted"
-msgstr ""
+msgstr "מ־AutoVA, הודבק"
 
 #: src/features/commerce/timeline.tsx
 msgid "From AutoVA's browser"
-msgstr ""
+msgstr "מהדפדפן של AutoVA"
 
 #: src/features/commerce/timeline.tsx
 msgid "From AutoVA's email"
-msgstr ""
+msgstr "מהמייל של AutoVA"
 
 #: src/features/commerce/timeline.tsx
 msgid "From Etsy"
-msgstr ""
+msgstr "מ־Etsy"
 
 #: src/features/admin/SalesCounters.tsx
 msgid "From the stored orders"
@@ -2523,6 +2611,10 @@ msgstr "תקלה הוסלמה: {cause}"
 msgid "Incident escalated: {cause}, order #{receipt}"
 msgstr "תקלה הוסלמה: {cause}, הזמנה #{receipt}"
 
+#: src/features/admin/EmailFailures.tsx
+msgid "Incident opened"
+msgstr "נפתח אירוע"
+
 #: src/app/shell/NotificationBell.tsx
 msgid "Incident resolved: {cause}"
 msgstr "תקלה נפתרה: {cause}"
@@ -2535,6 +2627,7 @@ msgstr "תקלה נפתרה: {cause}, הזמנה #{receipt}"
 msgid "Incident:"
 msgstr "תקלה:"
 
+#: src/features/admin/AuditPage.tsx
 #: src/features/incidents/IncidentsPage.tsx
 #: src/features/incidents/OrderIncidents.tsx
 #: src/features/overview/OverviewPage.tsx
@@ -2676,14 +2769,17 @@ msgstr "12 החודשים האחרונים"
 msgid "last 12 months, before Etsy's fees"
 msgstr "12 החודשים האחרונים, לפני העמלות של Etsy"
 
+#: src/features/admin/AuditPage.tsx
 #: src/features/admin/OperationsPage.tsx
 msgid "Last 24 hours"
 msgstr "24 השעות האחרונות"
 
+#: src/features/admin/AuditPage.tsx
 #: src/features/commerce/OrdersPage.tsx
 msgid "Last 30 days"
 msgstr "30 הימים האחרונים"
 
+#: src/features/admin/AuditPage.tsx
 #: src/features/admin/AutomationsPage.tsx
 #: src/features/admin/OperationsPage.tsx
 msgid "Last 7 days"
@@ -2713,6 +2809,10 @@ msgstr "הזמנה אחרונה"
 #: src/features/admin/SalesCounters.tsx
 msgid "Last recount"
 msgstr "ספירה אחרונה"
+
+#: src/features/admin/TrackingSync.tsx
+msgid "Last run"
+msgstr "הרצה אחרונה"
 
 #: src/features/admin/OperationsPage.tsx
 msgid "Last success"
@@ -2746,8 +2846,13 @@ msgid "Late orders + tracking sync failure"
 msgstr "הזמנות באיחור + כשל סנכרון מעקב"
 
 #: src/features/admin/AutomationsPage.tsx
+#: src/features/admin/TrackingSync.tsx
 msgid "Latest runs"
 msgstr "הרצות אחרונות"
+
+#: src/features/admin/TrackingSync.tsx
+msgid "Latest Tracking Sync runs"
+msgstr "ההרצות האחרונות של סנכרון המעקב"
 
 #: src/shared/demo/office.ts
 msgid "Lead Software & Platform Engineer"
@@ -2858,6 +2963,11 @@ msgstr "בזמן אמת מ־Etsy"
 msgid "Live shop data could not be loaded. Try again shortly."
 msgstr "לא ניתן לטעון את נתוני החנות. נסו שוב בקרוב."
 
+#: src/features/admin/AuditPage.tsx
+#: src/features/admin/EmailFailures.tsx
+msgid "Load more"
+msgstr "טעינת עוד"
+
 #: src/features/shops/ShopCard.tsx
 msgid "Loading connection details"
 msgstr "טוען את פרטי החיבור"
@@ -2895,6 +3005,10 @@ msgstr "טוענים חנויות"
 msgid "Loading statistics"
 msgstr "טוען סטטיסטיקה"
 
+#: src/features/admin/AuditPage.tsx
+msgid "Loading the audit log"
+msgstr "טוענים את יומן הביקורת"
+
 #: src/features/admin/AutomationsPage.tsx
 msgid "Loading the automations"
 msgstr "טוען את האוטומציות"
@@ -2902,6 +3016,10 @@ msgstr "טוען את האוטומציות"
 #: src/features/admin/execution.tsx
 msgid "Loading the execution"
 msgstr "טוענים את ההרצה"
+
+#: src/features/admin/EmailFailures.tsx
+msgid "Loading the failed emails"
+msgstr "טוענים את המיילים שנכשלו"
 
 #: src/features/incidents/IncidentsPage.tsx
 msgid "Loading the incident…"
@@ -2933,7 +3051,11 @@ msgstr "טוען את נתוני החנות"
 
 #: src/features/commerce/timeline.tsx
 msgid "Loading the tracking…"
-msgstr ""
+msgstr "טוענים את המעקב…"
+
+#: src/features/admin/TrackingSync.tsx
+msgid "Loading Tracking Sync's status"
+msgstr "טוענים את מצב סנכרון המעקב"
 
 #: src/features/office/floor3d/plan.ts
 msgid "Lounge"
@@ -3056,6 +3178,10 @@ msgctxt "navigation"
 msgid "Members & access"
 msgstr "חברים והרשאות"
 
+#: src/features/admin/AuditPage.tsx
+msgid "Members and roles"
+msgstr "חברים ותפקידים"
+
 #: src/features/team/TeamPage.tsx
 msgid "Members views"
 msgstr "תצוגות החברים"
@@ -3128,6 +3254,10 @@ msgstr "יותר מ־{0} תקלות פתוחות"
 msgid "More than {0} orders need a tracking number"
 msgstr "יותר מ־{0} הזמנות צריכות מספר מעקב"
 
+#: src/features/admin/AuditPage.tsx
+msgid "more to load"
+msgstr "יש עוד לטעון"
+
 #. placeholder {0}: words.state(step)
 #: src/features/incidents/IncidentsPage.tsx
 msgid "Move to {0}"
@@ -3189,6 +3319,10 @@ msgstr "נטו לפי יום"
 msgid "Never"
 msgstr "אף פעם"
 
+#: src/features/admin/EmailFailures.tsx
+msgid "Never the address"
+msgstr "אף פעם לא הכתובת"
+
 #: src/features/admin/AutomationsPage.tsx
 msgid "Never: it runs on its own"
 msgstr "אף פעם: היא רצה לבד"
@@ -3237,6 +3371,10 @@ msgstr "משימה חדשה"
 #: src/features/customers/CustomersDemos.tsx
 msgid "New this month"
 msgstr "חדשים החודש"
+
+#: src/features/admin/AuditPage.tsx
+msgid "Newest"
+msgstr "החדשה ביותר"
 
 #. placeholder {0}: count(all.data.items.length)
 #: src/features/commerce/OrdersPage.tsx
@@ -3304,6 +3442,14 @@ msgstr "אף אוטומציה עוד לא רצה."
 #: src/features/shops/ShopsPage.tsx
 msgid "No connection needs you. A disconnected shop stays paused until you connect it again."
 msgstr "אף חיבור לא צריך אותך. חנות מנותקת נשארת מושהית עד שתחבר אותה שוב."
+
+#: src/features/admin/EmailFailures.tsx
+msgid "No email was refused."
+msgstr "אף מייל לא נדחה."
+
+#: src/features/admin/EmailFailures.tsx
+msgid "No email was skipped."
+msgstr "אף מייל לא דולג."
 
 #: src/features/admin/OperationsPage.tsx
 msgid "No Etsy notice has arrived yet."
@@ -3384,6 +3530,10 @@ msgstr "אין ספירה אחרונה"
 msgid "No reconciliation has run yet."
 msgstr "עוד לא רצה התאמה."
 
+#: src/features/admin/AuditPage.tsx
+msgid "No record matches these filters."
+msgstr "אין רשומה שתואמת למסננים האלה."
+
 #: src/features/shops/ShopStats.tsx
 msgid "No refunds or cancellations in these orders."
 msgstr "אין החזרים או ביטולים בהזמנות האלה."
@@ -3438,7 +3588,7 @@ msgstr "אין עדיין חנויות. אפשר לחבר חנות במסחר �
 
 #: src/features/commerce/timeline.tsx
 msgid "No tracking number seen yet."
-msgstr ""
+msgstr "עדיין לא נראה מספר מעקב."
 
 #: src/features/office/floor3d/engine.ts
 msgid "No tracking yet"
@@ -3515,7 +3665,7 @@ msgstr "לא ידוע"
 
 #: src/features/shops/ShopCard.tsx
 msgid "Not known until the first Etsy call"
-msgstr ""
+msgstr "לא ידוע עד הפנייה הראשונה ל־Etsy"
 
 #: src/features/admin/AutomationsPage.tsx
 msgid "Not needed"
@@ -3524,6 +3674,10 @@ msgstr "לא נדרש"
 #: src/features/admin/OperationsPage.tsx
 msgid "Not processed yet"
 msgstr "עוד לא טופלו"
+
+#: src/features/admin/TrackingSync.tsx
+msgid "Not run this week"
+msgstr "לא רץ השבוע"
 
 #: src/features/shops/Capabilities.tsx
 msgid "Not set up yet. HTCO checks Etsy for new orders regularly instead."
@@ -3540,6 +3694,10 @@ msgstr "לא מסתנכרנת. יש לחבר אותה שוב כדי להמשיך
 #: src/features/shops/shopActions.tsx
 msgid "Nothing changes in your Etsy shop."
 msgstr "שום דבר לא משתנה בחנות שלכם ב־Etsy."
+
+#: src/features/admin/AuditPage.tsx
+msgid "Nothing has been recorded yet."
+msgstr "עדיין לא נרשם דבר."
 
 #: src/features/incidents/IncidentsPage.tsx
 msgid "Nothing is open"
@@ -3693,6 +3851,10 @@ msgstr "במכשיר הזה"
 msgid "On time"
 msgstr "בזמן"
 
+#: src/features/commerce/ShippingPage.tsx
+msgid "On-time delivery arrives with fulfilment."
+msgstr "מסירה בזמן תגיע עם ניהול המשלוחים."
+
 #. placeholder {0}: nameOf(dead[0]?.id ?? "")
 #: src/features/admin/AutomationsPage.tsx
 msgid "One automation has a dead-lettered run: {0}. Open it, read its error, then retry it."
@@ -3717,6 +3879,18 @@ msgstr "רק הבעלים והמנהלים סופרים מחדש את המכיר
 #: src/features/admin/OperationsPage.tsx
 msgid "Only the Owner and Admins retry jobs."
 msgstr "רק הבעלים והמנהלים מריצים משימות מחדש."
+
+#: src/features/admin/TrackingSync.tsx
+msgid "Only the workspace Owner and Admins see how Tracking Sync runs."
+msgstr "רק הבעלים והמנהלים של סביבת העבודה רואים איך סנכרון המעקב רץ."
+
+#: src/features/admin/AuditPage.tsx
+msgid "Only the workspace Owner and Admins see the audit log."
+msgstr "רק הבעלים והמנהלים של סביבת העבודה רואים את יומן הביקורת."
+
+#: src/features/admin/EmailFailures.tsx
+msgid "Only the workspace Owner and Admins see the failed emails."
+msgstr "רק הבעלים והמנהלים של סביבת העבודה רואים את המיילים שנכשלו."
 
 #: src/features/admin/OperationsPage.tsx
 msgid "Only the workspace Owner and Admins see the queue and sync health."
@@ -3745,6 +3919,10 @@ msgstr "רק הבעלים או מנהלים של סביבת העבודה יכו�
 #: src/features/incidents/IncidentsPage.tsx
 msgid "Open"
 msgstr "פתוחות"
+
+#: src/features/admin/TrackingSync.tsx
+msgid "Open Automations"
+msgstr "פתיחת האוטומציות"
 
 #: src/features/shops/ShopStats.tsx
 msgid "Open for {months, plural, one {# month} other {# months}}, since {since}:"
@@ -3900,6 +4078,7 @@ msgstr "מספר הזמנה או SKU"
 msgid "Order numbers"
 msgstr "נתוני ההזמנות"
 
+#: src/features/admin/AuditPage.tsx
 #: src/features/commerce/OrdersPage.tsx
 #: src/features/customers/CustomersDemos.tsx
 #: src/features/overview/OverviewPage.tsx
@@ -4135,6 +4314,10 @@ msgstr "ממוצע לקריאה"
 msgid "Period"
 msgstr "תקופה"
 
+#: src/features/admin/AuditPage.tsx
+msgid "Person"
+msgstr "אדם"
+
 #: src/features/commerce/OrdersPage.tsx
 msgid "Placed"
 msgstr "בוצעה"
@@ -4270,6 +4453,10 @@ msgstr "שאלה על גודל הדפס A3"
 msgid "Queue and sync"
 msgstr "תור וסנכרון"
 
+#: src/features/admin/AuditPage.tsx
+msgid "Queue jobs"
+msgstr "משימות בתור"
+
 #: src/features/admin/OperationsPage.tsx
 msgid "Queue numbers"
 msgstr "מספרי התור"
@@ -4345,6 +4532,10 @@ msgstr "נקרא ישירות מ־Etsy: השלבים יופיעו אחרי ש־H
 msgid "Read only"
 msgstr "קריאה בלבד"
 
+#: src/features/admin/AuditPage.tsx
+msgid "Read only · newest first"
+msgstr "לקריאה בלבד · החדשות קודם"
+
 #: src/features/shops/ShopCard.tsx
 msgid "Read orders"
 msgstr "קריאת הזמנות"
@@ -4372,6 +4563,10 @@ msgstr "מוכנות ל־Etsy"
 #: src/features/welcome/WelcomePage.tsx
 msgid "Ready today"
 msgstr "זמין היום"
+
+#: src/features/admin/EmailFailures.tsx
+msgid "Reason"
+msgstr "סיבה"
 
 #: src/features/admin/OperationsPage.tsx
 msgid "Received"
@@ -4434,6 +4629,14 @@ msgstr "נרשם ע״י"
 #: src/features/commerce/timeline.tsx
 msgid "Recorded in HTCO"
 msgstr "נרשמה ב־HTCO"
+
+#: src/features/admin/AuditPage.tsx
+msgid "Records"
+msgstr "רשומות"
+
+#: src/features/admin/AuditPage.tsx
+msgid "Records shown"
+msgstr "רשומות מוצגות"
 
 #: src/features/admin/SalesCounters.tsx
 msgid "Recount"
@@ -4525,9 +4728,13 @@ msgstr "החזרים וביטולים"
 msgid "Refunds and cancellations by reason"
 msgstr "החזרים וביטולים לפי סיבה"
 
+#: src/features/admin/EmailFailures.tsx
+msgid "Refused"
+msgstr "נדחה"
+
 #: src/features/commerce/timeline.tsx
 msgid "Regular check"
-msgstr ""
+msgstr "בדיקה קבועה"
 
 #: src/features/commerce/demoScreens.tsx
 #: src/features/office/ChatPage.tsx
@@ -4807,6 +5014,7 @@ msgstr "הרצה"
 
 #: src/features/admin/execution.tsx
 #: src/features/admin/OperationsPage.tsx
+#: src/features/admin/TrackingSync.tsx
 #: src/features/work/demoScreens.tsx
 #: src/shared/ui/kit/status.tsx
 msgid "Running"
@@ -4820,6 +5028,10 @@ msgstr "עובדים כעת"
 #: src/features/admin/OperationsPage.tsx
 msgid "Runs"
 msgstr "הרצות"
+
+#: src/features/admin/TrackingSync.tsx
+msgid "Runs, 7 days"
+msgstr "הרצות, 7 ימים"
 
 #: src/features/customers/CustomersDemos.tsx
 msgid "Sales"
@@ -5092,6 +5304,8 @@ msgstr "שולח היום"
 msgid "Shon"
 msgstr "שון"
 
+#: src/features/admin/AuditPage.tsx
+#: src/features/admin/EmailFailures.tsx
 #: src/features/admin/OperationsPage.tsx
 #: src/features/admin/SalesCounters.tsx
 #: src/features/finance/FinanceDemos.tsx
@@ -5149,6 +5363,10 @@ msgctxt "navigation"
 msgid "Shops"
 msgstr "חנויות"
 
+#: src/features/admin/AuditPage.tsx
+msgid "Shops and connections"
+msgstr "חנויות וחיבורים"
+
 #: src/features/overview/OverviewPage.tsx
 msgid "shops connected"
 msgstr "חנויות מחוברות"
@@ -5174,6 +5392,10 @@ msgstr "חנויות: {name}"
 msgid "Show all time"
 msgstr "הצג את כל הזמן"
 
+#: src/features/admin/AuditPage.tsx
+msgid "Show every actor"
+msgstr "הצגת כל המבצעים"
+
 #: src/features/commerce/ProductsPage.tsx
 msgid "Show every listing"
 msgstr "הצגת כל הליסטינגים"
@@ -5197,6 +5419,10 @@ msgstr "יותר"
 #: src/features/customers/CustomersPage.tsx
 msgid "Show more ({0} left)"
 msgstr "עוד ({0} נותרו)"
+
+#: src/features/admin/AuditPage.tsx
+msgid "Show only this actor's records"
+msgstr "הצגת הרשומות של המבצע הזה בלבד"
 
 #: src/features/auth/fields.tsx
 msgid "Show password"
@@ -5280,6 +5506,10 @@ msgstr "שישה־עשר עובדי AI בשבע מחלקות, שעובדים ל�
 #: src/app/shell/AppShell.tsx
 msgid "Skip to content"
 msgstr "דילוג לתוכן"
+
+#: src/features/admin/EmailFailures.tsx
+msgid "Skipped"
+msgstr "דולג"
 
 #: src/features/finance/FinanceDemos.tsx
 msgid "Software"
@@ -5377,6 +5607,7 @@ msgid "Statistics appear here once a shop is connected."
 msgstr "הסטטיסטיקה תופיע כאן אחרי שתחובר חנות."
 
 #: src/features/admin/AutomationsPage.tsx
+#: src/features/admin/EmailFailures.tsx
 #: src/features/admin/OperationsPage.tsx
 #: src/features/commerce/demoScreens.tsx
 #: src/features/commerce/OrdersPage.tsx
@@ -5430,6 +5661,7 @@ msgstr "הצליח"
 
 #: src/features/admin/AutomationsPage.tsx
 #: src/features/admin/OperationsPage.tsx
+#: src/features/admin/TrackingSync.tsx
 msgid "Success"
 msgstr "הצלחה"
 
@@ -5480,6 +5712,7 @@ msgstr "הסנכרון תוקן?"
 msgid "Synced from Etsy"
 msgstr "מסונכרן מ־Etsy"
 
+#: src/features/admin/AuditPage.tsx
 #: src/features/settings/AppearanceChoices.tsx
 msgid "System"
 msgstr "מערכת"
@@ -5564,6 +5797,14 @@ msgstr "משרד ה־AI"
 msgid "The app shows a new code every 30 seconds"
 msgstr "האפליקציה מציגה קוד חדש כל 30 שניות"
 
+#: src/features/admin/AuditPage.tsx
+msgid "The audit log could not be loaded. Try again shortly."
+msgstr "לא הצלחנו לטעון את יומן הביקורת. נסו שוב בעוד רגע."
+
+#: src/features/admin/AuditPage.tsx
+msgid "The audit log is not available on this server yet."
+msgstr "יומן הביקורת עדיין לא זמין בשרת הזה."
+
 #: src/features/admin/AutomationsPage.tsx
 msgid "The automations could not be loaded. Try again shortly."
 msgstr "לא הצלחנו לטעון את האוטומציות. נסו שוב בעוד רגע."
@@ -5614,6 +5855,14 @@ msgstr "לא הצלחנו להריץ מחדש את ההרצה. נסו שוב ב�
 msgid "The execution goes back to its retry."
 msgstr "ההרצה חוזרת לניסיון חוזר."
 
+#: src/features/admin/EmailFailures.tsx
+msgid "The failed emails are not available on this server yet."
+msgstr "המיילים שנכשלו עדיין לא זמינים בשרת הזה."
+
+#: src/features/admin/EmailFailures.tsx
+msgid "The failed emails could not be loaded. Try again shortly."
+msgstr "לא הצלחנו לטעון את המיילים שנכשלו. נסו שוב בעוד רגע."
+
 #: src/features/settings/AppearanceChoices.tsx
 msgid "The ground behind your panels."
 msgstr "הרקע שמאחורי הלוחות."
@@ -5649,6 +5898,10 @@ msgstr "ב־30 הימים האחרונים"
 #: src/features/commerce/OrdersPage.tsx
 msgid "the last 90 days"
 msgstr "ב־90 הימים האחרונים"
+
+#: src/features/admin/TrackingSync.tsx
+msgid "The latest runs could not be loaded."
+msgstr "לא הצלחנו לטעון את ההרצות האחרונות."
 
 #: src/features/auth/ForgotPasswordPage.tsx
 msgid "The link works once. Check the spam folder if it does not arrive."
@@ -5778,7 +6031,7 @@ msgstr "המונח ״Etsy״ הוא סימן מסחרי של חברת Etsy, Inc. 
 
 #: src/features/commerce/timeline.tsx
 msgid "The tracking could not be read."
-msgstr ""
+msgstr "לא הצלחנו לקרוא את המעקב."
 
 #: src/features/incidents/RelayPage.tsx
 msgid "The tracking relay is not set up on this server yet."
@@ -6043,6 +6296,10 @@ msgstr "ציר זמן"
 msgid "Titles, photos and claims audited, fixed as drafts you approve."
 msgstr "כותרות, תמונות וטענות נבדקות ומתוקנות כטיוטות שאתה מאשר."
 
+#: src/features/admin/EmailFailures.tsx
+msgid "To"
+msgstr "אל"
+
 #: src/features/commerce/ShippingPage.tsx
 msgid "To ship"
 msgstr "לשליחה"
@@ -6151,22 +6408,36 @@ msgstr "חסר מספר מעקב"
 msgid "Tracking number"
 msgstr "מספר מעקב"
 
+#: src/features/admin/EmailFailures.tsx
+msgid "Tracking number needed"
+msgstr "נדרש מספר מעקב"
+
+#: src/features/admin/AuditPage.tsx
 #: src/features/commerce/timeline.tsx
 #: src/features/incidents/IncidentState.tsx
 msgid "Tracking relay"
 msgstr "העברת מספרי מעקב"
 
+#: src/features/admin/TrackingSync.tsx
 #: src/features/commerce/ShippingPage.tsx
 msgid "Tracking sync"
 msgstr "סנכרון מעקב"
 
-#: src/features/commerce/ShippingPage.tsx
-msgid "Tracking sync and on-time delivery arrive with fulfilment. Until then, tracking numbers are read from Etsy with each order, and nothing is synced from here."
-msgstr "סנכרון המעקב והמסירה בזמן יגיעו עם שלב הטיפול בהזמנות. עד אז מספרי המעקב נקראים מ־Etsy עם כל הזמנה, ושום דבר לא מסונכרן מכאן."
+#: src/features/admin/TrackingSync.tsx
+msgid "Tracking Sync has not run in the last seven days. Tracking numbers are read from Etsy with each order until it does."
+msgstr "סנכרון המעקב לא רץ בשבעת הימים האחרונים. עד שירוץ, מספרי המעקב נקראים מ־Etsy עם כל הזמנה."
 
 #: src/shared/demo/office.ts
 msgid "Tracking sync is down"
 msgstr "סנכרון מעקב למטה"
+
+#: src/features/admin/TrackingSync.tsx
+msgid "Tracking Sync's status could not be loaded. Try again shortly."
+msgstr "לא הצלחנו לטעון את מצב סנכרון המעקב. נסו שוב בעוד רגע."
+
+#: src/features/admin/TrackingSync.tsx
+msgid "Tracking Sync's status is not available on this server yet."
+msgstr "מצב סנכרון המעקב עדיין לא זמין בשרת הזה."
 
 #: src/features/shops/Capabilities.tsx
 msgid "Tracking upload"
@@ -6212,8 +6483,11 @@ msgstr "מפעילים"
 
 #: src/app/RouteStates.tsx
 #: src/app/shell/NotificationBell.tsx
+#: src/features/admin/AuditPage.tsx
 #: src/features/admin/AutomationsPage.tsx
+#: src/features/admin/EmailFailures.tsx
 #: src/features/admin/OperationsPage.tsx
+#: src/features/admin/TrackingSync.tsx
 #: src/features/incidents/IncidentsPage.tsx
 #: src/features/incidents/RelayPage.tsx
 #: src/features/overview/OverviewPage.tsx
@@ -6483,6 +6757,8 @@ msgstr "מה ממתין למשלוח ומה נשלח, בזמן אמת מ־Etsy."
 msgid "What works today"
 msgstr "מה עובד היום"
 
+#: src/features/admin/AuditPage.tsx
+#: src/features/admin/EmailFailures.tsx
 #: src/features/admin/OperationsPage.tsx
 msgid "When"
 msgstr "מתי"
@@ -6507,9 +6783,17 @@ msgstr "איפה ההזמנה שלי? #3152"
 msgid "Where orders go"
 msgstr "לאן ההזמנות נשלחות"
 
+#: src/features/admin/EmailFailures.tsx
+msgid "Which emails"
+msgstr "אילו מיילים"
+
 #: src/features/office/ChatPage.tsx
 msgid "Which ones are late? Can we do something for the customers?"
 msgstr "אילו מהן באיחור? אפשר לעשות משהו בשביל הלקוחות?"
+
+#: src/features/admin/AuditPage.tsx
+msgid "Who did what"
+msgstr "מי עשה מה"
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "Windows"
@@ -6557,6 +6841,7 @@ msgstr "פעילות"
 msgid "Works"
 msgstr "עובד"
 
+#: src/features/admin/AuditPage.tsx
 #: src/features/team/TeamPage.tsx
 #: src/shared/ui/WorkspacePicker.tsx
 msgid "Workspace"
