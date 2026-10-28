@@ -78,7 +78,9 @@ function Detail({
  * daily limit, as last seen on Etsy's answers. Below the floor the server defers routine reads
  * until the budget resets, so the card says so in the attention tone; urgent reads still run.
  */
-function QuotaDetail({ quota, low }: { quota: EtsyQuota; low: boolean }) {
+function QuotaDetail({ quota, low, now }: { quota: EtsyQuota; low: boolean; now: number }) {
+  const { t } = useLingui();
+  const { locale } = useLocale();
   const count = useCount();
   const known = quota.remaining_today !== null && quota.limit_per_day !== null;
   return (
@@ -99,6 +101,12 @@ function QuotaDetail({ quota, low }: { quota: EtsyQuota; low: boolean }) {
           </span>
         )}
       </span>
+      {/* The API's last-seen value, possibly hours old: always "as of", never a live count. */}
+      {quota.observed_at === null ? null : (
+        <time dateTime={quota.observed_at} className="block text-caption text-muted">
+          {t`as of ${ago(quota.observed_at, Math.max(now, Date.parse(quota.observed_at)), locale)}`}
+        </time>
+      )}
     </Detail>
   );
 }
@@ -357,7 +365,7 @@ export function ShopCard({
                 )}
               </Detail>
               {budget === undefined || budget === null ? null : (
-                <QuotaDetail quota={budget} low={low} />
+                <QuotaDetail quota={budget} low={low} now={now} />
               )}
               {asleep && integration.purge_after != null ? (
                 <Detail label={<Trans>Data</Trans>}>

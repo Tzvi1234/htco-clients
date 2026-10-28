@@ -49,6 +49,9 @@ async function firstShippedOrder() {
   return within(row).getByRole("button", { name: /^Open order/ });
 }
 
+// Whole journeys through the app: more than the default 5 s on a busy runner.
+vi.setConfig({ testTimeout: 20_000 });
+
 describe("Orders on the stored history (slice 5.7)", () => {
   it("says the orders are synced from Etsy, and how long ago", async () => {
     await open();

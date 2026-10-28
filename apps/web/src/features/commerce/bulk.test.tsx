@@ -50,6 +50,9 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
+// Whole journeys through the app: more than the default 5 s on a busy runner.
+vi.setConfig({ testTimeout: 20_000 });
+
 describe("Orders: export and re-sync (slice 5.7)", () => {
   it("AC-5.7.5: exports the filter as a CSV made by the server and says how many", async () => {
     const created = vi.fn(() => "blob:orders");

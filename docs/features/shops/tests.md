@@ -5,7 +5,7 @@
 | Level | Web |
 |---|---|
 | Component and flow | Vitest + Testing Library on the in-memory API (`apps/web/src/test/fakeApi.ts`), rendered under StrictMode: `apps/web/src/features/shops/shops.test.tsx` |
-| Screenshots (he/en × light/dark) | Open: arrive with the Playwright/Storybook setup (AC-4.6.2) |
+| Screenshots (he/en × light/dark) | `e2e/journeys/shops.spec.ts`: every connection state, plus probing and a failed probe (AC-4.6.2) |
 | Manual | `pnpm web`, then `?demo` (no shops; connecting asks for the code 123456 and comes back through the callback) or `?demo=shops` (one shop in each connection state), at 1440×900 and 375×812 |
 
 ## Acceptance criteria coverage

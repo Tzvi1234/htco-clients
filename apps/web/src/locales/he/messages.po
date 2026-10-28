@@ -779,6 +779,11 @@ msgstr "ארכיון"
 msgid "Area"
 msgstr "אזור"
 
+#. placeholder {0}: ago(quota.observed_at, Math.max(now, Date.parse(quota.observed_at)), locale)
+#: src/features/shops/ShopCard.tsx
+msgid "as of {0}"
+msgstr "נראה {0}"
+
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "Ask for a new link"
 msgstr "בקשת קישור חדש"

@@ -278,6 +278,8 @@ describe("Etsy's daily request budget on the shop card (AC-4.1.2)", () => {
     const row = within(card).getByText("Etsy requests left today").closest("div");
     if (row === null) throw new Error("no quota row");
     expect(row).toHaveTextContent("8,412 of 10,000");
+    // The last-seen value, never a live count: it says when it was seen.
+    expect(row).toHaveTextContent(/as of now|as of .* ago/);
     expect(row.querySelector('[data-quota="ok"]')).not.toBeNull();
     expect(within(card).queryByRole("note")).toBeNull();
     // A disconnected shop is not read from Etsy, so it has no budget line.

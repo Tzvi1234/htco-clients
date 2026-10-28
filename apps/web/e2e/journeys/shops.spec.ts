@@ -52,6 +52,39 @@ for (const [locale, scheme] of [
     await expect(page.getByRole("article")).toHaveCount(4);
     await checkpoint(page, `shop-cards-${locale}-${scheme}`);
   });
+
+  // The two states a re-check passes through (AC-4.6.2): probing, while Etsy is asked, and the
+  // error when Etsy cannot be asked.
+  for (const state of ["probing", "probe-error"] as const) {
+    test(`a shop card ${state === "probing" ? "probing" : "after a failed probe"}, ${locale} ${scheme} (AC-4.6.2)`, async ({
+      page,
+    }) => {
+      const he = locale === "he";
+      await page.emulateMedia({ colorScheme: scheme });
+      await page.addInitScript((value) => {
+        localStorage.setItem("htco.locale", value);
+      }, locale);
+      await openApp(page, "/shops", state);
+      const card = page.getByRole("article", { name: "Willow & Wick" });
+      await expect(card).toBeVisible();
+      await card
+        .getByRole("button", { name: he ? /^בדיקה מחדש של מה/ : /^Re-check what HTCO/ })
+        .click();
+      await expect(
+        card.getByText(
+          state === "probing"
+            ? he
+              ? "בודקים מול Etsy עכשיו…"
+              : "Checking with Etsy now…"
+            : he
+              ? "בדיקות מול Etsy לא זמינות כרגע. אפשר לנסות שוב בעוד כמה דקות."
+              : "Etsy checks are unavailable right now. Try again in a few minutes.",
+        ),
+      ).toBeVisible();
+      await card.scrollIntoViewIfNeeded();
+      await checkpoint(page, `shop-card-${state}-${locale}-${scheme}`);
+    });
+  }
 }
 
 for (const locale of ["en", "he"] as const) {
