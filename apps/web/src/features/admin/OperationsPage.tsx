@@ -31,6 +31,7 @@ import {
   TabPanel,
 } from "../../shared/ui/kit/index.ts";
 import { WorkspacePicker, pickWorkspace } from "../../shared/ui/WorkspacePicker.tsx";
+import { EmailFailures } from "./EmailFailures.tsx";
 import { SalesCounters } from "./SalesCounters.tsx";
 
 import { Code, ExecutionSheet, StateWord, useAgo } from "./execution.tsx";
@@ -406,6 +407,8 @@ function Health({ health, organizationId }: { health: OperationsHealth; organiza
                 />
               )}
             </Panel>
+            {/* Beside the outbox's dead email.send messages: the emails refused (AC-6.5.6). */}
+            <EmailFailures organizationId={organizationId} shopName={shopName} />
           </>
         )}
       </TabPanel>
