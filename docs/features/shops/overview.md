@@ -27,7 +27,8 @@ The Owner connects an Etsy shop from the web app and then sees, per shop, whethe
 | — | Cancelling on Etsy (`error=access_denied`) says so and calls nothing | 4.3 | Pass |
 | — | Without a recent second factor, connecting asks for the authenticator code and continues | 4.3 | Pass |
 | AC-4.4.2 (card part) | `needs_reauth` is shown on the shop card with a Reconnect action | 4.6 | Pass |
-| AC-4.6.2 | All card states have screenshot tests in he/en × light/dark | 4.6 | Open (needs the Playwright/Storybook setup) |
+| AC-4.1.2 | The shop card shows Etsy's requests left today "as of" when last seen, amber below the floor | 4.6 | Pass: `shops.test.tsx` (platform PR #222) |
+| AC-4.6.2 | All card states have screenshot tests in he/en × light/dark | 4.6 | Pass: `e2e/journeys/shops.spec.ts` (connected, expiring, needs re-auth, disconnected, probing and probe error, en/he × light/dark, desktop and phone) |
 | AC-4.6.1 | Capability-blocked states explain the alternative | 4.6 | Pass (`explains the allowed alternative for what is blocked or not known`) |
 | AC-4.5.1 (web) | Capabilities shown with when they were checked; "Works" only as the server reports it | 4.5 | Pass |
 | — | Re-check by Owner and Admin, with feedback (done, too soon with the wait, not connected) | 4.5 | Pass |

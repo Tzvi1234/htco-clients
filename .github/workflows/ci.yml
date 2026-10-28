@@ -41,6 +41,10 @@ jobs:
         run: pnpm run typecheck
       - name: Translations in sync and complete
         run: pnpm run i18n:check
+      # The pinned OpenAPI copy is the platform's file at the commit in openapi.pin.json
+      # (architecture audit finding 8.1; client ADR-0004).
+      - name: Pinned OpenAPI matches its platform commit
+        run: node scripts/openapi-pin.ts --check
 
   tests:
     name: tests

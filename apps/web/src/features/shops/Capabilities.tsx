@@ -157,7 +157,12 @@ export function Capabilities({
           })}
         </ul>
       )}
-      {recheck?.feedback === undefined ? null : recheck.feedback.tone === "done" ? (
+      {recheck?.pending === true ? (
+        // Probing: the server's read-only checks are running on Etsy (AC-4.6.2's probing state).
+        <p role="status" className="m-0 text-caption text-secondary">
+          <Trans>Checking with Etsy now…</Trans>
+        </p>
+      ) : recheck?.feedback === undefined ? null : recheck.feedback.tone === "done" ? (
         now - recheck.feedback.at > DONE_SHOWN_MS ? null : (
           <p role="status" className="m-0 text-caption text-secondary">
             <Trans>Checked just now.</Trans>

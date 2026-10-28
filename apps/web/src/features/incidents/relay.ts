@@ -8,6 +8,7 @@ import type { ApiClient, components } from "@htco/api-client";
 import { queryOptions } from "@tanstack/react-query";
 
 import { ApiError, apiError } from "../../shared/api/api.tsx";
+import { IDEMPOTENCY_HEADER } from "../../shared/api/idempotency.ts";
 
 export type RelayItem = components["schemas"]["RelayItemView"];
 export type RelayPaste = components["schemas"]["RelayPasteView"];
@@ -106,10 +107,13 @@ export async function pasteTracking(
   id: string,
   carrier: Carrier,
   code: string,
+  /** The paste's Idempotency-Key, the same when that paste is sent again (platform PR #223). */
+  key: string,
 ): Promise<RelayPaste> {
   const { data, error, response } = await api.POST("/v1/relay-items/{item_id}/tracking", {
     params: { path: { item_id: id }, query: { organization_id: organizationId } },
     body: { carrier, code },
+    headers: { [IDEMPOTENCY_HEADER]: key },
   });
   if (data === undefined) throw apiError(response, error);
   return data;

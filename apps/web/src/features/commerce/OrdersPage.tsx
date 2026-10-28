@@ -5,8 +5,9 @@ import { useState, type ReactNode } from "react";
 import { Dialog, Input, Modal, ModalOverlay, SearchField } from "react-aria-components";
 
 import { RefundChip, RefundDetails } from "./refunds.tsx";
-import { OrderTimeline } from "./timeline.tsx";
+import { OrderTimeline, TrackingEvents } from "./timeline.tsx";
 import { ApiError, useApi } from "../../shared/api/api.tsx";
+import { useActionKey } from "../../shared/api/idempotency.ts";
 import { cx } from "../../shared/lib/cx.ts";
 import { PHONE_QUERY, useMediaQuery } from "../../shared/lib/useMediaQuery.ts";
 import { Banner } from "../../shared/ui/Banner.tsx";
@@ -696,6 +697,8 @@ function useBulk(shopId: string) {
   const count = useCount();
   const [busy, setBusy] = useState(false);
   const [said, setSaid] = useState<{ ok: boolean; text: string } | null>(null);
+  // One Idempotency-Key per re-sync of a set of orders; the same set tried again reuses it.
+  const action = useActionKey();
   const failed = (error: unknown): string => {
     const type = error instanceof ApiError ? error.type : undefined;
     return type === "orders-action-forbidden"
@@ -731,7 +734,13 @@ function useBulk(shopId: string) {
       setBusy(true);
       setSaid(null);
       try {
-        const queued = await resyncOrders(api, shopId, ids);
+        const queued = await resyncOrders(
+          api,
+          shopId,
+          ids,
+          action.key([...ids].sort((a, b) => a - b).join(",")),
+        );
+        action.reset();
         setSaid({
           ok: true,
           text: t`${count(queued)} orders queued to be read again from Etsy.`,
@@ -920,6 +929,7 @@ function OrderSheet({
                   </li>
                 ))}
               </ul>
+              <TrackingEvents tracking={detail.data?.tracking} loading={detail.isPending} />
               <OrderTimeline timeline={detail.data?.timeline} loading={detail.isPending} />
             </div>
           </Panel>

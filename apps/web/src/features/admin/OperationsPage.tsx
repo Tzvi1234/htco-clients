@@ -3,6 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useId, useState, type ReactNode } from "react";
 
 import { ApiError, meQuery, useApi } from "../../shared/api/api.tsx";
+import { useActionKey } from "../../shared/api/idempotency.ts";
 import { useLiveShops } from "../../shared/api/live.ts";
 import {
   operationsHealthQuery,
@@ -30,6 +31,7 @@ import {
   TabPanel,
 } from "../../shared/ui/kit/index.ts";
 import { WorkspacePicker, pickWorkspace } from "../../shared/ui/WorkspacePicker.tsx";
+import { EmailFailures } from "./EmailFailures.tsx";
 import { SalesCounters } from "./SalesCounters.tsx";
 
 import { Code, ExecutionSheet, StateWord, useAgo } from "./execution.tsx";
@@ -405,6 +407,8 @@ function Health({ health, organizationId }: { health: OperationsHealth; organiza
                 />
               )}
             </Panel>
+            {/* Beside the outbox's dead email.send messages: the emails refused (AC-6.5.6). */}
+            <EmailFailures organizationId={organizationId} shopName={shopName} />
           </>
         )}
       </TabPanel>
@@ -444,11 +448,14 @@ function DeadLetters({
   const since = useAgo();
   const [busy, setBusy] = useState<string | null>(null);
   const [said, setSaid] = useState<{ id: string; ok: boolean; text: string } | null>(null);
+  // One Idempotency-Key per retry of a job; pressing again after a failure reuses it.
+  const action = useActionKey();
   const retry = async (job: DeadJob) => {
     setBusy(job.id);
     setSaid(null);
     try {
-      await retryDeadJob(api, organizationId, job.id);
+      await retryDeadJob(api, organizationId, job.id, action.key(job.id));
+      action.reset();
       setSaid({
         id: job.id,
         ok: true,

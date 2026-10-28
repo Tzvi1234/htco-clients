@@ -50,6 +50,7 @@ export function useNavLabels() {
     admin: {
       health: t({ message: "Health", context: "navigation" }),
       automations: t({ message: "Automations", context: "navigation" }),
+      audit: t({ message: "Audit log", context: "navigation" }),
       members: t({ message: "Members & access", context: "navigation" }),
       settings: t({ message: "Settings", context: "navigation" }),
     },

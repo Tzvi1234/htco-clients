@@ -318,6 +318,7 @@ function tabName(id: string): string {
     ledger: "Ledger",
     health: "Health",
     automations: "Automations",
+    audit: "Audit log",
     members: "Members & access",
     settings: "Settings",
   };

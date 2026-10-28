@@ -20,6 +20,7 @@ import { SecondFactorPage } from "../features/auth/SecondFactorPage.tsx";
 import { SignInPage } from "../features/auth/SignInPage.tsx";
 import { OrdersPage } from "../features/commerce/OrdersPage.tsx";
 import { OrderIncidents } from "../features/incidents/OrderIncidents.tsx";
+import { AuditPage } from "../features/admin/AuditPage.tsx";
 import { AutomationsPage } from "../features/admin/AutomationsPage.tsx";
 import { OperationsPage } from "../features/admin/OperationsPage.tsx";
 import { ProductsPage } from "../features/commerce/ProductsPage.tsx";
@@ -264,6 +265,13 @@ const routeTree = rootRoute.addChildren([
         path: "/admin/automations",
         staticData: { layout: "panels", scroll: "page" },
         component: AutomationsPage,
+      }),
+      // The audit view (AC-3.9.3, platform PR #222), for the Owner and Admins.
+      createRoute({
+        getParentRoute: () => appRoute,
+        path: "/admin/audit",
+        staticData: { layout: "panels", scroll: "page" },
+        component: AuditPage,
       }),
       createRoute({
         getParentRoute: () => appRoute,

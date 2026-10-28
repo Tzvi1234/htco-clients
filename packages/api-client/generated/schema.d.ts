@@ -41,6 +41,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/audit-log": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The organization's audit records (Owner and Admins)
+         * @description Newest first; `since` is inclusive and `until` exclusive; `shop_id` matches the shop's
+         *     own records and those naming it; pass `next_cursor` back as `cursor` for the next page.
+         */
+        get: operations["list_audit_log"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/auth/invitations/accept": {
         parameters: {
             query?: never;
@@ -621,6 +642,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/operations/email-failures": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Emails refused for good or skipped (no full address)
+         * @description Newest first; the recipient as a member ID and a masked address; pass `next_cursor`
+         *     back as `cursor` for the next page.
+         */
+        get: operations["list_email_failures"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/operations/health": {
         parameters: {
             query?: never;
@@ -805,7 +847,8 @@ export interface paths {
         };
         /**
          * Marketplace connections of the organization's shops
-         * @description Status, granted scopes and token health per shop, for the shop card; never a token.
+         * @description Status, granted scopes and token health per shop, and Etsy's remaining daily request
+         *     budget with its floor, for the shop card; never a token.
          */
         get: operations["list_shop_integrations"];
         put?: never;
@@ -1190,6 +1233,11 @@ export interface components {
             /** Refresh Token */
             refresh_token: string;
         };
+        /**
+         * ActorKind
+         * @enum {string}
+         */
+        ActorKind: "user" | "employee" | "automation" | "advisor" | "system";
         /** AllTimeSalesView */
         AllTimeSalesView: {
             average_order_value: components["schemas"]["MoneyView"] | null;
@@ -1227,6 +1275,45 @@ export interface components {
         AssuranceView: {
             /** Assurance */
             assurance: string;
+        };
+        /** AuditEntryView */
+        AuditEntryView: {
+            /** Action */
+            action: string;
+            /** Actor Id */
+            actor_id: string;
+            actor_kind: components["schemas"]["ActorKind"];
+            /** After */
+            after: {
+                [key: string]: unknown;
+            } | null;
+            /** Before */
+            before: {
+                [key: string]: unknown;
+            } | null;
+            /** Correlation Id */
+            correlation_id: string | null;
+            /** Entity Id */
+            entity_id: string;
+            /** Entity Type */
+            entity_type: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Occurred At
+             * Format: date-time
+             */
+            occurred_at: string;
+        };
+        /** AuditLogPage */
+        AuditLogPage: {
+            /** Items */
+            items: components["schemas"]["AuditEntryView"][];
+            /** Next Cursor */
+            next_cursor: string | null;
         };
         /** AuthorizationView */
         AuthorizationView: {
@@ -1442,6 +1529,26 @@ export interface components {
             /** State */
             state?: string | null;
         };
+        /**
+         * EtsyQuotaView
+         * @description The shop card's quota figure: this API process's last-seen value, which can be stale.
+         *
+         *     Most Etsy calls run in the worker, so `remaining_today` and `below_floor` may be hours old or
+         *     from the previous Etsy day, and `below_floor` ignores the snapshot's age. Show `observed_at`
+         *     as "as of", never as a live count.
+         */
+        EtsyQuotaView: {
+            /** Below Floor */
+            below_floor: boolean;
+            /** Floor */
+            floor: number;
+            /** Limit Per Day */
+            limit_per_day: number | null;
+            /** Observed At */
+            observed_at: string | null;
+            /** Remaining Today */
+            remaining_today: number | null;
+        };
         /** EvidenceView */
         EvidenceView: {
             /** Kind */
@@ -1566,6 +1673,49 @@ export interface components {
             /** Verified */
             verified: boolean;
         };
+        /** FailedEmailList */
+        FailedEmailList: {
+            /** Items */
+            items: components["schemas"]["FailedEmailView"][];
+            /** Next Cursor */
+            next_cursor: string | null;
+        };
+        /** FailedEmailView */
+        FailedEmailView: {
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Incident Id */
+            incident_id: string | null;
+            /** Kind */
+            kind: string;
+            /** Reason */
+            reason: string | null;
+            /** Receipt Id */
+            receipt_id: number | null;
+            /** Recipient */
+            recipient: string | null;
+            /**
+             * Recipient User Id
+             * Format: uuid
+             */
+            recipient_user_id: string;
+            /** Shop Id */
+            shop_id: string | null;
+            status: components["schemas"]["FailedStatus"];
+        };
+        /**
+         * FailedStatus
+         * @enum {string}
+         */
+        FailedStatus: "failed" | "skipped";
         /**
          * FieldError
          * @description One invalid request field: where it is and what is wrong. The input is never echoed.
@@ -1712,6 +1862,7 @@ export interface components {
         IngestSource: "webhook" | "reconciliation" | "backfill" | "sync";
         /** IntegrationList */
         IntegrationList: {
+            etsy_quota?: components["schemas"]["EtsyQuotaView"] | null;
             /** Items */
             items: components["schemas"]["IntegrationView"][];
         };
@@ -1998,6 +2149,11 @@ export interface components {
             /** Type */
             type: string;
         };
+        /**
+         * ObservedVia
+         * @enum {string}
+         */
+        ObservedVia: "webhook" | "schedule" | "relay";
         /** OperationsHealthView */
         OperationsHealthView: {
             /** Automations */
@@ -2066,6 +2222,11 @@ export interface components {
             sync?: components["schemas"]["SyncView"] | null;
             /** Timeline */
             timeline: components["schemas"]["OrderStatusChangeView"][];
+            /**
+             * Tracking
+             * @default []
+             */
+            tracking: components["schemas"]["OrderTrackingView"][];
         };
         /**
          * OrderFilter
@@ -2147,6 +2308,22 @@ export interface components {
              * Format: date-time
              */
             window_start: string;
+        };
+        /** OrderTrackingView */
+        OrderTrackingView: {
+            /** Carrier */
+            carrier: string;
+            /** Carrier Name */
+            carrier_name: string;
+            /**
+             * First Observed At
+             * Format: date-time
+             */
+            first_observed_at: string;
+            /** Last4 */
+            last4: string;
+            observed_via: components["schemas"]["ObservedVia"];
+            source: components["schemas"]["TrackingSource"];
         };
         /** OrderView */
         OrderView: {
@@ -2856,6 +3033,12 @@ export interface components {
             /** Code */
             code: string;
         };
+        /**
+         * TrackingSource
+         * @description Where the tracking number came from.
+         * @enum {string}
+         */
+        TrackingSource: "etsy" | "autova_manual" | "autova_browser" | "autova_email";
         /** TransitionRequest */
         TransitionRequest: {
             /** Note */
@@ -3017,6 +3200,115 @@ export interface operations {
                 };
                 content: {
                     "application/problem+json": components["schemas"]["NotReadyProblem"];
+                };
+            };
+        };
+    };
+    list_audit_log: {
+        parameters: {
+            query?: {
+                action?: string | null;
+                actor_id?: string | null;
+                actor_kind?: components["schemas"]["ActorKind"] | null;
+                cursor?: string | null;
+                limit?: number;
+                organization_id?: string | null;
+                shop_id?: string | null;
+                since?: string | null;
+                until?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuditLogPage"];
+                };
+            };
+            /** @description The caller belongs to several organizations and named none */
+            400: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not signed in, or the access token was rejected */
+            401: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Only the Owner and Admins read the audit log (forbidden) */
+            403: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The named organization does not exist for the caller */
+            404: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Invalid filter, time range, limit or cursor */
+            422: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"];
+                };
+            };
+            /** @description Unexpected error. Quote the request ID when reporting it */
+            500: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not available on this server (audit-unavailable) */
+            503: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
                 };
             };
         };
@@ -5875,6 +6167,110 @@ export interface operations {
                 };
             };
             /** @description Invalid ID */
+            422: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"];
+                };
+            };
+            /** @description Unexpected error. Quote the request ID when reporting it */
+            500: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not available on this server (operations-unavailable) */
+            503: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    list_email_failures: {
+        parameters: {
+            query?: {
+                cursor?: string | null;
+                limit?: number;
+                organization_id?: string | null;
+                status?: components["schemas"]["FailedStatus"];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FailedEmailList"];
+                };
+            };
+            /** @description The caller belongs to several organizations and named none */
+            400: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not signed in, or the access token was rejected */
+            401: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Only the Owner and Admins see the failed emails (forbidden) */
+            403: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The named organization does not exist for the caller */
+            404: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Invalid ID, status, limit or cursor */
             422: {
                 headers: {
                     /** @description ID of this request, generated by the server. Quote it when reporting a problem. */

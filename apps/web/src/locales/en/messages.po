@@ -261,6 +261,12 @@ msgstr "{value} of 5 stars"
 msgid "#3152 (Emma R.) and #3160 (Liam K.) — a print delay at the supplier. I suggest a 15% partial refund on #3152, it is 4 days late."
 msgstr "#3152 (Emma R.) and #3160 (Liam K.) — a print delay at the supplier. I suggest a 15% partial refund on #3152, it is 4 days late."
 
+#. placeholder {0}: count(quota.remaining_today)
+#. placeholder {1}: count(quota.limit_per_day)
+#: src/features/shops/ShopCard.tsx
+msgid "<0>{0}</0> of <1>{1}</1>"
+msgstr "<0>{0}</0> of <1>{1}</1>"
+
 #. placeholder {0}: Number(profile.review_average).toFixed(1)
 #. placeholder {1}: count(profile.review_count)
 #: src/features/shops/ShopStats.tsx
@@ -447,6 +453,7 @@ msgstr "Account"
 msgid "across the shops"
 msgstr "across the shops"
 
+#: src/features/admin/AuditPage.tsx
 #: src/features/admin/SalesCounters.tsx
 msgid "Action"
 msgstr "Action"
@@ -486,6 +493,14 @@ msgstr "Activity"
 msgid "Activity log"
 msgstr "Activity log"
 
+#: src/features/admin/AuditPage.tsx
+msgid "Actor"
+msgstr "Actor"
+
+#: src/features/admin/AuditPage.tsx
+msgid "Actor ID"
+msgstr "Actor ID"
+
 #: src/features/security/SecurityPage.tsx
 msgid "Add an authenticator app: without it, a stolen password is enough to get in."
 msgstr "Add an authenticator app: without it, a stolen password is enough to get in."
@@ -498,6 +513,10 @@ msgstr "Admin"
 msgctxt "navigation"
 msgid "Admin"
 msgstr "Admin"
+
+#: src/features/admin/AuditPage.tsx
+msgid "After"
+msgstr "After"
 
 #: src/features/incidents/IncidentsPage.tsx
 msgid "Age"
@@ -532,6 +551,7 @@ msgstr "AI budget"
 msgid "AI costs"
 msgstr "AI costs"
 
+#: src/features/admin/AuditPage.tsx
 #: src/features/admin/AutomationsPage.tsx
 msgid "AI employee"
 msgstr "AI employee"
@@ -620,6 +640,7 @@ msgstr "All states"
 msgid "all time"
 msgstr "all time"
 
+#: src/features/admin/AuditPage.tsx
 #: src/features/commerce/OrdersPage.tsx
 msgid "All time"
 msgstr "All time"
@@ -669,6 +690,10 @@ msgstr "Android"
 #: src/features/welcome/WelcomePage.tsx
 msgid "Any browser, nothing to install."
 msgstr "Any browser, nothing to install."
+
+#: src/features/admin/AuditPage.tsx
+msgid "Anyone"
+msgstr "Anyone"
 
 #: src/features/office/EngineeringPage.tsx
 msgid "api v1.14 — order cache"
@@ -754,6 +779,11 @@ msgstr "Archive"
 msgid "Area"
 msgstr "Area"
 
+#. placeholder {0}: ago(quota.observed_at, Math.max(now, Date.parse(quota.observed_at)), locale)
+#: src/features/shops/ShopCard.tsx
+msgid "as of {0}"
+msgstr "as of {0}"
+
 #: src/features/auth/ResetPasswordPage.tsx
 msgid "Ask for a new link"
 msgstr "Ask for a new link"
@@ -781,9 +811,34 @@ msgstr "Attach"
 msgid "Attempts"
 msgstr "Attempts"
 
+#: src/features/admin/AuditPage.tsx
+msgid "Audit filters"
+msgstr "Audit filters"
+
+#: src/features/admin/AuditPage.tsx
+msgid "Audit log"
+msgstr "Audit log"
+
+#: src/app/shell/useNavLabels.ts
+msgctxt "navigation"
+msgid "Audit log"
+msgstr "Audit log"
+
 #: src/features/team/TeamPage.tsx
 msgid "Audit log:"
 msgstr "Audit log:"
+
+#: src/features/admin/AuditPage.tsx
+msgid "Audit numbers"
+msgstr "Audit numbers"
+
+#: src/features/admin/AuditPage.tsx
+msgid "Audit record"
+msgstr "Audit record"
+
+#: src/features/admin/AuditPage.tsx
+msgid "Audit records"
+msgstr "Audit records"
 
 #: src/features/auth/SecondFactorPage.tsx
 #: src/features/security/SecurityPage.tsx
@@ -795,6 +850,7 @@ msgstr "Authenticator app"
 msgid "Authenticator app is set up"
 msgstr "Authenticator app is set up"
 
+#: src/features/admin/AuditPage.tsx
 #: src/features/admin/AutomationsPage.tsx
 #: src/features/admin/OperationsPage.tsx
 #: src/features/incidents/IncidentsPage.tsx
@@ -813,6 +869,7 @@ msgstr "Automation numbers"
 msgid "Automation views"
 msgstr "Automation views"
 
+#: src/features/admin/AuditPage.tsx
 #: src/features/admin/AutomationsPage.tsx
 #: src/features/admin/OperationsPage.tsx
 #: src/features/incidents/IncidentState.tsx
@@ -894,6 +951,10 @@ msgstr "Balances"
 #: src/features/shops/ShopStats.tsx
 msgid "Based on the latest {0} orders, since {1}. Total sales is Etsy's own count; revenue, averages and months come from these orders."
 msgstr "Based on the latest {0} orders, since {1}. Total sales is Etsy's own count; revenue, averages and months come from these orders."
+
+#: src/features/admin/AuditPage.tsx
+msgid "Before"
+msgstr "Before"
 
 #: src/features/shops/ShopStats.tsx
 msgid "Best month"
@@ -1102,6 +1163,10 @@ msgstr "Checked just now."
 msgid "Checked moments ago. Try again in {0} seconds."
 msgstr "Checked moments ago. Try again in {0} seconds."
 
+#: src/features/shops/Capabilities.tsx
+msgid "Checking with Etsy now…"
+msgstr "Checking with Etsy now…"
+
 #: src/features/auth/SecondFactorPage.tsx
 msgid "Checking your account"
 msgstr "Checking your account"
@@ -1122,6 +1187,10 @@ msgstr "Choose a new password"
 #: src/features/incidents/IncidentsPage.tsx
 msgid "Choose an incident to see its evidence, its timeline and its order."
 msgstr "Choose an incident to see its evidence, its timeline and its order."
+
+#: src/features/admin/AuditPage.tsx
+msgid "Choose the workspace whose audit log you want to see."
+msgstr "Choose the workspace whose audit log you want to see."
 
 #: src/features/admin/AutomationsPage.tsx
 msgid "Choose the workspace whose automations you want to see."
@@ -1383,6 +1452,10 @@ msgstr "Copy to clipboard"
 msgid "copying the order history ({count} so far)"
 msgstr "copying the order history ({count} so far)"
 
+#: src/features/admin/AuditPage.tsx
+msgid "Correlation ID"
+msgstr "Correlation ID"
+
 #: src/features/office/FloorPage.tsx
 msgid "Cost"
 msgstr "Cost"
@@ -1536,6 +1609,7 @@ msgstr "Date"
 
 #: src/features/admin/AutomationsPage.tsx
 #: src/features/admin/OperationsPage.tsx
+#: src/features/admin/TrackingSync.tsx
 msgid "Dead letters"
 msgstr "Dead letters"
 
@@ -1550,6 +1624,10 @@ msgstr "Debugger & Reliability Engineer"
 #: src/features/work/demoScreens.tsx
 msgid "Decided today"
 msgstr "Decided today"
+
+#: src/features/admin/AuditPage.tsx
+msgid "Decision Advisor"
+msgstr "Decision Advisor"
 
 #: src/features/work/demoScreens.tsx
 msgid "Decision value"
@@ -1732,6 +1810,7 @@ msgstr "Eitan"
 msgid "Eitan, #3152 and #3160 passed their promised ship date. What is the supplier status?"
 msgstr "Eitan, #3152 and #3160 passed their promised ship date. What is the supplier status?"
 
+#: src/features/admin/EmailFailures.tsx
 #: src/features/auth/ForgotPasswordPage.tsx
 #: src/features/auth/SignInPage.tsx
 #: src/features/team/TeamPage.tsx
@@ -1792,6 +1871,10 @@ msgstr "Enter your email and we will send you a link to choose a new one."
 #: src/features/auth/ForgotPasswordPage.tsx
 msgid "Enter your email."
 msgstr "Enter your email."
+
+#: src/features/admin/AuditPage.tsx
+msgid "Entity"
+msgstr "Entity"
 
 #: src/app/RouteStates.tsx
 msgid "Error 404"
@@ -1909,6 +1992,10 @@ msgid "Etsy refused this. Reconnect the shop; if it stays blocked, Etsy has limi
 msgstr "Etsy refused this. Reconnect the shop; if it stays blocked, Etsy has limited the app."
 
 #: src/features/shops/ShopCard.tsx
+msgid "Etsy requests left today"
+msgstr "Etsy requests left today"
+
+#: src/features/shops/ShopCard.tsx
 msgid "Etsy shop ID"
 msgstr "Etsy shop ID"
 
@@ -1927,6 +2014,16 @@ msgstr "etsy.order_intake flagged 2 late orders"
 #: src/features/shops/ShopStats.tsx
 msgid "Etsy's count"
 msgstr "Etsy's count"
+
+#: src/features/shops/ShopCard.tsx
+msgid "Etsy's daily request budget is below its floor. Routine reads wait until it resets; urgent ones still run."
+msgstr "Etsy's daily request budget is below its floor. Routine reads wait until it resets; urgent ones still run."
+
+#. placeholder {0}: count(budget.remaining_today)
+#. placeholder {1}: count(budget.floor)
+#: src/features/shops/ShopCard.tsx
+msgid "Etsy's daily request budget is low: {0} left, under the floor of {1}. Routine reads wait until it resets; urgent ones still run."
+msgstr "Etsy's daily request budget is low: {0} left, under the floor of {1}. Routine reads wait until it resets; urgent ones still run."
 
 #: src/features/shops/connectEtsy.tsx
 msgid "Etsy's sign-in address looked wrong, so it was not opened. Try again shortly."
@@ -1950,9 +2047,17 @@ msgstr "Events by hour, busiest at 14:00"
 msgid "Events today:"
 msgstr "Events today:"
 
+#: src/features/admin/AuditPage.tsx
+msgid "Every action"
+msgstr "Every action"
+
 #: src/features/commerce/ProductsPage.tsx
 msgid "Every active listing is in stock."
 msgstr "Every active listing is in stock."
+
+#: src/features/admin/AuditPage.tsx
+msgid "Every change in this workspace, by people, AI employees and automations. Choose a record to see what it changed."
+msgstr "Every change in this workspace, by people, AI employees and automations. Choose a record to see what it changed."
 
 #: src/features/admin/OperationsPage.tsx
 msgid "Every message was delivered."
@@ -1973,6 +2078,10 @@ msgstr "Every order has its tracking number"
 #: src/features/commerce/OrdersPage.tsx
 msgid "Every paid order is shipped."
 msgstr "Every paid order is shipped."
+
+#: src/features/admin/AuditPage.tsx
+msgid "Every shop"
+msgstr "Every shop"
 
 #: src/features/team/TeamPage.tsx
 msgid "Everyone invited has joined."
@@ -2046,6 +2155,14 @@ msgstr "Exported {0} orders."
 msgid "Failed"
 msgstr "Failed"
 
+#: src/features/admin/EmailFailures.tsx
+msgid "Failed emails"
+msgstr "Failed emails"
+
+#: src/features/admin/TrackingSync.tsx
+msgid "Failing"
+msgstr "Failing"
+
 #: src/features/commerce/ProductsPage.tsx
 msgid "favourites"
 msgstr "favourites"
@@ -2118,6 +2235,11 @@ msgstr "Find an order"
 msgid "Finish connecting in the web app where you are signed in."
 msgstr "Finish connecting in the web app where you are signed in."
 
+#. placeholder {0}: when.format(new Date(parcel.first_observed_at))
+#: src/features/commerce/timeline.tsx
+msgid "first seen {0}"
+msgstr "first seen {0}"
+
 #: src/features/customers/CustomersPage.tsx
 msgid "Five stars"
 msgstr "Five stars"
@@ -2185,6 +2307,22 @@ msgstr "from"
 #: src/features/shops/ShopsPage.tsx
 msgid "from {covered} of {asking} shops"
 msgstr "from {covered} of {asking} shops"
+
+#: src/features/commerce/timeline.tsx
+msgid "From AutoVA, pasted"
+msgstr "From AutoVA, pasted"
+
+#: src/features/commerce/timeline.tsx
+msgid "From AutoVA's browser"
+msgstr "From AutoVA's browser"
+
+#: src/features/commerce/timeline.tsx
+msgid "From AutoVA's email"
+msgstr "From AutoVA's email"
+
+#: src/features/commerce/timeline.tsx
+msgid "From Etsy"
+msgstr "From Etsy"
 
 #: src/features/admin/SalesCounters.tsx
 msgid "From the stored orders"
@@ -2478,6 +2616,10 @@ msgstr "Incident escalated: {cause}"
 msgid "Incident escalated: {cause}, order #{receipt}"
 msgstr "Incident escalated: {cause}, order #{receipt}"
 
+#: src/features/admin/EmailFailures.tsx
+msgid "Incident opened"
+msgstr "Incident opened"
+
 #: src/app/shell/NotificationBell.tsx
 msgid "Incident resolved: {cause}"
 msgstr "Incident resolved: {cause}"
@@ -2490,6 +2632,7 @@ msgstr "Incident resolved: {cause}, order #{receipt}"
 msgid "Incident:"
 msgstr "Incident:"
 
+#: src/features/admin/AuditPage.tsx
 #: src/features/incidents/IncidentsPage.tsx
 #: src/features/incidents/OrderIncidents.tsx
 #: src/features/overview/OverviewPage.tsx
@@ -2631,14 +2774,17 @@ msgstr "Last 12 months"
 msgid "last 12 months, before Etsy's fees"
 msgstr "last 12 months, before Etsy's fees"
 
+#: src/features/admin/AuditPage.tsx
 #: src/features/admin/OperationsPage.tsx
 msgid "Last 24 hours"
 msgstr "Last 24 hours"
 
+#: src/features/admin/AuditPage.tsx
 #: src/features/commerce/OrdersPage.tsx
 msgid "Last 30 days"
 msgstr "Last 30 days"
 
+#: src/features/admin/AuditPage.tsx
 #: src/features/admin/AutomationsPage.tsx
 #: src/features/admin/OperationsPage.tsx
 msgid "Last 7 days"
@@ -2668,6 +2814,10 @@ msgstr "Last order"
 #: src/features/admin/SalesCounters.tsx
 msgid "Last recount"
 msgstr "Last recount"
+
+#: src/features/admin/TrackingSync.tsx
+msgid "Last run"
+msgstr "Last run"
 
 #: src/features/admin/OperationsPage.tsx
 msgid "Last success"
@@ -2701,8 +2851,13 @@ msgid "Late orders + tracking sync failure"
 msgstr "Late orders + tracking sync failure"
 
 #: src/features/admin/AutomationsPage.tsx
+#: src/features/admin/TrackingSync.tsx
 msgid "Latest runs"
 msgstr "Latest runs"
+
+#: src/features/admin/TrackingSync.tsx
+msgid "Latest Tracking Sync runs"
+msgstr "Latest Tracking Sync runs"
 
 #: src/shared/demo/office.ts
 msgid "Lead Software & Platform Engineer"
@@ -2813,6 +2968,11 @@ msgstr "Live from Etsy"
 msgid "Live shop data could not be loaded. Try again shortly."
 msgstr "Live shop data could not be loaded. Try again shortly."
 
+#: src/features/admin/AuditPage.tsx
+#: src/features/admin/EmailFailures.tsx
+msgid "Load more"
+msgstr "Load more"
+
 #: src/features/shops/ShopCard.tsx
 msgid "Loading connection details"
 msgstr "Loading connection details"
@@ -2850,6 +3010,10 @@ msgstr "Loading shops"
 msgid "Loading statistics"
 msgstr "Loading statistics"
 
+#: src/features/admin/AuditPage.tsx
+msgid "Loading the audit log"
+msgstr "Loading the audit log"
+
 #: src/features/admin/AutomationsPage.tsx
 msgid "Loading the automations"
 msgstr "Loading the automations"
@@ -2857,6 +3021,10 @@ msgstr "Loading the automations"
 #: src/features/admin/execution.tsx
 msgid "Loading the execution"
 msgstr "Loading the execution"
+
+#: src/features/admin/EmailFailures.tsx
+msgid "Loading the failed emails"
+msgstr "Loading the failed emails"
 
 #: src/features/incidents/IncidentsPage.tsx
 msgid "Loading the incident…"
@@ -2885,6 +3053,14 @@ msgstr "Loading the runs"
 #: src/features/shops/ShopCard.tsx
 msgid "Loading the shop's numbers"
 msgstr "Loading the shop's numbers"
+
+#: src/features/commerce/timeline.tsx
+msgid "Loading the tracking…"
+msgstr "Loading the tracking…"
+
+#: src/features/admin/TrackingSync.tsx
+msgid "Loading Tracking Sync's status"
+msgstr "Loading Tracking Sync's status"
 
 #: src/features/office/floor3d/plan.ts
 msgid "Lounge"
@@ -3007,6 +3183,10 @@ msgctxt "navigation"
 msgid "Members & access"
 msgstr "Members & access"
 
+#: src/features/admin/AuditPage.tsx
+msgid "Members and roles"
+msgstr "Members and roles"
+
 #: src/features/team/TeamPage.tsx
 msgid "Members views"
 msgstr "Members views"
@@ -3079,6 +3259,10 @@ msgstr "More than {0} open incidents"
 msgid "More than {0} orders need a tracking number"
 msgstr "More than {0} orders need a tracking number"
 
+#: src/features/admin/AuditPage.tsx
+msgid "more to load"
+msgstr "more to load"
+
 #. placeholder {0}: words.state(step)
 #: src/features/incidents/IncidentsPage.tsx
 msgid "Move to {0}"
@@ -3140,6 +3324,10 @@ msgstr "Net by day"
 msgid "Never"
 msgstr "Never"
 
+#: src/features/admin/EmailFailures.tsx
+msgid "Never the address"
+msgstr "Never the address"
+
 #: src/features/admin/AutomationsPage.tsx
 msgid "Never: it runs on its own"
 msgstr "Never: it runs on its own"
@@ -3188,6 +3376,10 @@ msgstr "New task"
 #: src/features/customers/CustomersDemos.tsx
 msgid "New this month"
 msgstr "New this month"
+
+#: src/features/admin/AuditPage.tsx
+msgid "Newest"
+msgstr "Newest"
 
 #. placeholder {0}: count(all.data.items.length)
 #: src/features/commerce/OrdersPage.tsx
@@ -3255,6 +3447,14 @@ msgstr "No automation has run yet."
 #: src/features/shops/ShopsPage.tsx
 msgid "No connection needs you. A disconnected shop stays paused until you connect it again."
 msgstr "No connection needs you. A disconnected shop stays paused until you connect it again."
+
+#: src/features/admin/EmailFailures.tsx
+msgid "No email was refused."
+msgstr "No email was refused."
+
+#: src/features/admin/EmailFailures.tsx
+msgid "No email was skipped."
+msgstr "No email was skipped."
 
 #: src/features/admin/OperationsPage.tsx
 msgid "No Etsy notice has arrived yet."
@@ -3335,6 +3535,10 @@ msgstr "No recent recount"
 msgid "No reconciliation has run yet."
 msgstr "No reconciliation has run yet."
 
+#: src/features/admin/AuditPage.tsx
+msgid "No record matches these filters."
+msgstr "No record matches these filters."
+
 #: src/features/shops/ShopStats.tsx
 msgid "No refunds or cancellations in these orders."
 msgstr "No refunds or cancellations in these orders."
@@ -3386,6 +3590,10 @@ msgstr "No shops yet"
 #: src/features/team/TeamPage.tsx
 msgid "No shops yet. Connect one under Commerce › Shops."
 msgstr "No shops yet. Connect one under Commerce › Shops."
+
+#: src/features/commerce/timeline.tsx
+msgid "No tracking number seen yet."
+msgstr "No tracking number seen yet."
 
 #: src/features/office/floor3d/engine.ts
 msgid "No tracking yet"
@@ -3460,6 +3668,10 @@ msgstr "Not connected"
 msgid "Not known"
 msgstr "Not known"
 
+#: src/features/shops/ShopCard.tsx
+msgid "Not known until the first Etsy call"
+msgstr "Not known until the first Etsy call"
+
 #: src/features/admin/AutomationsPage.tsx
 msgid "Not needed"
 msgstr "Not needed"
@@ -3467,6 +3679,10 @@ msgstr "Not needed"
 #: src/features/admin/OperationsPage.tsx
 msgid "Not processed yet"
 msgstr "Not processed yet"
+
+#: src/features/admin/TrackingSync.tsx
+msgid "Not run this week"
+msgstr "Not run this week"
 
 #: src/features/shops/Capabilities.tsx
 msgid "Not set up yet. HTCO checks Etsy for new orders regularly instead."
@@ -3483,6 +3699,10 @@ msgstr "Not syncing. Connect it again to resume."
 #: src/features/shops/shopActions.tsx
 msgid "Nothing changes in your Etsy shop."
 msgstr "Nothing changes in your Etsy shop."
+
+#: src/features/admin/AuditPage.tsx
+msgid "Nothing has been recorded yet."
+msgstr "Nothing has been recorded yet."
 
 #: src/features/incidents/IncidentsPage.tsx
 msgid "Nothing is open"
@@ -3636,6 +3856,10 @@ msgstr "On this device"
 msgid "On time"
 msgstr "On time"
 
+#: src/features/commerce/ShippingPage.tsx
+msgid "On-time delivery arrives with fulfilment."
+msgstr "On-time delivery arrives with fulfilment."
+
 #. placeholder {0}: nameOf(dead[0]?.id ?? "")
 #: src/features/admin/AutomationsPage.tsx
 msgid "One automation has a dead-lettered run: {0}. Open it, read its error, then retry it."
@@ -3660,6 +3884,18 @@ msgstr "Only the Owner and Admins recount sales."
 #: src/features/admin/OperationsPage.tsx
 msgid "Only the Owner and Admins retry jobs."
 msgstr "Only the Owner and Admins retry jobs."
+
+#: src/features/admin/TrackingSync.tsx
+msgid "Only the workspace Owner and Admins see how Tracking Sync runs."
+msgstr "Only the workspace Owner and Admins see how Tracking Sync runs."
+
+#: src/features/admin/AuditPage.tsx
+msgid "Only the workspace Owner and Admins see the audit log."
+msgstr "Only the workspace Owner and Admins see the audit log."
+
+#: src/features/admin/EmailFailures.tsx
+msgid "Only the workspace Owner and Admins see the failed emails."
+msgstr "Only the workspace Owner and Admins see the failed emails."
 
 #: src/features/admin/OperationsPage.tsx
 msgid "Only the workspace Owner and Admins see the queue and sync health."
@@ -3688,6 +3924,10 @@ msgstr "Only the workspace owner or an admin can re-check a shop."
 #: src/features/incidents/IncidentsPage.tsx
 msgid "Open"
 msgstr "Open"
+
+#: src/features/admin/TrackingSync.tsx
+msgid "Open Automations"
+msgstr "Open Automations"
 
 #: src/features/shops/ShopStats.tsx
 msgid "Open for {months, plural, one {# month} other {# months}}, since {since}:"
@@ -3843,6 +4083,7 @@ msgstr "Order number or SKU"
 msgid "Order numbers"
 msgstr "Order numbers"
 
+#: src/features/admin/AuditPage.tsx
 #: src/features/commerce/OrdersPage.tsx
 #: src/features/customers/CustomersDemos.tsx
 #: src/features/overview/OverviewPage.tsx
@@ -4078,6 +4319,10 @@ msgstr "Per call"
 msgid "Period"
 msgstr "Period"
 
+#: src/features/admin/AuditPage.tsx
+msgid "Person"
+msgstr "Person"
+
 #: src/features/commerce/OrdersPage.tsx
 msgid "Placed"
 msgstr "Placed"
@@ -4213,6 +4458,10 @@ msgstr "Question about A3 print size"
 msgid "Queue and sync"
 msgstr "Queue and sync"
 
+#: src/features/admin/AuditPage.tsx
+msgid "Queue jobs"
+msgstr "Queue jobs"
+
 #: src/features/admin/OperationsPage.tsx
 msgid "Queue numbers"
 msgstr "Queue numbers"
@@ -4288,6 +4537,10 @@ msgstr "Read live from Etsy: the steps appear once HTCO has stored this order."
 msgid "Read only"
 msgstr "Read only"
 
+#: src/features/admin/AuditPage.tsx
+msgid "Read only · newest first"
+msgstr "Read only · newest first"
+
 #: src/features/shops/ShopCard.tsx
 msgid "Read orders"
 msgstr "Read orders"
@@ -4315,6 +4568,10 @@ msgstr "Ready for Etsy"
 #: src/features/welcome/WelcomePage.tsx
 msgid "Ready today"
 msgstr "Ready today"
+
+#: src/features/admin/EmailFailures.tsx
+msgid "Reason"
+msgstr "Reason"
 
 #: src/features/admin/OperationsPage.tsx
 msgid "Received"
@@ -4377,6 +4634,14 @@ msgstr "Recorded by"
 #: src/features/commerce/timeline.tsx
 msgid "Recorded in HTCO"
 msgstr "Recorded in HTCO"
+
+#: src/features/admin/AuditPage.tsx
+msgid "Records"
+msgstr "Records"
+
+#: src/features/admin/AuditPage.tsx
+msgid "Records shown"
+msgstr "Records shown"
 
 #: src/features/admin/SalesCounters.tsx
 msgid "Recount"
@@ -4467,6 +4732,14 @@ msgstr "Refunds and cancellations"
 #: src/features/shops/ShopStats.tsx
 msgid "Refunds and cancellations by reason"
 msgstr "Refunds and cancellations by reason"
+
+#: src/features/admin/EmailFailures.tsx
+msgid "Refused"
+msgstr "Refused"
+
+#: src/features/commerce/timeline.tsx
+msgid "Regular check"
+msgstr "Regular check"
 
 #: src/features/commerce/demoScreens.tsx
 #: src/features/office/ChatPage.tsx
@@ -4746,6 +5019,7 @@ msgstr "Run"
 
 #: src/features/admin/execution.tsx
 #: src/features/admin/OperationsPage.tsx
+#: src/features/admin/TrackingSync.tsx
 #: src/features/work/demoScreens.tsx
 #: src/shared/ui/kit/status.tsx
 msgid "Running"
@@ -4759,6 +5033,10 @@ msgstr "Running now"
 #: src/features/admin/OperationsPage.tsx
 msgid "Runs"
 msgstr "Runs"
+
+#: src/features/admin/TrackingSync.tsx
+msgid "Runs, 7 days"
+msgstr "Runs, 7 days"
 
 #: src/features/customers/CustomersDemos.tsx
 msgid "Sales"
@@ -5031,6 +5309,8 @@ msgstr "Ships today"
 msgid "Shon"
 msgstr "Shon"
 
+#: src/features/admin/AuditPage.tsx
+#: src/features/admin/EmailFailures.tsx
 #: src/features/admin/OperationsPage.tsx
 #: src/features/admin/SalesCounters.tsx
 #: src/features/finance/FinanceDemos.tsx
@@ -5088,6 +5368,10 @@ msgctxt "navigation"
 msgid "Shops"
 msgstr "Shops"
 
+#: src/features/admin/AuditPage.tsx
+msgid "Shops and connections"
+msgstr "Shops and connections"
+
 #: src/features/overview/OverviewPage.tsx
 msgid "shops connected"
 msgstr "shops connected"
@@ -5113,6 +5397,10 @@ msgstr "Shops: {name}"
 msgid "Show all time"
 msgstr "Show all time"
 
+#: src/features/admin/AuditPage.tsx
+msgid "Show every actor"
+msgstr "Show every actor"
+
 #: src/features/commerce/ProductsPage.tsx
 msgid "Show every listing"
 msgstr "Show every listing"
@@ -5136,6 +5424,10 @@ msgstr "Show more"
 #: src/features/customers/CustomersPage.tsx
 msgid "Show more ({0} left)"
 msgstr "Show more ({0} left)"
+
+#: src/features/admin/AuditPage.tsx
+msgid "Show only this actor's records"
+msgstr "Show only this actor's records"
 
 #: src/features/auth/fields.tsx
 msgid "Show password"
@@ -5219,6 +5511,10 @@ msgstr "Sixteen AI employees in seven departments, working under your policies."
 #: src/app/shell/AppShell.tsx
 msgid "Skip to content"
 msgstr "Skip to content"
+
+#: src/features/admin/EmailFailures.tsx
+msgid "Skipped"
+msgstr "Skipped"
 
 #: src/features/finance/FinanceDemos.tsx
 msgid "Software"
@@ -5316,6 +5612,7 @@ msgid "Statistics appear here once a shop is connected."
 msgstr "Statistics appear here once a shop is connected."
 
 #: src/features/admin/AutomationsPage.tsx
+#: src/features/admin/EmailFailures.tsx
 #: src/features/admin/OperationsPage.tsx
 #: src/features/commerce/demoScreens.tsx
 #: src/features/commerce/OrdersPage.tsx
@@ -5369,6 +5666,7 @@ msgstr "Succeeded"
 
 #: src/features/admin/AutomationsPage.tsx
 #: src/features/admin/OperationsPage.tsx
+#: src/features/admin/TrackingSync.tsx
 msgid "Success"
 msgstr "Success"
 
@@ -5419,6 +5717,7 @@ msgstr "Sync fixed?"
 msgid "Synced from Etsy"
 msgstr "Synced from Etsy"
 
+#: src/features/admin/AuditPage.tsx
 #: src/features/settings/AppearanceChoices.tsx
 msgid "System"
 msgstr "System"
@@ -5503,6 +5802,14 @@ msgstr "The AI office"
 msgid "The app shows a new code every 30 seconds"
 msgstr "The app shows a new code every 30 seconds"
 
+#: src/features/admin/AuditPage.tsx
+msgid "The audit log could not be loaded. Try again shortly."
+msgstr "The audit log could not be loaded. Try again shortly."
+
+#: src/features/admin/AuditPage.tsx
+msgid "The audit log is not available on this server yet."
+msgstr "The audit log is not available on this server yet."
+
 #: src/features/admin/AutomationsPage.tsx
 msgid "The automations could not be loaded. Try again shortly."
 msgstr "The automations could not be loaded. Try again shortly."
@@ -5553,6 +5860,14 @@ msgstr "The execution could not be retried. Try again shortly."
 msgid "The execution goes back to its retry."
 msgstr "The execution goes back to its retry."
 
+#: src/features/admin/EmailFailures.tsx
+msgid "The failed emails are not available on this server yet."
+msgstr "The failed emails are not available on this server yet."
+
+#: src/features/admin/EmailFailures.tsx
+msgid "The failed emails could not be loaded. Try again shortly."
+msgstr "The failed emails could not be loaded. Try again shortly."
+
 #: src/features/settings/AppearanceChoices.tsx
 msgid "The ground behind your panels."
 msgstr "The ground behind your panels."
@@ -5588,6 +5903,10 @@ msgstr "the last 30 days"
 #: src/features/commerce/OrdersPage.tsx
 msgid "the last 90 days"
 msgstr "the last 90 days"
+
+#: src/features/admin/TrackingSync.tsx
+msgid "The latest runs could not be loaded."
+msgstr "The latest runs could not be loaded."
 
 #: src/features/auth/ForgotPasswordPage.tsx
 msgid "The link works once. Check the spam folder if it does not arrive."
@@ -5714,6 +6033,10 @@ msgstr "The step could not be saved. Check your connection and try again."
 #: src/features/shops/ShopsPage.tsx
 msgid "The term 'Etsy' is a trademark of Etsy, Inc. This application uses the Etsy API but is not endorsed or certified by Etsy, Inc."
 msgstr "The term 'Etsy' is a trademark of Etsy, Inc. This application uses the Etsy API but is not endorsed or certified by Etsy, Inc."
+
+#: src/features/commerce/timeline.tsx
+msgid "The tracking could not be read."
+msgstr "The tracking could not be read."
 
 #: src/features/incidents/RelayPage.tsx
 msgid "The tracking relay is not set up on this server yet."
@@ -5978,6 +6301,10 @@ msgstr "Timeline"
 msgid "Titles, photos and claims audited, fixed as drafts you approve."
 msgstr "Titles, photos and claims audited, fixed as drafts you approve."
 
+#: src/features/admin/EmailFailures.tsx
+msgid "To"
+msgstr "To"
+
 #: src/features/commerce/ShippingPage.tsx
 msgid "To ship"
 msgstr "To ship"
@@ -6054,6 +6381,7 @@ msgid "Tracked"
 msgstr "Tracked"
 
 #: src/features/commerce/ShippingPage.tsx
+#: src/features/commerce/timeline.tsx
 #: src/features/incidents/RelayPage.tsx
 msgid "Tracking"
 msgstr "Tracking"
@@ -6085,21 +6413,36 @@ msgstr "Tracking missing"
 msgid "Tracking number"
 msgstr "Tracking number"
 
+#: src/features/admin/EmailFailures.tsx
+msgid "Tracking number needed"
+msgstr "Tracking number needed"
+
+#: src/features/admin/AuditPage.tsx
+#: src/features/commerce/timeline.tsx
 #: src/features/incidents/IncidentState.tsx
 msgid "Tracking relay"
 msgstr "Tracking relay"
 
+#: src/features/admin/TrackingSync.tsx
 #: src/features/commerce/ShippingPage.tsx
 msgid "Tracking sync"
 msgstr "Tracking sync"
 
-#: src/features/commerce/ShippingPage.tsx
-msgid "Tracking sync and on-time delivery arrive with fulfilment. Until then, tracking numbers are read from Etsy with each order, and nothing is synced from here."
-msgstr "Tracking sync and on-time delivery arrive with fulfilment. Until then, tracking numbers are read from Etsy with each order, and nothing is synced from here."
+#: src/features/admin/TrackingSync.tsx
+msgid "Tracking Sync has not run in the last seven days. Tracking numbers are read from Etsy with each order until it does."
+msgstr "Tracking Sync has not run in the last seven days. Tracking numbers are read from Etsy with each order until it does."
 
 #: src/shared/demo/office.ts
 msgid "Tracking sync is down"
 msgstr "Tracking sync is down"
+
+#: src/features/admin/TrackingSync.tsx
+msgid "Tracking Sync's status could not be loaded. Try again shortly."
+msgstr "Tracking Sync's status could not be loaded. Try again shortly."
+
+#: src/features/admin/TrackingSync.tsx
+msgid "Tracking Sync's status is not available on this server yet."
+msgstr "Tracking Sync's status is not available on this server yet."
 
 #: src/features/shops/Capabilities.tsx
 msgid "Tracking upload"
@@ -6145,8 +6488,11 @@ msgstr "Triggers"
 
 #: src/app/RouteStates.tsx
 #: src/app/shell/NotificationBell.tsx
+#: src/features/admin/AuditPage.tsx
 #: src/features/admin/AutomationsPage.tsx
+#: src/features/admin/EmailFailures.tsx
 #: src/features/admin/OperationsPage.tsx
+#: src/features/admin/TrackingSync.tsx
 #: src/features/incidents/IncidentsPage.tsx
 #: src/features/incidents/RelayPage.tsx
 #: src/features/overview/OverviewPage.tsx
@@ -6416,6 +6762,8 @@ msgstr "What waits to ship and what shipped, live from Etsy."
 msgid "What works today"
 msgstr "What works today"
 
+#: src/features/admin/AuditPage.tsx
+#: src/features/admin/EmailFailures.tsx
 #: src/features/admin/OperationsPage.tsx
 msgid "When"
 msgstr "When"
@@ -6440,9 +6788,17 @@ msgstr "Where is my order? #3152"
 msgid "Where orders go"
 msgstr "Where orders go"
 
+#: src/features/admin/EmailFailures.tsx
+msgid "Which emails"
+msgstr "Which emails"
+
 #: src/features/office/ChatPage.tsx
 msgid "Which ones are late? Can we do something for the customers?"
 msgstr "Which ones are late? Can we do something for the customers?"
+
+#: src/features/admin/AuditPage.tsx
+msgid "Who did what"
+msgstr "Who did what"
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "Windows"
@@ -6490,6 +6846,7 @@ msgstr "Working"
 msgid "Works"
 msgstr "Works"
 
+#: src/features/admin/AuditPage.tsx
 #: src/features/team/TeamPage.tsx
 #: src/shared/ui/WorkspacePicker.tsx
 msgid "Workspace"
