@@ -27,6 +27,8 @@ allowBuilds:
 # scoped to the vulnerable range, so it lifts only the affected versions to the first fix.
 # undici via jsdom: GHSA-xjj6-f33q-929c (fixed in 8.12.2).
 # zod via eslint-plugin-react-hooks: GHSA-mrhx-c7xc-m3w5 (fixed in 4.6.6).
+# qs via style-dictionary > url: GHSA-6pq8-jhm2-2vcw (fixed in 6.16.1).
 overrides:
   "undici@>=8 <8.12.2": "8.12.2"
   "zod@>=4 <4.6.6": "4.6.6"
+  "qs@>=6.16.0 <6.16.1": "6.16.1"
