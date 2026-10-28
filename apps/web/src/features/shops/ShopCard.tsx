@@ -291,7 +291,7 @@ export function ShopCard({
             <span className="min-w-0">{health(integration)}</span>
           </p>
         ) : null}
-        {low && budget !== undefined && budget !== null ? (
+        {low ? (
           <p
             role="note"
             data-tone="attention"

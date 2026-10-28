@@ -116,7 +116,8 @@ export function fakeAuditEntries(
   // Minutes ago grow with each record, so the newest is first: hours, then days.
   const steps = [3, 26, 75, 160, 600, 1500, 3000, 9000, 30000];
   return Array.from({ length: count }, (_, n) => {
-    const template = base[n % base.length] as (typeof base)[number];
+    const template = base[n % base.length];
+    if (template === undefined) throw new Error("no record");
     const minutes = (steps[n % steps.length] ?? 0) + Math.floor(n / steps.length) * 40_000;
     return { ...template, id: id(n + 1), occurred_at: iso(now, minutes) };
   });

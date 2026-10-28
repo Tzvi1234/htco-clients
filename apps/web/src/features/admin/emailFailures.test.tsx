@@ -149,7 +149,8 @@ describe("failed emails on Admin › Health (AC-6.4.3)", () => {
   it("keeps nothing in storage, and the address bar names no email", async () => {
     const { backend } = await open();
     await within(await panel()).findByRole("table", { name: "Failed emails" });
-    expect(JSON.stringify({ ...localStorage })).not.toContain("***@");
+    const stored = Object.keys(localStorage).map((key) => localStorage.getItem(key) ?? "");
+    expect(stored.join("|")).not.toContain("***@");
     expect(window.location.href).not.toContain("@");
     expect(calls(backend).every((r) => !r.url.includes("@"))).toBe(true);
   });
