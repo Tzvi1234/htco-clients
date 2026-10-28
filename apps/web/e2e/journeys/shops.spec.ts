@@ -81,6 +81,11 @@ for (const [locale, scheme] of [
               : "Etsy checks are unavailable right now. Try again in a few minutes.",
         ),
       ).toBeVisible();
+      // No pointer hover or focus left on the button: the screenshot shows the card's state only.
+      await page.mouse.move(0, 0);
+      await page.evaluate(() => {
+        if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+      });
       await card.scrollIntoViewIfNeeded();
       await checkpoint(page, `shop-card-${state}-${locale}-${scheme}`);
     });
