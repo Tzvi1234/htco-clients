@@ -32,7 +32,7 @@ for (const locale of ["he", "en"] as const) {
     await panel.getByRole("button", { name: he ? "בדיקה ושמירה" : "Check and save" }).click();
     await expect(page.getByText(he ? /^נבדק ונשמר/ : /^Checked and saved/)).toBeVisible();
 
-    await page.getByRole("tab", { name: he ? /העתקה ל-Etsy/ : /Copy into Etsy/ }).click();
+    await page.getByRole("tab", { name: he ? /העתקה ל־Etsy/ : /Copy into Etsy/ }).click();
     await page.getByRole("row", { name: /#3480977163/ }).click();
     const ready = page.getByRole("region", {
       name: he ? "הזמנה #3480977163" : "Order #3480977163",
