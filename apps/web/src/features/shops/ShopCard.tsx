@@ -1,7 +1,7 @@
 import { Plural, Trans, useLingui } from "@lingui/react/macro";
 import { useId, type ReactNode } from "react";
 
-import type { IntegrationView, ShopView } from "../../shared/api/api.tsx";
+import type { EtsyQuota, IntegrationView, ShopView } from "../../shared/api/api.tsx";
 import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
 import { cx } from "../../shared/lib/cx.ts";
 import { Ltr } from "../../shared/ui/Ltr.tsx";
@@ -70,6 +70,36 @@ function Detail({
       <dt className="shrink-0 text-caption font-light text-muted">{label}</dt>
       <dd className="m-0 min-w-0 text-end text-body-sm">{children}</dd>
     </div>
+  );
+}
+
+/**
+ * Etsy's daily request budget (AC-4.1.2), the app's and not the shop's: what is left today of the
+ * daily limit, as last seen on Etsy's answers. Below the floor the server defers routine reads
+ * until the budget resets, so the card says so in the attention tone; urgent reads still run.
+ */
+function QuotaDetail({ quota, low }: { quota: EtsyQuota; low: boolean }) {
+  const count = useCount();
+  const known = quota.remaining_today !== null && quota.limit_per_day !== null;
+  return (
+    <Detail label={<Trans>Etsy requests left today</Trans>}>
+      <span className="inline-flex items-center gap-2" data-quota={low ? "low" : "ok"}>
+        <Dot tone={!known ? "muted" : low ? "attention" : "success"} />
+        {quota.remaining_today === null ? (
+          <span className="text-muted">
+            <Trans>Not known until the first Etsy call</Trans>
+          </span>
+        ) : quota.limit_per_day === null ? (
+          <N>{count(quota.remaining_today)}</N>
+        ) : (
+          <span>
+            <Trans>
+              <N>{count(quota.remaining_today)}</N> of <N>{count(quota.limit_per_day)}</N>
+            </Trans>
+          </span>
+        )}
+      </span>
+    </Detail>
   );
 }
 
@@ -158,8 +188,11 @@ export function ShopCard({
   remove,
   detailsLoading = false,
   live,
+  quota,
 }: {
   shop: ShopView;
+  /** Etsy's daily request budget (the app's), for a connected shop; null before the first call. */
+  quota?: EtsyQuota | null | undefined;
   /** The shop's live numbers; undefined when not asked (a disconnected shop). */
   live?: ShopLive | undefined;
   /** The connection details are still on their way: their rows show as placeholders. */
@@ -180,6 +213,7 @@ export function ShopCard({
 }) {
   const { t } = useLingui();
   const { locale } = useLocale();
+  const count = useCount();
   const titleId = useId();
 
   const statusLabel: Record<IntegrationView["status"], string> = {
@@ -214,6 +248,9 @@ export function ShopCard({
   }
 
   const asleep = integration?.status === "disconnected";
+  // The budget matters only while the shop is read from Etsy.
+  const budget = integration?.status === "connected" && !detailsLoading ? quota : undefined;
+  const low = budget?.below_floor === true;
 
   return (
     <Panel as="article" labelledBy={titleId}>
@@ -252,6 +289,20 @@ export function ShopCard({
           >
             <span aria-hidden="true" className="size-2 shrink-0 rounded-pill bg-tertiary" />
             <span className="min-w-0">{health(integration)}</span>
+          </p>
+        ) : null}
+        {low && budget !== undefined && budget !== null ? (
+          <p
+            role="note"
+            data-tone="attention"
+            className="m-0 flex items-center gap-2.5 rounded-card bg-attention-subtle px-4 py-3 text-body-sm"
+          >
+            <Dot tone="attention" />
+            <span className="min-w-0">
+              {budget.remaining_today === null
+                ? t`Etsy's daily request budget is below its floor. Routine reads wait until it resets; urgent ones still run.`
+                : t`Etsy's daily request budget is low: ${count(budget.remaining_today)} left, under the floor of ${count(budget.floor)}. Routine reads wait until it resets; urgent ones still run.`}
+            </span>
           </p>
         ) : null}
         {live === undefined || asleep ? null : <LiveTiles live={live} />}
@@ -305,6 +356,9 @@ export function ShopCard({
                   </ul>
                 )}
               </Detail>
+              {budget === undefined || budget === null ? null : (
+                <QuotaDetail quota={budget} low={low} />
+              )}
               {asleep && integration.purge_after != null ? (
                 <Detail label={<Trans>Data</Trans>}>
                   <time dateTime={integration.purge_after}>

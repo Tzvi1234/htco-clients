@@ -11,11 +11,15 @@ import {
   fakeRuns,
   type FakeOperations,
 } from "./fakeOperations.ts";
+import { filterAudit, page } from "./fakeAudit.ts";
 import { fakeRelay, relayRoutes, type FakeRelay } from "./fakeRelay.ts";
 import { fakeShopData, type FakePeriod } from "./fakeShopData.ts";
 
 type IntegrationView = components["schemas"]["IntegrationView"];
 type CapabilityView = components["schemas"]["CapabilityView"];
+type EtsyQuota = components["schemas"]["EtsyQuotaView"];
+type AuditEntry = components["schemas"]["AuditEntryView"];
+type FailedEmail = components["schemas"]["FailedEmailView"];
 
 /** The rebuilds started: each request's key and body, and each execution's state. */
 export interface FakeRecounts {
@@ -185,6 +189,34 @@ export interface FakeState {
   automationsOff?: boolean;
   /** The AutoVA tracking relay (slice 6.10): its items, pastes and audited reveals. */
   relay: FakeRelay;
+  /** Etsy's daily request budget on `GET /v1/shop-integrations` (AC-4.1.2); null before the
+   * first Etsy call. */
+  etsyQuota: EtsyQuota | null;
+  /** "hang": a re-check never answers (the probes still running); "fail": Etsy is unavailable. */
+  recheckTrouble?: "hang" | "fail" | undefined;
+  /** The organization's audit records (`GET /v1/audit-log`), newest first. */
+  audit: AuditEntry[];
+  /** "fail": the audit log answers 503 audit-unavailable; "hang": it never answers. */
+  auditTrouble?: "fail" | "hang" | undefined;
+  /** The queries of `GET /v1/audit-log`, in order. */
+  auditQueries: string[];
+  /** Emails refused for good or skipped (`GET /v1/operations/email-failures`). */
+  emailFailures: FailedEmail[];
+  /** "fail": the failed emails answer 503 operations-unavailable; "hang": never. */
+  emailFailuresTrouble?: "fail" | "hang" | undefined;
+  /** Tracking Synchronization's last seven days on the health read and its runs: running well,
+   * or failing (dead letters). Unset: it has not run. */
+  trackingSync?: "running" | "failing" | undefined;
+  /** Routes ("POST /v1/…" or a part of one) whose next call answers 503 once, as a lost answer
+   * would look; each entry is used up by the call it fails. */
+  failNext?: string[] | undefined;
+}
+
+/** The `Idempotency-Key` header of every call to a route, in order (platform PR #223). */
+export function idempotencyKeys(requests: readonly Request[], method: string, path: RegExp) {
+  return requests
+    .filter((r) => r.method === method && path.test(new URL(r.url).pathname))
+    .map((r) => r.headers.get("Idempotency-Key"));
 }
 
 const PROBLEMS = "https://ht-co.app/problems/";
@@ -367,6 +399,10 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
     resyncs: [],
     operations: fakeOperations(),
     relay: fakeRelay(),
+    etsyQuota: null,
+    audit: [],
+    auditQueries: [],
+    emailFailures: [],
     ...initial,
   };
   const requests: Request[] = [];
@@ -420,6 +456,11 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
       return json(200, { user_id: user, assurance: state.assurance });
     }
     if (!state.signedIn) return problem(401, "session-ended");
+    const failing = state.failNext?.findIndex((part) => route.includes(part)) ?? -1;
+    if (failing >= 0) {
+      state.failNext?.splice(failing, 1);
+      return problem(503, "unavailable");
+    }
 
     const orgRoute = /^(GET|POST) \/v1\/organizations\/([^/]+)\/(members|invitations)$/.exec(route);
     if (orgRoute !== null) {
@@ -483,6 +524,8 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
       if (action === "capability-checks") {
         if (state.role !== "owner" && state.role !== "admin") return problem(403, "forbidden");
         if (integration.status !== "connected") return notConnected(integration);
+        if (state.recheckTrouble === "hang") return new Promise<Response>(() => undefined);
+        if (state.recheckTrouble === "fail") return problem(503, "etsy-unavailable");
         if (state.recheckTooSoon)
           return new Response(
             JSON.stringify({
@@ -607,12 +650,33 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
       /^GET \/v1\/executions\/[^/]+$/.test(route) ||
       /^POST \/v1\/automations\/[^/]+\/executions\/[^/]+\/retry$/.test(route) ||
       route === "GET /v1/automations" ||
-      /^GET \/v1\/automations\/[^/]+\/executions$/.test(route);
+      /^GET \/v1\/automations\/[^/]+\/executions$/.test(route) ||
+      route === "GET /v1/operations/email-failures" ||
+      route === "GET /v1/audit-log";
     const named = url.searchParams.get("organization_id");
     if (operational && named === null && state.otherOrgs.length > 0)
       return problem(400, "organization-required");
     const workspace = named ?? org;
     const admin = workspace === org ? state.role === "owner" || state.role === "admin" : true;
+    // The audit view (AC-3.9.3) and the failed emails (AC-6.4.3): the Owner and Admins only;
+    // another workspace of the user has no records yet.
+    if (route === "GET /v1/audit-log") {
+      state.auditQueries.push(url.search);
+      if (!admin) return problem(403, "forbidden");
+      if (state.auditTrouble === "hang") return new Promise<Response>(() => undefined);
+      if (state.auditTrouble === "fail") return problem(503, "audit-unavailable");
+      const records = workspace === org ? filterAudit(state.audit, url.searchParams) : [];
+      return json(200, page(records, url.searchParams, 50));
+    }
+    if (route === "GET /v1/operations/email-failures") {
+      if (!admin) return problem(403, "forbidden");
+      if (state.emailFailuresTrouble === "hang") return new Promise<Response>(() => undefined);
+      if (state.emailFailuresTrouble === "fail") return problem(503, "operations-unavailable");
+      const status = url.searchParams.get("status") ?? "failed";
+      const emails =
+        workspace === org ? state.emailFailures.filter((e) => e.status === status) : [];
+      return json(200, page(emails, url.searchParams, 50));
+    }
     // The registry and the runs: every role that sees the office (the runs of granted shops).
     if (route === "GET /v1/automations") {
       if (state.automationsOff === true) return problem(503, "automations-unavailable");
@@ -632,14 +696,20 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
     }
     const runs = /^GET \/v1\/automations\/([^/]+)\/executions$/.exec(route);
     if (runs !== null) {
-      const ops = workspace === org ? state.operations : fakeOperations("calm");
+      const ops =
+        workspace === org
+          ? { ...state.operations, trackingSync: state.trackingSync }
+          : fakeOperations("calm");
       return json(200, { items: fakeRuns(runs[1] ?? "", state.shops, ops), next_cursor: null });
     }
     if (route === "GET /v1/operations/health") {
       if (!admin) return problem(403, "forbidden");
       if (state.healthTrouble === "fail") return problem(503, "operations-unavailable");
       // Another workspace of the user runs calmly: switching shows its own numbers.
-      const ops = workspace === org ? state.operations : fakeOperations("calm");
+      const ops =
+        workspace === org
+          ? { ...state.operations, trackingSync: state.trackingSync }
+          : fakeOperations("calm");
       return json(200, fakeHealth(workspace, state.shops, ops));
     }
     const deadRetry = /^POST \/v1\/operations\/dead-letters\/([^/]+)\/retry$/.exec(route);
@@ -776,7 +846,7 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
         if (state.role !== "owner" && state.role !== "admin") return problem(403, "forbidden");
         if (state.integrationsTrouble === "hang") return new Promise<Response>(() => undefined);
         if (state.integrationsTrouble === "fail") return problem(500, "internal-error");
-        return json(200, { items: state.integrations });
+        return json(200, { items: state.integrations, etsy_quota: state.etsyQuota });
       case "POST /v1/shops/etsy/connect":
         if (state.role !== "owner") return problem(403, "forbidden");
         if (state.assurance !== "aal2") return problem(403, "mfa-required");
@@ -1045,6 +1115,32 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
                 ]
               : []),
           ];
+    // Each parcel's tracking as Tracking Synchronization first saw it (AC-6.1.2): every role sees
+    // the carrier and the code's last four characters, never the code (read for all roles here).
+    const full = fakeShopData(shopId, shop.name, Date.now(), true, state.liveBusy === true)
+      .ordersFor(null, 10_000, 0, "all")
+      .items.find((o) => o.order_id === orderId);
+    const carrierNames: Record<string, string> = {
+      usps: "USPS",
+      "israel-post": "Israel Post",
+      dhl: "DHL",
+    };
+    const tracking = !stored
+      ? []
+      : (full?.shipments ?? []).flatMap((parcel, index) =>
+          parcel.tracking_code === null
+            ? []
+            : [
+                {
+                  carrier: parcel.carrier,
+                  carrier_name: carrierNames[parcel.carrier] ?? parcel.carrier,
+                  last4: parcel.tracking_code.replace(/\s/g, "").slice(-4),
+                  source: index === 0 ? "etsy" : "autova_manual",
+                  observed_via: index === 0 ? "webhook" : "relay",
+                  first_observed_at: parcel.shipped_at,
+                },
+              ],
+        );
     return json(200, {
       source: stored ? "htco_store" : "etsy_live",
       fetched_at: stored ? at : new Date(Date.now() - 90_000).toISOString(),
@@ -1052,6 +1148,7 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
       shop_id: shopId,
       order,
       timeline,
+      tracking,
       buyer_details: contact,
       sync: stored ? { state: "complete", orders_stored: every.total, last_synced_at: at } : null,
       last_synced_at: stored ? at : null,

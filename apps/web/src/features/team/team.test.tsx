@@ -5,7 +5,9 @@ import { describe, expect, it, vi } from "vitest";
 
 import { App } from "../../app/App.tsx";
 import { memoryStorage } from "../../shared/lib/storage.ts";
-import { fakeBackend, type FakeState } from "../../test/fakeApi.ts";
+import { fakeBackend, idempotencyKeys, type FakeState } from "../../test/fakeApi.ts";
+
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
 
 /** The item at `index`, failing the test when there is none. */
 function nth<T>(list: readonly T[], index: number): T {
@@ -71,6 +73,44 @@ describe("the team (FR-IAM-02)", () => {
     expect(screen.getByRole("button", { name: "Copy link" })).toBeInTheDocument();
     expect(backend.state.invited).toEqual([{ email: "dana@example.test", role: "admin" }]);
     expect(await memberRows()).toHaveLength(2);
+  });
+
+  it("sends the invitation with an Idempotency-Key, the same one when it is sent again (#223)", async () => {
+    const { user, backend } = await open("/settings/team", {
+      ...owner,
+      failNext: ["/invitations"],
+    });
+
+    await user.type(await screen.findByLabelText("Email"), "dana@example.test");
+    await user.click(screen.getByRole("button", { name: "Invite" }));
+    await screen.findByText("Invitations cannot be sent right now. Try again shortly.");
+    await user.click(screen.getByRole("button", { name: "Invite" }));
+    await screen.findByRole("textbox", { name: "Invitation link" });
+
+    const keys = idempotencyKeys(backend.requests, "POST", /\/invitations$/);
+    expect(keys).toHaveLength(2);
+    expect(keys[0]).toMatch(UUID);
+    expect(keys[1]).toBe(keys[0]);
+  });
+
+  it("a changed address is a new invitation with a new Idempotency-Key (#223)", async () => {
+    const { user, backend } = await open("/settings/team", {
+      ...owner,
+      failNext: ["/invitations"],
+    });
+
+    const email = await screen.findByLabelText("Email");
+    await user.type(email, "dana@example.test");
+    await user.click(screen.getByRole("button", { name: "Invite" }));
+    await screen.findByText("Invitations cannot be sent right now. Try again shortly.");
+    await user.clear(email);
+    await user.type(email, "noam@example.test");
+    await user.click(screen.getByRole("button", { name: "Invite" }));
+    await screen.findByRole("textbox", { name: "Invitation link" });
+
+    const [first, second] = idempotencyKeys(backend.requests, "POST", /\/invitations$/);
+    expect(second).toMatch(UUID);
+    expect(second).not.toBe(first);
   });
 
   it("is offered from Settings to Owners and Admins only", async () => {

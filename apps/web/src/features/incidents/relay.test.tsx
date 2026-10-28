@@ -6,7 +6,12 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { App } from "../../app/App.tsx";
 import { memoryStorage } from "../../shared/lib/storage.ts";
-import { fakeBackend, fakeIntegration, type FakeState } from "../../test/fakeApi.ts";
+import {
+  fakeBackend,
+  fakeIntegration,
+  idempotencyKeys,
+  type FakeState,
+} from "../../test/fakeApi.ts";
 import { fakeRelay, fakeRelayItem, type FakeRelayItem } from "../../test/fakeRelay.ts";
 
 // The AutoVA tracking relay (platform slice 6.10): the orders waiting for a number, the owner's
@@ -143,6 +148,34 @@ describe("the orders waiting for tracking (AC-6.10.1)", () => {
   it("shows its loading state while the list is on its way", async () => {
     await open({ relay: fakeRelay(items(), { trouble: "hang" }) });
     expect(await screen.findByText("Loading the orders…")).toBeVisible();
+  });
+});
+
+describe("the paste's Idempotency-Key (platform PR #223)", () => {
+  it("is the same when the same paste is sent again, and new for a changed number", async () => {
+    const { user, backend } = await open({
+      failNext: ["POST /v1/relay-items", "POST /v1/relay-items"],
+    });
+    const panel = await orderPanel("3481220917");
+    await pasteInto(user, panel, "Yun Express", GOOD);
+    await within(panel).findByRole("alert");
+    await user.click(within(panel).getByRole("button", { name: "Check and save" }));
+    await vi.waitFor(() => {
+      expect(idempotencyKeys(backend.requests, "POST", /\/tracking$/)).toHaveLength(2);
+    });
+    const field = within(panel).getByRole("textbox", { name: "Tracking number" });
+    await user.clear(field);
+    await user.type(field, PASTED);
+    await user.click(within(panel).getByRole("button", { name: "Check and save" }));
+    await screen.findByText(/^Checked and saved/);
+
+    const keys = idempotencyKeys(backend.requests, "POST", /\/relay-items\/[^/]+\/tracking$/);
+    expect(keys).toHaveLength(3);
+    expect(keys[0]).toMatch(/^[0-9a-f-]{36}$/);
+    expect(keys[1]).toBe(keys[0]);
+    expect(keys[2]).not.toBe(keys[0]);
+    // The number never travels in the key.
+    for (const key of keys) expect(key).not.toContain(GOOD);
   });
 });
 

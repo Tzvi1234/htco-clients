@@ -29,7 +29,11 @@ const api =
         const { demoShops, fakeBackend } = await import("./test/fakeApi.ts");
         const { demoIncidents, demoNotifications } = await import("./test/fakeIncidents.ts");
         const { demoRelay } = await import("./test/fakeRelay.ts");
+        const { fakeAuditEntries, fakeEmailFailures } = await import("./test/fakeAudit.ts");
         if (demo === "signed-out") return fakeBackend().client;
+        // `?demo=probing` / `?demo=probe-error`: the shops, where a re-check never finishes or
+        // Etsy is unavailable for it (the shop card's probing and error states, AC-4.6.2).
+        const shopsDemo = demo === "shops" || demo === "probing" || demo === "probe-error";
         // Signed in with a password only: the authenticator code step.
         if (demo === "mfa")
           return fakeBackend({ signedIn: true, enrolled: true, assurance: "aal1" }).client;
@@ -39,22 +43,36 @@ const api =
           enrolled: true,
           assurance: "aal2",
           authorizationUrl: `/integrations/etsy/callback?code=demo-code&state=demo-state&demo=${demo}`,
-          ...(demo === "shops" || demo === "history"
+          ...(shopsDemo || demo === "history"
             ? (() => {
                 const shops = demoShops();
                 // The incident center and the bell: three open incidents, one resolved; the
-                // tracking relay: two orders waiting for a number, one ready for Etsy.
+                // tracking relay: two orders waiting for a number, one ready for Etsy; the
+                // audit view, the failed emails, Etsy's daily budget and Tracking Sync's week.
                 const ids = shops.shops.map((shop) => shop.id);
+                const org = "a0000000-0000-7000-8000-000000000000";
                 return {
                   ...shops,
                   incidents: demoIncidents(ids),
                   notifications: demoNotifications(ids),
                   relay: demoRelay(ids),
+                  audit: fakeAuditEntries(org, shops.shops, Date.now(), 64),
+                  emailFailures: fakeEmailFailures(shops.shops),
+                  etsyQuota: {
+                    limit_per_day: 10_000,
+                    remaining_today: 8_412,
+                    observed_at: new Date(Date.now() - 4 * 60_000).toISOString(),
+                    floor: 500,
+                    below_floor: false,
+                  },
+                  trackingSync: "running" as const,
                 };
               })()
             : {}),
           // `?demo=shops`: the orders come from the stored history (slice 5.6).
-          ...(demo === "shops" ? { orderStore: true } : {}),
+          ...(shopsDemo ? { orderStore: true } : {}),
+          ...(demo === "probing" ? { recheckTrouble: "hang" as const } : {}),
+          ...(demo === "probe-error" ? { recheckTrouble: "fail" as const } : {}),
           // `?demo=history`: every order is older than 30 days (the owner's live shop).
           ...(demo === "history" ? { liveTrouble: "history" as const } : {}),
         }).client;

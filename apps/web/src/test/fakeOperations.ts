@@ -26,6 +26,25 @@ export interface FakeOperations {
   retriedExecutions: string[];
   /** Set: an execution retry answers only once this promise settles (a slow connection). */
   hold?: Promise<unknown>;
+  /** Tracking Synchronization's week: running well, or failing; unset, it has not run. */
+  trackingSync?: "running" | "failing" | undefined;
+}
+
+export const TRACKING_SYNC = "tracking-sync";
+export const TRACKING_DEAD = "0e000000-0000-7000-8000-0000000000f7";
+
+/** Tracking Synchronization's metrics of the last seven days on the health read. */
+function trackingMetrics(mode: "running" | "failing") {
+  return {
+    automation_id: TRACKING_SYNC,
+    executions: mode === "running" ? 96 : 41,
+    succeeded: mode === "running" ? 96 : 35,
+    dead_lettered: mode === "running" ? 0 : 2,
+    retries: mode === "running" ? 1 : 9,
+    success_rate: mode === "running" ? "100.0" : "85.4",
+    p50_seconds: 2.1,
+    p95_seconds: 7.9,
+  };
 }
 
 export function fakeOperations(scene: FakeScene = "dead"): FakeOperations {
@@ -172,6 +191,7 @@ export function fakeHealth(
         p50_seconds: 0.2,
         p95_seconds: 0.6,
       },
+      ...(ops.trackingSync === undefined ? [] : [trackingMetrics(ops.trackingSync)]),
     ],
   };
 }
@@ -359,6 +379,13 @@ export function fakeRuns(
     return [
       run("0e000000-0000-7000-8000-0000000000e3", "succeeded", 6),
       run("0e000000-0000-7000-8000-0000000000e4", "succeeded", 48),
+    ];
+  if (automationId === TRACKING_SYNC && ops.trackingSync !== undefined)
+    return [
+      ...(ops.trackingSync === "failing" ? [run(TRACKING_DEAD, "dead_lettered", 12, 5)] : []),
+      run("0e000000-0000-7000-8000-0000000000f1", "succeeded", 15),
+      run("0e000000-0000-7000-8000-0000000000f2", "succeeded", 30),
+      run("0e000000-0000-7000-8000-0000000000f3", "succeeded", 45),
     ];
   return [];
 }

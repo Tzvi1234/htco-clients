@@ -189,16 +189,31 @@ export function shopsQuery(api: ApiClient, organizationId: string) {
   });
 }
 
-/** Each shop's marketplace connection: status, scopes and token health, never a token. */
-export function integrationsQuery(api: ApiClient, organizationId: string) {
+export type IntegrationList = components["schemas"]["IntegrationList"];
+/** Etsy's daily request budget, the app's (one per list, not per shop): AC-4.1.2. */
+export type EtsyQuota = components["schemas"]["EtsyQuotaView"];
+
+/**
+ * The shops' marketplace connections as the API lists them: each shop's status, scopes and token
+ * health (never a token), and Etsy's remaining daily request budget with its floor.
+ */
+export function integrationListQuery(api: ApiClient, organizationId: string) {
   return queryOptions({
     queryKey: shopKeys.integrations(organizationId),
-    queryFn: async (): Promise<IntegrationView[]> => {
+    queryFn: async (): Promise<IntegrationList> => {
       const { data, error, response } = await api.GET("/v1/shop-integrations", {
         params: { query: { organization_id: organizationId } },
       });
       if (data === undefined) throw apiError(response, error);
-      return data.items;
+      return data;
     },
+  });
+}
+
+/** Each shop's marketplace connection: status, scopes and token health, never a token. */
+export function integrationsQuery(api: ApiClient, organizationId: string) {
+  return queryOptions({
+    ...integrationListQuery(api, organizationId),
+    select: (list: IntegrationList): IntegrationView[] => list.items,
   });
 }
