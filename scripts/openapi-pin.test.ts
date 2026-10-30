@@ -4,7 +4,14 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
-import { asPinned, checkPin, firstDifference, parsePin, rawUrl } from "./openapi-pin.ts";
+import {
+  asPinned,
+  checkPin,
+  fetchPinned,
+  firstDifference,
+  parsePin,
+  rawUrl,
+} from "./openapi-pin.ts";
 
 // Architecture audit 2026-10-23, finding 8.1: the pinned OpenAPI copy must not drift from the
 // platform commit it names.
@@ -26,8 +33,9 @@ function repository(copy: string): string {
 }
 
 const serving = (text: string, status = 200): typeof fetch =>
-  ((url: string) => {
+  ((url: string, init?: RequestInit) => {
     expect(url).toBe(rawUrl(PIN));
+    expect(init?.signal).toBeInstanceOf(AbortSignal);
     return Promise.resolve(new Response(text, { status }));
   }) as typeof fetch;
 
@@ -63,6 +71,17 @@ describe("the pinned OpenAPI copy (finding 8.1)", () => {
 
   it("fails when the pinned commit cannot be read", async () => {
     await expect(checkPin(repository(""), serving("", 404))).rejects.toThrow(/answered 404/);
+  });
+
+  it("gives up on a stalled answer after its timeout instead of waiting for the job", async () => {
+    // A server that never answers until the request is aborted.
+    const stalled = ((_url: string, init?: RequestInit) =>
+      new Promise<Response>((_resolve, reject) => {
+        init?.signal?.addEventListener("abort", () => {
+          reject(init.signal?.reason as Error);
+        });
+      })) as typeof fetch;
+    await expect(fetchPinned(PIN, stalled, 20)).rejects.toThrow(/timed out|abort/i);
   });
 
   it("finds the first differing line, and none when equal", () => {

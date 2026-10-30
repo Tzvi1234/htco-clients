@@ -47,8 +47,15 @@ export async function asPinned(text: string, file = SPEC_FILE): Promise<string> 
   return format(text, { ...options, parser: "yaml" });
 }
 
-export async function fetchPinned(pin: Pin, fetcher: typeof fetch = fetch): Promise<string> {
-  const response = await fetcher(rawUrl(pin));
+/** How long the raw file may take: a stalled answer fails fast, not at the job's timeout. */
+export const FETCH_TIMEOUT_MS = 30_000;
+
+export async function fetchPinned(
+  pin: Pin,
+  fetcher: typeof fetch = fetch,
+  timeoutMs = FETCH_TIMEOUT_MS,
+): Promise<string> {
+  const response = await fetcher(rawUrl(pin), { signal: AbortSignal.timeout(timeoutMs) });
   if (!response.ok)
     throw new Error(`${rawUrl(pin)} answered ${String(response.status)}; is the commit pushed?`);
   return response.text();
