@@ -133,4 +133,35 @@ describe("Orders: export and re-sync (slice 5.7)", () => {
       await screen.findByText("Your role may see these orders but not re-sync them."),
     ).toBeInTheDocument();
   });
+
+  // A selection belongs to the view it was made in: a new period, filter or search replaces the
+  // visible orders, so the orders picked before can no longer be sent by a bulk action.
+  for (const change of ["period", "filter", "search"] as const) {
+    it(`clears the selection when the ${change} changes, so hidden orders are never sent`, async () => {
+      const { user, backend } = await open();
+      const table = await screen.findByRole("table", { name: "Orders" });
+      const [first, second] = within(table).getAllByRole("checkbox", { name: /^Select order / });
+      if (first === undefined || second === undefined) throw new Error("no orders");
+      await user.click(first);
+      await user.click(second);
+      expect(screen.getByRole("button", { name: "Re-sync selected" })).toBeEnabled();
+
+      if (change === "period") await user.click(screen.getByRole("radio", { name: "All time" }));
+      else if (change === "filter")
+        await user.click(
+          within(screen.getByRole("group", { name: "Status" })).getByRole("button", {
+            name: /^Paid/,
+          }),
+        );
+      else await user.type(screen.getByRole("searchbox", { name: "Find an order" }), "1");
+
+      await vi.waitFor(() => {
+        expect(screen.getByRole("button", { name: "Re-sync selected" })).toBeDisabled();
+      });
+      expect(screen.getByRole("button", { name: /^Export/ })).toHaveTextContent("Export to CSV");
+      for (const box of screen.queryAllByRole("checkbox", { name: /^Select order / }))
+        expect(box).not.toBeChecked();
+      expect(backend.state.resyncs).toEqual([]);
+    });
+  }
 });

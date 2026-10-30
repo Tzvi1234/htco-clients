@@ -211,13 +211,17 @@ function Orders({
       return next;
     });
   };
+  // A new period, filter or search replaces the visible orders: the selection starts again, so a
+  // bulk action never sends an order the list no longer shows.
   const choose = (f: OrderFilter | "all") => {
     setFilter(f);
     setShown(step);
+    setSelected(new Set());
   };
   const pickPeriod = (p: OrderPeriod) => {
     setPeriod(p);
     setShown(step);
+    setSelected(new Set());
   };
   const all = useQuery(ordersQuery(api, shopId, undefined, period));
   const overview = useQuery(overviewQuery(api, shopId));
@@ -517,6 +521,7 @@ function Orders({
             onChange={(value) => {
               setSearch(value);
               setShown(step);
+              setSelected(new Set());
             }}
             className="flex h-10 w-full max-w-[320px] items-center gap-2 rounded-pill border border-line-strong px-4 focus-within:outline-2 focus-within:outline-focus"
           >
@@ -841,7 +846,7 @@ function OrderRow({ order, onOpen }: { order: ShopOrder; onOpen: () => void }) {
  */
 function OrderSheet({
   shopId,
-  order,
+  order: summary,
   photos,
   incidents,
   onClose,
@@ -854,7 +859,10 @@ function OrderSheet({
 }) {
   const { t } = useLingui();
   const api = useApi();
-  const detail = useQuery(orderQuery(api, shopId, order.order_id));
+  const detail = useQuery(orderQuery(api, shopId, summary.order_id));
+  // The detail read is the current order (it may have shipped since the list was read); the
+  // list's row only stands in while it loads.
+  const order = detail.data?.order ?? summary;
   const money = useMoney();
   const date = useShortDate();
   const states = useOrderStates();

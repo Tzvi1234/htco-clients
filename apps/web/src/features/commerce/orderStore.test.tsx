@@ -104,6 +104,31 @@ describe("Orders on the stored history (slice 5.7)", () => {
     expect(tracking.textContent).not.toMatch(/9400 1118/);
   });
 
+  it("the sheet shows the order its detail read returns, newer than the list's row", async () => {
+    // The list was read while the order was paid; it shipped since, and the detail says so.
+    const { user } = await open({
+      orderDetailNewer: (order) => ({
+        ...order,
+        state: "shipped",
+        overdue: false,
+        shipments: [
+          { carrier: "Parcel Newer", shipped_at: "2026-10-14T08:00:00Z", tracking_code: "NW0001" },
+        ],
+      }),
+    });
+    const table = await screen.findByRole("table", { name: "Orders" });
+    const row = within(table)
+      .getAllByRole("row")
+      .find((r) => within(r).queryByText("Paid") !== null);
+    if (row === undefined) throw new Error("no paid order");
+    await user.click(within(row).getByRole("button", { name: /^Open order/ }));
+
+    const sheet = await screen.findByRole("dialog", { name: /^Order / });
+    expect(await within(sheet).findByText("Parcel Newer")).toBeInTheDocument();
+    expect(within(sheet).getByText("NW0001")).toBeInTheDocument();
+    expect(within(sheet).getAllByText("Shipped").length).toBeGreaterThan(0);
+  });
+
   it("AC-6.1.2: a role without buyer data still sees the carrier and the last four", async () => {
     const { user } = await open({ role: "viewer" });
 

@@ -178,6 +178,11 @@ export interface FakeState {
    * False or unset: read live from Etsy, as before the history is complete.
    */
   orderStore?: boolean;
+  /**
+   * The order one order's detail read returns, from the list's one: a newer state than the list
+   * was read with (it shipped since), as the order sheet must show. Unset: the same order.
+   */
+  orderDetailNewer?: ((order: Record<string, unknown>) => Record<string, unknown>) | undefined;
   /** The Orders screen's bulk actions (slice 5.7): each export's body, each re-sync's IDs. */
   exports: unknown[];
   resyncs: number[][];
@@ -1146,7 +1151,7 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
       fetched_at: stored ? at : new Date(Date.now() - 90_000).toISOString(),
       stale: false,
       shop_id: shopId,
-      order,
+      order: state.orderDetailNewer === undefined ? order : state.orderDetailNewer(order),
       timeline,
       tracking,
       buyer_details: contact,
