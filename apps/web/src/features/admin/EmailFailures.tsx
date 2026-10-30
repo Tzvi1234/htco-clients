@@ -4,17 +4,19 @@ import { useState, type ReactNode } from "react";
 
 import { ApiError, useApi } from "../../shared/api/api.tsx";
 import { emailFailuresQuery, type FailedStatus } from "../../shared/api/operations.ts";
+import { PHONE_QUERY, useMediaQuery } from "../../shared/lib/useMediaQuery.ts";
 import { Button } from "../../shared/ui/Button.tsx";
+import { PanelEmpty } from "../../shared/ui/EmptyState.tsx";
 import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
 import { DataTable, FilterChips, LiveSkeleton, Status } from "../../shared/ui/kit/index.ts";
 
-import { Code, useAgo } from "./execution.tsx";
+import { Code, LoadMore, useAgo } from "./execution.tsx";
 
 /**
  * Admin › Health's failed emails (platform PR #222, AC-6.4.3 and AC-6.5.6): emails the provider
- * refused for good, or never sent (skipped), newest first, beside the outbox failures. The
- * recipient is a member ID and an address the server masked; the full address and the body never
- * reach the client. The Owner and Admins only (the server decides; others get 403).
+ * refused for good, or never sent (skipped), newest first, beside the outbox failures: kind,
+ * reason, shop and time, never the address (not even masked) or the body (AC-6.5.6). On phones
+ * each email is one stacked row. The Owner and Admins only (the server decides; others get 403).
  */
 export function EmailFailures({
   organizationId,
@@ -26,6 +28,7 @@ export function EmailFailures({
   const { t } = useLingui();
   const api = useApi();
   const since = useAgo();
+  const phone = useMediaQuery(PHONE_QUERY);
   const [status, setStatus] = useState<FailedStatus>("failed");
   const emails = useInfiniteQuery(emailFailuresQuery(api, organizationId, status));
   const rows = emails.data?.pages.flatMap((page) => page.items) ?? [];
@@ -35,7 +38,8 @@ export function EmailFailures({
   };
 
   let body: ReactNode;
-  if (emails.isError) {
+  // A failed next page keeps the pages shown; only a failed first read replaces the list.
+  if (emails.isError && emails.data === undefined) {
     const code = emails.error instanceof ApiError ? emails.error.status : 0;
     body = (
       <div role="alert" className="flex flex-col items-center gap-3 px-6 py-8 text-center">
@@ -47,7 +51,7 @@ export function EmailFailures({
               : t`The failed emails could not be loaded. Try again shortly.`}
         </p>
         {code === 403 ? null : (
-          <Button onPress={() => void emails.refetch()}>
+          <Button size="touch" onPress={() => void emails.refetch()}>
             <Trans>Try again</Trans>
           </Button>
         )}
@@ -56,54 +60,81 @@ export function EmailFailures({
   } else if (emails.data === undefined) {
     body = <LiveSkeleton rows={3} label={t`Loading the failed emails`} />;
   } else if (rows.length === 0) {
-    body = (
-      <p className="m-0 px-6 pt-1 pb-6 text-body-sm text-secondary">
-        {status === "failed" ? t`No email was refused.` : t`No email was skipped.`}
-      </p>
-    );
+    body =
+      status === "failed" ? (
+        <PanelEmpty
+          title={t`No email was refused.`}
+          description={t`An email the provider refuses for good shows here, with its reason.`}
+        />
+      ) : (
+        <PanelEmpty
+          title={t`No email was skipped.`}
+          description={t`An email that could not be sent, such as to a member without a verified address, shows here.`}
+        />
+      );
   } else {
+    const kindOf = (value: string) => kind[value] ?? <Code>{value}</Code>;
+    const state = (value: FailedStatus) =>
+      value === "failed" ? (
+        <Status status="failed" label={t`Refused`} />
+      ) : (
+        <Status status="idle" label={t`Skipped`} />
+      );
     body = (
       <>
-        <DataTable
-          flow
-          label={t`Failed emails`}
-          phoneHidden={[2, 3]}
-          head={[t`Email`, t`Status`, t`Reason`, t`Shop`, t`To`, t`When`]}
-          rows={rows.map((email) => ({
-            key: email.id,
-            cells: [
-              <span key="k">{kind[email.kind] ?? <Code>{email.kind}</Code>}</span>,
-              email.status === "failed" ? (
-                <Status key="s" status="failed" label={t`Refused`} />
-              ) : (
-                <Status key="s" status="idle" label={t`Skipped`} />
-              ),
-              <Code key="r">{email.reason ?? "—"}</Code>,
-              <span key="sh" dir="auto">
-                {shopName(email.shop_id)}
-              </span>,
-              // The server's masked address, or the member ID when there is none to mask.
-              <Code key="to">{email.recipient ?? email.recipient_user_id.slice(0, 8)}</Code>,
-              <time key="t" dateTime={email.created_at}>
-                {since(email.created_at)}
-              </time>,
-            ],
-          }))}
-        />
+        {phone ? (
+          // Phones: one stacked row per email, nothing cut off at 375 px.
+          <ul aria-label={t`Failed emails`} className="m-0 flex list-none flex-col px-4 pb-3">
+            {rows.map((email) => (
+              <li
+                key={email.id}
+                className="flex min-h-11 flex-col gap-1 border-b border-line py-3 last:border-b-0"
+              >
+                <span className="flex items-baseline justify-between gap-3 text-body-sm">
+                  <span className="min-w-0">{kindOf(email.kind)}</span>
+                  <time className="shrink-0 text-caption text-muted" dateTime={email.created_at}>
+                    {since(email.created_at)}
+                  </time>
+                </span>
+                <span className="flex flex-wrap items-center gap-x-3 gap-y-1 text-caption text-secondary">
+                  {state(email.status)}
+                  <Code>{email.reason ?? "—"}</Code>
+                  <span dir="auto">{shopName(email.shop_id)}</span>
+                </span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <DataTable
+            flow
+            label={t`Failed emails`}
+            head={[t`Email`, t`Status`, t`Reason`, t`Shop`, t`When`]}
+            rows={rows.map((email) => ({
+              key: email.id,
+              cells: [
+                <span key="k">{kindOf(email.kind)}</span>,
+                <span key="s">{state(email.status)}</span>,
+                <Code key="r">{email.reason ?? "—"}</Code>,
+                <span key="sh" dir="auto">
+                  {shopName(email.shop_id)}
+                </span>,
+                <time key="t" dateTime={email.created_at}>
+                  {since(email.created_at)}
+                </time>,
+              ],
+            }))}
+          />
+        )}
         {emails.hasNextPage ? (
-          <div className="flex justify-center px-6 pb-6">
-            <Button
-              isPending={emails.isFetchingNextPage}
-              onPress={() => void emails.fetchNextPage()}
-            >
-              <Trans>Load more</Trans>
-            </Button>
-          </div>
+          <LoadMore
+            pending={emails.isFetchingNextPage}
+            failed={emails.isFetchNextPageError}
+            onMore={() => void emails.fetchNextPage()}
+          />
         ) : null}
       </>
     );
   }
-
   return (
     <Panel label={t`Failed emails`}>
       <PanelHeader title={<Trans>Failed emails</Trans>} meta={<Trans>Never the address</Trans>} />

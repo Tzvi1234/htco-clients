@@ -4,8 +4,7 @@ import { useId } from "react";
 import type { CapabilityView, IntegrationView } from "../../shared/api/api.tsx";
 import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
 import { Button } from "../../shared/ui/Button.tsx";
-import { StatusGlyph, type AgentStatus } from "../../shared/ui/kit/index.ts";
-import { FormAlert } from "../../shared/ui/FormAlert.tsx";
+import { Dot, StatusGlyph, type AgentStatus } from "../../shared/ui/kit/index.ts";
 import { ago } from "../../shared/lib/time.ts";
 
 /** The state's glyph: the shape carries it (filled, square, dashed ring), not only the colour. */
@@ -117,7 +116,7 @@ export function Capabilities({
           )}
           {recheck === undefined ? null : (
             <Button
-              size="sm"
+              size="touch"
               aria-label={t`Re-check what HTCO can do with ${shopName}`}
               isPending={recheck.pending}
               onPress={recheck.onPress}
@@ -169,7 +168,15 @@ export function Capabilities({
           </p>
         )
       ) : (
-        <FormAlert message={recheck.feedback.message} />
+        // The card's note style (as the low-budget note): read out at once, amber, no red frame.
+        <p
+          role="alert"
+          data-tone="attention"
+          className="m-0 flex items-center gap-2.5 rounded-card bg-attention-subtle px-4 py-3 text-body-sm"
+        >
+          <Dot tone="attention" />
+          <span className="min-w-0">{recheck.feedback.message}</span>
+        </p>
       )}
     </section>
   );

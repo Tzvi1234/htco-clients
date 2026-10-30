@@ -9,7 +9,7 @@ import { fakeEmailFailures } from "../../test/fakeAudit.ts";
 import { fakeBackend, fakeIntegration, type FakeState } from "../../test/fakeApi.ts";
 
 // Admin › Health's failed emails (platform PR #222, AC-6.4.3 and AC-6.5.6): refused and skipped
-// emails for the Owner and Admins, the recipient masked by the server (invented data).
+// emails for the Owner and Admins, never their recipient (AC-6.5.6; invented data).
 
 const WILLOW = "d0000000-0000-7000-8000-000000000001";
 const shops = [{ id: WILLOW, name: "Willow & Wick", status: "active" }];
@@ -50,7 +50,7 @@ const calls = (backend: { requests: Request[] }) =>
   backend.requests.filter((r) => new URL(r.url).pathname.endsWith("/operations/email-failures"));
 
 describe("failed emails on Admin › Health (AC-6.4.3)", () => {
-  it("lists the refused emails with kind, reason, shop, masked recipient and time", async () => {
+  it("AC-6.5.6: lists the refused emails with kind, reason, shop and time, never the address", async () => {
     const { backend } = await open();
 
     const table = await within(await panel()).findByRole("table", { name: "Failed emails" });
@@ -60,14 +60,16 @@ describe("failed emails on Admin › Health (AC-6.4.3)", () => {
     expect(rows[0]).toHaveTextContent("Refused");
     expect(rows[0]).toHaveTextContent("recipient_rejected");
     expect(rows[0]).toHaveTextContent("Willow & Wick");
-    expect(rows[0]).toHaveTextContent("o***@e***.test");
+    // Never the address, not even the masked one the server sends (AC-6.5.6).
+    expect(table).not.toHaveTextContent("@");
+    expect(within(table).queryByRole("columnheader", { name: "To" })).toBeNull();
     for (const r of calls(backend)) {
       expect(new URL(r.url).searchParams.get("status")).toBe("failed");
       expect(new URL(r.url).searchParams.get("organization_id")).not.toBeNull();
     }
   });
 
-  it("shows the skipped ones on request; one without an address shows the member ID", async () => {
+  it("shows the skipped ones on request, with no recipient at all", async () => {
     const { user } = await open();
     const box = await panel();
 
@@ -77,12 +79,14 @@ describe("failed emails on Admin › Health (AC-6.4.3)", () => {
     const rows = within(table).getAllByRole("row").slice(1);
     expect(rows).toHaveLength(1);
     expect(rows[0]).toHaveTextContent("no_verified_address");
-    expect(rows[0]).toHaveTextContent("a1b2c3d4");
+    expect(rows[0]).not.toHaveTextContent("a1b2c3d4");
   });
 
   it("says when no email was refused", async () => {
     await open({ emailFailures: [] });
-    expect(await within(await panel()).findByText("No email was refused.")).toBeInTheDocument();
+    expect(
+      await within(await panel()).findByRole("heading", { name: "No email was refused." }),
+    ).toBeInTheDocument();
   });
 
   it("says so and offers to try again when the list cannot be read", async () => {
@@ -115,6 +119,36 @@ describe("failed emails on Admin › Health (AC-6.4.3)", () => {
       expect(within(table).getAllByRole("row")).toHaveLength(31);
     });
     expect(within(box).queryByRole("button", { name: "Load more" })).toBeNull();
+  });
+
+  it("a failed Load more keeps the emails shown and offers to try that page again", async () => {
+    const [one] = fakeEmailFailures(shops);
+    if (one === undefined) throw new Error("no email");
+    const many = Array.from({ length: 30 }, (_, n) => ({
+      ...one,
+      id: `0a000000-0000-7000-8000-${String(500 + n).padStart(12, "0")}`,
+    }));
+    const { user, backend } = await open({ emailFailures: many });
+    const box = await panel();
+    const table = await within(box).findByRole("table", { name: "Failed emails" });
+    expect(within(table).getAllByRole("row")).toHaveLength(26);
+    // The next page fails, and so do its two automatic retries.
+    backend.state.failNext = ["email-failures", "email-failures", "email-failures"];
+
+    await user.click(within(box).getByRole("button", { name: "Load more" }));
+
+    expect(
+      await within(box).findByText("The next page could not be loaded.", undefined, {
+        timeout: 8000,
+      }),
+    ).toBeInTheDocument();
+    expect(within(box).getByRole("table", { name: "Failed emails" })).toBe(table);
+    expect(within(table).getAllByRole("row")).toHaveLength(26);
+    await user.click(within(box).getByRole("button", { name: "Try again" }));
+    await vi.waitFor(() => {
+      expect(within(table).getAllByRole("row")).toHaveLength(31);
+    });
+    expect(within(box).queryByText("The next page could not be loaded.")).toBeNull();
   });
 
   it("goes back to sign-in when the session ended (401)", async () => {

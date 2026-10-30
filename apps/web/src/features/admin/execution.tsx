@@ -206,3 +206,30 @@ export function ExecutionSheet({
     </ModalOverlay>
   );
 }
+
+/**
+ * "Load more" under a paged list. When the next page cannot be read, the pages already shown
+ * stay and the failure is said beside the button, which then tries that page again.
+ */
+export function LoadMore({
+  pending,
+  failed,
+  onMore,
+}: {
+  pending: boolean;
+  failed: boolean;
+  onMore: () => void;
+}) {
+  return (
+    <div className="flex flex-col items-center gap-2 px-6 pb-6">
+      {failed ? (
+        <p role="alert" className="m-0 text-center text-body-sm text-secondary">
+          <Trans>The next page could not be loaded.</Trans>
+        </p>
+      ) : null}
+      <Button size="touch" isPending={pending} onPress={onMore}>
+        {failed ? <Trans>Try again</Trans> : <Trans>Load more</Trans>}
+      </Button>
+    </div>
+  );
+}

@@ -376,7 +376,7 @@ export function ShopCard({
               ) : null}
             </dl>
             <KV2
-              className="max-sm:grid-cols-1"
+              stack
               items={[
                 [
                   <Trans>Status:</Trans>,

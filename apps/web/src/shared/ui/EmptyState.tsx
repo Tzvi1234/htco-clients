@@ -90,6 +90,28 @@ export function StateCard({
   );
 }
 
+/**
+ * An empty list inside its panel, as the sibling screens draw it (Relay's tabs, Orders' empty
+ * period): a light title, one sentence, and the one action that helps ("Clear filters").
+ */
+export function PanelEmpty({
+  title,
+  description,
+  children,
+}: {
+  title: ReactNode;
+  description: ReactNode;
+  children?: ReactNode;
+}) {
+  return (
+    <div className="flex flex-col items-center gap-2 px-6 py-12 text-center">
+      <h3 className="m-0 font-display text-title-sm font-light text-balance">{title}</h3>
+      <p className="m-0 max-w-[46ch] text-body-sm text-pretty text-secondary">{description}</p>
+      {children === undefined ? null : <div className="mt-2">{children}</div>}
+    </div>
+  );
+}
+
 /** Nothing here yet, and what to do about it. */
 export function EmptyState(props: StateCardProps) {
   return <StateCard preview {...props} />;

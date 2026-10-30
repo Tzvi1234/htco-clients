@@ -44,7 +44,7 @@ export function TrackingSyncStatus({ organizationId }: { organizationId: string 
               : t`Tracking Sync's status could not be loaded. Try again shortly.`}
         </p>
         {status === 403 ? null : (
-          <Button onPress={() => void health.refetch()}>
+          <Button size="touch" onPress={() => void health.refetch()}>
             <Trans>Try again</Trans>
           </Button>
         )}
@@ -120,7 +120,7 @@ export function TrackingSyncStatus({ organizationId }: { organizationId: string 
             {latest.slice(0, 5).map((run) => (
               <li
                 key={run.id}
-                className="flex items-center justify-between gap-3 border-t border-line py-2 first:border-t-0"
+                className="flex min-h-11 items-center justify-between gap-3 border-t border-line py-2 first:border-t-0"
               >
                 <StateWord state={run.state} />
                 <span className="text-caption text-muted">
