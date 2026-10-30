@@ -119,6 +119,26 @@ describe("Orders: export and re-sync (slice 5.7)", () => {
     expect(keys[2]).not.toBe(keys[0]);
   });
 
+  it("after a re-sync succeeded, the same selection again is a new Idempotency-Key (#223)", async () => {
+    const { user, backend } = await open();
+    const table = await screen.findByRole("table", { name: "Orders" });
+    const [first] = within(table).getAllByRole("checkbox", { name: /^Select order / });
+    if (first === undefined) throw new Error("no orders");
+
+    await user.click(first);
+    await user.click(screen.getByRole("button", { name: "Re-sync selected" }));
+    await screen.findByText("1 orders queued to be read again from Etsy.");
+    await user.click(screen.getByRole("button", { name: "Re-sync selected" }));
+    await vi.waitFor(() => {
+      expect(backend.state.resyncs).toHaveLength(2);
+    });
+
+    const [one, two] = idempotencyKeys(backend.requests, "POST", /\/order-resyncs$/);
+    expect(one).toMatch(UUID);
+    expect(two).toMatch(UUID);
+    expect(two).not.toBe(one);
+  });
+
   it("AC-5.7.6: re-sync waits for a selection, and a role that may not says so", async () => {
     const { user } = await open({ role: "support" });
 

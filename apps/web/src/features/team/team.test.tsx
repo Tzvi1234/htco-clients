@@ -113,6 +113,43 @@ describe("the team (FR-IAM-02)", () => {
     expect(second).not.toBe(first);
   });
 
+  it("a changed role is a new invitation with a new Idempotency-Key (#223)", async () => {
+    const { user, backend } = await open("/settings/team", {
+      ...owner,
+      failNext: ["/invitations"],
+    });
+
+    await user.type(await screen.findByLabelText("Email"), "dana@example.test");
+    await user.click(screen.getByRole("button", { name: "Invite" }));
+    await screen.findByText("Invitations cannot be sent right now. Try again shortly.");
+    await user.click(screen.getByRole("radio", { name: "Support" }));
+    await user.click(screen.getByRole("button", { name: "Invite" }));
+    await screen.findByRole("textbox", { name: "Invitation link" });
+
+    const [first, second] = idempotencyKeys(backend.requests, "POST", /\/invitations$/);
+    expect(first).toMatch(UUID);
+    expect(second).toMatch(UUID);
+    expect(second).not.toBe(first);
+  });
+
+  it("after a sent invitation, the same address and role again is a new Idempotency-Key (#223)", async () => {
+    const { user, backend } = await open("/settings/team", owner);
+
+    await user.type(await screen.findByLabelText("Email"), "dana@example.test");
+    await user.click(screen.getByRole("button", { name: "Invite" }));
+    await screen.findByRole("textbox", { name: "Invitation link" });
+    await user.click(screen.getByRole("button", { name: "Invite someone else" }));
+    await user.type(await screen.findByLabelText("Email"), "dana@example.test");
+    await user.click(screen.getByRole("button", { name: "Invite" }));
+    await vi.waitFor(() => {
+      expect(idempotencyKeys(backend.requests, "POST", /\/invitations$/)).toHaveLength(2);
+    });
+
+    const [first, second] = idempotencyKeys(backend.requests, "POST", /\/invitations$/);
+    expect(second).toMatch(UUID);
+    expect(second).not.toBe(first);
+  });
+
   it("is offered from Settings to Owners and Admins only", async () => {
     await open("/settings", owner);
     const page = screen.getByRole("main");

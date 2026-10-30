@@ -1,7 +1,7 @@
 import { renderHook } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import { useActionKey } from "./idempotency.ts";
+import { useActionKey, useActionKeys } from "./idempotency.ts";
 
 // Platform PR #223: a fresh Idempotency-Key per user action, the same one on a retry of it.
 
@@ -29,5 +29,20 @@ describe("useActionKey", () => {
     const first = result.current.key();
     rerender();
     expect(result.current.key()).toBe(first);
+  });
+});
+
+describe("useActionKeys", () => {
+  it("keeps one key per job: A, then B, then A again reuses A's key until A succeeds", () => {
+    const { result } = renderHook(() => useActionKeys());
+    const a = result.current.key("job-a");
+    const b = result.current.key("job-b");
+    expect(a).toMatch(UUID);
+    expect(b).not.toBe(a);
+    expect(result.current.key("job-a")).toBe(a);
+    result.current.reset("job-a");
+    const again = result.current.key("job-a");
+    expect(again).not.toBe(a);
+    expect(result.current.key("job-b")).toBe(b);
   });
 });

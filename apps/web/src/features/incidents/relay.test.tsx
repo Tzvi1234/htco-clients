@@ -177,6 +177,27 @@ describe("the paste's Idempotency-Key (platform PR #223)", () => {
     // The number never travels in the key.
     for (const key of keys) expect(key).not.toContain(GOOD);
   });
+
+  it("is new when the carrier changes, the number unchanged", async () => {
+    const { user, backend } = await open({ failNext: ["POST /v1/relay-items"] });
+    const panel = await orderPanel("3481220917");
+    await pasteInto(user, panel, "Yun Express", GOOD);
+    await within(panel).findByRole("alert");
+    await user.click(within(panel).getByRole("radio", { name: "USPS" }));
+    await user.click(within(panel).getByRole("button", { name: "Check and save" }));
+    await vi.waitFor(() => {
+      expect(idempotencyKeys(backend.requests, "POST", /\/tracking$/)).toHaveLength(2);
+    });
+
+    const [first, second] = idempotencyKeys(
+      backend.requests,
+      "POST",
+      /\/relay-items\/[^/]+\/tracking$/,
+    );
+    expect(first).toMatch(/^[0-9a-f-]{36}$/);
+    expect(second).toMatch(/^[0-9a-f-]{36}$/);
+    expect(second).not.toBe(first);
+  });
 });
 
 describe("the paste, checked by the server (AC-6.10.4)", () => {

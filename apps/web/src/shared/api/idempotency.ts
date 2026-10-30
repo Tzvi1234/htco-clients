@@ -32,3 +32,31 @@ export function useActionKey(): ActionKey {
     },
   };
 }
+
+export interface ActionKeys {
+  /** The key of the action on `id` (one job): kept per `id` until that action succeeds. */
+  key: (id: string) => string;
+  /** The action on `id` succeeded: its next press is a new action. */
+  reset: (id: string) => void;
+}
+
+/**
+ * One key per item of a list (each dead-lettered job): retrying A, then B, then A again sends A's
+ * first key again until A succeeds; another item's press never renews it.
+ */
+export function useActionKeys(): ActionKeys {
+  const keys = useRef(new Map<string, string>());
+  return {
+    key: (id) => {
+      let key = keys.current.get(id);
+      if (key === undefined) {
+        key = newActionKey();
+        keys.current.set(id, key);
+      }
+      return key;
+    },
+    reset: (id) => {
+      keys.current.delete(id);
+    },
+  };
+}
