@@ -1,6 +1,6 @@
 import { Trans, useLingui } from "@lingui/react/macro";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 import { ApiError, meQuery, shopsQuery, useApi } from "../../shared/api/api.tsx";
 import {
@@ -11,7 +11,9 @@ import {
 } from "../../shared/api/audit.ts";
 import { useCount } from "../../shared/i18n/format.ts";
 import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
+import { PHONE_QUERY, REDUCED_MOTION_QUERY, useMediaQuery } from "../../shared/lib/useMediaQuery.ts";
 import { Button } from "../../shared/ui/Button.tsx";
+import { PanelEmpty } from "../../shared/ui/EmptyState.tsx";
 import { PageHeader } from "../../shared/ui/PageHeader.tsx";
 import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
 import {
@@ -31,7 +33,7 @@ import {
 } from "../../shared/ui/kit/index.ts";
 import { WorkspacePicker, pickWorkspace } from "../../shared/ui/WorkspacePicker.tsx";
 
-import { Code, useAgo } from "./execution.tsx";
+import { Code, LoadMore, useAgo } from "./execution.tsx";
 
 /** The action families the audit writer records (platform audit actions), as the API filters. */
 const FAMILIES = [
@@ -120,6 +122,15 @@ function WorkspaceAudit({ organizationId }: { organizationId: string }) {
   // The window's start is fixed when it is chosen, so the pages of one view stay one query.
   const [range, setRange] = useState<{ id: Range; since?: string }>({ id: "all" });
   const [opened, setOpened] = useState<string | null>(null);
+  const phone = useMediaQuery(PHONE_QUERY);
+  const still = useMediaQuery(REDUCED_MOTION_QUERY);
+  // The chosen record opens below the list: bring it into view, or a tap on a phone would seem
+  // to do nothing.
+  const recordRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (opened === null) return;
+    recordRef.current?.scrollIntoView?.({ behavior: still ? "auto" : "smooth", block: "start" });
+  }, [opened, still]);
 
   const filters: AuditFilters = {
     ...(shop === "all" ? {} : { shopId: shop }),
@@ -146,15 +157,52 @@ function WorkspaceAudit({ organizationId }: { organizationId: string }) {
     organization: t`Workspace`,
   };
 
-  if (audit.isError) return <Problem error={audit.error} onRetry={() => void audit.refetch()} />;
+  // A failed next page keeps the records shown; only a failed first read replaces the list.
+  if (audit.isError && audit.data === undefined)
+    return <Problem error={audit.error} onRetry={() => void audit.refetch()} />;
+
+  const clearFilters = () => {
+    setShop("all");
+    setKind("all");
+    setActor(undefined);
+    setFamily("all");
+    setRange({ id: "all" });
+    setOpened(null);
+  };
+  const actorCell = (record: AuditEntry) => (
+    <span className="inline-flex items-center gap-2">
+      <span>{kindWord(record.actor_kind)}</span>
+      <Code>{short(record.actor_id)}</Code>
+    </span>
+  );
+  const entityCell = (record: AuditEntry) => (
+    <span className="inline-flex items-center gap-2">
+      <Code>{record.entity_type}</Code>
+      {record.entity_type === "shop" && shopName(record.entity_id) !== undefined ? (
+        <bdi>{shopName(record.entity_id)}</bdi>
+      ) : (
+        <Code>{short(record.entity_id)}</Code>
+      )}
+    </span>
+  );
 
   let list: ReactNode;
   if (audit.data === undefined) list = <LiveSkeleton rows={8} label={t`Loading the audit log`} />;
   else if (records.length === 0)
-    list = (
-      <p className="m-0 px-6 py-12 text-center text-body-sm text-secondary">
-        {filtered ? t`No record matches these filters.` : t`Nothing has been recorded yet.`}
-      </p>
+    list = filtered ? (
+      <PanelEmpty
+        title={t`No record matches these filters`}
+        description={t`Records outside the chosen shop, actor, action or time are not shown.`}
+      >
+        <Button size="touch" onPress={clearFilters}>
+          <Trans>Clear filters</Trans>
+        </Button>
+      </PanelEmpty>
+    ) : (
+      <PanelEmpty
+        title={t`Nothing has been recorded yet`}
+        description={t`Each change by a person, an AI employee or an automation shows here, newest first.`}
+      />
     );
   else
     list = (
@@ -162,44 +210,47 @@ function WorkspaceAudit({ organizationId }: { organizationId: string }) {
         <DataTable
           flow
           label={t`Audit records`}
-          phoneHidden={[1, 3]}
-          head={[t`When`, t`Actor`, t`Action`, t`Entity`]}
+          // Phones: two columns, the actor and the entity folded under the action, so nothing
+          // the record answers is hidden.
+          head={phone ? [t`When`, t`Action`] : [t`When`, t`Actor`, t`Action`, t`Entity`]}
           rows={records.map((record) => ({
             key: record.id,
             selected: record.id === opened,
             onSelect: () => {
               setOpened(record.id === opened ? null : record.id);
             },
-            cells: [
-              <time key="t" dateTime={record.occurred_at}>
-                {since(record.occurred_at)}
-              </time>,
-              <span key="a" className="inline-flex items-center gap-2">
-                <span>{kindWord(record.actor_kind)}</span>
-                <Code>{short(record.actor_id)}</Code>
-              </span>,
-              <Code key="c">{record.action}</Code>,
-              <span key="e" className="inline-flex items-center gap-2">
-                <Code>{record.entity_type}</Code>
-                {record.entity_type === "shop" && shopName(record.entity_id) !== undefined ? (
-                  <bdi>{shopName(record.entity_id)}</bdi>
-                ) : (
-                  <Code>{short(record.entity_id)}</Code>
-                )}
-              </span>,
-            ],
+            cells: phone
+              ? [
+                  <time key="t" dateTime={record.occurred_at}>
+                    {since(record.occurred_at)}
+                  </time>,
+                  <span key="a" className="flex flex-col gap-0.5 py-2 whitespace-normal">
+                    <Code>{record.action}</Code>
+                    <span className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-caption text-secondary">
+                      {actorCell(record)}
+                      {entityCell(record)}
+                    </span>
+                  </span>,
+                ]
+              : [
+                  <time key="t" dateTime={record.occurred_at}>
+                    {since(record.occurred_at)}
+                  </time>,
+                  <span key="a">{actorCell(record)}</span>,
+                  <Code key="c">{record.action}</Code>,
+                  <span key="e">{entityCell(record)}</span>,
+                ],
           }))}
         />
         {audit.hasNextPage ? (
-          <div className="flex justify-center px-6 pb-6">
-            <Button isPending={audit.isFetchingNextPage} onPress={() => void audit.fetchNextPage()}>
-              <Trans>Load more</Trans>
-            </Button>
-          </div>
+          <LoadMore
+            pending={audit.isFetchingNextPage}
+            failed={audit.isFetchNextPageError}
+            onMore={() => void audit.fetchNextPage()}
+          />
         ) : null}
       </>
     );
-
   const newest = records[0];
   return (
     <>
@@ -303,7 +354,7 @@ function WorkspaceAudit({ organizationId }: { organizationId: string }) {
                 <Trans>Actor</Trans> <Code>{short(actor)}</Code>
               </Chip>
               <Button
-                size="sm"
+                size="touch"
                 variant="ghost"
                 onPress={() => {
                   setActor(undefined);
@@ -320,14 +371,16 @@ function WorkspaceAudit({ organizationId }: { organizationId: string }) {
         {list}
       </Panel>
       {chosen === undefined ? null : (
-        <AuditRecord
-          record={chosen}
-          kind={kindWord(chosen.actor_kind)}
-          onActor={() => {
-            setActor(chosen.actor_id);
-            setOpened(null);
-          }}
-        />
+        <div ref={recordRef} className="scroll-mt-4">
+          <AuditRecord
+            record={chosen}
+            kind={kindWord(chosen.actor_kind)}
+            onActor={() => {
+              setActor(chosen.actor_id);
+              setOpened(null);
+            }}
+          />
+        </div>
       )}
     </>
   );
@@ -422,7 +475,7 @@ function Problem({ error, onRetry }: { error: Error; onRetry: () => void }) {
               : t`The audit log could not be loaded. Try again shortly.`}
         </p>
         {status === 403 ? null : (
-          <Button onPress={onRetry}>
+          <Button size="touch" onPress={onRetry}>
             <Trans>Try again</Trans>
           </Button>
         )}

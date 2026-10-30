@@ -108,7 +108,10 @@ describe("Admin › Audit log (AC-3.9.3)", () => {
     await vi.waitFor(() => {
       expect(lastQuery(backend).get("actor_kind")).toBe("system");
     });
-    expect(await screen.findByText("No record matches these filters.")).toBeInTheDocument();
+    expect(
+      await screen.findByRole("heading", { name: "No record matches these filters" }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Clear filters" })).toBeInTheDocument();
 
     await choose(user, "Actor", "Anyone");
     await choose(user, "Shop", "Every shop");
@@ -158,9 +161,72 @@ describe("Admin › Audit log (AC-3.9.3)", () => {
     expect(screen.queryByRole("button", { name: "Load more" })).toBeNull();
   });
 
+  it("a failed Load more keeps the records shown and offers to try that page again", async () => {
+    const { user, backend } = await open({ audit: fakeAuditEntries(ORG, shops, Date.now(), 70) });
+    expect(await records()).toHaveLength(50);
+    const [first] = await records();
+    if (first === undefined) throw new Error("no rows");
+    await user.click(first);
+    await screen.findByRole("region", { name: "Audit record" });
+    // The next page fails, and so do its two automatic retries.
+    backend.state.failNext = ["audit-log", "audit-log", "audit-log"];
+
+    await user.click(screen.getByRole("button", { name: "Load more" }));
+
+    expect(
+      await screen.findByText("The next page could not be loaded.", undefined, { timeout: 8000 }),
+    ).toBeInTheDocument();
+    expect(await records()).toHaveLength(50);
+    expect(screen.getByRole("region", { name: "Audit record" })).toBeInTheDocument();
+    expect(screen.getByRole("region", { name: "Audit filters" })).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Try again" }));
+    await vi.waitFor(async () => {
+      expect(await records()).toHaveLength(70);
+    });
+    expect(screen.queryByText("The next page could not be loaded.")).toBeNull();
+  });
+
+  it("clears every filter from the filtered empty state", async () => {
+    const { user, backend } = await open();
+    await records();
+    await choose(user, "Shop", "Willow & Wick");
+    expect(await records()).toHaveLength(3);
+    await choose(user, "Actor", "System");
+    await user.click(await screen.findByRole("button", { name: "Clear filters" }));
+
+    await vi.waitFor(async () => {
+      expect(await records()).toHaveLength(9);
+    });
+    expect(lastQuery(backend).get("actor_kind")).toBeNull();
+    expect(lastQuery(backend).get("shop_id")).toBeNull();
+  });
+
+  it("renders markup in a record's before and after as text, never as elements", async () => {
+    const [one] = fakeAuditEntries(ORG, shops);
+    if (one === undefined) throw new Error("no record");
+    const hostile = {
+      ...one,
+      before: { note: "<script>window.__xss = 1</script>" },
+      after: { note: "<img src=x onerror=window.__xss=2>" },
+    };
+    const { user } = await open({ audit: [hostile] });
+    const [row] = await records();
+    if (row === undefined) throw new Error("no rows");
+
+    await user.click(row);
+
+    const record = await screen.findByRole("region", { name: "Audit record" });
+    expect(within(record).getByText(/<script>window.__xss = 1<\/script>/)).toBeInTheDocument();
+    expect(within(record).getByText(/<img src=x onerror=window.__xss=2>/)).toBeInTheDocument();
+    expect(record.querySelector("script, img")).toBeNull();
+    expect((window as { __xss?: number }).__xss).toBeUndefined();
+  });
+
   it("says when nothing has been recorded yet", async () => {
     await open({ audit: [] });
-    expect(await screen.findByText("Nothing has been recorded yet.")).toBeInTheDocument();
+    expect(
+      await screen.findByRole("heading", { name: "Nothing has been recorded yet" }),
+    ).toBeInTheDocument();
   });
 
   it("shows a loading state while the records are on their way", async () => {
@@ -215,7 +281,9 @@ describe("Admin › Audit log (AC-3.9.3)", () => {
     expect(screen.getByText(/Choose the workspace whose audit log/)).toBeInTheDocument();
     expect(backend.state.auditQueries).toHaveLength(0);
     await user.click(screen.getByRole("radio", { name: /c0000000/ }));
-    expect(await screen.findByText("Nothing has been recorded yet.")).toBeInTheDocument();
+    expect(
+      await screen.findByRole("heading", { name: "Nothing has been recorded yet" }),
+    ).toBeInTheDocument();
     expect(lastQuery(backend).get("organization_id")).toBe(OTHER);
   });
 
