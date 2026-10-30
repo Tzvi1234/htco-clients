@@ -1,5 +1,5 @@
 import { createMemoryHistory } from "@tanstack/react-router";
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
@@ -267,6 +267,31 @@ describe("Customers: reviews, live from Etsy", () => {
     // The customer health and list are Demo, under the Customers sub-tab (clarity round 3).
     await user.click(screen.getByRole("tab", { name: /Customers/ }));
     expect(screen.getAllByText("Demo — coming soon").length).toBeGreaterThan(0);
+  });
+
+  // Codex post-merge review, finding 5: the open screen used to keep its first read for good.
+  it("reads the reviews again while the screen stays open, and shows a new one", async () => {
+    // Time still runs (for the page's reads), and can be pushed ahead by hand.
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    try {
+      const { backend } = await open("/customers/customers");
+      const reviews = await panel("Reviews");
+      await within(reviews).findByText(/Smells like a walk in the forest/);
+      const reads = () => backend.requests.filter((r) => r.url.endsWith("/reviews")).length;
+      const before = reads();
+
+      backend.state.newReview = "Arrived broken, and nobody answered.";
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(5 * 60_000);
+      });
+
+      expect(reads()).toBeGreaterThan(before);
+      expect(
+        await within(reviews).findByText(/Arrived broken, and nobody answered/),
+      ).toBeInTheDocument();
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });
 

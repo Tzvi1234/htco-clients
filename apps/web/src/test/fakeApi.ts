@@ -120,6 +120,12 @@ export interface FakeState {
     | undefined;
   /** Workspaces whose shop list answers 500. */
   shopsFailFor?: string[];
+  /** True: the shop list never answers (a slow read, to see what renders meanwhile). */
+  shopsHang?: boolean;
+  /** True: the second factor's status (`GET /v1/auth/mfa`) answers 500. */
+  mfaReadFails?: boolean;
+  /** A review that arrived since the last read: the reviews list starts with it, one star. */
+  newReview?: string;
   /** Shops whose statistics (`GET /v1/shops/{id}/stats`) answer 503 etsy-data-unavailable. */
   statsFailFor?: string[];
   /** True: the shops are busy, 160 orders in 30 days (more than one page of 100). */
@@ -720,6 +726,7 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
           ],
         });
       case "GET /v1/auth/mfa":
+        if (state.mfaReadFails === true) return problem(500, "internal-error");
         return json(200, {
           assurance: state.assurance,
           enrolled: state.enrolled,
@@ -763,6 +770,7 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
         const organizationId = url.searchParams.get("organization_id") ?? org;
         if (state.shopsFailFor?.includes(organizationId) === true)
           return problem(500, "internal-error");
+        if (state.shopsHang === true) return new Promise<Response>(() => undefined);
         return json(200, {
           items: state.shops.slice(start, end).map((shop) => ({
             ...shop,
@@ -1149,7 +1157,29 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
             : data.listings,
         ),
       );
-    if (view === "reviews") return json(200, mark(data.reviews));
+    if (view === "reviews") {
+      const arrived = state.newReview;
+      return json(
+        200,
+        mark(
+          arrived === undefined
+            ? data.reviews
+            : {
+                ...data.reviews,
+                items: [
+                  {
+                    listing_id: data.reviews.items[0]?.listing_id ?? 1402211,
+                    rating: 1,
+                    text: arrived,
+                    language: "en",
+                    created_at: new Date().toISOString(),
+                  },
+                  ...data.reviews.items,
+                ],
+              },
+        ),
+      );
+    }
     if (view === "stats") {
       if (state.statsFailFor?.includes(shopId) === true)
         return problem(503, "etsy-data-unavailable");

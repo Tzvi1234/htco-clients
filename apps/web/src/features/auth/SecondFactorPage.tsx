@@ -20,6 +20,33 @@ import { FormAlert } from "../../shared/ui/FormAlert.tsx";
 export function SecondFactorPage() {
   const api = useApi();
   const status = useQuery(mfaQuery(api));
+  // A failed read is not "still checking": say so, with a retry and the way back (Codex
+  // post-merge review, finding 2).
+  if (status.data === undefined && status.isError)
+    return (
+      <AuthLayout
+        eyebrow={<Trans>Step 2 of 2</Trans>}
+        title={<Trans>Checking your account</Trans>}
+        step={2}
+      >
+        <div className="flex flex-col gap-6">
+          <p role="alert" className="m-0 text-body-sm text-danger-text">
+            <Trans>We could not check your two-step sign-in. Try again shortly.</Trans>
+          </p>
+          <Button
+            variant="primary"
+            className={AUTH_SUBMIT}
+            isPending={status.isFetching}
+            onPress={() => {
+              void status.refetch();
+            }}
+          >
+            <Trans>Try again</Trans>
+          </Button>
+          <BackLink />
+        </div>
+      </AuthLayout>
+    );
   if (status.data === undefined)
     return (
       <AuthLayout

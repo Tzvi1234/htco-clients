@@ -2886,6 +2886,10 @@ msgstr "Loading the runs"
 msgid "Loading the shop's numbers"
 msgstr "Loading the shop's numbers"
 
+#: src/features/team/TeamPage.tsx
+msgid "Loading the shops…"
+msgstr "Loading the shops…"
+
 #: src/features/office/floor3d/plan.ts
 msgid "Lounge"
 msgstr "Lounge"
@@ -5707,6 +5711,10 @@ msgstr "The shop's orders, live from Etsy."
 msgid "The shop's reviews on Etsy, newest first."
 msgstr "The shop's reviews on Etsy, newest first."
 
+#: src/features/team/TeamPage.tsx
+msgid "The shops cannot be loaded right now. Try again shortly."
+msgstr "The shops cannot be loaded right now. Try again shortly."
+
 #: src/features/incidents/IncidentsPage.tsx
 msgid "The step could not be saved. Check your connection and try again."
 msgstr "The step could not be saved. Check your connection and try again."
@@ -6147,11 +6155,13 @@ msgstr "Triggers"
 #: src/app/shell/NotificationBell.tsx
 #: src/features/admin/AutomationsPage.tsx
 #: src/features/admin/OperationsPage.tsx
+#: src/features/auth/SecondFactorPage.tsx
 #: src/features/incidents/IncidentsPage.tsx
 #: src/features/incidents/RelayPage.tsx
 #: src/features/overview/OverviewPage.tsx
 #: src/features/shops/reconnect.tsx
 #: src/features/shops/ShopsPage.tsx
+#: src/features/team/TeamPage.tsx
 msgid "Try again"
 msgstr "Try again"
 
@@ -6351,6 +6361,10 @@ msgstr "Warm and soft"
 #: src/features/shops/ShopsPage.tsx
 msgid "Watch it here"
 msgstr "Watch it here"
+
+#: src/features/auth/SecondFactorPage.tsx
+msgid "We could not check your two-step sign-in. Try again shortly."
+msgstr "We could not check your two-step sign-in. Try again shortly."
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "Web"
