@@ -2886,6 +2886,10 @@ msgstr "טוען את ההרצות"
 msgid "Loading the shop's numbers"
 msgstr "טוען את נתוני החנות"
 
+#: src/features/team/TeamPage.tsx
+msgid "Loading the shops…"
+msgstr "טוען את החנויות…"
+
 #: src/features/office/floor3d/plan.ts
 msgid "Lounge"
 msgstr "טרקלין"
@@ -5707,6 +5711,10 @@ msgstr "ההזמנות של החנות, בזמן אמת מ־Etsy."
 msgid "The shop's reviews on Etsy, newest first."
 msgstr "הביקורות של החנות ב־Etsy, החדשות קודם."
 
+#: src/features/team/TeamPage.tsx
+msgid "The shops cannot be loaded right now. Try again shortly."
+msgstr "אי אפשר לטעון את החנויות כרגע. נסו שוב בעוד רגע."
+
 #: src/features/incidents/IncidentsPage.tsx
 msgid "The step could not be saved. Check your connection and try again."
 msgstr "לא ניתן היה לשמור את הצעד. כדאי לבדוק את החיבור ולנסות שוב."
@@ -6147,11 +6155,13 @@ msgstr "מפעילים"
 #: src/app/shell/NotificationBell.tsx
 #: src/features/admin/AutomationsPage.tsx
 #: src/features/admin/OperationsPage.tsx
+#: src/features/auth/SecondFactorPage.tsx
 #: src/features/incidents/IncidentsPage.tsx
 #: src/features/incidents/RelayPage.tsx
 #: src/features/overview/OverviewPage.tsx
 #: src/features/shops/reconnect.tsx
 #: src/features/shops/ShopsPage.tsx
+#: src/features/team/TeamPage.tsx
 msgid "Try again"
 msgstr "לנסות שוב"
 
@@ -6351,6 +6361,10 @@ msgstr "חם ורך"
 #: src/features/shops/ShopsPage.tsx
 msgid "Watch it here"
 msgstr "מעקב כאן"
+
+#: src/features/auth/SecondFactorPage.tsx
+msgid "We could not check your two-step sign-in. Try again shortly."
+msgstr "לא הצלחנו לבדוק את הכניסה הדו־שלבית שלך. נסו שוב בעוד רגע."
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "Web"

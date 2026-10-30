@@ -7,7 +7,7 @@ import { AUTH_SUBMIT, AuthLayout } from "./AuthLayout.tsx";
 import { PasswordField } from "./fields.tsx";
 import { CodeBoxes } from "../../shared/ui/kit/index.ts";
 import { passwordProblem, tokensOf, type LinkTokens } from "./linkTokens.ts";
-import { ApiError, apiError, forgetSession, useApi } from "../../shared/api/api.tsx";
+import { ApiError, apiError, forgetSession, useApi, PUBLIC_AUTH } from "../../shared/api/api.tsx";
 import { Button } from "../../shared/ui/Button.tsx";
 import { FormAlert } from "../../shared/ui/FormAlert.tsx";
 
@@ -41,6 +41,7 @@ export function ResetPasswordPage() {
   }, [hash, router]);
 
   const reset = useMutation({
+    meta: PUBLIC_AUTH,
     mutationFn: async (link: LinkTokens) => {
       const { data, error, response } = await api.POST("/v1/auth/password/reset", {
         body: {

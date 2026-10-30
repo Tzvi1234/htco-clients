@@ -748,13 +748,42 @@ function MemberPanel({
                 <p className="m-0 text-caption text-secondary">
                   <Trans>Owners and Admins work in every shop of the workspace.</Trans>
                 </p>
-              ) : (shops.data ?? []).length === 0 ? (
+              ) : shops.data === undefined && shops.isError ? (
+                // A failed read is not an empty workspace (Codex post-merge review, finding 6).
+                <div className="flex flex-col items-start gap-2">
+                  <p role="alert" className="m-0 text-caption text-danger-text">
+                    <Trans>The shops cannot be loaded right now. Try again shortly.</Trans>
+                  </p>
+                  <Button
+                    size="sm"
+                    isPending={shops.isFetching}
+                    onPress={() => {
+                      void shops.refetch();
+                    }}
+                  >
+                    <Trans>Try again</Trans>
+                  </Button>
+                </div>
+              ) : shops.data === undefined ? (
+                <div aria-busy="true" className="flex flex-col gap-2">
+                  <span className="sr-only">
+                    <Trans>Loading the shops…</Trans>
+                  </span>
+                  {[0, 1].map((index) => (
+                    <span
+                      key={index}
+                      aria-hidden="true"
+                      className="h-9 animate-pulse rounded-card border border-line"
+                    />
+                  ))}
+                </div>
+              ) : shops.data.length === 0 ? (
                 <p className="m-0 text-caption text-secondary">
                   <Trans>No shops yet. Connect one under Commerce › Shops.</Trans>
                 </p>
               ) : (
                 <ul className="m-0 flex list-none flex-col p-0">
-                  {(shops.data ?? []).map((shop) => {
+                  {shops.data.map((shop) => {
                     const on = member.shop_ids.includes(shop.id);
                     const shopName = shop.name;
                     return (

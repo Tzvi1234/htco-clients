@@ -92,6 +92,24 @@ export function forgetSession(client: QueryClient): void {
   mutations.clear();
 }
 
+/**
+ * The `meta` of a mutation that runs without a session (sign-in, an invitation, a password
+ * reset): its 401 refuses what was typed or the link, it does not end a session.
+ */
+export const PUBLIC_AUTH = { publicAuth: true } as const;
+
+/**
+ * True when a failed call proves the session ended (expired, revoked elsewhere): a 401 from an
+ * authenticated call. A 401 that refuses a credential the user just gave (`mfa-code-refused` on a
+ * step-up, `etsy-authorization-refused` on the Etsy callback) is an answer about that credential,
+ * and a public auth mutation's 401 never is about a session (Codex post-merge review, finding 1).
+ */
+export function sessionEnded(error: unknown, meta?: Record<string, unknown>): boolean {
+  if (!(error instanceof ApiError) || error.status !== 401) return false;
+  if (meta?.["publicAuth"] === true) return false;
+  return !(error.type?.endsWith("-refused") ?? false);
+}
+
 /** Who is signed in on this browser; `null` when nobody is. */
 export function sessionQuery(api: ApiClient) {
   return queryOptions({

@@ -1,7 +1,7 @@
 import { Plural, Trans, useLingui } from "@lingui/react/macro";
 import { useQueries, useQuery } from "@tanstack/react-query";
-import { useRouterState } from "@tanstack/react-router";
-import { useId, useState, type ReactNode } from "react";
+import { useRouter } from "@tanstack/react-router";
+import { useEffect, useId, useState, type ReactNode } from "react";
 
 import { useConnectEtsy, type ConnectEtsy } from "./connectEtsy.tsx";
 import { ShopCard, needsReconnect, useReconnectLabel } from "./ShopCard.tsx";
@@ -44,7 +44,16 @@ export function ShopsPage() {
   const me = useQuery(meQuery(api));
   const memberships = me.data?.memberships ?? [];
   const ids = memberships.map((m) => m.organization_id);
-  const connected = useRouterState({ select: (s) => s.location.state.etsy });
+  const router = useRouter();
+  // The confirmation from the Etsy callback is read once, then cleared from this history entry,
+  // so coming back here with the browser's Back does not announce it again (Codex post-merge
+  // review, finding 7).
+  const [connected] = useState(() => router.state.location.state.etsy);
+  useEffect(() => {
+    const { location } = router.state;
+    if (location.state.etsy === undefined) return;
+    router.history.replace(location.href, { ...location.state, etsy: undefined });
+  }, [router]);
   // Back from Etsy: the workspace the shop was connected to.
   const [chosen, setChosen] = useState<string | null>(() => connected?.organizationId ?? null);
   const organizationId = pickWorkspace(ids, chosen);

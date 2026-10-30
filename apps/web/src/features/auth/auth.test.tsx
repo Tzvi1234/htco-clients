@@ -139,6 +139,44 @@ describe("the second factor for Owners and Admins (AC-3.5.3)", () => {
     expect(await screen.findByRole("heading", { level: 1, name: "Home" })).toBeInTheDocument();
   });
 
+  // Codex post-merge review, finding 2: a failed status read used to keep the skeleton forever.
+  it("says when the second factor cannot be checked, with a retry and the way back", async () => {
+    const { user, backend } = await open("/", {
+      signedIn: true,
+      enrolled: true,
+      assurance: "aal1",
+      mfaReadFails: true,
+    });
+
+    expect(
+      await screen.findByText(
+        "We could not check your two-step sign-in. Try again shortly.",
+        undefined,
+        { timeout: 8000 },
+      ),
+    ).toHaveAttribute("role", "alert");
+
+    backend.state.mfaReadFails = false;
+    await user.click(screen.getByRole("button", { name: "Try again" }));
+    expect(
+      await screen.findByRole("heading", { level: 1, name: "Two-step code" }),
+    ).toBeInTheDocument();
+  });
+
+  it("signs out from a failed second-factor check", async () => {
+    const { user, backend } = await open("/", {
+      signedIn: true,
+      enrolled: true,
+      assurance: "aal1",
+      mfaReadFails: true,
+    });
+    await screen.findByRole("alert", undefined, { timeout: 8000 });
+
+    await user.click(screen.getByRole("button", { name: "Back to sign-in" }));
+    expect(await screen.findByRole("heading", { level: 1, name: "Sign in" })).toBeInTheDocument();
+    expect(backend.state.signedIn).toBe(false);
+  });
+
   it("lets other roles in without a second factor", async () => {
     await open("/", { signedIn: true, role: "support" });
     expect(screen.getByRole("heading", { level: 1, name: "Home" })).toBeInTheDocument();
