@@ -11,7 +11,11 @@ import {
 } from "../../shared/api/audit.ts";
 import { useCount } from "../../shared/i18n/format.ts";
 import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
-import { PHONE_QUERY, REDUCED_MOTION_QUERY, useMediaQuery } from "../../shared/lib/useMediaQuery.ts";
+import {
+  PHONE_QUERY,
+  REDUCED_MOTION_QUERY,
+  useMediaQuery,
+} from "../../shared/lib/useMediaQuery.ts";
 import { Button } from "../../shared/ui/Button.tsx";
 import { PanelEmpty } from "../../shared/ui/EmptyState.tsx";
 import { PageHeader } from "../../shared/ui/PageHeader.tsx";
@@ -129,7 +133,10 @@ function WorkspaceAudit({ organizationId }: { organizationId: string }) {
   const recordRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (opened === null) return;
-    recordRef.current?.scrollIntoView?.({ behavior: still ? "auto" : "smooth", block: "start" });
+    const box = recordRef.current;
+    // Not every environment scrolls (jsdom has no scrollIntoView).
+    if (box !== null && "scrollIntoView" in box)
+      box.scrollIntoView({ behavior: still ? "auto" : "smooth", block: "start" });
   }, [opened, still]);
 
   const filters: AuditFilters = {

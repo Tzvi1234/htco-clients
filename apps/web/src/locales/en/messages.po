@@ -675,6 +675,14 @@ msgstr "An app for your phone with the same features."
 msgid "An automation"
 msgstr "An automation"
 
+#: src/features/admin/EmailFailures.tsx
+msgid "An email that could not be sent, such as to a member without a verified address, shows here."
+msgstr "An email that could not be sent, such as to a member without a verified address, shows here."
+
+#: src/features/admin/EmailFailures.tsx
+msgid "An email the provider refuses for good shows here, with its reason."
+msgstr "An email the provider refuses for good shows here, with its reason."
+
 #: src/features/welcome/WelcomePage.tsx
 msgid "An example of what will ask you"
 msgstr "An example of what will ask you"
@@ -1207,6 +1215,10 @@ msgstr "Choose the workspace whose queue and syncs you want to see."
 #: src/features/office/FloorPage.tsx
 msgid "Claude · model"
 msgstr "Claude · model"
+
+#: src/features/admin/AuditPage.tsx
+msgid "Clear filters"
+msgstr "Clear filters"
 
 #: src/features/customers/CustomersDemos.tsx
 msgid "Clicks"
@@ -1785,6 +1797,10 @@ msgstr "Drag to orbit · double-click a room"
 #: src/features/admin/OperationsPage.tsx
 msgid "Drifts today"
 msgstr "Drifts today"
+
+#: src/features/admin/AuditPage.tsx
+msgid "Each change by a person, an AI employee or an automation shows here, newest first."
+msgstr "Each change by a person, an AI employee or an automation shows here, newest first."
 
 #: src/features/incidents/RelayPage.tsx
 msgid "Each reveal is recorded in the audit log. The order closes on its own once Etsy shows the tracking."
@@ -2968,8 +2984,7 @@ msgstr "Live from Etsy"
 msgid "Live shop data could not be loaded. Try again shortly."
 msgstr "Live shop data could not be loaded. Try again shortly."
 
-#: src/features/admin/AuditPage.tsx
-#: src/features/admin/EmailFailures.tsx
+#: src/features/admin/execution.tsx
 msgid "Load more"
 msgstr "Load more"
 
@@ -3536,8 +3551,8 @@ msgid "No reconciliation has run yet."
 msgstr "No reconciliation has run yet."
 
 #: src/features/admin/AuditPage.tsx
-msgid "No record matches these filters."
-msgstr "No record matches these filters."
+msgid "No record matches these filters"
+msgstr "No record matches these filters"
 
 #: src/features/shops/ShopStats.tsx
 msgid "No refunds or cancellations in these orders."
@@ -3701,8 +3716,8 @@ msgid "Nothing changes in your Etsy shop."
 msgstr "Nothing changes in your Etsy shop."
 
 #: src/features/admin/AuditPage.tsx
-msgid "Nothing has been recorded yet."
-msgstr "Nothing has been recorded yet."
+msgid "Nothing has been recorded yet"
+msgstr "Nothing has been recorded yet"
 
 #: src/features/incidents/IncidentsPage.tsx
 msgid "Nothing is open"
@@ -3862,8 +3877,8 @@ msgstr "On-time delivery arrives with fulfilment."
 
 #. placeholder {0}: nameOf(dead[0]?.id ?? "")
 #: src/features/admin/AutomationsPage.tsx
-msgid "One automation has a dead-lettered run: {0}. Open it, read its error, then retry it."
-msgstr "One automation has a dead-lettered run: {0}. Open it, read its error, then retry it."
+msgid "One automation has a dead-lettered run: {0}."
+msgstr "One automation has a dead-lettered run: {0}."
 
 #: src/features/welcome/WelcomePage.tsx
 msgid "One button, Etsy asks you to allow it, and you are back."
@@ -3956,6 +3971,10 @@ msgstr "Open incidents:"
 #: src/features/finance/FinanceDemos.tsx
 msgid "Open invoices"
 msgstr "Open invoices"
+
+#: src/features/admin/AutomationsPage.tsx
+msgid "Open it, read its error, then retry it."
+msgstr "Open it, read its error, then retry it."
 
 #: src/features/commerce/ProductsPage.tsx
 msgid "Open on Etsy"
@@ -4638,6 +4657,10 @@ msgstr "Recorded in HTCO"
 #: src/features/admin/AuditPage.tsx
 msgid "Records"
 msgstr "Records"
+
+#: src/features/admin/AuditPage.tsx
+msgid "Records outside the chosen shop, actor, action or time are not shown."
+msgstr "Records outside the chosen shop, actor, action or time are not shown."
 
 #: src/features/admin/AuditPage.tsx
 msgid "Records shown"
@@ -5921,6 +5944,10 @@ msgstr "The members cannot be loaded right now. Try again shortly."
 msgid "The newest {SHOWN} of {0}"
 msgstr "The newest {SHOWN} of {0}"
 
+#: src/features/admin/execution.tsx
+msgid "The next page could not be loaded."
+msgstr "The next page could not be loaded."
+
 #: src/features/office/FloorPage.tsx
 msgid "The office is waking up…"
 msgstr "The office is waking up…"
@@ -6301,10 +6328,6 @@ msgstr "Timeline"
 msgid "Titles, photos and claims audited, fixed as drafts you approve."
 msgstr "Titles, photos and claims audited, fixed as drafts you approve."
 
-#: src/features/admin/EmailFailures.tsx
-msgid "To"
-msgstr "To"
-
 #: src/features/commerce/ShippingPage.tsx
 msgid "To ship"
 msgstr "To ship"
@@ -6491,6 +6514,7 @@ msgstr "Triggers"
 #: src/features/admin/AuditPage.tsx
 #: src/features/admin/AutomationsPage.tsx
 #: src/features/admin/EmailFailures.tsx
+#: src/features/admin/execution.tsx
 #: src/features/admin/OperationsPage.tsx
 #: src/features/admin/TrackingSync.tsx
 #: src/features/incidents/IncidentsPage.tsx
