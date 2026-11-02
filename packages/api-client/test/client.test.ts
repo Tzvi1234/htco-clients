@@ -32,6 +32,15 @@ describe("the API client", () => {
     expect(requests[0]?.credentials).toBe("same-origin");
   });
 
+  it("keeps a same-origin referrer under the page's no-referrer policy, so POSTs keep their Origin", async () => {
+    const { requests, fetch } = recordingFetch(204);
+    const client = createApiClient({ baseUrl: "https://app.test/api", fetch });
+
+    await client.POST("/v1/auth/sign-out");
+
+    expect(requests[0]?.referrerPolicy).toBe("same-origin");
+  });
+
   it("sends the CSRF header on unsafe requests only (AC-3.5.2)", async () => {
     const { requests, fetch } = recordingFetch(204);
     const client = createApiClient({ baseUrl: "https://app.test/api", fetch });

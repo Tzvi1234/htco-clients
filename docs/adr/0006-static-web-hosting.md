@@ -13,7 +13,7 @@ Slice 3.8 planned a Caddy container that serves the built app with security resp
 - The web app is a static site component (`web`) of the existing App Platform app, built by `apps/web/Dockerfile` from this repository's `main`, at `https://dash.ht-co.app`. The app's ingress sends `dash.ht-co.app/api/*` to the API (prefix removed), so the API stays on the page's origin (platform ADR-0006).
 - The policies travel inside the page, written at build time by `src/shared/security/csp.ts`:
   - **Content-Security-Policy** as a `<meta>`: only this origin; `data:` images for the authenticator QR code; one hashed `<style>` that React Aria injects; no inline script, no `unsafe-*`.
-  - **Referrer-Policy** `same-origin` as a `<meta>`.
+  - **Referrer-Policy** `no-referrer` as a `<meta>` (was `same-origin` until the Codex security review of 2026-10-30, so a page's query never reaches this site's own asset requests either); API calls set `same-origin` on the request so a POST keeps its `Origin` header.
 - **HSTS:** every `.app` domain is on the browsers' HSTS preload list, so plain HTTP is never used. App Platform also redirects HTTP to HTTPS.
 - **Framing:** `frame-ancestors` does not work in a `<meta>`, so the app renders nothing when it runs inside a frame (`framing.ts`).
 - **Not covered:** `Permissions-Policy` (the app uses no camera, microphone, location or payment features) and `X-Content-Type-Options` (App Platform sets content types from file extensions).

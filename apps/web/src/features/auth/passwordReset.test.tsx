@@ -7,6 +7,7 @@ import { App } from "../../app/App.tsx";
 import type { Locale } from "../../shared/i18n/locale.ts";
 import { memoryStorage } from "../../shared/lib/storage.ts";
 import { fakeBackend, type FakeState } from "../../test/fakeApi.ts";
+import { heldIn, watchMutationCaches } from "../../test/mutationCaches.ts";
 
 const SENT = "If an account exists for this email, we sent a link to reset the password.";
 const EXPIRED = "This password reset link has expired or was already used. Ask for a new one.";
@@ -102,29 +103,32 @@ describe("forgetting the password (AC-3.5.6)", () => {
 });
 
 describe("setting a new password from the emailed link (AC-3.5.6)", () => {
-  const link = "/reset-password#access_token=reset-at&refresh_token=reset-rt&type=recovery";
+  // The API's link callback redeemed the link and sent the browser here with its `HttpOnly`
+  // cookie and a clean address (Codex security review).
+  const link = "/reset-password";
+  const opened = { linkCookie: "recovery" as const };
 
-  it("sets the password, signs in and drops the tokens from the address bar", async () => {
-    const { user, backend, history } = await open(link, { role: "support" });
+  it("sets the password and signs in, sending only the password (the link stays in the cookie)", async () => {
+    const caches = watchMutationCaches();
+    const { user, backend } = await open(link, { ...opened, role: "support" });
     expect(
       screen.getByRole("heading", { level: 1, name: "Choose a new password" }),
     ).toBeInTheDocument();
-    expect(history.location.hash).toBe("");
 
     await user.type(screen.getByLabelText("New password"), "a long new password");
     await user.type(screen.getByLabelText("Repeat the password"), "a long new password");
     await user.click(screen.getByRole("button", { name: "Save and sign in" }));
 
     expect(await screen.findByRole("heading", { level: 1, name: "Home" })).toBeInTheDocument();
-    expect(backend.state.reset).toEqual({
-      access_token: "reset-at",
-      refresh_token: "reset-rt",
-      password: "a long new password",
-    });
+    expect(backend.state.reset).toEqual({ password: "a long new password" });
+    expect(backend.state.linkCookie).toBeNull();
+    // No secret in the shared mutation cache (Codex security review).
+    expect(caches.length).toBeGreaterThan(0);
+    expect(heldIn(caches)).not.toContain("a long new password");
   });
 
   it("asks for the same password twice", async () => {
-    const { user, backend } = await open(link);
+    const { user, backend } = await open(link, opened);
 
     await user.type(screen.getByLabelText("New password"), "a long new password");
     await user.type(screen.getByLabelText("Repeat the password"), "another password!!");
@@ -135,7 +139,7 @@ describe("setting a new password from the emailed link (AC-3.5.6)", () => {
   });
 
   it("checks the password length before sending it", async () => {
-    const { user, backend } = await open(link);
+    const { user, backend } = await open(link, opened);
 
     await user.type(screen.getByLabelText("New password"), "too short");
     await user.type(screen.getByLabelText("Repeat the password"), "too short");
@@ -147,8 +151,8 @@ describe("setting a new password from the emailed link (AC-3.5.6)", () => {
     expect(backend.state.reset).toBeUndefined();
   });
 
-  it("says when the password is too weak", async () => {
-    const { user } = await open(link);
+  it("says when the password is too weak, and the link still works", async () => {
+    const { user, backend } = await open(link, opened);
 
     await user.type(screen.getByLabelText("New password"), "weak but long enough");
     await user.type(screen.getByLabelText("Repeat the password"), "weak but long enough");
@@ -157,10 +161,11 @@ describe("setting a new password from the emailed link (AC-3.5.6)", () => {
     expect(await screen.findByRole("alert")).toHaveTextContent(
       "Choose a longer password that is harder to guess.",
     );
+    expect(backend.state.linkCookie).toBe("recovery");
   });
 
   it("says when the new password is the current one", async () => {
-    const { user } = await open(link);
+    const { user } = await open(link, opened);
 
     await user.type(screen.getByLabelText("New password"), "correct horse battery");
     await user.type(screen.getByLabelText("Repeat the password"), "correct horse battery");
@@ -171,8 +176,8 @@ describe("setting a new password from the emailed link (AC-3.5.6)", () => {
     );
   });
 
-  it("says when the link expired, and offers a new one", async () => {
-    await open("/reset-password#error=access_denied&error_code=otp_expired&error_description=x");
+  it("says when the API's callback found the link expired, and offers a new one", async () => {
+    await open("/reset-password?link=invalid");
 
     expect(screen.getByText(EXPIRED)).toBeInTheDocument();
     expect(screen.queryByLabelText("New password")).not.toBeInTheDocument();
@@ -182,20 +187,44 @@ describe("setting a new password from the emailed link (AC-3.5.6)", () => {
     );
   });
 
-  it("says when the server refuses the link", async () => {
-    const { user } = await open(
-      "/reset-password#access_token=used-at&refresh_token=used-rt&type=recovery",
+  it("says when too many links failed from this address", async () => {
+    await open("/reset-password?link=too-many");
+
+    expect(screen.getByText("Too many attempts. Wait 15 minutes and try again.")).toBeVisible();
+    expect(screen.queryByLabelText("New password")).not.toBeInTheDocument();
+  });
+
+  it("says when the server refuses the link (no link cookie on this browser)", async () => {
+    const { user } = await open(link);
+
+    await user.type(screen.getByLabelText("New password"), "a long new password");
+    await user.type(screen.getByLabelText("Repeat the password"), "a long new password");
+    await user.click(screen.getByRole("button", { name: "Save and sign in" }));
+
+    expect(await screen.findByText(EXPIRED)).toBeVisible();
+    expect(screen.queryByLabelText("New password")).not.toBeInTheDocument();
+  });
+
+  it("never reads a token from the address (an old fragment link is ignored)", async () => {
+    const { user, backend } = await open(
+      "/reset-password#access_token=reset-at&refresh_token=reset-rt&type=recovery",
     );
 
     await user.type(screen.getByLabelText("New password"), "a long new password");
     await user.type(screen.getByLabelText("Repeat the password"), "a long new password");
     await user.click(screen.getByRole("button", { name: "Save and sign in" }));
 
-    expect(await screen.findByRole("alert")).toHaveTextContent(EXPIRED);
+    expect(await screen.findByText(EXPIRED)).toBeVisible();
+    expect(backend.state.reset).toBeUndefined();
+    for (const request of backend.requests) expect(request.url).not.toContain("reset-at");
   });
 
   it("asks a user with an authenticator app for its code, then signs in", async () => {
-    const { user, backend } = await open(link, { resetNeedsCode: true, enrolled: true });
+    const { user, backend } = await open(link, {
+      ...opened,
+      resetNeedsCode: true,
+      enrolled: true,
+    });
 
     await user.type(screen.getByLabelText("New password"), "a long new password");
     await user.type(screen.getByLabelText("Repeat the password"), "a long new password");

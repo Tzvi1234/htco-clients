@@ -22,14 +22,9 @@ test("an Owner invites a member and gets the link to send", async ({ page }) => 
 });
 
 test("an invited person sets a password from the link and is signed in", async ({ page }) => {
-  await openApp(
-    page,
-    "/accept-invite#access_token=invite-at&refresh_token=invite-rt&type=invite",
-    "signed-out",
-  );
+  // The API's link callback redeemed the link and sent the browser here with a clean address.
+  await openApp(page, "/accept-invite", "signed-out");
   await expect(pageTitle(page, "Set your password")).toBeVisible();
-  // The tokens leave the address bar straight away.
-  await expect(page).not.toHaveURL(/access_token/);
   await checkpoint(page, "accept-invite");
 
   await page.getByLabel("New password").fill("a long new password");

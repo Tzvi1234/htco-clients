@@ -47,9 +47,9 @@ describe("the Content Security Policy (AC-3.8.2)", () => {
     expect(withSecurityPolicies(html)).toContain(`'sha256-${hash}'`);
   });
 
-  it("sends no referrer to other sites", () => {
+  it("sends no referrer, not even to this site's assets (Codex security review)", () => {
     const built = withSecurityPolicies('<head><meta charset="utf-8" /></head>');
-    expect(built).toContain('<meta name="referrer" content="same-origin" />');
+    expect(built).toContain('<meta name="referrer" content="no-referrer" />');
   });
 });
 

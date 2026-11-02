@@ -29,7 +29,14 @@ const api =
         const { demoShops, fakeBackend } = await import("./test/fakeApi.ts");
         const { demoIncidents, demoNotifications } = await import("./test/fakeIncidents.ts");
         const { demoRelay } = await import("./test/fakeRelay.ts");
-        if (demo === "signed-out") return fakeBackend().client;
+        // Opening the accept or reset page acts as if the API's link callback had just set its
+        // `HttpOnly` link cookie.
+        const path = window.location.pathname;
+        if (demo === "signed-out")
+          return fakeBackend({
+            linkCookie:
+              path === "/accept-invite" ? "invite" : path === "/reset-password" ? "recovery" : null,
+          }).client;
         // Signed in with a password only: the authenticator code step.
         if (demo === "mfa")
           return fakeBackend({ signedIn: true, enrolled: true, assurance: "aal1" }).client;
@@ -38,7 +45,8 @@ const api =
           signedIn: true,
           enrolled: true,
           assurance: "aal2",
-          authorizationUrl: `/integrations/etsy/callback?code=demo-code&state=demo-state&demo=${demo}`,
+          // As if the API's callback had kept Etsy's code in its cookie and sent the owner on.
+          authorizationUrl: `/integrations/etsy/callback?demo=${demo}`,
           ...(demo === "shops" || demo === "history"
             ? (() => {
                 const shops = demoShops();

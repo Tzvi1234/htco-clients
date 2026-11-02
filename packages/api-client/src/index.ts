@@ -31,6 +31,9 @@ export function createApiClient({ baseUrl = "/api", fetch }: ApiClientOptions = 
   const client = createClient<paths>({
     baseUrl,
     credentials: "same-origin",
+    // The page's own policy is `no-referrer`, under which a same-origin POST carries
+    // `Origin: null` and fails the API's origin check; API calls keep a same-origin referrer.
+    referrerPolicy: "same-origin",
     ...(fetch === undefined ? {} : { fetch }),
   });
   client.use(csrf);
