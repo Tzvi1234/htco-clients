@@ -54,10 +54,11 @@ for (const [locale, scheme] of [
 
     test(`the audit log (AC-3.9.3), ${locale} ${scheme}`, async ({ page }) => {
       await openApp(page, "/admin/audit", "shops");
-      await expect(page.getByRole("table", { name: words.audit })).toBeVisible({
-        timeout: 20_000,
-      });
+      const table = page.getByRole("table", { name: words.audit });
+      await expect(table).toBeVisible({ timeout: 20_000 });
       await settle(page);
+      // The records themselves: on a phone the filters fill the first screen.
+      await table.scrollIntoViewIfNeeded();
       await checkpoint(page, `audit-${locale}-${scheme}`);
     });
 
