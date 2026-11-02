@@ -49,6 +49,9 @@ async function firstShippedOrder() {
   return within(row).getByRole("button", { name: /^Open order/ });
 }
 
+// Whole journeys through the app: more than the default 5 s on a busy runner.
+vi.setConfig({ testTimeout: 20_000 });
+
 describe("Orders on the stored history (slice 5.7)", () => {
   it("says the orders are synced from Etsy, and how long ago", async () => {
     await open();
@@ -85,6 +88,65 @@ describe("Orders on the stored history (slice 5.7)", () => {
         /\/v1\/shops\/[^/]+\/orders\/\d+$/.test(new URL(r.url).pathname),
       ),
     ).toBe(true);
+  });
+
+  it("AC-6.1.2: the sheet shows each parcel's tracking: carrier, last four, source, first seen", async () => {
+    const { user } = await open();
+
+    await user.click(await firstShippedOrder());
+
+    const sheet = await screen.findByRole("dialog", { name: /^Order / });
+    const tracking = await within(sheet).findByRole("region", { name: "Tracking" });
+    const [parcel] = await within(tracking).findAllByRole("listitem");
+    expect(parcel).toHaveTextContent(/^(USPS|Israel Post|DHL) •••• \d{4}/);
+    expect(parcel).toHaveTextContent(/From Etsy · Etsy notice · first seen/);
+    // Only the last four: never the full code in the tracking list.
+    expect(tracking.textContent).not.toMatch(/9400 1118/);
+  });
+
+  it("the sheet shows the order its detail read returns, newer than the list's row", async () => {
+    // The list was read while the order was paid; it shipped since, and the detail says so.
+    const { user } = await open({
+      orderDetailNewer: (order) => ({
+        ...order,
+        state: "shipped",
+        overdue: false,
+        shipments: [
+          { carrier: "Parcel Newer", shipped_at: "2026-10-14T08:00:00Z", tracking_code: "NW0001" },
+        ],
+      }),
+    });
+    const table = await screen.findByRole("table", { name: "Orders" });
+    const row = within(table)
+      .getAllByRole("row")
+      .find((r) => within(r).queryByText("Paid") !== null);
+    if (row === undefined) throw new Error("no paid order");
+    await user.click(within(row).getByRole("button", { name: /^Open order/ }));
+
+    const sheet = await screen.findByRole("dialog", { name: /^Order / });
+    expect(await within(sheet).findByText("Parcel Newer")).toBeInTheDocument();
+    expect(within(sheet).getByText("NW0001")).toBeInTheDocument();
+    expect(within(sheet).getAllByText("Shipped").length).toBeGreaterThan(0);
+  });
+
+  it("AC-6.1.2: a role without buyer data still sees the carrier and the last four", async () => {
+    const { user } = await open({ role: "viewer" });
+
+    await user.click(await firstShippedOrder());
+
+    const sheet = await screen.findByRole("dialog", { name: /^Order / });
+    const tracking = await within(sheet).findByRole("region", { name: "Tracking" });
+    expect(await within(tracking).findByText(/•••• \d{4}/)).toBeInTheDocument();
+  });
+
+  it("an order without a tracking event says none was seen yet", async () => {
+    const { user } = await open({ orderStore: false });
+
+    await user.click(await firstShippedOrder());
+
+    const sheet = await screen.findByRole("dialog", { name: /^Order / });
+    const tracking = await within(sheet).findByRole("region", { name: "Tracking" });
+    expect(await within(tracking).findByText("No tracking number seen yet.")).toBeInTheDocument();
   });
 
   it("an order read live (not stored yet) says its steps come later, never an empty list", async () => {

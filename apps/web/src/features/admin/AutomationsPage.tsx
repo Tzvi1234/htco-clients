@@ -251,10 +251,15 @@ function Automations({
               other="# automations are live. Their runs and success are for the Owner and Admins."
             />
           ) : dead.length === 1 ? (
-            <Trans>
-              One automation has a dead-lettered run: {nameOf(dead[0]?.id ?? "")}. Open it, read its
-              error, then retry it.
-            </Trans>
+            // Two lines: as one sentence it broke on the wrap boundary and flipped between runs.
+            <>
+              <span className="block">
+                <Trans>One automation has a dead-lettered run: {nameOf(dead[0]?.id ?? "")}.</Trans>
+              </span>
+              <span className="block">
+                <Trans>Open it, read its error, then retry it.</Trans>
+              </span>
+            </>
           ) : dead.length > 1 ? (
             <Plural
               value={dead.length}

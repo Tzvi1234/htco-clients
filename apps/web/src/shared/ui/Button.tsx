@@ -3,7 +3,7 @@ import { Button as AriaButton, type ButtonProps as AriaButtonProps } from "react
 import { cx } from "../lib/cx.ts";
 
 export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
-export type ButtonSize = "sm" | "md" | "lg";
+export type ButtonSize = "sm" | "md" | "lg" | "touch";
 
 // Design 1C (.btn): pills with a hairline; the primary is the inverse (ink) fill, its glyph in
 // orange (round 4; tertiary.on-inverse is checked at 4.5:1 on the ink).
@@ -27,11 +27,13 @@ const LINK_VARIANTS: Record<ButtonVariant, string> = {
   danger: "border-transparent bg-action-danger text-action-danger-fg",
 };
 
-// 28, 32 and 40 px.
+// 28, 32 and 40 px. `touch` is `md` under a mouse and 44 px (the touch target) on phones and
+// coarse pointers: for a button that sits alone in a list or a card (Load more, Try again).
 const SIZES: Record<ButtonSize, string> = {
   sm: "h-7 gap-1.5 px-3 text-caption",
   md: "h-8 gap-1.5 px-4 text-body-sm",
   lg: "h-10 gap-2 px-5 text-body-sm",
+  touch: "h-8 gap-1.5 px-4 text-body-sm max-sm:h-11 pointer-coarse:h-11",
 };
 
 export interface ButtonProps extends Omit<AriaButtonProps, "className"> {

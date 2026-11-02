@@ -8,7 +8,12 @@ import { App } from "../../app/App.tsx";
 import { forgetSession } from "../../shared/api/api.tsx";
 import { operationsKeys } from "../../shared/api/operations.ts";
 import { memoryStorage } from "../../shared/lib/storage.ts";
-import { fakeBackend, fakeIntegration, type FakeState } from "../../test/fakeApi.ts";
+import {
+  fakeBackend,
+  fakeIntegration,
+  idempotencyKeys,
+  type FakeState,
+} from "../../test/fakeApi.ts";
 import { DEAD_EXECUTION, DEAD_JOB, fakeOperations } from "../../test/fakeOperations.ts";
 
 // Admin › Health (platform slice 5.9): the queue, the workers, the shops' syncs, webhook intake,
@@ -246,6 +251,24 @@ describe("Admin › Health (slice 5.9)", () => {
         (r) => r.method === "POST" && r.url.includes(`/dead-letters/${DEAD_JOB}/retry`),
       ),
     ).toBe(true);
+  });
+
+  it("retries a dead job with an Idempotency-Key, the same one when the retry is pressed again (#223)", async () => {
+    const { user, backend } = await open({ failNext: ["dead-letters"] });
+    const letters = await table("Dead letters");
+    const button = within(letters).getByRole("button", {
+      name: "Retry the job etsy.webhook_event",
+    });
+
+    await user.click(button);
+    await screen.findByText("The job could not be retried. Try again shortly.");
+    await user.click(button);
+    await screen.findByText(/Queued again/);
+
+    const keys = idempotencyKeys(backend.requests, "POST", /\/dead-letters\/[^/]+\/retry$/);
+    expect(keys).toHaveLength(2);
+    expect(keys[0]).toMatch(/^[0-9a-f-]{36}$/);
+    expect(keys[1]).toBe(keys[0]);
   });
 
   it("an execution's dead job opens its chain, where the execution is retried", async () => {

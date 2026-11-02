@@ -41,6 +41,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/audit-log": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The organization's audit records (Owner and Admins)
+         * @description Newest first; `since` is inclusive and `until` exclusive; `shop_id` matches the shop's
+         *     own records and those naming it; pass `next_cursor` back as `cursor` for the next page.
+         */
+        get: operations["list_audit_log"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/auth/invitations/accept": {
         parameters: {
             query?: never;
@@ -612,9 +633,30 @@ export interface paths {
         /**
          * Send a dead-lettered job back to the queue (audited)
          * @description Attempts start from zero and the job is due now; the audit records its kind and last
-         *     error.
+         *     error. Once per Idempotency-Key (audit 6.1).
          */
         post: operations["retry_dead_letter"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/operations/email-failures": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Emails refused for good or skipped (no full address)
+         * @description Newest first; the recipient as a member ID and a masked address; pass `next_cursor`
+         *     back as `cursor` for the next page.
+         */
+        get: operations["list_email_failures"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -653,7 +695,9 @@ export interface paths {
         /**
          * Invite a user by email
          * @description Adds the membership and returns a one-time invitation link to send to the invitee
-         *     (`no-store`; never logged). Only the Owner may invite another Owner.
+         *     (`no-store`; never logged). Only the Owner may invite another Owner. Once per
+         *     Idempotency-Key (audit 6.1): a retry does not invite again, and its replay carries
+         *     `invite_link: null`, since the link is shown once and never stored.
          */
         post: operations["invite_organization_member"];
         delete?: never;
@@ -786,8 +830,10 @@ export interface paths {
          * Paste the tracking number from AutoVA for one relay item
          * @description An Owner or Admin with a second factor (6.10 PR B). Validated before anything else
          *     (AC-6.10.4); a number the Etsy receipt already carries closes the item on that evidence
-         *     (AC-6.10.2); otherwise the item is handed off for the copy into Etsy (AC-6.10.3). Replay
-         *     safe: a second paste is a 409. Audited, never with the number; no Etsy call.
+         *     (AC-6.10.2); otherwise the item is handed off for the copy into Etsy (AC-6.10.3). Once
+         *     per Idempotency-Key (audit 6.1): a timed-out retry gets the first answer; a second paste
+         *     with a new key is a 409. Audited, never with the number; no Etsy call. Only the carrier
+         *     and the last four characters are kept for the replay, never the number.
          */
         post: operations["paste_tracking"];
         delete?: never;
@@ -805,7 +851,8 @@ export interface paths {
         };
         /**
          * Marketplace connections of the organization's shops
-         * @description Status, granted scopes and token health per shop, for the shop card; never a token.
+         * @description Status, granted scopes and token health per shop, and Etsy's remaining daily request
+         *     budget with its floor, for the shop card; never a token.
          */
         get: operations["list_shop_integrations"];
         put?: never;
@@ -976,7 +1023,8 @@ export interface paths {
          * Re-read the selected orders from Etsy (queued, audited)
          * @description One Etsy Order Intake re-read per receipt, queued for the worker (GET-only, through
          *     the engine and the Action Gateway). Owner and Admin, and Operations and Developer for
-         *     their granted shops. At most 50 receipts a request; audited with the receipt IDs.
+         *     their granted shops. At most 50 receipts a request; audited with the receipt IDs. Once
+         *     per Idempotency-Key (audit 6.1).
          */
         post: operations["resync_shop_orders"];
         delete?: never;
@@ -1190,6 +1238,11 @@ export interface components {
             /** Refresh Token */
             refresh_token: string;
         };
+        /**
+         * ActorKind
+         * @enum {string}
+         */
+        ActorKind: "user" | "employee" | "automation" | "advisor" | "system";
         /** AllTimeSalesView */
         AllTimeSalesView: {
             average_order_value: components["schemas"]["MoneyView"] | null;
@@ -1227,6 +1280,45 @@ export interface components {
         AssuranceView: {
             /** Assurance */
             assurance: string;
+        };
+        /** AuditEntryView */
+        AuditEntryView: {
+            /** Action */
+            action: string;
+            /** Actor Id */
+            actor_id: string;
+            actor_kind: components["schemas"]["ActorKind"];
+            /** After */
+            after: {
+                [key: string]: unknown;
+            } | null;
+            /** Before */
+            before: {
+                [key: string]: unknown;
+            } | null;
+            /** Correlation Id */
+            correlation_id: string | null;
+            /** Entity Id */
+            entity_id: string;
+            /** Entity Type */
+            entity_type: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Occurred At
+             * Format: date-time
+             */
+            occurred_at: string;
+        };
+        /** AuditLogPage */
+        AuditLogPage: {
+            /** Items */
+            items: components["schemas"]["AuditEntryView"][];
+            /** Next Cursor */
+            next_cursor: string | null;
         };
         /** AuthorizationView */
         AuthorizationView: {
@@ -1442,6 +1534,26 @@ export interface components {
             /** State */
             state?: string | null;
         };
+        /**
+         * EtsyQuotaView
+         * @description The shop card's quota figure: this API process's last-seen value, which can be stale.
+         *
+         *     Most Etsy calls run in the worker, so `remaining_today` and `below_floor` may be hours old or
+         *     from the previous Etsy day, and `below_floor` ignores the snapshot's age. Show `observed_at`
+         *     as "as of", never as a live count.
+         */
+        EtsyQuotaView: {
+            /** Below Floor */
+            below_floor: boolean;
+            /** Floor */
+            floor: number;
+            /** Limit Per Day */
+            limit_per_day: number | null;
+            /** Observed At */
+            observed_at: string | null;
+            /** Remaining Today */
+            remaining_today: number | null;
+        };
         /** EvidenceView */
         EvidenceView: {
             /** Kind */
@@ -1566,6 +1678,49 @@ export interface components {
             /** Verified */
             verified: boolean;
         };
+        /** FailedEmailList */
+        FailedEmailList: {
+            /** Items */
+            items: components["schemas"]["FailedEmailView"][];
+            /** Next Cursor */
+            next_cursor: string | null;
+        };
+        /** FailedEmailView */
+        FailedEmailView: {
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Incident Id */
+            incident_id: string | null;
+            /** Kind */
+            kind: string;
+            /** Reason */
+            reason: string | null;
+            /** Receipt Id */
+            receipt_id: number | null;
+            /** Recipient */
+            recipient: string | null;
+            /**
+             * Recipient User Id
+             * Format: uuid
+             */
+            recipient_user_id: string;
+            /** Shop Id */
+            shop_id: string | null;
+            status: components["schemas"]["FailedStatus"];
+        };
+        /**
+         * FailedStatus
+         * @enum {string}
+         */
+        FailedStatus: "failed" | "skipped";
         /**
          * FieldError
          * @description One invalid request field: where it is and what is wrong. The input is never echoed.
@@ -1712,6 +1867,7 @@ export interface components {
         IngestSource: "webhook" | "reconciliation" | "backfill" | "sync";
         /** IntegrationList */
         IntegrationList: {
+            etsy_quota?: components["schemas"]["EtsyQuotaView"] | null;
             /** Items */
             items: components["schemas"]["IntegrationView"][];
         };
@@ -1998,6 +2154,11 @@ export interface components {
             /** Type */
             type: string;
         };
+        /**
+         * ObservedVia
+         * @enum {string}
+         */
+        ObservedVia: "webhook" | "schedule" | "relay";
         /** OperationsHealthView */
         OperationsHealthView: {
             /** Automations */
@@ -2066,6 +2227,11 @@ export interface components {
             sync?: components["schemas"]["SyncView"] | null;
             /** Timeline */
             timeline: components["schemas"]["OrderStatusChangeView"][];
+            /**
+             * Tracking
+             * @default []
+             */
+            tracking: components["schemas"]["OrderTrackingView"][];
         };
         /**
          * OrderFilter
@@ -2147,6 +2313,22 @@ export interface components {
              * Format: date-time
              */
             window_start: string;
+        };
+        /** OrderTrackingView */
+        OrderTrackingView: {
+            /** Carrier */
+            carrier: string;
+            /** Carrier Name */
+            carrier_name: string;
+            /**
+             * First Observed At
+             * Format: date-time
+             */
+            first_observed_at: string;
+            /** Last4 */
+            last4: string;
+            observed_via: components["schemas"]["ObservedVia"];
+            source: components["schemas"]["TrackingSource"];
         };
         /** OrderView */
         OrderView: {
@@ -2856,6 +3038,12 @@ export interface components {
             /** Code */
             code: string;
         };
+        /**
+         * TrackingSource
+         * @description Where the tracking number came from.
+         * @enum {string}
+         */
+        TrackingSource: "etsy" | "autova_manual" | "autova_browser" | "autova_email";
         /** TransitionRequest */
         TransitionRequest: {
             /** Note */
@@ -3017,6 +3205,115 @@ export interface operations {
                 };
                 content: {
                     "application/problem+json": components["schemas"]["NotReadyProblem"];
+                };
+            };
+        };
+    };
+    list_audit_log: {
+        parameters: {
+            query?: {
+                action?: string | null;
+                actor_id?: string | null;
+                actor_kind?: components["schemas"]["ActorKind"] | null;
+                cursor?: string | null;
+                limit?: number;
+                organization_id?: string | null;
+                shop_id?: string | null;
+                since?: string | null;
+                until?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuditLogPage"];
+                };
+            };
+            /** @description The caller belongs to several organizations and named none */
+            400: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not signed in, or the access token was rejected */
+            401: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Only the Owner and Admins read the audit log (forbidden) */
+            403: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The named organization does not exist for the caller */
+            404: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Invalid filter, time range, limit or cursor */
+            422: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"];
+                };
+            };
+            /** @description Unexpected error. Quote the request ID when reporting it */
+            500: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not available on this server (audit-unavailable) */
+            503: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
                 };
             };
         };
@@ -5800,7 +6097,10 @@ export interface operations {
             query?: {
                 organization_id?: string | null;
             };
-            header?: never;
+            header?: {
+                /** @description A key for this request; a retry with the same key and body returns the first response (24 hours). Send it: it becomes required. */
+                "Idempotency-Key"?: string;
+            };
             path: {
                 job_id: string;
             };
@@ -5819,7 +6119,7 @@ export interface operations {
                     "application/json": components["schemas"]["RetriedJobView"];
                 };
             };
-            /** @description The caller belongs to several organizations and named none */
+            /** @description The caller belongs to several organizations and named none, or an invalid Idempotency-Key */
             400: {
                 headers: {
                     /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
@@ -5863,7 +6163,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The job is not dead (job-not-dead), or it runs an execution: retry the execution (retry-through-execution, with `execution_id`) */
+            /** @description The job is not dead (job-not-dead), or it runs an execution: retry the execution (retry-through-execution, with `execution_id`), or the first request with this Idempotency-Key still runs (idempotency-in-progress) */
             409: {
                 headers: {
                     /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
@@ -5874,7 +6174,111 @@ export interface operations {
                     "application/problem+json": components["schemas"]["RetryThroughExecutionProblem"];
                 };
             };
-            /** @description Invalid ID */
+            /** @description Invalid ID, or the Idempotency-Key was used with another request (idempotency-key-reused); `errors` names the fields */
+            422: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"];
+                };
+            };
+            /** @description Unexpected error. Quote the request ID when reporting it */
+            500: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not available on this server (operations-unavailable), or replays are not set up (not-ready) */
+            503: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    list_email_failures: {
+        parameters: {
+            query?: {
+                cursor?: string | null;
+                limit?: number;
+                organization_id?: string | null;
+                status?: components["schemas"]["FailedStatus"];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FailedEmailList"];
+                };
+            };
+            /** @description The caller belongs to several organizations and named none */
+            400: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not signed in, or the access token was rejected */
+            401: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Only the Owner and Admins see the failed emails (forbidden) */
+            403: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The named organization does not exist for the caller */
+            404: {
+                headers: {
+                    /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
+                    "X-Request-Id": string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Invalid ID, status, limit or cursor */
             422: {
                 headers: {
                     /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
@@ -6002,7 +6406,10 @@ export interface operations {
     invite_organization_member: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                /** @description A key for this request; a retry with the same key and body returns the first response (24 hours). Send it: it becomes required. */
+                "Idempotency-Key"?: string;
+            };
             path: {
                 organization_id: string;
             };
@@ -6025,7 +6432,7 @@ export interface operations {
                     "application/json": components["schemas"]["InvitationView"];
                 };
             };
-            /** @description The body is not valid JSON */
+            /** @description The body is not valid JSON, or an invalid Idempotency-Key */
             400: {
                 headers: {
                     /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
@@ -6069,7 +6476,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description Already a member, or the email already has an account */
+            /** @description Already a member, or the email already has an account, or the first request with this Idempotency-Key still runs (idempotency-in-progress) */
             409: {
                 headers: {
                     /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
@@ -6080,7 +6487,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description Invalid email or role */
+            /** @description Invalid email or role, or the Idempotency-Key was used with another request (idempotency-key-reused); `errors` names the fields */
             422: {
                 headers: {
                     /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
@@ -6102,7 +6509,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description Invitations cannot be sent right now */
+            /** @description Invitations cannot be sent right now, or replays are not set up (not-ready) */
             503: {
                 headers: {
                     /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
@@ -6779,7 +7186,10 @@ export interface operations {
             query?: {
                 organization_id?: string | null;
             };
-            header?: never;
+            header?: {
+                /** @description A key for this request; a retry with the same key and body returns the first response (24 hours). Send it: it becomes required. */
+                "Idempotency-Key"?: string;
+            };
             path: {
                 item_id: string;
             };
@@ -6802,7 +7212,7 @@ export interface operations {
                     "application/json": components["schemas"]["RelayPasteView"];
                 };
             };
-            /** @description The caller belongs to several organizations and named none */
+            /** @description An invalid Idempotency-Key, or several organizations and none named */
             400: {
                 headers: {
                     /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
@@ -6846,7 +7256,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description Pasted already or closed (relay-item-moved), or the number is used for another order (tracking-already-used) */
+            /** @description Pasted already or closed (relay-item-moved), the number is used for another order (tracking-already-used), or the first request with this Idempotency-Key still runs (idempotency-in-progress) */
             409: {
                 headers: {
                     /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
@@ -6857,7 +7267,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description An unknown carrier or a number in the wrong format (tracking-invalid) */
+            /** @description An unknown carrier or a number in the wrong format (tracking-invalid), or the Idempotency-Key was used with another request (idempotency-key-reused) */
             422: {
                 headers: {
                     /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
@@ -6879,7 +7289,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The relay is not set up on this server (relay-unavailable) */
+            /** @description The relay is not set up on this server (relay-unavailable), or replays are not set up (not-ready) */
             503: {
                 headers: {
                     /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
@@ -7697,7 +8107,10 @@ export interface operations {
     resync_shop_orders: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                /** @description A key for this request; a retry with the same key and body returns the first response (24 hours). Send it: it becomes required. */
+                "Idempotency-Key"?: string;
+            };
             path: {
                 shop_id: string;
             };
@@ -7720,7 +8133,7 @@ export interface operations {
                     "application/json": components["schemas"]["ResyncOrdersView"];
                 };
             };
-            /** @description The body is not valid JSON */
+            /** @description The body is not valid JSON, or an invalid Idempotency-Key */
             400: {
                 headers: {
                     /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
@@ -7764,7 +8177,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The shop is not connected (shop-not-connected; `reason` says why, `needs_reauth` means reconnect it), or the connection lacks the scope (etsy-scope-missing) */
+            /** @description The shop is not connected (shop-not-connected; `reason` says why, `needs_reauth` means reconnect it), the connection lacks the scope (etsy-scope-missing), or the first request with this Idempotency-Key still runs (idempotency-in-progress) */
             409: {
                 headers: {
                     /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
@@ -7775,7 +8188,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["ShopNotConnectedProblem"];
                 };
             };
-            /** @description Invalid shop ID or query */
+            /** @description Invalid shop ID or body, or the Idempotency-Key was used with another request (idempotency-key-reused); `errors` names the fields */
             422: {
                 headers: {
                     /** @description ID of this request, generated by the server. Quote it when reporting a problem. */
@@ -7808,7 +8221,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description Re-syncs are not set up (orders-bulk-unavailable) */
+            /** @description Re-syncs are not set up (orders-bulk-unavailable), or replays are not set up (not-ready) */
             503: {
                 headers: {
                     /** @description ID of this request, generated by the server. Quote it when reporting a problem. */

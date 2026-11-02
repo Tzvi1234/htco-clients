@@ -9,7 +9,13 @@ import { useDisconnects, useRechecks, useRemovals } from "./shopActions.tsx";
 import { ShopStats } from "./ShopStats.tsx";
 import { TopListings } from "./TopListings.tsx";
 import parcel from "../../assets/commerce/parcel.webp";
-import { integrationsQuery, meQuery, shopsQuery, useApi } from "../../shared/api/api.tsx";
+import {
+  integrationListQuery,
+  integrationsQuery,
+  meQuery,
+  shopsQuery,
+  useApi,
+} from "../../shared/api/api.tsx";
 import { Button } from "../../shared/ui/Button.tsx";
 import { PageHeader } from "../../shared/ui/PageHeader.tsx";
 import { Panel, PanelHeader } from "../../shared/ui/Panel.tsx";
@@ -101,6 +107,12 @@ function Shops({
   const integrations = useQuery({
     ...integrationsQuery(api, organizationId),
     enabled: seesConnections,
+  });
+  // Etsy's daily request budget comes with the same list (one cache entry, one request).
+  const quota = useQuery({
+    ...integrationListQuery(api, organizationId),
+    enabled: seesConnections,
+    select: (list) => list.etsy_quota ?? null,
   });
   const reconnectLabel = useReconnectLabel();
   const rechecks = useRechecks(organizationId);
@@ -384,6 +396,7 @@ function Shops({
                   shop={shop}
                   integration={integration}
                   live={live.get(shop.id)}
+                  quota={seesConnections ? quota.data : undefined}
                   detailsLoading={seesConnections && integrations.isPending}
                   now={Math.max(integrations.dataUpdatedAt, clock)}
                   {...(seesConnections

@@ -25,7 +25,7 @@ describe("the navigation model (Design 1C, client ADR-0008)", () => {
       commerce: ["shops", "orders", "products", "shipping", "incidents", "tracking", "suppliers"],
       customers: ["tickets", "customers", "mail", "marketing"],
       finance: ["overview", "ledger"],
-      admin: ["health", "automations", "members", "settings"],
+      admin: ["health", "automations", "audit", "members", "settings"],
     });
   });
 
@@ -43,6 +43,7 @@ describe("the navigation model (Design 1C, client ADR-0008)", () => {
       "customers/customers /customers/customers",
       "admin/health /admin/health",
       "admin/automations /admin/automations",
+      "admin/audit /admin/audit",
       "admin/members /settings/team",
       "admin/settings /settings",
     ]);

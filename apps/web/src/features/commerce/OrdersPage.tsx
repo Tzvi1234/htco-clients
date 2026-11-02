@@ -5,8 +5,9 @@ import { useState, type ReactNode } from "react";
 import { Dialog, Input, Modal, ModalOverlay, SearchField } from "react-aria-components";
 
 import { RefundChip, RefundDetails } from "./refunds.tsx";
-import { OrderTimeline } from "./timeline.tsx";
+import { OrderTimeline, TrackingEvents } from "./timeline.tsx";
 import { ApiError, useApi } from "../../shared/api/api.tsx";
+import { useActionKey } from "../../shared/api/idempotency.ts";
 import { cx } from "../../shared/lib/cx.ts";
 import { PHONE_QUERY, useMediaQuery } from "../../shared/lib/useMediaQuery.ts";
 import { Banner } from "../../shared/ui/Banner.tsx";
@@ -210,13 +211,17 @@ function Orders({
       return next;
     });
   };
+  // A new period, filter or search replaces the visible orders: the selection starts again, so a
+  // bulk action never sends an order the list no longer shows.
   const choose = (f: OrderFilter | "all") => {
     setFilter(f);
     setShown(step);
+    setSelected(new Set());
   };
   const pickPeriod = (p: OrderPeriod) => {
     setPeriod(p);
     setShown(step);
+    setSelected(new Set());
   };
   const all = useQuery(ordersQuery(api, shopId, undefined, period));
   const overview = useQuery(overviewQuery(api, shopId));
@@ -516,6 +521,7 @@ function Orders({
             onChange={(value) => {
               setSearch(value);
               setShown(step);
+              setSelected(new Set());
             }}
             className="flex h-10 w-full max-w-[320px] items-center gap-2 rounded-pill border border-line-strong px-4 focus-within:outline-2 focus-within:outline-focus"
           >
@@ -696,6 +702,8 @@ function useBulk(shopId: string) {
   const count = useCount();
   const [busy, setBusy] = useState(false);
   const [said, setSaid] = useState<{ ok: boolean; text: string } | null>(null);
+  // One Idempotency-Key per re-sync of a set of orders; the same set tried again reuses it.
+  const action = useActionKey();
   const failed = (error: unknown): string => {
     const type = error instanceof ApiError ? error.type : undefined;
     return type === "orders-action-forbidden"
@@ -731,7 +739,13 @@ function useBulk(shopId: string) {
       setBusy(true);
       setSaid(null);
       try {
-        const queued = await resyncOrders(api, shopId, ids);
+        const queued = await resyncOrders(
+          api,
+          shopId,
+          ids,
+          action.key([...ids].sort((a, b) => a - b).join(",")),
+        );
+        action.reset();
         setSaid({
           ok: true,
           text: t`${count(queued)} orders queued to be read again from Etsy.`,
@@ -832,7 +846,7 @@ function OrderRow({ order, onOpen }: { order: ShopOrder; onOpen: () => void }) {
  */
 function OrderSheet({
   shopId,
-  order,
+  order: summary,
   photos,
   incidents,
   onClose,
@@ -845,7 +859,10 @@ function OrderSheet({
 }) {
   const { t } = useLingui();
   const api = useApi();
-  const detail = useQuery(orderQuery(api, shopId, order.order_id));
+  const detail = useQuery(orderQuery(api, shopId, summary.order_id));
+  // The detail read is the current order (it may have shipped since the list was read); the
+  // list's row only stands in while it loads.
+  const order = detail.data?.order ?? summary;
   const money = useMoney();
   const date = useShortDate();
   const states = useOrderStates();
@@ -920,6 +937,7 @@ function OrderSheet({
                   </li>
                 ))}
               </ul>
+              <TrackingEvents tracking={detail.data?.tracking} loading={detail.isPending} />
               <OrderTimeline timeline={detail.data?.timeline} loading={detail.isPending} />
             </div>
           </Panel>

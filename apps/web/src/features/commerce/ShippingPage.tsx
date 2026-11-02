@@ -32,6 +32,7 @@ import {
   ShopChips,
   NextGlyph,
 } from "../../shared/ui/kit/index.ts";
+import { TrackingSyncStatus } from "../admin/index.ts";
 import { LiveProblem, ShopReconnectBanner, NoShopYet } from "../shops/index.ts";
 import {
   listingsQuery,
@@ -47,8 +48,8 @@ import { useCount, useMoney, useShortDate } from "../../shared/i18n/format.ts";
 /**
  * Commerce › Shipping, live from Etsy (clarity round 3): what waits to ship on top with the one
  * action (ship on Etsy; HTCO only reads), then sub-tabs: the queue, the shop's shipping profiles
- * with its return policies and production partners, and tracking. Tracking sync and delivery
- * performance stay Demo until Phase 6 (fulfillment and incidents).
+ * with its return policies and production partners, and tracking: Tracking Sync's status from the
+ * operations health read and its latest runs; delivery performance stays Demo.
  */
 export function ShippingPage() {
   const { t } = useLingui();
@@ -59,7 +60,12 @@ export function ShippingPage() {
       <Flow>
         {live.shop === undefined ? null : <ShopReconnectBanner shop={live.shop} />}
         {live.shop !== undefined ? (
-          <Shipping key={live.shop.id} shopId={live.shop.id} chips={<ShopChips live={live} />} />
+          <Shipping
+            key={live.shop.id}
+            shopId={live.shop.id}
+            organizationId={live.shop.organization_id}
+            chips={<ShopChips live={live} />}
+          />
         ) : (
           <Panel>
             <PanelHeader title={<Trans>Orders to ship</Trans>} />
@@ -79,7 +85,16 @@ export function ShippingPage() {
   );
 }
 
-function Shipping({ shopId, chips }: { shopId: string; chips: ReactNode }) {
+function Shipping({
+  shopId,
+  organizationId,
+  chips,
+}: {
+  shopId: string;
+  /** The shop's workspace: Tracking Sync's status is read there. */
+  organizationId: string;
+  chips: ReactNode;
+}) {
   const { t } = useLingui();
   const api = useApi();
   const count = useCount();
@@ -247,7 +262,7 @@ function Shipping({ shopId, chips }: { shopId: string; chips: ReactNode }) {
         tabs={[
           { id: "queue", label: <Trans>To ship</Trans>, count: known ? awaiting : undefined },
           { id: "profiles", label: <Trans>Profiles and returns</Trans> },
-          { id: "tracking", label: <Trans>Tracking</Trans>, demo: <DemoTag /> },
+          { id: "tracking", label: <Trans>Tracking</Trans> },
         ]}
       />
       <TabPanel idBase={tabs} tab={tab}>
@@ -313,28 +328,23 @@ function Shipping({ shopId, chips }: { shopId: string; chips: ReactNode }) {
             </Panel>
           </FlowRow>
         ) : (
-          <Panel label={t`Delivery performance`}>
-            <PanelHeader
-              title={<Trans>Delivery performance</Trans>}
-              actions={<DemoTag className="me-4" />}
-            />
-            <FlowBody className="gap-5">
-              <p className="m-0 max-w-[62ch] text-body-sm text-secondary">
-                <Trans>
-                  Tracking sync and on-time delivery arrive with fulfilment. Until then, tracking
-                  numbers are read from Etsy with each order, and nothing is synced from here.
-                </Trans>
-              </p>
-              <DemoPart tag={false}>
-                <div className="grid items-center gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-                  <KV
-                    items={[
-                      [
-                        <Trans key="t">Tracking sync</Trans>,
-                        <Status key="tv" live status="failed" />,
-                      ],
-                    ]}
-                  />
+          <FlowRow layout="halves">
+            <Panel label={t`Tracking sync`}>
+              <PanelHeader title={<Trans>Tracking sync</Trans>} />
+              <FlowBody className="gap-5">
+                <TrackingSyncStatus organizationId={organizationId} />
+              </FlowBody>
+            </Panel>
+            <Panel label={t`Delivery performance`}>
+              <PanelHeader
+                title={<Trans>Delivery performance</Trans>}
+                actions={<DemoTag className="me-4" />}
+              />
+              <FlowBody className="gap-5">
+                <p className="m-0 max-w-[62ch] text-body-sm text-secondary">
+                  <Trans>On-time delivery arrives with fulfilment.</Trans>
+                </p>
+                <DemoPart tag={false}>
                   <HBarList
                     label={t`Delivery performance`}
                     max={100}
@@ -343,10 +353,10 @@ function Shipping({ shopId, chips }: { shopId: string; chips: ReactNode }) {
                       { key: "tracked", label: t`Tracked`, value: 96, text: <N>96%</N> },
                     ]}
                   />
-                </div>
-              </DemoPart>
-            </FlowBody>
-          </Panel>
+                </DemoPart>
+              </FlowBody>
+            </Panel>
+          </FlowRow>
         )}
       </TabPanel>
     </>

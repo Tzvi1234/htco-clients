@@ -8,6 +8,7 @@ import { useSearch } from "@tanstack/react-router";
 import { useState } from "react";
 
 import { ApiError, apiError, meQuery, shopsQuery, useApi, type ShopView } from "./api.tsx";
+import { IDEMPOTENCY_HEADER } from "./idempotency.ts";
 
 export type ShopOverview = components["schemas"]["ShopOverviewView"];
 export type ShopOrders = components["schemas"]["OrdersView"];
@@ -15,6 +16,8 @@ export type ShopOrder = components["schemas"]["OrderView"];
 /** One order with its status timeline from the stored history (slice 5.6). */
 export type ShopOrderDetail = components["schemas"]["OrderDetailView"];
 export type OrderStatusChange = components["schemas"]["OrderStatusChangeView"];
+/** One parcel's tracking as first seen (AC-6.1.2): the carrier and the code's last four only. */
+export type OrderTracking = components["schemas"]["OrderTrackingView"];
 /** The stored history's state: `syncing_history` while the backfill runs, then `complete`. */
 export type HistorySync = components["schemas"]["SyncView"];
 export type ShopListings = components["schemas"]["ListingsView"];
@@ -146,11 +149,20 @@ export async function exportOrders(
   };
 }
 
-/** "Re-sync selected" (slice 5.7): one queued re-read from Etsy per order; how many queued. */
-export async function resyncOrders(api: ApiClient, shopId: string, ids: number[]): Promise<number> {
+/**
+ * "Re-sync selected" (slice 5.7): one queued re-read from Etsy per order; how many queued. `key`
+ * is the press's Idempotency-Key, reused when the same re-sync is tried again (platform PR #223).
+ */
+export async function resyncOrders(
+  api: ApiClient,
+  shopId: string,
+  ids: number[],
+  key: string,
+): Promise<number> {
   const { data, error, response } = await api.POST("/v1/shops/{shop_id}/order-resyncs", {
     params: { path: { shop_id: shopId } },
     body: { order_ids: ids },
+    headers: { [IDEMPOTENCY_HEADER]: key },
   });
   if (data === undefined) throw apiError(response, error);
   return data.queued;

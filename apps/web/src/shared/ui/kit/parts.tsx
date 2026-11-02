@@ -308,14 +308,30 @@ export function KV({ items, className }: { items: readonly Pair[]; className?: s
 
 /**
  * `.kv2`: two labelled pills side by side ("Status:" / "Last sync:"). Each value is drawn in a
- * full-width pill, unless it is a `Pill` already (one with its own classes).
+ * full-width pill, unless it is a `Pill` already (one with its own classes). `stack`: one pair
+ * per row on phones, its label at the start like every other row there.
  */
-export function KV2({ items, className }: { items: readonly Pair[]; className?: string }) {
+export function KV2({
+  items,
+  stack = false,
+  className,
+}: {
+  items: readonly Pair[];
+  stack?: boolean;
+  className?: string;
+}) {
   return (
-    <div className={cx("grid grid-cols-2 gap-2", className)}>
+    <div className={cx("grid grid-cols-2 gap-2", stack && "max-sm:grid-cols-1", className)}>
       {items.map(([label, value], index) => (
         <div key={index} className="min-w-0">
-          <div className="mb-1.5 text-center text-caption font-light text-muted">{label}</div>
+          <div
+            className={cx(
+              "mb-1.5 text-center text-caption font-light text-muted",
+              stack && "max-sm:text-start",
+            )}
+          >
+            {label}
+          </div>
           {isValidElement(value) && value.type === Pill ? value : <Pill wide>{value}</Pill>}
         </div>
       ))}

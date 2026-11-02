@@ -15,6 +15,7 @@ import {
   type RelayPaste,
 } from "./relay.ts";
 import { ApiError, forgetSession, meQuery, shopsQuery, useApi } from "../../shared/api/api.tsx";
+import { useActionKey } from "../../shared/api/idempotency.ts";
 import { useLocale } from "../../shared/i18n/LocaleProvider.tsx";
 import { cx } from "../../shared/lib/cx.ts";
 import { useNow } from "../../shared/lib/time.ts";
@@ -569,6 +570,9 @@ function PastePanel({
   const [code, setCode] = useState("");
   const [problem, setProblem] = useState<{ text: string; mfa: boolean } | undefined>();
   const [pending, setPending] = useState(false);
+  // The paste's Idempotency-Key: sending the same paste again after a failure reuses it; a new
+  // number is a new paste (the number itself never goes into the signature, it is buyer data).
+  const action = useActionKey();
   const refresh = () => client.invalidateQueries({ queryKey: relayKeys.list(organizationId) });
 
   // Not a mutation hook: its cache would keep the pasted number (the variables) after the view.
@@ -578,7 +582,15 @@ function PastePanel({
     setPending(true);
     setProblem(undefined);
     try {
-      const after = await pasteTracking(api, organizationId, item.id, carrier, code.trim());
+      const after = await pasteTracking(
+        api,
+        organizationId,
+        item.id,
+        carrier,
+        code.trim(),
+        action.key(`${item.id}:${carrier}`),
+      );
+      action.reset();
       setCode("");
       onDone(
         after.state === "closed"
@@ -620,6 +632,8 @@ function PastePanel({
             onChange={(next) => {
               setCode(next);
               setProblem(undefined);
+              // A changed number is a new paste with a new key.
+              action.reset();
             }}
             isInvalid={problem !== undefined && !problem.mfa}
             isDisabled={pending}

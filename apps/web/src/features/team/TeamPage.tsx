@@ -15,6 +15,7 @@ import {
   useApi,
   type ApiClient,
 } from "../../shared/api/api.tsx";
+import { IDEMPOTENCY_HEADER, useActionKey } from "../../shared/api/idempotency.ts";
 import { cx } from "../../shared/lib/cx.ts";
 import { PHONE_QUERY, useMediaQuery } from "../../shared/lib/useMediaQuery.ts";
 import { Button } from "../../shared/ui/Button.tsx";
@@ -478,17 +479,25 @@ function InvitePanel({
   const [role, setRole] = useState<Role>("admin");
   const [copied, setCopied] = useState(false);
   const inviteMessage = useInviteMessage();
+  // The invitation's Idempotency-Key (platform PR #223): sending the same invitation again after
+  // a failure reuses it; a changed email or role, or a sent invitation, makes the next one new.
+  const action = useActionKey();
 
   const invite = useMutation({
     mutationFn: async (invitee: string) => {
       const { data, error, response } = await api.POST(
         "/v1/organizations/{organization_id}/invitations",
-        { params: { path: { organization_id: organizationId } }, body: { email: invitee, role } },
+        {
+          params: { path: { organization_id: organizationId } },
+          body: { email: invitee, role },
+          headers: { [IDEMPOTENCY_HEADER]: action.key(role) },
+        },
       );
       if (data === undefined) throw apiError(response, error);
       return data;
     },
     onSuccess: async () => {
+      action.reset();
       setEmail("");
       setCopied(false);
       await queryClient.invalidateQueries({ queryKey: ["organizations", organizationId] });
@@ -519,7 +528,10 @@ function InvitePanel({
               ltr
               isRequired
               value={email}
-              onChange={setEmail}
+              onChange={(next) => {
+                setEmail(next);
+                action.reset();
+              }}
               inputRef={emailRef}
             />
             <ChoiceChips

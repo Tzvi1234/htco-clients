@@ -3,9 +3,10 @@
 // Every call names its workspace (the API answers 400 to a member of several who names none),
 // and every key carries it, so switching workspace never shows the other one's cached data.
 import type { ApiClient, components } from "@htco/api-client";
-import { queryOptions } from "@tanstack/react-query";
+import { infiniteQueryOptions, queryOptions } from "@tanstack/react-query";
 
 import { ApiError, apiError } from "./api.tsx";
+import { IDEMPOTENCY_HEADER } from "./idempotency.ts";
 
 export type OperationsHealth = components["schemas"]["OperationsHealthView"];
 export type DeadJob = OperationsHealth["dead_letters"][number];
@@ -57,14 +58,19 @@ export function executionChainQuery(api: ApiClient, organizationId: string, exec
   });
 }
 
-/** Send a dead job back to the queue (audited by the server). */
+/**
+ * Send a dead job back to the queue (audited by the server). `key` is the press's
+ * Idempotency-Key, the same when the person retries a request that failed (platform PR #223).
+ */
 export async function retryDeadJob(
   api: ApiClient,
   organizationId: string,
   jobId: string,
+  key: string,
 ): Promise<void> {
   const { data, error, response } = await api.POST("/v1/operations/dead-letters/{job_id}/retry", {
     params: { path: { job_id: jobId }, query: { organization_id: organizationId } },
+    headers: { [IDEMPOTENCY_HEADER]: key },
   });
   if (data === undefined) throw apiError(response, error);
 }
@@ -86,6 +92,49 @@ export async function retryExecution(
     },
   );
   if (data === undefined) throw apiError(response, error);
+}
+
+// --- Failed emails (platform PR #222, AC-6.4.3 and AC-6.5.6) ------------------------------------
+
+export type FailedEmail = components["schemas"]["FailedEmailView"];
+export type FailedEmailList = components["schemas"]["FailedEmailList"];
+export type FailedStatus = components["schemas"]["FailedStatus"];
+
+/** One page of the failed emails. */
+export const EMAIL_FAILURES_PAGE = 25;
+
+export const emailFailureKeys = {
+  list: (organizationId: string, status: FailedStatus) =>
+    ["operations", organizationId, "email-failures", status] as const,
+};
+
+/**
+ * Emails refused for good (`failed`) or never sent (`skipped`), newest first: the recipient as a
+ * member ID and an address the server masked (`o***@e***.test`), never the full address or the
+ * body. The pages leave the cache as soon as the panel closes.
+ */
+export function emailFailuresQuery(api: ApiClient, organizationId: string, status: FailedStatus) {
+  return infiniteQueryOptions({
+    queryKey: emailFailureKeys.list(organizationId, status),
+    queryFn: async ({ pageParam }): Promise<FailedEmailList> => {
+      const { data, error, response } = await api.GET("/v1/operations/email-failures", {
+        params: {
+          query: {
+            organization_id: organizationId,
+            status,
+            limit: EMAIL_FAILURES_PAGE,
+            ...(pageParam === null ? {} : { cursor: pageParam }),
+          },
+        },
+      });
+      if (data === undefined) throw apiError(response, error);
+      return data;
+    },
+    initialPageParam: null as string | null,
+    getNextPageParam: (last) => last.next_cursor,
+    gcTime: 0,
+    retry,
+  });
 }
 
 // --- Sales counters (Phase 5 activation step 2b) -------------------------------------------------

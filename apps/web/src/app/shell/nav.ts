@@ -96,6 +96,8 @@ export const AREAS: readonly NavArea[] = [
     tabs: [
       { id: "health", to: "/admin/health", built: true },
       { id: "automations", to: "/admin/automations", built: true },
+      // The organization's audit records (AC-3.9.3), for the Owner and Admins.
+      { id: "audit", to: "/admin/audit", built: true },
       { id: "members", to: "/settings/team", built: true },
       { id: "settings", to: "/settings", built: true },
     ],

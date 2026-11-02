@@ -18,6 +18,7 @@ const SCREENS = [
   ["Shipping", "/commerce/shipping"],
   ["Incidents", "/incidents"],
   ["Customers", "/customers/customers"],
+  ["Audit log", "/admin/audit"],
   ["Members & access", "/settings/team"],
   ["Security", "/settings/security"],
   ["Settings", "/settings"],
