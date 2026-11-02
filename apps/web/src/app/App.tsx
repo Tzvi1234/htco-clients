@@ -1,10 +1,16 @@
 import type { ApiClient } from "@htco/api-client";
-import { QueryCache, QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider, type RouterHistory } from "@tanstack/react-router";
 import { useState } from "react";
 
 import { createAppRouter } from "./router.tsx";
-import { ApiError, ApiProvider, createApiClient, forgetSession } from "../shared/api/api.tsx";
+import {
+  ApiError,
+  ApiProvider,
+  createApiClient,
+  forgetSession,
+  sessionEnded,
+} from "../shared/api/api.tsx";
 import { LocaleProvider } from "../shared/i18n/LocaleProvider.tsx";
 import { IntroProvider } from "../shared/motion/intro.tsx";
 import type { Locale } from "../shared/i18n/locale.ts";
@@ -33,14 +39,22 @@ export function App({ locale, theme, storage, history, api: given }: AppProps) {
     return { ...readTweaks(storage), theme };
   });
   const [{ queryClient, router }] = useState(() => {
+    // A session that ended on the server (revoked elsewhere, expired): forget it, back to sign-in.
+    const ended = () => {
+      forgetSession(client);
+      void appRouter.navigate({ to: "/sign-in" });
+    };
     const client: QueryClient = new QueryClient({
-      // A session that ended on the server (revoked elsewhere, expired): back to sign-in.
       queryCache: new QueryCache({
         onError: (error) => {
-          if (error instanceof ApiError && error.status === 401) {
-            forgetSession(client);
-            void appRouter.navigate({ to: "/sign-in" });
-          }
+          if (error instanceof ApiError && error.status === 401) ended();
+        },
+      }),
+      // The same for every authenticated mutation (an incident step, an invitation); public auth
+      // mutations mark themselves `PUBLIC_AUTH`, so a wrong password stays on its form.
+      mutationCache: new MutationCache({
+        onError: (error, _variables, _context, mutation) => {
+          if (sessionEnded(error, mutation.meta)) ended();
         },
       }),
       defaultOptions: {

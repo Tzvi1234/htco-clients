@@ -211,6 +211,47 @@ describe("managing a member (FR-IAM-03, slice 2.6)", () => {
     ).toHaveAttribute("role", "alert");
     expect(backend.state.members.find((m) => m.id === dana.id)?.role).toBe("support");
   });
+
+  // Codex post-merge review, finding 6: a slow or failed shop list is not "No shops yet".
+  it("shows the shop access as loading while the shops are read, not as no shops", async () => {
+    const { user } = await open("/settings/team", {
+      ...withDana(),
+      shops: [shop],
+      shopsHang: true,
+    });
+
+    const member = await chooseDana(user);
+    const access = within(member).getByRole("region", { name: "Shop access" });
+    expect(within(access).getByText("Loading the shops…")).toBeInTheDocument();
+    expect(access.querySelector('[aria-busy="true"]')).not.toBeNull();
+    expect(within(member).queryByText(/No shops yet/)).not.toBeInTheDocument();
+  });
+
+  it("says when the shops cannot be read, and reads them again on Try again", async () => {
+    const ORG = "a0000000-0000-7000-8000-000000000000";
+    const { user, backend } = await open("/settings/team", {
+      ...withDana(),
+      shops: [shop],
+      shopsFailFor: [ORG],
+    });
+
+    const member = await chooseDana(user);
+    expect(
+      await within(member).findByText(
+        "The shops cannot be loaded right now. Try again shortly.",
+        undefined,
+        { timeout: 8000 },
+      ),
+    ).toHaveAttribute("role", "alert");
+    expect(within(member).queryByText(/No shops yet/)).not.toBeInTheDocument();
+
+    backend.state.shopsFailFor = [];
+    await user.click(within(member).getByRole("button", { name: "Try again" }));
+    expect(
+      await within(member).findByRole("switch", { name: "Access to Willow & Wick" }),
+    ).toBeInTheDocument();
+    expect(within(member).queryByRole("alert")).not.toBeInTheDocument();
+  });
 });
 
 describe("the planned parts of Members & access", () => {

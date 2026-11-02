@@ -140,6 +140,28 @@ describe("coming back from Etsy (slice 4.3)", () => {
     expect(history.location.pathname).toBe("/shops");
   });
 
+  // Codex post-merge review, finding 7: the confirmation lived on in the history entry, so Back
+  // to Shops announced a connection that did not happen again.
+  it("does not announce the connection again on coming back with Back", async () => {
+    const { history } = await open(callback, owner);
+    expect(await screen.findByText("Your Etsy shop is connected.")).toBeInTheDocument();
+    await vi.waitFor(() => {
+      expect(history.location.state.etsy).toBeUndefined();
+    });
+
+    act(() => {
+      history.push("/");
+    });
+    expect(await screen.findByRole("heading", { level: 1, name: "Home" })).toBeInTheDocument();
+    act(() => {
+      history.back();
+    });
+
+    expect(await screen.findByRole("heading", { level: 1, name: "Shops" })).toBeInTheDocument();
+    expect(await screen.findByRole("article", { name: "Willow & Wick" })).toBeInTheDocument();
+    expect(screen.queryByText("Your Etsy shop is connected.")).not.toBeInTheDocument();
+  });
+
   it("says when a shop was reconnected", async () => {
     await open(callback, { ...owner, ...demoShops() });
     expect(await screen.findByText("Your Etsy shop is reconnected.")).toBeInTheDocument();
@@ -719,7 +741,9 @@ describe("post-merge review (2026-10-23)", () => {
     ["removing", "DELETE", "Remove Willow & Wick", "Remove shop", "remove"],
     ["disconnecting", "POST", "Disconnect Willow & Wick", "Disconnect", "disconnect"],
   ] as const)(
-    "says the session ended when %s answers 401, instead of 'try again shortly'",
+    // The session ended: back to sign-in, like every authenticated mutation's 401 (Codex
+    // post-merge review, finding 1), instead of 'try again shortly'.
+    "goes back to sign-in when %s answers 401, instead of 'try again shortly'",
     async (_, method, trigger, press, verb) => {
       const { user, backend } = await open("/shops", { ...owner, ...demoShops(), steppedUp: true });
       const refused = vi
@@ -737,8 +761,10 @@ describe("post-merge review (2026-10-23)", () => {
       await user.click(within(dialog).getByRole("button", { name: press }));
 
       expect(
-        await screen.findByText(`Your session has ended. Sign in again, then ${verb} the shop.`),
+        await screen.findByRole("heading", { level: 1, name: "Sign in" }, { timeout: 8000 }),
       ).toBeInTheDocument();
+      expect(screen.queryByRole("article", { name: "Willow & Wick" })).not.toBeInTheDocument();
+      expect(verb === "remove" ? backend.state.removals : backend.state.disconnects).toEqual([]);
       refused.mockRestore();
     },
   );

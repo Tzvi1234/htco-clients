@@ -5,7 +5,7 @@ import { useState, type SyntheticEvent } from "react";
 
 import { AUTH_LINK, AUTH_SUBMIT, AuthLayout } from "./AuthLayout.tsx";
 import { AuthField } from "./fields.tsx";
-import { ApiError, apiError, useApi } from "../../shared/api/api.tsx";
+import { ApiError, apiError, useApi, PUBLIC_AUTH } from "../../shared/api/api.tsx";
 import { Button } from "../../shared/ui/Button.tsx";
 import { FormAlert } from "../../shared/ui/FormAlert.tsx";
 
@@ -22,6 +22,7 @@ export function ForgotPasswordPage() {
   const [problem, setProblem] = useState<"empty" | "format" | null>(null);
 
   const send = useMutation({
+    meta: PUBLIC_AUTH,
     mutationFn: async (address: string) => {
       const { error, response } = await api.POST("/v1/auth/password/forgot", {
         body: { email: address },

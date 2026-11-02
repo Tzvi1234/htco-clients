@@ -1,9 +1,10 @@
 import { QueryClient, focusManager } from "@tanstack/react-query";
 import { createMemoryHistory } from "@tanstack/react-router";
 import { act, render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
-import { forgetSession } from "./api.tsx";
+import { ApiError, PUBLIC_AUTH, forgetSession, sessionEnded } from "./api.tsx";
 import { App } from "../../app/App.tsx";
 import { memoryStorage } from "../lib/storage.ts";
 import { fakeBackend } from "../../test/fakeApi.ts";
@@ -133,4 +134,59 @@ describe("the session's cache", () => {
     ).toBeVisible();
     expect(screen.queryByText("Tzvi Weiss")).toBeNull();
   }, 20_000); // a sign-in, a 401 and two screens: more than the default 5 s on a busy runner
+
+  // Codex post-merge review, finding 1: an authenticated mutation's 401 ends the session too,
+  // not only a query's; before, the page showed a generic error and kept every cached answer.
+  it("forgets the session and goes to sign-in when an authenticated mutation answers 401", async () => {
+    const backend = fakeBackend({ signedIn: true, enrolled: true, assurance: "aal2" });
+    const history = createMemoryHistory({ initialEntries: ["/settings/team"] });
+    render(
+      <App
+        locale="en"
+        theme="system"
+        storage={memoryStorage()}
+        history={history}
+        api={backend.client}
+      />,
+    );
+    expect(await screen.findByText("Tzvi Weiss", undefined, { timeout: 8000 })).toBeVisible();
+    const user = userEvent.setup();
+
+    // The session ends elsewhere; the next thing the user does is a write, an invitation.
+    backend.state.signedIn = false;
+    await user.type(await screen.findByLabelText("Email"), "dana@example.test");
+    await user.click(screen.getByRole("button", { name: "Invite" }));
+    expect(
+      await screen.findByRole("heading", { level: 1, name: /sign in/i }, { timeout: 8000 }),
+    ).toBeVisible();
+    expect(backend.state.invited).toEqual([]);
+
+    // Nothing of the last session is cached: the next user's slow members read shows no one.
+    backend.state.signedIn = true;
+    backend.state.membersHang = true;
+    act(() => {
+      history.push("/settings/team");
+    });
+    expect(
+      await screen.findByRole("heading", { level: 1, name: "Members & access" }, { timeout: 8000 }),
+    ).toBeVisible();
+    expect(screen.queryByText("Tzvi Weiss")).toBeNull();
+  }, 20_000);
+});
+
+describe("which 401 ends the session", () => {
+  it("is a 401 of an authenticated call", () => {
+    expect(sessionEnded(new ApiError(401, "session-ended"))).toBe(true);
+    expect(sessionEnded(new ApiError(401, undefined))).toBe(true);
+  });
+
+  it("is not a refused credential, a public auth form, nor another failure", () => {
+    // A wrong step-up code, an Etsy callback Etsy refused: answers about what was just given.
+    expect(sessionEnded(new ApiError(401, "mfa-code-refused"))).toBe(false);
+    expect(sessionEnded(new ApiError(401, "etsy-authorization-refused"))).toBe(false);
+    // Sign-in, an invitation, a reset: there is no session to end.
+    expect(sessionEnded(new ApiError(401, "session-ended"), PUBLIC_AUTH)).toBe(false);
+    expect(sessionEnded(new ApiError(403, "forbidden"))).toBe(false);
+    expect(sessionEnded(new Error("offline"))).toBe(false);
+  });
 });

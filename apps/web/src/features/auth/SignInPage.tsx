@@ -5,7 +5,14 @@ import { useState, type SyntheticEvent } from "react";
 
 import { AUTH_LINK, AUTH_SUBMIT, AuthLayout } from "./AuthLayout.tsx";
 import { AuthField, PasswordField } from "./fields.tsx";
-import { apiError, ApiError, forgetSession, safeRedirect, useApi } from "../../shared/api/api.tsx";
+import {
+  apiError,
+  ApiError,
+  forgetSession,
+  safeRedirect,
+  useApi,
+  PUBLIC_AUTH,
+} from "../../shared/api/api.tsx";
 import { Button } from "../../shared/ui/Button.tsx";
 import { FormAlert } from "../../shared/ui/FormAlert.tsx";
 
@@ -20,6 +27,7 @@ export function SignInPage() {
   const [password, setPassword] = useState("");
 
   const signIn = useMutation({
+    meta: PUBLIC_AUTH,
     mutationFn: async () => {
       const { data, error, response } = await api.POST("/v1/auth/sign-in", {
         body: { email, password },

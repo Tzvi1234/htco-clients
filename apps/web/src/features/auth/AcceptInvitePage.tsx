@@ -6,7 +6,7 @@ import { useEffect, useState, type SyntheticEvent } from "react";
 import { AUTH_SUBMIT, AuthLayout } from "./AuthLayout.tsx";
 import { PasswordField } from "./fields.tsx";
 import { passwordProblem, tokensOf, type LinkTokens } from "./linkTokens.ts";
-import { ApiError, apiError, forgetSession, useApi } from "../../shared/api/api.tsx";
+import { ApiError, apiError, forgetSession, useApi, PUBLIC_AUTH } from "../../shared/api/api.tsx";
 import { Button } from "../../shared/ui/Button.tsx";
 import { FormAlert } from "../../shared/ui/FormAlert.tsx";
 
@@ -36,6 +36,7 @@ export function AcceptInvitePage() {
   }, [hash, router]);
 
   const accept = useMutation({
+    meta: PUBLIC_AUTH,
     mutationFn: async (invite: LinkTokens) => {
       const { data, error, response } = await api.POST("/v1/auth/invitations/accept", {
         body: {

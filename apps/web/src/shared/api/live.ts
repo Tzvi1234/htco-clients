@@ -198,6 +198,8 @@ export function reviewsQuery(api: ApiClient, shopId: string) {
       if (data === undefined) throw apiError(response, error);
       return data;
     },
+    // A new review shows up on an open Customers screen without a reload or a refocus.
+    refetchInterval: REFRESH_MS * 2.5,
     retry,
   });
 }
