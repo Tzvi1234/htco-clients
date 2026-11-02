@@ -44,8 +44,9 @@ export function policyFor(html: string): string {
 export function withSecurityPolicies(html: string): string {
   const meta =
     `<meta http-equiv="Content-Security-Policy" content="${policyFor(html)}" />\n` +
-    // Addresses and query strings never leave for another site.
-    `    <meta name="referrer" content="same-origin" />`;
+    // No referrer at all, not even to this site's own assets (Codex security review): a page's
+    // address and query never ride along. API calls set their own same-origin policy.
+    `    <meta name="referrer" content="no-referrer" />`;
   const charset = /<meta charset="utf-8" \/>/i.exec(html);
   if (charset === null) throw new Error("index.html has no <meta charset> in its head");
   const end = charset.index + charset[0].length;

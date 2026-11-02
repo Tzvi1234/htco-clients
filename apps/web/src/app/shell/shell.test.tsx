@@ -155,7 +155,7 @@ describe("the sidebar (Design 1C)", () => {
 describe("the screen's panel", () => {
   it("scrolls an existing screen inside the panel, which clips to its corners", async () => {
     // Every Design 1C screen lays out its own panels; the Etsy callback is one panel, the shell's.
-    await open("/integrations/etsy/callback");
+    await open("/integrations/etsy/callback?outcome=incomplete");
     const scroller = document.querySelector("main [data-screen-scroll]");
 
     expect(scroller).toHaveClass("overflow-auto");

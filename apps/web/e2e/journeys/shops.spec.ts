@@ -26,14 +26,10 @@ test("the Owner connects an Etsy shop through the code dialog and Etsy (slice 4.
   await checkpoint(page, "shops-connected");
 });
 
-test("cancelling on Etsy is explained, and the code leaves the address bar", async ({ page }) => {
-  await openApp(
-    page,
-    "/integrations/etsy/callback?error=access_denied&error_description=denied",
-    "signed-in",
-  );
+test("cancelling on Etsy is explained", async ({ page }) => {
+  // The API's callback sends the owner here with only the outcome, never Etsy's code.
+  await openApp(page, "/integrations/etsy/callback?outcome=cancelled", "signed-in");
   await expect(page.getByRole("alert")).toContainText("You cancelled the connection on Etsy.");
-  await expect(page).not.toHaveURL(/error=/);
   await checkpoint(page, "etsy-cancelled");
 });
 

@@ -153,7 +153,7 @@ jobs:
         run: |
           docker run --rm htco-web cat /src/apps/web/dist/index.html > index.html
           grep -q 'http-equiv="Content-Security-Policy"' index.html
-          grep -q '<meta name="referrer" content="same-origin" />' index.html
+          grep -q '<meta name="referrer" content="no-referrer" />' index.html
 
   security:
     name: security

@@ -12,6 +12,9 @@ import { Button } from "../../shared/ui/Button.tsx";
 import { Ltr } from "../../shared/ui/Ltr.tsx";
 import { TextField } from "../../shared/ui/TextField.tsx";
 import { FormAlert } from "../../shared/ui/FormAlert.tsx";
+import type { components } from "@htco/api-client";
+
+type Enrollment = components["schemas"]["EnrollmentView"];
 
 /**
  * The second factor for Owners and Admins (AC-3.5.3): set up an authenticator app, or confirm
@@ -69,17 +72,22 @@ function SetUp() {
   const finish = useFinish();
   const codeMessage = useCodeMessage();
   const [code, setCode] = useState("");
+  // The authenticator seed lives in this view's state only, gone with the view; the mutation
+  // returns nothing, so the shared mutation cache never holds it (Codex security review).
+  const [enrolled, setEnrolled] = useState<Enrollment | null>(null);
 
   const enroll = useMutation({
-    mutationFn: async () => {
+    gcTime: 0,
+    mutationFn: async (): Promise<void> => {
       const { data, error, response } = await api.POST("/v1/auth/mfa/enroll", {
         body: { name: t`Authenticator app` },
       });
       if (data === undefined) throw apiError(response, error);
-      return data;
+      setEnrolled(data);
     },
   });
   const verify = useMutation({
+    gcTime: 0,
     mutationFn: async (attempt: { factorId: string; code: string }) => {
       const { data, error, response } = await api.POST("/v1/auth/mfa/verify", {
         body: { factor_id: attempt.factorId, code: attempt.code },
@@ -91,7 +99,7 @@ function SetUp() {
 
   function submit(event: SyntheticEvent) {
     event.preventDefault();
-    if (enroll.data !== undefined) verify.mutate({ factorId: enroll.data.factor_id, code });
+    if (enrolled !== null) verify.mutate({ factorId: enrolled.factor_id, code });
   }
 
   return (
@@ -106,7 +114,7 @@ function SetUp() {
       }
       step={2}
     >
-      {enroll.data === undefined ? (
+      {enrolled === null ? (
         <div className="flex flex-col gap-6">
           <ol className="m-0 flex list-none flex-col rounded-card border border-line p-0">
             {[
@@ -142,7 +150,7 @@ function SetUp() {
         <form className="flex flex-col gap-5" onSubmit={submit} noValidate>
           <div className="flex animate-enter items-center gap-4 rounded-card border border-line bg-raised p-3">
             <img
-              src={enroll.data.qr_code}
+              src={enrolled.qr_code}
               alt={t`QR code for your authenticator app`}
               className="size-[132px] shrink-0 rounded-menu-item bg-art-paper p-2"
             />
@@ -154,7 +162,7 @@ function SetUp() {
                 <Trans>Cannot scan? Type this key into the app:</Trans>
               </p>
               <p className="m-0 text-caption break-all text-primary">
-                <Ltr>{enroll.data.secret}</Ltr>
+                <Ltr>{enrolled.secret}</Ltr>
               </p>
             </div>
           </div>

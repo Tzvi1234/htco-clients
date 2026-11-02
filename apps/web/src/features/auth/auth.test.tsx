@@ -8,6 +8,7 @@ import { safeRedirect } from "../../shared/api/api.tsx";
 import type { Locale } from "../../shared/i18n/locale.ts";
 import { memoryStorage } from "../../shared/lib/storage.ts";
 import { fakeBackend, type FakeState } from "../../test/fakeApi.ts";
+import { heldIn, watchMutationCaches } from "../../test/mutationCaches.ts";
 
 async function open(path: string, state: Partial<FakeState> = {}, locale: Locale = "en") {
   const backend = fakeBackend(state);
@@ -126,6 +127,22 @@ describe("the second factor for Owners and Admins (AC-3.5.3)", () => {
     await user.type(screen.getByLabelText("Code from the app"), "123456");
     await user.click(screen.getByRole("button", { name: "Verify and sign in" }));
     expect(await screen.findByRole("heading", { level: 1, name: "Home" })).toBeInTheDocument();
+  });
+
+  it("keeps the authenticator seed out of the shared mutation cache (Codex security review)", async () => {
+    const caches = watchMutationCaches();
+    const { user } = await open("/sign-in");
+    await signIn(user);
+
+    await user.click(
+      await screen.findByRole("button", { name: "Show the QR code" }, { timeout: 3000 }),
+    );
+    expect(await screen.findByText("JBSWY3DPEHPK3PXP")).toBeInTheDocument();
+
+    // On screen, yet not what the enrollment mutation returned or anything else it keeps.
+    expect(caches.length).toBeGreaterThan(0);
+    expect(heldIn(caches)).not.toContain("JBSWY3DPEHPK3PXP");
+    expect(heldIn(caches)).not.toContain("data:image/svg");
   });
 
   it("asks an enrolled Owner for the code before the dashboard", async () => {

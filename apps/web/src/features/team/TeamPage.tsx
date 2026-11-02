@@ -478,15 +478,23 @@ function InvitePanel({
   const [role, setRole] = useState<Role>("admin");
   const [copied, setCopied] = useState(false);
   const inviteMessage = useInviteMessage();
+  // The reusable invitation link lives in this view's state only, gone with the view; the
+  // mutation returns nothing, so the shared mutation cache never holds it (Codex security review).
+  const [invited, setInvited] = useState<{
+    link: string | null;
+    email: string;
+    role: Role;
+  } | null>(null);
 
   const invite = useMutation({
-    mutationFn: async (invitee: string) => {
+    gcTime: 0,
+    mutationFn: async (invitee: string): Promise<void> => {
       const { data, error, response } = await api.POST(
         "/v1/organizations/{organization_id}/invitations",
         { params: { path: { organization_id: organizationId } }, body: { email: invitee, role } },
       );
       if (data === undefined) throw apiError(response, error);
-      return data;
+      setInvited({ link: data.invite_link, email: invitee, role: data.role });
     },
     onSuccess: async () => {
       setEmail("");
@@ -500,11 +508,11 @@ function InvitePanel({
     invite.mutate(email);
   }
 
-  const link = invite.data?.invite_link ?? null;
+  const link = invited?.link ?? null;
   const share = link === null ? null : t`You're invited to HT-Commerce: ${link}`;
   const message = inviteMessage(invite.error);
-  const invitedRole = roleLabel(invite.data?.role ?? role);
-  const invitedEmail = invite.variables ?? "";
+  const invitedRole = roleLabel(invited?.role ?? role);
+  const invitedEmail = invited?.email ?? "";
 
   return (
     <Panel label={t`Invite member`}>
@@ -589,6 +597,7 @@ function InvitePanel({
             variant="ghost"
             onPress={() => {
               invite.reset();
+              setInvited(null);
               setTimeout(() => emailRef.current?.focus(), 0);
             }}
           >

@@ -6,6 +6,7 @@ import { describe, expect, it, vi } from "vitest";
 import { App } from "../../app/App.tsx";
 import { memoryStorage } from "../../shared/lib/storage.ts";
 import { fakeBackend, type FakeState } from "../../test/fakeApi.ts";
+import { heldIn, watchMutationCaches } from "../../test/mutationCaches.ts";
 
 /** The item at `index`, failing the test when there is none. */
 function nth<T>(list: readonly T[], index: number): T {
@@ -71,6 +72,22 @@ describe("the team (FR-IAM-02)", () => {
     expect(screen.getByRole("button", { name: "Copy link" })).toBeInTheDocument();
     expect(backend.state.invited).toEqual([{ email: "dana@example.test", role: "admin" }]);
     expect(await memberRows()).toHaveLength(2);
+  });
+
+  it("keeps the invitation link out of the shared mutation cache (Codex security review)", async () => {
+    const caches = watchMutationCaches();
+    const { user, backend } = await open("/settings/team", owner);
+
+    await user.type(await screen.findByLabelText("Email"), "dana@example.test");
+    await user.click(screen.getByRole("button", { name: "Invite" }));
+    expect(await screen.findByRole("textbox", { name: "Invitation link" })).toHaveValue(
+      backend.state.inviteLink,
+    );
+
+    // Shown on screen, yet neither what the mutation returned nor anything else it keeps.
+    expect(caches.length).toBeGreaterThan(0);
+    expect(heldIn(caches)).not.toContain(backend.state.inviteLink);
+    expect(heldIn(caches)).not.toContain("t=t");
   });
 
   it("is offered from Settings to Owners and Admins only", async () => {
@@ -255,10 +272,15 @@ describe("the team with several workspaces", () => {
 });
 
 describe("accepting an invitation", () => {
-  const link = "/accept-invite#access_token=invite-at&refresh_token=invite-rt&type=invite";
+  // The API's link callback redeemed the link and sent the browser here with its `HttpOnly`
+  // cookie and a clean address (Codex security review).
+  const link = "/accept-invite";
+  const opened = { linkCookie: "invite" as const };
+  const EXPIRED = "This invitation link has expired or was already used. Ask for a new one.";
 
-  it("sets the password from the link and signs the new member in", async () => {
-    const { user, backend } = await open(link, { role: "support" });
+  it("sets the password and signs the new member in, sending only the password", async () => {
+    const caches = watchMutationCaches();
+    const { user, backend } = await open(link, { ...opened, role: "support" });
     expect(
       screen.getByRole("heading", { level: 1, name: "Set your password" }),
     ).toBeInTheDocument();
@@ -268,15 +290,31 @@ describe("accepting an invitation", () => {
     await user.click(screen.getByRole("button", { name: "Save and sign in" }));
 
     expect(await screen.findByRole("heading", { level: 1, name: "Home" })).toBeInTheDocument();
-    expect(backend.state.accepted).toEqual({
-      access_token: "invite-at",
-      refresh_token: "invite-rt",
-      password: "a long new password",
-    });
+    expect(backend.state.accepted).toEqual({ password: "a long new password" });
+    expect(backend.state.linkCookie).toBeNull();
+    expect(caches.length).toBeGreaterThan(0);
+    expect(heldIn(caches)).not.toContain("a long new password");
+  });
+
+  it("says when the server refuses the link (no link cookie on this browser)", async () => {
+    const { user } = await open(link);
+
+    await user.type(screen.getByLabelText("New password"), "a long new password");
+    await user.type(screen.getByLabelText("Repeat the password"), "a long new password");
+    await user.click(screen.getByRole("button", { name: "Save and sign in" }));
+
+    expect(await screen.findByText(EXPIRED)).toBeVisible();
+    expect(screen.queryByLabelText("New password")).not.toBeInTheDocument();
+  });
+
+  it("says when too many links failed from this address", async () => {
+    await open("/accept-invite?link=too-many");
+
+    expect(screen.getByText("Too many attempts. Wait 15 minutes and try again.")).toBeVisible();
   });
 
   it("asks for the same password twice", async () => {
-    const { user, backend } = await open(link);
+    const { user, backend } = await open(link, opened);
 
     await user.type(screen.getByLabelText("New password"), "a long new password");
     await user.type(screen.getByLabelText("Repeat the password"), "another password!!");
@@ -287,7 +325,7 @@ describe("accepting an invitation", () => {
   });
 
   it("checks the password length before sending it", async () => {
-    const { user, backend } = await open(link);
+    const { user, backend } = await open(link, opened);
 
     await user.type(screen.getByLabelText("New password"), "too short");
     await user.type(screen.getByLabelText("Repeat the password"), "too short");
@@ -300,7 +338,7 @@ describe("accepting an invitation", () => {
   });
 
   it("says when the chosen password is the account's current one", async () => {
-    const { user } = await open(link);
+    const { user } = await open(link, opened);
 
     await user.type(screen.getByLabelText("New password"), "correct horse battery");
     await user.type(screen.getByLabelText("Repeat the password"), "correct horse battery");
@@ -312,10 +350,8 @@ describe("accepting an invitation", () => {
   });
 
   it("says when the link expired or was already used", async () => {
-    await open("/accept-invite#error=access_denied&error_code=otp_expired");
-    expect(
-      screen.getByText("This invitation link has expired or was already used. Ask for a new one."),
-    ).toBeInTheDocument();
+    await open("/accept-invite?link=invalid");
+    expect(screen.getByText(EXPIRED)).toBeInTheDocument();
     expect(screen.queryByLabelText("New password")).not.toBeInTheDocument();
   });
 });

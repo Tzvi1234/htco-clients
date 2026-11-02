@@ -10,59 +10,57 @@ import { PageHeader } from "../../shared/ui/PageHeader.tsx";
 import { PanelHeader } from "../../shared/ui/Panel.tsx";
 import { IdBlock, Note, ShieldGlyph } from "../../shared/ui/kit/index.ts";
 
-/** What Etsy put in the address when it sent the owner back. */
+/**
+ * What the API's Etsy callback says when it sends the owner here (Codex security review, owner
+ * gate v4). Etsy's code and state never reach this page: the API keeps them in an `HttpOnly`
+ * cookie and redirects here with a clean address, or with `?outcome=` when there is nothing to
+ * finish (declined at Etsy, an Etsy error, no code, or the connection switched off).
+ */
 export interface EtsyReturn {
-  code?: string;
-  state?: string;
-  error?: string;
+  outcome?: "cancelled" | "failed" | "incomplete" | "unavailable";
 }
 
 export function etsyReturn(search: unknown): EtsyReturn {
-  const text = (key: string): string | undefined => {
-    if (typeof search !== "object" || search === null || !(key in search)) return undefined;
-    const value: unknown = (search as Record<string, unknown>)[key];
-    return typeof value === "string" ? value : undefined;
-  };
-  const result: EtsyReturn = {};
-  const code = text("code");
-  const state = text("state");
-  const error = text("error");
-  if (code !== undefined) result.code = code;
-  if (state !== undefined) result.state = state;
-  if (error !== undefined) result.error = error;
-  return result;
+  if (typeof search !== "object" || search === null || !("outcome" in search)) return {};
+  const value: unknown = (search as Record<string, unknown>)["outcome"];
+  return value === "cancelled" ||
+    value === "failed" ||
+    value === "incomplete" ||
+    value === "unavailable"
+    ? { outcome: value }
+    : {};
 }
 
 type Outcome = { kind: "cancelled" } | { kind: "incomplete" } | { kind: "failed"; type?: string };
 
 /**
- * Where Etsy sends the owner back (slice 4.3). The code and state leave the address bar at once,
- * are sent to the API exactly once (also under StrictMode), and the owner lands on Shops.
+ * Where the owner lands after Etsy (slice 4.3), through the API's callback. The page asks the API
+ * once (also under StrictMode) to finish with the code it holds in the cookie, then the owner
+ * lands on Shops. The same page finishes a first connection, a reconnection and a re-consent.
  */
 export function EtsyCallbackPage() {
   const api = useApi();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const search = useRouterState({ select: (s) => etsyReturn(s.location.search) });
-  // Read once: the address is cleaned on the first render.
   const [sent] = useState(search);
   const early: Outcome | null =
-    sent.error !== undefined
-      ? sent.error === "access_denied"
+    sent.outcome === undefined
+      ? null
+      : sent.outcome === "cancelled"
         ? { kind: "cancelled" }
-        : { kind: "failed" }
-      : sent.code === undefined
-        ? { kind: "incomplete" }
-        : null;
+        : sent.outcome === "incomplete"
+          ? { kind: "incomplete" }
+          : sent.outcome === "unavailable"
+            ? { kind: "failed", type: "etsy-unavailable" }
+            : { kind: "failed" };
   const started = useRef(false);
   const [failure, setFailure] = useState<Outcome | null>(null);
   const outcome = early ?? failure;
 
   const finish = useMutation({
-    mutationFn: async ({ code, state }: { code: string; state: string | undefined }) => {
-      const { data, error, response } = await api.POST("/v1/integrations/etsy/callback", {
-        body: { code, ...(state === undefined ? {} : { state }) },
-      });
+    mutationFn: async () => {
+      const { data, error, response } = await api.POST("/v1/integrations/etsy/callback", {});
       if (data === undefined) throw apiError(response, error);
       return data;
     },
@@ -91,17 +89,8 @@ export function EtsyCallbackPage() {
   useEffect(() => {
     if (started.current) return;
     started.current = true;
-    // Cleaning the address right after the page opens skips the view transition (a second
-    // transition would abort the first: "Transition was skipped").
-    void navigate({
-      to: "/integrations/etsy/callback",
-      search: {},
-      replace: true,
-      viewTransition: false,
-    });
-    if (sent.error === undefined && sent.code !== undefined)
-      finish.mutate({ code: sent.code, state: sent.state });
-  }, [finish, navigate, sent]);
+    if (sent.outcome === undefined) finish.mutate();
+  }, [finish, sent]);
 
   return (
     <>

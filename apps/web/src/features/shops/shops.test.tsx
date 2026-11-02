@@ -128,15 +128,18 @@ describe("connecting an Etsy shop (slice 4.3)", () => {
 });
 
 describe("coming back from Etsy (slice 4.3)", () => {
-  const callback = "/integrations/etsy/callback?code=etsy-code&state=s-1";
+  // The API's callback kept Etsy's code and state in its `HttpOnly` cookie and sent the owner
+  // here with a clean address (Codex security review).
+  const callback = "/integrations/etsy/callback";
 
-  it("finishes the connection once and shows the shop", async () => {
+  it("finishes the connection once, without any code in the page, and shows the shop", async () => {
     const { backend, history } = await open(callback, owner);
 
     expect(await screen.findByRole("heading", { level: 1, name: "Shops" })).toBeInTheDocument();
     expect(await screen.findByText("Your Etsy shop is connected.")).toBeInTheDocument();
     expect(await screen.findByRole("article", { name: "Willow & Wick" })).toBeInTheDocument();
-    expect(backend.state.callbacks).toEqual([{ code: "etsy-code", state: "s-1" }]);
+    expect(backend.state.callbacks).toEqual([{}]);
+    expect(backend.state.etsyCookie).toBe(false);
     expect(history.location.pathname).toBe("/shops");
   });
 
@@ -145,12 +148,19 @@ describe("coming back from Etsy (slice 4.3)", () => {
     expect(await screen.findByText("Your Etsy shop is reconnected.")).toBeInTheDocument();
   });
 
-  it("removes the code from the address bar straight away", async () => {
-    const { history } = await open(callback, { ...owner, callbackProblem: "etsy-no-shop" });
+  it("says the link was used when the API holds no callback cookie", async () => {
+    await open(callback, { ...owner, etsyCookie: false });
 
-    await screen.findByRole("alert");
-    expect(history.location.pathname).toBe("/integrations/etsy/callback");
-    expect(history.location.search).toBe("");
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "This connection link has expired or was already used.",
+    );
+  });
+
+  it("never sends a code from the address, even from an old-style link", async () => {
+    const { backend } = await open("/integrations/etsy/callback?code=etsy-code&state=s-1", owner);
+
+    expect(await screen.findByText("Your Etsy shop is connected.")).toBeInTheDocument();
+    expect(backend.state.callbacks).toEqual([{}]);
   });
 
   it.each([
@@ -169,10 +179,7 @@ describe("coming back from Etsy (slice 4.3)", () => {
   });
 
   it("says when the owner cancelled on Etsy, without calling the API", async () => {
-    const { backend } = await open(
-      "/integrations/etsy/callback?error=access_denied&error_description=The+user+denied+access",
-      owner,
-    );
+    const { backend } = await open("/integrations/etsy/callback?outcome=cancelled", owner);
 
     expect(await screen.findByRole("alert")).toHaveTextContent(
       "You cancelled the connection on Etsy.",
@@ -180,8 +187,17 @@ describe("coming back from Etsy (slice 4.3)", () => {
     expect(backend.state.callbacks).toEqual([]);
   });
 
-  it("says when the address has no code", async () => {
-    const { backend } = await open("/integrations/etsy/callback", owner);
+  it("says when connecting is switched off, without calling the API", async () => {
+    const { backend } = await open("/integrations/etsy/callback?outcome=unavailable", owner);
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "Connecting shops is unavailable right now.",
+    );
+    expect(backend.state.callbacks).toEqual([]);
+  });
+
+  it("says when Etsy sent no code", async () => {
+    const { backend } = await open("/integrations/etsy/callback?outcome=incomplete", owner);
 
     expect(await screen.findByRole("alert")).toHaveTextContent(
       "This connection link is incomplete.",
@@ -329,7 +345,7 @@ describe("Codex review findings", () => {
 
   it("shows the confirmation in the workspace the shop was connected to", async () => {
     const other = "c0000000-0000-7000-8000-000000000009";
-    const { user } = await open("/integrations/etsy/callback?code=etsy-code&state=s-1", {
+    const { user } = await open("/integrations/etsy/callback", {
       ...owner,
       otherOrgs: [other],
     });

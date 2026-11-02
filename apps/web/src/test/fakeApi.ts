@@ -80,6 +80,13 @@ export interface FakeState {
   /** True: the user has an authenticator app, so the reset needs its code. */
   resetNeedsCode: boolean;
   reset?: Record<string, unknown>;
+  /**
+   * The `HttpOnly` link cookie the API's link callback set after redeeming an invitation or reset
+   * link (the page can neither read nor send it itself); null when none was opened or it is spent.
+   */
+  linkCookie: "invite" | "recovery" | null;
+  /** True while the API's Etsy callback holds Etsy's code in its `HttpOnly` cookie. */
+  etsyCookie: boolean;
   /** The organization's shops and their Etsy connections. */
   shops: { id: string; name: string; status: string }[];
   integrations: IntegrationView[];
@@ -346,6 +353,8 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
     resetRequests: [],
     resetThrottled: false,
     resetNeedsCode: false,
+    linkCookie: null,
+    etsyCookie: true,
     shops: [],
     integrations: [],
     steppedUp: false,
@@ -394,8 +403,12 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
       return json(200, { user_id: user, assurance: state.assurance });
     }
     if (route === "POST /v1/auth/invitations/accept") {
-      if (body["access_token"] !== "invite-at") return problem(401, "invitation-refused");
+      if (state.linkCookie !== "invite") {
+        state.linkCookie = null;
+        return problem(401, "invitation-refused");
+      }
       if (body["password"] === state.password) return problem(422, "same-password");
+      state.linkCookie = null;
       state.accepted = body;
       state.signedIn = true;
       return json(200, { user_id: user, assurance: state.assurance });
@@ -407,13 +420,17 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
       return new Response(null, { status: 202 });
     }
     if (route === "POST /v1/auth/password/reset") {
-      if (body["access_token"] !== "reset-at") return problem(401, "reset-link-refused");
+      if (state.linkCookie !== "recovery") {
+        state.linkCookie = null;
+        return problem(401, "reset-link-refused");
+      }
       if (state.resetNeedsCode && body["code"] === undefined)
         return problem(403, "mfa-code-required");
       if (state.resetNeedsCode && body["code"] !== "123456")
         return problem(401, "mfa-code-refused");
       if (String(body["password"]).includes("weak")) return problem(422, "weak-password");
       if (body["password"] === state.password) return problem(422, "same-password");
+      state.linkCookie = null;
       state.reset = body;
       state.signedIn = true;
       if (state.resetNeedsCode) state.assurance = "aal2";
@@ -782,9 +799,16 @@ export function fakeBackend(initial: Partial<FakeState> = {}): FakeBackend {
         if (state.assurance !== "aal2") return problem(403, "mfa-required");
         if (!state.steppedUp) return problem(403, "step-up-required");
         if (state.etsyDown) return problem(503, "etsy-unavailable");
+        // Etsy, then the API's callback, will hand the browser a fresh callback cookie.
+        state.etsyCookie = true;
         return json(200, { authorization_url: state.authorizationUrl });
       case "POST /v1/integrations/etsy/callback": {
         state.callbacks.push(body);
+        // The API spends its callback cookie whatever the outcome; without one, the state is
+        // missing.
+        const held = state.etsyCookie;
+        state.etsyCookie = false;
+        if (!held) return problem(400, "etsy-state-rejected");
         const slug = state.callbackProblem;
         if (slug !== undefined) return problem(CALLBACK_STATUS[slug] ?? 500, slug);
         const existing = state.shops.find((shop) => shop.name === "Willow & Wick");
