@@ -28,7 +28,10 @@ allowBuilds:
 # undici via jsdom: GHSA-xjj6-f33q-929c (fixed in 8.12.2).
 # zod via eslint-plugin-react-hooks: GHSA-mrhx-c7xc-m3w5 (fixed in 4.6.6).
 # qs via style-dictionary > url: GHSA-6pq8-jhm2-2vcw (fixed in 6.16.1).
+# seroval via @tanstack/router-core: GHSA-9wx9-5pv9-3349, GHSA-f86p-h4j2-7qgj (fixed in 1.6.11).
 overrides:
   "undici@>=8 <8.12.2": "8.12.2"
   "zod@>=4 <4.6.6": "4.6.6"
   "qs@>=6.16.0 <6.16.1": "6.16.1"
+  "seroval@>=1 <1.6.11": "1.6.11"
+  "seroval-plugins@>=1 <1.6.11": "1.6.11"
