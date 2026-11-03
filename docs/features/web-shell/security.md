@@ -9,6 +9,14 @@
 | Repository | Information disclosure: committed secrets | gitleaks over the full history | `security` job |
 | Tests | Repudiation: tests silently weakened | `scripts/test-integrity.ts` requires a "Test changes" explanation | `test-integrity` job |
 
+### Supply-chain exceptions
+
+Each exception names exact versions, a date and an expiry; the global rules stay as they are.
+
+| Date | Exception | Why | Remove |
+|---|---|---|---|
+| 2026-11-02 | `minimumReleaseAgeExclude`: `glob@14.0.2`, `minimatch@11.0.1`, and their new dependencies `path-scurry@3.0.0` and `@isaacs/nonrecursive-glob-match@1.0.1` | GHSA-3g3m-2fjr-6pw4 (glob) / GHSA-g3hv-75wg-m249 (minimatch). Owner decision 2026-11-02: upgrade to the fixes (overrides `glob@13` and `minimatch@<11.0.1`) instead of an osv-scanner ignore. `@redocly/openapi-core@1.34.20` is patched (`patches/`) to call minimatch 11's named export | After 2026-11-03, when the versions are seven days old |
+
 ## Sign-in in the browser (slices 3.5 web and 3.6)
 
 | Element | Threat | Control | Test |
