@@ -6,6 +6,16 @@ packages:
 # Supply chain (ER-SEC-09).
 # New versions are installed only after seven days (in minutes).
 minimumReleaseAge: 10080
+# Reviewed exceptions, exact versions only. GHSA-3g3m-2fjr-6pw4 (glob) / GHSA-g3hv-75wg-m249
+# (minimatch): owner decision 2026-11-02 to take the fixes before they are seven days old.
+# glob 14.0.2 and minimatch 11.0.1 are the fixes (overrides below); path-scurry 3.0.0 and
+# @isaacs/nonrecursive-glob-match 1.0.1 are their new dependencies from the same release.
+# Remove after 2026-11-03, when all four are past the seven days.
+minimumReleaseAgeExclude:
+  - glob@14.0.2
+  - minimatch@11.0.1
+  - path-scurry@3.0.0
+  - "@isaacs/nonrecursive-glob-match@1.0.1"
 # Fail when a package's publishing trust drops, for example a release without the provenance
 # its predecessors had.
 trustPolicy: no-downgrade
@@ -28,7 +38,17 @@ allowBuilds:
 # undici via jsdom: GHSA-xjj6-f33q-929c (fixed in 8.12.2).
 # zod via eslint-plugin-react-hooks: GHSA-mrhx-c7xc-m3w5 (fixed in 4.6.6).
 # qs via style-dictionary > url: GHSA-6pq8-jhm2-2vcw (fixed in 6.16.1).
+# glob via style-dictionary and Storybook docgen: GHSA-3g3m-2fjr-6pw4 (fixed in 14.0.2).
+# minimatch via eslint, glob and Redocly (GHSA-g3hv-75wg-m249, fixed in 11.0.1).
 overrides:
   "undici@>=8 <8.12.2": "8.12.2"
   "zod@>=4 <4.6.6": "4.6.6"
   "qs@>=6.16.0 <6.16.1": "6.16.1"
+  "glob@13": "14.0.2"
+  "minimatch@<11.0.1": "11.0.1"
+# @redocly/openapi-core 1.x calls `require("minimatch")` as a function, the minimatch 5 API; from
+# minimatch 6 on the function is the named export `minimatch`. The patch takes that export so its
+# URL matching (resolve.http.headers) keeps working under the override above. Drop it with the
+# override once @redocly/openapi-core depends on a fixed minimatch.
+patchedDependencies:
+  "@redocly/openapi-core@1.34.20": patches/@redocly__openapi-core@1.34.20.patch
